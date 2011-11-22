@@ -155,6 +155,11 @@
 			{
 				//funHelp("WorkOrderST");
 			}
+		else if ($("#cmbAgainst").val()=="Production Order")
+			{
+				funHelp("Production");
+			}
+		
 		else
 			{
 				if($("#txtLocFrom").val()=="")
@@ -255,6 +260,12 @@
 			case 'MIS':
 				funGetMISData(code);
  			break;	
+ 			
+			case 'Production':
+				funSetProductionData(code);
+ 			break;	
+ 			
+ 			
 		}
 		
 	}
@@ -1606,7 +1617,125 @@
 						        	
 		}
 		
-
+		function funSetProductionData(code)
+		{
+			var searchUrl="";		
+			searchUrl=getContextPath()+"/loadProductionData.html?PDCode="+code;
+			//alert(searchUrl);
+			$.ajax({
+			        type: "GET",
+			        url: searchUrl,
+				    dataType: "json",
+				    success: function(response)
+				    {
+				    	$.each(response, function(i,item)
+				    	{
+				    		if(response[i].strPDCode!="Invalid Code")
+				    			{
+				    				funFillDataForBatching(response);	
+				    			}
+				    		else
+				    			{
+				    				
+				    			}
+				    	
+					     });
+				    },
+				    error: function(jqXHR, exception) {
+			            if (jqXHR.status === 0) {
+			                alert('Not connect.n Verify Network.');
+			            } else if (jqXHR.status == 404) {
+			                alert('Requested page not found. [404]');
+			            } else if (jqXHR.status == 500) {
+			                alert('Internal Server Error [500].');
+			            } else if (exception === 'parsererror') {
+			                alert('Requested JSON parse failed.');
+			            } else if (exception === 'timeout') {
+			                alert('Time out error.');
+			            } else if (exception === 'abort') {
+			                alert('Ajax request aborted.');
+			            } else {
+			                alert('Uncaught Error.n' + jqXHR.responseText);
+			            }		            
+			        }
+			      });
+		}
+		
+		function funFillDataForBatching(response)
+		{
+			var count=0;
+			$.each(response, function(i,item)
+	    			{		
+						count=i;
+						$("#txtReqCode").val(response[i].strPDCode);									    
+			    		$("#txtLocFrom").val(response[i].strLocCode)
+			    		funGetProdDataForBatching($("#txtReqCode").val());
+	    			});
+			listRow=count+1;
+		}
+		
+		function funGetProdDataForBatching(strPDcode)
+		{	
+			searchUrl=getContextPath()+"/loadProductionDtlData.html?PDCode="+strPDcode;				
+			$.ajax({				
+	        	type: "GET",
+		        url: searchUrl,
+		        dataType: "json",
+		        success: function(response)
+		        {				        	
+		        	/* funRemRows(); */
+					$.each(response, function(i,item)
+	                {
+						funfillProdRowForBatching(response[i].strProdCode,response[i].strPartNo,response[i].strProdName,response[i].strProcessCode,response[i].strProcessName,response[i].strUOM,response[i].dblQtyProd,response[i].dblQtyRej,response[i].dblWeight,response[i].dblPrice,response[i].dblActTime);
+	                                               
+	                });
+					
+				},
+				error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+	      });
+		}
+		
+		function funfillProdRowForBatching(strProdCode,strPartNo,strProdName,strProcessCode,strProcessName,strUOM,dblQtyProd,dblQtyRej,dblWeight,dblPrice,dblActTime)
+		{	  
+		    var dblAcceptedQty=dblQtyProd-dblQtyRej;
+	        var dblTotWt=dblQtyProd*dblWeight;
+	        var dblTotalPrice=dblAcceptedQty*dblPrice;
+		    var table = document.getElementById("tblProdDet");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		  
+		    row.insertCell(0).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"8%\"   id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";	
+		    row.insertCell(1).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"48%\"  id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"' />";	
+		    row.insertCell(2).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"3%\"  id=\"txtUOM."+(rowCount)+"\" value='"+strUOM+"' />";
+		    row.insertCell(3).innerHTML=" <input name=\"listonMISDtl["+(rowCount)+"].strProcessCode\" readonly=\"readonly\" class=\"Box\" size=\"8%\"  id=\"strProcessCode."+(rowCount)+"\" value="+strProcessCode+">";
+		    row.insertCell(4).innerHTML=" <input name=\"listonMISDtl["+(rowCount)+"].strProcessName\" readonly=\"readonly\" class=\"Box\" size=\"8%\"  id=\"strProcessName."+(rowCount)+"\" value="+strProcessName+">";	
+		    row.insertCell(5).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].dblQty\" type=\"number\" step=\"any\" required = \"required\" style=\"text-align: right;width:100%\" size=\"5%\" id=\"txtQtyProd."+(rowCount)+"\" value="+dblQtyProd+">";
+		    row.insertCell(6).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].dblWeight\" type=\"number\" step=\"any\" required = \"required\" style=\"text-align: right;width:100%\"  size=\"5%\" id=\"txtWt."+(rowCount)+"\" value="+dblWeight+">";
+		    row.insertCell(7).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].dtlTotWt\"  class=\"Box\" style=\"text-align: right;width:100%\" size=\"5%\" id=\"dtlTotWt."+(rowCount)+"\" value="+dblTotWt+">";
+		    row.insertCell(8).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].dblUnitPrice\"  type=\"number\" step=\"any\" required = \"required\" style=\"text-align: right;width:100%\" size=\"5%\" id=\"dblPrice."+(rowCount)+"\" value="+dblPrice+">";
+		    row.insertCell(9).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].dblTotalPrice\"  class=\"Box\" style=\"text-align: right;width:100%\" size=\"5%\" id=\"dblTotalPrice."+(rowCount)+"\" value="+dblTotalPrice+">";
+		    row.insertCell(10).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].dblQtyRej\" type=\"number\" step=\"any\" required = \"required\" style=\"text-align: right;width:100%\" size=\"5%\" id=\"txtQtyRej."+(rowCount)+"\" value="+dblQtyRej+">";
+		    row.insertCell(11).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].dblAcceptedQty\"  type=\"number\" step=\"any\" required = \"required\" style=\"text-align: right;width:100%\"  size=\"5%\" id=\"dblAcceptedQty."+(rowCount)+"\" value="+dblAcceptedQty+">";	    
+		    row.insertCell(12).innerHTML= "<input name=\"listonMISDtl["+(rowCount)+"].dblActTime\"  type=\"number\" step=\"any\" required = \"required\" style=\"text-align: right;width:100%\"  size=\"5%\" id=\"txtActTime."+(rowCount)+"\" value="+dblActTime+">";		    
+		    row.insertCell(13).innerHTML= '<input type="button" value = "Delete" class="deletebutton" onClick="Javacsript:funDeleteRow(this)">';
+		    
+		}
 		
 </script>
 

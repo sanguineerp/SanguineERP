@@ -127,7 +127,7 @@ public class clsStockLedgerController {
 	}
 
 	@RequestMapping(value = "/frmStockLedgerReport", method = RequestMethod.GET)
-	private @ResponseBody List funShowStockDetailFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, HttpServletRequest req, HttpServletResponse resp) {
+	private @ResponseBody List funShowStockDetailFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "batchCode") String strBatchCode, HttpServletRequest req, HttpServletResponse resp) {
 		objGlobal = new clsGlobalFunctions();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
@@ -331,9 +331,22 @@ public class clsStockLedgerController {
 
 		sql = "";
 		if (qtyWithUOM.equals("No")) {
+			
+			if(strBatchCode.equals(""))
+			{
 			sql = "select DATE_FORMAT(date(TransDate),'%d-%m-%Y'),TransType,RefNo,Receipt,Issue,Name,Rate,FreeQty from "
 
 			+ "(";
+
+			}
+			else if(strBatchCode.equalsIgnoreCase("ALL"))
+			{
+				sql = "SELECT * FROM( SELECT DATE_FORMAT(DATE(TransDate),'%d-%m-%Y'),TransType,RefNo ref,Receipt,Issue,Name,Rate,FreeQty FROM ( ";
+			}
+			else
+			{
+				sql = "SELECT * FROM( SELECT DATE_FORMAT(DATE(TransDate),'%d-%m-%Y'),TransType,RefNo ref,Receipt,Issue,Name,Rate,FreeQty FROM ( ";
+			}
 			if (!selectOpStk.isEmpty()) {
 				sql += selectOpStk;
 				sql += " union all ";
@@ -557,8 +570,20 @@ public class clsStockLedgerController {
 			// + "order by Date(TransDate) desc,Receipt desc";
 
 					+ "order by Date(TransDate) desc ,TransNo desc ,Receipt desc";
+			if(strBatchCode.equals(""))
+			{
+				
+			}
+			else if(strBatchCode.equalsIgnoreCase("ALL"))
+			{
+				sql+=" ) temp WHERE temp.ref IN( SELECT a.strTransCode FROM tblbatchhd a WHERE a.strProdCode='"+prodCode+"')";
+			}
+			else
+			{
+				sql+=" ) temp WHERE temp.ref IN( SELECT a.strTransCode FROM tblbatchhd a WHERE a.strProdCode='"+prodCode+"' and a.strBatchCode='"+strBatchCode+"')";
+			}
 		} else {
-			sql = "select DATE_FORMAT(date(TransDate),'%d-%m-%Y'),TransType,RefNo,Receipt,Issue,Name,Rate,0 as FreeQty, UOMString from "
+			sql = "select DATE_FORMAT(date(TransDate),'%d-%m-%Y'),TransType,RefNo as ref,Receipt,Issue,Name,Rate,0 as FreeQty, UOMString from "
 
 			+ "(";
 			if (!selectOpStk.isEmpty()) {
@@ -1906,7 +1931,7 @@ public class clsStockLedgerController {
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/frmExportStockLedger", method = RequestMethod.GET)
-	private ModelAndView funExportStockLedger(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, HttpServletRequest req, HttpServletResponse resp) {
+	private ModelAndView funExportStockLedger(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "batchCode") String strBatchCode, HttpServletRequest req, HttpServletResponse resp) {
 
 		objGlobal = new clsGlobalFunctions();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
@@ -2149,9 +2174,23 @@ public class clsStockLedgerController {
 
 		sql = "";
 		if (qtyWithUOM.equals("No")) {
+
+			if(strBatchCode.equals(""))
+			{
 			sql = "select DATE_FORMAT(date(TransDate),'%d-%m-%Y'),TransType,RefNo,Receipt,Issue,Name,Rate,FreeQty from "
 
 			+ "(";
+
+			}
+			else if(strBatchCode.equalsIgnoreCase("ALL"))
+			{
+				sql = "SELECT * FROM( SELECT DATE_FORMAT(DATE(TransDate),'%d-%m-%Y'),TransType,RefNo ref,Receipt,Issue,Name,Rate,FreeQty FROM ( ";
+			}
+			else
+			{
+				sql = "SELECT * FROM( SELECT DATE_FORMAT(DATE(TransDate),'%d-%m-%Y'),TransType,RefNo ref,Receipt,Issue,Name,Rate,FreeQty FROM ( ";
+			}
+			
 			if (!selectOpStk.isEmpty()) {
 				sql += selectOpStk;
 				sql += " union all ";
@@ -2374,6 +2413,21 @@ public class clsStockLedgerController {
 			// + "order by Date(TransDate) desc,Receipt desc";
 
 					+ "order by Date(TransDate) desc ,TransNo desc ,Receipt desc";
+			
+			if(strBatchCode.equals(""))
+			{
+				
+			}
+			else if(strBatchCode.equalsIgnoreCase("ALL"))
+			{
+				sql+=" ) temp WHERE temp.ref IN( SELECT a.strTransCode FROM tblbatchhd a WHERE a.strProdCode='"+prodCode+"')";
+			}
+			else
+			{
+				sql+=" ) temp WHERE temp.ref IN( SELECT a.strTransCode FROM tblbatchhd a WHERE a.strProdCode='"+prodCode+"' and a.strBatchCode='"+strBatchCode+"')";
+			}
+			
+			
 		} else {
 			sql = "select DATE_FORMAT(date(TransDate),'%d-%m-%Y'),TransType,RefNo,Receipt,Issue,Name,Rate,FreeQty UOMString from "
 

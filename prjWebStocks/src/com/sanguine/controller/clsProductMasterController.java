@@ -1358,5 +1358,31 @@ public class clsProductMasterController {
 		}
 		return listProd;
 	}
+	
+	@RequestMapping(value = "/loadBatchNo", method = RequestMethod.GET)
+	public @ResponseBody boolean funBatchCheck(@RequestParam("prodCode") String prodCode, HttpServletRequest req, HttpServletResponse response) {
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		clsProductMasterModel objModel = null;
+
+		String propCode = req.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetUp = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+		objGlobal = new clsGlobalFunctions();
+		List listReturn = new ArrayList<>();
+		boolean returnBool=true;
+		String sqlBatch = "select * from tblbatchhd a where a.strProdCode='"+prodCode+"' and a.strClientCode='"+clientCode+"'";
+		List list = objGlobalFunctionsService.funGetList(sqlBatch);
+		if(list.size()>0)
+		{
+			returnBool=true;
+		}
+		else
+		{
+			returnBool=false;
+		}
+
+		
+		return returnBool;
+	}
+
 
 }

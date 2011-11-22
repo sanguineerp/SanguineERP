@@ -167,13 +167,14 @@ public class clsManualBatch {
 							String strTransType  = arrObject[13].toString();
 							if(dblTempBatchQty<=dblPendingQty)
 							{
+							double dblTempPendingMisQty = dblTempBatchQty;
 							dblTempBatchQty = dblPendingQty-dblTempBatchQty;
 							
 							batchModel.setStrTransCode(objBean.getStrMISCode());
 							batchModel.setStrProdCode(tempBatchModel.getStrProdCode());
 							batchModel.setStrClientCode(clientCode);
 							batchModel.setStrBatchCode(strBatchCode);
-							batchModel.setDblQty(dblPendingQty);
+							batchModel.setDblQty(dblTempPendingMisQty);
 							if(dblTempBatchQty<0)
 							{
 								dblTempBatchQty=0;
@@ -182,7 +183,7 @@ public class clsManualBatch {
 							{
 								batchModel.setDblPendingQty(0.0);
 							}
-							batchModel.setDblPendingQty(0.0);
+							batchModel.setDblPendingQty(dblTempPendingMisQty);
 							batchModel.setDtExpiryDate(tempBatchModel.getDtExpiryDate());
 							batchModel.setStrManuBatchCode("");
 							batchModel.setStrTransType("MIS");
@@ -204,7 +205,7 @@ public class clsManualBatch {
 								batchModel.setStrClientCode(clientCode);
 								batchModel.setStrBatchCode(strBatchCode);
 								batchModel.setDblQty(dblPendingQty);
-								batchModel.setDblPendingQty(dblTempBatchQty);
+								batchModel.setDblPendingQty(dblPendingQty);
 								batchModel.setDtExpiryDate(tempBatchModel.getDtExpiryDate());
 								batchModel.setStrManuBatchCode(tempBatchModel.getStrManuBatchCode());
 								batchModel.setStrTransType("MIS");

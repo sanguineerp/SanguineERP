@@ -72,14 +72,18 @@
 					funSetProduct(code);
 				}
 			})
+			
+			$("#tdBAtchLabel").hide();
+			$("#tdBatchTxt").hide();
 		});
 		
 		
 		function funGetStockLedger(fromDate,toDate,locCode,propCode,prodCode)
 		{
+			var batchNo = $("#txtBatch").val();
 			var qtyWithUOM=$("#cmbQtyWithUOM").val();
 			var param1=locCode+","+propCode+","+prodCode+",detail,"+qtyWithUOM;
-			var searchUrl=getContextPath()+"/frmStockLedgerReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate;
+			var searchUrl=getContextPath()+"/frmStockLedgerReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&batchCode="+batchNo;
 			
 			$.ajax({
 			        type: "GET",
@@ -399,6 +403,10 @@
 		}
 
 		function funHelp(transactionName) {
+			$("#tdBAtchLabel").hide();
+			$("#tdBatchTxt").hide();
+			$("#txtBatch").val('');
+
 			fieldName = transactionName;
 			//window.open("searchform.html?formname="+transactionName+"&searchText=", 'window', 'width=600,height=600');
 			//	window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
@@ -412,7 +420,15 @@
 			case 'productmaster':
 				funSetProduct(code);
 				break;
+				
+				
+			case 'Batch':
+				funSetBatch(code);
+				break;
+				
+				
 			}
+			
 		}
 
 		function funSetProduct(code) {
@@ -424,10 +440,12 @@
 				type : "GET",
 				url : searchUrl,
 				dataType : "json",
+				async :false,
 				success : function(response) {
 					$("#txtProdCode").val(response.strProdCode);
 					$("#lblProdName").text(response.strProdName);
 					weightedRate = response.dblCostRM;
+					funBatchCheck(response.strProdCode);
 					
 				},
 				error : function(e) {
@@ -451,6 +469,7 @@
 								var param1=reportType+","+locName+","+strProdName+","+dtFromDate+","+dtToDate;
 								window.location.href=getContextPath()+"/frmExportStockLedger.html?param1="+param1;
 								 */
+								 var batchNo = $("#txtBatch").val();
 								var fromDate = $("#txtFromDate").val();
 								var toDate = $("#txtToDate").val();
 								var locCode = $("#cmbLocation").val();
@@ -462,7 +481,7 @@
 								window.location.href = getContextPath()
 										+ "/frmExportStockLedger.html?param1="
 										+ param1 + "&fDate=" + fromDate
-										+ "&tDate=" + toDate;
+										+ "&tDate=" + toDate+"&batchCode="+batchNo;
 							});
 				});
 
@@ -525,6 +544,43 @@
 				}
 			});
 		}
+		
+		function funBatchCheck(code)
+		{
+			var all = 'ALL';
+			var boolBatchCheck;
+			var searchUrl = "";
+
+			searchUrl = getContextPath()
+					+ "/loadBatchNo.html?prodCode=" + code;
+			$.ajax({
+				type : "GET",
+				url : searchUrl,
+				dataType : "json",
+				async :false,
+				success : function(response) {
+					boolBatchCheck = response;
+					if(boolBatchCheck==true)
+						{
+						$("#tdBAtchLabel").show();
+						$("#tdBatchTxt").show();
+						$("#txtBatch").val(all); 
+						
+						}
+					
+				},
+				error : function(e) {
+					alert('Error:=' + e);
+				}
+			});
+		}
+		
+		function funSetBatch(code)
+		{
+			$("#txtBatch").val(code);
+			
+		
+		}
 	</script>
 </head>
 <body onload="funOnLoad();">
@@ -581,12 +637,14 @@
 						</select>
 					</td>
 			        
+			       
+			        
 				</tr>
 						
 				<tr>
 					<td><input id="btnExecute" type="button" value="EXECUTE" class="form_button1"/></td>
 					
-					<td colspan="6">
+					<td colspan="3">
 					
 						<s:select path="strExportType" id="cmbExportType" cssClass="BoxW124px">
 <!-- 							<option value="pdf">PDF</option> -->
@@ -595,7 +653,10 @@
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input id="btnExport" type="button" value="EXPORT" class="form_button1"/>
 					</td>
-					
+					 <td id="tdBAtchLabel"><label>Batch</label></td>
+					<td id="tdBatchTxt">
+			            <input id="txtBatch" ondblclick="funHelp('Batch');"  class="searchTextBox"/>
+					</td>
 				</tr>
 			</table>
 			

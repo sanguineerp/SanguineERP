@@ -1671,6 +1671,11 @@
 													name="listProcessSetupForm[${status.index}].strProject"
 													<c:if test="${processsetupform.strProject == 'Project'}">checked="checked"</c:if>
 													value="Project"> Project <br></td>
+													
+													<td colspan="2"><input type="checkbox"
+													name="listProcessSetupForm[${status.index}].strProductionOrder"
+													<c:if test="${processsetupform.strProductionOrder == 'Production Order'}">checked="checked"</c:if>
+													value="Production Order"> Production Order <br></td>
 											</c:when>
 
 
