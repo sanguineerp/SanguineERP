@@ -20,6 +20,7 @@ public class clsBaseDaoImpl implements intfBaseDao {
 
 	
 	
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 	
