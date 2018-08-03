@@ -203,8 +203,7 @@
 				
 				row1.insertCell(4).innerHTML= "<label>"+dteBillDate+"</label>";
 
-				
-				
+						
 				if(item.dblDebitAmt<0){
 				row1.insertCell(5).innerHTML= "<label>("+(item.dblDebitAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)*(-1)+")</label>";
 				}else{

@@ -11,6 +11,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+
 @Entity
 @Table(name = "tblacmaster")
 @IdClass(clsWebBooksAccountMasterModel_ID.class)

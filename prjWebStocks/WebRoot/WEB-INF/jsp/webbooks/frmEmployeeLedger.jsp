@@ -64,6 +64,7 @@
 					
 				});
 
+		
 		$("#btnExport").click(
 				function() {
 					var currency=$("#cmbCurrency").val();
