@@ -1,5 +1,6 @@
 package com.sanguine.webbooks.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -17,19 +18,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,6 +38,24 @@ import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.webbooks.bean.clsCreditorOutStandingReportBean;
 import com.sanguine.webbooks.model.clsParameterSetupModel;
 import com.sanguine.webbooks.service.clsParameterSetupService;
+
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 @Controller
 public class clsTrialBalanceReportController {
@@ -649,11 +655,12 @@ public class clsTrialBalanceReportController {
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);
 			JasperPrint print = JasperFillManager.fillReport(jr, hm, beanCollectionDataSource);
+			
 			jprintlist.add(print);
 			ServletOutputStream servletOutputStream = resp.getOutputStream();
 			if (jprintlist.size() > 0) {
-				// if(objBean.getStrDocType().equals("PDF"))
-				// {
+			if(objBean.getTypeDebitCredit().equals("PDF"))
+			 {
 				JRExporter exporter = new JRPdfExporter();
 				resp.setContentType("application/pdf");
 				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
@@ -665,19 +672,20 @@ public class clsTrialBalanceReportController {
 				servletOutputStream.flush();
 				servletOutputStream.close();
 
-			} else {
-				JRExporter exporter = new JRXlsExporter();
-				resp.setContentType("application/xlsx");
-				exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
-				exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, servletOutputStream);
-				exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-				// resp.setHeader("Content-Disposition",
-				// "inline;filename=rptProductWiseGRNReport_"+dteFromDate+"_To_"+dteToDate+"_"+userCode+".xls");
-				exporter.exportReport();
-				servletOutputStream.flush();
-				servletOutputStream.close();
-				// }
-
+			}
+			else {
+					JRXlsExporter exporter = new JRXlsExporter();
+					resp.setContentType("application/xlsx");
+					ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+					exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
+					exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, byteArrayOutputStream);
+					exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+					resp.setHeader("Content-Disposition","inline;filename=rptTrailBalReport_"+dteFromDate+"_To_"+dteToDate+"_"+userCode+".xls");
+					exporter.exportReport();
+					servletOutputStream.write(byteArrayOutputStream.toByteArray()); 
+					servletOutputStream.flush();
+					servletOutputStream.close();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -54,8 +54,14 @@
 											<s:option value="DebitCredit">Debit and Credit</s:option>
 										
 										</s:select></td>
-					<td></td>
-					<td></td>
+					<td ><label>Report Type</label></td>
+					<td >	
+					<s:select id="cmbReportType" path="typeDebitCredit" cssClass="BoxW124px">
+				    		<s:option value="PDF">PDF</s:option>
+				    		<s:option value="XLS">EXCEL</s:option>
+
+				    </s:select>
+					</td>
 				
 				</tr>
 <!-- 				<tr> -->

@@ -1181,7 +1181,14 @@ public class clsInvoiceController
 		objBean.setDblTaxAmt(objInvHdModel.getDblTaxAmt() / currValue);
 		objBean.setDblTotalAmt(objInvHdModel.getDblTotalAmt() / currValue);
 		objBean.setDblDiscountAmt(objInvHdModel.getDblDiscountAmt() / currValue);
+		if(objPartyMasterModel.getDblReturnDiscount()!=0.0)
+		{
+			objBean.setDblDiscount(objPartyMasterModel.getDblReturnDiscount());
+		}
+		else
+		{	
 		objBean.setDblDiscount(objInvHdModel.getDblDiscount());
+		}
 		objBean.setStrSettlementCode(objInvHdModel.getStrSettlementCode());
 		objBean.setStrAuthorize(objInvHdModel.getStrAuthorise());
 

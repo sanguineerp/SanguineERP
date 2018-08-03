@@ -348,7 +348,7 @@ public class clsSalesAndSalesReturnSummaryReportController {
 				List listOfCustomerData = objGlobalFunctionsService.funGetList(sql.toString(), "sql");
 				if (!listOfCustomerData.isEmpty()) {
 					for (int i = 0; i < listOfCustomerData.size(); i++) {
-						Object[] obj = (Object[]) listOfSubGroupWiseData.get(i);
+						Object[] obj = (Object[]) listOfCustomerData.get(i);
 						clsInvoiceBean objInvBean = new clsInvoiceBean();
 						objInvBean.setStrProdCode(obj[0].toString());//Tax Desc
 						objInvBean.setDblQty(Double.parseDouble(obj[1].toString()));//Tax %

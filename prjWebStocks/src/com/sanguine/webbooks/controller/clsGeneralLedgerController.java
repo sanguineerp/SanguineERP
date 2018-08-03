@@ -144,8 +144,9 @@ public class clsGeneralLedgerController {
 		List listBillLedger = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
 		List objList = new ArrayList();
 		double bal = 0.00;
+		String totBalAmt="";
 		
-		DecimalFormat df = new DecimalFormat("####0.00");
+		DecimalFormat df = new DecimalFormat("####0.0000");
 		String twoDecimalVal="";
 		double debitAmt=0.00,creditAmt=0.00;
 		for (int i = 0; i < listBillLedger.size(); i++) {
@@ -162,6 +163,7 @@ public class clsGeneralLedgerController {
 			listemp.add(obj[4].toString());
 			
 			debitAmt = Double.parseDouble(obj[5].toString())/conversionRate;
+			
 			if(Double.parseDouble(obj[5].toString())< 0){
 				twoDecimalVal="";
 				twoDecimalVal =df.format((debitAmt)*-1); 
@@ -176,15 +178,17 @@ public class clsGeneralLedgerController {
 				twoDecimalVal =df.format(creditAmt*-1); 
 				listemp.add("("+twoDecimalVal+")");
 			}else{
-				listemp.add(creditAmt);
+				listemp.add(df.format(creditAmt));
 			}
 			
 			if(bal < 0){
 				twoDecimalVal = df.format(bal*-1);
 				listemp.add("("+twoDecimalVal+")");
+				totBalAmt = "("+twoDecimalVal+")";
 				
 			}else{
 				listemp.add(df.format(bal));
+				totBalAmt = df.format(bal);
 			}
 			
 			objList.add(listemp);
@@ -193,6 +197,18 @@ public class clsGeneralLedgerController {
 	// Summary Detail
 		
 		List listemp = new ArrayList();
+		
+		listemp.add("");
+		listemp.add("");
+		listemp.add("");
+		listemp.add("");
+		listemp.add("Total");
+		listemp.add(df.format(debit));
+		listemp.add(df.format(credit));
+		listemp.add(totBalAmt);
+		objList.add(listemp);
+		
+		listemp = new ArrayList();
 		
 		listemp.add("");
 		listemp.add("");

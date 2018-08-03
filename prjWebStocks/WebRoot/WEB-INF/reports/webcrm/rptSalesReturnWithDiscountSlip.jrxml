@@ -123,32 +123,24 @@
 			<property name="com.jaspersoft.studio.field.label" value="dblQty"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="b"/>
 		</field>
-		<field name="dblPrice" class="java.lang.Double">
-			<property name="com.jaspersoft.studio.field.label" value="dblUnitPrice"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="b"/>
-		</field>
 		<field name="dblTotalAmt" class="java.lang.Double">
 			<property name="com.jaspersoft.studio.field.label" value="dblTotalPrice"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="b"/>
 		</field>
 		<field name="strRemarks" class="java.lang.String"/>
 		<field name="discPer" class="java.lang.Double"/>
-		<variable name="vdblTotalAmt" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[$F{dblQty}*$F{dblPrice}-($F{discPer}/100)*$F{dblQty}*$F{dblPrice}]]></variableExpression>
-			<initialValueExpression><![CDATA[new Double(0.00)]]></initialValueExpression>
+		<variable name="vTotalAmount" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{dblTotalAmt}-$F{dblTotalAmt}/100*$F{discPer}]]></variableExpression>
 		</variable>
 	</subDataset>
 	<subDataset name="dsTaxSummary" uuid="aca2a2dc-c2c3-47cd-9761-5f1f6dca216f">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<parameter name="totalAmt" class="java.lang.Double"/>
 		<queryString>
 			<![CDATA[select strTaxCode,strTaxDesc,strTaxableAmt,strTaxAmt from tblsalesreturntaxdtl where strSRCode='03SRQC000003' and strClientCode='189.001']]>
 		</queryString>
 		<field name="strTaxDesc" class="java.lang.String"/>
-		<field name="strTaxAmt" class="java.lang.Double"/>
-		<field name="dblTotalAmt" class="java.lang.Double"/>
-		<variable name="vTotTaxAmount" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[$F{strTaxAmt}]]></variableExpression>
-		</variable>
+		<field name="dblPercent" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="strCompanyName" class="java.lang.String"/>
 	<parameter name="srCode" class="java.lang.String"/>
@@ -169,6 +161,8 @@
 	<parameter name="againstName" class="java.lang.String"/>
 	<parameter name="dcCode" class="java.lang.String"/>
 	<parameter name="currencyName" class="java.lang.String"/>
+	<parameter name="listTaxDtl" class="java.util.List"/>
+	<parameter name="totalAmount" class="java.lang.Double"/>
 	<queryString>
 		<![CDATA[select 1 from dual]]>
 	</queryString>
@@ -455,7 +449,7 @@
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{dblPrice}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{dblTotalAmt}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -519,7 +513,7 @@
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{vdblTotalAmt}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{vTotalAmount}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -529,7 +523,7 @@
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{dblQty}*$F{dblPrice}-($F{discPer}/100)*$F{dblQty}*$F{dblPrice}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{dblTotalAmt}-$F{dblTotalAmt}/100*$F{discPer}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -569,8 +563,11 @@
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="dsTaxSummary" uuid="82fefc95-705a-495c-90f7-d94485c33f20">
-						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<datasetRun subDataset="dsTaxSummary" uuid="542e15a8-b259-4416-9e85-0bacedb52293">
+						<datasetParameter name="totalAmt">
+							<datasetParameterExpression><![CDATA[$P{totalAmount}]]></datasetParameterExpression>
+						</datasetParameter>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listTaxDtl})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="430" uuid="3e565ad3-2ccb-44c0-892e-05f9555d1e9d">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
@@ -617,7 +614,7 @@
 								<textElement textAlignment="Right">
 									<font isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{dblTotalAmt}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$P{totalAmt}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table 2_TD" height="30">
@@ -628,7 +625,7 @@
 								<textElement textAlignment="Right">
 									<font isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{strTaxAmt}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{dblPercent}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

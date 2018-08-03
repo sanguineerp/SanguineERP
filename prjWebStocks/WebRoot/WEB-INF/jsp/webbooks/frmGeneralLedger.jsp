@@ -53,6 +53,7 @@
 		var qtyWithUOM = $("#cmbQtyWithUOM").val();
 		var param1=glCode;
 		var currency=$("#cmbCurrency").val();
+		funGetGeneralLedgerDataBeforeExport(fromDate,toDate,glCode);
 		window.location.href = getContextPath()+ "/frmExportGeneralLedger.html?param1="+ param1 + "&fDate=" + fromDate+ "&tDate=" + toDate+"&currency="+currency;
 
 	}
@@ -106,6 +107,30 @@
 			    success: function(response)
 			    {
 			    	funShowGeneralLedger(response,currValue);
+			    },
+				error: function(e)
+			    {
+			       	alert('Error:=' + e);
+			    }
+		      });
+	}
+	
+	function funGetGeneralLedgerDataBeforeExport(fromDate,toDate,glCode)
+	{
+		var currValue='<%=session.getAttribute("currValue").toString()%>';
+		var param1=glCode;
+		var currency=$("#cmbCurrency").val();
+		var currValue=funGetCurrencyCode(currency);
+		var searchUrl=getContextPath()+"/getGeneralLedger.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&currency="+currency;
+		
+		$.ajax({
+		        type: "GET",
+		        url: searchUrl,
+			    dataType: "json",
+			    async:false,
+			    success: function(response)
+			    {
+			    	
 			    },
 				error: function(e)
 			    {

@@ -12,20 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
+import com.sanguine.bean.clsTaxMasterBean;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.controller.clsJVGeneratorController;
 import com.sanguine.crm.bean.clsInvoiceBean;
@@ -70,6 +57,20 @@ import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsUOMService;
 import com.sanguine.util.clsReportBean;
 import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
+
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 @Controller
 public class clsSalesReturnController {
@@ -1043,7 +1044,8 @@ public class clsSalesReturnController {
 		String prodType = objBean.getStrProdType();
 		String type = objBean.getStrDocType();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
-		
+		double totalAmount=0.0,totTaxAmount=0.0,retDiscAmt=0.0;	
+		List<clsTaxMasterBean> listTaxDtl = new ArrayList<clsTaxMasterBean>();
 		Connection con = objGlobalfunction.funGetConnection(req);
 		try {
 
@@ -1134,17 +1136,38 @@ public class clsSalesReturnController {
 
 			if(!(clientCode.equals("226.001"))){
 				
-			String taxSummary = "select a.strTaxCode,a.strTaxDesc,a.strTaxableAmt  as strTaxableAmt ,a.strTaxAmt  as strTaxAmt,"
-					+ "(sum(c.dblPrice * c.dblQty)-(b.dblDiscAmt)+sum(a.strTaxAmt))-(sum(a.strTaxAmt)/100* d.dblReturnDiscount)  AS dblTotalAmt "  
-					+ " FROM  "+webStockDB+".tblsalesreturntaxdtl a, "+webStockDB+".tblsalesreturnhd b left outer join " 
-					+ "  "+webStockDB+".tblsalesreturndtl c on b.strSRCode=c.strSRCode left OUTER join  "+webStockDB+".tblpartymaster d on b.strCustCode=d.strPCode "
-					+ "where a.strSRCode='" + srCode + "' and a.strClientCode='" + clientCode + "' and a.strSRCode=b.strSRCode "
-					+ " group by a.strTaxCode";
-		
-			JRDesignQuery taxSummQuery = new JRDesignQuery();
-			taxSummQuery.setText(taxSummary);
-			JRDesignDataset taxSumDataset = (JRDesignDataset) datasetMap.get("dsTaxSummary");
-			taxSumDataset.setQuery(taxSummQuery);
+				StringBuilder taxSummary = new StringBuilder("select a.strTaxCode,a.strTaxDesc,a.strTaxableAmt  as strTaxableAmt ,a.strTaxAmt  as strTaxAmt,"
+						+ "sum(c.dblPrice * c.dblQty)-(b.dblDiscAmt) AS dblTotalAmt,d.dblReturnDiscount AS dblReturnDiscount "  
+						+ " FROM  "+webStockDB+".tblsalesreturntaxdtl a, "+webStockDB+".tblsalesreturnhd b left outer join " 
+						+ "  "+webStockDB+".tblsalesreturndtl c on b.strSRCode=c.strSRCode left OUTER join  "+webStockDB+".tblpartymaster d on b.strCustCode=d.strPCode "
+						+ "where a.strSRCode='" + srCode + "' and a.strClientCode='" + clientCode + "' and a.strSRCode=b.strSRCode "
+						+ " group by a.strTaxCode");
+				List list = objGlobalFunctionsService.funGetList(taxSummary.toString(), "sql");
+			
+				if(list.size()>0)
+				{
+					for(int i=0;i<list.size();i++)
+					{
+						Object[] obj = (Object[])list.get(i);
+						clsTaxMasterBean objTaxBean = new clsTaxMasterBean();
+						objTaxBean.setStrTaxCode(obj[0].toString());//tax code
+						objTaxBean.setStrTaxDesc(obj[1].toString());//tax desc
+						objTaxBean.setDblAmount(Double.parseDouble(obj[2].toString()));//taxable amount
+						objTaxBean.setDblPercent(Double.parseDouble(obj[3].toString()));//tax amount
+						if(i==0)
+						{
+							totalAmount = Double.parseDouble(obj[3].toString())+Double.parseDouble(obj[4].toString());
+							retDiscAmt = Double.parseDouble(obj[5].toString());
+						}
+						else
+						{
+							totalAmount = totalAmount + Double.parseDouble(obj[3].toString());
+						}
+						totTaxAmount = totTaxAmount+ Double.parseDouble(obj[3].toString());
+						listTaxDtl.add(objTaxBean);
+					}
+					totalAmount = totalAmount-(totTaxAmount/100*retDiscAmt);
+				}
 			
 			}
 			

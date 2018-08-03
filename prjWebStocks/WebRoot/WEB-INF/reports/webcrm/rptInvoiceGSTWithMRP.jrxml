@@ -735,7 +735,7 @@ No
 									<textElement textAlignment="Right">
 										<font size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{dblTaxableAmt}/$F{dblDisAmt}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{dblDisAmt}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
