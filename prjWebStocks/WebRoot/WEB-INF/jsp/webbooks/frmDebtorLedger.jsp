@@ -97,7 +97,9 @@
 				var creditorName = $("#lblFromDebtorName").text();
 				if(reportType=="EXCEL")
 				{
-				window.location.href = getContextPath()
+					var propCode='<%=session.getAttribute("propertyCode").toString()%>';
+					funGetDebtorLedgerDataBeforeExport(fromDate,toDate,glCode,creditorCode,propCode);
+				    window.location.href = getContextPath()
 						+ "/frmExportLedger.html?param1="
 						+ param1 + "&fDate=" + fromDate
 						+ "&tDate=" + toDate+"&currency="+currency;
@@ -231,7 +233,7 @@
 				}
 				
 				if(bal<0){
-				row1.insertCell(7).innerHTML= "<label>("+bal.toFixed(maxQuantityDecimalPlaceLimit)*(-1)+")</label>";
+				row1.insertCell(7).innerHTML= "<label>("+(bal*(-1)).toFixed(maxQuantityDecimalPlaceLimit)+")</label>";
 				}else{
 					row1.insertCell(7).innerHTML= "<label>"+bal.toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
 				}
@@ -240,6 +242,28 @@
 // 			}	
 			}
 		});
+		
+		if(rowCount>0)
+		{
+			table.insertRow(rowCount);
+			var rowCount = table.rows.length;
+			var row2 = table.insertRow(rowCount);
+			row2.insertCell(0).innerHTML= "";
+			row2.insertCell(1).innerHTML= "";
+			row2.insertCell(2).innerHTML= "";
+			row2.insertCell(3).innerHTML= "";
+			row2.insertCell(4).innerHTML= "Total";
+			row2.insertCell(5).innerHTML= "<label>"+ parseFloat(dr).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+			row2.insertCell(6).innerHTML=  "<label>"+ parseFloat(cr).toFixed(maxQuantityDecimalPlaceLimit)+ "</label>";
+			if(bal<0)
+			{
+			  bal=(bal)*(-1);
+			  row2.insertCell(7).innerHTML = "<label>("+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + ")</label>";
+			
+			}else{
+				row2.insertCell(7).innerHTML = "<label>"+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+			}
+		}
 		
 		var table = document.getElementById("tblDebtorLedgerBillTot");
 		var rowCount = table.rows.length;
@@ -735,6 +759,29 @@
 			                alert('Uncaught Error.n' + jqXHR.responseText);
 			            }		            
 			        }
+		      });
+	}
+	
+	function funGetDebtorLedgerDataBeforeExport(fromDate,toDate,glCode,debtor,propCode)
+	{
+		var currency=$("#cmbCurrency").val();
+        var currValue=1;
+		var param1=glCode+","+debtor+","+propCode;
+		var searchUrl=getContextPath()+"/getDebtorLedger.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&currency="+currency;
+
+ 		
+		$.ajax({
+		        type: "GET",
+		        url: searchUrl,
+			    dataType: "json",
+			    async:false,
+			    success: function(response)
+			    {
+			    },
+				error: function(e)
+			    {
+			       	alert('Error:=' + e);
+			    }
 		      });
 	}
 	

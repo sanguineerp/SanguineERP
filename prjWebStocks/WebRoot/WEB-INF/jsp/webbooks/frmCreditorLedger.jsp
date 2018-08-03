@@ -93,9 +93,11 @@
 		var ledgerName = "creditorLedger";
 		var glName = $("#lblGLCode").text();
 		var creditorName = $("#lblFromDebtorName").text();
+		var propCode='<%=session.getAttribute("propertyCode").toString()%>';
 		if(reportType=="EXCEL")
 		{
-		window.location.href = getContextPath()
+			funGetCreditorLedgerDataBeforeExport(fromDate,toDate,glCode,creditorCode,propCode);
+		    window.location.href = getContextPath()
 				+ "/frmExportLedger.html?param1="
 				+ param1 + "&fDate=" + fromDate
 				+ "&tDate=" + toDate+"&currency="+currency;
@@ -214,7 +216,7 @@
 					row1.insertCell(6).innerHTML= "<label>"+(item.dblCreditAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
 				}
 				if(bal<0){
-				row1.insertCell(7).innerHTML= "<label>("+bal.toFixed(maxQuantityDecimalPlaceLimit)*(-1)+")</label>";
+				row1.insertCell(7).innerHTML= "<label>("+(bal*(-1)).toFixed(maxQuantityDecimalPlaceLimit)+")</label>";
 				}else{
 					row1.insertCell(7).innerHTML= "<label>"+bal.toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
 				}
@@ -223,6 +225,29 @@
 			}	
 		});
 		
+		
+		if(rowCount>0)
+		{
+			table.insertRow(rowCount);
+			var rowCount = table.rows.length;
+			var row2 = table.insertRow(rowCount);
+			row2.insertCell(0).innerHTML= "";
+			row2.insertCell(1).innerHTML= "";
+			row2.insertCell(2).innerHTML= "";
+			row2.insertCell(3).innerHTML= "";
+			row2.insertCell(4).innerHTML= "Total";
+			row2.insertCell(5).innerHTML= "<label>"+ parseFloat(dr).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+			row2.insertCell(6).innerHTML=  "<label>"+ parseFloat(cr).toFixed(maxQuantityDecimalPlaceLimit)+ "</label>";
+			if(bal<0)
+			{
+			  bal=(bal)*(-1);
+			  row2.insertCell(7).innerHTML = "<label>("+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + ")</label>";
+			
+			}else{
+				row2.insertCell(7).innerHTML = "<label>"+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+			}
+		}
+		
 		var table = document.getElementById("tblCreditorLedgerBillTot");
 		var rowCount = table.rows.length;
 		var row = table.insertRow(rowCount);
@@ -230,7 +255,7 @@
 		row.insertCell(1).innerHTML = "<label>Amount</label>";
 		rowCount = rowCount + 1;
 		
-	var row1 = table.insertRow(rowCount);
+	    var row1 = table.insertRow(rowCount);
 		
 		row1 = table.insertRow(rowCount);
 		row1.insertCell(0).innerHTML = "<label>Opening Balance</label>";
@@ -722,6 +747,28 @@
 			                alert('Uncaught Error.n' + jqXHR.responseText);
 			            }		            
 			        }
+		      });
+	}
+	
+	
+	function funGetCreditorLedgerDataBeforeExport(fromDate,toDate,glCode,creditorCode,propCode)
+	{
+		var currency=$("#cmbCurrency").val();
+		var currValue=1;
+		var param1=glCode+","+creditorCode+","+propCode;
+		var searchUrl=getContextPath()+"/getCreditorLedger.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&currency="+currency;
+		$.ajax({
+		        type: "GET",
+		        url: searchUrl,
+			    dataType: "json",
+			    async:false,
+			    success: function(response)
+			    {	
+			    },
+				error: function(e)
+			    {
+			       	alert('Error:=' + e);
+			    }
 		      });
 	}
 	

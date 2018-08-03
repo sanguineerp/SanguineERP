@@ -79,7 +79,9 @@
 					var employeeName = $("#lblFromEmployeeName").text();
 					if(reportType=="EXCEL")
 					{
-					window.location.href = getContextPath()
+						var propCode='<%=session.getAttribute("propertyCode").toString()%>';
+						funGetEmployeeLedgerDataBeforeExport(fromDate,toDate,glCode,employeeCode,propCode);
+					    window.location.href = getContextPath()
 							+ "/frmExportLedger.html?param1="
 							+ param1 + "&fDate=" + fromDate
 							+ "&tDate=" + toDate+"&currency="+currency;
@@ -408,6 +410,28 @@
 	        }
       });
 		return amt;
+	}
+	
+	
+	function funGetEmployeeLedgerDataBeforeExport(fromDate,toDate,glCode,employeeCode,propCode)
+	{
+		var currency=$("#cmbCurrency").val();
+		var currValue=1;
+		var param1=glCode+","+employeeCode+","+propCode;
+		var searchUrl=getContextPath()+"/getEmployeeLedger.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&currency="+currency;
+		$.ajax({
+		        type: "GET",
+		        url: searchUrl,
+			    dataType: "json",
+			    async:false,
+			    success: function(response)
+			    {	
+			    },
+				error: function(e)
+			    {
+			       	alert('Error:=' + e);
+			    }
+		      });
 	}
 	
 </script>

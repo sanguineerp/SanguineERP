@@ -61,10 +61,10 @@ public class clsWebBooksAccountMasterModel implements Serializable {
 	@Column(name = "strGroupCode")
 	private String strGroupCode;
 	
-	@Column(name = "intPrevYearBal")
+	@Column(name = "intPrevYearBal", columnDefinition = "Decimal(18,4) NOT NULL default '0.00'")
 	private double intPrevYearBal;
 
-	@Column(name = "strPrevCrDr")
+	@Column(name = "strPrevCrDr",columnDefinition = "VARCHAR(20) NOT NULL default ''")
 	private String strPrevCrDr;
 
 	public String getStrGroupName() {
