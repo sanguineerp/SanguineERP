@@ -669,7 +669,7 @@
 			finalAmt=parseFloat(finalAmt).toFixed(maxAmountDecimalPlaceLimit);
 			var roundOff=0.0;
 			var finalAmtWithRoundoff=Math.round(finalAmt);
-			roundOff=finalAmtWithRoundoff-finalAmt;
+			roundOff=(parseFloat(finalAmtWithRoundoff)-parseFloat(finalAmt)).toFixed(maxAmountDecimalPlaceLimit);
 			/* if((Math.round(finalAmt))>finalAmt)
 			{
 				roundOff=-((Math.round(finalAmt))-finalAmt);
@@ -679,10 +679,10 @@
 				roundOff=finalAmt-(Math.round(finalAmt));
 			} */
 			
-			$("#hidRoundOff").val(roundOff)
+    		$("#hidRoundOff").val(roundOff)
 			finalAmt=Math.round(finalAmt);
-			$("#txtFinalAmt").val(finalAmt);
-			$("#lblGRNGrandTotal").text(finalAmt);
+			$("#txtFinalAmt").val(finalAmtWithRoundoff);
+			$("#lblGRNGrandTotal").text(finalAmtWithRoundoff);
 			funCalculateOtherChargesTotal();
 			//HELLO
 		}
@@ -3264,8 +3264,15 @@ function funCalculateOtherChargesTotal()
 	
 	var finalAmt=(parseFloat(subTotal)+parseFloat(otherCharges)+parseFloat(extraCharges)+parseFloat(taxAmt)-parseFloat(discAmt));
 	finalAmt=parseFloat(finalAmt).toFixed(maxAmountDecimalPlaceLimit);
-	$("#txtFinalAmt").val(finalAmt);
-	$("#lblPOGrandTotal").text(finalAmt);
+	
+	var roundOff=0.0;
+	var finalAmtWithRoundoff=Math.round(finalAmt);
+	roundOff=(parseFloat(finalAmtWithRoundoff)-parseFloat(finalAmt)).toFixed(maxAmountDecimalPlaceLimit);
+	
+	$("#hidRoundOff").val(roundOff)
+	
+	$("#txtFinalAmt").val(finalAmtWithRoundoff);
+	$("#lblPOGrandTotal").text(finalAmtWithRoundoff);
 }
 	</script>
 </head>

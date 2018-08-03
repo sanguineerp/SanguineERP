@@ -533,7 +533,7 @@ public class clsJVGeneratorController {
 							double insuranceAmt=objModel.getDblInsurance();
 							double otherCharges=objModel.getDblOtherCharges();
 							double totalDebitAmt=FOBAmt;
-							totalDebitAmt=FOBAmt+freightAmt+insuranceAmt+otherCharges;
+							totalDebitAmt=FOBAmt+freightAmt+insuranceAmt+otherCharges+objModel.getDblRoundOff()+objModel.getDblExtra()-objModel.getDblDisAmt() ;
 							objJVDtlBean.setDblCreditAmt(totalDebitAmt);
 						}
 						objJVDtlBean.setDblDebitAmt(0.00);
@@ -559,7 +559,7 @@ public class clsJVGeneratorController {
 							double insuranceAmt=objModel.getDblInsurance();
 							double otherCharges=objModel.getDblOtherCharges();
 							double totalDebitAmt=FOBAmt;
-							totalDebitAmt=FOBAmt+freightAmt+insuranceAmt+otherCharges;
+							totalDebitAmt=FOBAmt+freightAmt+insuranceAmt+otherCharges+objModel.getDblRoundOff()+objModel.getDblExtra()-objModel.getDblDisAmt() ;
 							objJVDetailBean.setDblCreditAmt(totalDebitAmt);
 						}
 							
