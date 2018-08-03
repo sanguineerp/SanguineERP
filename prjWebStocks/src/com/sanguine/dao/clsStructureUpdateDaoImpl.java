@@ -3917,7 +3917,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				  + " CHANGE COLUMN `dteUserDefDate` `dteUserDefDate` VARCHAR(50) NOT NULL AFTER `strReportName`;";
 		funExecuteWebBooksQuery(sql);
 
-		
+		sql="ALTER TABLE `tblacmaster` "
+			+" ADD COLUMN `intPrevYearBal` DECIMAL(18,4) NOT NULL DEFAULT '0.0000' AFTER `strCrDr`, "
+			+" ADD COLUMN `strPrevCrDr` VARCHAR(255) NOT NULL DEFAULT '' AFTER `intPrevYearBal`; ";
+		funExecuteWebBooksQuery(sql);
 		
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
 				+ " ('frmSundryCreditorBill', 'Sundry Creditor Bill', 'Transaction', '1', 'T', '1', '1', '12', 'default.png', '5', '1', '1', '1', 'NO', '1', 'frmSundryCreditorBill.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "

@@ -415,20 +415,20 @@ public class clsDeleteTransController {
 			break;
 
 		case "Material Issue Slip":
-			flgTrans = true;
+			//flgTrans = true;
 			objMIS.funSaveAudit(objBean.getStrTransCode(), type, req);
-			objDelTransService.funDeleteRecord(" update tblmishd set dblTotalAmt=0,dblReqQty=0,strNarration='"+narration+"' where strMISCode='"+objBean.getStrTransCode()+"' "
+			objDelTransService.funDeleteRecord(" update tblmishd set dblTotalAmt=0,dblReqQty=0,strNarration='"+narration+"' ,strReqCode='' where strMISCode='"+objBean.getStrTransCode()+"' "
 					+ " and  strClientCode='" + clientCode + "' ","sql");
-			objDelTransService.funDeleteRecord("delete from tblmisdtl where strMISCode=" + objBean.getStrTransCode() + "'  and strClientCode='" + clientCode + "'", "sql");
+			objDelTransService.funDeleteRecord("delete from tblmisdtl where strMISCode='" + objBean.getStrTransCode() + "'  and strClientCode='" + clientCode + "'", "sql");
 			queryType = "sql";
 			break;
 
 		case "Material Requisition":
-			flgTrans = true;
+			//flgTrans = true;
 			objMatReq.funSaveAudit(objBean.getStrTransCode(), type, req);
 			objDelTransService.funDeleteRecord(" update tblreqhd set dblSubTotal=0,strNarration='"+narration+"' where strReqCode='"+objBean.getStrTransCode()+"' "
 					+ " and  strClientCode='" + clientCode + "' ","sql");
-			objDelTransService.funDeleteRecord("delete from tblreqdtl where strReqCode=" + objBean.getStrTransCode() + "'  and strClientCode='" + clientCode + "'", "sql");
+			objDelTransService.funDeleteRecord("delete from tblreqdtl where strReqCode='"+ objBean.getStrTransCode() + "'  and strClientCode='" + clientCode + "'", "sql");
 		
 			queryType = "sql";
 			break;
