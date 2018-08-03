@@ -45,7 +45,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
-import com.sanguine.base.service.intfBaseService;
 import com.sanguine.bean.clsGRNBean;
 import com.sanguine.model.clsAuditDtlModel;
 import com.sanguine.model.clsAuditGRNTaxDtlModel;
@@ -65,6 +64,7 @@ import com.sanguine.model.clsPOTaxDtlModel;
 import com.sanguine.model.clsProdSuppMasterModel;
 import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsProductReOrderLevelModel;
+import com.sanguine.model.clsProductReOrderLevelModel_ID;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsPurchaseOrderHdModel;
 import com.sanguine.model.clsPurchaseReturnDtlModel;
@@ -74,11 +74,9 @@ import com.sanguine.service.clsCurrencyMasterService;
 import com.sanguine.service.clsDeliveryScheduleService;
 import com.sanguine.service.clsGRNService;
 import com.sanguine.service.clsGlobalFunctionsService;
-import com.sanguine.service.clsLinkUpService;
 import com.sanguine.service.clsLocationMasterService;
 import com.sanguine.service.clsMISService;
 import com.sanguine.service.clsProductMasterService;
-import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsPurchaseOrderService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsUOMService;
@@ -455,6 +453,9 @@ public class clsGRNController {
 	 * @return
 	 */
 
+
+
+
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/saveGRN", method = RequestMethod.POST)
 	public String funAddUpdate(@ModelAttribute("command") @Valid clsGRNBean objBean, BindingResult result, HttpServletRequest request) {
@@ -520,7 +521,7 @@ public class clsGRNController {
 									if (objReOrder != null) {
 										if (ob.getDblUnitPrice() != objReOrder.getDblPrice()) {
 											dblreOrderPrice = objReOrder.getDblPrice();
-											List<clsLocationMasterModel> list = objLocationMasterService.funLoadLocationPropertyWise(objSetUp.getStrPropertyCode(), clientCode);
+											List<clsLocationMasterModel> listLocModel = objLocationMasterService.funLoadLocationPropertyWise(objSetUp.getStrPropertyCode(), clientCode);
 											
 											proprtyWiseStock=propCode;
 											stock = objGlobalFunctions.funGetCurrentStockForProduct(ob.getStrProdCode(), objHdModel.getStrLocCode(), clientCode, userCode, startDate, objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd"),proprtyWiseStock);
@@ -541,14 +542,31 @@ public class clsGRNController {
 											objReOrder.setDblPrice(weightedAvg);
 											objProductMasterService.funAddUpdateProdReOrderLvl(objReOrder);
 											
-											for (clsLocationMasterModel obj : list) {
+											for (clsLocationMasterModel obj : listLocModel) {
 												if (!(obj.getStrLocCode().equals(objHdModel.getStrLocCode()))) {
 													System.out.println("prod " + ob.getStrProdCode() + "Loc" + obj.getStrLocCode() + " HDLOC" + objHdModel.getStrLocCode());
 													clsProductReOrderLevelModel reeorderLevelForPropertyWiseLocation = objProductMasterService.funGetProdReOrderLvl(ob.getStrProdCode(), obj.getStrLocCode(), clientCode);
-													reeorderLevelForPropertyWiseLocation.setDblPrice(weightedAvg);
+													if(reeorderLevelForPropertyWiseLocation!=null){
+														reeorderLevelForPropertyWiseLocation.setDblPrice(weightedAvg);	
+													}else{
+														reeorderLevelForPropertyWiseLocation = new clsProductReOrderLevelModel(new clsProductReOrderLevelModel_ID(obj.getStrLocCode(), clientCode, ob.getStrProdCode()));
+														reeorderLevelForPropertyWiseLocation.setDblReOrderLevel(0);
+														reeorderLevelForPropertyWiseLocation.setDblReOrderQty(0);
+														reeorderLevelForPropertyWiseLocation.setDblPrice(weightedAvg);
+													}
 													objProductMasterService.funAddUpdateProdReOrderLvl(reeorderLevelForPropertyWiseLocation);
 												}
 											}
+										}
+									}else{ 
+										//location wise product entry not found in reorder table--> insert new with rate
+										List<clsLocationMasterModel> listLocModel = objLocationMasterService.funLoadLocationPropertyWise(objSetUp.getStrPropertyCode(), clientCode);
+										for (clsLocationMasterModel obj : listLocModel) {
+												clsProductReOrderLevelModel reeorderLevelForPropertyWiseLocation  = new clsProductReOrderLevelModel(new clsProductReOrderLevelModel_ID(obj.getStrLocCode(), clientCode, ob.getStrProdCode()));
+													reeorderLevelForPropertyWiseLocation.setDblReOrderLevel(0);
+													reeorderLevelForPropertyWiseLocation.setDblReOrderQty(0);
+													reeorderLevelForPropertyWiseLocation.setDblPrice(ob.getDblUnitPrice() );
+												objProductMasterService.funAddUpdateProdReOrderLvl(reeorderLevelForPropertyWiseLocation);
 										}
 									}
 							}else{
@@ -700,6 +718,7 @@ public class clsGRNController {
 			return ("redirect:/frmGRN.html?saddr=" + urlHits);
 		}
 	}
+	
 	/**
 	 * NonStockable Issue Function Logic
 	 * 
@@ -2282,6 +2301,7 @@ public class clsGRNController {
 	}
 
 
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/loadGRNProductRate", method = RequestMethod.GET)
 	public @ResponseBody List funLatestGRNProductRate(@RequestParam("prodCode") String prodCode, HttpServletRequest req) {
@@ -2292,18 +2312,24 @@ public class clsGRNController {
 		List list = objGlobalFunctionsService.funGetList(sqlBuilder.toString(), "sql");
 
 		List prodList = new ArrayList();
-		if (list.size() > 0) {
-			Object[] ob = (Object[]) list.get(0);
+		if(null!=list){
+			if (list.size() > 0) {
+				Object[] ob = (Object[]) list.get(0);
 
-			prodList.add(ob[0].toString());
-			prodList.add(Double.parseDouble(ob[1].toString()));
+				prodList.add(ob[0].toString());
+				prodList.add(Double.parseDouble(ob[1].toString()));
 
+			} else {
+				prodList = new ArrayList();
+				prodList.add("Invalid Code ");
+			}
 		} else {
 			prodList = new ArrayList();
 			prodList.add("Invalid Code ");
 		}
-		return prodList;
+	return prodList;
 	}
+
 
 	@RequestMapping(value = "/loadAgainstDS", method = RequestMethod.GET)
 	public @ResponseBody clsGRNBean funLoadAgainstDS(@RequestParam("dsCode") String dsCode, HttpServletRequest req, HttpServletResponse response) {
