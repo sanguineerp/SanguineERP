@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.DriverManager;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -4952,7 +4953,6 @@ return 1;
 					sbSql.append("delete from tblsundarycreditoropeningbalance where strCreditorCode='"+docCode+"' and strClientCode='"+clientCode+"'  ");
 					objBaseService.funExcecteUpdateModuleWise(sbSql, "sql", "WebBooks");
 					
-				 
 	    			sbSql.setLength(0);
 					sbSql.append("delete from tblsundarycreditormaster where strCreditorCode='"+docCode+"' and strClientCode='"+clientCode+"'  ");
 					objBaseService.funExcecteUpdateModuleWise(sbSql, "sql", "WebBooks");
@@ -5002,6 +5002,57 @@ return 1;
 		{
 			return listDCAccountDetails;
 		}
+	}
+	
+	
+	public DecimalFormat funGetDecimatFormat(HttpServletRequest req)
+	{
+		int decimalPlaces = Integer.parseInt(req.getSession().getAttribute("amtDecPlace").toString());
+		String pattern = "";
+		if (decimalPlaces == 1)
+		{
+			pattern = "#.0";
+		}
+		else if (decimalPlaces == 2)
+		{
+			pattern = "#.00";
+		}
+		else if (decimalPlaces == 3)
+		{
+			pattern = "#.000";
+		}
+		else if (decimalPlaces == 4)
+		{
+			pattern = "#.0000";
+		}
+		else if (decimalPlaces == 5)
+		{
+			pattern = "#.00000";
+		}
+		else if (decimalPlaces == 6)
+		{
+			pattern = "#.000000";
+		}
+		else if (decimalPlaces == 7)
+		{
+			pattern = "#.0000000";
+		}
+		else if (decimalPlaces == 8)
+		{
+			pattern = "#.00000000";
+		}
+		else if (decimalPlaces == 9)
+		{
+			pattern = "#.000000000";
+		}
+		else if (decimalPlaces == 10)
+		{
+			pattern = "#.0000000000";
+		}
+
+		DecimalFormat decFormat = new DecimalFormat(pattern);
+		return decFormat;
+
 	}
 	
 	

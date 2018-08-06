@@ -191,14 +191,14 @@ public class clsCreditorLedgerController {
 		String creditorCode = spParam1[1];
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 		double currValue = 1.0;
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df =objGlobal.funGetDecimatFormat(req);
 			
-			String currency=req.getParameter("currency").toString();
-			clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(currency, clientCode);
-			if (objCurrModel != null) {
-				currValue = objCurrModel.getDblConvToBaseCurr();
-	
-			}
+		String currency=req.getParameter("currency").toString();
+		clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(currency, clientCode);
+		if (objCurrModel != null) {
+			currValue = objCurrModel.getDblConvToBaseCurr();
+
+		}
 
 		String fromDate = objGlobal.funGetDate("yyyy-MM-dd", fDate);
 		String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
@@ -209,33 +209,8 @@ public class clsCreditorLedgerController {
 
 		String sql = " SELECT DATE_FORMAT(DATE(dteVochDate),'%d-%m-%Y'),strTransType,strVoucherNo,strChequeBillNo,DATE_FORMAT(DATE(dteBillDate),'%d-%m-%Y'),dblDebitAmt,dblCreditAmt,dblBalanceAmt " + " from tblledgersummary where strUserCode='" + userCode + "' and strPropertyCode='" + propertyCode + "' AND strClientCode='" + clientCode + "'  " + " order by dteVochDate, strTransTypeForOrderBy ";
 
-		/*
-		 * String sql=
-		 * " select DATE_FORMAT(DATE(TransDate),'%d-%m-%Y'),TransName,RefNo,Chq_BillNo,BillDate,Dr,Cr from ( "
-		 * ; sql+=
-		 * "  select a.dteVouchDate TransDate,'1' TransType,'JV' TransName,a.strVouchNo RefNo,c.strInvoiceNo Chq_BillNo,DATE_FORMAT(DATE(c.dteInvoiceDate),'%d-%m-%Y') BillDate,b.dblDrAmt Dr,b.dblCrAmt Cr "
-		 * + " from tbljvhd a, tbljvdtl b,tbljvdebtordtl c " +
-		 * " where a.strVouchNo=b.strVouchNo and a.strVouchNo=c.strVouchNo " +
-		 * " and date(a.dteVouchDate) between '"+fromDate+"' and '"+toDate+"' "
-		 * +
-		 * " and b.strAccountCode='"+glCode+"'and c.strDebtorCode='"+creditorCode
-		 * +"' and a.strPropertyCode=b.strPropertyCode " +
-		 * " and a.strPropertyCode='"
-		 * +propertyCode+"' and a.strClientCode='"+clientCode+"' " +
-		 * " Union all " +
-		 * " select a.dteVouchDate TransDate,'2' TransType,'Payment' TransName,a.strVouchNo RefNo,a.strChequeNo Chq_BillNo,DATE_FORMAT(DATE(a.dteChequeDate),'%d-%m-%Y')  BillDate,b.dblDrAmt Dr, b.dblCrAmt Cr "
-		 * + " from tblpaymenthd a, tblpaymentdtl b " +
-		 * " where a.strVouchNo=b.strVouchNo " +
-		 * " and date(a.dteVouchDate) between '"+fromDate+"' and '"+toDate+"' "
-		 * +
-		 * " AND b.strAccountCode ='"+glCode+"' and b.strDebtorCode='"+creditorCode
-		 * +"' and a.strPropertyCode=b.strPropertyCode " +
-		 * " and a.strPropertyCode='"
-		 * +propertyCode+"' and a.strClientCode='"+clientCode+"' " +
-		 * " ) ledger " + " order by TransDate, TransType ";
-		 */
-		double debit = 0.0;
-		double credit = 0.0;
+		double debit = 0.00;
+		double credit = 0.00;
 		
 		List listBillLedger = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 		List objList = new ArrayList();
@@ -253,27 +228,23 @@ public class clsCreditorLedgerController {
 			listemp.add(obj[3]);
 			listemp.add(obj[4]);
 			if(Double.parseDouble(obj[5].toString())< 0){
-				double de=Double.parseDouble(df.format(obj[5].toString()))*-1; 
-				listemp.add("("+de+")");
+				listemp.add("("+df.format(Double.parseDouble(obj[5].toString())*-1)+")");
 			}else{
 				listemp.add(df.format(obj[5]));
 			}
 			
 			if(Double.parseDouble(obj[6].toString())< 0){
-				double cre=Double.parseDouble(df.format(obj[6].toString()))*-1; 
-				listemp.add("("+cre+")");
+				listemp.add("("+df.format(Double.parseDouble(obj[6].toString())*-1)+")");
 			}else{
 				listemp.add(df.format(obj[6]));
 			}
 			
 			if(bal < 0){
-				listemp.add("("+Double.parseDouble(df.format(bal))*-1+")");
+				listemp.add("("+df.format((bal)*-1)+")");
 				
 			}else{
-				listemp.add(Double.parseDouble(df.format(bal)));
+				listemp.add(df.format(bal));
 			}
-			
-			
 			objList.add(listemp);
 			
 		}
@@ -286,26 +257,24 @@ public class clsCreditorLedgerController {
 		listemp.add(" ");
 		listemp.add("Total");
 		if(debit < 0){
-			debit =Double.parseDouble(df.format(debit));
-			listemp.add("("+debit*-1+")");
+			listemp.add("("+df.format(debit*-1)+")");
 			
 		}else{
-			listemp.add(Double.parseDouble(df.format(debit)));
+			listemp.add(df.format(debit));
 		}
 		
 		if(credit < 0){
-			credit =Double.parseDouble(df.format(credit));
-			listemp.add("("+credit*-1+")");
+			listemp.add("("+df.format(credit*-1)+")");
 			
 		}else{
-			listemp.add(Double.parseDouble(df.format(credit)));
+			listemp.add(df.format(credit));
 		}
 		
        if((debit-credit) < 0){
-			listemp.add("("+ (Double.parseDouble(df.format(debit-credit)))*-1 +")");
+			listemp.add("("+ df.format((debit-credit)*-1) +")");
 			
 		}else{
-			listemp.add(Double.parseDouble(df.format(debit-credit)));
+			listemp.add(df.format(debit-credit));
 		}
 		objList.add(listemp);
 		
@@ -344,11 +313,10 @@ public class clsCreditorLedgerController {
 		listemp.add("Total Debit");
 	
 		if(debit < 0){
-			debit =Double.parseDouble(df.format(debit));
-			listemp.add("("+debit*-1+")");
+			listemp.add("("+df.format(debit*-1)+")");
 			
 		}else{
-			listemp.add(Double.parseDouble(df.format(debit)));
+			listemp.add(df.format(debit));
 		}
 		
 		listemp.add("");
@@ -358,7 +326,6 @@ public class clsCreditorLedgerController {
 		listemp.add("");
 		listemp.add("");
 		objList.add(listemp);
-		
 		
 		
 		listemp = new ArrayList();
@@ -366,11 +333,10 @@ public class clsCreditorLedgerController {
 		listemp.add("Total Credit");
 		
 		if(credit < 0){
-			credit =Double.parseDouble(df.format(credit));
-			listemp.add("("+credit*-1+")");
+			listemp.add("("+df.format(credit*-1)+")");
 			
 		}else{
-			listemp.add(Double.parseDouble(df.format(credit)));
+			listemp.add(df.format(credit));
 		}
 		
 		listemp.add("");
@@ -382,16 +348,15 @@ public class clsCreditorLedgerController {
 		objList.add(listemp);
 		
 		
-		
 		listemp = new ArrayList();
 		
 		listemp.add("Closing Balance");
 		
 		if((debit-credit) < 0){
-			listemp.add("("+ (Double.parseDouble(df.format(debit-credit)))*-1 +")");
+			listemp.add("("+ df.format((debit-credit)*-1)+")");
 			
 		}else{
-			listemp.add(Double.parseDouble(df.format(debit-credit)));
+			listemp.add(df.format(debit-credit));
 		}
 		
 		listemp.add("");

@@ -108,7 +108,7 @@ public class clsExcelBuilderWithReportName extends AbstractExcelView {
 					if (null != arrObj.get(Count) && arrObj.get(Count).toString().length() > 0) {
 
 						if (isNumeric(arrObj.get(Count).toString())) {
-							aRow.createCell(Count).setCellValue(Double.parseDouble(arrObj.get(Count).toString()));
+							aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
 							aRow.getCell(Count).setCellStyle(rowStyle);
 						}
 						else if(arrObj.get(Count).toString().startsWith("("))
@@ -132,15 +132,25 @@ public class clsExcelBuilderWithReportName extends AbstractExcelView {
 					if (null != arrObj.get(Count) && arrObj.get(Count).toString().length() > 0) {
 
 						if (isNumeric(arrObj.get(Count).toString())) {
-							aRow.createCell(Count).setCellValue(Double.parseDouble(arrObj.get(Count).toString()));
+							aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
+							aRow.getCell(Count).setCellStyle(styleOfAligment);
 						}
 						else if(arrObj.get(Count).toString().startsWith("("))
 						{
 							aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
 							aRow.getCell(Count).setCellStyle(styleOfAligment);
 						}
-						else {
-							aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
+						else 
+						{
+							if(arrObj.get(Count).toString().startsWith(".0"))
+							{
+								aRow.createCell(Count).setCellValue("0"+arrObj.get(Count).toString());
+								aRow.getCell(Count).setCellStyle(styleOfAligment);
+							}
+							else
+							{
+								aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
+							}
 						}
 					} else {
 						aRow.createCell(Count).setCellValue("");
