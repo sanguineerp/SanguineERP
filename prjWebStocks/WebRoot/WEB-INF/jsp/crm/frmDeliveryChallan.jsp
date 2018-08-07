@@ -370,10 +370,10 @@ $(document).ready(function()
 	        dataType: "json",
 	        success: function(response)
 	        {		        	
-	        		if('Invalid Code' == response.strDCCode){
+	        		if(null == response.strDCCode){
 	        			alert("Invalid Delivery Challan Code");
-	        			$("#txtCode").val('');
-	        			$("#txtCode").focus();
+	        			$("#txtDCCode").val('');
+	        			funRemoveAllRows();
 	        			
 	        		}else{	
 	        			funRemoveAllRows();
@@ -1101,13 +1101,13 @@ $(document).ready(function()
 	$(function()
 			{
 				$("#txtDCCode").blur(function() 
+					{
+						var code=$('#txtDCCode').val();
+						if(code.trim().length > 0 && code !="?" && code !="/")
 						{
-							var code=$('#txtDCCode').val();
-							if(code.trim().length > 0 && code !="?" && code !="/")
-							{
-								funSetDeliveryChallanData(code);
-							}
-						});
+							funSetDeliveryChallanData(code);
+						}
+					});
 				
 				$('#txtCustCode').blur(function () {
 					var code=$('#txtCustCode').val();

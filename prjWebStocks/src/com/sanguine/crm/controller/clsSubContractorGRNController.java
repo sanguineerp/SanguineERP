@@ -98,38 +98,39 @@ public class clsSubContractorGRNController {
 		objGlobal = new clsGlobalFunctions();
 
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
-		// String userCode=req.getSession().getAttribute("usercode").toString();
 		clsSubContractorGRNBean objBean = new clsSubContractorGRNBean();
 		List<Object> objSCGRNList = objSubContractorGRNService.funLoadSubContractorGRNHDData(docCode, clientCode);
-		// clsSubContractorGRNModelDtl objSubContractorGRNDtl = new
-		// clsSubContractorGRNModelDtl();
 
-		clsSubContractorGRNModelHd objSCGRNHDModle = null;
-		clsPartyMasterModel objPartyMasterModel = null;
-		clsLocationMasterModel objLocationMasterModel = null;
+		if(objSCGRNList!=null)
+		{
+			clsSubContractorGRNModelHd objSCGRNHDModle = null;
+			clsPartyMasterModel objPartyMasterModel = null;
+			clsLocationMasterModel objLocationMasterModel = null;
 
-		for (int i = 0; i < objSCGRNList.size(); i++) {
-			Object[] ob = (Object[]) objSCGRNList.get(i);
-			objSCGRNHDModle = (clsSubContractorGRNModelHd) ob[0];
-			objPartyMasterModel = (clsPartyMasterModel) ob[1];
-			objLocationMasterModel = (clsLocationMasterModel) ob[2];
+			for (int i = 0; i < objSCGRNList.size(); i++) {
+				Object[] ob = (Object[]) objSCGRNList.get(i);
+				objSCGRNHDModle = (clsSubContractorGRNModelHd) ob[0];
+				objPartyMasterModel = (clsPartyMasterModel) ob[1];
+				objLocationMasterModel = (clsLocationMasterModel) ob[2];
 
+			}
+
+			objBean = funPrepardHdBean(objSCGRNHDModle, objPartyMasterModel, objLocationMasterModel);
+			objBean.setStrSuppName(objPartyMasterModel.getStrPName());
+			objBean.setStrLocName(objLocationMasterModel.getStrLocName());
+			List<clsSubContractorGRNModelDtl> listSCGRNDtl = new ArrayList<clsSubContractorGRNModelDtl>();
+			List<Object> objSCGRNDtlList = objSubContractorGRNService.funLoadSubContractorGRNDtlData(docCode, clientCode);
+			for (int i = 0; i < objSCGRNDtlList.size(); i++) {
+				Object[] ob = (Object[]) objSCGRNDtlList.get(i);
+				clsSubContractorGRNModelDtl scGRNDtl = (clsSubContractorGRNModelDtl) ob[0];
+				clsProductMasterModel prodmast = (clsProductMasterModel) ob[1];
+				scGRNDtl.setStrProdName(prodmast.getStrProdName());
+				scGRNDtl.setDblQty(scGRNDtl.getDblQtyRbl());
+				listSCGRNDtl.add(scGRNDtl);
+			}
+			objBean.setListSCGRNDtl(listSCGRNDtl);
 		}
-
-		objBean = funPrepardHdBean(objSCGRNHDModle, objPartyMasterModel, objLocationMasterModel);
-		objBean.setStrSuppName(objPartyMasterModel.getStrPName());
-		objBean.setStrLocName(objLocationMasterModel.getStrLocName());
-		List<clsSubContractorGRNModelDtl> listSCGRNDtl = new ArrayList<clsSubContractorGRNModelDtl>();
-		List<Object> objSCGRNDtlList = objSubContractorGRNService.funLoadSubContractorGRNDtlData(docCode, clientCode);
-		for (int i = 0; i < objSCGRNDtlList.size(); i++) {
-			Object[] ob = (Object[]) objSCGRNDtlList.get(i);
-			clsSubContractorGRNModelDtl scGRNDtl = (clsSubContractorGRNModelDtl) ob[0];
-			clsProductMasterModel prodmast = (clsProductMasterModel) ob[1];
-			scGRNDtl.setStrProdName(prodmast.getStrProdName());
-			scGRNDtl.setDblQty(scGRNDtl.getDblQtyRbl());
-			listSCGRNDtl.add(scGRNDtl);
-		}
-		objBean.setListSCGRNDtl(listSCGRNDtl);
+		
 		return objBean;
 	}
 

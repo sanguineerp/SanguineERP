@@ -80,79 +80,116 @@
 			$("#wait").css("display", "none");
 		});
 		
-		$('a#baseUrl').click(function() 
-				{
-					if($("#txtSOCode").val().trim()=="")
-					{
-						alert("Please Select Sales Order Code");
-						return false;
-					}
-					window.open('attachDoc.html?transName=frmSalesOrder.jsp&formName=Sales Order&code='+$('#txtSOCode').val(),"mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
-				});
+    $('a#baseUrl').click(function() 
+		{
+			if($("#txtSOCode").val().trim()=="")
+			{
+				alert("Please Select Sales Order Code");
+				return false;
+			}
+			window.open('attachDoc.html?transName=frmSalesOrder.jsp&formName=Sales Order&code='+$('#txtSOCode').val(),"mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+		});
 		
 	});
+	
+	//Textfiled On blur geting data
+	$(function() {
 		
-	
-	
-	
+		$('#txtLocCode').blur(function() {
+			var code = $('#txtLocCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetLocation(code);
+			}
+		});
 		
-		function funHelp(transactionName)
-		{
-			fieldName = transactionName;
-			window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500;left=500;");
-		}
+		$('#txtProdName').blur(function () {
+			var code=$('#hidProdCode').val();
+			if (code.trim().length > 0 && code !="?" && code !="/"){								  
+				funSetProduct(code);
+			   }
+			});
+		
+		$('#txtCustCode').blur(function () {
+			var code=$('#txtCustCode').val();
+			if (code.trim().length > 0 && code !="?" && code !="/"){								  
+				funSetCuster(code);
+			   }
+			});
+		
+		$('#txtSubGroup').blur(function () {
+			var code=$('#hidSubGroupCode').val();
+			if (code.trim().length > 0 && code !="?" && code !="/"){								  
+				funSetSubGroup(code);
+			   }
+			});
+		
+		$('#txtSOCode').blur(function () {
+			var code=$('#txtSOCode').val();
+			if (code.trim().length > 0 && code !="?" && code !="/"){								  
+				funSetSalesData(code);
+			   }
+			});
+	});
+		
+		
+	function funHelp(transactionName)
+	{
+		fieldName = transactionName;
+		window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500;left=500;");
+	}
 
-		 	function funSetData(code)
-			{
-				switch (fieldName)
-				{
-				 	case 'locationmaster':
-				    	funSetLocation(code);
-				        break;
-				        
-				    case 'productProduced':
-				    	funSetProduct(code);
-				        break;
-				        
-				    case 'custMasterActive' :
-				    	funSetCuster(code);
-				    	break;
-				    	
-				    case 'salesorder' :
-				    	funSetSalesData(code);
-				    	break;
-				     
-				    case 'subgroup':
-				    	funSetSubGroup(code);
-				        break;
-				        
-				    case 'salesorderslip' :
-				    	funSetSalesSlipData(code);
-				    	break;
-				}
-			}
+ 	function funSetData(code)
+	{
+		switch (fieldName)
+		{
+		 	case 'locationmaster':
+		    	funSetLocation(code);
+		        break;
+		        
+		    case 'productProduced':
+		    	funSetProduct(code);
+		        break;
+		        
+		    case 'custMasterActive' :
+		    	funSetCuster(code);
+		    	break;
+		    	
+		    case 'salesorder' :
+		    	funSetSalesData(code);
+		    	break;
+		     
+		    case 'subgroup':
+		    	funSetSubGroup(code);
+		        break;
+		        
+		    case 'salesorderslip' :
+		    	funSetSalesSlipData(code);
+		    	break;
+		}
+	}
 		 	
 		 	
-		 	function funSetSubGroup(code)
-			{
-				$("#hidSubGroupCode").val(code);
-				gurl=getContextPath()+"/loadSubGroupMasterData.html?subGroupCode="+code;
-				$.ajax({
-				        type: "GET",
-				        url: gurl,
-				        dataType: "json",
-				        success: function(response)
-				        {
-					        	$("#txtSubGroup").val(response.strSGName);
-						},
-				        error: function(e)
-				        {				        	
-				        	alert("Invalid SubGroup Code");
-			        		$("#txtSubgroupCode").val('');
-				        }
-			      });
-			}
-		 	
+ 	function funSetSubGroup(code)
+	{
+		$("#hidSubGroupCode").val(code);
+		gurl=getContextPath()+"/loadSubGroupMasterData.html?subGroupCode="+code;
+		$.ajax({
+		        type: "GET",
+		        url: gurl,
+		        dataType: "json",
+		        success: function(response)
+		        {
+			        	$("#txtSubGroup").val(response.strSGName);
+				},
+		        error: function(e)
+		        {				        	
+		        	alert("Invalid SubGroup Code");
+	        		$("#txtSubgroupCode").val('');
+		        }
+	      });
+	}
+ 	
 		 	
 		 	function funSetSalesData(code)
 			{
@@ -164,8 +201,8 @@
 			        async:false,
 			        success: function(response)
 			        {		        	
-			        		if('Invalid Code' == response.strSOCode){
-			        			alert("Invalid Customer Code");
+			        		if(null == response.strSOCode){
+			        			alert("Invalid Sales Order Code");
 			        			$("#txtSOCode").val('');
 			        			$("#txtSOCode").focus();
 			        			

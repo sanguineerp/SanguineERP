@@ -43,6 +43,8 @@
 		window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;;dialogTop:400px;");
 	
 	}
+	
+
 
 	function funSetData(code) {
 

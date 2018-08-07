@@ -26,7 +26,17 @@
 
 /*On form Load It Reset form :Ritesh 22 Nov 2014*/
 
-
+   //Textfiled On blur geting data
+	$(function() {
+		
+		$('#txtRegionCode').blur(function() {
+			var code = $('#txtRegionCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetData(code);
+			}
+		});
+	});
 
 	/**
 	* Reset The category Name TextField
@@ -60,9 +70,9 @@
 				        dataType: "json",
 				        success: function(response)
 				        {
-				        	if(response.strRegionCode=='Invalid Code')
+				        	if(response.strRegionCode==null)
 				        	{
-				        		alert("Invalid Manufacturer Code");
+				        		alert("Invalid Region Code");
 				        		$("#txtRegionCode").val('');
 				        	}
 				        	else

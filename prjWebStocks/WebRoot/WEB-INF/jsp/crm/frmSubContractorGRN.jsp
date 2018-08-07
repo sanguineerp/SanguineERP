@@ -241,6 +241,8 @@
 				    		  alert("Invalid Product Code");
 				    		  $("#txtProdCode").val('') 
 				    		  $("#txtProdCode").focus();
+				    		  $("#lblProdName").text('');
+				    		  $("#txtPrice").val('');
 				    		  return false;
 				    		}					   
 				    },
@@ -588,7 +590,7 @@
 	        dataType: "json",
 	        success: function(response)
 	        {		        	
-	        		if('Invalid Code' == response.strSRCode){
+	        		if(null == response.strSRCode){
 	        			alert("Invalid SubContractorGRND Code");
 	        			$("#txtSRCode").val('');
 	        			$("#txtSRCode").focus();

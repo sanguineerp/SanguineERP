@@ -51,12 +51,12 @@
 	   		}
 		});
 		
-		/* $('#txtSOCode').blur(function () {
+		 $('#txtSOCode').blur(function () {
 			 var code=$('#txtSOCode').val();
 			 if (code.trim().length > 0 && code !="?" && code !="/"){							   
-				 funGenerateJobOrder();
+				 funSetSOCode(code);
 	   		}
-		}); */
+		}); 
 		
 		$("form").submit(function(){	
 			$("#tblJobOrderDtl").empty();
@@ -112,8 +112,10 @@
 					
 				}else{
 					
-					if(response.length<=0){
+					if(response.length<=0)
+					{
 						alert("No Job Orders Available For Sales Order");
+						$("#txtSOCode").val('');
 					}else{
 						 $("#txtSOCode").val(SOcode);
 						$.each(response, function(i,item){
@@ -218,7 +220,7 @@
 		    	if('Invalid Code' == response.strProdCode){
 		    		alert('Invalid Product Code');
 			    	$("#txtProdCode").val('');
-			    	$("#txtProdName").val('');
+			    	$("#txtprodName").text('');
 			    	$("#txtProdCode").focus();
 		    	}
 		    	else{

@@ -287,12 +287,17 @@ public class clsProductMasterDaoImpl implements clsProductMasterDao {
 
 	@Override
 	public clsProductMasterModel funGetBarCodeProductObject(String barCode, String clientCode) {
+		clsProductMasterModel objModel=null;
 		String sql = "from clsProductMasterModel where strBarCode=:barCode " + "and strClientCode=:clientCode";
 		Query query = sessionFactory.getCurrentSession().createQuery(sql);
 		query.setParameter("barCode", barCode);
 		query.setParameter("clientCode", clientCode);
 		List list = query.list();
-		return (clsProductMasterModel) list.get(0);
+		if (!list.isEmpty()) 
+		{
+			objModel = (clsProductMasterModel) list.get(0);
+		}
+		return objModel;
 
 	}
 

@@ -123,6 +123,16 @@
 			}
 		});
 		
+		$('#txtLocCode').blur(function() {
+			var code = $('#txtLocCode').val();
+			if (code.trim().length > 0 && code != "?" && code != "/") {
+				funSetLocationData(code);
+			}
+		});
+		
+		
+		
+		
 	});
 
 	function funSetData(code){
@@ -580,8 +590,18 @@
 			    dataType: "json",
 			    success: function(response)
 			    {
-			    	$("#txtProcessCode").val(response.strProcessCode);
-			    	$("#lblprocessName").text(response.strProcessName);
+			    	if('Invalid Code' == response.strProcessCode)
+			    	{
+			    		alert('Invalid Process Code');
+			    		$("#txtProcessCode").val('');
+				    	$("#lblprocessName").text('');
+			    	}
+			    	else
+			    	{
+			    		$("#txtProcessCode").val(response.strProcessCode);
+				    	$("#lblprocessName").text(response.strProcessName);
+			    	}
+			    	
 			    },
 			    error: function(jqXHR, exception) {
 		            if (jqXHR.status === 0) {

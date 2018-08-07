@@ -187,44 +187,49 @@ public class clsDeliveryChallanController {
 		clsLocationMasterModel objLocationMasterModel = null;
 		clsPartyMasterModel objPartyMasterModel = null;
 
-		for (int i = 0; i < objDC.size(); i++) {
-			Object[] ob = (Object[]) objDC.get(i);
-			objDeliveryChallanHdModel = (clsDeliveryChallanHdModel) ob[0];
-			objLocationMasterModel = (clsLocationMasterModel) ob[1];
-			objPartyMasterModel = (clsPartyMasterModel) ob[2];
-		}
-
-		objBeanDC = funPrepardHdBean(objDeliveryChallanHdModel, objLocationMasterModel, objPartyMasterModel);
-		objBeanDC.setStrCustName(objPartyMasterModel.getStrPName());
-		objBeanDC.setStrLocName(objLocationMasterModel.getStrLocName());
-		List<clsDeliveryChallanModelDtl> listDCDtl = new ArrayList<clsDeliveryChallanModelDtl>();
-		List<clsInvoiceBean> listPreviousInv = new ArrayList<clsInvoiceBean>();
-		List<Object> objDCDtlModelList = objDeliveryChallanHdService.funGetDeliveryChallanDtl(dcCode, clientCode);
-		for (int i = 0; i < objDCDtlModelList.size(); i++) {
-			Object[] ob = (Object[]) objDCDtlModelList.get(i);
-			clsDeliveryChallanModelDtl dcDtl = (clsDeliveryChallanModelDtl) ob[0];
-			clsProductMasterModel prodmast = (clsProductMasterModel) ob[1];
-			clsDeliveryChallanHdModel objHDModel = (clsDeliveryChallanHdModel) ob[2];
-			dcDtl.setStrProdName(prodmast.getStrProdName());
-			String sqlHd = "select b.dteInvDate,a.dblUnitPrice,b.strInvCode  from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + dcDtl.getStrProdCode() + "' and a.strClientCode='" + dcDtl.getStrClientCode() + "' and b.strInvCode=a.strInvCode " + " and a.strCustCode='" + objHDModel.getStrCustCode()
-					+ "' and  b.dteInvDate=(SELECT MAX(b.dteInvDate) from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + dcDtl.getStrProdCode() + "' and a.strClientCode='" + dcDtl.getStrClientCode() + "' and b.strInvCode=a.strInvCode  " + " and a.strCustCode='" + objHDModel.getStrCustCode() + "')";
-
-			List listPrevInvData = objGlobalFunctionsService.funGetList(sqlHd, "sql");
-			clsInvoiceBean objInvBean = new clsInvoiceBean();
-			if (listPrevInvData.size() > 0) {
-				Object objInv[] = (Object[]) listPrevInvData.get(0);
-				objInvBean.setDblUnitPrice(Double.parseDouble(objInv[1].toString()));
-				objInvBean.setStrInvCode(objInv[2].toString());
-				listPreviousInv.add(objInvBean);
-			} else {
-				objInvBean.setDblUnitPrice(0.0);
-				objInvBean.setStrInvCode(" ");
-				listPreviousInv.add(objInvBean);
+		if(objDC!=null)
+		{
+			for (int i = 0; i < objDC.size(); i++) {
+				Object[] ob = (Object[]) objDC.get(i);
+				objDeliveryChallanHdModel = (clsDeliveryChallanHdModel) ob[0];
+				objLocationMasterModel = (clsLocationMasterModel) ob[1];
+				objPartyMasterModel = (clsPartyMasterModel) ob[2];
 			}
-			listDCDtl.add(dcDtl);
+
+			objBeanDC = funPrepardHdBean(objDeliveryChallanHdModel, objLocationMasterModel, objPartyMasterModel);
+			objBeanDC.setStrCustName(objPartyMasterModel.getStrPName());
+			objBeanDC.setStrLocName(objLocationMasterModel.getStrLocName());
+			List<clsDeliveryChallanModelDtl> listDCDtl = new ArrayList<clsDeliveryChallanModelDtl>();
+			List<clsInvoiceBean> listPreviousInv = new ArrayList<clsInvoiceBean>();
+			List<Object> objDCDtlModelList = objDeliveryChallanHdService.funGetDeliveryChallanDtl(dcCode, clientCode);
+			for (int i = 0; i < objDCDtlModelList.size(); i++) {
+				Object[] ob = (Object[]) objDCDtlModelList.get(i);
+				clsDeliveryChallanModelDtl dcDtl = (clsDeliveryChallanModelDtl) ob[0];
+				clsProductMasterModel prodmast = (clsProductMasterModel) ob[1];
+				clsDeliveryChallanHdModel objHDModel = (clsDeliveryChallanHdModel) ob[2];
+				dcDtl.setStrProdName(prodmast.getStrProdName());
+				String sqlHd = "select b.dteInvDate,a.dblUnitPrice,b.strInvCode  from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + dcDtl.getStrProdCode() + "' and a.strClientCode='" + dcDtl.getStrClientCode() + "' and b.strInvCode=a.strInvCode " + " and a.strCustCode='" + objHDModel.getStrCustCode()
+						+ "' and  b.dteInvDate=(SELECT MAX(b.dteInvDate) from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + dcDtl.getStrProdCode() + "' and a.strClientCode='" + dcDtl.getStrClientCode() + "' and b.strInvCode=a.strInvCode  " + " and a.strCustCode='" + objHDModel.getStrCustCode() + "')";
+
+				List listPrevInvData = objGlobalFunctionsService.funGetList(sqlHd, "sql");
+				clsInvoiceBean objInvBean = new clsInvoiceBean();
+				if (listPrevInvData.size() > 0) {
+					Object objInv[] = (Object[]) listPrevInvData.get(0);
+					objInvBean.setDblUnitPrice(Double.parseDouble(objInv[1].toString()));
+					objInvBean.setStrInvCode(objInv[2].toString());
+					listPreviousInv.add(objInvBean);
+				} else {
+					objInvBean.setDblUnitPrice(0.0);
+					objInvBean.setStrInvCode(" ");
+					listPreviousInv.add(objInvBean);
+				}
+				listDCDtl.add(dcDtl);
+			}
+			objBeanDC.setListclsInvoiceBean(listPreviousInv);
+			objBeanDC.setListclsDeliveryChallanModelDtl(listDCDtl);
 		}
-		objBeanDC.setListclsInvoiceBean(listPreviousInv);
-		objBeanDC.setListclsDeliveryChallanModelDtl(listDCDtl);
+		
+		
 		return objBeanDC;
 	}
 

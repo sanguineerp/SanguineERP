@@ -531,66 +531,70 @@ public class clsSalesOrderController
 		clsSalesOrderHdModel objSalesOrderHdModel = null;
 		clsLocationMasterModel objLocationMasterModel = null;
 		clsPartyMasterModel objPartyMasterModel = null;
-		for (int i = 0; i < objSales.size(); i++)
+		if(objSales!=null)
 		{
-			Object[] ob = (Object[]) objSales.get(i);
-			objSalesOrderHdModel = (clsSalesOrderHdModel) ob[0];
-			objLocationMasterModel = (clsLocationMasterModel) ob[1];
-			objPartyMasterModel = (clsPartyMasterModel) ob[2];
-		}
-		objBeanSale = funPrepardHdBean(objSalesOrderHdModel, objLocationMasterModel, objPartyMasterModel);
-		double currRate=objBeanSale.getDblConversion();
-
-		List<clsSalesOrderDtl> listSaleDtl = new ArrayList<clsSalesOrderDtl>();
-		List<clsSalesCharModel> listSalesChar = new ArrayList<clsSalesCharModel>();
-		List<Object> objSalesDtlModelList = objSalesOrderService.funGetSalesOrderDtl(soCode, clientCode);
-		for (int i = 0; i < objSalesDtlModelList.size(); i++)
-		{
-			Object[] ob = (Object[]) objSalesDtlModelList.get(i);
-			clsSalesOrderDtl saleDtl = (clsSalesOrderDtl) ob[0];
-			clsProductMasterModel prodmast = (clsProductMasterModel) ob[1];
-
-			listSalesChar = objSalesOrderService.funGetSalesChar(objBeanSale.getStrSOCode(), saleDtl.getStrProdCode());
-
-			saleDtl.setDblAvgQty(funGetCustAvg(objBeanSale.getStrCustCode(), saleDtl.getStrProdCode(), objBeanSale.getDteSODate(), req));
-			saleDtl.setStrProdName(prodmast.getStrProdName());
-			saleDtl.setStrProdType(prodmast.getStrProdType());
-            saleDtl.setDblDiscount(saleDtl.getDblDiscount()/currRate);
-            saleDtl.setDblTax(saleDtl.getDblTax()/currRate);
-            saleDtl.setDblTaxableAmt(saleDtl.getDblTaxableAmt()/currRate);
-            saleDtl.setDblTaxAmt(saleDtl.getDblTaxAmt()/currRate);
-            saleDtl.setDblTotalPrice(saleDtl.getDblTotalPrice()/currRate); 
-            saleDtl.setDblUnitPrice(saleDtl.getDblUnitPrice()/currRate);
-                     
-			if (!(objSetup == null))
+			for (int i = 0; i < objSales.size(); i++)
 			{
-				if (objSetup.getStrShowAvgQtyInSO().equals("Y"))
-				{
-					double avgQty = funGetCustAvg(objBeanSale.getStrCustCode(), saleDtl.getStrProdCode(), objBeanSale.getDteSODate(), req);
-					saleDtl.setDblAvgQty(avgQty);
-				}
-				if (objSetup.getStrShowStockInSO().equals("Y"))
-				{
-					String sqlStk = " select a.dblClosingStk " + " from tblcurrentstock a where a.strLocCode='" + objBeanSale.getStrLocCode() + "' " + " and a.strProdCode='" + saleDtl.getStrProdCode() + "' " + " and a.strClientCode='" + clientCode + "'  ";
-					List<BigDecimal> listSTK = objGlobalFunctionsService.funGetDataList(sqlStk, "sql");
-					double dblClosingStk = 0;
-					if (!(listSTK.isEmpty()))
-					{
-						BigDecimal objStk = listSTK.get(0);
-						dblClosingStk = objStk.doubleValue();
-					}
-					saleDtl.setDblAvalaibleStk(dblClosingStk);
-				}
-
+				Object[] ob = (Object[]) objSales.get(i);
+				objSalesOrderHdModel = (clsSalesOrderHdModel) ob[0];
+				objLocationMasterModel = (clsLocationMasterModel) ob[1];
+				objPartyMasterModel = (clsPartyMasterModel) ob[2];
 			}
+			objBeanSale = funPrepardHdBean(objSalesOrderHdModel, objLocationMasterModel, objPartyMasterModel);
+			double currRate=objBeanSale.getDblConversion();
 
-			listSaleDtl.add(saleDtl);
+			List<clsSalesOrderDtl> listSaleDtl = new ArrayList<clsSalesOrderDtl>();
+			List<clsSalesCharModel> listSalesChar = new ArrayList<clsSalesCharModel>();
+			List<Object> objSalesDtlModelList = objSalesOrderService.funGetSalesOrderDtl(soCode, clientCode);
+			for (int i = 0; i < objSalesDtlModelList.size(); i++)
+			{
+				Object[] ob = (Object[]) objSalesDtlModelList.get(i);
+				clsSalesOrderDtl saleDtl = (clsSalesOrderDtl) ob[0];
+				clsProductMasterModel prodmast = (clsProductMasterModel) ob[1];
+
+				listSalesChar = objSalesOrderService.funGetSalesChar(objBeanSale.getStrSOCode(), saleDtl.getStrProdCode());
+
+				saleDtl.setDblAvgQty(funGetCustAvg(objBeanSale.getStrCustCode(), saleDtl.getStrProdCode(), objBeanSale.getDteSODate(), req));
+				saleDtl.setStrProdName(prodmast.getStrProdName());
+				saleDtl.setStrProdType(prodmast.getStrProdType());
+	            saleDtl.setDblDiscount(saleDtl.getDblDiscount()/currRate);
+	            saleDtl.setDblTax(saleDtl.getDblTax()/currRate);
+	            saleDtl.setDblTaxableAmt(saleDtl.getDblTaxableAmt()/currRate);
+	            saleDtl.setDblTaxAmt(saleDtl.getDblTaxAmt()/currRate);
+	            saleDtl.setDblTotalPrice(saleDtl.getDblTotalPrice()/currRate); 
+	            saleDtl.setDblUnitPrice(saleDtl.getDblUnitPrice()/currRate);
+	                     
+				if (!(objSetup == null))
+				{
+					if (objSetup.getStrShowAvgQtyInSO().equals("Y"))
+					{
+						double avgQty = funGetCustAvg(objBeanSale.getStrCustCode(), saleDtl.getStrProdCode(), objBeanSale.getDteSODate(), req);
+						saleDtl.setDblAvgQty(avgQty);
+					}
+					if (objSetup.getStrShowStockInSO().equals("Y"))
+					{
+						String sqlStk = " select a.dblClosingStk " + " from tblcurrentstock a where a.strLocCode='" + objBeanSale.getStrLocCode() + "' " + " and a.strProdCode='" + saleDtl.getStrProdCode() + "' " + " and a.strClientCode='" + clientCode + "'  ";
+						List<BigDecimal> listSTK = objGlobalFunctionsService.funGetDataList(sqlStk, "sql");
+						double dblClosingStk = 0;
+						if (!(listSTK.isEmpty()))
+						{
+							BigDecimal objStk = listSTK.get(0);
+							dblClosingStk = objStk.doubleValue();
+						}
+						saleDtl.setDblAvalaibleStk(dblClosingStk);
+					}
+
+				}
+
+				listSaleDtl.add(saleDtl);
+			}
+			if (listSalesChar != null)
+			{
+				objBeanSale.setListSalesChar(listSalesChar);
+			}
+			objBeanSale.setListSODtl(listSaleDtl);
 		}
-		if (listSalesChar != null)
-		{
-			objBeanSale.setListSalesChar(listSalesChar);
-		}
-		objBeanSale.setListSODtl(listSaleDtl);
+		
 		return objBeanSale;
 	}
 
