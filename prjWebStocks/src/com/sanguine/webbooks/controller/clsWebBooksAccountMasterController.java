@@ -100,7 +100,7 @@ public class clsWebBooksAccountMasterController {
 
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		List listModel = objWebBooksAccountMasterService.funGetWebBooksAccountMaster(accountCode, clientCode);
-		if (null == listModel) {
+		if (null == listModel || listModel.size()==0) {
 			objModel = new clsWebBooksAccountMasterModel();
 			objModel.setStrAccountCode("Invalid Code");
 		} else {

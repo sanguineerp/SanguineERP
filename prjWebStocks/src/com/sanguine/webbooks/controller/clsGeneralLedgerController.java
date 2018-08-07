@@ -67,7 +67,7 @@ public class clsGeneralLedgerController {
 
 	@RequestMapping(value = "/getGeneralLedger", method = RequestMethod.GET)
 	public @ResponseBody List funLoadGeneralLedger(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "currency") String currency, HttpServletRequest req, HttpServletResponse resp) {
-		List retList = new ArrayList();
+		
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 		String startDate = req.getSession().getAttribute("startDate").toString();
@@ -109,10 +109,10 @@ public class clsGeneralLedgerController {
 
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
-		String[] spParam1 = param1.split(",");
+		
 
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
-		//double currValue = Double.parseDouble(req.getSession().getAttribute("currValue").toString());
+
 
 		String fromDate = objGlobal.funGetDate("yyyy-MM-dd", fDate);
 		String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);

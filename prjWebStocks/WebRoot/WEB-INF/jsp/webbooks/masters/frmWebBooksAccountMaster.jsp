@@ -30,6 +30,35 @@
 		}}%>
 
 	});
+
+	//Textfiled On blur geting data
+		$(function() {
+			
+			$('#txtAccountCode').blur(function() {
+				var code = $('#txtAccountCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetAccountDetails(code);
+				}
+			});
+			
+			$('#txtGroupCode').blur(function() {
+				var code = $('#txtGroupCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetAccountGroupDetails(code);
+				}
+			});
+			
+			$('#txtEmployeeCode').blur(function() {
+				var code = $('#txtEmployeeCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetEmployeeMasterData(code);
+				}
+			});
+		});
+
 	
 	 document.onkeypress = function(key_dtl) {
 		 key_dtl = key_dtl || window.event; 
@@ -195,7 +224,7 @@
 			        {
 			        	if(response.strEmployeeCode=='Invalid Code')
 			        	{
-			        		alert("Invalid Bank Code");
+			        		alert("Invalid Employee Code");
 			        		$("#txtEmployeeCode").val('');
 			        	}
 			        	else
@@ -398,7 +427,7 @@
 			</tr>
 			<tr>
 			    <td><label >Group Code</label></td>
-			    <td><s:input id="txtGroupCode" path="strGroupCode" readonly="true" ondblclick="funHelp('acGroupCode')" cssClass="searchTextBox"/></td>			        			        
+			    <td><s:input id="txtGroupCode" path="strGroupCode"  ondblclick="funHelp('acGroupCode')" cssClass="searchTextBox"/></td>			        			        
 			    <td colspan="2"><s:input id="txtGroupName" path="strGroupName" required="true" readonly="true" cssClass="longTextBox"/></td>			    			        			   
 				
 			</tr>
