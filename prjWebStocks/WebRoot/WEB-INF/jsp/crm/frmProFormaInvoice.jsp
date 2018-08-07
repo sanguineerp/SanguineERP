@@ -252,8 +252,9 @@
 	        {		        	
 	        		if('Invalid Code' == response.strPCode){
 	        			alert("Invalid Customer Code");
-	        			$("#txtPartyCode").val('');
-	        			$("#txtPartyCode").focus();
+	        			$("#txtCustCode").val('');
+	        			$("#txtCustCode").focus();
+	        			$("#lblCustomerName").text('');
 	        		}else{			   
 	        			$("#txtCustCode").val(response.strPCode);
 						$("#lblCustomerName").text(response.strPName);
@@ -451,10 +452,11 @@
 	        dataType: "json",
 	        success: function(response)
 	        {		        	
-	        		if('Invalid Code' == response.strInvCode){
+	        		if(null == response.strInvCode){
 	        			alert("Invalid  Invoice Code");
 	        			$("#txtSOCode").val('');
 	        			$("#txtSOCode").focus();
+	        			funRemoveAllRows();
 	        			
 	        		}else{	
 	        			funRemoveAllRows();
@@ -1027,16 +1029,68 @@
 	$(function()
 			{
 				$("#txtDCCode").blur(function() 
+					{
+						var code=$('#txtDCCode').val();
+						if(code.trim().length > 0 && code !="?" && code !="/")
 						{
-							var code=$('#txtDCCode').val();
-							if(code.trim().length > 0 && code !="?" && code !="/")
-							{
-								funSetInvoiceData(code);
-							}
-						});
+							funSetInvoiceData(code);
+						}
+					});
 				
 				
+				$("#txtLocCode").blur(function() 
+					{
+						var code=$('#txtLocCode').val();
+						if(code.trim().length > 0 && code !="?" && code !="/")
+						{
+							funSetLocation(code);
+						}
+					});
 				
+				$("#txtCustCode").blur(function() 
+					{
+						var code=$('#txtCustCode').val();
+						if(code.trim().length > 0 && code !="?" && code !="/")
+						{
+							funSetCuster(code);
+						}
+					});
+				
+				$("#txtProdName").blur(function() 
+					{
+						var code=$('#hidProdCode').val();
+						if(code.trim().length > 0 && code !="?" && code !="/")
+						{
+							funSetProduct(code);
+						}
+					});
+				
+				$("#txtTaxCode").blur(function() 
+					{
+						var code=$('#txtTaxCode').val();
+						if(code.trim().length > 0 && code !="?" && code !="/")
+						{
+							 funSetTax(code);
+						}
+					});
+				
+				$("#txtVehCode").blur(function() 
+					{
+						var code=$('#txtVehCode').val();
+						if(code.trim().length > 0 && code !="?" && code !="/")
+						{
+							funSetVehCode(code);
+						}
+					});
+				
+				$("#txtSubGroup").blur(function() 
+					{
+						var code=$('#hidSubGroupCode').val();
+						if(code.trim().length > 0 && code !="?" && code !="/")
+						{
+							funSetSubGroup(code);
+						}
+					});
 			 
 				
 				

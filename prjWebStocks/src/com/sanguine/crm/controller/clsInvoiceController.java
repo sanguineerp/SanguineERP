@@ -1064,82 +1064,87 @@ public class clsInvoiceController
 		clsInvoiceHdModel objInvoiceHdModel = null;
 		clsLocationMasterModel objLocationMasterModel = null;
 		clsPartyMasterModel objPartyMasterModel = null;
-
-		for (int i = 0; i < objDC.size(); i++)
+    
+		if(objDC!=null)
 		{
-			Object[] ob = (Object[]) objDC.get(i);
-			objInvoiceHdModel = (clsInvoiceHdModel) ob[0];
-			objLocationMasterModel = (clsLocationMasterModel) ob[1];
-			objPartyMasterModel = (clsPartyMasterModel) ob[2];
-		}
+			for (int i = 0; i < objDC.size(); i++)
+			{
+				Object[] ob = (Object[]) objDC.get(i);
+				objInvoiceHdModel = (clsInvoiceHdModel) ob[0];
+				objLocationMasterModel = (clsLocationMasterModel) ob[1];
+				objPartyMasterModel = (clsPartyMasterModel) ob[2];
+			}
 
-		objBeanInv = funPrepardHdBean(objInvoiceHdModel, objLocationMasterModel, objPartyMasterModel);
-		objBeanInv.setStrCustName(objPartyMasterModel.getStrPName());
-		objBeanInv.setStrLocName(objLocationMasterModel.getStrLocName());
-		double currValue =objBeanInv.getDblCurrencyConv() ;
+			objBeanInv = funPrepardHdBean(objInvoiceHdModel, objLocationMasterModel, objPartyMasterModel);
+			objBeanInv.setStrCustName(objPartyMasterModel.getStrPName());
+			objBeanInv.setStrLocName(objLocationMasterModel.getStrLocName());
+			double currValue =objBeanInv.getDblCurrencyConv() ;
+			
+			List<clsInvoiceModelDtl> listDCDtl = new ArrayList<clsInvoiceModelDtl>();
+			clsInvoiceHdModel objInvHDModelList = objInvoiceHdService.funGetInvoiceDtl(invCode, clientCode);
+
+			List<clsInvoiceModelDtl> listInvDtlModel = objInvHDModelList.getListInvDtlModel();
+			List<clsInvoiceDtlBean> listInvDtlBean = new ArrayList();
+			for (int i = 0; i < listInvDtlModel.size(); i++)
+			{
+				clsInvoiceDtlBean objBeanInvoice = new clsInvoiceDtlBean();
+
+				clsInvoiceModelDtl obj = listInvDtlModel.get(i);
+				clsProductMasterModel objProdModle = objProductMasterService.funGetObject(obj.getStrProdCode(), clientCode);
+
+				objBeanInvoice.setStrProdCode(obj.getStrProdCode());
+				objBeanInvoice.setStrProdName(objProdModle.getStrProdName());
+				objBeanInvoice.setStrProdType(obj.getStrProdType());
+				objBeanInvoice.setDblQty(obj.getDblQty());
+				objBeanInvoice.setDblWeight(obj.getDblWeight());
+				objBeanInvoice.setDblUnitPrice(obj.getDblUnitPrice() / currValue);
+				objBeanInvoice.setStrPktNo(obj.getStrPktNo());
+				objBeanInvoice.setStrRemarks(obj.getStrRemarks());
+				objBeanInvoice.setStrInvoiceable(obj.getStrInvoiceable());
+				objBeanInvoice.setStrSerialNo(obj.getStrSerialNo());
+				objBeanInvoice.setStrCustCode(obj.getStrCustCode());
+				objBeanInvoice.setStrSOCode(obj.getStrSOCode());
+				objBeanInvoice.setDblDisAmt(obj.getDblProdDiscAmount()/ currValue);
+				String sqlHd = "select b.dteInvDate,a.dblUnitPrice,b.strInvCode  from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode " + " and a.strCustCode='" + objBeanInv.getStrCustName() + "' and  b.dteInvDate=(SELECT MAX(b.dteInvDate) from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode  " + " and a.strCustCode='" + objBeanInv.getStrCustCode() + "')";
+
+				List listPrevInvData = objGlobalFunctionsService.funGetList(sqlHd, "sql");
+
+				if (listPrevInvData.size() > 0)
+				{
+					Object objInv[] = (Object[]) listPrevInvData.get(0);
+					objBeanInvoice.setPrevUnitPrice(Double.parseDouble(objInv[1].toString()) / currValue);
+					objBeanInvoice.setPrevInvCode(objInv[2].toString());
+
+				}
+				else
+				{
+					objBeanInvoice.setPrevUnitPrice(0.0);
+					objBeanInvoice.setPrevInvCode(" ");
+				}
+
+				listInvDtlBean.add(objBeanInvoice);
+
+			}
+			objBeanInv.setListclsInvoiceModelDtl(listInvDtlBean);
+
+			String sql = "select strTaxCode,strTaxDesc,dblTaxableAmt,dblTaxAmt from tblinvtaxdtl " + "where strInvCode='" + invCode + "' and strClientCode='" + clientCode + "'";
+			List list = objGlobalFunctionsService.funGetList(sql, "sql");
+			List<clsInvoiceTaxDtlBean> listInvTaxDtl = new ArrayList<clsInvoiceTaxDtlBean>();
+			for (int cnt = 0; cnt < list.size(); cnt++)
+			{
+				clsInvoiceTaxDtlBean objTaxDtl = new clsInvoiceTaxDtlBean();
+				Object[] arrObj = (Object[]) list.get(cnt);
+				objTaxDtl.setStrTaxCode(arrObj[0].toString());
+				objTaxDtl.setStrTaxDesc(arrObj[1].toString());
+				objTaxDtl.setStrTaxableAmt(Double.parseDouble(arrObj[2].toString())/ currValue);
+				objTaxDtl.setStrTaxAmt(Double.parseDouble(arrObj[3].toString())/ currValue);
+
+				listInvTaxDtl.add(objTaxDtl);
+			}
+			objBeanInv.setListInvoiceTaxDtl(listInvTaxDtl);
+		}
 		
-		List<clsInvoiceModelDtl> listDCDtl = new ArrayList<clsInvoiceModelDtl>();
-		clsInvoiceHdModel objInvHDModelList = objInvoiceHdService.funGetInvoiceDtl(invCode, clientCode);
-
-		List<clsInvoiceModelDtl> listInvDtlModel = objInvHDModelList.getListInvDtlModel();
-		List<clsInvoiceDtlBean> listInvDtlBean = new ArrayList();
-		for (int i = 0; i < listInvDtlModel.size(); i++)
-		{
-			clsInvoiceDtlBean objBeanInvoice = new clsInvoiceDtlBean();
-
-			clsInvoiceModelDtl obj = listInvDtlModel.get(i);
-			clsProductMasterModel objProdModle = objProductMasterService.funGetObject(obj.getStrProdCode(), clientCode);
-
-			objBeanInvoice.setStrProdCode(obj.getStrProdCode());
-			objBeanInvoice.setStrProdName(objProdModle.getStrProdName());
-			objBeanInvoice.setStrProdType(obj.getStrProdType());
-			objBeanInvoice.setDblQty(obj.getDblQty());
-			objBeanInvoice.setDblWeight(obj.getDblWeight());
-			objBeanInvoice.setDblUnitPrice(obj.getDblUnitPrice() / currValue);
-			objBeanInvoice.setStrPktNo(obj.getStrPktNo());
-			objBeanInvoice.setStrRemarks(obj.getStrRemarks());
-			objBeanInvoice.setStrInvoiceable(obj.getStrInvoiceable());
-			objBeanInvoice.setStrSerialNo(obj.getStrSerialNo());
-			objBeanInvoice.setStrCustCode(obj.getStrCustCode());
-			objBeanInvoice.setStrSOCode(obj.getStrSOCode());
-			objBeanInvoice.setDblDisAmt(obj.getDblProdDiscAmount()/ currValue);
-			String sqlHd = "select b.dteInvDate,a.dblUnitPrice,b.strInvCode  from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode " + " and a.strCustCode='" + objBeanInv.getStrCustName() + "' and  b.dteInvDate=(SELECT MAX(b.dteInvDate) from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode  " + " and a.strCustCode='" + objBeanInv.getStrCustCode() + "')";
-
-			List listPrevInvData = objGlobalFunctionsService.funGetList(sqlHd, "sql");
-
-			if (listPrevInvData.size() > 0)
-			{
-				Object objInv[] = (Object[]) listPrevInvData.get(0);
-				objBeanInvoice.setPrevUnitPrice(Double.parseDouble(objInv[1].toString()) / currValue);
-				objBeanInvoice.setPrevInvCode(objInv[2].toString());
-
-			}
-			else
-			{
-				objBeanInvoice.setPrevUnitPrice(0.0);
-				objBeanInvoice.setPrevInvCode(" ");
-			}
-
-			listInvDtlBean.add(objBeanInvoice);
-
-		}
-		objBeanInv.setListclsInvoiceModelDtl(listInvDtlBean);
-
-		String sql = "select strTaxCode,strTaxDesc,dblTaxableAmt,dblTaxAmt from tblinvtaxdtl " + "where strInvCode='" + invCode + "' and strClientCode='" + clientCode + "'";
-		List list = objGlobalFunctionsService.funGetList(sql, "sql");
-		List<clsInvoiceTaxDtlBean> listInvTaxDtl = new ArrayList<clsInvoiceTaxDtlBean>();
-		for (int cnt = 0; cnt < list.size(); cnt++)
-		{
-			clsInvoiceTaxDtlBean objTaxDtl = new clsInvoiceTaxDtlBean();
-			Object[] arrObj = (Object[]) list.get(cnt);
-			objTaxDtl.setStrTaxCode(arrObj[0].toString());
-			objTaxDtl.setStrTaxDesc(arrObj[1].toString());
-			objTaxDtl.setStrTaxableAmt(Double.parseDouble(arrObj[2].toString())/ currValue);
-			objTaxDtl.setStrTaxAmt(Double.parseDouble(arrObj[3].toString())/ currValue);
-
-			listInvTaxDtl.add(objTaxDtl);
-		}
-		objBeanInv.setListInvoiceTaxDtl(listInvTaxDtl);
+		
 		return objBeanInv;
 	}
 
