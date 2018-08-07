@@ -146,7 +146,7 @@ public class clsGeneralLedgerController {
 		double bal = 0.00;
 		String totBalAmt="";
 		
-		DecimalFormat df = new DecimalFormat("####0.0000");
+		DecimalFormat df = objGlobal.funGetDecimatFormat(req);
 		String twoDecimalVal="";
 		double debitAmt=0.00,creditAmt=0.00;
 		for (int i = 0; i < listBillLedger.size(); i++) {

@@ -412,9 +412,34 @@ public class clsPaymentController {
 		for (clsPaymentDetailsBean objPaymentBeanDetails : objBean.getListPaymentDetailsBean()) {
 			clsPaymentDebtorDtlModel objPaymentDebtorDtlModel = new clsPaymentDebtorDtlModel();
 
+			if(!strCrCode.equals(""))
+			{
 			if (objPaymentBeanDetails.getStrDC().equals("Dr")) {
-				objPaymentDebtorDtlModel.setStrDebtorCode(strCrCode);
-				objPaymentDebtorDtlModel.setStrDebtorName(strCrNameCode);
+				
+				if(objPaymentBeanDetails.getStrDebtorCode().startsWith("D"))
+				{
+					clsSundryDebtorMasterModel objSunDebtor = objSundryDebtorMasterService.funGetSundryDebtorMaster(objPaymentBeanDetails.getStrDebtorCode(), clientCode);
+					String debtorName="";
+					if (objSunDebtor != null) {
+						debtorName = objSunDebtor.getStrDebtorFullName();
+					}
+					objPaymentDebtorDtlModel.setStrDebtorCode(objPaymentBeanDetails.getStrDebtorCode());
+					objPaymentDebtorDtlModel.setStrDebtorName(debtorName);
+				}
+				else if(objPaymentBeanDetails.getStrDebtorCode().startsWith("C")){
+				
+				clsSundaryCreditorMasterModel objSunCrModel= objSundryCreditorMasterService.funGetSundryCreditorMaster(objPaymentBeanDetails.getStrDebtorCode(), clientCode);
+				objPaymentDebtorDtlModel.setStrDebtorCode(objPaymentBeanDetails.getStrDebtorCode()) ;
+				objPaymentDebtorDtlModel.setStrDebtorName(objSunCrModel.getStrFirstName());
+				}
+				if(objPaymentBeanDetails.getStrDebtorCode().startsWith("E")){
+				clsEmployeeMasterModel objclsEmployeeMasterModel=objEmployeeMasterController.funAssignFields(objPaymentBeanDetails.getStrDebtorCode(),request);
+				
+				objPaymentDebtorDtlModel.setStrDebtorCode(objclsEmployeeMasterModel.getStrEmployeeCode()) ;
+				objPaymentDebtorDtlModel.setStrDebtorName(objclsEmployeeMasterModel.getStrEmployeeName());
+				} 
+				
+				
 				objPaymentDebtorDtlModel.setStrAccountCode(objPaymentBeanDetails.getStrAccountCode());
 				objPaymentDebtorDtlModel.setStrNarration("");
 				objPaymentDebtorDtlModel.setStrPropertyCode(propertyCode);
@@ -430,6 +455,7 @@ public class clsPaymentController {
 				objPaymentDebtorDtlModel.setDteDueDate(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 
 				listPaymentDebtorDtlModel.add(objPaymentDebtorDtlModel);
+			}
 			}
 		}
 		objModel.setListPaymentDebtorDtlModel(listPaymentDebtorDtlModel);

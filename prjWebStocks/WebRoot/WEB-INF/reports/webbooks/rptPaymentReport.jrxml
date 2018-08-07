@@ -649,16 +649,9 @@
 				</jr:table>
 			</componentElement>
 		</band>
-		<band height="116">
-			<staticText>
-				<reportElement x="3" y="10" width="107" height="15" uuid="bd976756-4437-404a-90fd-89d0f40c71e7"/>
-				<textElement>
-					<font fontName="Serif" isBold="true" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[Cr/Dr Details :-]]></text>
-			</staticText>
+		<band height="92">
 			<componentElement>
-				<reportElement key="table 10" style="table 10" x="3" y="45" width="552" height="55" uuid="2927f4e6-434d-4e59-8be6-1c4c2822e387"/>
+				<reportElement key="table 10" style="table 10" x="3" y="4" width="552" height="85" uuid="2927f4e6-434d-4e59-8be6-1c4c2822e387"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="dsPaymentDetor" uuid="30597a4b-4f18-475b-9cbb-9a7178f46a82">
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
@@ -666,13 +659,28 @@
 					<jr:column width="60" uuid="f0f870fd-a486-4b2b-8d19-3ed01fe6e5ed">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="30" uuid="37dfacc7-2947-4f56-b75b-201195b2faa8"/>
 								<box leftPadding="2"/>
 								<textElement textAlignment="Left"/>
-								<text><![CDATA[Cr/Dr Code]]></text>
+								<text><![CDATA[Cr/Dr Details ]]></text>
 							</staticText>
 						</jr:tableHeader>
+						<jr:columnHeader style="table_TH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="30" uuid="da18c4a2-002b-498c-8cd2-6b191d393d09"/>
+								<box leftPadding="2"/>
+								<textElement textAlignment="Left"/>
+								<text><![CDATA[Cr/Dr Code]]></text>
+							</staticText>
+						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="20">
 							<textField>
 								<reportElement x="0" y="0" width="60" height="20" uuid="3e07776b-86d2-4c76-91bd-5c8789d30497"/>
@@ -684,13 +692,21 @@
 					<jr:column width="180" uuid="db736065-9161-4e22-a83e-3c59f2d06dbe">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:columnHeader style="table_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="180" height="30" uuid="63c5c39d-b375-42a5-9be2-c205fbdb4b1b"/>
+								<reportElement x="0" y="0" width="180" height="30" uuid="30cea542-51f0-4186-af9f-967ee8afb07a"/>
 								<box leftPadding="2"/>
 								<textElement textAlignment="Left"/>
 								<text><![CDATA[Cr/Dr Name]]></text>
 							</staticText>
-						</jr:tableHeader>
+						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="20">
 							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="180" height="20" uuid="64eb76af-3779-4215-aa28-a04eace6d655"/>
@@ -705,13 +721,21 @@
 					<jr:column width="70" uuid="2bd0b0ff-097a-4cc5-8191-0a79c56e3b70">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:columnHeader style="table_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="70" height="30" uuid="6c9e96f5-68de-487d-8ac5-726876551e42"/>
+								<reportElement x="0" y="0" width="70" height="30" uuid="f8a3724e-1e64-414f-a4af-a600e4f8f024"/>
 								<box rightPadding="2"/>
 								<textElement textAlignment="Right"/>
 								<text><![CDATA[ Amt]]></text>
 							</staticText>
-						</jr:tableHeader>
+						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="20">
 							<textField pattern="#,##0.00#;#,##0.00#-">
 								<reportElement x="0" y="0" width="70" height="20" uuid="515c41c8-3f91-4859-a2f8-253d22cd9fb3"/>
@@ -724,13 +748,21 @@
 					<jr:column width="30" uuid="a52e446d-c815-4e14-9521-dec166bcf365">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
 						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:columnHeader style="table_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="30" height="30" uuid="0ab52882-bd6d-432a-b877-4f66fb2e3aff"/>
+								<reportElement x="0" y="0" width="30" height="30" uuid="1a98e75f-afaa-46d8-8550-6a9429f418f7"/>
 								<box leftPadding="2"/>
 								<textElement textAlignment="Left"/>
 								<text><![CDATA[CrDr]]></text>
 							</staticText>
-						</jr:tableHeader>
+						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="20">
 							<textField>
 								<reportElement x="0" y="0" width="30" height="20" uuid="b8fc21be-9b27-47df-a95d-227889cd6c98"/>
@@ -743,13 +775,21 @@
 					<jr:column width="50" uuid="021ba288-2392-489f-8875-648475786ee4">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
 						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:columnHeader style="table_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="50" height="30" uuid="ed0b4ccc-fb58-410e-8ae5-ea92db4386d7"/>
+								<reportElement x="0" y="0" width="50" height="30" uuid="99e4aa7c-4e3f-45e4-aa4a-5438f789333d"/>
 								<box leftPadding="2"/>
 								<textElement textAlignment="Left"/>
 								<text><![CDATA[Bill No]]></text>
 							</staticText>
-						</jr:tableHeader>
+						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="20">
 							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="50" height="20" uuid="fe87871a-e66d-4657-b505-caaf5108bcb0"/>
@@ -761,13 +801,21 @@
 					<jr:column width="60" uuid="fefab6b0-2e07-44f0-a4d8-6345ad830774">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
 						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:columnHeader style="table_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="60" height="30" uuid="26e6956b-7ab5-4b7c-bb4e-383feb03b8fc"/>
+								<reportElement x="0" y="0" width="60" height="30" uuid="f41f3bd5-a94d-4372-82b9-b38b0a544b1f"/>
 								<box leftPadding="2"/>
 								<textElement textAlignment="Left"/>
 								<text><![CDATA[Bill Date]]></text>
 							</staticText>
-						</jr:tableHeader>
+						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="20">
 							<textField isStretchWithOverflow="true" pattern="d/MM/yyyy">
 								<reportElement x="0" y="0" width="60" height="20" uuid="1f81e449-51e9-4f17-aabe-d592d1f9fafb"/>
@@ -779,13 +827,21 @@
 					<jr:column width="40" uuid="7185990d-7d35-4321-aee1-ed066359fa93">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
 						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:columnHeader style="table_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="40" height="30" uuid="8de94f81-3483-401b-afa5-f34310608762"/>
+								<reportElement x="0" y="0" width="40" height="30" uuid="7a68cb6c-58df-47cf-94e5-35c9c0cd8ac1"/>
 								<box leftPadding="2"/>
 								<textElement textAlignment="Left"/>
 								<text><![CDATA[Invoice No]]></text>
 							</staticText>
-						</jr:tableHeader>
+						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="20">
 							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="40" height="20" uuid="847cc288-e286-475b-aa02-7bc3dbb2be96"/>
@@ -797,13 +853,21 @@
 					<jr:column width="60" uuid="1f5e357c-d6e1-4145-9e83-77883a3567ba">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
 						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:columnHeader style="table_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="60" height="30" uuid="150fb4c9-1040-4bc7-ad93-9e0e35bb162c"/>
+								<reportElement x="0" y="0" width="60" height="30" uuid="168fc0a2-fad9-4990-92de-d54b2bfc5970"/>
 								<box leftPadding="2"/>
 								<textElement textAlignment="Left"/>
 								<text><![CDATA[Invoice Date]]></text>
 							</staticText>
-						</jr:tableHeader>
+						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="20">
 							<textField isStretchWithOverflow="true" pattern="d/MM/yyyy">
 								<reportElement x="0" y="0" width="60" height="20" uuid="e3fabb2a-822f-4203-8bd3-2e9e29f52bdb"/>
