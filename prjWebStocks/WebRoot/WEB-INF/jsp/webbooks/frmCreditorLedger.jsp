@@ -39,7 +39,23 @@
 			}	
 			
 		}
-				
+		
+		$('#txtGLCode').blur(function() {
+			var code = $('#txtGLCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetGLCode(code);
+			}
+		});
+
+		$('#txtFromDebtorCode').blur(function() {
+			var code = $('#txtFromDebtorCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetCreditoMasterData(code);
+			}
+		});
+					
 	});
 	
 	function funButtonExecute(){
@@ -352,7 +368,8 @@
 			        	if(response.strCreditorCode=='Invalid Code')
 			        	{
 			        		alert("Invalid creditor Code");
-			        		$("#txtDebtorCode").val('');
+			        		$("#txtFromDebtorCode").val('');
+			        		$("#lblFromDebtorName").text('');
 			        	}
 			        	else
 			        	{					        	    			        	    
@@ -391,7 +408,7 @@
 			url : getContextPath()+ "/loadAccontCodeAndName.html?accountCode=" + code,
 			dataType : "json",
 			success : function(response){ 
-				if(response.strVouchNo!="Invalid")
+				if(response.strAccountCode!="Invalid Code")
 		    	{
 					$("#txtGLCode").val(response.strAccountCode);
 					$("#lblGLCode").text(response.strAccountName);
@@ -399,9 +416,10 @@
 		    	}
 		    	else
 			    {
-			    	alert("Invalid Receipt No");
-			    	$("#txtVouchNo").val("");
-			    	$("#txtVouchNo").focus();
+			    	alert("Invalid Account No");
+			    	$("#txtGLCode").val("");
+			    	$("#lblGLCode").text("");
+			    	$("#txtGLCode").focus();
 			    	return false;
 			    }
 			},

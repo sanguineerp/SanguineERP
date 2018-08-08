@@ -51,7 +51,28 @@ var fieldName;
 					});																	
 				});
 				
-	
+	 $(function() {
+			
+			$('#txtAccountCode').blur(function() {
+				var code = $('#txtAccountCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetAccountDetails(code);
+				}
+			});
+			
+			$('#txtEmployeeCode').blur(function() {
+				var code = $('#txtEmployeeCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetEmployeeMasterData(code);
+				}
+			});
+			
+		
+		});
+	 
+	 
 	
 	 function funRemoveRow(selectedRow,tableId)
 		{
@@ -167,6 +188,7 @@ var fieldName;
 				        	{
 				        		alert("Invalid Account Code");
 				        		$("#txtAccountCode").val('');
+				        		$("#txtAccountName").val('');
 				        	}
 				        	else 
 				        	{
@@ -245,8 +267,9 @@ var fieldName;
 			        {
 			        	if(response.strEmployeeCode=='Invalid Code')
 			        	{
-			        		alert("Invalid Bank Code");
+			        		alert("Invalid Employee Code");
 			        		$("#txtEmployeeCode").val('');
+			        		$("#txtEmployeeName").val('');
 			        	}
 			        	else
 			        	{

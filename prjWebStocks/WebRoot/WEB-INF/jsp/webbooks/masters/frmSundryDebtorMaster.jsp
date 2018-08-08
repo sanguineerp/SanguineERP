@@ -332,7 +332,10 @@
 				        	$("#txtAddressLine3").val(response.strAddressLine3);
 				        	$("#cmbBlocked").val(response.strBlocked);
 				        	//fun set reason master data
+				        	if(response.strExpiryReasonCode.toString.length!=0)
+				        	{
 				        	funSetReasonData(response.strExpiryReasonCode);				        					        	
+				        	}
 				        	$("#txtFax").val(response.strFax);
 				        	$("#txtLandmark").val(response.strLandmark);
 				        	$("#txtEmail").val(response.strEmail);
@@ -1333,7 +1336,7 @@
 			   	</tr>	
 			   	<tr>
 			    	<td><label>Billing To</label></td>
-				    <td><s:input id="txtBillingToCode" path="strBillingToCode"   ondblclick="funHelp('billingTo')" cssClass="searchTextBox"/></td>			
+				    <td><s:input id="txtBillingToCode" path="strBillingToCode"  readonly="true" ondblclick="funHelp('billingTo')" cssClass="searchTextBox"/></td>			
 			    	<td colspan="2"><s:input id="" path=""  readonly="true" cssClass="longTextBox" /></td>			    			        			       					
 			    </tr>
 			    <tr>

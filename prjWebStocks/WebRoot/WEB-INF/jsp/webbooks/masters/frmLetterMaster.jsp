@@ -81,6 +81,7 @@
 			        	{
 			        		alert("Invalid Letter Code");
 			        		$("#txtLetterCode").val('');
+			        		$("#txtLetterName").val('');
 			        	}
 			        	else
 			        	{
@@ -167,6 +168,19 @@
 
 	});
 
+	
+	 $(function() {
+			
+			$('#txtLetterCode').blur(function() {
+				var code = $('#txtLetterCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetLetterData(code);
+				}
+			});
+
+		});
+	 
 	function funSetData(code)
 	{
 		switch(fieldName)
@@ -201,7 +215,7 @@
 		<table class="masterTable">
 			<tr>
 			    <td style="width: 125px"><label>Letter Code</label></td>
-			    <td style="width: 125px"><s:input id="txtLetterCode" path="strLetterCode" readonly="true" ondblclick="funHelp('letterCode')" cssClass="searchTextBox"/></td>			        			        
+			    <td style="width: 125px"><s:input id="txtLetterCode" path="strLetterCode"  ondblclick="funHelp('letterCode')" cssClass="searchTextBox"/></td>			        			        
 			    <td><s:input id="txtLetterName" path="strLetterName" required="true" cssClass="longTextBox" cssStyle="width:68%"/></td>					  		        			  
 			</tr>	
 			<tr>
