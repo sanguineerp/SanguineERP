@@ -31,6 +31,28 @@
 
 	});
 	
+	 $(function() {
+			
+			$('#txtInterfaceCode').blur(function() {
+				var code = $('#txtInterfaceCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetInterfaceData(code);
+				}
+			});
+			
+			$('#txtAccountCode').blur(function() {
+				var code = $('#txtAccountCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetAccountData(code);
+				}
+			});
+			
+		
+		});
+	
+	 
 	function funSetInterfaceData(interfaceCode)
 	{
 	    $("#txtInterfaceCode").val(interfaceCode);
@@ -45,6 +67,7 @@
 			        	{
 			        		alert("Invalid Interface Code");
 			        		$("#txtInterfaceCode").val('');
+			        		$("#txtInterfaceName").val('');
 			        	}
 			        	else
 			        	{
@@ -88,6 +111,7 @@
 	        	{
 	        		alert("Invalid Account Code");
 	        		$("#txtAccountCode").val('');
+	        		$("#txtAccountName").val('');
 	        	}
 	        	else
 	        	{
@@ -160,10 +184,10 @@
                 <td></td>			    			        			        			    			    		        			  
 			</tr>
 			<tr>				
-			    <td><s:input id="txtInterfaceCode" path="strInterfaceCode" readonly="true" ondblclick="funHelp('interfaceCode')" cssClass="searchTextBox"/></td>			   	
+			    <td><s:input id="txtInterfaceCode" path="strInterfaceCode"  ondblclick="funHelp('interfaceCode')" cssClass="searchTextBox"/></td>			   	
 				<td><s:input id="txtInterfaceName" path="strInterfaceName" required="true" cssClass="longTextBox"/></td>
 				<td></td>						
-				<td><s:input id="txtAccountCode" path="strAccountCode" readonly="true" ondblclick="funHelp('accountCode')" cssClass="searchTextBox"/></td>
+				<td><s:input id="txtAccountCode" path="strAccountCode"  ondblclick="funHelp('accountCode')" cssClass="searchTextBox"/></td>
 				<td ><s:input id="txtAccountName" path="strAccountName" required="true" readonly="true" cssClass="longTextBox"/></td>
 				<td></td>		
 			</tr>			

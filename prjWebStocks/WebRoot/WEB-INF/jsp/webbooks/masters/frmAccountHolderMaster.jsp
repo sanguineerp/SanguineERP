@@ -31,6 +31,19 @@
 
 	});
 	
+	 $(function() {
+			
+			$('#txtACHolderCode').blur(function() {
+				var code = $('#txtACHolderCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetAccountHolderData(code);
+				}
+			});
+			
+		
+		});
+	 
 	function funSetAccountHolderData(accountHolderCode)
 	{
 	    $("#txtACHolderCode").val(accountHolderCode);

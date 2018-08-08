@@ -31,6 +31,19 @@
 
 	});
 	
+	 $(function() {
+			
+			$('#txtGroupCode').blur(function() {
+				var code = $('#txtGroupCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetAccountsGroupData(code);
+				}
+			});
+			
+		
+		});
+	
 	function funSetAccountsGroupData(groupCode)
 	{
 	    $("#txtGroupCode").val(groupCode);
@@ -41,16 +54,16 @@
 			        dataType: "json",
 			        success: function(response)
 			        {
-			        	if(response.strBankCode=='Invalid Code')
+			        	if(response.strGroupCode=='Invalid Code')
 			        	{
 			        		alert("Invalid Group Code");
 			        		$("#txtGroupCode").val('');
+			        		$("#txtGroupName").val('');
 			        	}
 			        	else
 			        	{
 				        	$("#txtGroupName").val(response.strGroupName);
 				        	$("#txtGroupName").focus();
-				        	$("#txtShortName").val(response.strShortName);
 				        	$("#cmbCategory").val(response.strCategory);
 				        	$("#cmbDefaultType").val(response.strDefaultType);
 			        	}

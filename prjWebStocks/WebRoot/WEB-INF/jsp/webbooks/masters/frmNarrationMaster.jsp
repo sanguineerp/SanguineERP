@@ -31,6 +31,19 @@
 
 	});
 	
+	 $(function() {
+			
+			$('#txtRemarkCode').blur(function() {
+				var code = $('#txtRemarkCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetRemarkData(code);
+				}
+			});
+			
+		
+		});
+	
 	
 	function funSetRemarkData(remarkCode)
 	 {
@@ -46,6 +59,7 @@
 				        	{
 				        		alert("Invalid Remark Code");
 				        		$("#txtRemarkCode").val('');
+				        		$("#txtDescription").val('');
 				        	}
 				        	else
 				        	{
@@ -131,7 +145,7 @@
 		<table class="masterTable">
 			<tr>
 			    <td><label >Remark Code</label></td>
-			    <td><s:input id="txtRemarkCode" path="strRemarkCode" readonly="true" ondblclick="funHelp('remarkCode')" cssClass="searchTextBox"/></td>			        			        			    			    		        			  
+			    <td><s:input id="txtRemarkCode" path="strRemarkCode"  ondblclick="funHelp('remarkCode')" cssClass="searchTextBox"/></td>			        			        			    			    		        			  
 			</tr>
 			<tr>
 				<td><label >Description</label></td>

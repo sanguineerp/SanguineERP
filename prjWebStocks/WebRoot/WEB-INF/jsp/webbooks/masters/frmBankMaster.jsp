@@ -48,6 +48,19 @@
 
 	});
 	
+	 $(function() {
+			
+			$('#txtBankCode').blur(function() {
+				var code = $('#txtBankCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetBankMasterData(code);
+				}
+			});
+			
+		
+		});
+	 
 	function funSetBankMasterData(bankCode)
 	{
 	    $("#txtBankCode").val(bankCode);

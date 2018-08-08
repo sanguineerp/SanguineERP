@@ -268,6 +268,7 @@
 			        	{
 			        		alert("Invalid Account Code");
 			        		$("#txtAccountCode").val('');
+			        		$("#txtAccountName").val('');
 			        	}
 			        	else 
 			        	{
@@ -309,6 +310,9 @@
 			        	{
 			        		alert("Invalid Debtor Code");
 			        		$("#txtDebtorCode").val('');
+			        		$("#txtFirstName").val('');
+			        		$("#txtMiddleName").val('');
+			        		$("#txtLastName").val('');
 			        	}
 			        	else
 			        	{					        	    			        	    
@@ -455,8 +459,9 @@
 			        {
 			        	if(response.strReasonCode=='Invalid Code')
 			        	{
-			        		//alert("Invalid Reason Code");
+			        		alert("Invalid Reason Code");
 			        		$("#txtExpiryReasonCode").val('');
+			        		$("#txtExpiryReasonName").val('');
 			        	}
 			        	else
 			        	{		
@@ -499,6 +504,7 @@
 			        	{
 			        		alert("Invalid Category Code");
 			        		$("#strCategoryCode").val('');
+			        		$("#txtCategoryName").val('');
 			        	}
 			        	else
 			        	{		
@@ -539,8 +545,9 @@
 			        {
 			        	if(response.strAreaCode=='Invalid Code')
 			        	{
-			        		//alert("Invalid Area Code");
+			        		alert("Invalid Area Code");
 			        		$("#txtArea").val('');
+			        		$("#txtAreaName").val('');
 			        	}
 			        	else 
 			        	{		
@@ -579,8 +586,9 @@
 			        {
 			        	if(response.strCityCode=='Invalid Code')
 			        	{
-			        		//alert("Invalid City Code");
+			        		alert("Invalid City Code");
 			        		$("#txtCity").val('');
+			        		$("#txtCityName").val('');
 			        	}
 			        	else 
 			        	{		
@@ -619,8 +627,9 @@
 			        {
 			        	if(response.strStateCode=='Invalid Code')
 			        	{
-			        		//alert("Invalid State Code");
+			        		alert("Invalid State Code");
 			        		$("#txtState").val('');
+			        		$("#txtStateName").val('');
 			        	}
 			        	else 
 			        	{		
@@ -659,8 +668,9 @@
 			        {
 			        	if(response.strRegionCode=='Invalid Code')
 			        	{
-			        		//alert("Invalid Region Code");
+			        		alert("Invalid Region Code");
 			        		$("#txtRegion").val('');
+			        		$("#txtRegionName").val('');
 			        	}
 			        	else 
 			        	{		
@@ -700,8 +710,9 @@
 			        {
 			        	if(response.strCountryCode=='Invalid Code')
 			        	{
-			        		//alert("Invalid Country Code");
+			        		alert("Invalid Country Code");
 			        		$("#txtCountry").val('');
+			        		$("#txtCountryName").val('');
 			        	}
 			        	else 
 			        	{		
@@ -740,8 +751,9 @@
 			        {
 			        	if(response.strACHolderCode=='Invalid Code')
 			        	{
-			        		//alert("Invalid Account Holder Code");
+			        		alert("Invalid Account Holder Code");
 			        		$("#txtAccountHolderCode").val('');
+			        		$("#txtAccountHolderName").val('');
 			        	}
 			        	else
 			        	{
@@ -792,6 +804,99 @@
 						<%}
 		}%>
 
+	});
+	
+	$(function() {
+		
+		$('#txtDebtorCode').blur(function() {
+			var code = $('#txtDebtorCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetDebtorMasterData(code);
+			}
+		});
+		
+		$('#strCategoryCode').blur(function() {
+			var code = $('#strCategoryCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetCategoryData(code);
+			}
+		});
+		
+		$('#txtArea').blur(function() {
+			var code = $('#txtArea').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetAreaData(code);
+			}
+		});
+		
+		$('#txtCity').blur(function() {
+			var code = $('#txtCity').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetCityData(code);
+			}
+		});
+		
+		$('#txtState').blur(function() {
+			var code = $('#txtState').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetStateData(code);
+			}
+		});
+		
+
+		$('#txtRegion').blur(function() {
+			var code = $('#txtRegion').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetRegionData(code);
+			}
+		});
+		
+		$('#txtCountry').blur(function() {
+			var code = $('#txtCountry').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetCountryData(code);
+			}
+		});
+		
+		$('#txtAccountHolderCode').blur(function() {
+			var code = $('#txtAccountHolderCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetAccountHolderData(code);
+			}
+		});
+		
+		$('#txtExpiryReasonCode').blur(function() {
+			var code = $('#txtExpiryReasonCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetReasonData(code);
+			}
+		});
+		
+		$('#txtAccountCode').blur(function() {
+			var code = $('#txtAccountCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetAccountDetails(code);
+			}
+		});
+		
+		$('#txtGLCode').blur(function() {
+			var code = $('#txtGLCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetGLCode(code);
+			}
+		});
+	
 	});
 		
 
@@ -845,7 +950,7 @@
 			url : getContextPath()+ "/loadAccontCodeAndName.html?accountCode=" + code,
 			dataType : "json",
 			success : function(response){ 
-				if(response.strVouchNo!="Invalid")
+				if(response.strAccountCode!="Invalid Code")
 		    	{
 					$("#txtGLCode").val(response.strAccountCode);
 					$("#lblGLCode").text(response.strAccountName);
@@ -853,9 +958,10 @@
 		    	}
 		    	else
 			    {
-			    	alert("Invalid Receipt No");
-			    	$("#txtVouchNo").val("");
-			    	$("#txtVouchNo").focus();
+			    	alert("Invalid Account Code");
+			    	$("#txtGLCode").val("");
+			    	$("#txtGLCode").focus();
+			    	$("#lblGLCode").text("");
 			    	return false;
 			    }
 			},
@@ -1131,7 +1237,7 @@
 			    </tr>
 			    <tr>
 			    	<td><label>Area</label></td>
-				    <td style="width: 130px;"><s:input id="txtArea" path="strArea" readonly="true" ondblclick="funHelp('areaCode')" cssClass="searchTextBox"/></td>			
+				    <td style="width: 130px;"><s:input id="txtArea" path="strArea"  ondblclick="funHelp('areaCode')" cssClass="searchTextBox"/></td>			
 			    	<td><s:input id="txtAreaName" path="" readonly="true"   cssClass="longTextBox" cssStyle="width:190px" /></td>			    			        			       
 				    <td><label>Currency Type</label></td>
 					<td colspan="3"><s:select id="cmbCurrencyType" path="strCurrencyType" items="${listCurrencyType}" cssClass="BoxW124px" /></td>
@@ -1139,28 +1245,28 @@
 			    </tr>
 			    <tr>
 			    	<td><label>City</label></td>
-				    <td><s:input id="txtCity" path="strCity" readonly="true"  ondblclick="funHelp('cityCode')" cssClass="searchTextBox"/></td>			
+				    <td><s:input id="txtCity" path="strCity"   ondblclick="funHelp('cityCode')" cssClass="searchTextBox"/></td>			
 			    	<td><s:input id="txtCityName" path=""  readonly="true" cssClass="longTextBox" cssStyle="width:190px" /></td>			    			        			       
 				    <td><label>License Fee in Rs.</label></td>
 					<td colspan="3"><s:input id="txtLicenseFee" path="dblLicenseFee"  cssClass="longTextBox" cssStyle="width:115px" /></td>							
 			    </tr>
 			    <tr>
 			    	<td><label>Sate</label></td>
-				    <td><s:input id="txtState" path="strState" readonly="true"  ondblclick="funHelp('stateCode')" cssClass="searchTextBox"/></td>			
+				    <td><s:input id="txtState" path="strState"  ondblclick="funHelp('stateCode')" cssClass="searchTextBox"/></td>			
 			    	<td><s:input id="txtStateName" path=""  readonly="true" cssClass="longTextBox" cssStyle="width:190px" /></td>			    			        			       
 				    <td><label>Annual Fee in Rs.</label></td>
 					<td colspan="3"><s:input id="txtAnnualFee" path="dblAnnualFee"  cssClass="longTextBox" cssStyle="width:115px" /></td>								
 			    </tr>
 			    <tr>
 			    	<td><label>Region</label></td>
-				    <td><s:input id="txtRegion" path="strRegion" readonly="true" ondblclick="funHelp('regionCode')" cssClass="searchTextBox"/></td>			
+				    <td><s:input id="txtRegion" path="strRegion"  ondblclick="funHelp('regionCode')" cssClass="searchTextBox"/></td>			
 			    	<td><s:input id="txtRegionName" path=""  readonly="true" cssClass="longTextBox" cssStyle="width:190px" /></td>			    			        			       
 				    <td><label>Remarks</label></td>
 					<td colspan="3"><s:textarea id="txtRemarks" path="strRemarks"   cssClass="longTextBox" cssStyle="height:50px" /></td>					
 			    </tr>
 			    <tr>
 			    	<td><label>Counrty</label></td>
-				    <td><s:input id="txtCountry" path="strCountry" readonly="true" ondblclick="funHelp('countryCode')" cssClass="searchTextBox"/></td>			
+				    <td><s:input id="txtCountry" path="strCountry"  ondblclick="funHelp('countryCode')" cssClass="searchTextBox"/></td>			
 			    	<td><s:input id="txtCountryName" path=""  readonly="true" cssClass="longTextBox" cssStyle="width:190px" /></td>
 			    	<td><label>Operational</label> </td>
 					<td colspan="3"><s:select id="cmbOperational" path="strOperational" items="${listOperational}" cssClass="BoxW124px"/></td>
@@ -1227,7 +1333,7 @@
 			   	</tr>	
 			   	<tr>
 			    	<td><label>Billing To</label></td>
-				    <td><s:input id="txtBillingToCode" path="strBillingToCode"  readonly="true" ondblclick="funHelp('billingTo')" cssClass="searchTextBox"/></td>			
+				    <td><s:input id="txtBillingToCode" path="strBillingToCode"   ondblclick="funHelp('billingTo')" cssClass="searchTextBox"/></td>			
 			    	<td colspan="2"><s:input id="" path=""  readonly="true" cssClass="longTextBox" /></td>			    			        			       					
 			    </tr>
 			    <tr>
@@ -1238,7 +1344,7 @@
 			    </tr>
 			    <tr>
 			    	<td><label>Account Holder Code</label></td>
-				    <td><s:input id="txtAccountHolderCode" path="strAccountHolderCode" readonly="true" ondblclick="funHelp('acHolderCode')" cssClass="searchTextBox"/></td>			
+				    <td><s:input id="txtAccountHolderCode" path="strAccountHolderCode" ondblclick="funHelp('acHolderCode')" cssClass="searchTextBox"/></td>			
 			    	<td colspan="2"><s:input id="txtAccountHolderName" path="strAccountHolderName"  readonly="true" cssClass="longTextBox" /></td>			    			        			       				
 			    </tr>
 			    <tr>

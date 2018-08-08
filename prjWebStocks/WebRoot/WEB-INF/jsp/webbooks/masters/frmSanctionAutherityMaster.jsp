@@ -31,6 +31,19 @@
 
 	});
 	
+	 $(function() {
+			
+			$('#txtSanctionCode').blur(function() {
+				var code = $('#txtSanctionCode').val();
+				if(code.trim().length > 0 && code !="?" && code !="/")
+				{
+					funSetSanctionAutherityData(code);
+				}
+			});
+			
+		
+		});
+	
 	function funSetSanctionAutherityData(sanctionCode)
 	{
 	    $("#txtSanctionCode").val(sanctionCode);
@@ -45,6 +58,7 @@
 			        	{
 			        		alert("Invalid Sanction Code");
 			        		$("#txtSanctionCode").val('');
+			        		$("#txtSanctionName").val('');
 			        	}
 			        	else
 			        	{
@@ -107,7 +121,7 @@
 		<table class="masterTable">
 			<tr>
 			    <td><label>Sanction Code</label></td>
-			    <td width="125px"><s:input id="txtSanctionCode" path="strSanctionCode" readonly="true" ondblclick="funHelp('sanctionCode')" cssClass="searchTextBox"/></td>			    			    			        			        			    			    		        			 
+			    <td width="125px"><s:input id="txtSanctionCode" path="strSanctionCode" ondblclick="funHelp('sanctionCode')" cssClass="searchTextBox"/></td>			    			    			        			        			    			    		        			 
 			    <td><s:input id="txtSanctionName" path="strSanctionName" required="true" cssClass="longTextBox"  cssStyle="width:75%"/></td>
 			</tr>			
 			<tr>

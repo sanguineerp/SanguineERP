@@ -152,9 +152,10 @@ public class clsSundryDebtorMasterController {
 		String sqlQuery = "select a.strAccountCode,a.strAccountName,a.dblOpeningbal /"+currValue+",a.strCrDr " + "FROM tblsundarydebtoropeningbalance a " + "where a.strDebtorCode = '" + debtorCode + "'  and a.strClientCode='" + clientCode + "'";
 
 		List listProperty = objGlobalFunctionsService.funGetListModuleWise(sqlQuery, "sql");
-
+		if(listProperty.size()>0)
+		{
 		objModel.setListSundryDetorOpenongBalModel(listProperty);
-
+		}
 		if (null == objModel) {
 			objModel = new clsSundryDebtorMasterModel();
 			objModel.setStrDebtorCode("Invalid Code");

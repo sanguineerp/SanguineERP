@@ -184,6 +184,28 @@
 		}}%>
 
 	});
+    
+    $(function() {
+		
+		$('#txtChargeCode').blur(function() {
+			var code = $('#txtChargeCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetChargeMasterData(code);
+			}
+		});
+		
+		$('#txtAcctCode').blur(function() {
+			var code = $('#txtAcctCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetAccountData(code);
+			}
+		});
+		
+	
+	});
+    
 	/*  */
 	function funSetChargeMasterData(chargeCode)
 	{
@@ -199,6 +221,7 @@
 			        	{
 			        		alert("Invalid Charge Code");
 			        		$("#txtChargeCode").val('');
+			        		$("#txtChargeName").val('');
 			        	}
 			        	else
 			        	{					        	    
@@ -272,6 +295,7 @@
         	{
         		alert("Invalid Account Code");
         		$("#txtAcctCode").val('');
+        		$("#txtAccountName").val('');
         	}
         	else
         	{					        	    
@@ -336,12 +360,12 @@
 		<table class="masterTable">
 			<tr>
 			    <td style="width: 12%"><label >Charge Code</label></td>
-			    <td><s:input id="txtChargeCode" path="strChargeCode" readonly="true" ondblclick="funHelp('chargeCode')" cssClass="searchTextBox"/></td>			        			        
+			    <td><s:input id="txtChargeCode" path="strChargeCode"  ondblclick="funHelp('chargeCode')" cssClass="searchTextBox"/></td>			        			        
 			    <td colspan="4"><s:input id="txtChargeName" path="strChargeName" required="true" cssClass="longTextBox" cssStyle="width:68%"/></td>			    		        			   
 			</tr>
 			<tr>
 			    <td><label >Account Code</label></td>
-			    <td><s:input id="txtAcctCode" path="strAcctCode" readonly="true" ondblclick="funHelp('accountCode')" cssClass="searchTextBox"/></td>			        			        
+			    <td><s:input id="txtAcctCode" path="strAcctCode"  ondblclick="funHelp('accountCode')" cssClass="searchTextBox"/></td>			        			        
 			    <td colspan="4"><s:input id="txtAccountName" path="strAccountName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:68%" /></td>			    	    		        			  
 			</tr>
 			<%-- <tr>
