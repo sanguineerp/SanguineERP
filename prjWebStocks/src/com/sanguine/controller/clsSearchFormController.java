@@ -4958,7 +4958,7 @@ public class clsSearchFormController {
 			break;
 		}
 		case "ReceiptNo": {
-			columnNames = "a.strVouchNo,a.strNarration,a.dteVouchDate,a.strType,a.strChequeNo,ifnull(b.strBankName,''),a.strBranch,a.strReceiptType,c.strDebtorName ";
+			columnNames = "a.strVouchNo,a.strNarration,a.dteVouchDate,a.strType,a.strChequeNo,ifnull(b.strBankName,''),a.strBranch,a.strReceiptType,ifnull(c.strDebtorName,'') ";
 			tableName = "from tblreceipthd a left outer join tblbankmaster b on a.strDrawnOn=b.strBankCode left outer join tblreceiptdebtordtl c on a.strVouchNo=c.strVouchNo where a.strClientCode='" + clientCode + "'";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strPropertyCode = '" + propertyCode + "' ";

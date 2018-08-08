@@ -362,61 +362,66 @@ public class clsSalesReturnController {
 		clsSalesReturnHdModel objsrHdModel = null;
 		clsLocationMasterModel objLocationMasterModel = null;
 		clsPartyMasterModel objPartyMasterModel = null;
-
-		for (int i = 0; i < objDC.size(); i++) {
-			Object[] ob = (Object[]) objDC.get(i);
-			objsrHdModel = (clsSalesReturnHdModel) ob[0];
-			objLocationMasterModel = (clsLocationMasterModel) ob[1];
-			objPartyMasterModel = (clsPartyMasterModel) ob[2];
-		}
-
-		objBeanSalesRet = funPrepardHdBean(objsrHdModel, objLocationMasterModel, objPartyMasterModel);
-		objBeanSalesRet.setStrCustName(objPartyMasterModel.getStrPName());
-		objBeanSalesRet.setStrLocName(objLocationMasterModel.getStrLocName());
-		List<clsSalesReturnDtlModel> listSalesDtl = new ArrayList<clsSalesReturnDtlModel>();
-		List<Object> objInvDtlModelList = funGetSalesReturnDtl(srCode, clientCode);
-		for (int i = 0; i < objInvDtlModelList.size(); i++) {
-			Object[] obj = (Object[]) objInvDtlModelList.get(i);
-			clsSalesReturnDtlModel salesRetDtl = new clsSalesReturnDtlModel();
-			salesRetDtl.setStrSRCode(obj[0].toString());
-			salesRetDtl.setStrProdCode(obj[1].toString());
-			salesRetDtl.setDblQty(Double.valueOf(obj[2].toString()));
-			salesRetDtl.setDblPrice(Double.valueOf(obj[3].toString()));
-			salesRetDtl.setDblWeight(Double.valueOf(obj[4].toString()));
-			salesRetDtl.setStrRemarks(obj[5].toString());
-			salesRetDtl.setStrClientCode(obj[6].toString());
-			salesRetDtl.setStrProdName(obj[7].toString());
-			// clsSalesReturnDtlModel invDtl = (clsSalesReturnDtlModel) obj[0];
-			// clsProductMasterModel prodmast =(clsProductMasterModel) obj[1];
-			// clsInvoiceModelDtl invModDtl =(clsInvoiceModelDtl) obj[4];
-			// prodmast.setDblUnitPrice(invModDtl.getDblPrice());
-
-			// invDtl.setStrProdName(prodmast.getStrProdName());
-			listSalesDtl.add(salesRetDtl);
-		}
-
-		objBeanSalesRet.setListSalesReturn(listSalesDtl);
-
-		String sql = "select strTaxCode,strTaxDesc,strTaxableAmt,strTaxAmt from clsSalesRetrunTaxModel " + "where strSRCode='" + srCode + "' and strClientCode='" + clientCode + "'";
-
-		List list = objGlobalFunctionsService.funGetList(sql, "hql");
-		List<clsSalesRetrunTaxModel> listTaxDtl = new ArrayList<clsSalesRetrunTaxModel>();
-		if (null != list) {
-			for (int cnt = 0; cnt < list.size(); cnt++) {
-				clsSalesRetrunTaxModel objTaxDtl = new clsSalesRetrunTaxModel();
-				Object[] arrObj = (Object[]) list.get(cnt);
-				objTaxDtl.setStrTaxCode(arrObj[0].toString());
-				objTaxDtl.setStrTaxDesc(arrObj[1].toString());
-				objTaxDtl.setStrTaxableAmt(Double.parseDouble(arrObj[2].toString()));
-				objTaxDtl.setStrTaxAmt(Double.parseDouble(arrObj[3].toString()));
-				objTaxDtl.setStrSRCode(srCode);
-				objTaxDtl.setStrClientCode(clientCode);
-				listTaxDtl.add(objTaxDtl);
+		
+		if(objDC!=null)
+		{
+			for (int i = 0; i < objDC.size(); i++) {
+				Object[] ob = (Object[]) objDC.get(i);
+				objsrHdModel = (clsSalesReturnHdModel) ob[0];
+				objLocationMasterModel = (clsLocationMasterModel) ob[1];
+				objPartyMasterModel = (clsPartyMasterModel) ob[2];
 			}
-			objBeanSalesRet.setListSalesRetrunTaxModel(listTaxDtl);
+
+			objBeanSalesRet = funPrepardHdBean(objsrHdModel, objLocationMasterModel, objPartyMasterModel);
+			objBeanSalesRet.setStrCustName(objPartyMasterModel.getStrPName());
+			objBeanSalesRet.setStrLocName(objLocationMasterModel.getStrLocName());
+			List<clsSalesReturnDtlModel> listSalesDtl = new ArrayList<clsSalesReturnDtlModel>();
+			List<Object> objInvDtlModelList = funGetSalesReturnDtl(srCode, clientCode);
+			for (int i = 0; i < objInvDtlModelList.size(); i++) {
+				Object[] obj = (Object[]) objInvDtlModelList.get(i);
+				clsSalesReturnDtlModel salesRetDtl = new clsSalesReturnDtlModel();
+				salesRetDtl.setStrSRCode(obj[0].toString());
+				salesRetDtl.setStrProdCode(obj[1].toString());
+				salesRetDtl.setDblQty(Double.valueOf(obj[2].toString()));
+				salesRetDtl.setDblPrice(Double.valueOf(obj[3].toString()));
+				salesRetDtl.setDblWeight(Double.valueOf(obj[4].toString()));
+				salesRetDtl.setStrRemarks(obj[5].toString());
+				salesRetDtl.setStrClientCode(obj[6].toString());
+				salesRetDtl.setStrProdName(obj[7].toString());
+				// clsSalesReturnDtlModel invDtl = (clsSalesReturnDtlModel) obj[0];
+				// clsProductMasterModel prodmast =(clsProductMasterModel) obj[1];
+				// clsInvoiceModelDtl invModDtl =(clsInvoiceModelDtl) obj[4];
+				// prodmast.setDblUnitPrice(invModDtl.getDblPrice());
+
+				// invDtl.setStrProdName(prodmast.getStrProdName());
+				listSalesDtl.add(salesRetDtl);
+			}
+
+			objBeanSalesRet.setListSalesReturn(listSalesDtl);
+
+			String sql = "select strTaxCode,strTaxDesc,strTaxableAmt,strTaxAmt from clsSalesRetrunTaxModel " + "where strSRCode='" + srCode + "' and strClientCode='" + clientCode + "'";
+
+			List list = objGlobalFunctionsService.funGetList(sql, "hql");
+			List<clsSalesRetrunTaxModel> listTaxDtl = new ArrayList<clsSalesRetrunTaxModel>();
+			if (null != list) {
+				for (int cnt = 0; cnt < list.size(); cnt++) {
+					clsSalesRetrunTaxModel objTaxDtl = new clsSalesRetrunTaxModel();
+					Object[] arrObj = (Object[]) list.get(cnt);
+					objTaxDtl.setStrTaxCode(arrObj[0].toString());
+					objTaxDtl.setStrTaxDesc(arrObj[1].toString());
+					objTaxDtl.setStrTaxableAmt(Double.parseDouble(arrObj[2].toString()));
+					objTaxDtl.setStrTaxAmt(Double.parseDouble(arrObj[3].toString()));
+					objTaxDtl.setStrSRCode(srCode);
+					objTaxDtl.setStrClientCode(clientCode);
+					listTaxDtl.add(objTaxDtl);
+				}
+				objBeanSalesRet.setListSalesRetrunTaxModel(listTaxDtl);
+			}
+			objBeanSalesRet.setDblConversion(objsrHdModel.getDblConversion());
+			objBeanSalesRet.setStrCurrency(objsrHdModel.getStrCurrency());
 		}
-		objBeanSalesRet.setDblConversion(objsrHdModel.getDblConversion());
-		objBeanSalesRet.setStrCurrency(objsrHdModel.getStrCurrency());
+
+		
 		return objBeanSalesRet;
 
 	}

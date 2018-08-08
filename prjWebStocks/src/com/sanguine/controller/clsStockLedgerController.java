@@ -503,11 +503,11 @@ public class clsStockLedgerController {
 			}
 			sql += "and date(a.dtMISDate) >= '" + fromDate + "' and date(a.dtMISDate) <= '" + toDate + "' " + "group by a.dtMISDate, a.strMISCode, a.strLocTo "
 
-			+ ""
-
-			+ "union all "
-
-			+ "select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, 0 Receipt,  " + "ifnull(sum(b.dblQty),0) Issue ,c.strLocName Name,d.dblCostRM Rate  " + "from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c ,tblproductmaster d " + "where a.strSRCode = b.strSRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode ";
+				+ "union all "
+	
+				+ "select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, ifnull(sum(b.dblQty),0) Receipt, 0 Issue ,c.strLocName Name,d.dblCostRM Rate  " 
+				+ "from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c ,tblproductmaster d " 
+				+ "where a.strSRCode = b.strSRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode AND b.strProdCode='"+prodCode+"' ";
 
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode = '" + locCode + "' ";
@@ -749,19 +749,17 @@ public class clsStockLedgerController {
 			}
 			sql += "and date(a.dtMISDate) >= '" + fromDate + "' and date(a.dtMISDate) <= '" + toDate + "' " + "group by a.dtMISDate, a.strMISCode, a.strLocTo " + ""
 
-			+ "union all "
+				+ "union all "
 
-			+ " select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, 0 Receipt, " + " funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue , " + " c.strLocName Name,'1' Rate  "
-			// +
-			// " funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString " + " from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c, tblproductmaster d " + " where a.strSRCode  = b.strSRCode and a.strLocCode=c.strLocCode   and b.strProdCode=d.strProdCode  " + " and b.strProdCode = '" + prodCode + "' ";
+				+ " select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue , " + " c.strLocName Name,'1' Rate  "
+				+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString " 
+				+ " from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c, tblproductmaster d " 
+				+ " where a.strSRCode = b.strSRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode and b.strProdCode = '" + prodCode + "' ";
 
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += " and a.strLocCode='" + locCode + "' ";
 			}
 			sql += "and date(a.dteSRDate) >= '" + fromDate + "' and date(a.dteSRDate) <= '" + toDate + "' " + "group by a.dteSRDate, a.strSRCode, a.strLocCode "
-
-			+ ""
 
 			+ " UNION ALL ";
 
@@ -1135,10 +1133,11 @@ public class clsStockLedgerController {
 			}
 			sql += "and date(a.dtMISDate) >= '" + fromDate + "' and date(a.dtMISDate) <= '" + toDate + "' " + "group by a.dtMISDate, a.strMISCode, a.strLocTo " + ""
 
-			+ "union all "
+				+ "union all "
 
-			+ "select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, 0 Receipt,  " + "ifnull(sum(b.dblQty),0) Issue ,c.strLocName Name,d.dblCostRM Rate  " + "from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c ,tblproductmaster d " + "where a.strSRCode = b.strSRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode and "
-					+ " b.strProdCode = '" + prodCode + "' ";
+				+ " select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, ifnull(sum(b.dblQty),0) Receipt, 0 Issue ,c.strLocName Name,d.dblCostRM Rate  " 
+				+ " from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c ,tblproductmaster d " 
+				+ " where a.strSRCode = b.strSRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode and b.strProdCode = '" + prodCode + "' ";
 
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode = '" + locCode + "' ";
@@ -1373,12 +1372,12 @@ public class clsStockLedgerController {
 			}
 			sql += "and date(a.dtMISDate) >= '" + fromDate + "' and date(a.dtMISDate) <= '" + toDate + "' " + "group by a.dtMISDate, a.strMISCode, a.strLocTo " + ""
 
-			+ "union all "
-
-			+ " select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, 0 Receipt, " + " funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue , " + " c.strLocName Name,'1' Rate  "
-			// +
-			// "  funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString " + " from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c, tblproductmaster d " + " where a.strSRCode  = b.strSRCode and a.strLocCode=c.strLocCode   and b.strProdCode=d.strProdCode  " + " and b.strProdCode = '" + prodCode + "' ";
+				+ "union all "
+				
+				+ " select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue , " + " c.strLocName Name,'1' Rate  "
+				+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString " 
+				+ " from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c, tblproductmaster d " 
+				+ " where a.strSRCode  = b.strSRCode and a.strLocCode=c.strLocCode   and b.strProdCode=d.strProdCode and b.strProdCode = '" + prodCode + "' ";
 
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += " and a.strLocCode='" + locCode + "' ";
@@ -2316,8 +2315,9 @@ public class clsStockLedgerController {
 
 			+ "union all "
 
-			+ "select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, 0 Receipt,  " + "ifnull(sum(b.dblQty),0) Issue ,c.strLocName Name,d.dblCostRM Rate  " + "from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c ,tblproductmaster d " + "where a.strSRCode = b.strSRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode and "
-					+ " b.strProdCode = '" + prodCode + "' ";
+			+ "select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, ifnull(sum(b.dblQty),0) Receipt, 0 Issue ,c.strLocName Name,d.dblCostRM Rate  " 
+				+ " from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c ,tblproductmaster d " 
+				+ " where a.strSRCode = b.strSRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode = '" + locCode + "' ";
 			}
@@ -2556,12 +2556,12 @@ public class clsStockLedgerController {
 			}
 			sql += "and date(a.dtMISDate) >= '" + fromDate + "' and date(a.dtMISDate) <= '" + toDate + "' " + "group by a.dtMISDate, a.strMISCode, a.strLocTo " + ""
 
-			+ "union all "
+				+ "union all "
 
-			+ " select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, 0 Receipt, " + " funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue , " + " c.strLocName Name,'1' Rate  "
-			// +
-			// " funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString " + " from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c, tblproductmaster d " + " where a.strSRCode  = b.strSRCode and a.strLocCode=c.strLocCode   and b.strProdCode=d.strProdCode  " + " and b.strProdCode = '" + prodCode + "' ";
+				+ " select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue , c.strLocName Name,'1' Rate  "
+				+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString " 
+				+ " from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c, tblproductmaster d " 
+				+ " where a.strSRCode  = b.strSRCode and a.strLocCode=c.strLocCode   and b.strProdCode=d.strProdCode  " + " and b.strProdCode = '" + prodCode + "' ";
 
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += " and a.strLocCode='" + locCode + "' ";

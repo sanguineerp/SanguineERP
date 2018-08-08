@@ -424,16 +424,42 @@ public class clsReceiptController {
 		List<clsReceiptDebtorDtlModel> listReceiptDebtorDtlModel = new ArrayList<clsReceiptDebtorDtlModel>();
 		for (clsReceiptDetailBean objReceiptDetails : objBean.getListReceiptBeanDtl()) {
 			clsReceiptDebtorDtlModel objReceiptDebtorDtlModel = new clsReceiptDebtorDtlModel();
-
+			if(!objReceiptDetails.getStrDebtorCode().equals("")){
 			if (objReceiptDetails.getStrDC().equals("Cr")) {
 				debtorCode = objReceiptDetails.getStrDebtorCode();
-				clsSundryDebtorMasterModel objSunDrModel = objSundryDebtorMasterService.funGetSundryDebtorMaster(debtorCode, clientCode);
+				/*clsSundryDebtorMasterModel objSunDrModel = objSundryDebtorMasterService.funGetSundryDebtorMaster(debtorCode, clientCode);
 				if (objSunDrModel != null) {
 					objReceiptDebtorDtlModel.setStrDebtorName(objSunDrModel.getStrFirstName());
 					debtorName = objSunDrModel.getStrDebtorFullName();
 				} else {
 					objReceiptDebtorDtlModel.setStrDebtorName("");
+				}*/
+				
+				
+				if(objReceiptDetails.getStrDebtorCode().startsWith("D"))
+				{
+					clsSundryDebtorMasterModel objSunDebtor = objSundryDebtorMasterService.funGetSundryDebtorMaster(objReceiptDetails.getStrDebtorCode(), clientCode);
+					if (objSunDebtor != null) {
+						debtorCode = objSunDebtor.getStrDebtorCode();
+						debtorName = objSunDebtor.getStrDebtorFullName();
+						objReceiptDebtorDtlModel.setStrDebtorName(objSunDebtor.getStrDebtorFullName());
+					} 
+				}else if(objReceiptDetails.getStrDebtorCode().startsWith("C")){
+					clsSundaryCreditorMasterModel objSunCrModel= objSundryCreditorMasterService.funGetSundryCreditorMaster(objReceiptDetails.getStrDebtorCode(), clientCode);
+					if (objSunCrModel != null) {
+						debtorCode = objSunCrModel.getStrCreditorCode();
+						debtorName = objSunCrModel.getStrCreditorFullName();
+						objReceiptDebtorDtlModel.setStrDebtorName(objSunCrModel.getStrCreditorFullName());
+					}
+					
+				}if(objReceiptDetails.getStrDebtorCode().startsWith("E")){
+					clsEmployeeMasterModel objclsEmployeeMasterModel=objEmployeeMasterController.funAssignFields(objReceiptDetails.getStrDebtorCode(),request);
+					debtorCode = objclsEmployeeMasterModel.getStrEmployeeCode();
+					debtorName = objclsEmployeeMasterModel.getStrEmployeeName();
+					objReceiptDebtorDtlModel.setStrDebtorName(objclsEmployeeMasterModel.getStrEmployeeName());
+				
 				}
+				
 				objReceiptDebtorDtlModel.setStrDebtorCode(objReceiptDetails.getStrDebtorCode());
 
 				objReceiptDebtorDtlModel.setStrAccountCode(objReceiptDetails.getStrAccountCode());
@@ -451,6 +477,7 @@ public class clsReceiptController {
 				objReceiptDebtorDtlModel.setDteDueDate(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 
 				listReceiptDebtorDtlModel.add(objReceiptDebtorDtlModel);
+			}
 			}
 		}
 		objModel.setStrDebtorCode(debtorCode);

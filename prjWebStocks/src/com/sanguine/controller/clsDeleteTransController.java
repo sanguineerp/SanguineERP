@@ -280,7 +280,7 @@ public class clsDeleteTransController {
 		case "Opening Stock":
 			flgTrans = true;
 			objOpStk.funSaveAudit(objBean.getStrTransCode(), type, req);
-			sqlBuilder_UpdateHd.append(" clsInitialInventoryModel where strOpStkCode=");
+			sqlBuilder_UpdateHd.append(" clsInitialInventoryModel set strLocCode='',strConversionUOM='' where strOpStkCode=");
 			sqlBuilder_DeleteDtl.append( "clsOpeningStkDtl where strOpStkCode=");
 			queryType = "hql";
 			break;
@@ -293,7 +293,7 @@ public class clsDeleteTransController {
 				sql_StckAdjDeleteDtl += "clsStkAdjustmentDtlModel where strSACode=";
 			}
 			objPhyStk.funSaveAudit(objBean.getStrTransCode(), type, req);
-			sqlBuilder_UpdateHd.append( "clsStkPostingHdModel where strPSCode=");
+			sqlBuilder_UpdateHd.append( "clsStkPostingHdModel set strSACode='' ,dblTotalAmt=0.00,strNarration='"+narration+"' where strPSCode=");
 			sqlBuilder_DeleteDtl.append( "clsStkPostingDtlModel where strPSCode=");
 			queryType = "hql";
 			break;
@@ -301,7 +301,7 @@ public class clsDeleteTransController {
 		case "Production Order":
 			flgTrans = true;
 			objProductionOrderController.funSaveAudit(objBean.getStrTransCode(), type, req);
-			sqlBuilder_UpdateHd.append( "clsProductionOrderHdModel where strOPCode=");
+			sqlBuilder_UpdateHd.append( "clsProductionOrderHdModel set strLocCode='',strNarration='"+narration+"',strCode='',strLocName=''  where strOPCode=");
 			sqlBuilder_DeleteDtl.append("clsProductionOrderDtlModel where strOPCode=");
 			queryType = "hql";
 			break;
@@ -385,7 +385,7 @@ public class clsDeleteTransController {
 		case "Stock Adjustment":
 			flgTrans = true;
 			objStkAdj.funSaveAudit(objBean.getStrTransCode(), type, req);
-			sqlBuilder_UpdateHd.append( "clsStkAdjustmentHdModel where strSACode=");
+			sqlBuilder_UpdateHd.append( "clsStkAdjustmentHdModel strLocCode='',strNarration='"+narration+"',dblTotalAmt=0.0 where strSACode=");
 			sqlBuilder_DeleteDtl.append( "clsStkAdjustmentDtlModel where strSACode=");
 			queryType = "hql";
 			break;
@@ -401,7 +401,7 @@ public class clsDeleteTransController {
 		case "Work Order":
 			flgTrans = true;
 			objWorkOrderController.funSaveAudit(objBean.getStrTransCode(), type, req);
-			sqlBuilder_UpdateHd.append( "clsWorkOrderHdModel where strWOCode=");
+			sqlBuilder_UpdateHd.append( "clsWorkOrderHdModel set strSOCode='',strStatus='',strFromLocCode='',strToLocCode='',strJOCode='' ,dblQty=0.0,strParentWOCode='' ,strProdCode='' where strWOCode=");
 			sqlBuilder_DeleteDtl.append( "clsWorkOrderDtlModel where strWOCode=");
 			queryType = "hql";
 			break;
@@ -409,7 +409,7 @@ public class clsDeleteTransController {
 		case "Material Return":
 			flgTrans = true;
 			objMatReturn.funSaveAudit(objBean.getStrTransCode(), type, req);
-			sqlBuilder_UpdateHd.append( "clsMaterialReturnHdModel set strNarration='"+narration+"' where strMRetCode=");
+			sqlBuilder_UpdateHd.append( "clsMaterialReturnHdModel set strNarration='"+narration+"',strMISCode='',strLocFrom='',strLocTo='' where strMRetCode=");
 			sqlBuilder_DeleteDtl.append("clsMaterialReturnDtlModel where strMRetCode=");
 			queryType = "hql";
 			break;

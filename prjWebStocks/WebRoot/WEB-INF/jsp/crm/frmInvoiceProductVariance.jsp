@@ -74,6 +74,18 @@ function funHelp(transactionName)
 		}
 	}
 	
+	
+	$(function()
+	{
+		$('#txtProdCode').blur(function() {
+			var code = $('#txtProdCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetProduct(code);
+			}
+		});
+	});
+	
 	/**
 	 * Set Product Data after selecting form Help windows
 	 */

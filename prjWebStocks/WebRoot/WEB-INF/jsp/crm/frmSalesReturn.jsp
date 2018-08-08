@@ -92,20 +92,7 @@ $(document).ready(function()
 });
 		
 		
-/* $(function() {		
-		$('#txtCode').blur(function() {
-			var code = $('#txtCode').val();
-			if(code.trim().length > 0 && code !="?" && code !="/")
-			{
-				if(($("#cmbAgainst").val()=="Purchase Return"))
-					{
-					funSetPurchaseReturn(code);
-					}
-				
-			}
-		});
-		
-	}); */
+
 
 
 function funHelp1(){
@@ -251,6 +238,7 @@ function funHelp(transactionName)
 				    		  alert("Invalid Product Code");
 				    		  $("#txtProdCode").val('') 
 				    		  $("#txtProdCode").focus();
+				    		  $("#lblProdName").text('');
 				    		  return false;
 				    		}					   
 				    },
@@ -291,6 +279,8 @@ function funHelp(transactionName)
 	        			alert("Invalid Customer Code");
 	        			$("#txtCustCode").val('');
 	        			$("#txtCustCode").focus();
+	        			$("#lblCustomerName").text('');
+						$("#txtDiscPer").val('');
 	        			
 	        		}else{			   
 	        			$("#txtCustCode").val(response.strPCode);
@@ -990,10 +980,11 @@ function funHelp(transactionName)
 	        dataType: "json",
 	        success: function(response)
 	        {		        	
-	        		if('Invalid Code' == response.strInvCode){
+	        		if(null == response.strSRCode){
 	        			alert("Invalid  Invoice Code");
-	        			$("#txtSOCode").val('');
-	        			$("#txtSOCode").focus();
+	        			$("#txtSRCode").val('');
+	        			$("#txtSRCode").focus();
+	        			funRemoveAllRows();
 	        			
 	        		}else{	
 <%-- 	        			var currValue='<%=session.getAttribute("currValue").toString()%>'; --%>
@@ -1197,6 +1188,39 @@ function funHelp(transactionName)
 	
 	$(function()
 	{
+		$('#txtSRCode').blur(function() {
+			var code = $('#txtSRCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetSalesReturnData(code);
+			}
+		});
+		
+		$('#txtLocCode').blur(function() {
+			var code = $('#txtLocCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetLocation(code);
+			}
+		});
+		
+		$('#txtProdCode').blur(function() {
+			var code = $('#txtProdCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetProduct(code);
+			}
+		});
+		
+		$('#txtCustCode').blur(function() {
+			var code = $('#txtCustCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetCuster(code);
+			}
+		});
+		
+		
 	//Generate tax
 		$("#btnGenTax").click(function()
 		{
