@@ -126,12 +126,22 @@ $(document).ready(function()
 				        dataType: "json",
 				        success: function(response)
 				        {
-				        	$("#txtTaxCode").val(code);
-				        	$("#lblTaxDesc").text(response.strTaxDesc);
-				        	$("#txtTaxableAmt").val($("#txtFinalAmt").val());
-				        	$("#txtTaxableAmt").focus();
-				        	taxPer=parseFloat(response.dblPercent);
-				        	funCalculateTaxForSubTotal(parseFloat($("#txtTaxableAmt").val()),taxPer);
+				        	if(response.strTaxCode!="Invalid Code")
+					    	{
+				        		$("#txtTaxCode").val(code);
+					        	$("#lblTaxDesc").text(response.strTaxDesc);
+					        	$("#txtTaxableAmt").val($("#txtFinalAmt").val());
+					        	$("#txtTaxableAmt").focus();
+					        	taxPer=parseFloat(response.dblPercent);
+					        	funCalculateTaxForSubTotal(parseFloat($("#txtTaxableAmt").val()),taxPer);
+					    	}
+				        	else
+				        	{
+				        		$("#txtTaxCode").val('');
+					        	$("#lblTaxDesc").text('');
+					        	alert("Invalid Tax Code");
+				        	}	
+				        	
 						},
 						error: function(jqXHR, exception) {
 				            if (jqXHR.status === 0) {
@@ -210,8 +220,9 @@ $(document).ready(function()
 	        {		        	
 	        		if('Invalid Code' == response.strPCode){
 	        			alert("Invalid Customer Code");
-	        			$("#txtPartyCode").val('');
-	        			$("#txtPartyCode").focus();
+	        			$("#txtCustCode").val('');
+	        			$("#txtCustCode").focus();
+	        			$("#lblCustomerName").text('');
 	        		}else{			   
 	        			$("#txtCustCode").val(response.strPCode);
 						$("#lblCustomerName").text(response.strPName);
@@ -279,6 +290,7 @@ $(document).ready(function()
 				    		  alert("Invalid Product Code");
 				    		  $("#txtProdCode").val('') 
 				    		  $("#txtProdCode").focus();
+				    		  $("#lblProdName").text('');
 				    		  return false;
 				    		}					   
 				    },
@@ -315,10 +327,12 @@ $(document).ready(function()
 	        dataType: "json",
 	        success: function(response)
 	        {		        	
-	        		if('Invalid Code' == response.strInvCode){
+	        		if(null == response.strInvCode){
 	        			alert("Invalid  Invoice Code");
-	        			$("#txtSOCode").val('');
-	        			$("#txtSOCode").focus();
+	        			$("#txtDCCode").val('');
+	        			$("#txtDCCode").focus();
+	        			$('#txtNarration').val('');
+	        			funRemoveAllRows();
 	        			
 	        		}else{	
 	        			funRemoveAllRows();
@@ -724,6 +738,14 @@ $(document).ready(function()
 						funSetProduct(code);
 					   }
 					}); 
+				
+				$('#txtTaxCode').blur(function () {
+					var code=$('#txtTaxCode').val();
+					if (code.trim().length > 0 && code !="?" && code !="/"){								  
+						funSetTax(code);
+					   }
+					}); 
+				
 				
 				
 			});

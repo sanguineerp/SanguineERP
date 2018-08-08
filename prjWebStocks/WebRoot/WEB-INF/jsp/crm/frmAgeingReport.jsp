@@ -89,6 +89,21 @@ function funHelpDN(transactionName)
 		}
 	}
 	
+	$(function()
+			 {
+				$('#txtSCCode').blur(function() {
+					var code = $('#txtSCCode').val();
+					if(code.trim().length > 0 && code !="?" && code !="/")
+					{
+						funSetSubContractorData(code);
+					}
+				});
+				
+				
+				
+			});
+
+	
 	function funSetDNData(code)
 	{
 		$('#txtDNCode').val(code);
@@ -143,6 +158,7 @@ function funHelpDN(transactionName)
 	        			alert("Invalid Sub Contractor Code");
 	        			$("#txtSCCode").val('');
 	        			$("#txtSCCode").focus();
+	        			$("#txtSCName").text("All Sub Contractors");
 	        			
 	        		}else{
 	        			

@@ -12,103 +12,116 @@
 <script type="text/javascript">
 		
 $(document).ready(function() 
-		{		
+	{		
+		$(".tab_content").hide();
+		$(".tab_content:first").show();
+
+		$("ul.tabs li").click(function() {
+			$("ul.tabs li").removeClass("active");
+			$(this).addClass("active");
 			$(".tab_content").hide();
-			$(".tab_content:first").show();
-	
-			$("ul.tabs li").click(function() {
-				$("ul.tabs li").removeClass("active");
-				$(this).addClass("active");
-				$(".tab_content").hide();
-				var activeTab = $(this).attr("data-state");
-				$("#" + activeTab).fadeIn();
-			});
-			
-				var startDate="${startDate}";
-				var arr = startDate.split("/");
-				Dat=arr[2]+"-"+arr[1]+"-"+arr[0];
-			    $("#txtFromDate").datepicker({ dateFormat: 'yy-mm-dd' });
-				$("#txtFromDate" ).datepicker('setDate', Dat);
-				$("#txtFromDate").datepicker();	
-				
-				$("#txtToDate").datepicker({ dateFormat: 'yy-mm-dd' });
-				$("#txtToDate" ).datepicker('setDate', 'today');
-				$("#txtToDate").datepicker();	
-					
-				$("#txtFromFulfillment").datepicker({ dateFormat: 'yy-mm-dd' });
-				$("#txtFromFulfillment" ).datepicker('setDate', Dat);
-				$("#txtFromFulfillment").datepicker();	
-						
-						
-				$("#txtToFulfillment").datepicker({ dateFormat: 'yy-mm-dd' });
-				$("#txtToFulfillment" ).datepicker('setDate', 'today');
-				$("#txtToFulfillment").datepicker();	
-							
+			var activeTab = $(this).attr("data-state");
+			$("#" + activeTab).fadeIn();
 		});
 		
-
-		
-		
-		function funHelp(transactionName)
-		{
-			fieldName = transactionName;
-		//	window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
-		window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500,left=500")
+			var startDate="${startDate}";
+			var arr = startDate.split("/");
+			Dat=arr[2]+"-"+arr[1]+"-"+arr[0];
+		    $("#txtFromDate").datepicker({ dateFormat: 'yy-mm-dd' });
+			$("#txtFromDate" ).datepicker('setDate', Dat);
+			$("#txtFromDate").datepicker();	
 			
-		}
-
-		 	function funSetData(code)
-			{
-				switch (fieldName)
-				{
-					    	
-				    case 'custMaster' :
-				    	funSetCuster(code);
-				    	break;
-				        
-				}
-			}
-		 	
-		 	function funSetCuster(code)
-			{
-				gurl=getContextPath()+"/loadPartyMasterData.html?partyCode=";
-				$.ajax({
-			        type: "GET",
-			        url: gurl+code,
-			        dataType: "json",
-			        success: function(response)
-			        {		        	
-			        		if('Invalid Code' == response.strPCode){
-			        			alert("Invalid Customer Code");
-			        			$("#txtPartyCode").val('');
-			        			$("#txtPartyCode").focus();
-			        			
-			        		}else{			   
-			        			$("#txtPartyCode").val(response.strPCode);
-								$("#lblPartyName").text(response.strPName);
-			        		}
-			        		
+			$("#txtToDate").datepicker({ dateFormat: 'yy-mm-dd' });
+			$("#txtToDate" ).datepicker('setDate', 'today');
+			$("#txtToDate").datepicker();	
+				
+			$("#txtFromFulfillment").datepicker({ dateFormat: 'yy-mm-dd' });
+			$("#txtFromFulfillment" ).datepicker('setDate', Dat);
+			$("#txtFromFulfillment").datepicker();	
+					
+					
+			$("#txtToFulfillment").datepicker({ dateFormat: 'yy-mm-dd' });
+			$("#txtToFulfillment" ).datepicker('setDate', 'today');
+			$("#txtToFulfillment").datepicker();	
 						
-					},
-					error: function(jqXHR, exception) {
-			            if (jqXHR.status === 0) {
-			                alert('Not connect.n Verify Network.');
-			            } else if (jqXHR.status == 404) {
-			                alert('Requested page not found. [404]');
-			            } else if (jqXHR.status == 500) {
-			                alert('Internal Server Error [500].');
-			            } else if (exception === 'parsererror') {
-			                alert('Requested JSON parse failed.');
-			            } else if (exception === 'timeout') {
-			                alert('Time out error.');
-			            } else if (exception === 'abort') {
-			                alert('Ajax request aborted.');
-			            } else {
-			                alert('Uncaught Error.n' + jqXHR.responseText);
-			            }		            
-			        }
-		      });
+	});
+		
+
+		
+		
+	function funHelp(transactionName)
+	{
+		fieldName = transactionName;
+	//	window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
+	window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500,left=500")
+		
+	}
+
+ 	function funSetData(code)
+	{
+		switch (fieldName)
+		{
+			    	
+		    case 'custMaster' :
+		    	funSetCuster(code);
+		    	break;
+		        
+		}
+	}
+ 	
+ 	$(function()
+	 {
+		$('#txtPartyCode').blur(function() {
+			var code = $('#txtPartyCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetCuster(code);
 			}
+		});
+    });
+	
+		 	
+ 	function funSetCuster(code)
+	{
+		gurl=getContextPath()+"/loadPartyMasterData.html?partyCode=";
+		$.ajax({
+	        type: "GET",
+	        url: gurl+code,
+	        dataType: "json",
+	        success: function(response)
+	        {		        	
+        		if('Invalid Code' == response.strPCode){
+        			alert("Invalid Customer Code");
+        			$("#txtPartyCode").val('');
+        			$("#txtPartyCode").focus();
+        			$("#lblPartyName").text('');
+        			
+        		}else{			   
+        			$("#txtPartyCode").val(response.strPCode);
+					$("#lblPartyName").text(response.strPName);
+        		}
+	        		
+				
+			},
+			error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }		            
+	        }
+      });
+	}
 
 	
 	
@@ -160,18 +173,7 @@ $(document).ready(function()
 		}
 	}
 	
-	$(function()
-			{
-				$("#txtPartyCode").blur(function() 
-						{
-							var code=$('#txtPartyCode').val();
-							if(code.trim().length > 0 && code !="?" && code !="/")
-							{
-								funHelp(code);
-							}
-						});
-				
-			});
+	
 		
 </script>
 

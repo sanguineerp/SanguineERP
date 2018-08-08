@@ -39,26 +39,41 @@ $(document).ready(function()
 
 
 
-function funHelp(transactionName)
-{
-	fieldName=transactionName;
-    
-   // window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
-     window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
-}
-function funSetData(code)
-{
-	switch(fieldName)
+	function funHelp(transactionName)
 	{
+		fieldName=transactionName;
+	    
+	   // window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
+	     window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
+	}
+	function funSetData(code)
+	{
+		switch(fieldName)
+		{
+		
+		case 'subContractor':
+		      funSetSubContractor(code)
+		      break;
+		case 'DNCode':
+			  funSetDeliveryNoteCode(code)
+			  break;
+		}
+	 }
 	
-	case 'subContractor':
-	      funSetSubContractor(code)
-	      break;
-	case 'DNCode':
-		  funSetDeliveryNoteCode(code)
-		  break;
-	}
-	}
+	$(function()
+			 {
+				$('#txtSubContractor').blur(function() {
+					var code = $('#txtSubContractor').val();
+					if(code.trim().length > 0 && code !="?" && code !="/")
+					{
+						funSetSubContractor(code);
+					}
+				});
+				
+				
+			
+			});
+
 	
 	function funSetSubContractor(code)
 	{
@@ -72,7 +87,7 @@ function funSetData(code)
 			    {
 			    	if(response.strPCode=='Invalid Code')
 			       	{
-			       		alert("Invalid Party Code");
+			       		alert("Invalid Sub Contractor Code");
 			       		$("#txtSubContractor").val('');
 			       		$("#lblSubContractor").text("");
 			       		$("#txtSubContractor").focus();

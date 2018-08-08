@@ -3575,123 +3575,105 @@ public class clsInvoiceController
 
 		sqlProdMRP.append(" and strClientCode='" + clientCode + "' ");
 		List listprodMRP = objGlobalFunctionsService.funGetList(sqlProdMRP.toString(), "sql");
-		Object objprodMRP = (Object) listprodMRP.get(0);
-		String prodMRP = objprodMRP.toString();
-
-		if (prodMRP.equalsIgnoreCase("N"))
+		if(listprodMRP!=null && listprodMRP.size()>0)
 		{
-			sqlProdMRP.setLength(0);
-			sqlProdMRP.append(" SELECT a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, IFNULL(b.strSuppCode,'') AS strSuppCode, " + " IFNULL(c.strPName,'') AS strPName,a.strProdType,a.dblWeight, IFNULL(q.pervInvCode,''), " + " IFNULL(q.prevUnitPrice,0.0),a.dblCostRM, IFNULL(b.dblLastCost,0.0) " + " from tblproductmaster a " + " JOIN tblprodsuppmaster b " + " Join tblpartymaster c " + " LEFT JOIN " + " ( SELECT b.dteInvDate AS pervInvCode,a.dblUnitPrice AS prevUnitPrice,b.strInvCode, " + " a.strProdCode AS prodCode FROM tblinvoicedtl a,tblinvoicehd b " + " WHERE a.strProdCode='" + prodCode + "' AND a.strClientCode='" + clientCode + "' " + " AND b.strInvCode=a.strInvCode AND a.strCustCode='" + suppCode + "' " + " AND b.dteInvDate=( SELECT MAX(b.dteInvDate) " + " FROM tblinvoicedtl a,tblinvoicehd b WHERE a.strProdCode='" + prodCode + "' " + " AND a.strClientCode='" + clientCode + "'  AND b.strInvCode=a.strInvCode " + " AND a.strCustCode='" + suppCode + "')) AS q ON a.strProdCode=q.prodCode " + " where  a.strProdCode=b.strProdCode and ");
-			if (prodCode.length() > 8)
-			{
-				sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
-			}
-			else
-			{
-				sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
-			}
-			sqlProdMRP.append(" and b.strSuppCode=c.strPCode ");
+			Object objprodMRP = (Object) listprodMRP.get(0);
+			String prodMRP = objprodMRP.toString();
 
-			if (objListPartyModel.size() > 0)
+			if (prodMRP.equalsIgnoreCase("N"))
 			{
-				sqlProdMRP.append(" and c.strLocCode='" + locCode + "' and c.strPropCode='" + propertyCode + "' ");
-				list = objGlobalFunctionsService.funGetProductDataForTransaction(sqlProdMRP.toString(), prodCode, clientCode);
-			}
-
-			/*
-			 * +
-			 * "select a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, ifnull(b.strSuppCode,'') as strSuppCode,"
-			 * +
-			 * " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,ifnull(q.pervInvCode,''),ifnull(q.prevUnitPrice,0.0),a.dblCostRM,ifnull(b.dblLastCost,0.0) "
-			 * +
-			 * " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='"
-			 * +clientCode+"' and b.strDefault='Y' " +
-			 * " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='"
-			 * +clientCode+"' " +
-			 * " left join (select b.dteInvDate as pervInvCode,a.dblUnitPrice as prevUnitPrice,b.strInvCode,a.strProdCode as prodCode from tblinvoicedtl a,tblinvoicehd b "
-			 * +" where a.strProdCode='"+prodCode+"' and a.strClientCode='"+
-			 * clientCode+"' and b.strInvCode=a.strInvCode  "
-			 * +" and a.strCustCode='"+suppCode+
-			 * "' and  b.dteInvDate=(SELECT MAX(b.dteInvDate) from tblinvoicedtl a,tblinvoicehd b "
-			 * +" where a.strProdCode='"+prodCode+"' and a.strClientCode='"+
-			 * clientCode+"' and b.strInvCode=a.strInvCode   " +" and a.strCustCode='"
-			 * +suppCode+"')) as q on a.strProdCode=q.prodCode    " +
-			 * " where  a.strProdCode='" +prodCode+"' and a.strClientCode='"+clientCode+"'"
-			 */
-			// );
-
-			if (list.size() == 0)
-			{
-
 				sqlProdMRP.setLength(0);
-				String propCode = req.getSession().getAttribute("propertyCode").toString();
-				clsPropertySetupModel objSetUp = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
-				if (objSetUp.getStrMultiCurrency().equalsIgnoreCase("N"))
+				sqlProdMRP.append(" SELECT a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, IFNULL(b.strSuppCode,'') AS strSuppCode, " + " IFNULL(c.strPName,'') AS strPName,a.strProdType,a.dblWeight, IFNULL(q.pervInvCode,''), " + " IFNULL(q.prevUnitPrice,0.0),a.dblCostRM, IFNULL(b.dblLastCost,0.0) " + " from tblproductmaster a " + " JOIN tblprodsuppmaster b " + " Join tblpartymaster c " + " LEFT JOIN " + " ( SELECT b.dteInvDate AS pervInvCode,a.dblUnitPrice AS prevUnitPrice,b.strInvCode, " + " a.strProdCode AS prodCode FROM tblinvoicedtl a,tblinvoicehd b " + " WHERE a.strProdCode='" + prodCode + "' AND a.strClientCode='" + clientCode + "' " + " AND b.strInvCode=a.strInvCode AND a.strCustCode='" + suppCode + "' " + " AND b.dteInvDate=( SELECT MAX(b.dteInvDate) " + " FROM tblinvoicedtl a,tblinvoicehd b WHERE a.strProdCode='" + prodCode + "' " + " AND a.strClientCode='" + clientCode + "'  AND b.strInvCode=a.strInvCode " + " AND a.strCustCode='" + suppCode + "')) AS q ON a.strProdCode=q.prodCode " + " where  a.strProdCode=b.strProdCode and ");
+				if (prodCode.length() > 8)
 				{
-					sqlProdMRP.append("SELECT a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, " + " IFNULL(b.strSuppCode,'') AS strSuppCode, IFNULL(c.strPName,'') AS strPName,a.strProdType, " + "a.dblWeight, '',0.0,a.dblCostRM, IFNULL(a.dblCostRM,0.0) FROM tblproductmaster a , " + " tblprodsuppmaster b , tblpartymaster c 	WHERE ");
-					if (prodCode.length() > 8)
-					{
-						sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
-					}
-					else
-					{
-						sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
-					}
-					sqlProdMRP.append(" and a.strProdCode=b.strProdCode  and b.strSuppCode=c.strPCode and a.strClientCode='" + clientCode + "'");
+					sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
 				}
 				else
 				{
-
-					sqlProdMRP.append("SELECT a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, " + " IFNULL(b.strSuppCode,'') AS strSuppCode, IFNULL(c.strPName,'') AS strPName,a.strProdType, " + "a.dblWeight, '',0.0,d.dblPrice as dblCostRM, IFNULL(d.dblPrice,0.0) as dblCostRM FROM tblproductmaster a , " + " tblprodsuppmaster b , tblpartymaster c ,tblreorderlevel d	WHERE ");
-					if (prodCode.length() > 8)
-					{
-						sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
-					}
-					else
-					{
-						sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
-					}
-					sqlProdMRP.append(" and a.strProdCode=b.strProdCode  and b.strSuppCode=c.strPCode and a.strClientCode='" + clientCode + "' " + " and d.strProdCode=a.strProdCode and d.strLocationCode='" + locCode + "' and d.strClientCode='" + clientCode + "' ");
-
+					sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
 				}
-				list = objGlobalFunctionsService.funGetProductDataForTransaction(sqlProdMRP.toString(), prodCode, clientCode);
+				sqlProdMRP.append(" and b.strSuppCode=c.strPCode ");
+
+				if (objListPartyModel.size() > 0)
+				{
+					sqlProdMRP.append(" and c.strLocCode='" + locCode + "' and c.strPropCode='" + propertyCode + "' ");
+					list = objGlobalFunctionsService.funGetProductDataForTransaction(sqlProdMRP.toString(), prodCode, clientCode);
+				}
+
 				if (list.size() == 0)
 				{
-					sqlProdMRP.setLength(0);
 
-					sqlProdMRP.append("select a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, ifnull(b.strSuppCode,'') as strSuppCode," + " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,'',0.0,a.dblCostRM,ifnull(b.dblLastCost,0.0) " + " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' and b.strDefault='Y' " + " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where ");
-					if (prodCode.length() > 8)
+					sqlProdMRP.setLength(0);
+					String propCode = req.getSession().getAttribute("propertyCode").toString();
+					clsPropertySetupModel objSetUp = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+					if (objSetUp.getStrMultiCurrency().equalsIgnoreCase("N"))
 					{
-						sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
+						sqlProdMRP.append("SELECT a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, " + " IFNULL(b.strSuppCode,'') AS strSuppCode, IFNULL(c.strPName,'') AS strPName,a.strProdType, " + "a.dblWeight, '',0.0,a.dblCostRM, IFNULL(a.dblCostRM,0.0) FROM tblproductmaster a , " + " tblprodsuppmaster b , tblpartymaster c 	WHERE ");
+						if (prodCode.length() > 8)
+						{
+							sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
+						}
+						else
+						{
+							sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
+						}
+						sqlProdMRP.append(" and a.strProdCode=b.strProdCode  and b.strSuppCode=c.strPCode and a.strClientCode='" + clientCode + "'");
 					}
 					else
 					{
-						sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
+
+						sqlProdMRP.append("SELECT a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, " + " IFNULL(b.strSuppCode,'') AS strSuppCode, IFNULL(c.strPName,'') AS strPName,a.strProdType, " + "a.dblWeight, '',0.0,d.dblPrice as dblCostRM, IFNULL(d.dblPrice,0.0) as dblCostRM FROM tblproductmaster a , " + " tblprodsuppmaster b , tblpartymaster c ,tblreorderlevel d	WHERE ");
+						if (prodCode.length() > 8)
+						{
+							sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
+						}
+						else
+						{
+							sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
+						}
+						sqlProdMRP.append(" and a.strProdCode=b.strProdCode  and b.strSuppCode=c.strPCode and a.strClientCode='" + clientCode + "' " + " and d.strProdCode=a.strProdCode and d.strLocationCode='" + locCode + "' and d.strClientCode='" + clientCode + "' ");
+
 					}
-					sqlProdMRP.append(" and a.strClientCode='" + clientCode + "'");
 					list = objGlobalFunctionsService.funGetProductDataForTransaction(sqlProdMRP.toString(), prodCode, clientCode);
+					if (list.size() == 0)
+					{
+						sqlProdMRP.setLength(0);
 
+						sqlProdMRP.append("select a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, ifnull(b.strSuppCode,'') as strSuppCode," + " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,'',0.0,a.dblCostRM,ifnull(b.dblLastCost,0.0) " + " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' and b.strDefault='Y' " + " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where ");
+						if (prodCode.length() > 8)
+						{
+							sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
+						}
+						else
+						{
+							sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
+						}
+						sqlProdMRP.append(" and a.strClientCode='" + clientCode + "'");
+						list = objGlobalFunctionsService.funGetProductDataForTransaction(sqlProdMRP.toString(), prodCode, clientCode);
+
+					}
 				}
-			}
 
-		}
-		else
-		{
-			sqlProdMRP.setLength(0);
-			sqlProdMRP.append("select a.strProdcode,a.strProdName,a.strUOM,a.dblMRP, ifnull(b.strSuppCode,'') as strSuppCode," + " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,a.dblCostRM,ifnull(b.dblLastCost,0.0) " + " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' and b.strDefault='Y' " + " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where ");
-			if (prodCode.length() > 8)
-			{
-				sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
 			}
 			else
 			{
-				sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
+				sqlProdMRP.setLength(0);
+				sqlProdMRP.append("select a.strProdcode,a.strProdName,a.strUOM,a.dblMRP, ifnull(b.strSuppCode,'') as strSuppCode," + " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,a.dblCostRM,ifnull(b.dblLastCost,0.0) " + " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' and b.strDefault='Y' " + " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where ");
+				if (prodCode.length() > 8)
+				{
+					sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
+				}
+				else
+				{
+					sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
+				}
+				sqlProdMRP.append(" and a.strClientCode='" + clientCode + "'");
+				list = objGlobalFunctionsService.funGetProductDataForTransaction(sqlProdMRP.toString(), prodCode, clientCode);
+
 			}
-			sqlProdMRP.append(" and a.strClientCode='" + clientCode + "'");
-			list = objGlobalFunctionsService.funGetProductDataForTransaction(sqlProdMRP.toString(), prodCode, clientCode);
 
 		}
-
+		
 		if (list.size() == 0)
 		{
 			list.add("Invalid Product Code");
