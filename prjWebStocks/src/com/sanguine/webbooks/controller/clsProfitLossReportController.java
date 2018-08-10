@@ -180,7 +180,7 @@ public class clsProfitLossReportController {
 			double totalIncome = 0.0;
 			double totalExpense = 0.0;
 			String sqlIncome = "select a.strAccountName,ifnull((b.dblAmt-c.dblAmt)/17.0,0) as dblAmt ,a.strAccountCode ,d.strGroupName,d.strCategory " + " from tblacgroupmaster  d  ,tblacmaster a  " + " left outer join tblreceiptdebtordtl b on a.strAccountCode=b.strAccountCode " + " and b.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   "
-					+ " left outer join tblpaymentdebtordtl c on a.strAccountCode=c.strAccountCode   " + " and c.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   " + " where a.strType='GL Code' and a.strCreditor ='No' and a.strDebtor='No' and a.strGroupCode=d.strGroupCode " + " and d.strCategory='INCOME' " + " and a.strClientCode='" + clientCode + "' and a.strPropertyCode='"
+					+ " left outer join tblpaymentdebtordtl c on a.strAccountCode=c.strAccountCode   " + " and c.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   " + " where a.strType='GL Code' and a.strCreditor ='No' and a.strDebtor='No' and a.strGroupCode=d.strGroupCode " + " and d.strCategory='DIRECT INCOME' " + " and a.strClientCode='" + clientCode + "' and a.strPropertyCode='"
 					+ propertyCode + "' "
 					+ " order by b.dteBillDate;";
 
@@ -199,7 +199,7 @@ public class clsProfitLossReportController {
 			}
 
 			String sqlExtraExpense = "select a.strAccountName,ifnull((b.dblAmt-c.dblAmt)/17.0,0) as dblAmt ,a.strAccountCode ,d.strGroupName,d.strCategory " + " from tblacgroupmaster  d  ,tblacmaster a  " + " left outer join tblreceiptdebtordtl b on a.strAccountCode=b.strAccountCode " + " and b.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   "
-					+ " left outer join tblpaymentdebtordtl c on a.strAccountCode=c.strAccountCode   " + " and c.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   " + " where a.strType='GL Code' and a.strCreditor ='No' and a.strDebtor='No' and a.strGroupCode=d.strGroupCode " + " and d.strCategory='EXPENSE' " + " and a.strClientCode='" + clientCode + "' and a.strPropertyCode='"
+					+ " left outer join tblpaymentdebtordtl c on a.strAccountCode=c.strAccountCode   " + " and c.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   " + " where a.strType='GL Code' and a.strCreditor ='No' and a.strDebtor='No' and a.strGroupCode=d.strGroupCode " + " and d.strCategory='INDIRECT EXPENSE' " + " and a.strClientCode='" + clientCode + "' and a.strPropertyCode='"
 					+ propertyCode + "' order by b.dteBillDate ;";
 
 			List listExpenses = objGlobalFunctionsService.funGetDataList(sqlExtraExpense, "sql");

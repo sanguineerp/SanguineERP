@@ -952,7 +952,7 @@ public class clsBalanceSheetController {
 				double total=0,capitalTotal=0;
 				for(Map.Entry<String, Map<String,Double>> entry:hmBalanceSheetCatWiseData.entrySet())
 				{
-					if(entry.getKey().equals("ASSET") || entry.getKey().equals("INVENTORY") || entry.getKey().equals("INCOME") 
+					if(entry.getKey().equals("ASSET") || entry.getKey().equals("INVENTORY") || entry.getKey().equals("DIRECT INCOME") 
 						|| entry.getKey().equals("SUNDRY DEBTOR") || entry.getKey().equals("BANK BALANCE") || entry.getKey().equals("CASH BALANCE"))
 					{
 						List<String> listAssetGroups=new ArrayList<String>();
@@ -965,7 +965,7 @@ public class clsBalanceSheetController {
 						}
 					}
 					
-					if(entry.getKey().equals("LIABILITY") || entry.getKey().equals("EXPENSE") || entry.getKey().equals("SUNDRY CREDITOR"))
+					if(entry.getKey().equals("LIABILITY") || entry.getKey().equals("INDIRECT EXPENSE") || entry.getKey().equals("SUNDRY CREDITOR"))
 					{
 						List<String> listLiabilityGroups=new ArrayList<String>();
 						for(Map.Entry<String, Double> entryLiability:entry.getValue().entrySet())

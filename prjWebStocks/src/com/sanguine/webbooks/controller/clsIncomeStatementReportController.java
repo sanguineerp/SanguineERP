@@ -237,7 +237,7 @@ public class clsIncomeStatementReportController
 				objIncomeStmtreportBean.setStrGroupCategory(entry.getValue().getStrGroupCategory());
 				objIncomeStmtreportBean.setStrGroupName(entry.getValue().getStrGroupName());
 				objIncomeStmtreportBean.setStrAccountName("SALES");
-				objIncomeStmtreportBean.setStrCategory("INCOME");
+				objIncomeStmtreportBean.setStrCategory("DIRECT INCOME");
 			}
 			objIncomeStmtreportBean.setDblValue(totalSalesAmt);
 //			listOfIncomeStatement.add(objIncomeStmtreportBean);
@@ -250,7 +250,7 @@ public class clsIncomeStatementReportController
 				objIncomeStmtreportBean.setStrGroupCategory(entry.getValue().getStrGroupCategory());
 				objIncomeStmtreportBean.setStrGroupName(entry.getValue().getStrGroupName());
 				objIncomeStmtreportBean.setStrAccountName("COST OF GOODS SOLD");
-				objIncomeStmtreportBean.setStrCategory("INCOME");
+				objIncomeStmtreportBean.setStrCategory("DIRECT INCOME");
 			}
 			objIncomeStmtreportBean.setDblValue(totalOtherExpenses);
 //			listOfIncomeStatement.add(objIncomeStmtreportBean);
@@ -261,7 +261,7 @@ public class clsIncomeStatementReportController
 //			BigDecimal grossProfit=totalSalesAmt.subtract(totalOtherExpenses);
 //			objSales1.setDblValue(grossProfit);
 			objSales1.setStrAccountName("");
-			objSales1.setStrCategory("INCOME");
+			objSales1.setStrCategory("DIRECT INCOME");
 //			listOfIncomeStatement.add(objSales1);
 			BigDecimal grossProfit=salesAmt.subtract(purAmt);			
 			hm.put("dblGrossProfit", grossProfit);
@@ -273,25 +273,25 @@ public class clsIncomeStatementReportController
 			Map<String,clsIncomeStmtReportBean> hmOtherIncomeIncStmt = new HashMap<String,clsIncomeStmtReportBean>();	
 				
 			// Other Incomes JV
-				funCalculateIncomeStmt("OTHER INCOME", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
+				funCalculateIncomeStmt("INDIRECT INCOME", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
 						
 			// Other Incomes Receipt 
-				funCalculateIncomeStmt("OTHER INCOME", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
+				funCalculateIncomeStmt("INDIRECT INCOMEE", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
 									
 			// Other Incomes Payment	
-				funCalculateIncomeStmt("OTHER INCOME", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
+				funCalculateIncomeStmt("INDIRECT INCOME", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
 								
 			
 			Map<String,clsIncomeStmtReportBean> hmExpenseIncStmt = new HashMap<String,clsIncomeStmtReportBean>();	
 				
 			// Expense JV
-				funCalculateIncomeStmt("EXPENSE", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
+				funCalculateIncomeStmt("INDIRECT EXPENSE", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
 						
 			// Expense Receipt 
-				funCalculateIncomeStmt("EXPENSE", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
+				funCalculateIncomeStmt("INDIRECT EXPENSE", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
 							
 			// Expense Payment	
-				funCalculateIncomeStmt("EXPENSE", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
+				funCalculateIncomeStmt("INDIRECT EXPENSE", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
 
 				
 				for(Map.Entry<String, clsIncomeStmtReportBean> entry:hmOtherIncomeIncStmt.entrySet())

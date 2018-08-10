@@ -285,7 +285,7 @@
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["INCOME"+"     "+"TOTAL"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["DIRECT INCOME"+"     "+"TOTAL"]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.###;(#,##0.###)" isBlankWhenNull="true">
 					<reportElement x="280" y="3" width="120" height="20" isPrintInFirstWholeBand="true" printWhenGroupChanges="strCategory" forecolor="#106B1F" uuid="84aab117-a164-4f02-bdb6-f0e3c5e35e9e">
@@ -490,7 +490,7 @@
 				<textElement>
 					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
-				<text><![CDATA[INCOME]]></text>
+				<text><![CDATA[DIRECT INCOME]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="120" width="554" height="1" uuid="ebf2cc92-78bb-4f00-a550-a84554b01a98"/>

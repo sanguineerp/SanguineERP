@@ -534,8 +534,8 @@ public class clsTrialBalanceReportController {
 				objHmBean.setStrAccountName(objArr[3].toString());
 				objHmBean.setTypeDebitCredit(objArr[4].toString());
 				double openingAmt=0;
-				if(objArr[8].toString().equals("INCOME") || objArr[8].toString().equals("EXPENSE") 
-						|| objArr[8].toString().equals("OTHER INCOME") || objArr[8].toString().equals("OTHER EXPENSE")){
+				if(objArr[8].toString().equals("DIRECT INCOME") || objArr[8].toString().equals("INDIRECT EXPENSES") 
+						|| objArr[8].toString().equals("INDIRECT INCOME") || objArr[8].toString().equals("DIRECT EXPENSES")){
 					objHmBean.setDblOpDrAmt(0);
 					objHmBean.setDblOpCrAmt(0);
 				}else{
@@ -597,8 +597,8 @@ public class clsTrialBalanceReportController {
 			}
 			
 			clsCreditorOutStandingReportBean objHmBean =new clsCreditorOutStandingReportBean();
-			objHmBean.setStrGroupCode("1004");
-			objHmBean.setStrGroupName("COST OF GOODS SOLD");
+			objHmBean.setStrGroupCode("1001");
+			objHmBean.setStrGroupName("CURRENT ASSETS");
 			objHmBean.setStrAccountCode(objModel.getStrStockInHandAccCode());
 			objHmBean.setStrAccountName(objModel.getStrStockInHandAccName());
 			objHmBean.setTypeDebitCredit("Debit");
@@ -612,8 +612,8 @@ public class clsTrialBalanceReportController {
 			fieldList.add(objHmBean);
 			
 			 objHmBean =new clsCreditorOutStandingReportBean();
-			objHmBean.setStrGroupCode("1004");
-			objHmBean.setStrGroupName("COST OF GOODS SOLD");
+			objHmBean.setStrGroupCode("1002");
+			objHmBean.setStrGroupName("SALES");
 			objHmBean.setStrAccountCode(objModel.getStrClosingCode());
 			objHmBean.setStrAccountName(objModel.getStrClosingName());
 			objHmBean.setTypeDebitCredit("Credit");

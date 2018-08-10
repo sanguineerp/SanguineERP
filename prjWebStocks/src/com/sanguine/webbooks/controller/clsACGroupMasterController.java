@@ -59,13 +59,13 @@ public class clsACGroupMasterController {
 		listCategory.add("ASSETS");				
 		listCategory.add("BANK BALANCE");
 		listCategory.add("CASH BALANCE");		
-		listCategory.add("EXPENSE");
-		listCategory.add("INCOME");
+		listCategory.add("INDIRECT EXPENSE");//Expense
+		listCategory.add("DIRECT INCOME");//Income
 		listCategory.add("LIABILITY");
 		listCategory.add("SUNDRY DEBTOR");
 		listCategory.add("SUNDRY CREDITOR");
-		listCategory.add("OTHER EXPENSES");
-		listCategory.add("OTHER INCOME");
+		listCategory.add("DIRECT EXPENSES");//other expenses
+		listCategory.add("INDIRECT INCOME");//other income
 		
 		
 		
