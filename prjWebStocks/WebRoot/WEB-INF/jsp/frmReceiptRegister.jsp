@@ -24,6 +24,8 @@ var fieldName="";
 			{
 			    $("#wait").css("display","none");
 			});	
+			
+			funSetAllLocationAllPrpoerty();
 		});
 		
 		/**
@@ -192,6 +194,57 @@ var fieldName="";
 				}
 			});
 		}
+		
+		
+		//Get and Set All Location on the basis of all Property
+	      function funSetAllLocationAllPrpoerty() {
+				var searchUrl = "";
+				searchUrl = getContextPath()+ "/loadAllLocationForAllProperty.html";
+				$.ajax({
+					type : "GET",
+					url : searchUrl,
+					dataType : "json",
+					beforeSend : function(){
+						 $("#wait").css("display","block");
+				    },
+				    complete: function(){
+				    	 $("#wait").css("display","none");
+				    },
+					success : function(response) {
+						if (response.strLocCode == 'Invalid Code') {
+							alert("Invalid Location Code");
+							$("#txtFromLocCode").val('');
+							$("#lblFromLocName").text("");
+							$("#txtFromLocCode").focus();
+						} else
+						{
+							$.each(response, function(i,item)
+							 		{
+								funfillLocationGrid(response[i].strLocCode,response[i].strLocName);
+									});
+							
+						}
+					},
+					error : function(jqXHR, exception) {
+						if (jqXHR.status === 0) {
+							alert('Not connect.n Verify Network.');
+						} else if (jqXHR.status == 404) {
+							alert('Requested page not found. [404]');
+						} else if (jqXHR.status == 500) {
+							alert('Internal Server Error [500].');
+						} else if (exception === 'parsererror') {
+							alert('Requested JSON parse failed.');
+						} else if (exception === 'timeout') {
+							alert('Time out error.');
+						} else if (exception === 'abort') {
+							alert('Ajax request aborted.');
+						} else {
+							alert('Uncaught Error.n' + jqXHR.responseText);
+						}
+					}
+				});
+			}
+		
 		
 		 /**
 		  * Fill location data in grid

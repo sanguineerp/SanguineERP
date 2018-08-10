@@ -4131,21 +4131,21 @@ public class clsReportsController {
 			if (tempSupp.length == 1) // for all supp of that date range
 			{
 				if (tempSupp[0].length() == 0) {
-					String sqlsupp = " select a.strSuppCode from tblgrnhd a where a.dtGRNDate >= '" + fromTempDate + "' AND a.dtGRNDate <= '" + toTempDate + "' ";
-
-					if (objBean.getStrDocCode() != "") {
-						sqlsupp = sqlsupp + " and " + "(" + strLocCodes + ") ";
-					}
-					sqlsupp = sqlsupp + "  group by a.strSuppCode order by a.strSuppCode  ";
-					List listSuppDtl = objGlobalFunctionsService.funGetDataList(sqlsupp, "sql");
-					for (int i = 0; i < listSuppDtl.size(); i++) {
-						String supp = listSuppDtl.get(i).toString();
+//					String sqlsupp = " select a.strSuppCode from tblgrnhd a where a.dtGRNDate >= '" + fromTempDate + "' AND a.dtGRNDate <= '" + toTempDate + "' ";
+//
+//					if (objBean.getStrDocCode() != "") {
+//						sqlsupp = sqlsupp + " and " + "(" + strLocCodes + ") ";
+//					}
+//					sqlsupp = sqlsupp + "  group by a.strSuppCode order by a.strSuppCode  ";
+//					List listSuppDtl = objGlobalFunctionsService.funGetDataList(sqlsupp, "sql");
+//					for (int i = 0; i < listSuppDtl.size(); i++) {
+//						String supp = listSuppDtl.get(i).toString();
 						// String supp = arrSupp.toString();
 
-						JasperPrint jp = funAddProductPurchaseReciept(objBean, resp, req, supp);
+						JasperPrint jp = funAddProductPurchaseReciept(objBean, resp, req, "");
 						jprintlist.add(jp);
 
-					}
+//					}
 				}
 
 			}
@@ -4312,22 +4312,24 @@ public class clsReportsController {
 			// " and b.strClientCode='"+clientCode+"' and c.strClientCode='"+clientCode+"'"
 			// +
 			// " and d.strClientCode='"+clientCode+"' and e.strClientCode='"+clientCode+"'";
-			String sql = " select a.strGRNCode as  GRN_No,b.strProdCode as P_Code,c.strProdName as Product_Name,sum(b.dblQty) as Qty_Recd ,a.dblSubTotal,b.dblUnitPrice as Price,a.dblTaxAmt" + " ,b.dblTotalPrice as Amount,c.strUOM as UOM" + " from tblgrnhd a, tblgrndtl b ,tblproductmaster c, tblsubgroupmaster d  "
+			String sql = " select a.strGRNCode as  GRN_No,b.strProdCode as P_Code,c.strProdName as Product_Name,sum(b.dblQty) as Qty_Recd ,a.dblSubTotal,c.dblCostRM as Price,a.dblTaxAmt" + " ,(c.dblCostRM*sum(b.dblQty)) as Amount,c.strUOM as UOM" + " from tblgrnhd a, tblgrndtl b ,tblproductmaster c, tblsubgroupmaster d  "
 					+ "where a.strGRNCode=b.strGRNCode and b.strProdCode=c.strProdCode and c.strSGCode=d.strSGCode   " + "AND a.dtGRNDate >= '" + fromTempDate + "' AND a.dtGRNDate <= '" + toTempDate + "' ";
 
 			if (objBean.getStrDocCode() != "") {
 				sql = sql + " and " + "(" + strLocCodes + ") ";
 			}
-
+			if (!supp.equals("")) {
 			sql = sql + " and a.strSuppCode='" + supp + "'  ";
-
+			}
 			sql += " group by b.strProdCode order by d.intSortingNo,c.strProdName  ";
 
 			String sqlTotal = "  select  a.dblSubTotal,a.dblTaxAmt  from tblgrnhd a, tblgrndtl b  " + " where a.strGRNCode=b.strGRNCode " + "  AND a.dtGRNDate >= '" + fromTempDate + "' AND a.dtGRNDate <= '" + toTempDate + "' ";
 			if (objBean.getStrDocCode() != "") {
 				sqlTotal = sqlTotal + " and " + "(" + strLocCodes + ") ";
 			}
+			if (!supp.equals("")) {
 			sqlTotal = sqlTotal + " and a.strSuppCode='" + supp + "'  ";
+			}
 			sqlTotal += " group by a.strGRNCode  ";
 			List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlTotal, "sql");
 

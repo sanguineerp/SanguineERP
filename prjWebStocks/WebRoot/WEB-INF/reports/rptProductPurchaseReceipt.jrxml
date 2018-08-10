@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.2.1.final using JasperReports Library version 6.2.1  -->
-<!-- 2016-07-25T17:44:39 -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="test" pageWidth="595" pageHeight="800" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8ca3318f-da2c-4d8d-935e-8b30d18882c5">
 	<property name="ireport.zoom" value="1.1289478601075547"/>
 	<property name="ireport.x" value="0"/>
@@ -162,9 +161,9 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="133">
+		<band height="89">
 			<componentElement>
-				<reportElement key="table 2" style="table 2" x="0" y="0" width="552" height="133" uuid="bf50b07d-2e21-4af0-b6c9-eb285992e96e"/>
+				<reportElement key="table 2" style="table 2" x="0" y="0" width="552" height="80" uuid="bf50b07d-2e21-4af0-b6c9-eb285992e96e"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="dsProdPurchase" uuid="931a2668-2317-430e-b25e-402664c7742b">
 						<datasetParameter name="subtotal">
@@ -178,13 +177,13 @@
 					<jr:column width="80" uuid="e0fd29b0-6bd9-4c0a-86ad-86aa415940ac">
 						<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="47" height="30" uuid="4a08cec2-5ae6-4e09-ab92-52395e3c64f1"/>
+								<reportElement x="0" y="0" width="80" height="30" uuid="4a08cec2-5ae6-4e09-ab92-52395e3c64f1"/>
 								<text><![CDATA[Product Code]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 							<textField>
-								<reportElement x="2" y="0" width="78" height="20" uuid="7ac4749b-b37b-4b18-a0f5-5781505caf95"/>
+								<reportElement x="0" y="0" width="80" height="20" uuid="7ac4749b-b37b-4b18-a0f5-5781505caf95"/>
 								<textFieldExpression><![CDATA[$F{P_Code}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -192,13 +191,13 @@
 					<jr:column width="229" uuid="3295c16c-8390-477e-ae2d-e61f374253f1">
 						<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="150" height="30" uuid="f3a01fd8-f31e-43a3-877f-93013c99876a"/>
+								<reportElement x="0" y="0" width="229" height="30" uuid="f3a01fd8-f31e-43a3-877f-93013c99876a"/>
 								<text><![CDATA[Product Name]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 							<textField>
-								<reportElement x="3" y="0" width="226" height="20" uuid="771fccee-ea3a-4c99-b936-1fdb2ea331b8"/>
+								<reportElement x="0" y="0" width="229" height="20" uuid="771fccee-ea3a-4c99-b936-1fdb2ea331b8"/>
 								<textFieldExpression><![CDATA[$F{Product_Name}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -206,13 +205,13 @@
 					<jr:column width="46" uuid="553f05da-cee2-4b58-bac0-41e6343d4a03">
 						<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="44" height="30" uuid="663d5bda-57f8-4840-8ac8-056126429789"/>
+								<reportElement x="0" y="0" width="46" height="30" uuid="663d5bda-57f8-4840-8ac8-056126429789"/>
 								<text><![CDATA[UOM]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 							<textField>
-								<reportElement x="3" y="0" width="41" height="20" uuid="280f289c-5012-480c-b2e5-2ba8bb7e9179"/>
+								<reportElement x="0" y="0" width="46" height="20" uuid="280f289c-5012-480c-b2e5-2ba8bb7e9179"/>
 								<textFieldExpression><![CDATA[$F{UOM}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -220,13 +219,13 @@
 					<jr:column width="52" uuid="3f371540-7844-4eed-854c-09ad318de449">
 						<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="49" height="30" uuid="133d93ca-0417-46ba-960c-682d2126ba3b"/>
+								<reportElement x="0" y="0" width="52" height="30" uuid="133d93ca-0417-46ba-960c-682d2126ba3b"/>
 								<text><![CDATA[Qty Recd]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 							<textField pattern="###0.00;-###0.00">
-								<reportElement x="2" y="0" width="47" height="20" uuid="d3004c4a-5e61-48ef-8903-5cdf5754e4bf"/>
+								<reportElement x="0" y="0" width="52" height="20" uuid="d3004c4a-5e61-48ef-8903-5cdf5754e4bf"/>
 								<textFieldExpression><![CDATA[$F{Qty_Recd}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -234,36 +233,22 @@
 					<jr:column width="68" uuid="0559bfdc-613c-4905-89fe-dc3744b16b2d">
 						<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="52" height="30" uuid="009ec2f8-93ca-4323-bd2f-0e14799f1805"/>
+								<reportElement x="0" y="0" width="68" height="30" uuid="009ec2f8-93ca-4323-bd2f-0e14799f1805"/>
 								<text><![CDATA[Price]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:tableFooter style="table 2_TD" height="78" rowSpan="1">
+						<jr:tableFooter style="table 2_TD" height="30" rowSpan="1">
 							<staticText>
-								<reportElement style="table 2_TD" x="0" y="0" width="68" height="28" uuid="d4a4e887-0e64-4701-962b-7dce47e83b2a"/>
+								<reportElement style="table 2_TD" x="0" y="0" width="68" height="30" uuid="d4a4e887-0e64-4701-962b-7dce47e83b2a"/>
 								<textElement>
 									<font fontName="Serif" isBold="true"/>
 								</textElement>
 								<text><![CDATA[ Sub Total]]></text>
 							</staticText>
-							<staticText>
-								<reportElement style="table 2_TD" x="0" y="28" width="68" height="23" uuid="47bc116e-ab76-4ab2-9c21-2102ee10cf30"/>
-								<textElement>
-									<font fontName="Serif" isBold="true"/>
-								</textElement>
-								<text><![CDATA[ Tax Amt]]></text>
-							</staticText>
-							<staticText>
-								<reportElement style="table 2_TD" x="0" y="51" width="68" height="27" uuid="93529b08-aa4c-4ec6-af17-9531b2e1b7ff"/>
-								<textElement>
-									<font fontName="Serif" isBold="true"/>
-								</textElement>
-								<text><![CDATA[ Grand Total]]></text>
-							</staticText>
 						</jr:tableFooter>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 							<textField pattern="###0.00;-###0.00">
-								<reportElement x="1" y="0" width="67" height="20" uuid="4a562130-7eff-431f-b937-1e0e644bd7e5"/>
+								<reportElement x="0" y="0" width="68" height="20" uuid="4a562130-7eff-431f-b937-1e0e644bd7e5"/>
 								<textFieldExpression><![CDATA[$F{Price}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -271,31 +256,17 @@
 					<jr:column width="74" uuid="e7f193ae-926f-4888-92b1-95e78c27287d">
 						<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="52" height="30" uuid="1e8d1cf6-ffec-4148-b5e6-c84287e4f265"/>
+								<reportElement x="0" y="0" width="74" height="30" uuid="1e8d1cf6-ffec-4148-b5e6-c84287e4f265"/>
 								<text><![CDATA[Amount]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:tableFooter style="table 2_TD" height="78" rowSpan="1">
+						<jr:tableFooter style="table 2_TD" height="30" rowSpan="1">
 							<textField pattern="###0.00;-###0.00">
-								<reportElement style="table 2_TD" x="0" y="0" width="74" height="28" uuid="138b218f-4728-4217-85d9-b406010998af"/>
+								<reportElement style="table 2_TD" x="0" y="0" width="74" height="30" uuid="138b218f-4728-4217-85d9-b406010998af"/>
 								<textElement>
 									<font fontName="Serif" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$P{subtotal}]]></textFieldExpression>
-							</textField>
-							<textField pattern="###0.00;-###0.00">
-								<reportElement style="table 2_TD" x="0" y="28" width="74" height="23" uuid="4378bc21-70d5-4888-869d-80d3d123a056"/>
-								<textElement>
-									<font fontName="Serif" isBold="true"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$P{taxtotal}]]></textFieldExpression>
-							</textField>
-							<textField pattern="###0.00;-###0.00">
-								<reportElement style="table 2_TD" x="0" y="51" width="74" height="27" uuid="aaf7c61c-87d6-48ba-923f-f5cb027e6fea"/>
-								<textElement>
-									<font fontName="Serif" isBold="true"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{totGrandTotal}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
@@ -366,6 +337,6 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="1" splitType="Stretch"/>
 	</summary>
 </jasperReport>
