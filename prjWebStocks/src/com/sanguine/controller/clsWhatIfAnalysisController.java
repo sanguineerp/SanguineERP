@@ -43,7 +43,6 @@ public class clsWhatIfAnalysisController {
 	@Autowired
 	clsProductMasterService objProductMasterService;
 
-	// List listChildNodes;
 	Map<String, List<String>> mapChildNodes;
 	List<List<String>> listChildNodes;
 	List<clsWhatIfAnalysisModel> listWhatIfAnalysis;
@@ -65,7 +64,6 @@ public class clsWhatIfAnalysisController {
 		} else {
 			return null;
 		}
-
 	}
 
 	@RequestMapping(value = "/saveWhatIfAnanlysis", method = RequestMethod.POST)
@@ -75,7 +73,6 @@ public class clsWhatIfAnalysisController {
 		listWhatIfAnalysis = new ArrayList<clsWhatIfAnalysisModel>();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		for (String product : objBean.getListProduct()) {
-			System.out.println("prod=" + product + "\tqty=" + product.split(",")[3]);
 			List list = funGetAllChildNodes(product.split(",")[0], clientCode, Double.parseDouble(product.split(",")[3]));
 		}
 		return new ModelAndView("frmWhatIfAnalysisFlash");
@@ -84,8 +81,6 @@ public class clsWhatIfAnalysisController {
 	@RequestMapping(value = "/loadProductFromRecipe", method = RequestMethod.GET)
 	public @ResponseBody List funLoadProduct(HttpServletRequest request) {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		String userCode = request.getSession().getAttribute("usercode").toString();
-		
 		String prodCode = request.getParameter("prodCode").toString();
 		String sql = "select a.strParentCode,b.strPartNo,b.strProdName,b.dblCostRM " + "from clsBomHdModel a, clsProductMasterModel b " + "where a.strParentCode=b.strProdCode and a.strParentCode='" + prodCode + "' " + "and a.strClientCode='" + clientCode + "'";
 		List listRecipeProduct = objGlobalFunctionsService.funGetList(sql, "hql");
@@ -95,14 +90,11 @@ public class clsWhatIfAnalysisController {
 	@RequestMapping(value = "/getChildNodes", method = RequestMethod.GET)
 	public @ResponseBody List<List<String>> funGetChildNodes(HttpServletRequest request) {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		String userCode = request.getSession().getAttribute("usercode").toString();
-		
 		String param = request.getParameter("prodCode").toString();
 		String[] sp = param.split(",");
 		mapChildNodes = new HashMap<String, List<String>>();
 		listChildNodes = new ArrayList<List<String>>();
 		List list = funGetAllChildNodes(sp[0], clientCode, Double.parseDouble(sp[1]));
-		// return mapChildNodes;
 		return listChildNodes;
 	}
 
@@ -115,7 +107,6 @@ public class clsWhatIfAnalysisController {
 		List<String> listChildNodes = new ArrayList<String>();
 		String param = request.getParameter("prodCode").toString();
 		String rateFrom = request.getParameter("rateFrom").toString();
-		System.out.println(param);
 		param = param.substring(1, param.length());
 		String[] sp = param.split(",");
 		for (int cn = 0; cn < sp.length; cn++) {
@@ -137,11 +128,10 @@ public class clsWhatIfAnalysisController {
 			String locationCode = request.getSession().getAttribute("locationCode").toString();
 			
 			double currentStock = objGlobalFunction.funGetCurrentStockForProduct(prodCode, locationCode, clientCode, userCode, startDate, toDate,proprtyWiseStock);
-			// double currentStock=0;
 			double orderQty = reqdQty - (openPOQty + currentStock);
 			if (orderQty < 0)
 				orderQty = 0;
-			System.out.println("Prod=" + prodCode + "\topenPO=" + openPOQty + "\tstk=" + currentStock + "\tOrder Qty=" + orderQty);
+			
 			String productInfo = funGetProdInfo(prodCode);
 			String leadTime = "0", prodName = "", uom = "", suppCode = "", suppName = "";
 			double receiveConversion=1;
@@ -284,7 +274,6 @@ public class clsWhatIfAnalysisController {
 			String sql = "select ifNull(a.dblCostRM,0) as Rate  from tblproductmaster a where a.strProdCode='" + childCode + "' and a.strClientCode='" + clientCode + "' ";
 			List listChildRate = objGlobalFunctionsService.funGetList(sql, "sql");
 			if (listChildRate.size() > 0) {
-				System.out.println(listChildRate.get(0));
 				bomRate = Double.parseDouble(listChildRate.get(0).toString());
 			}
 
@@ -300,7 +289,6 @@ public class clsWhatIfAnalysisController {
 			String sql = "select b.dblUnitPrice from tblgrnhd a, tblgrndtl b where a.strGRNCode=b.strGRNCode and a.strClientCode='"+clientCode+"' and b.strProdCode='"+childCode+"' order by a.dtBillDate desc limit 1 ;";
 			List listChildRate = objGlobalFunctionsService.funGetList(sql, "sql");
 			if (listChildRate.size() > 0) {
-				System.out.println(listChildRate.get(0));
 				bomRate = Double.parseDouble(listChildRate.get(0).toString());
 			}
 
@@ -318,19 +306,15 @@ public class clsWhatIfAnalysisController {
 				+ "from tblbommasterhd a ,tblbommasterdtl b left outer join (select a.strProdCode as Product,a.dblOrdQty - ifnull(b.POQty,0) as BalanceQty " + "from tblpurchaseorderdtl a left outer join (SELECT b.strCode AS POCode, b.strProdCode, SUM(b.dblQty) AS POQty " + "FROM tblgrnhd a INNER JOIN tblgrndtl b ON a.strGRNCode = b.strGRNCode WHERE (a.strAgainst = 'Purchase Order') "
 				+ "GROUP BY POCode, b.strProdCode) b on a.strPOCode = b.POCode and a.strProdCode = b.strProdCode " + "left outer join tblproductmaster c on a.strProdCode=c.strProdCode " + "where a.dblOrdQty > ifnull(b.POQty,0) and a.strProdCode='" + prodCode + "' and a.strClientCode='" + clientCode + "' ) d " + "on b.strChildCode=d.Product, tblproductmaster c "
 				+ "left outer join tblprodsuppmaster e on c.strProdCode=e.strProdCode and e.strDefault='Y' " + "left outer join tblpartymaster f on e.strSuppCode=f.strPCode " + "where a.strBOMCode=b.strBOMCode and b.strChildCode=c.strProdCode " + "and a.strParentCode='" + prodCode + "' and a.strClientCode='" + clientCode + "'";
-		System.out.println(sql);
 		List listChildProducts = objGlobalFunctionsService.funGetList(sql, "sql");
 		if (listChildProducts.size() > 0) {
 			for (int cnt = 0; cnt < listChildProducts.size(); cnt++) {
 				Object[] arrObjNodes = (Object[]) listChildProducts.get(cnt);
 				double reqQty = Double.parseDouble(arrObjNodes[7].toString());
 				reqQty = reqQty * qty;
-				// System.out.println("Init Qty="+qty+"\tReq Qty="+reqQty);
 				List listTemp = funGetAllChildNodes(arrObjNodes[0].toString(), clientCode, reqQty);
-
 				if (listTemp.size() == 0) {
 					List listNodes = new ArrayList<String>();
-					// System.out.println("PROD="+arrObjNodes[0].toString()+"\tFinal Qty="+reqQty);
 
 					listNodes.add(arrObjNodes[0].toString()); // Prod Code
 
@@ -383,10 +367,8 @@ public class clsWhatIfAnalysisController {
 				}
 			}
 		}
-
 		return listChildProducts;
 	}
-
 }
 
 
