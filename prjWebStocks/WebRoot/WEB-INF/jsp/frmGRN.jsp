@@ -1070,10 +1070,11 @@
 				    	}
 					    var POQty=parseFloat(gPOQty)-parseFloat(totalQty);
 					    $("#txtQuantity").val(POQty);
-					    if(response[12]=="Contract Rate Amt")
+					    //Contract Rate Editable
+					    /* if(response[12]=="Contract Rate Amt")
 						{
 							$('#txtCostRM').attr('readonly', true);
-						}
+						} */
 					}
 				},
 				error : function(jqXHR, exception) {
@@ -2051,11 +2052,10 @@
 							{
 								if(response.strRemark=="Contract Rate Amt")
 								{
-									$('#txtCostRM').attr('readonly', true);
+									//Contract Rate Editable
+									//$('#txtCostRM').attr('readonly', true);
 								}
 							}
-								
-								
 						}
 					},
 					error : function(jqXHR, exception) {

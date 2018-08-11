@@ -489,6 +489,7 @@ public class clsMaterialReqController {
 
 		} else {
 			objReqModel.setDtReqDate(objGlobal.funGetDate("yyyy/MM/dd", objReqModel.getDtReqDate()));
+			objReqModel.setDtReqiredDate(objGlobal.funGetDate("yyyy/MM/dd", objReqModel.getDtReqiredDate()));
 			clsLocationMasterModel objLocHdBy = objLocService.funGetObject(objReqModel.getStrLocBy(), clientCode);
 			clsLocationMasterModel objLocHdOn = objLocService.funGetObject(objReqModel.getStrLocOn(), clientCode);
 			objReqModel.setStrLocByName(objLocHdBy.getStrLocName());
