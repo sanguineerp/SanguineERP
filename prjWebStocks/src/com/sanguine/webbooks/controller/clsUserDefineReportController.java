@@ -185,6 +185,7 @@ public class clsUserDefineReportController
                 else
                 {
                 	objUserDefModel=new clsUserDefinedReportHdModel(); 
+                	objUserDefModel.setStrReportId("Invalid Code");
                 }
 	
 			}

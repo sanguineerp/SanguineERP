@@ -138,31 +138,19 @@ public class clsReceiptController {
 		String docCode = request.getParameter("docCode").toString();
 		String debtorCode = "";
 		String debtorName = "";
-//		String strCurr = request.getSession().getAttribute("currValue").toString();
-//		double currValue = Double.parseDouble(strCurr);
-		
 		clsReceiptHdModel objReceipt = objReceiptService.funGetReceiptList(docCode, clientCode, propCode);
-
-//		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
-		double currConversion = objReceipt.getDblConversion();
-		if(currConversion==0)
-		{
-			currConversion=1.0;
-		}
-//		if (objSetup != null) {
-//			clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(objReceipt.getStrCurrency(), clientCode);
-//			if (objCurrModel != null) {
-//				currConversion = objCurrModel.getDblConvToBaseCurr();
-//
-//			}
-//
-//		}
+		double currConversion=0.0;
 		
 		clsReceiptBean objReceiptBean = null;
 		if (null == objReceipt) {
 			objReceiptBean = new clsReceiptBean();
 			objReceiptBean.setStrVouchNo("Invalid");
 		} else {
+			currConversion = objReceipt.getDblConversion();
+			if(currConversion==0)
+			{
+				currConversion=1.0;
+			}
 			Map<String, clsReceiptDetailBean> hmReceiptDtlBean = new HashMap<String, clsReceiptDetailBean>();
 
 			objReceiptBean = new clsReceiptBean();

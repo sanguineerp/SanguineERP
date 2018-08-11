@@ -33,6 +33,7 @@ import com.sanguine.webbooks.model.clsPaymentHdModel;
 import com.sanguine.webbooks.model.clsReceiptDebtorDtlModel;
 import com.sanguine.webbooks.model.clsReceiptDtlModel;
 import com.sanguine.webbooks.model.clsReceiptHdModel;
+import com.sanguine.webbooks.model.clsWebBooksAccountMasterModel;
 import com.sanguine.webbooks.model.clsWebBooksAuditDebtorDtlModel;
 import com.sanguine.webbooks.model.clsWebBooksAuditDtlModel;
 import com.sanguine.webbooks.model.clsWebBooksAuditHdModel;
@@ -470,6 +471,11 @@ public class clsDeleteTransactionController {
 			Object[] ob = (Object[]) list.get(0);
 			objModel.setStrReasonCode(ob[0].toString());
 			objModel.setStrReasonName(ob[1].toString());
+		}
+		else
+		{
+			objModel = new clsReasonMaster();
+			objModel.setStrReasonCode("Invalid Code");
 		}
 		return objModel;
 	}
