@@ -60,7 +60,11 @@ function funHelp(transactionName)
 							var code=$('#txtSOCode').val();
 							if(code.trim().length > 0 && code !="?" && code !="/")
 							{
-								//funSetReqData(code);
+								if(code.trim().length>12)
+								{
+									alert("Invalid Voucher No");
+									$('#txtSOCode').val('');
+								}	
 							}
 						});
 				

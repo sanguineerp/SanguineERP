@@ -49,7 +49,22 @@ function funHelp(transactionName)
 		}
 	}
 	
-
+	$(function()
+			{
+				$("#txtSOCode").blur(function() 
+						{
+							var code=$('#txtSOCode').val();
+							if(code.trim().length > 0 && code !="?" && code !="/")
+							{
+								if(code.trim().length>12)
+								{
+									alert("Invalid Voucher No");
+									$('#txtSOCode').val('');
+								}	
+							}
+						});
+				
+			});
 		
 </script>
 

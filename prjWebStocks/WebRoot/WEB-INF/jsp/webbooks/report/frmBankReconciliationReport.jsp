@@ -25,6 +25,14 @@
 		$( "#txtToDate" ).datepicker({ dateFormat: 'dd-mm-yy' });
 		$("#txtToDate" ).datepicker('setDate', 'today');
 		
+		$("#txtBankCode").blur(function() 
+				{
+					var code=$('#txtBankCode').val();
+					if(code.trim().length > 0 && code !="?" && code !="/")
+					{
+						funSetBankAccountDetails(code);
+					}
+				});
 
 	});
 	
@@ -56,6 +64,8 @@
 	        	{
 	        		alert("Invalid Account Code");
 	        		$("#txtBankCode").val('');
+	        		$("#lblBankDesc").text('');
+	        		$("#txtBankDesc").val('');
 	        	}
 	        	else
 	        	{

@@ -59,6 +59,31 @@
 				<%
 			}
 		}%>
+		
+		$('#txtTransCode').blur(function() {
+			var code = $('#txtTransCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				if(code.trim().length>12)
+				{
+					alert("Invalid Code");
+					$("#txtTransCode").val('');
+				}
+				else
+				{
+					$("#txtTransCode").val(code);
+				}	
+			}
+		});
+		
+		$('#txtReasonCode').blur(function() {
+			var code = $('#txtReasonCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetReason(code);
+			}
+		});
+		
 	});
 
 		
@@ -106,9 +131,17 @@
 			url : getContextPath()+ "/loadWebStockReasonMasterData.html?reasonCode=" + code,
 			dataType : "json",
 			success : function(response){
-				
+				if(response.strReasonCode=="Invalid Code")
+				{
+				alert("Invalid Reason Code");
+				$("#txtReasonCode").val('');
+				$("#lblReasonDesc").text('');
+				}
+				else
+				{	
 				$("#txtReasonCode").val(response.strReasonCode);
 				$("#lblReasonDesc").text(response.strReasonName);
+				}
 			},
 			error : function(e){
 				if (jqXHR.status === 0) {

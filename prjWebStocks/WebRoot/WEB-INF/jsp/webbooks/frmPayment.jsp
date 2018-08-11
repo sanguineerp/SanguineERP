@@ -79,6 +79,59 @@
 			
 		<%}%>
 		
+		$('#txtVouchNo').blur(function() {
+			var code = $('#txtVouchNo').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetVouchNo(code);
+			}
+		});
+		
+		$('#txtBankCode').blur(function() {
+			var code = $('#txtBankCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetBankAccountDetails(code);
+				
+			}
+		});
+		
+		$('#txtDrawnOn').blur(function() {
+			var code = $('#txtDrawnOn').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetDrawnOn(code);
+			}
+		});
+		
+		$('#txtAccCode').blur(function() {
+			var code = $('#txtAccCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetAccountDetails(code);
+			}
+		});
+		
+		$('#txtDebtorCode').blur(function() {
+			var code = $('#txtDebtorCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				if(code.startsWith("D"))
+				{
+					funSetDebtorMasterData(code);
+				}
+				else if(code.startsWith("C"))
+				{
+					funSetcreditorMasterData(code);
+				}
+				else if(code.startsWith("E"))
+				{
+					funSetEmployeeMasterData(code);
+				}
+			}
+		});
+		
+		
 	});
 
 	
@@ -175,14 +228,17 @@
 			type : "GET",
 			url : getContextPath()+ "/loadPayment.html?docCode=" + code,
 			dataType : "json",
-			success : function(response){ 
+			success : function(response)
+			{
+				funRemoveProductRows("tblReceiptDetails");
+				  funRemoveAccountRows("tblGRN");
 				if(response.strVouchNo!="Invalid")
 		    	{
 		    		funFillHdData(response);
 		    	}
 		    	else
 			    {
-			    	alert("Invalid Receipt No");
+			    	alert("Invalid Payment No");
 			    	$("#txtVouchNo").val("");
 			    	$("#txtVouchNo").focus();
 			    	return false;
@@ -220,6 +276,8 @@
 	        	{
 	        		alert("Invalid Account Code");
 	        		$("#txtBankCode").val('');
+	        		$("#lblBankDesc").text('');
+	        		$("#lblBankBalAmt").text('');
 	        	}
 	        	else
 	        	{
@@ -265,10 +323,11 @@
 			url : getContextPath()+"/loadBankMasterData.html?bankCode="+code,
 			dataType : "json",
 			success : function(response){ 
-				if(response.strAccountCode=='Invalid Code')
+				if(response.strBankCode=='Invalid Code')
 	        	{
 	        		alert("Invalid Bank Code");
 	        		$("#txtDrawnOn").val('');
+	        		$("#lblDrawnOnDesc").text('');
 	        	}
 	        	else
 	        	{
@@ -310,6 +369,7 @@
 	        	{
 	        		alert("Invalid Account Code");
 	        		$("#txtAccCode").val('');
+	        		$("#txtDescription").val('');
 	        	}
 	        	else
 	        	{
@@ -379,16 +439,17 @@ function funSetcreditorMasterData(creditorCode)
 			        dataType: "json",
 			        success: function(response)
 			        {
-			        	if(response.Creditor=='Invalid Code')
+			        	if(response.strCreditorCode=='Invalid Code')
 			        	{
-			        		alert("Invalid creditor Code");
+			        		alert("Invalid Creditor Code");
 			        		$("#txtDebtorCode").val('');
+			        		 $("#txtDebtorName").val('');
 			        	}
 			        	else
 			        	{					        	    			        	    
 			        	    /* Debtor Details */
 			        	    funRemoveAccountRows("tblGRN");
-			        	    $("#txtDebtorCode").val(creditorCode);
+			        	    $("#txtDebtorCode").val(response.strCreditorCode);
 			        	    $("#txtDebtorName").val(response.strFirstName);
 			        	    $("#cmbCurrency").val(response.strCurrencyType);
 			        	    $("#txtDblConversion").val(response.dblConversion);
@@ -549,13 +610,14 @@ function funSetDebtorMasterData(debtorCode)
 		        	{
 		        		alert("Invalid Debtor Code");
 		        		$("#txtDebtorCode").val('');
+		        		  $("#txtDebtorName").val('');
 		        	}
 		        	else
 		        	{					        	    			        	    
 		        	    /* Debtor Details */
 		        	   
 		        		   
-			        	    $("#txtDebtorCode").val(debtorCode);
+			        	    $("#txtDebtorCode").val(response.strDebtorCode);
 			        	    $("#txtDebtorName").val(response.strFirstName);
 			        	  
 			        	    funSetBalanceAmt("Debtor");
@@ -1348,8 +1410,9 @@ function funSetDebtorMasterData(debtorCode)
 			        {
 			        	if(response.strEmployeeCode=='Invalid Code')
 			        	{
-			        		alert("Invalid Debtor Code");
+			        		alert("Invalid Employee Code");
 			        		$("#txtDebtorCode").val('');
+			        		 $("#txtDebtorName").val('');
 			        	}
 			        	else
 			        	{					        	    			        	    

@@ -60,6 +60,53 @@
 			
 		<%}%>
 		
+		
+		$('#txtAccCode').blur(function() {
+			var code = $('#txtAccCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetAccountDetails(code);
+			}
+		});
+		
+
+		$('#txtVouchNo').blur(function() {
+			var code = $('#txtVouchNo').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetVouchNo(code);
+			}
+		});
+		
+		$('#txtOneLineAcc').blur(function() {
+			var code = $('#txtOneLineAcc').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetOneLineAccDetails(code);
+			}
+		});
+		
+		$('#txtDebtorCode').blur(function() {
+			var code = $('#txtDebtorCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				if(code.startsWith("C"))
+				{
+					funSetcreditorMasterData(code);
+				}
+				else if(code.startsWith("D"))
+				{
+					funSetDebtorMasterData(code);
+				}
+				else if(code.startsWith("E"))
+				{
+					funSetEmployeeMasterData(code);
+				}	
+				
+			}
+		});
+		
+		
 	});
 	
 	
@@ -108,16 +155,17 @@
 			        dataType: "json",
 			        success: function(response)
 			        {
-			        	if(response.Creditor=='Invalid Code')
+			        	if(response.strCreditorCode=='Invalid Code')
 			        	{
-			        		alert("Invalid creditor Code");
+			        		alert("Invalid Creditor Code");
 			        		$("#txtDebtorCode").val('');
+			        		$("#lblCrdDebName").text('');
 			        	}
 			        	else
 			        	{					        	    			        	    
 			        	    /* Debtor Details */
 			        	  
-			        	    $("#txtDebtorCode").val(creditorCode);
+			        	    $("#txtDebtorCode").val(response.strCreditorCode);
 			        	    $("#lblCrdDebName").text(response.strCreditorFullName);
 			        	  
 				    		
@@ -164,6 +212,7 @@
 			async: false,
 			success : function(response){
 
+				funRemoveProductRows();
 				if(response.strVouchNo!="Invalid")
 		    	{
 		    		funFillHdData(response);
@@ -251,6 +300,7 @@
 		        	{
 		        		alert("Invalid Account Code");
 		        		$("#txtAccCode").val('');
+		        		$("#txtDescription").val('');
 		        	}
 		        	else
 		        	{
@@ -323,6 +373,8 @@
 	        		alert("Invalid Account Code");
 	        		$("#txtOneLineAcc").val('');
 	        	}
+				else
+				{	
 				if($("#txtAccCode").val()==response.strAccountCode)
 				{
 					alert("This account in not valid!!!");
@@ -332,6 +384,7 @@
 	        		$("#txtOneLineAcc").val(response.strAccountCode);
 	        		oneLineAccDesc=response.strAccountName;
 	        	}
+				}
 			},
 			error: function(jqXHR, exception) {
 				if (jqXHR.status === 0) {
@@ -694,11 +747,12 @@
 			        	{
 			        		alert("Invalid Debtor Code");
 			        		$("#txtDebtorCode").val('');
+			        		$("#lblCrdDebName").text('');
 			        	}
 			        	else
 			        	{					        	    			        	    
 			        	    /* Debtor Details */
-			        	    $("#txtDebtorCode").val(debtorCode);
+			        	    $("#txtDebtorCode").val(response.strDebtorCode);
 			        	    $("#lblCrdDebName").text(response.strDebtorFullName);
 			        	
 			        	}
@@ -740,8 +794,9 @@
 			        {
 			        	if(response.strEmployeeCode=='Invalid Code')
 			        	{
-			        		alert("Invalid Debtor Code");
+			        		alert("Invalid Employee Code");
 			        		$("#txtDebtorCode").val('');
+			        		$("#lblCrdDebName").text('');
 			        	}
 			        	else
 			        	{					        	    			        	    

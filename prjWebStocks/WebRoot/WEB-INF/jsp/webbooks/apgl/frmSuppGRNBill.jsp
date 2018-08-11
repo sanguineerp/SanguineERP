@@ -23,6 +23,31 @@
 		
 		$( "#txtToDate" ).datepicker({ dateFormat: 'dd-mm-yy' });		
 		$("#txtToDate" ).datepicker('setDate', 'today'); 
+		
+		
+		$('#txtVoucherNo').blur(function() {
+			var code = $('#txtVoucherNo').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetVoucherNo(code);
+			}
+		});
+		
+		$('#txtSuppCode').blur(function() {
+			var code = $('#txtSuppCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetSuppCode(code);
+			}
+		});
+		
+		$('#txtACCode').blur(function() {
+			var code = $('#txtACCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetAccountDetails(code);
+			}
+		});
 	});
 	
 	$(document).ready(function()
@@ -167,6 +192,7 @@
 	        	{
 	        		alert("Invalid Supplier Code");
 	        		$("#txtSuppCode").val('');
+	        		$("#txtSuppName").val('');
 	        	}
 	        	else
 	        	{
@@ -213,6 +239,7 @@
 	        	{
 	        		alert("Invalid Account Code");
 	        		$("#txtACCode").val('');
+	        		$("#txtACName").val('');
 	        	}
 	        	else
 	        	{

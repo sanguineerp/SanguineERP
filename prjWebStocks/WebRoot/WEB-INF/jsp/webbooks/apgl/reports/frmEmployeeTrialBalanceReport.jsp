@@ -25,7 +25,14 @@
 		$( "#txtToDate" ).datepicker({ dateFormat: 'dd-mm-yy' });
 		$("#txtToDate" ).datepicker('setDate', 'today');
 		
-		
+		$("#txtGLCode").blur(function() 
+				{
+					var code=$('#txtGLCode').val();
+					if(code.trim().length > 0 && code !="?" && code !="/")
+					{
+						funSetGLCode(code);
+					}
+				});
 
 	});
 	
@@ -51,7 +58,7 @@
 		url : getContextPath()+ "/loadAccontCodeAndName.html?accountCode=" + code,
 		dataType : "json",
 		success : function(response){ 
-			if(response.strVouchNo!="Invalid")
+			if(response.strAccountCode!="Invalid Code")
 	    	{
 				$("#txtGLCode").val(response.strAccountCode);
 				$("#lblGLCode").text(response.strAccountName);
@@ -61,7 +68,7 @@
 		    {
 		    	alert("Invalid GL Code");
 		    	$("#txtGLCode").val("");
-		    	
+		    	$("#lblGLCode").text("");
 		    	return false;
 		    }
 		},

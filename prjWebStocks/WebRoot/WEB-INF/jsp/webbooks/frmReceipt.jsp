@@ -68,6 +68,57 @@
 			
 		<%}%>
 		
+		$('#txtVouchNo').blur(function() {
+			var code = $('#txtVouchNo').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetVouchNo(code);
+			}
+		});
+		
+		$('#txtCFCode').blur(function() {
+			var code = $('#txtCFCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetCFCode(code);
+			}
+		});
+		
+		$('#txtDrawnOn').blur(function() {
+			var code = $('#txtDrawnOn').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetBankDetails(code);
+			}
+		});
+		
+		$('#txtAccCode').blur(function() {
+			var code = $('#txtAccCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetAccountDetails(code);
+			}
+		});
+		
+		$('#txtDebtorCode').blur(function() {
+			var code = $('#txtDebtorCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				if(code.startsWith("D"))
+				{
+					funSetDebtorMasterData(code);
+				}
+				else if(code.startsWith("C"))
+				{
+					funSetcreditorMasterData(code);
+				}
+				else if(code.startsWith("E"))
+				{
+					funSetEmployeeMasterData(code);
+				}
+			}
+		});
+		
 		
 	});
 
@@ -128,6 +179,8 @@
 			url : getContextPath()+ "/loadReceipt.html?docCode=" + code,
 			dataType : "json",
 			success : function(response){ 
+				funRemoveProductRows();
+				funRemoveAccountRows("tblInv");
 				if(response.strVouchNo!="Invalid")
 		    	{
 		    		funFillHdData(response);
@@ -240,6 +293,8 @@
 	        	{
 	        		alert("Invalid Account Code");
 	        		$("#txtCFCode").val('');
+	        		$("#lblCFDesc").text('');
+	        		$("#lblBankBalAmt").text('');
 	        	}
 	        	else
 	        	{
@@ -296,6 +351,7 @@
 	        	{
 	        		alert("Invalid Account Code");
 	        		$("#txtAccCode").val('');
+	        		$("#txtDescription").val('');
 	        	}
 	        	else
 	        	{
@@ -407,6 +463,7 @@
 	        	{
 	        		alert("Invalid Bank Code");
 	        		$("#txtDrawnOn").val('');
+	        		$("#lblDrawnOnDesc").text('');
 	        	}
 	        	else
 	        	{
@@ -754,16 +811,17 @@
 			        dataType: "json",
 			        success: function(response)
 			        {
-			        	if(response.Creditor=='Invalid Code')
+			        	if(response.strCreditorCode=='Invalid Code')
 			        	{
-			        		alert("Invalid creditor Code");
+			        		alert("Invalid Creditor Code");
 			        		$("#txtDebtorCode").val('');
+			        		$("#txtDebtorName").val('');
 			        	}
 			        	else
 			        	{					        	    			        	    
 			        	    /* Debtor Details */
 			        	 
-			        	    $("#txtDebtorCode").val(creditorCode);
+			        	    $("#txtDebtorCode").val(response.strCreditorCode);
 			        	    $("#txtDebtorName").val(response.strFirstName);
 			        	  
 			        	    funSetBalanceAmt("Creditor");
@@ -803,12 +861,13 @@
 			        	{
 			        		alert("Invalid Debtor Code");
 			        		$("#txtDebtorCode").val('');
+			        		$("#txtDebtorName").val('');
 			        	}
 			        	else
 			        	{					        	    			        	    
 			        	    /* Debtor Details */
 			        	     funRemoveAccountRows("tblInv");
-			        	    $("#txtDebtorCode").val(debtorCode);
+			        	    $("#txtDebtorCode").val(response.strDebtorCode);
 			        	    $("#txtDebtorName").val(response.strDebtorFullName);
 			        	    $("#cmbCurrency").val(response.strCurrencyType);
 			        	    $("#txtDblConversion").val(response.dblConversion);
@@ -1128,8 +1187,9 @@
 				        {
 				        	if(response.strEmployeeCode=='Invalid Code')
 				        	{
-				        		alert("Invalid Debtor Code");
+				        		alert("Invalid Employee Code");
 				        		$("#txtDebtorCode").val('');
+				        		$("#txtDebtorName").val('');
 				        	}
 				        	else
 				        	{					        	    			        	    

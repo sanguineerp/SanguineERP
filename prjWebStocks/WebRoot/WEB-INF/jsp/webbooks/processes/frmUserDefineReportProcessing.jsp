@@ -20,6 +20,15 @@
 					$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
 					$("#txtToDate").datepicker('setDate', 'today');
 					var glCode = $("#txtGLCode").val();
+					
+					$('#txtReportCode').blur(function() {
+						var code = $('#txtReportCode').val();
+						if(code.trim().length > 0 && code !="?" && code !="/")
+						{
+							funSetReportName(code);
+						}
+					});
+					
 					});
 			
 	
@@ -49,10 +58,17 @@
 			dataType : "json",
 			success : function(response)
 			{
-				
+				if(response.strReportId=="Invalid Code")
+				{
+				alert("Invlid Report Id");
+				$("#txtReportCode").val("");
+				$("#lblUserName").text("");
+				}
+				else
+				{	
 				$("#txtReportCode").val(response.strReportId);
 				$("#lblUserName").text(response.strReportName);
-				
+				}
 			},
 			error : function(e){
 			}
