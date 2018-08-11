@@ -990,7 +990,7 @@ public class clsMaterialReqController {
 		Map<String, List> hmChildNodes = new HashMap<String, List>();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String opCode = request.getParameter("OPCode").toString();
-		objWhatIfAnalysis.listChildNodes1 = new ArrayList<String>();
+		List<String> listChildNodes = new ArrayList<String>();
 		StringBuilder sqlBuilder = new StringBuilder("select b.strProdCode,b.dblQty from tblproductionorderhd a,tblproductionorderdtl b " + " where a.strOPCode=b.strOPCode and a.strOPCode='" + opCode + "' "
 		+ " and a.strClientCode=b.strClientCode and a.strClientCode='" + clientCode + "'");
 
@@ -1001,14 +1001,14 @@ public class clsMaterialReqController {
 				Object[] arrObj = (Object[]) list.get(cnt);
 				String parentCode = arrObj[0].toString();
 				double parentQty = Double.parseDouble(arrObj[1].toString());
-				objWhatIfAnalysis.funGetBOMNodes(parentCode, 0, parentQty);
+				objWhatIfAnalysis.funGetBOMNodes(parentCode, 0, parentQty, listChildNodes);
 			}
 		}
 		
-		for (int cnt = 0; cnt < objWhatIfAnalysis.listChildNodes1.size(); cnt++) {
+		for (int cnt = 0; cnt < listChildNodes.size(); cnt++) {
 			clsProductMasterModel objModel = null;
 			List arrListBOMProducts = new ArrayList<String>();
-			String temp = (String) objWhatIfAnalysis.listChildNodes1.get(cnt);
+			String temp = (String) listChildNodes.get(cnt);
 			String prodCode = temp.split(",")[0];
 			double reqdQty = Double.parseDouble(temp.split(",")[1]);
 			double openPOQty = objWhatIfAnalysis.funGetOpenPOQty(prodCode, clientCode);
@@ -1052,7 +1052,7 @@ public class clsMaterialReqController {
 
 			hmChildNodes.put(prodCode, arrListBOMProducts);
 		}
-		objWhatIfAnalysis.listChildNodes1 = null;
+		listChildNodes = null;
 		return hmChildNodes;
 	}
 

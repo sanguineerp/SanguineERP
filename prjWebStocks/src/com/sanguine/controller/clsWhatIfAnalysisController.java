@@ -48,7 +48,6 @@ public class clsWhatIfAnalysisController {
 	// List listChildNodes;
 	Map<String, List<String>> mapChildNodes;
 	List<List<String>> listChildNodes;
-	public List listChildNodes1;
 	List<clsWhatIfAnalysisModel> listWhatIfAnalysis;
 
 	@RequestMapping(value = "/frmWhatIfAnalysis", method = RequestMethod.GET)
@@ -111,11 +110,11 @@ public class clsWhatIfAnalysisController {
 
 
 	@RequestMapping(value = "/getChildNodes1", method = RequestMethod.GET)
-	public @ResponseBody Map<String, List> funGetChildNodes1(HttpServletRequest request) {
-		Map<String, List> hmChildNodes = new HashMap<String, List>();
+	public @ResponseBody Map<String, clsWhatIfAnalysisFields> funGetChildNodes1(HttpServletRequest request) {
+		Map<String, clsWhatIfAnalysisFields> hmChildNodes = new HashMap<String, clsWhatIfAnalysisFields>();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
-		listChildNodes1 = new ArrayList<String>();
+		List<String> listChildNodes = new ArrayList<String>();
 		String param = request.getParameter("prodCode").toString();
 		String rateFrom = request.getParameter("rateFrom").toString();
 		System.out.println(param);
@@ -124,12 +123,11 @@ public class clsWhatIfAnalysisController {
 		for (int cn = 0; cn < sp.length; cn++) {
 			String sp1[] = sp[cn].split("!");
 			double reqdQty = Double.parseDouble(sp1[1]);
-			funGetBOMNodes(sp1[0], 0, reqdQty);
+			funGetBOMNodes(sp1[0], 0, reqdQty, listChildNodes);
 		}
 		String proprtyWiseStock="N";
-		for (int cnt = 0; cnt < listChildNodes1.size(); cnt++) {
-			List arrListBOMProducts = new ArrayList<String>();
-			String temp = (String) listChildNodes1.get(cnt);
+		for (int cnt = 0; cnt < listChildNodes.size(); cnt++) {
+			String temp = (String) listChildNodes.get(cnt);
 			String prodCode = temp.split(",")[0];
 			double reqdQty = Double.parseDouble(temp.split(",")[1]);
 			double openPOQty = funGetOpenPOQty(prodCode, clientCode);
@@ -148,38 +146,35 @@ public class clsWhatIfAnalysisController {
 			System.out.println("Prod=" + prodCode + "\topenPO=" + openPOQty + "\tstk=" + currentStock + "\tOrder Qty=" + orderQty);
 			String productInfo = funGetProdInfo(prodCode);
 			String leadTime = "0", prodName = "", uom = "", suppCode = "", suppName = "";
-			double dblRecipeConversion=1;//calculate this amt for showing required qty in recipe
+			double receiveConversion=1;
+			
 			if (productInfo.trim().length() > 0) {
 				String[] spProd = productInfo.split("#");
 				prodName = spProd[0];
 				uom = spProd[1];
 				suppCode = spProd[2];
 				suppName = spProd[3];
-				dblRecipeConversion = Double.parseDouble(spProd[4]);
-				if (spProd.length > 5) {
-					leadTime = spProd[5];
-				}
+				receiveConversion = Double.parseDouble(spProd[5]);
+				if(spProd.length>6)
+					leadTime = spProd[6];
 
 			} else {
 				clsProductMasterModel objModel = objProductMasterService.funGetObject(prodCode, clientCode);
 				prodName = objModel.getStrProdName();
+				receiveConversion = objModel.getDblReceiveConversion();
 			}
 
-			Date today = new Date();
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DAY_OF_MONTH, Integer.parseInt(leadTime));
 			Date expDate = cal.getTime();
 			String expectedDate = expDate.getDate() + "/" + (expDate.getMonth() + 1) + "/" + (expDate.getYear() + 1900);
 
 			if (null != hmChildNodes.get(prodCode)) {
-				List arrListTemp = hmChildNodes.get(prodCode);
-				reqdQty = reqdQty + Double.parseDouble(arrListTemp.get(3).toString());
-				currentStock = currentStock + Double.parseDouble(arrListTemp.get(4).toString());
-				openPOQty = openPOQty + Double.parseDouble(arrListTemp.get(5).toString());
-				orderQty = orderQty + Double.parseDouble(arrListTemp.get(6).toString());
-
-				System.out.println(Double.parseDouble(arrListTemp.get(3).toString()));
-				System.out.println(Double.parseDouble(arrListTemp.get(4).toString()));
+				clsWhatIfAnalysisFields objWhatIfAnalysisFields = hmChildNodes.get(prodCode);
+				reqdQty = reqdQty + objWhatIfAnalysisFields.getReqdQty();
+				currentStock = currentStock + objWhatIfAnalysisFields.getCurrentStock();
+				openPOQty = openPOQty + objWhatIfAnalysisFields.getOpenPOQty();
+				orderQty = orderQty + objWhatIfAnalysisFields.getOrderQty();
 				hmChildNodes.remove(prodCode);
 			}
 
@@ -189,36 +184,51 @@ public class clsWhatIfAnalysisController {
 			}else{
 				bomrate=funGetBOMRate(prodCode, clientCode);	
 			}
+						
+			clsWhatIfAnalysisFields objWhatIfAnalysisFields=new clsWhatIfAnalysisFields();
+			objWhatIfAnalysisFields.setProdCode(prodCode);
+			objWhatIfAnalysisFields.setProdName(prodName);
+			objWhatIfAnalysisFields.setReqdQty(reqdQty*receiveConversion);
+			objWhatIfAnalysisFields.setUom(uom);
+			objWhatIfAnalysisFields.setOpenPOQty(openPOQty);
+			objWhatIfAnalysisFields.setOrderQty(orderQty);
+			objWhatIfAnalysisFields.setSuppCode(suppCode);
+			objWhatIfAnalysisFields.setSuppName(suppName);
+			objWhatIfAnalysisFields.setLeadTime(leadTime);
+			objWhatIfAnalysisFields.setAmount(bomrate * reqdQty);
+			objWhatIfAnalysisFields.setExpectedDate(expectedDate);
+			objWhatIfAnalysisFields.setCurrentStock(currentStock);
 			
-
-			arrListBOMProducts.add(prodCode);
-			arrListBOMProducts.add(prodName);
-			arrListBOMProducts.add(uom);
-			arrListBOMProducts.add(reqdQty*dblRecipeConversion);
-			arrListBOMProducts.add(currentStock);
-			arrListBOMProducts.add(openPOQty);
-			arrListBOMProducts.add(orderQty);
-			arrListBOMProducts.add(suppCode);
-			arrListBOMProducts.add(suppName);
-			arrListBOMProducts.add(leadTime);
-			arrListBOMProducts.add(bomrate * reqdQty);
-			arrListBOMProducts.add(expectedDate);
-
-			hmChildNodes.put(prodCode, arrListBOMProducts);
+			if(hmChildNodes.containsKey(prodCode))
+			{
+				double reqdQty1=reqdQty*receiveConversion;
+				double amount1=bomrate * reqdQty;
+				
+				objWhatIfAnalysisFields=hmChildNodes.get(prodCode);
+				objWhatIfAnalysisFields.setOpenPOQty(objWhatIfAnalysisFields.getOpenPOQty()+openPOQty);
+				objWhatIfAnalysisFields.setReqdQty(objWhatIfAnalysisFields.getReqdQty()+reqdQty1);
+				objWhatIfAnalysisFields.setOrderQty(objWhatIfAnalysisFields.getOrderQty()+orderQty);
+				objWhatIfAnalysisFields.setAmount(objWhatIfAnalysisFields.getAmount()+amount1);
+			}
+			
+			hmChildNodes.put(prodCode, objWhatIfAnalysisFields);
+			System.out.println(hmChildNodes);
 		}
-
+		
 		return hmChildNodes;
 	}
 
 	public String funGetProdInfo(String prodCode) {
 		String prodInfo = "";
-//		String sql = " select ifnull(a.strProdName,''),ifnull(a.strReceivedUOM,''),ifnull(b.strSuppCode,''),ifnull(c.strPName,''),ifnull(b.strLeadTime,'0') " + " from tblproductmaster a " + " left outer join tblprodsuppmaster b  on a.strProdCode=b.strProdCode  and b.strDefault='Y' " + " left outer join tblpartymaster c on b.strSuppCode=c.strPCode " + " where  a.strProdCode='" + prodCode + "'  ";
-		String sql = " select ifnull(a.strProdName,''),if(IFNULL(a.strRecipeUOM,'')='',IFNULL(a.strReceivedUOM,''),a.strRecipeUOM),ifnull(b.strSuppCode,''),ifnull(c.strPName,''),ifnull(b.strLeadTime,'0'),a.dblRecipeConversion " + " from tblproductmaster a " + " left outer join tblprodsuppmaster b  on a.strProdCode=b.strProdCode  and b.strDefault='Y' " + " left outer join tblpartymaster c on b.strSuppCode=c.strPCode " + " where  a.strProdCode='" + prodCode + "'  ";
+		String sql = " select ifnull(a.strProdName,''),if(IFNULL(a.strRecipeUOM,'')='',IFNULL(a.strReceivedUOM,''),a.strRecipeUOM),ifnull(b.strSuppCode,''),ifnull(c.strPName,''),a.dblRecipeConversion,a.dblReceiveConversion,ifnull(b.strLeadTime,'0') " 
+			+ " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strDefault='Y' "
+			+ " left outer join tblpartymaster c on b.strSuppCode=c.strPCode "
+			+ " where  a.strProdCode='" + prodCode + "'  ";
 
 		List list = objGlobalFunctionsService.funGetList(sql, "sql");
 		if (list.size() > 0) {
 			Object[] arrObj = (Object[]) list.get(0);
-			prodInfo = arrObj[0] + "#" + arrObj[1] + "#" + arrObj[2] + "#" + arrObj[3] + "#" + arrObj[5]+ "#" + arrObj[4];
+			prodInfo = arrObj[0] + "#" + arrObj[1] + "#" + arrObj[2] + "#" + arrObj[3] + "#" + arrObj[4]+ "#" + arrObj[5]+ "#" + arrObj[6];
 		}
 
 		return prodInfo;
@@ -231,7 +241,6 @@ public class clsWhatIfAnalysisController {
 				+ "and a.strProdCode = b.strProdCode left outer join tblproductmaster c on a.strProdCode=c.strProdCode " + "where a.dblOrdQty > ifnull(b.POQty,0) and a.strProdCode='" + prodCode + "' and a.strClientCode='" + clientCode + "'";
 		List list = objGlobalFunctionsService.funGetList(sql, "sql");
 		if (list.size() > 0) {
-			// openPOQty = (double) list.get(0);
 			Object ob = list.get(0);
 			openPOQty = (BigDecimal) ob;
 			dblPOQty = openPOQty.doubleValue();
@@ -240,24 +249,20 @@ public class clsWhatIfAnalysisController {
 		return dblPOQty;
 	}
 
-	public List funGetBOMNodes(String parentProdCode, double bomQty, double qty) {
-		double finalQty = 0;
-		List listTemp = new ArrayList<String>();
+	public int funGetBOMNodes(String parentProdCode, double bomQty, double qty, List<String> listChildNodes) {
+			
 		String sql = "select b.strChildCode from  tblbommasterhd a,tblbommasterdtl b " + "where a.strBOMCode=b.strBOMCode and a.strParentCode='" + parentProdCode + "' ";
-		listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
+		List listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
 		if (listTemp.size() > 0) {
 			for (int cnt = 0; cnt < listTemp.size(); cnt++) {
 				String childNode = (String) listTemp.get(cnt);
 				bomQty = funGetBOMQty(childNode, parentProdCode);
-				// qty=qty*bomQty;
-				// System.out.println(childNode+"\tbom="+bomQty+"\tQty="+qty);
-				funGetBOMNodes(childNode, bomQty, qty * bomQty);
+				funGetBOMNodes(childNode, bomQty, qty * bomQty, listChildNodes);
 			}
-			finalQty = qty;
 		} else {
-			listChildNodes1.add(parentProdCode + "," + qty);
+			listChildNodes.add(parentProdCode + "," + qty);
 		}
-		return listChildNodes1;
+		return 1;
 	}
 
 	public double funGetBOMQty(String childCode, String parentCode) {
@@ -308,17 +313,8 @@ public class clsWhatIfAnalysisController {
 	}
 
 	private List funGetAllChildNodes(String prodCode, String clientCode, double qty) {
+
 		List list = new ArrayList<String>();
-
-		/*
-		 * String sql=
-		 * "select a.strParentCode,b.strChildCode, c.strProdName, c.strPartNo, b.dblQty "
-		 * + "from clsBomHdModel a ,clsBomDtlModel b ,clsProductMasterModel c "
-		 * +
-		 * "where a.strBOMCode=b.strBOMCode and b.strChildCode=c.strProdCode and a.strParentCode='"
-		 * +prodCode+"' " + "and a.strClientCode='"+clientCode+"'";
-		 */
-
 		String sql = "select b.strChildCode, c.strProdName, c.strPartNo, b.dblQty as Quantity " + ",ifnull(d.BalanceQty,0) as PurchaseQty " + ",b.dblQty-(ifnull(d.BalanceQty,0)) as OrderQty " + ",left(((c.dblReceiveConversion/c.dblIssueConversion)/c.dblRecipeConversion),6) as Conversion "
 				+ ",left(((c.dblReceiveConversion/c.dblIssueConversion)/c.dblRecipeConversion),6)*(b.dblQty-(ifnull(d.BalanceQty,0))) as FinalQty " + ",ifnull(e.strSuppCode,''),ifnull(f.strPName,''),ifnull(e.strLeadTime,0),ifnull(e.dblLastCost,0)" + ",c.strReceivedUOM "
 				+ "from tblbommasterhd a ,tblbommasterdtl b left outer join (select a.strProdCode as Product,a.dblOrdQty - ifnull(b.POQty,0) as BalanceQty " + "from tblpurchaseorderdtl a left outer join (SELECT b.strCode AS POCode, b.strProdCode, SUM(b.dblQty) AS POQty " + "FROM tblgrnhd a INNER JOIN tblgrndtl b ON a.strGRNCode = b.strGRNCode WHERE (a.strAgainst = 'Purchase Order') "
@@ -394,3 +390,100 @@ public class clsWhatIfAnalysisController {
 	}
 
 }
+
+
+class clsWhatIfAnalysisFields
+{
+	private String prodCode;
+	private String prodName;
+	private String uom;
+	private double reqdQty;
+	private double currentStock;
+	private double openPOQty;
+	private double orderQty;
+	private String suppCode;
+	private String leadTime;
+	private String suppName;
+	private double amount;
+	private String expectedDate;
+	
+	
+	public String getProdCode() {
+		return prodCode;
+	}
+	public void setProdCode(String prodCode) {
+		this.prodCode = prodCode;
+	}
+	public String getProdName() {
+		return prodName;
+	}
+	public void setProdName(String prodName) {
+		this.prodName = prodName;
+	}
+	public String getUom() {
+		return uom;
+	}
+	public void setUom(String uom) {
+		this.uom = uom;
+	}
+	public double getReqdQty() {
+		return reqdQty;
+	}
+	public void setReqdQty(double reqdQty) {
+		this.reqdQty = reqdQty;
+	}
+	public double getCurrentStock() {
+		return currentStock;
+	}
+	public void setCurrentStock(double currentStock) {
+		this.currentStock = currentStock;
+	}
+	public double getOpenPOQty() {
+		return openPOQty;
+	}
+	public void setOpenPOQty(double openPOQty) {
+		this.openPOQty = openPOQty;
+	}
+	public double getOrderQty() {
+		return orderQty;
+	}
+	public void setOrderQty(double orderQty) {
+		this.orderQty = orderQty;
+	}
+	public String getSuppCode() {
+		return suppCode;
+	}
+	public void setSuppCode(String suppCode) {
+		this.suppCode = suppCode;
+	}
+	public String getLeadTime() {
+		return leadTime;
+	}
+	public void setLeadTime(String leadTime) {
+		this.leadTime = leadTime;
+	}
+	public String getSuppName() {
+		return suppName;
+	}
+	public void setSuppName(String suppName) {
+		this.suppName = suppName;
+	}
+	public double getAmount() {
+		return amount;
+	}
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+	public String getExpectedDate() {
+		return expectedDate;
+	}
+	public void setExpectedDate(String expectedDate) {
+		this.expectedDate = expectedDate;
+	}
+	
+	
+	
+}
+
+
+

@@ -122,8 +122,13 @@
 				    {				    	
 				    	$.each(response, function(i,itemDtl)
 						{				    		
-							funAddChildProducts(itemDtl[0],itemDtl[1],itemDtl[2],itemDtl[3].toFixed(maxQuantityDecimalPlaceLimit),itemDtl[4].toFixed(maxAmountDecimalPlaceLimit),itemDtl[5]
-							,itemDtl[6],itemDtl[7],itemDtl[8],itemDtl[9],itemDtl[10].toFixed(maxAmountDecimalPlaceLimit),itemDtl[11],itemDtl[12]);
+							/*funAddChildProducts(itemDtl[0],itemDtl[1],itemDtl[2],itemDtl[3].toFixed(maxQuantityDecimalPlaceLimit),itemDtl[4].toFixed(maxAmountDecimalPlaceLimit),itemDtl[5]
+							,itemDtl[6],itemDtl[7],itemDtl[8],itemDtl[9],itemDtl[10].toFixed(maxAmountDecimalPlaceLimit),itemDtl[11],itemDtl[12]);*/
+							
+				    		funAddChildProducts(itemDtl.prodCode,itemDtl.prodName,itemDtl.uom,itemDtl.reqdQty.toFixed(maxQuantityDecimalPlaceLimit)
+				    			,itemDtl.currentStock.toFixed(maxAmountDecimalPlaceLimit),itemDtl.openPOQty,itemDtl.orderQty
+								,itemDtl.suppCode,itemDtl.suppName,itemDtl.leadTime,itemDtl.amount.toFixed(maxAmountDecimalPlaceLimit),itemDtl[11],itemDtl[12]);
+							
 						});
 				    	
 				    	funAddTotal();
