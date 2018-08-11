@@ -45,7 +45,7 @@ $(document).ready(function()
 		{
 			fieldName = transactionName;
 		//	window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
-			window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500,left=500")
+			 window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
 			
 		}
 
@@ -74,6 +74,7 @@ $(document).ready(function()
 			        			alert("Invalid Customer Code");
 			        			$("#txtPartyCode").val('');
 			        			$("#txtPartyCode").focus();
+			        			$("#lblPartyName").text('');
 			        			
 			        		}else{			   
 			        			$("#txtPartyCode").val(response.strPCode);
@@ -145,7 +146,7 @@ $(document).ready(function()
 							var code=$('#txtPartyCode').val();
 							if(code.trim().length > 0 && code !="?" && code !="/")
 							{
-								funHelp(code);
+								funSetCuster(code);
 							}
 						});
 				

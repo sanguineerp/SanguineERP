@@ -545,6 +545,7 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 										
         				$("#txtreqCode").val(response.strReqCode);
         				$("#txtReqDate").val(response.dtReqDate);
+        				$("#txtReqiredDate").val(response.dtReqiredDate);
         				$("#txtLocBy").val(response.strLocBy); 
         				$("#lblLocBy").text(response.strLocByName);
         				$("#txtLocOn").val(response.strLocOn);

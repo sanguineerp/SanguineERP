@@ -320,68 +320,64 @@ public class clsCommercialTaxInnvoiceController {
 		clsInvoiceHdModel objInvoiceHdModel = null;
 		clsLocationMasterModel objLocationMasterModel = null;
 		clsPartyMasterModel objPartyMasterModel = null;
+		
+		if(objDC!=null)
+		{
+			
+			for (int i = 0; i < objDC.size(); i++) {
+				Object[] ob = (Object[]) objDC.get(i);
+				objInvoiceHdModel = (clsInvoiceHdModel) ob[0];
+				objLocationMasterModel = (clsLocationMasterModel) ob[1];
+				objPartyMasterModel = (clsPartyMasterModel) ob[2];
+			}
 
-		for (int i = 0; i < objDC.size(); i++) {
-			Object[] ob = (Object[]) objDC.get(i);
-			objInvoiceHdModel = (clsInvoiceHdModel) ob[0];
-			objLocationMasterModel = (clsLocationMasterModel) ob[1];
-			objPartyMasterModel = (clsPartyMasterModel) ob[2];
+			objBeanInv = funPrepardComericalHdBean(objInvoiceHdModel, objLocationMasterModel, objPartyMasterModel);
+			objBeanInv.setStrCustName(objPartyMasterModel.getStrPName());
+			objBeanInv.setStrLocName(objLocationMasterModel.getStrLocName());
+			List<clsInvoiceModelDtl> listDCDtl = new ArrayList<clsInvoiceModelDtl>();
+			clsInvoiceHdModel objInvHDModelList = objInvoiceHdService.funGetInvoiceDtl(invCode, clientCode);
+
+			List<clsInvoiceModelDtl> listInvDtlModel = objInvHDModelList.getListInvDtlModel();
+			List<clsInvoiceDtlBean> listInvDtlBean = new ArrayList();
+			for (int i = 0; i < listInvDtlModel.size(); i++) {
+				clsInvoiceDtlBean objBeanInvoice = new clsInvoiceDtlBean();
+
+				clsInvoiceModelDtl obj = listInvDtlModel.get(i);
+				clsProductMasterModel objProdModle = objProductMasterService.funGetObject(obj.getStrProdCode(), clientCode);
+
+				objBeanInvoice.setStrProdCode(obj.getStrProdCode());
+				objBeanInvoice.setStrProdName(objProdModle.getStrProdName());
+				objBeanInvoice.setStrProdType(obj.getStrProdType());
+				objBeanInvoice.setDblQty(obj.getDblQty());
+				objBeanInvoice.setDblWeight(obj.getDblWeight());
+				objBeanInvoice.setDblUnitPrice(obj.getDblUnitPrice());
+				objBeanInvoice.setStrPktNo(obj.getStrPktNo());
+				objBeanInvoice.setStrRemarks(obj.getStrRemarks());
+				objBeanInvoice.setStrInvoiceable(obj.getStrInvoiceable());
+				objBeanInvoice.setStrSerialNo(obj.getStrSerialNo());
+				objBeanInvoice.setStrCustCode(obj.getStrCustCode());
+				objBeanInvoice.setStrSOCode(obj.getStrSOCode());
+				objBeanInvoice.setStrUOM(objProdModle.getStrUOM());
+				listInvDtlBean.add(objBeanInvoice);
+
+			}
+			objBeanInv.setListclsInvoiceModelDtl(listInvDtlBean);
+			List<clsInvoiceTaxDtlBean> listInvBeanTaxDtl = new ArrayList<clsInvoiceTaxDtlBean>();
+			for (clsInvoiceTaxDtlModel objInvTaxDtl : objInvHDModelList.getListInvTaxDtlModel()) {
+				clsInvoiceTaxDtlBean objTaxBeanDtl = new clsInvoiceTaxDtlBean();
+
+				objTaxBeanDtl.setStrTaxCode(objInvTaxDtl.getStrTaxCode());
+				objTaxBeanDtl.setStrTaxDesc(objInvTaxDtl.getStrTaxDesc());
+				objTaxBeanDtl.setStrTaxableAmt(objInvTaxDtl.getDblTaxableAmt());
+				objTaxBeanDtl.setStrTaxAmt(objInvTaxDtl.getDblTaxAmt());
+
+				listInvBeanTaxDtl.add(objTaxBeanDtl);
+			}
+			objBeanInv.setListInvoiceTaxDtl(listInvBeanTaxDtl);
+
 		}
 
-		objBeanInv = funPrepardComericalHdBean(objInvoiceHdModel, objLocationMasterModel, objPartyMasterModel);
-		objBeanInv.setStrCustName(objPartyMasterModel.getStrPName());
-		objBeanInv.setStrLocName(objLocationMasterModel.getStrLocName());
-		List<clsInvoiceModelDtl> listDCDtl = new ArrayList<clsInvoiceModelDtl>();
-		clsInvoiceHdModel objInvHDModelList = objInvoiceHdService.funGetInvoiceDtl(invCode, clientCode);
-
-		List<clsInvoiceModelDtl> listInvDtlModel = objInvHDModelList.getListInvDtlModel();
-		List<clsInvoiceDtlBean> listInvDtlBean = new ArrayList();
-		for (int i = 0; i < listInvDtlModel.size(); i++) {
-			clsInvoiceDtlBean objBeanInvoice = new clsInvoiceDtlBean();
-
-			clsInvoiceModelDtl obj = listInvDtlModel.get(i);
-			clsProductMasterModel objProdModle = objProductMasterService.funGetObject(obj.getStrProdCode(), clientCode);
-
-			objBeanInvoice.setStrProdCode(obj.getStrProdCode());
-			objBeanInvoice.setStrProdName(objProdModle.getStrProdName());
-			objBeanInvoice.setStrProdType(obj.getStrProdType());
-			objBeanInvoice.setDblQty(obj.getDblQty());
-			objBeanInvoice.setDblWeight(obj.getDblWeight());
-			objBeanInvoice.setDblUnitPrice(obj.getDblUnitPrice());
-			objBeanInvoice.setStrPktNo(obj.getStrPktNo());
-			objBeanInvoice.setStrRemarks(obj.getStrRemarks());
-			objBeanInvoice.setStrInvoiceable(obj.getStrInvoiceable());
-			objBeanInvoice.setStrSerialNo(obj.getStrSerialNo());
-			objBeanInvoice.setStrCustCode(obj.getStrCustCode());
-			objBeanInvoice.setStrSOCode(obj.getStrSOCode());
-			objBeanInvoice.setStrUOM(objProdModle.getStrUOM());
-			listInvDtlBean.add(objBeanInvoice);
-
-		}
-		objBeanInv.setListclsInvoiceModelDtl(listInvDtlBean);
-
-		// Object ob = listInvDtlModel.get(index)
-		// clsInvoiceModelDtl invDtl = (clsInvoiceModelDtl) ob[0];
-		// clsProductMasterModel prodmast =(clsProductMasterModel) ob[1];
-
-		// invDtl.setStrProdName(prodmast.getStrProdName());
-		// listDCDtl.add(invDtl);
-		// }
-
-		// objBeanInv.setListclsInvoiceModelDtl(listDCDtl);
-		List<clsInvoiceTaxDtlBean> listInvBeanTaxDtl = new ArrayList<clsInvoiceTaxDtlBean>();
-		for (clsInvoiceTaxDtlModel objInvTaxDtl : objInvHDModelList.getListInvTaxDtlModel()) {
-			clsInvoiceTaxDtlBean objTaxBeanDtl = new clsInvoiceTaxDtlBean();
-
-			objTaxBeanDtl.setStrTaxCode(objInvTaxDtl.getStrTaxCode());
-			objTaxBeanDtl.setStrTaxDesc(objInvTaxDtl.getStrTaxDesc());
-			objTaxBeanDtl.setStrTaxableAmt(objInvTaxDtl.getDblTaxableAmt());
-			objTaxBeanDtl.setStrTaxAmt(objInvTaxDtl.getDblTaxAmt());
-
-			listInvBeanTaxDtl.add(objTaxBeanDtl);
-		}
-		objBeanInv.setListInvoiceTaxDtl(listInvBeanTaxDtl);
-
+		
 		return objBeanInv;
 	}
 

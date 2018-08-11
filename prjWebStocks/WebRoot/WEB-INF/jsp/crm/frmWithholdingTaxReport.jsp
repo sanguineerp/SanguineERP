@@ -49,6 +49,18 @@
 		}
 	}
 	
+	$(function()
+	 {
+		$('#txtPartyCode').blur(function() {
+			var code = $('#txtPartyCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetCustomer(code);
+			}
+		});
+	});
+
+	
 	function funSetCustomer(code)
 	{
 		gurl=getContextPath()+"/loadPartyMasterData.html?partyCode=";
@@ -62,6 +74,7 @@
 	        			alert("Invalid Customer Code");
 	        			$("#txtPartyCode").val('');
 	        			$("#txtPartyCode").focus();
+	        			$("#txtPartyName").val('');
 	        			
 	        		}else{
 	        			$("#txtPartyCode").val(response.strPCode);

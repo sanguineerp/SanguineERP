@@ -11,58 +11,77 @@
 </head>
 <script type="text/javascript">
 $(document).ready(function() 
-		{		
+	{		
+		$(".tab_content").hide();
+		$(".tab_content:first").show();
+	
+		$("ul.tabs li").click(function() {
+			$("ul.tabs li").removeClass("active");
+			$(this).addClass("active");
 			$(".tab_content").hide();
-			$(".tab_content:first").show();
-	
-			$("ul.tabs li").click(function() {
-				$("ul.tabs li").removeClass("active");
-				$(this).addClass("active");
-				$(".tab_content").hide();
-				var activeTab = $(this).attr("data-state");
-				$("#" + activeTab).fadeIn();
-			});
-			
-			 var startDate="${startDate}";
-			 var arr = startDate.split("/");
-			 Dat=arr[2]+"-"+arr[1]+"-"+arr[0];
-			 $("#txtFromDate").datepicker({ dateFormat: 'yy-mm-dd' });
-			 $("#txtFromDate" ).datepicker('setDate', Dat);
-			 $("#txtFromDate").datepicker();	
-				
-			 $("#txtToDate").datepicker({ dateFormat: 'yy-mm-dd' });
-			 $("#txtToDate" ).datepicker('setDate', 'today');
-			 $("#txtToDate").datepicker();	
-					
-			 $("#txtSRTillDate").datepicker({ dateFormat: 'yy-mm-dd' });
-			 $("#txtSRTillDate" ).datepicker('setDate', 'today');
-			 $("#txtSRTillDate").datepicker();
-				
-					
+			var activeTab = $(this).attr("data-state");
+			$("#" + activeTab).fadeIn();
 		});
+		
+		 var startDate="${startDate}";
+		 var arr = startDate.split("/");
+		 Dat=arr[2]+"-"+arr[1]+"-"+arr[0];
+		 $("#txtFromDate").datepicker({ dateFormat: 'yy-mm-dd' });
+		 $("#txtFromDate" ).datepicker('setDate', Dat);
+		 $("#txtFromDate").datepicker();	
+			
+		 $("#txtToDate").datepicker({ dateFormat: 'yy-mm-dd' });
+		 $("#txtToDate" ).datepicker('setDate', 'today');
+		 $("#txtToDate").datepicker();	
+				
+		 $("#txtSRTillDate").datepicker({ dateFormat: 'yy-mm-dd' });
+		 $("#txtSRTillDate" ).datepicker('setDate', 'today');
+		 $("#txtSRTillDate").datepicker();
+			
+				
+	});
 
 
 
-function funHelp(transactionName)
-{
-	fieldName=transactionName;
-    
- //   window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
-   window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
-}
-function funSetData(code)
-{
-	switch(fieldName)
+	function funHelp(transactionName)
 	{
-	
-	case 'subContractor':
-	      funSetSubContractor(code)
-	      break;
-	case 'DNCode':
-		  funSetDeliveryNoteCode(code)
-		  break;
+		fieldName=transactionName;
+	    
+	 //   window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
+	   window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
 	}
-	}
+	function funSetData(code)
+	{
+		switch(fieldName)
+		{
+		
+		case 'subContractor':
+		      funSetSubContractor(code)
+		      break;
+		case 'DNCode':
+			  funSetDeliveryNoteCode(code)
+			  break;
+		}
+	 }
+ 
+   $(function()
+	 {
+		$('#txtSubContractor').blur(function() {
+			var code = $('#txtSubContractor').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetSubContractor(code);
+			}
+		});
+		
+		$('#txtDNCode').blur(function() {
+			var code = $('#txtDNCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetDeliveryNoteCode(code);
+			}
+		});
+	});
 	
 	function funSetSubContractor(code)
 	{
@@ -75,11 +94,11 @@ function funSetData(code)
 			    dataType: "json",
 			    success: function(response)
 			    {
-			    	if(response.strLocCode=='Invalid Code')
+			    	if(response.strPCode=='Invalid Code')
 			       	{
-			       		alert("Invalid Location Code");
+			       		alert("Invalid Sub Contractor Code");
 			       		$("#txtSubContractor").val('');
-			       		$("#lblSubContractor").text("");
+			       		$("#lblSubContractor").text("All Sub Contractor");
 			       		$("#txtSubContractor").focus();
 			       	}
 			       	else
@@ -121,11 +140,11 @@ function funSetData(code)
 			    dataType: "json",
 			    success: function(response)
 			    {
-			    	if(response.strPCode=='Invalid Code')
+			    	if(response.strDNCode==null)
 			       	{
-			       		alert("Invalid Location Code");
+			       		alert("Invalid Delivery Note Code");
 			       		$("#txtDNCode").val('');
-			       		$("#lblDN").text("");
+			       		$("#lblDN").text("All Delivery Notes");
 			       		$("#txtDNCode").focus();
 			       	}
 			       	else

@@ -42,6 +42,21 @@
 
 		});
 		
+		 $(function() {
+				
+				$('#txtReportCode').blur(function() {
+					var code = $('#txtReportCode').val();
+					if(code.trim().length > 0 && code !="?" && code !="/")
+					{
+						funSetReportName(code);
+					}
+				});
+				
+				
+				
+			
+			});
+		
 		function funHelp(transactionName)
 		{
 			fieldName=transactionName;
@@ -83,6 +98,15 @@
 				success : function(response)
 				{
 					funRemoveAllRows();
+					if(response.strReportId==null)
+					{
+						alert("Invalid Report Id");
+						$("#txtReportCode").val('');
+						$("#txtReportName").val('');
+					}
+					else
+					{	
+				
 					$("#txtReportCode").val(response.strReportId);
 					$("#txtReportName").val(response.strReportName);
 					//var userDefDate=response.dteUserDefDate.split(" ")[0].split("-");
@@ -92,7 +116,7 @@
 					{
 						funAddProductRow(data.strType,data.strColumn,data.strOperator,data.strFGroup,data.strTGroup,data.strFAccount,data.strTAccount,data.strDescription,data.strConstant,data.strFormula,data.strPrint);
 					});
-					
+					}
 				},
 				error : function(e){
 				}
@@ -128,10 +152,10 @@
  		    row.insertCell(1).innerHTML= "<select name=\"listUserDefRptDtlBean["+(rowCount)+"].strType\" class=\"Box\" style=\"width: 100%;\"  id=\"strType."+(rowCount)+"\"  onchange=\"funClickOnType(this.value,"+(rowCount)+")\">   '"+funGetTypeList(selectedType)+"'";
 		    row.insertCell(2).innerHTML= "<select name=\"listUserDefRptDtlBean["+(rowCount)+"].strColumn\" class=\"Box\" style=\"width: 100%;\"  id=\"strColumn."+(rowCount)+"\" >   '"+funGetColumnNoTypeList(strColumn)+"'";
 		    row.insertCell(3).innerHTML= "<select name=\"listUserDefRptDtlBean["+(rowCount)+"].strOperator\" class=\"Box\" style=\"width: 100%;\"  id=\"strOperator."+(rowCount)+"\"  >   '"+funGetOperatorList(selectedOperator)+"'";
-		    row.insertCell(4).innerHTML= "<input name=\"listUserDefRptDtlBean["+(rowCount)+"].strFGroup\"  class=\"searchTextBox1\" size=\"7%\" id=\"strFGroup."+(rowCount)+"\" value='"+FGroup+"'  ondblclick=\"Javacsript:funHelp1('acGroupCode',"+(rowCount)+",'FGroup' )\"/>";		  		   	  
-		    row.insertCell(5).innerHTML= "<input name=\"listUserDefRptDtlBean["+(rowCount)+"].strTGroup\"  class=\"searchTextBox1\" size=\"7%\" id=\"strTGroup."+(rowCount)+"\" value='"+TGroup+"'  ondblclick=\"Javacsript:funHelp1('acGroupCode',"+(rowCount)+",'TGroup')\"/>";
-		    row.insertCell(6).innerHTML= "<input name=\"listUserDefRptDtlBean["+(rowCount)+"].strFAccount\"  class=\"searchTextBox\" size=\"6%\" id=\"strFAccount."+(rowCount)+"\" value='"+FAccount+"' ondblclick=\"Javacsript:funHelp1('accountCode',"+(rowCount)+",'FAccount' )\"/>";	  		   	  
-		    row.insertCell(7).innerHTML= "<input name=\"listUserDefRptDtlBean["+(rowCount)+"].strTAccount\"  class=\"searchTextBox\" size=\"6%\" id=\"strTAccount."+(rowCount)+"\" value='"+TAccount+"' ondblclick=\"Javacsript:funHelp1('accountCode',"+(rowCount)+",'TAccount')\"/>";	  		   	  
+		    row.insertCell(4).innerHTML= "<input name=\"listUserDefRptDtlBean["+(rowCount)+"].strFGroup\"  readonly=\"readonly\"  class=\"searchTextBox1\" size=\"7%\" id=\"strFGroup."+(rowCount)+"\" value='"+FGroup+"'  ondblclick=\"Javacsript:funHelp1('acGroupCode',"+(rowCount)+",'FGroup' )\"/>";		  		   	  
+		    row.insertCell(5).innerHTML= "<input name=\"listUserDefRptDtlBean["+(rowCount)+"].strTGroup\"  readonly=\"readonly\"  class=\"searchTextBox1\" size=\"7%\" id=\"strTGroup."+(rowCount)+"\" value='"+TGroup+"'  ondblclick=\"Javacsript:funHelp1('acGroupCode',"+(rowCount)+",'TGroup')\"/>";
+		    row.insertCell(6).innerHTML= "<input name=\"listUserDefRptDtlBean["+(rowCount)+"].strFAccount\"  readonly=\"readonly\"  class=\"searchTextBox\" size=\"6%\" id=\"strFAccount."+(rowCount)+"\" value='"+FAccount+"' ondblclick=\"Javacsript:funHelp1('accountCode',"+(rowCount)+",'FAccount' )\"/>";	  		   	  
+		    row.insertCell(7).innerHTML= "<input name=\"listUserDefRptDtlBean["+(rowCount)+"].strTAccount\"  readonly=\"readonly\"  class=\"searchTextBox\" size=\"6%\" id=\"strTAccount."+(rowCount)+"\" value='"+TAccount+"' ondblclick=\"Javacsript:funHelp1('accountCode',"+(rowCount)+",'TAccount')\"/>";	  		   	  
 		    row.insertCell(8).innerHTML= "<input type=\"text\"  size=\"18%\" name=\"listUserDefRptDtlBean["+(rowCount)+"].strDescription\" style=\"text-align: left; width:170px;\"  id=\"strDescription."+(rowCount)+"\" value='"+description+"'  />";
 		    row.insertCell(9).innerHTML= "<input type=\"text\"  size=\"4.4%\" name=\"listUserDefRptDtlBean["+(rowCount)+"].strConstant\" style=\"text-align: left; width:45px;\"  id=\"strConstant."+(rowCount)+"\" value='"+constant+"'  />";
 		    row.insertCell(10).innerHTML= "<input type=\"text\"  size=\"4.4%\" name=\"listUserDefRptDtlBean["+(rowCount)+"].strFormula\" style=\"text-align: left; width:48px;\"  id=\"strFormula."+(rowCount)+"\" value='"+formula+"'  />";

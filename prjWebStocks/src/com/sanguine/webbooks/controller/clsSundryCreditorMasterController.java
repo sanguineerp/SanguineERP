@@ -313,9 +313,11 @@ public class clsSundryCreditorMasterController {
 		String sqlQuery = "select a.strAccountCode,a.strAccountName,a.dblOpeningbal /"+currValue+",a.strCrDr " + "FROM tblsundarycreditoropeningbalance a " + "where a.strCreditorCode = '" + CreditorCode + "'  and a.strClientCode='" + clientCode + "'";
 
 		List listProperty = objGlobalFunctionsService.funGetListModuleWise(sqlQuery, "sql");
-
+		if(listProperty.size()>0)
+		{
 		objModel.setListSundryCreditorOpenongBalModel(listProperty);
-
+		}
+		
 		if (null == objModel) {
 			objModel = new clsSundaryCreditorMasterModel();
 			objModel.setStrCreditorCode("Invalid Code");

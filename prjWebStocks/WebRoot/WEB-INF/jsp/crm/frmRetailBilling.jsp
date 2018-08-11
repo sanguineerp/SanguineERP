@@ -50,26 +50,25 @@ $(document).ready(function() {
 	var message='';
 	var invoiceformat='';
 	<%if (session.getAttribute("success") != null) {
-		            if(session.getAttribute("successMessage") != null){%>
+				if (session.getAttribute("successMessage") != null) {%>
 		            message='<%=session.getAttribute("rptInvCode").toString()%>';
-		            <%
-		            session.removeAttribute("successMessage");
-		            }
-					boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
-					session.removeAttribute("success");
-					if (test) {
-					%>	
+		            <%session.removeAttribute("successMessage");
+				}
+				boolean test = ((Boolean) session.getAttribute("success"))
+						.booleanValue();
+				session.removeAttribute("success");
+				if (test) {%>	
 		alert("Data Save successfully\n\n"+message);
-	<%
-	}}%>
+	<%}
+			}%>
 	
 	
-	<%if(null!=session.getAttribute("rptInvCode")){%>
+	<%if (null != session.getAttribute("rptInvCode")) {%>
 	
 	code='<%=session.getAttribute("rptInvCode").toString()%>';
 <%-- 							dccode='<%=session.getAttribute("rptDcCode").toString()%>'; --%>
 	dccode='';
-	<%if(null!=session.getAttribute("rptInvDate")){%>
+	<%if (null != session.getAttribute("rptInvDate")) {%>
 	invDate='<%=session.getAttribute("rptInvDate").toString()%>';
 	invoiceformat='<%=session.getAttribute("invoieFormat").toString()%>';
 <%-- 							invoiceformat='<%=session.getAttribute("invoieFormat").toString()%>'; --%>
@@ -118,6 +117,38 @@ $(document).ready(function() {
 	
 	
 });
+
+
+    $(function()
+	 {
+		$('#txtCustCode').blur(function() {
+			var code = $('#txtCustCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetCuster(code);
+			}
+		});
+		
+		$('#txtInvCode').blur(function() {
+			var code = $('#txtInvCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetInvoiceData(code);
+			}
+		});
+		
+		$('#txtProdName').blur(function() {
+			var code = $('#hidProdCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				 funSetProduct(code);
+			}
+		});
+		
+	
+	});
+
+
  
 		
 		$(document).keypress(function(e) {
@@ -232,18 +263,17 @@ $(document).ready(function() {
 	
 	var message='';
 	<%if (session.getAttribute("success") != null) {
-		            if(session.getAttribute("successMessage") != null){%>
+				if (session.getAttribute("successMessage") != null) {%>
 		            message='<%=session.getAttribute("successMessage").toString()%>';
-		            <%
-		            session.removeAttribute("successMessage");
-		            }
-					boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
-					session.removeAttribute("success");
-					if (test) {
-					%>	
+		            <%session.removeAttribute("successMessage");
+				}
+				boolean test = ((Boolean) session.getAttribute("success"))
+						.booleanValue();
+				session.removeAttribute("success");
+				if (test) {%>	
 		alert("Data Save successfully\n\n"+message);
-	<%
-	}}%>
+	<%}
+			}%>
 	
 	$("#txtPartyCode").focus();
 });
@@ -367,6 +397,7 @@ $(document).ready(function() {
 			        			alert("Invalid Customer Code");
 			        			$("#txtCustCode").val('');
 			        			$("#txtCustCode").focus();
+			        			$("#lblCustomerName").text('');
 			        		}else{			   
 			        			$("#txtCustCode").val(response.strPCode);
 								$("#lblCustomerName").text(response.strPName);
@@ -855,11 +886,11 @@ $(document).ready(function() {
 	        dataType: "json",
 	        success: function(response)
 	        {		        	
-	        		if('Invalid Code' == response.strInvCode){
+	        		if(null== response.strInvCode){
 	        			alert("Invalid  Invoice Code");
-	        			$("#txtSOCode").val('');
-	        			$("#txtSOCode").focus();
-	        			
+	        			$("#txtInvCode").val('');
+	        			$("#txtInvCode").focus();
+	        			funRemoveAllRows();
 	        		}else{	
 	        			funRemoveAllRows();
 	        		
@@ -947,31 +978,8 @@ $(document).ready(function() {
 	    return false;
 	}
 	
-	/* $(function() {
-		
 
-	 	$('#hidProdCode').keydown(function(e){
-	var code=$('#hidProdCode').val();
-	if (e.which == 9){
-	  	if (code.trim().length > 8) {
-	  		funSetProduct(code);
-	  	}
-	  	
-	}
-	if(e.which == 13)
-	{
-		if(code.trim().length > 8 )
-		{
-			 funCallBarCodeProduct(code)
-		}else if (code.trim().length > 0)
-  		{
-  			funSetProduct(code);
-  		}
-	}
- 
-	});
-	 	
-	}); */
+
 	
 	
 	function funGetProductStock(strProdCode)
@@ -1250,44 +1258,47 @@ $(document).ready(function() {
 		action="saveRetailingBillng.html?saddr=${urlHits}">
 		<input type="hidden" value="${urlHits}" name="saddr">
 		<br>
-		
-		<div id="tab_container" style="height: 600px">
-						<ul class="tabs">
-							<li class="active" data-state="tab1"
-								style="width: 100px; padding-left: 55px">Retail Billing</li>
-							<li data-state="tab2" style="width: 100px; padding-left: 55px">Settlement</li>
-						</ul>
 
-						<div id="tab1" class="tab_content">
-						<table
-							style="border: 0px solid black; width: 100%; height: 100%; margin-left: auto; margin-right: auto; background-color: #C0E4FF;">
-							<tr>
-								<td>
-								<table class="transTable">
-									<tr>
-										<th align="right" colspan="9"><a id="baseUrl" href="#">
-												Attach Documents </a></th>
-									</tr>
-	
-									<tr>
+		<div id="tab_container" style="height: 600px">
+			<ul class="tabs">
+				<li class="active" data-state="tab1"
+					style="width: 100px; padding-left: 55px">Retail Billing</li>
+				<li data-state="tab2" style="width: 100px; padding-left: 55px">Settlement</li>
+			</ul>
+
+			<div id="tab1" class="tab_content">
+				<table
+					style="border: 0px solid black; width: 100%; height: 100%; margin-left: auto; margin-right: auto; background-color: #C0E4FF;">
+					<tr>
+						<td>
+							<table class="transTable">
+								<tr>
+									<th align="right" colspan="9"><a id="baseUrl" href="#">
+											Attach Documents </a></th>
+								</tr>
+
+								<tr>
 									<td width="100px"><label>Inv. Code</label></td>
-									<td  colspan="3"><s:input path="strInvCode" id="txtInvCode"
-											ondblclick="funHelp('invoiceRetail')" 
+									<td colspan="3"><s:input path="strInvCode" id="txtInvCode"
+											ondblclick="funHelp('invoiceRetail')"
 											cssClass="searchTextBox" /></td>
 
 									<td width="100px"><label>Inv Date</label>
 									<td><s:input path="dteInvDate" id="txtInvDate"
-											required="required" readonly="true" cssClass="calenderTextBox" /></td>
+											required="required" readonly="true"
+											cssClass="calenderTextBox" /></td>
 									<td></td>
 									<td></td>
 									<td></td>
 								</tr>
-								
+
 
 								<tr>
 									<td><label>Customer Code</label></td>
-									<td  colspan="1"><s:input path="strCustCode" id="txtCustCode"
-											ondblclick="funHelp('custMasterActive')" cssClass="searchTextBox" onkeypress="funGetKeyCode(event,'Customer')" /></td>
+									<td colspan="1"><s:input path="strCustCode"
+											id="txtCustCode" ondblclick="funHelp('custMasterActive')"
+											cssClass="searchTextBox"
+											onkeypress="funGetKeyCode(event,'Customer')" /></td>
 									<td colspan="5"><label id="lblCustomerName"
 										class="namelabel"></label></td>
 
@@ -1297,71 +1308,72 @@ $(document).ready(function() {
 
 									<td><label>Location Code</label></td>
 									<td><s:input type="text" id="txtLocCode" path="strLocCode"
-											cssClass="searchTextBox" 
-											 readonly="true" /></td>
+											cssClass="searchTextBox" readonly="true" /></td>
 									<td colspan="2"><label id="lblLocName"></label></td>
 
 									<%-- <td><label>Vechile No</label></td>
 									<td ><s:input id="txtVehNo" type="text" path="strVehNo"
 											cssClass="searchTextBox" ondblclick="funHelp('VehCode');"/></td> --%>
 								</tr>
-							
+
 
 								<tr>
-								
-								<td width="100px"><label>Sub-Group</label></td>
-									<td ><input id="txtSubGroup" cssStyle="width:80%;text-transform: uppercase;"  name="SubgroupName" class="searchTextBox" 
-									style="width: 98%;background-position: 220px 2px;" placeholder="Type to search Subgroup"
-									onkeypress="funGetKeyCode(event,'SubGroup')"
-									/></td>
+
+									<td width="100px"><label>Sub-Group</label></td>
+									<td><input id="txtSubGroup"
+										cssStyle="width:80%;text-transform: uppercase;"
+										name="SubgroupName" class="searchTextBox"
+										style="width: 98%; background-position: 220px 2px;"
+										placeholder="Type to search Subgroup"
+										onkeypress="funGetKeyCode(event,'SubGroup')" /></td>
 									<input type="hidden" id="hidSubGroupCode" />
-								
+
 									<td width="100px"><label>Product</label></td>
 									<td colspan="2"><input id="txtProdName"
-										ondblclick="funHelp('productProduced')" class="searchTextBox" onkeypress="funGetKeyCode(event,'Product')" 
-										style="width: 90%;background-position: 280px 2px;" 
-										 placeholder="Type to search Product" /></td>
-									 
-									 <td><label id="lblUOM"></label></td>
+										ondblclick="funHelp('productProduced')" class="searchTextBox"
+										onkeypress="funGetKeyCode(event,'Product')"
+										style="width: 90%; background-position: 280px 2px;"
+										placeholder="Type to search Product" /></td>
+
+									<td><label id="lblUOM"></label></td>
 									<input type="hidden" id="hidProdCode" />
 								</tr>
 								<tr>
 
 									<td><label>Rate</label></td>
 									<td><input type="text" id="txtRate"
-										class="decimal-places numberField" 
+										class="decimal-places numberField"
 										onkeypress="funGetKeyCode(event,'Rate')" /></td>
-									
+
 									<td><label>PRP</label></td>
 									<td><input type="text" id="txtMRP"
-										class="decimal-places numberField" 
-										onkeypress="funGetKeyCode(event,'MRP')" readonly="readonly" /></td>	
-									
+										class="decimal-places numberField"
+										onkeypress="funGetKeyCode(event,'MRP')" readonly="readonly" /></td>
+
 									<td><label>Stock</label></td>
-									<td  width="10%">
-									<label id="spStock" class="namelabel"></label>
-									<span id="spStockUOM"></span>
-									</td>
-								
+									<td width="10%"><label id="spStock" class="namelabel"></label>
+										<span id="spStockUOM"></span></td>
+
 								</tr>
-								
+
 								<tr>
-								
-								
+
+
 									<td style="width: 115px"><label>Quantity</label></td>
 									<td><input id="txtQty" type="text"
-										class="decimal-places numberField" style="width: 60%" 
+										class="decimal-places numberField" style="width: 60%"
 										onkeypress="funGetKeyCode(event,'AddBtn')" /></td>
-								
-								<td ><label>UOM</label></td>
-								<td><select id="cmbUOM" class="BoxW116px" onchange="funUOMChange()"></select></td>
-								
-								<td><input id="btnAdd" type="button" value="Add" 
-									 onclick="return btnAdd_onclick();" class="smallButton" 
-									 onkeypress="funGetKeyCode(event,'Qty')" ></input></td>
-								
+
+									<td><label>UOM</label></td>
+									<td><select id="cmbUOM" class="BoxW116px"
+										onchange="funUOMChange()"></select></td>
+
+									<td><input id="btnAdd" type="button" value="Add"
+										onclick="return btnAdd_onclick();" class="smallButton"
+										onkeypress="funGetKeyCode(event,'Qty')"></input></td>
+
 								</tr>
-								
+
 
 							</table>
 
@@ -1415,7 +1427,7 @@ $(document).ready(function() {
 										<!--  COl8   -->
 										<col style="width: 0%">
 										<!--  COl9   -->
-										
+
 										<col style="width: 15%">
 										<!--  COl8   -->
 										<col style="width: 4%">
@@ -1427,155 +1439,163 @@ $(document).ready(function() {
 								</div>
 
 							</div>
-				</td>
-			</tr>
-			
-		</table>
-		<table class="transTable">
+						</td>
+					</tr>
 
-			<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td ></td>
-			</tr>
-			<tr>
-			<td ><label>Sub Total</label></td>
-			<td><input id="txtSubTotal" type="text" readonly="readonly" class="BoxW116px" /></td>
-			</tr>
-		</table>
-		
+				</table>
+				<table class="transTable">
+
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><label>Sub Total</label></td>
+						<td><input id="txtSubTotal" type="text" readonly="readonly"
+							class="BoxW116px" /></td>
+					</tr>
+				</table>
+
+			</div>
+			<div id="tab2" class="tab_content">
+
+				<table class="transTable">
+
+					<tr>
+						<td><label>Settlement Type</label></td>
+						<td><s:select id="cmbSettlement" Class="BoxW116px"
+								path="strSettlementCode" items="${hmSettlement}"
+								onchange="funSettlement()"></s:select></td>
+						<td><label>Actual Amount</label></td>
+						<td colspan="2"><input id="txtActualAmt" type="text"
+							readonly="readonly" class="BoxW116px decimal-places numberField" /></td>
+
+					</tr>
+					<tr>
+						<td><label>Settlement Amount</label></td>
+						<td><input id="txtSettlementAmt" type="text"
+							readonly="readonly" class="BoxW116px decimal-places numberField" /></td>
+
+						<td><label>Paid Amount</label></td>
+						<td colspan="2"><input id="txtPaidAmt" type="text"
+							class="BoxW116px decimal-places numberField" /></td>
+
+
+
+
+					</tr>
+					<tr id="rowCard" style="display: none">
+						<td><label>Card Name</label></td>
+						<td><input id="txtCardName" type="text" class="BoxW116px" /></td>
+						<td><label>Expriy Date</label></td>
+						<td colspan="2"><input id="txtExpriyDate" type="text"
+							Class="calenderTextBox" /></td>
+					</tr>
+					<tr>
+						<td><label>Refund Amount</label></td>
+						<td><input id="txtRefundAmt" type="text" readonly="readonly"
+							value="0" class="BoxW116px decimal-places numberField" /></td>
+						<td><label>Remark</label></td>
+						<td><textarea id="txtRemark" type="text" class="BoxW116px"></textarea></td>
+						<td><input id="btnAddSettle" type="button" value="Add"
+							onclick="return btnAddSettle_onclick();" class="smallButton"></input>&nbsp;&nbsp;&nbsp;
+
+							<input id="btnResetSettle" type="button" value="Reset"
+							onclick="return funDeleteAllRowSettle();" class="smallButton"></input>
+
+						</td>
+					</tr>
+
+				</table>
+
+				<div class="dynamicTableContainer" style="height: 300px;">
+					<table
+						style="height: 20px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+						<tr bgcolor="#72BEFC">
+							<!--  COl0   -->
+							<td width="3%">Settlement Code</td>
+							<!--  COl1   -->
+							<td width="5%">Settement Name</td>
+							<!--  COl2   -->
+							<td width="6%">Actual Amt</td>
+							<!--  COl3   -->
+							<td width="6%">Settlement Amt</td>
+							<!--  COl4   -->
+							<td width="6%">Paid Amt</td>
+							<!--  COl5   -->
+							<td width="6%">Card Name</td>
+							<!--  COl6   -->
+							<td width="6%">Expiry date</td>
+							<!--  COl7   -->
+							<td width="6%">Refund Amt</td>
+							<!--  COl8   -->
+							<td width="6%">Remark</td>
+							<!--  COl9   -->
+							<td width="2%">Delete</td>
+
+
+
+						</tr>
+					</table>
+
+					<div
+						style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
+						<table id="tblSettleDet"
+							style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+							class="transTablex col15-center">
+							<tbody>
+							<col style="width: 5%">
+							<!--  COl1   -->
+							<col style="width: 5%">
+							<!--  COl2   -->
+							<col style="width: 6%">
+							<!--  COl3   -->
+							<col style="width: 6%">
+							<!--  COl4   -->
+							<col style="width: 6%">
+							<!--  COl5   -->
+							<col style="width: 6%">
+							<!--  COl6   -->
+							<col style="width: 6%">
+							<!--  COl7   -->
+							<col style="width: 6%">
+							<!--  COl8  -->
+							<col style="width: 6%">
+							<!--  COl9   -->
+							<col style="width: 3%">
+						</table>
+					</div>
+				</div>
+
+
+			</div>
 		</div>
-		<div id="tab2" class="tab_content">
-		
-		<table class="transTable">
-		
-		<tr>
-			<td><label>Settlement Type</label></td>
-			<td><s:select id="cmbSettlement" Class="BoxW116px" path="strSettlementCode" items="${hmSettlement}" onchange="funSettlement()"></s:select></td>
-			<td ><label>Actual Amount</label></td>
-			<td colspan="2"><input id="txtActualAmt"  type="text" readonly="readonly"   class="BoxW116px decimal-places numberField"  /></td>
-		
-		</tr>
-		<tr>
-			<td ><label>Settlement Amount</label></td>
-			<td><input id="txtSettlementAmt"   type="text" readonly="readonly" class="BoxW116px decimal-places numberField" /></td>
-			
-			<td><label>Paid Amount</label></td>
-			<td colspan="2"><input id="txtPaidAmt"  type="text"   class="BoxW116px decimal-places numberField"  /></td>
-			
-			
-		
-		
-		</tr>
-		<tr id="rowCard" style="display: none"> 
-			<td><label>Card Name</label></td>
-			<td><input id="txtCardName"  type="text"  class="BoxW116px" /></td>
-			<td><label>Expriy Date</label></td>
-			<td colspan="2"><input id="txtExpriyDate"  type="text" Class="calenderTextBox" /></td>
-		</tr>
-		<tr>
-		<td><label>Refund Amount</label></td>
-			<td><input id="txtRefundAmt"  type="text"  readonly="readonly" value="0"  class="BoxW116px decimal-places numberField"  /></td>
-			<td><label>Remark</label></td>
-			<td><textarea id="txtRemark"  type="text"  class="BoxW116px" ></textarea></td>
-			<td><input id="btnAddSettle" type="button" value="Add" 
-									 onclick="return btnAddSettle_onclick();" class="smallButton" ></input>&nbsp;&nbsp;&nbsp;
-									 
-									 <input id="btnResetSettle" type="button" value="Reset" 
-									 onclick="return funDeleteAllRowSettle();" class="smallButton" ></input>
-									
-									 </td>
-		</tr>	
-		
-		</table>
-		
-		<div class="dynamicTableContainer" style="height: 300px;">
-								<table
-									style="height: 20px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
-									<tr bgcolor="#72BEFC">
-										<!--  COl0   -->
-										<td width="3%">Settlement Code</td>
-										<!--  COl1   -->
-										<td width="5%">Settement Name</td>
-										<!--  COl2   -->
-										<td width="6%">Actual Amt</td>
-										<!--  COl3   -->
-										<td width="6%">Settlement Amt</td>
-										<!--  COl4   -->
-										<td width="6%">Paid Amt</td>
-										<!--  COl5   -->
-										<td width="6%">Card Name</td>
-										<!--  COl6   -->
-										<td width="6%">Expiry date</td>
-										<!--  COl7   -->
-										<td width="6%">Refund Amt</td>
-										<!--  COl8   -->
-										<td width="6%">Remark</td>
-										<!--  COl9   -->
-										<td width="2%">Delete</td>
-										
-										
-										
-							</tr>
-							</table>
-							
-							<div
-									style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
-									<table id="tblSettleDet"
-										style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
-										class="transTablex col15-center">
-										<tbody>
-										<col style="width: 5%">
-										<!--  COl1   -->
-										<col style="width: 5%">
-										<!--  COl2   -->
-										<col style="width: 6%">
-										<!--  COl3   -->
-										<col style="width: 6%">
-										<!--  COl4   -->
-										<col style="width: 6%">
-										<!--  COl5   -->
-										<col style="width: 6%">
-										<!--  COl6   -->
-										<col style="width: 6%">
-										<!--  COl7   -->
-										<col style="width: 6%">
-										<!--  COl8  -->
-										<col style="width: 6%">
-										<!--  COl9   -->
-										<col style="width: 3%">
-							</table>
-							</div>	
-							</div>		
-		
-		
-		</div>
-		</div>
-		
-		
-	<br>
+
+
+		<br>
 
 		<div align="center">
 			<input type="submit" value="Submit"
-				onclick="return funCallFormAction()"
-				class="form_button" /> &nbsp; &nbsp; &nbsp; <input type="button"
-				id="reset" name="reset" value="Reset" class="form_button" />
+				onclick="return funCallFormAction()" class="form_button" /> &nbsp;
+			&nbsp; &nbsp; <input type="button" id="reset" name="reset"
+				value="Reset" class="form_button" />
 		</div>
 		<s:input type="hidden" id="hidProdType" path="strProdType"></s:input>
-<%-- 		<s:input type="hidden" id="hidSettlementCode" path="strSettlementCode"></s:input> --%>
-		
-		
+		<%-- 		<s:input type="hidden" id="hidSettlementCode" path="strSettlementCode"></s:input> --%>
+
+
 		<br>
-		
+
 		<div id="wait"
 			style="display: none; width: 60px; height: 60px; border: 0px solid black; position: absolute; top: 60%; left: 55%; padding: 2px;">
 			<img
 				src="../${pageContext.request.contextPath}/resources/images/ajax-loader-light.gif"
 				width="60px" height="60px" />
 		</div>
-		<input type="hidden" id="hidPrevInvCode" ></input>	
-			<input type="hidden" id="hidPreInvPrice" ></input>
+		<input type="hidden" id="hidPrevInvCode"></input>
+		<input type="hidden" id="hidPreInvPrice"></input>
 	</s:form>
 	<script type="text/javascript">
 	//	funApplyNumberValidation();
