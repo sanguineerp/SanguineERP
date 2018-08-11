@@ -25,6 +25,14 @@
 		{
 			funSetBankCode(bankCode);
 		}
+		
+		$('#txtGLCode').blur(function() {
+			var code = $('#txtGLCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
+			{
+				funSetBankCode(code);
+			}
+		});
 	});
 	
 
@@ -54,7 +62,7 @@
 			url : getContextPath()+ "/loadAccontCodeAndName.html?accountCode=" + code,
 			dataType : "json",
 			success : function(response){ 
-				if(response.strVouchNo!="Invalid")
+				if(response.strAccountCode!="Invalid Code")
 		    	{
 					$("#txtGLCode").val(response.strAccountCode);
 					$("#lblGLCode").text(response.strAccountName);
@@ -62,9 +70,10 @@
 		    	}
 		    	else
 			    {
-			    	alert("Invalid Receipt No");
-			    	$("#txtVouchNo").val("");
-			    	$("#txtVouchNo").focus();
+			    	alert("Invalid Account No");
+			    	$("#txtGLCode").val("");
+			    	$("#lblGLCode").text("");
+			    	$("#txtGLCode").focus();
 			    	return false;
 			    }
 			},
