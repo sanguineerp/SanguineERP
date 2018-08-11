@@ -33,11 +33,9 @@ import com.sanguine.controller.clsWhatIfAnalysisController;
 
 @Controller
 public class clsWhatIfAnalysisController {
-	@Autowired
-	private clsGlobalFunctionsService objGlobalFunctionsService;
 
 	@Autowired
-	clsGlobalFunctions objGlobal;
+	private clsGlobalFunctionsService objGlobalFunctionsService;
 
 	@Autowired
 	clsGlobalFunctions objGlobalFunction;
@@ -87,7 +85,7 @@ public class clsWhatIfAnalysisController {
 	public @ResponseBody List funLoadProduct(HttpServletRequest request) {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
-		objGlobal = new clsGlobalFunctions();
+		
 		String prodCode = request.getParameter("prodCode").toString();
 		String sql = "select a.strParentCode,b.strPartNo,b.strProdName,b.dblCostRM " + "from clsBomHdModel a, clsProductMasterModel b " + "where a.strParentCode=b.strProdCode and a.strParentCode='" + prodCode + "' " + "and a.strClientCode='" + clientCode + "'";
 		List listRecipeProduct = objGlobalFunctionsService.funGetList(sql, "hql");
@@ -98,7 +96,7 @@ public class clsWhatIfAnalysisController {
 	public @ResponseBody List<List<String>> funGetChildNodes(HttpServletRequest request) {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
-		objGlobal = new clsGlobalFunctions();
+		
 		String param = request.getParameter("prodCode").toString();
 		String[] sp = param.split(",");
 		mapChildNodes = new HashMap<String, List<String>>();
@@ -135,7 +133,7 @@ public class clsWhatIfAnalysisController {
 			String[] fmDate = startDate.split(" ");
 			String[] spDate = fmDate[0].split("/");
 			startDate = spDate[2] + "-" + spDate[1] + "-" + spDate[0];
-			String toDate = objGlobal.funGetCurrentDateTime("yyyy-MM-dd");
+			String toDate = objGlobalFunction.funGetCurrentDateTime("yyyy-MM-dd");
 			String locationCode = request.getSession().getAttribute("locationCode").toString();
 			
 			double currentStock = objGlobalFunction.funGetCurrentStockForProduct(prodCode, locationCode, clientCode, userCode, startDate, toDate,proprtyWiseStock);
@@ -352,7 +350,7 @@ public class clsWhatIfAnalysisController {
 
 					listNodes.add(arrObjNodes[9].toString()); // Supplier Name
 
-					String leadTime = objGlobal.funIfNull(arrObjNodes[10].toString(), "0", arrObjNodes[10].toString());
+					String leadTime = objGlobalFunction.funIfNull(arrObjNodes[10].toString(), "0", arrObjNodes[10].toString());
 					listNodes.add(leadTime); // Lead Time
 
 					double rate = Double.parseDouble(arrObjNodes[11].toString());
