@@ -2050,10 +2050,10 @@
 							$("#btnAddChar").css('visibility', 'visible');
 							if(strRateFrom!="SupplierRate")
 							{
-								if(response.strRemark=="Contract Rate Amt")
+								if($("#hidstrRateEditableYN").val()=="No")
 								{
-									//Contract Rate Editable
-									//$('#txtCostRM').attr('readonly', true);
+									// Rate Editable false     
+									$('#txtCostRM').attr('readonly', true);
 								}
 							}
 						}
@@ -3725,7 +3725,7 @@ function funCalculateOtherChargesTotal()
 				<img src="../${pageContext.request.contextPath}/resources/images/ajax-loader-light.gif" width="60px" height="60px" />
 			</div>
 			<s:input id="hidRoundOff"  value="0" path="dblRoundOff" type="hidden"  ></s:input>
-
+			<s:input id="hidstrRateEditableYN"  value="" path="StrRateEditableYN" type="hidden"  ></s:input>
 			
 			
 			

@@ -528,6 +528,7 @@ public class clsSetupMasterController
 		bean.setStrInvFormat(objSetup.getStrInvFormat());
 		bean.setStrInvNote(objSetup.getStrInvNote());
 		bean.setStrCurrencyCode(objSetup.getStrCurrencyCode());
+
 		/*
 		 * if(objSetup.getStrShowAllPropCustomer()==null ||
 		 * objSetup.getStrShowAllPropCustomer().equalsIgnoreCase("N")) {
@@ -550,6 +551,7 @@ public class clsSetupMasterController
 		bean.setStrPOSlipFormat(objSetup.getStrPOSlipFormat());
 		bean.setStrSRSlipFormat(objSetup.getStrSRSlipFormat());
 		bean.setStrWeightedAvgCal(objSetup.getStrWeightedAvgCal());
+		bean.setStrGRNRateEditable(objSetup.getStrGRNRateEditable());
 		/*
 		 * Bank Tab
 		 */
@@ -1095,6 +1097,8 @@ public class clsSetupMasterController
 		objPropertySetupModel.setStrInvFormat(bean.getStrInvFormat());
 		objPropertySetupModel.setStrInvNote(bean.getStrInvNote());
 		objPropertySetupModel.setStrCurrencyCode(bean.getStrCurrencyCode());
+		objPropertySetupModel.setStrGRNRateEditable(bean.getStrGRNRateEditable());
+		
 		/*
 		 * if(bean.isStrShowAllPropCustomer()==true) {
 		 * objPropertySetupModel.setStrShowAllPropCustomer("Y"); }else {

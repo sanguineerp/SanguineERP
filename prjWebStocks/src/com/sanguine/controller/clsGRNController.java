@@ -171,8 +171,9 @@ public class clsGRNController {
 			list = new ArrayList<String>();
 			model.put("strProcessList", list);
 		}
+		clsPropertySetupModel objPropertySetupModel=objSetupMasterService.funGetObjectPropertySetup(propCode,clientCode);
 
-		
+		objBean.setStrRateEditableYN(objPropertySetupModel.getStrGRNRateEditable());
 		Map<String, String> hmCurrency = objCurrencyMasterService.funCurrencyListToDisplay(clientCode);
 		if (hmCurrency.isEmpty()) {
 			hmCurrency.put("", "");

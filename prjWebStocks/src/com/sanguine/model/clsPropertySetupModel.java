@@ -183,6 +183,9 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	@Column(name = "strWeightedAvgCal", columnDefinition = "VARCHAR(30) default ''")
 	private String strWeightedAvgCal;
 	
+	@Column(name = "strGRNRateEditable", columnDefinition = "VARCHAR(10) default ''")
+	private String strGRNRateEditable;
+	
 	
 	// BAnk Dtl Tab
 	private String strBankName;
@@ -1146,6 +1149,14 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 
 	public void setStrWeightedAvgCal(String strWeightedAvgCal) {
 		this.strWeightedAvgCal = (String) setDefaultValue(strWeightedAvgCal, "");
+	}
+
+	public String getStrGRNRateEditable() {
+		return strGRNRateEditable;
+	}
+
+	public void setStrGRNRateEditable(String strGRNRateEditable) {
+		this.strGRNRateEditable = strGRNRateEditable;
 	}
 	
 	

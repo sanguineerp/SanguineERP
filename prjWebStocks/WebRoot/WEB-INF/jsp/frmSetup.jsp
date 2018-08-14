@@ -1377,6 +1377,17 @@
 										</s:select>
 										</td>
 									</tr>
+									<tr>
+										<td>GRN Rate Editable</td>
+										<td>
+										<s:select path="strGRNRateEditable" id="strGRNRateEditable"
+												cssClass="BoxW48px" cssStyle="width:50%">
+												<s:option selected="selected" value="Yes">Yes</s:option>
+												<s:option value="No">No</s:option>
+										</s:select>
+										</td>
+									</tr>
+									
 								</table>
 							</div>
 				

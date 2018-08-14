@@ -894,6 +894,19 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			e.printStackTrace();
 		}
 			
+		sql="ALTER TABLE `tblpropertysetup` "
+			+" ADD COLUMN `strGRNRateEditable` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strWeightedAvgCal`;" ;
+		funExecuteQuery(sql);
+		try{
+			sql="update tblpropertysetup a set a.strGRNRateEditable='Yes' where "
+					+" a.strClientCode='"+clientCode+"' and (a.strGRNRateEditable='' or a.strGRNRateEditable=null)";
+			funExecuteQuery(sql);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		
+		funExecuteQuery(sql);
 
 		sql = " DELETE FROM `tbltreemast`; ";
 		funExecuteQuery(sql);

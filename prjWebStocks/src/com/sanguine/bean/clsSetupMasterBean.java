@@ -231,6 +231,8 @@ public class clsSetupMasterBean {
 	private List<clsWorkFlowModel> listclsWorkFlowModel; // Authorization
 
 	private List<clsTransactionTimeModel> listclsTransactionTimeModel;
+	
+	private String strGRNRateEditable;
 
 	public List<clsWorkFlowModel> getListclsWorkFlowModel() {
 		return listclsWorkFlowModel;
@@ -1307,6 +1309,14 @@ public class clsSetupMasterBean {
 
 	public void setStrWeightedAvgCal(String strWeightedAvgCal) {
 		this.strWeightedAvgCal = strWeightedAvgCal;
+	}
+
+	public String getStrGRNRateEditable() {
+		return strGRNRateEditable;
+	}
+
+	public void setStrGRNRateEditable(String strGRNRateEditable) {
+		this.strGRNRateEditable = strGRNRateEditable;
 	}
 
 

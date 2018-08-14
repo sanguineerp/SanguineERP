@@ -5890,6 +5890,7 @@ public void funCallInvoiceFormat(String InvCode, String type,HttpServletResponse
 		}
 		else if(invoiceformat.equalsIgnoreCase("RetailNonGSTA4"))
 		{
+			funOpenInvoiceRetailNonGSTReport( InvCode, type,  resp,  req);
 			//window.open(getContextPath()+"/openRptInvoiceRetailNonGSTReport.html?rptInvCode="+code,'_blank');
 	    }
 		else if(invoiceformat.equalsIgnoreCase("Format 6"))
