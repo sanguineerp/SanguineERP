@@ -1262,14 +1262,14 @@ public class clsProductMasterController {
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/loadSubGroupWiseProduct", method = RequestMethod.GET)
-	public @ResponseBody List funloadSubGroupWiseProduct(@RequestParam("sgCode") String sgCode, HttpServletRequest req) {
+	public @ResponseBody List funloadSubGroupWiseProduct(@RequestParam("sgCode") String sgCode,@RequestParam("itemType") String itemType, HttpServletRequest req) {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		List<clsProductMasterModel> listProd = new ArrayList<clsProductMasterModel>();
 		ListIterator<clsProductMasterModel> itProdModel = null;
 		try {
 			// listProd=objProductMasterService.funGetSubGroupWiseProductList(sgCode,
 			// clientCode);
-			itProdModel = (ListIterator<clsProductMasterModel>) objProductMasterService.funGetSubGroupWiseProductList(sgCode, clientCode).listIterator();
+			itProdModel = (ListIterator<clsProductMasterModel>) objProductMasterService.funGetSubGroupWiseProductList(sgCode, clientCode,itemType).listIterator();
 			while (itProdModel.hasNext()) {
 				clsProductMasterModel objProd = itProdModel.next();
 				clsSubGroupMasterModel objSubGroup = objSubGrpMasterService.funGetObject(objProd.getStrSGCode(), clientCode);

@@ -17,7 +17,7 @@ function funCheckNetworkConnection()
        
         },
         error: function(jqXHR, exception) {
-                alert('Vinayak Network Issue');
+                alert('Network Issue');
    
         }
 	});

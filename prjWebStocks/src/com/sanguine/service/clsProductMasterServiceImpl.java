@@ -230,8 +230,8 @@ public class clsProductMasterServiceImpl implements clsProductMasterService {
 		return objProductMasterDao.funGetAllStockablProddSuppList(clientCode);
 	}
 
-	public List funGetSubGroupWiseProductList(String sgCode, String clientCode) {
-		return objProductMasterDao.funGetSubGroupWiseProductList(sgCode, clientCode);
+	public List funGetSubGroupWiseProductList(String sgCode, String clientCode,String itemType) {
+		return objProductMasterDao.funGetSubGroupWiseProductList(sgCode, clientCode,itemType);
 	}
 
 	@Override

@@ -501,7 +501,7 @@ left outer join tbllocationmaster h on CONCAT(a.strClientCode,a.strPOSCode) = h.
 				<textElement>
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<text><![CDATA[Cost Price]]></text>
+				<text><![CDATA[Actual Price]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="343" y="2" width="59" height="15" forecolor="#000000" uuid="c5237fc6-991d-46f9-8e6e-cb66acf553b5"/>
@@ -529,7 +529,7 @@ left outer join tbllocationmaster h on CONCAT(a.strClientCode,a.strPOSCode) = h.
 				<textElement textAlignment="Right">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<text><![CDATA[Standard Price]]></text>
+				<text><![CDATA[Recipe Price]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" x="580" y="3" width="54" height="34" forecolor="#000000" uuid="18e151b3-c9f5-42e9-9b24-148a6a078bab"/>

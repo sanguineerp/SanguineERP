@@ -24,7 +24,7 @@
 		<script type="text/javascript" src="<spring:url value="/resources/js/jquery-ui.js"/>"></script>
 		<script type="text/javascript" src="<spring:url value="/resources/js/jquery.excelexport.js"/>"></script>
 		<script type="text/javascript" src="<spring:url value="/resources/js/hindiTyping.js"/>"></script>
-		
+		<script type="text/javascript" src="<spring:url value="/resources/js/checkNetworkConnection.js"/>"></script>
 	
 	<%-- End Default Script For Page  --%>
 	
@@ -36,6 +36,7 @@
 	 	<link rel="stylesheet" type="text/css" media="screen" href="<spring:url value="/resources/css/jquery-ui.css"/>" />
 	 	<link rel="stylesheet" type="text/css" media="screen" href="<spring:url value="/resources/css/main.css"/>" />
 	 	<link rel="stylesheet"  href="<spring:url value="/resources/css/pagination.css"/>" />
+	 	
  	
  	<%-- End Default CSS For Page  --%>
  	
@@ -90,6 +91,8 @@
    			document.getElementById("pageTop").className = "pagetop";
    			break;
    		}
+   		
+
    			
     	//alert("hii");
        

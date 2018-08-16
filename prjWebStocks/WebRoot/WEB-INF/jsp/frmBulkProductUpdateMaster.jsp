@@ -184,10 +184,11 @@
 		function funLoadSGProduct()
 		{
 			var sgCode = $("#cmbSubGroup").val();
+			var itemType= $("#txtProdType").val();
 			$.ajax({
 				type : "GET",
 				url : getContextPath()
-						+ "/loadSubGroupWiseProduct.html?sgCode=" + sgCode,
+						+ "/loadSubGroupWiseProduct.html?sgCode=" + sgCode+"&itemType="+itemType,
 				dataType : "json",
 				success : function(response) {
 				//	funRemoveProductRows();
@@ -258,6 +259,8 @@
 			   	+'<td width="4px">Item Not In Use</td><td width="4px">Pick MRP Tax Cal.</td><td width="4px">Bar Code</td>'
 			   	+'<td width="4px">Recv.UOM </td><td width="4px">Recv. Conv</td><td width="4px">Iss.UOM</td>'
 			   	+'<td width="4px">Iss.Conv</td><td width="4px">Recipe UOM </td><td width="4x">Recip. Conv</td>'
+			   	+'<td width="4x">List Price</td>'
+			   	+'<td width="4x">Standard Price</td>'
 			   	+'</tr>';
 			   	
 			   	// Iterate through a selection of the content and build an HTML string
@@ -299,7 +302,9 @@
 			        newcontent += '<td>'+ "<select name=\"listProdModel["+(i)+"].strIssueUOM\" style=\"width:40px\"  class=\"Box inputText-Auto\" id=\"strIssueUOM."+(i)+"\" "+getProductTypeUOM(productMasterData[i].strIssueUOM)+" ";
 			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].dblIssueConversion\" type=\"text\" style=\"width:30px;text-align: right;\" size=\"4px\"  id=\"txtIssueConversion."+(i)+"\"  value = '"+productMasterData[i].dblIssueConversion+"' ></td>";
 			        newcontent += '<td>'+ "<select name=\"listProdModel["+(i)+"].strRecipeUOM\" style=\"width:50px\" class=\"Box\"  id=\"txtRecipeUOM."+(i)+"\"  "+getProductTypeUOM(productMasterData[i].strRecipeUOM)+"  ";
-			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].dblRecipeConversion\" type=\"text\" size=\"4px\" style=\"width:30px;text-align: right;\" id=\"txtRecipeConverstion."+(i)+"\"  value = '"+productMasterData[i].dblRecipeConversion+"' ></td></tr>";
+			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].dblRecipeConversion\" type=\"text\" size=\"4px\" style=\"width:30px;text-align: right;\" id=\"txtRecipeConverstion."+(i)+"\"  value = '"+productMasterData[i].dblRecipeConversion+"' ></td>";
+			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].dblListPrice\" type=\"text\" size=\"4px\" style=\"width:30px;text-align: right;\" id=\"txtListPrice."+(i)+"\"  value = '"+productMasterData[i].dblListPrice+"' ></td>";
+			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].dblUnitPrice\" type=\"text\" size=\"4px\" style=\"width:30px;text-align: right;\" id=\"txtUnitPrice."+(i)+"\"  value = '"+productMasterData[i].dblUnitPrice+"' ></td></tr>";
 			       
 			        rowCount++;
 			    }
@@ -620,6 +625,8 @@
 				</select>
 			
 			</td>
+			<td><label >Item Type</label></td>
+				        <td><s:select id="txtProdType" name="prodType" path="strProdType" items="${typeList}" cssClass="BoxW124px"/></td>
 			<td>
 			<input id="btnExcuete" type="button" value="Execute" onclick="funLoadSGProduct()" class="form_button"  ></input>
 			<td>

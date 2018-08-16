@@ -12,6 +12,7 @@
 	
 }
 </style>
+
 <script type="text/javascript">
 
 //var resFormName="";
@@ -36,8 +37,11 @@ $(document).ready(function(){
 <%if(session.getAttribute("selectedModuleName").toString().equalsIgnoreCase("1-WebStocks")){%>
  	NotificationTimeinterval=parseInt(NotificationTimeinterval)*60000;
  	setInterval(function(){funGetNotification()},NotificationTimeinterval);
+ 	
+ 	
 <%}%>
-   
+NetworkcheckTimeinterval=parseInt(15)*100;
+	setInterval(function(){funCheckNetworkConnection()},NetworkcheckTimeinterval);
    	
 function funGetNotification()
 {

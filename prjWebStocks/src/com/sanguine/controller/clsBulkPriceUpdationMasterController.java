@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,6 +83,20 @@ public class clsBulkPriceUpdationMasterController {
 		model.put("uomList", uomList);
 
 		model.put("urlHits", urlHits);
+		List<String> listType = new ArrayList<String>();
+		listType.add("All");
+		listType.add("Procured");
+		listType.add("Produced");
+		listType.add("Sub-Contracted");
+		listType.add("Tools");
+		listType.add("Service");
+		listType.add("Labour");
+		listType.add("Overhead");
+		listType.add("Scrap");
+		listType.add("Non-Inventory");
+		listType.add("Trading");
+		model.put("typeList", listType);
+		
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmBulkProductUpdate_1", "command", new clsProductMasterBean());
@@ -142,7 +157,8 @@ public class clsBulkPriceUpdationMasterController {
 					objModel1.setDblRecipeConversion(obModel.getDblRecipeConversion());
 					objModel1.setStrUserModified(user);
 					objModel1.setDtLastModified(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
-
+					objModel1.setDblListPrice(obModel.getDblListPrice());
+					objModel1.setDblUnitPrice(obModel.getDblUnitPrice());
 					if (objModel1.getStrProductImage() == null) {
 						objModel1.setStrProductImage(funBlankBlob());
 					}
@@ -152,11 +168,11 @@ public class clsBulkPriceUpdationMasterController {
 			}
 		request.getSession().setAttribute("success", true);
 		request.getSession().setAttribute("successMessage", "Update SucessFully ");
-
+		
 		if ("2".equalsIgnoreCase(urlHits)) {
-			return new ModelAndView("frmBulkProductUpdate_1", "command", new clsProductMasterBean());
+	    return funOpenForm( model, request);
 		} else if ("1".equalsIgnoreCase(urlHits)) {
-			return new ModelAndView("frmBulkProductUpdate", "command", new clsProductMasterBean());
+			 return funOpenForm( model, request);
 		} else {
 			return null;
 		}

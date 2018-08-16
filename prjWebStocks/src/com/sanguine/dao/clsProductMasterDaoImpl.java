@@ -419,12 +419,19 @@ public class clsProductMasterDaoImpl implements clsProductMasterDao {
 	}
 
 	@Override
-	public List funGetSubGroupWiseProductList(String sgCode, String clientCode) {
-		String hql = "from clsProductMasterModel a " + "where a.strSGCode= :strSGCode and  a.strClientCode= :clientCode";
+	public List funGetSubGroupWiseProductList(String sgCode, String clientCode,String strProdType) {
+		String hql = "from clsProductMasterModel a " + "where a.strSGCode= :strSGCode and  a.strClientCode= :clientCode ";
+		if(!strProdType.equals("All"))
+		{
+			hql+= "and a.strProdType= :strProdType ";
+		}
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("strSGCode", sgCode);
 		query.setParameter("clientCode", clientCode);
-		List list = query.list();
+		if(!strProdType.equals("All"))
+		{
+		query.setParameter("strProdType", strProdType);
+		}List list = query.list();
 		return list;
 	}
 

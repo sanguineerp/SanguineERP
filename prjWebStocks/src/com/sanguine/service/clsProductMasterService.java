@@ -89,7 +89,7 @@ public interface clsProductMasterService {
 
 	public List<clsProductMasterModel> funGetAllStockablProddSuppList(String clientCode);
 
-	public List funGetSubGroupWiseProductList(String sgCode, String clientCode);
+	public List funGetSubGroupWiseProductList(String sgCode, String clientCode,String itemType);
 
 	public List funGetSubGroupNameWiseProductList(String sgName, String clientCode);
 
