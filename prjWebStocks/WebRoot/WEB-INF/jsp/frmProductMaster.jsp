@@ -1041,6 +1041,7 @@ $(document).ready(function()
 				    	$("#txtYieldPer").val(response.dblYieldPer);
 				    	$("#txtProdNameMarathi").val(response.strProdNameMarathi);
 				    	$("#txtManufacturerCode").val(response.strManufacturerCode);
+				    	$("#txtHSNCode").val(response.strHSNCode);
 				    	
 				    	toggle("txtProdNameMarathi");
 				    	if(response.strNotInUse=='Y')
@@ -1983,7 +1984,7 @@ $(document).ready(function()
 			<tr>
 				<td>
 				
-				<div id="tab_container" style="height: 435px">
+				<div id="tab_container" style="height: 465px">
 						<ul class="tabs">
 							<li class="active" data-state="tab1"
 								style="width: 6%; padding-left: 1.2%">General</li>
@@ -2121,6 +2122,11 @@ $(document).ready(function()
 				<td><s:input id="txtManufacturerCode" path="strManufacturerCode"
 						cssClass="searchTextBox jQKeyboard form-control" readonly="true" ondblclick="funHelp('manufactureMaster')" /></td>
 			   <td width="18px"><label id="lblManufacturerName" > </label></td>
+			
+			</tr>
+			<tr>
+			<td><label>HSN Code</label></td>
+			<td><s:input id="txtHSNCode" name="hsnCode" path="strHSNCode"  cssClass="BoxW116px" style="width: 90%"/></td>
 			
 			</tr>
 			    	

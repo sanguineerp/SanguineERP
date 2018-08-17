@@ -5,7 +5,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +28,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mysql.jdbc.Connection;
 import com.sanguine.bean.clsProductionBean;
+import com.sanguine.crm.bean.clsProductionComPilationBean;
 import com.sanguine.model.clsAuditDtlModel;
 import com.sanguine.model.clsAuditHdModel;
 import com.sanguine.model.clsLocationMasterModel;
@@ -25,10 +43,12 @@ import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsProductionDtlModel;
 import com.sanguine.model.clsProductionHdModel;
 import com.sanguine.model.clsProductionHdModel_ID;
+import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsWorkOrderHdModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsLocationMasterService;
 import com.sanguine.service.clsProductionService;
+import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsWorkOrderService;
 
 @Controller
@@ -45,6 +65,11 @@ public class clsProductionController {
 	private clsGlobalFunctions objGlobalFunctions;
 	clsGlobalFunctions objGlobal = null;
 
+	@Autowired
+	private clsSetupMasterService objSetupMasterService;
+	@Autowired
+	private ServletContext servletContext;
+	
 	/**
 	 * Open Production Form
 	 * 
@@ -412,4 +437,90 @@ public class clsProductionController {
 		return AuditHdModel;
 	}
 
+	@RequestMapping(value = "/openProductionSlip", method = RequestMethod.GET)
+	public void funOpenProductionSlip(@RequestParam(value = "docCode") String docCode,HttpServletResponse resp, HttpServletRequest req) {
+		
+		Connection con = objGlobalFunctions.funGetConnection(req);
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String companyName = req.getSession().getAttribute("companyName").toString();
+		String userCode = req.getSession().getAttribute("usercode").toString();
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+		if (objSetup == null) {
+			objSetup = new clsPropertySetupModel();
+		}
+		String reportName = servletContext.getRealPath("/WEB-INF/reports/rptProductionSlip.jrxml");
+		String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+		ArrayList fieldList = new ArrayList();
+		String PDCode="",PDDate="",WODate="",LocName="";
+		String sqlQuery = "select a.strPDCode,a.dtPDDate,c.strLocName,d.dtWODate ,b.strProdCode,e.strProdName,b.strPartNo,e.strProdType,b.dblQtyProd "
+				+" ,e.strUOM,ifnull(a.strNarration,'') from tblproductionhd a ,tblproductiondtl b,tbllocationmaster c ,tblworkorderhd d ,tblproductmaster e "
+				+" where a.strPDCode=b.strPDCode  "
+				+" and a.strLocCode=c.strLocCode and a.strWOCode=d.strWOCode and b.strProdCode=e.strProdCode and a.strPDCode='"+docCode+"' and a.strClientCode='"+clientCode+"';";
+
+		List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
+		if(listProdDtl!=null && listProdDtl.size()>0){
+			
+			clsProductionBean objProductionBean ;
+			for (int j = 0; j < listProdDtl.size(); j++) {
+				Object[] obj=(Object[]) listProdDtl.get(j);
+				objProductionBean = new clsProductionBean();
+				PDCode=obj[0].toString();
+				PDDate=obj[1].toString();
+				WODate=obj[3].toString();
+				LocName=obj[2].toString();
+				objProductionBean.setStrProdCode(obj[4].toString());
+				objProductionBean.setStrProdName(obj[5].toString());
+				objProductionBean.setStrPOSItemCode(obj[6].toString());
+				objProductionBean.setStrProdType(obj[7].toString());
+				objProductionBean.setDblQty(Double.parseDouble(obj[8].toString()));
+				objProductionBean.setStrUOM(obj[9].toString());
+				
+				fieldList.add(objProductionBean);
+			}
+
+		}
+		
+		HashMap hm = new HashMap();
+		hm.put("strCompanyName", companyName);
+		hm.put("strUserCode", userCode);
+		hm.put("strImagePath", imagePath);
+		
+		hm.put("PDCode", PDCode);
+		hm.put("PDDate", PDDate);
+		hm.put("WODate", WODate);
+		hm.put("LocName", LocName);
+		
+
+		try {
+			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);
+			JasperDesign jd = JRXmlLoader.load(reportName);
+			JasperReport jr = JasperCompileManager.compileReport(jd);
+			JasperPrint jp = JasperFillManager.fillReport(jr, hm, beanCollectionDataSource);
+			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+			if (jp != null) {
+				jprintlist.add(jp);
+				ServletOutputStream servletOutputStream = resp.getOutputStream();
+				JRExporter exporter = new JRPdfExporter();
+				resp.setContentType("application/pdf");
+				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+				exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+				resp.setHeader("Content-Disposition", "inline;filename=rptProductionReport.pdf");
+				exporter.exportReport();
+				servletOutputStream.flush();
+				servletOutputStream.close();
+
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+	
+		
+		
+	}
+
+	
 }

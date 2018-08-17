@@ -816,7 +816,8 @@ public class clsProductMasterController {
 		objModel.setStrNonStockableItem(objGlobal.funIfNull(objBean.getStrNonStockableItem(), "N", "Y"));
 		objModel.setStrPickMRPForTaxCal(objGlobal.funIfNull(objBean.getStrPickMRPForTaxCal(), "N", "Y"));
 		objModel.setStrManufacturerCode(objBean.getStrManufacturerCode());
-
+		objModel.setStrHSNCode(objGlobal.funIfNull(objBean.getStrHSNCode(), "", objBean.getStrHSNCode()));
+		
 		if (objBean.getDblYieldPer() == 0.0) {
 			double yieldper = 100.00;
 			objBean.setDblYieldPer(yieldper);

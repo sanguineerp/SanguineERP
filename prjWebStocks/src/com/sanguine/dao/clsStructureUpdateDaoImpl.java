@@ -904,9 +904,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		
 		funExecuteQuery(sql);
+		sql="ALTER TABLE `tblproductmaster` ADD COLUMN `strHSNCode` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strComesaItem`;";
+		funExecuteQuery(sql);
+		
 
 		sql = " DELETE FROM `tbltreemast`; ";
 		funExecuteQuery(sql);

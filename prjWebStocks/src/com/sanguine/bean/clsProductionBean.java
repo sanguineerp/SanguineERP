@@ -9,6 +9,9 @@ public class clsProductionBean {
 	private String strWOCode, strUserCreated, dtCreatedDate, strUserModified, dtLastModified, strAuthorise, strClientCode;
 	private long Intid;
 
+	private String strPOSItemCode,strProdCode,strProdName,strUOM,strProdType;
+	private double dblQty;
+	
 	public long getIntid() {
 		return Intid;
 	}
@@ -115,4 +118,55 @@ public class clsProductionBean {
 		this.strClientCode = strClientCode;
 	}
 
+	public String getStrPOSItemCode() {
+		return strPOSItemCode;
+	}
+
+	public void setStrPOSItemCode(String strPOSItemCode) {
+		this.strPOSItemCode = strPOSItemCode;
+	}
+
+	public String getStrProdCode() {
+		return strProdCode;
+	}
+
+	public void setStrProdCode(String strProdCode) {
+		this.strProdCode = strProdCode;
+	}
+
+	public String getStrProdName() {
+		return strProdName;
+	}
+
+	public void setStrProdName(String strProdName) {
+		this.strProdName = strProdName;
+	}
+
+	
+
+	public String getStrUOM() {
+		return strUOM;
+	}
+
+	public void setStrUOM(String strUOM) {
+		this.strUOM = strUOM;
+	}
+
+	public String getStrProdType() {
+		return strProdType;
+	}
+
+	public void setStrProdType(String strProdType) {
+		this.strProdType = strProdType;
+	}
+
+	public double getDblQty() {
+		return dblQty;
+	}
+
+	public void setDblQty(double dblQty) {
+		this.dblQty = dblQty;
+	}
+
+	
 }

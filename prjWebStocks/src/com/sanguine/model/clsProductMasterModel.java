@@ -251,6 +251,9 @@ public class clsProductMasterModel implements Serializable {
 
 	@Column(name = "strManufacturerCode")
 	private String strManufacturerCode;
+	
+	@Column(name = "strHSNCode" , columnDefinition = "VARCHAR(50) default ''")
+	private String strHSNCode;
 
 	public String getStrSelectedPOSItem() {
 		return strSelectedPOSItem;
@@ -832,6 +835,14 @@ public class clsProductMasterModel implements Serializable {
 
 	public void setStrComesaItem(String strComesaItem) {
 		this.strComesaItem = (String) setDefaultValue(strComesaItem, "");
+	}
+
+	public String getStrHSNCode() {
+		return strHSNCode;
+	}
+
+	public void setStrHSNCode(String strHSNCode) {
+		this.strHSNCode = (String) setDefaultValue(strHSNCode, "");
 	}
 
 }

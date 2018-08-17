@@ -4950,7 +4950,7 @@ public class clsInvoiceController
 			String dcCode = "";
 
 			String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,IFNULL(b.dblPrice,0.00),c.dblMRP"
-				+ ", IFNULL(b.dblPrice,0.00) AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,f.strExciseChapter,b.dblProdDiscAmount as discAmt,IFNULL(d.strBAdd1,''),IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') ,ifNull(strCST,''),c.strBarCode,b.strRemarks,ifnull(c.strUOM,0) from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
+				+ ", IFNULL(b.dblPrice,0.00) AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,f.strExciseChapter,b.dblProdDiscAmount as discAmt,IFNULL(d.strBAdd1,''),IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') ,ifNull(strCST,''),c.strBarCode,b.strRemarks,ifnull(c.strUOM,0),ifnull(c.strHSNCode,'') from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
 
 			String bAddress = "";
 			String bState = "";
@@ -4986,7 +4986,7 @@ public class clsInvoiceController
 					challanDate = obj[9].toString();
 					PONO = obj[10].toString();
 					dcCode = obj[8].toString();
-					objDtlBean.setStrHSN(obj[12].toString());
+					objDtlBean.setStrHSN(obj[26].toString());
 					objDtlBean.setDblDisAmt(Double.parseDouble(obj[13].toString()) / currValue);
 					bAddress = obj[14].toString() + " " + obj[15].toString();
 					bState = obj[16].toString();
@@ -5885,17 +5885,23 @@ public void funCallInvoiceFormat(String InvCode, String type,HttpServletResponse
 			}
 		else if(invoiceformat.equalsIgnoreCase("Format 5"))
 		{
-			
-			//window.open(getContextPath()+"/rptInvoiceSlipFormat5Report.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
+			String date="";
+			try{
+				StringBuilder sb=new StringBuilder("select dteInvDate from tblinvoicehd where strInvCode='"+InvCode+"' ");
+				List listDate=objBaseService.funGetListModuleWise(sb, "sql", "WebStocks");
+				 date=listDate.get(0).toString();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			funOpenInvoiceFormat5Report(InvCode , date,  resp,  req);
 		}
 		else if(invoiceformat.equalsIgnoreCase("RetailNonGSTA4"))
 		{
 			funOpenInvoiceRetailNonGSTReport( InvCode, type,  resp,  req);
-			//window.open(getContextPath()+"/openRptInvoiceRetailNonGSTReport.html?rptInvCode="+code,'_blank');
-	    }
+			funOpenInvoiceRetailNonGSTReport(InvCode, type,  resp,  req);
+		}
 		else if(invoiceformat.equalsIgnoreCase("Format 6"))
 		{
-			//window.open(getContextPath()+"/rptInvoiceSlipFormat6Report.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
 			String date="";
 			try{
 				StringBuilder sb=new StringBuilder("select dteInvDate from tblinvoicehd where strInvCode='"+InvCode+"' ");
@@ -5908,7 +5914,6 @@ public void funCallInvoiceFormat(String InvCode, String type,HttpServletResponse
 		}
 		else if(invoiceformat.equalsIgnoreCase("Format 7"))
 		{
-			//window.open(getContextPath()+"/rptInvoiceSlipFormat6Report.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
 			String date="";
 			try{
 				StringBuilder sb=new StringBuilder("select dteInvDate from tblinvoicehd where strInvCode='"+InvCode+"' ");
@@ -5921,9 +5926,7 @@ public void funCallInvoiceFormat(String InvCode, String type,HttpServletResponse
 		}
 		else
 	    {
-	    	//window.open(getContextPath()+"/openRptInvoiceRetailReport.html?rptInvCode="+code,'_blank');
-			
-			funOpenInvoiceRetailReport(InvCode,type,resp,req);
+	    	funOpenInvoiceRetailReport(InvCode,type,resp,req);
 	    }
 
 	}

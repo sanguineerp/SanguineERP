@@ -1846,7 +1846,7 @@ public class clsStockLedgerController {
 			break;
 
 		case "Production":
-			// objProduction.funCallReport(docCode,"pdf",resp,req);
+			 objProduction.funOpenProductionSlip(docCode,resp,req);
 			break;
 
 		case "Purchase Return":

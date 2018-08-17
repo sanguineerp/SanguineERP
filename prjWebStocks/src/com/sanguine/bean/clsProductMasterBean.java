@@ -78,6 +78,8 @@ public class clsProductMasterBean {
 	private String strManufacturerCode;
 
 	private String strComesaItem;
+	
+	private String strHSNCode;
 
 	public List<clsProductReOrderLevelModel> getListReorderLvl() {
 		return listReorderLvl;
@@ -770,6 +772,14 @@ public class clsProductMasterBean {
 
 	public void setStrComesaItem(String strComesaItem) {
 		this.strComesaItem = strComesaItem;
+	}
+
+	public String getStrHSNCode() {
+		return strHSNCode;
+	}
+
+	public void setStrHSNCode(String strHSNCode) {
+		this.strHSNCode = strHSNCode;
 	}
 
 }
