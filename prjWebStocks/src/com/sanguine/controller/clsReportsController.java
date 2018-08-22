@@ -4312,8 +4312,11 @@ public class clsReportsController {
 			// " and b.strClientCode='"+clientCode+"' and c.strClientCode='"+clientCode+"'"
 			// +
 			// " and d.strClientCode='"+clientCode+"' and e.strClientCode='"+clientCode+"'";
-			String sql = " select a.strGRNCode as  GRN_No,b.strProdCode as P_Code,c.strProdName as Product_Name,sum(b.dblQty) as Qty_Recd ,a.dblSubTotal,c.dblCostRM as Price,a.dblTaxAmt" + " ,(c.dblCostRM*sum(b.dblQty)) as Amount,c.strUOM as UOM" + " from tblgrnhd a, tblgrndtl b ,tblproductmaster c, tblsubgroupmaster d  "
-					+ "where a.strGRNCode=b.strGRNCode and b.strProdCode=c.strProdCode and c.strSGCode=d.strSGCode   " + "AND a.dtGRNDate >= '" + fromTempDate + "' AND a.dtGRNDate <= '" + toTempDate + "' ";
+			String sql = " select a.strGRNCode as  GRN_No,b.strProdCode as P_Code,c.strProdName as Product_Name,sum(b.dblQty) as Qty_Recd ,a.dblSubTotal,c.dblCostRM as Price,a.dblTaxAmt" 
+					+ " ,(c.dblCostRM*sum(b.dblQty)) as Amount,c.strUOM as UOM,d.strSGName,e.strGName " 
+					+ " from tblgrnhd a, tblgrndtl b ,tblproductmaster c, tblsubgroupmaster d ,tblgroupmaster e  "
+					+ "where a.strGRNCode=b.strGRNCode and b.strProdCode=c.strProdCode and c.strSGCode=d.strSGCode and d.strGCode=e.strGCode  " 
+					+ "AND a.dtGRNDate >= '" + fromTempDate + "' AND a.dtGRNDate <= '" + toTempDate + "' ";
 
 			if (objBean.getStrDocCode() != "") {
 				sql = sql + " and " + "(" + strLocCodes + ") ";
@@ -4321,7 +4324,7 @@ public class clsReportsController {
 			if (!supp.equals("")) {
 			sql = sql + " and a.strSuppCode='" + supp + "'  ";
 			}
-			sql += " group by b.strProdCode order by d.intSortingNo,c.strProdName  ";
+			sql += " group by b.strProdCode order by e.strGName ,d.strSGName,c.strProdName  ";
 
 			String sqlTotal = "  select  a.dblSubTotal,a.dblTaxAmt  from tblgrnhd a, tblgrndtl b  " + " where a.strGRNCode=b.strGRNCode " + "  AND a.dtGRNDate >= '" + fromTempDate + "' AND a.dtGRNDate <= '" + toTempDate + "' ";
 			if (objBean.getStrDocCode() != "") {

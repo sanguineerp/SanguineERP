@@ -231,7 +231,7 @@ public class clsDownloadExcelController {
 			if (qtyWithUOM.equals("No")) {
 				for (int cnt = 0; cnt < list.size(); cnt++) {
 					Object[] arrObj = (Object[]) list.get(cnt);
-					List dataList = new ArrayList<>();
+					List dataList = new ArrayList();
 					dataList.add(arrObj[0].toString());
 					dataList.add(arrObj[1].toString());
 					dataList.add(arrObj[2].toString());
@@ -341,7 +341,7 @@ public class clsDownloadExcelController {
 
 					listStockFlashModel.add(dataList);
 					
-					totalOpeningStock+=Double.parseDouble(arrObj[9].toString());
+					/*totalOpeningStock+=Double.parseDouble(arrObj[9].toString().split(" ")[0]);
 					totalGRN+= Double.parseDouble(arrObj[10].toString());
 					totalSCGRN+= Double.parseDouble(arrObj[11].toString());
 					totalStkTransferIn+= Double.parseDouble(arrObj[12].toString());
@@ -359,7 +359,7 @@ public class clsDownloadExcelController {
 					totalSaleAmt+= Double.parseDouble(arrObj[24].toString());
 					totalClosingStk+= Double.parseDouble(arrObj[26].toString());
 					totalValueTotal+= value;
-					totalIssueUOMStk+= Double.parseDouble(arrObj[28].toString());
+					totalIssueUOMStk+= Double.parseDouble(arrObj[28].toString());*/
 				}
 			}
 			List dataList = new ArrayList<>();
@@ -371,7 +371,7 @@ public class clsDownloadExcelController {
 			dataList.add("");
 			dataList.add("");
 			dataList.add("");
-			dataList.add("Total ");
+			/*dataList.add("Total ");
 			dataList.add(totalOpeningStock);
 			dataList.add(totalGRN);
 			dataList.add(totalSCGRN);
@@ -392,7 +392,30 @@ public class clsDownloadExcelController {
 			NumberFormat formatter = new DecimalFormat("###.#####");
 			String f = formatter.format(totalValueTotal);
 			dataList.add(f);
-			dataList.add(totalIssueUOMStk);
+			dataList.add(totalIssueUOMStk);*/
+			
+			dataList.add(" ");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			NumberFormat formatter = new DecimalFormat("###.#####");
+			String f = formatter.format(totalValueTotal);
+			dataList.add("");
+			dataList.add("");
 			dataList.add("");
 			dataList.add("");
 			dataList.add("");
@@ -532,7 +555,7 @@ public class clsDownloadExcelController {
 
 				listStockFlashModel.add(dataList);
 				
-				totalOpeningStock+=Double.parseDouble(arrObj[9].toString());
+				/*totalOpeningStock+=Double.parseDouble(arrObj[9].toString());
 				totalReciept+= Double.parseDouble(arrObj[10].toString());
 				if ( Double.parseDouble(arrObj[11].toString()) < 0) 
 				{
@@ -544,7 +567,7 @@ public class clsDownloadExcelController {
 				}
 				totalClosingStk+= Double.parseDouble(arrObj[12].toString());
 				totalValueTotal+= value;
-				totalIssueUOMStk+= Double.parseDouble(arrObj[14].toString());
+				totalIssueUOMStk+= Double.parseDouble(arrObj[14].toString());*/
 			}
 			List dataList = new ArrayList<>();
 			dataList.add("");
@@ -555,13 +578,20 @@ public class clsDownloadExcelController {
 			dataList.add("");
 			dataList.add("");
 			dataList.add("");
-			dataList.add("Total ");
-			dataList.add(totalOpeningStock);
-			dataList.add(totalReciept);
-			dataList.add(totalIssue);
-			dataList.add(totalClosingStk);
-			dataList.add(totalValueTotal);
-			dataList.add(totalIssueUOMStk);
+			dataList.add("");
+//			dataList.add("Total ");
+//			dataList.add(totalOpeningStock);
+//			dataList.add(totalReciept);
+//			dataList.add(totalIssue);
+//			dataList.add(totalClosingStk);
+//			dataList.add(totalValueTotal);
+//			dataList.add(totalIssueUOMStk);
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
+			dataList.add("");
 			dataList.add("");
 			dataList.add("");
 			dataList.add("");
@@ -1030,6 +1060,6 @@ public class clsDownloadExcelController {
 		return strVal;
 	}
 
-	
+
 
 }

@@ -2265,6 +2265,9 @@ public class clsGlobalFunctions {
 						+ " and b.strTaxReversal='N' ");
 				if (checkComesaRegionTax)
 					sbSql.append(" and strNotApplicableForComesa='N' ");
+				
+				if (checkComesaRegionTax)
+					sbSql.append(" and strNotApplicableForComesa='N' ");
 
 				sbSql.append(" order by b.strTaxOnTax,b.strTaxCode; ");
 				System.out.println(sbSql);

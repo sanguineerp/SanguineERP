@@ -708,7 +708,7 @@ $(document).ready(function(){
 		var flagOpenFromAuthorization="${flagOpenFromAuthorization}";
 		if(flagOpenFromAuthorization == 'true')
 		{
-			funSetMRHdData("${authorizationPICode}");
+			funSetPIData("${authorizationPICode}");
 		}
 			 
     });

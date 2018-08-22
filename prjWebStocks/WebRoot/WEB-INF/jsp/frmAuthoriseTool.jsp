@@ -311,7 +311,7 @@
 		    
 		    </table>
 		    
-		    <div id="trans" style="margin-left: 235px;overflow-y: scroll;">
+		    <div id="trans" style="margin-left: 235px;overflow-y: scroll; height:600px">
 		    
 		    </div>
 		    

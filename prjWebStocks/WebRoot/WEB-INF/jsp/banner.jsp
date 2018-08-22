@@ -18,7 +18,7 @@
 //var resFormName="";
 
 var NotificationTimeinterval=parseInt('<%=session.getAttribute("NotificationTimeinterval").toString()%>');
-
+var chkNetwork=1;
 var NotificationCount="";
 $(document).ready(function(){
 	//window.location.href=getContextPath()+"/loadPendingRequisition.html";
@@ -40,9 +40,10 @@ $(document).ready(function(){
  	
  	
 <%}%>
-NetworkcheckTimeinterval=parseInt(15)*100;
+    NetworkcheckTimeinterval=parseInt(30)*100;
 	setInterval(function(){funCheckNetworkConnection()},NetworkcheckTimeinterval);
    	
+	
 function funGetNotification()
 {
 	var searchUrl=getContextPath()+"/getNotification.html";
