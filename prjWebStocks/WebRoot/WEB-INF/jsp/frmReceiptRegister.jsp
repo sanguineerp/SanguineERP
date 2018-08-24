@@ -26,6 +26,7 @@ var fieldName="";
 			});	
 			
 			funSetAllLocationAllPrpoerty();
+			funGetGroupData();
 		});
 		
 		/**
@@ -50,6 +51,9 @@ var fieldName="";
 			    if(formName == "frmReceiptRegister")
 			    	{
 			    	 	 $('#lblFormHeader').text("Receipt Register Report");
+			    	 	document.getElementById('trGrpSubGroup').style.display = "none" ;
+			    	 	document.getElementById('trGrpSubGroupData').style.display = "none" ;
+			    	 	
 			    	}
 			    else if(formName == "frmProductPurchaseReciept")
 			    	{
@@ -219,9 +223,9 @@ var fieldName="";
 						} else
 						{
 							$.each(response, function(i,item)
-							 		{
-								funfillLocationGrid(response[i].strLocCode,response[i].strLocName);
-									});
+						 		{
+									funfillLocationGrid(response[i].strLocCode,response[i].strLocName);
+								});
 							
 						}
 					},
@@ -255,7 +259,7 @@ var fieldName="";
 				    var rowCount = table.rows.length;
 				    var row = table.insertRow(rowCount);
 				    
-				    row.insertCell(0).innerHTML= "<input id=\"cbLocSel."+(rowCount)+"\" name=\"Locthemes\" type=\"checkbox\" class=\"LocCheckBoxClass\"  checked=\"checked\" value='"+strLocCode+"' />";
+				    row.insertCell(0).innerHTML= "<input id=\"cbLocSel."+(rowCount)+"\" name=\"Locthemes\" type=\"checkbox\" class=\"LocCheckBoxClass\"  checked=\"checked\" value='"+strLocCode+"'  class=\"locCheckBoxClass\"/>";
 				    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \" size=\"15%\" id=\"strLocCode."+(rowCount)+"\" value='"+strLocCode+"' >";
 				    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \" size=\"50%\" id=\"strLocName."+(rowCount)+"\" value='"+strLocationName+"' >";
 			}
@@ -274,6 +278,166 @@ var fieldName="";
 			    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strSuppName."+(rowCount)+"\" value='"+strSuppName+"' >";
 			}
 		    
+		  //Get All Group data 
+		    function funGetGroupData()
+			{
+				var searchUrl = getContextPath() + "/loadAllGroupData.html";
+				$.ajax({
+					type : "GET",
+					url : searchUrl,
+					dataType : "json",
+					success : function(response) {
+						funRemRows("tblGroup");
+						$.each(response, function(i,item)
+				 		{
+							funfillGroupGrid(response[i].strGCode,response[i].strGName);
+						});
+						funGroupChkOnClick();
+					},
+					error: function(jqXHR, exception) {
+			            if (jqXHR.status === 0) {
+			                alert('Not connect.n Verify Network.');
+			            } else if (jqXHR.status == 404) {
+			                alert('Requested page not found. [404]');
+			            } else if (jqXHR.status == 500) {
+			                alert('Internal Server Error [500].');
+			            } else if (exception === 'parsererror') {
+			                alert('Requested JSON parse failed.');
+			            } else if (exception === 'timeout') {
+			                alert('Time out error.');
+			            } else if (exception === 'abort') {
+			                alert('Ajax request aborted.');
+			            } else {
+			                alert('Uncaught Error.n' + jqXHR.responseText);
+			            }		            
+			        }
+				});
+			}
+		    
+		    //Fill Group Data
+			function funfillGroupGrid(strGroupCode,strGroupName)
+			{
+				
+				 	var table = document.getElementById("tblGroup");
+				    var rowCount = table.rows.length;
+				    var row = table.insertRow(rowCount);
+				    
+				    row.insertCell(0).innerHTML= "<input id=\"cbGSel."+(rowCount)+"\" type=\"checkbox\"  name=\"Groupthemes\" class=\"GCheckBoxClass selected \" checked=\"checked\" value='"+strGroupCode+"' onclick=\"funGroupChkOnClick()\"/>";
+				    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box selected\" size=\"15%\" id=\"strGCode."+(rowCount)+"\" value='"+strGroupCode+"' >";
+				    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box selected\" size=\"50%\" id=\"strGName."+(rowCount)+"\" value='"+strGroupName+"' >";
+			}
+				
+			//Select All Group
+			function funGroupChkOnClick()
+			{
+				var table = document.getElementById("tblGroup");
+			    var rowCount = table.rows.length;  
+			    var strGCodes="";
+			    for(no=0;no<rowCount;no++)
+			    {
+			        if(document.all("cbGSel."+no).checked==true)
+			        	{
+			        		if(strGCodes.length>0)
+			        			{
+			        				strGCodes=strGCodes+","+document.all("strGCode."+no).value;
+			        			}
+			        		else
+			        			{
+			        				strGCodes=document.all("strGCode."+no).value;
+			        			}
+			        	}
+			    }
+			    funGetSubGroupData(strGCodes);
+			}
+		    
+			
+			//Geting SubGroup Data On the basis of Selection Group
+			function funGetSubGroupData(strGCodes)
+			{
+				strCodes = strGCodes.split(",");
+				var count=0;
+				funRemRows("tblSubGroup");
+				for (ci = 0; ci < strCodes.length; ci++) 
+				 {
+					var searchUrl = getContextPath() + "/loadSubGroupCombo.html?code="+ strCodes[ci];
+					$.ajax({
+						type : "GET",
+						url : searchUrl,
+						dataType : "json",
+						beforeSend : function(){
+							 $("#wait").css("display","block");
+					    },
+					    complete: function(){
+					    	 $("#wait").css("display","none");
+					    },
+						success : function(response)
+						{
+							$.each(response, function(key, value) {
+								funfillSubGroup(key,value);
+							});
+									
+						},
+						error: function(jqXHR, exception) {
+					        if (jqXHR.status === 0) {
+					            alert('Not connect.n Verify Network.');
+					        } else if (jqXHR.status == 404) {
+					            alert('Requested page not found. [404]');
+					        } else if (jqXHR.status == 500) {
+					            alert('Internal Server Error [500].');
+					        } else if (exception === 'parsererror') {
+					            alert('Requested JSON parse failed.');
+					        } else if (exception === 'timeout') {
+					            alert('Time out error.');
+					        } else if (exception === 'abort') {
+					            alert('Ajax request aborted.');
+					        } else {
+					            alert('Uncaught Error.n' + jqXHR.responseText);
+					        }		            
+					    }
+					});
+				}
+				
+			}
+			
+			//Fill SubGroup Data
+			function funfillSubGroup(strSGCode,strSGName) 
+			{
+				var table = document.getElementById("tblSubGroup");
+			    var rowCount = table.rows.length;
+			    var row = table.insertRow(rowCount);
+			    
+			    row.insertCell(0).innerHTML= "<input id=\"cbSGSel."+(rowCount)+"\" type=\"checkbox\" checked=\"checked\" name=\"SubGroupthemes\" value='"+strSGCode+"' class=\"SGCheckBoxClass\" />";
+			    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strSGCode."+(rowCount)+"\" value='"+strSGCode+"' >";
+			    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strSGName."+(rowCount)+"\" value='"+strSGName+"' >";
+			}
+			
+			//Select All Group,SubGroup,From Location, To Location When Clicking Select All Check Box
+			 $(document).ready(function () 
+						{
+							$("#chkSGALL").click(function ()
+							{
+							    $(".SGCheckBoxClass").prop('checked', $(this).prop('checked'));
+							});
+							
+							$("#chkGrpALL").click(function () 
+							{
+							    $(".GCheckBoxClass").prop('checked', $(this).prop('checked'));
+							    funGroupChkOnClick();
+							  
+							});
+							
+							$("#chkLocALL").click(function () 
+							{
+								$(".LocCheckBoxClass").prop('checked', $(this).prop('checked'));
+							});
+							
+							$("#chkSuppALL").click(function ()
+							{
+							    $(".suppCheckBoxClass").prop('checked', $(this).prop('checked'));
+							});
+							
+						});
+		
 		 /**
 		  * Remove All row form Grid
 		 **/
@@ -288,21 +452,7 @@ var fieldName="";
 				}
 			}
 		
-		 /**
-		  * Select All Location, SubGroup
-		 **/
-		 $(document).ready(function () 
-				{
-					$("#chkLocALL").click(function () 
-					{
-						$(".LocCheckBoxClass").prop('checked', $(this).prop('checked'));
-					});
-					$("#chkSuppALL").click(function ()
-					{
-					    $(".suppCheckBoxClass").prop('checked', $(this).prop('checked'));
-					});
-				});
-		 
+
 		 /**
 		   * Checking Validation before submiting the data
 		  **/
@@ -373,6 +523,36 @@ var fieldName="";
 						 
 						});
 					 $("#hidSuppCode").val(strSuppCode);
+					 
+					 var strGroupCode="";
+					 $('input[name="Groupthemes"]:checked').each(function() {
+						 if(strGroupCode.length>0)
+							 {
+							 strGroupCode=strGroupCode+","+this.value;
+							 }
+							 else
+							 {
+								 strGroupCode=this.value;
+							 }
+						 
+						});
+					 $("#hidGroupCode").val(strGroupCode);
+						
+					 var strSubGroupCode="";
+					 $('input[name="SubGroupthemes"]:checked').each(function() {
+						 if(strSubGroupCode.length>0)
+							 {
+							 strSubGroupCode=strSubGroupCode+","+this.value;
+							 }
+							 else
+							 {
+								 strSubGroupCode=this.value;
+							 }
+						 
+						});
+					 
+					 $("#hidSubGroupCode").val(strSubGroupCode);
+					 
 					 document.forms[0].action = "rptReceiptRegister.html";
 				}
 			    
@@ -402,6 +582,7 @@ var fieldName="";
 			    
 			}
 			
+		
 	   /**
 		 * Reset form
 		**/
@@ -508,6 +689,81 @@ var fieldName="";
 					</div>
 				</td>
 			</tr>
+			
+			<tr><td></td><br><td></td></tr>
+			<tr id="trGrpSubGroup">
+				<td width="49%">Group&nbsp;&nbsp;&nbsp;
+					<input type="text" id="txtGroupCode" 
+					 Class="searchTextBox"></input>
+					<label id="lblToGroupName"></label>
+			    </td>
+				<td width="49%">SubGroup&nbsp;&nbsp;&nbsp;
+				 <input id="txtSubGroupCode"  Class="searchTextBox" />
+				<label id="txtSubGroupName"></label>
+				
+				</td>
+			</tr>
+			<tr id="trGrpSubGroupData">
+				<td style="padding: 0 !important;">
+					<div class="transTablex">
+						<div
+							style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 150px; overflow-x: hidden; overflow-y: scroll;">
+
+							<table id="" class="masterTable"
+								style="width: 100%; border-collapse: separate;">
+								<tbody>
+									<tr bgcolor="#72BEFC">
+										<td width="15%"><input type="checkbox" id="chkGrpALL"
+										 onclick="funCheckUncheckGroup()"/>Select</td>
+										<td width="25%">Group Code</td>
+										<td width="65%">Group Name</td>
+
+									</tr>
+								</tbody>
+							</table>
+							<table id="tblGroup" class="masterTable"
+								style="width: 100%; border-collapse: separate;">
+
+								<tr bgcolor="#72BEFC">
+									<td width="15%"></td>
+									<td width="25%"></td>
+									<td width="65%"></td>
+
+								</tr>
+							</table>
+						</div>
+					</div>
+				</td>
+				<td style="padding: 0 !important;">
+					<div
+						style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 150px; overflow-x: hidden; overflow-y: scroll;">
+
+						<table id="" class="masterTable"
+							style="width: 100%; border-collapse: separate;">
+							<tbody>
+								<tr bgcolor="#72BEFC">
+									<td width="15%"><input type="checkbox" id="chkSGALL"
+										onclick="funCheckUncheckSubgroup()" />Select</td>
+									<td width="25%">SubGroup Code</td>
+									<td width="65%">SubGroup Name</td>
+
+								</tr>
+							</tbody>
+						</table>
+						<table id="tblSubGroup" class="masterTable"
+							style="width: 100%; border-collapse: separate;">
+							<tbody>
+								<tr bgcolor="#72BEFC">
+									<td width="15%"></td>
+									<td width="25%"></td>
+									<td width="65%"></td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</td>
+			</tr>
 		</table>
 		<br>
 		<table class="transTable">
@@ -534,6 +790,8 @@ var fieldName="";
 		</p>
 		<s:input type="hidden" id="hidLocCodes" path="strDocCode"></s:input>
 		<s:input type="hidden" id="hidSuppCode" path="strSuppCode"></s:input>
+		<s:input type="hidden" id="hidGroupCode" path="strGCode"></s:input>
+		<s:input type="hidden" id="hidSubGroupCode" path="strSGCode"></s:input>
 		<div id="wait"
 			style="display: none; width: 60px; height: 60px; border: 0px solid black; position: absolute; top: 60%; left: 55%; padding: 2px;">
 			<img

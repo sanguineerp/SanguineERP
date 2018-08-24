@@ -63,6 +63,9 @@
 		<variable name="vGroupTotal" class="java.lang.Double" resetType="Group" resetGroup="Group2" calculation="Sum">
 			<variableExpression><![CDATA[$F{Amount}]]></variableExpression>
 		</variable>
+		<variable name="subTotal" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{Amount}]]></variableExpression>
+		</variable>
 		<group name="Group1">
 			<groupExpression><![CDATA[$F{strGName}]]></groupExpression>
 		</group>
@@ -441,7 +444,7 @@
 								<textElement>
 									<font fontName="Serif" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$P{subtotal}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{subTotal}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:groupFooter groupName="Group2">

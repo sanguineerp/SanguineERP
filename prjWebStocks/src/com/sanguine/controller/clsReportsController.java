@@ -4241,9 +4241,10 @@ public class clsReportsController {
 			String fromTempDate = objGlobal.funGetDate("yyyy-MM-dd", fromDate);
 			String toTempDate = objGlobal.funGetDate("yyyy-MM-dd", toDate);
 			String tempLoc[] = objBean.getStrDocCode().split(",");
+			String tempSubGroup[] = objBean.getStrSGCode().split(",");
 			// String tempSupp[] = objBean.getStrSuppCode().split(",");
 
-			String strLocCodes = "";
+			String strLocCodes = "",strSubGroupCodes="";
 			String pname = "All";
 			if (!supp.equals("")) {
 				clsSupplierMasterModel objPartyModel = objSupplierMasterService.funGetObject(supp, clientCode);
@@ -4266,6 +4267,14 @@ public class clsReportsController {
 					clsLocationMasterModel objLocCode = objLocationMasterService.funGetObject(tempLoc[i], clientCode);
 					strLocationNames = strLocationNames + "," + objLocCode.getStrLocName();
 
+				}
+			}
+			for(int i=0;i<tempSubGroup.length;i++){
+				if (strSubGroupCodes.length() > 0) {
+					strSubGroupCodes = strSubGroupCodes + " or c.strSGCode='" + tempSubGroup[i] + "' ";
+				} else {
+					strSubGroupCodes = " c.strSGCode='" + tempSubGroup[i] + "' ";
+					
 				}
 			}
 
@@ -4324,14 +4333,20 @@ public class clsReportsController {
 			if (!supp.equals("")) {
 			sql = sql + " and a.strSuppCode='" + supp + "'  ";
 			}
+			if(objBean.getStrSGCode() !=""){
+				sql = sql + " and " + "(" + strSubGroupCodes + ") ";
+			}
 			sql += " group by b.strProdCode order by e.strGName ,d.strSGName,c.strProdName  ";
 
-			String sqlTotal = "  select  a.dblSubTotal,a.dblTaxAmt  from tblgrnhd a, tblgrndtl b  " + " where a.strGRNCode=b.strGRNCode " + "  AND a.dtGRNDate >= '" + fromTempDate + "' AND a.dtGRNDate <= '" + toTempDate + "' ";
+			String sqlTotal = "  select  a.dblSubTotal,a.dblTaxAmt  from tblgrnhd a, tblgrndtl b ,tblproductmaster c " + " where a.strGRNCode=b.strGRNCode " + " and b.strProdCode=c.strProdCode  AND a.dtGRNDate >= '" + fromTempDate + "' AND a.dtGRNDate <= '" + toTempDate + "' ";
 			if (objBean.getStrDocCode() != "") {
 				sqlTotal = sqlTotal + " and " + "(" + strLocCodes + ") ";
 			}
 			if (!supp.equals("")) {
 			sqlTotal = sqlTotal + " and a.strSuppCode='" + supp + "'  ";
+			}
+			if(objBean.getStrSGCode() !=""){
+				sqlTotal = sqlTotal + " and " + "(" + strSubGroupCodes + ") ";
 			}
 			sqlTotal += " group by a.strGRNCode  ";
 			List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlTotal, "sql");
