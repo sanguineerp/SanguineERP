@@ -5118,6 +5118,24 @@ public class clsSearchFormController {
 			searchFormTitle = "User Defined Master";
 			break;
 		}
+		
+		case "productCodeWebBook": {
+			columnNames = "a.strProdCode,a.strProdName,c.strSGName,d.strGName,a.strUOM,a.strNonStockableItem ";
+			tableName = " select a.strProdCode,a.strProdName,c.strSGName,d.strGName,a.strUOM,"
+					  + " a.strNonStockableItem " 
+					  + " from "+webStockDB+".tblproductmaster a, "+webStockDB+".tblsubgroupmaster c ," 
+					  + " "+webStockDB+".tblgroupmaster d "
+					  + " where "
+					  + " a.strSGCode=c.strSGCode and c.strGCode=d.strGCode " 
+					  + " and a.strClientCode='" + clientCode + "' ";
+			listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Non Stockable ";
+			idColumnName = "a.strProdCode";
+			searchFormTitle = "Product Master";
+			flgQuerySelection = true;
+			break;
+		}
+		
+	
 
 	}
 

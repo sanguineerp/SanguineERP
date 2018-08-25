@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sanguine.webbooks.model.clsSundryCreditorOpeningBalMasterModel;
+import com.sanguine.webbooks.model.clsSundryDebtorMasterItemDetialModel;
 import com.sanguine.webbooks.model.clsSundryDebtorOpeningBalMasterModel;
 
 public class clsSundryDebtorMasterBean {
@@ -133,6 +134,7 @@ public class clsSundryDebtorMasterBean {
 	private String strAccountName;
 
 	private List<clsSundryDebtorOpeningBalMasterModel> listSundryDetorOpenongBalModel = new ArrayList<clsSundryDebtorOpeningBalMasterModel>();
+	private List<clsSundryDebtorMasterItemDetialModel> listSundryDetorItemDetailModel = new ArrayList<clsSundryDebtorMasterItemDetialModel>();
 
 	/* Require for each Bean */
 	public long getIntGId() {
@@ -958,6 +960,15 @@ public class clsSundryDebtorMasterBean {
 	public void setStrOperational(String strOperational) {
 		this.strOperational = strOperational;
 	}
+
+	public List<clsSundryDebtorMasterItemDetialModel> getListSundryDetorItemDetailModel() {
+		return listSundryDetorItemDetailModel;
+	}
+
+	public void setListSundryDetorItemDetailModel(List<clsSundryDebtorMasterItemDetialModel> listSundryDetorItemDetailModel) {
+		this.listSundryDetorItemDetailModel = listSundryDetorItemDetailModel;
+	}
+
 
 	
 

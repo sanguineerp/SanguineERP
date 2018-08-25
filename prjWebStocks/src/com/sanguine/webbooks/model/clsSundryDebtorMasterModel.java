@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.CollectionOfElements;
 
 @Entity
@@ -32,11 +33,19 @@ public class clsSundryDebtorMasterModel implements Serializable {
 		strClientCode = objModelID.getStrClientCode();
 	}
 
-	@CollectionOfElements(fetch = FetchType.EAGER)
+	@CollectionOfElements(fetch = FetchType.LAZY)
 	@JoinTable(name = "tblsundarydebtoropeningbalance", joinColumns = { @JoinColumn(name = "strClientCode"), @JoinColumn(name = "strDebtorCode") })
 	@Id
 	@AttributeOverrides({ @AttributeOverride(name = "strDebtorCode", column = @Column(name = "strDebtorCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })
 	List<clsSundryDebtorOpeningBalMasterModel> listSundryDetorOpenongBalModel = new ArrayList<clsSundryDebtorOpeningBalMasterModel>();
+
+	
+
+	@CollectionOfElements(fetch = FetchType.LAZY)
+	@JoinTable(name = "tblsundarydebtoritemdetail", joinColumns = { @JoinColumn(name = "strClientCode"), @JoinColumn(name = "strDebtorCode") })
+	@Id
+	@AttributeOverrides({ @AttributeOverride(name = "strDebtorCode", column = @Column(name = "strDebtorCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })
+	List<clsSundryDebtorMasterItemDetialModel> listSundryDetorItemDetailModel = new ArrayList<clsSundryDebtorMasterItemDetialModel>();
 
 	// Variable Declaration
 	@Column(name = "intGId", updatable = false, nullable = false)
@@ -1195,6 +1204,14 @@ public class clsSundryDebtorMasterModel implements Serializable {
 
 	public void setStrOperational(String strOperational) {
 		this.strOperational = strOperational;
+	}
+	
+	public List<clsSundryDebtorMasterItemDetialModel> getListSundryDetorItemDetailModel() {
+		return listSundryDetorItemDetailModel;
+	}
+
+	public void setListSundryDetorItemDetailModel(List<clsSundryDebtorMasterItemDetialModel> listSundryDetorItemDetailModel) {
+		this.listSundryDetorItemDetailModel = listSundryDetorItemDetailModel;
 	}
 
 	

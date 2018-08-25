@@ -608,7 +608,57 @@
 			$("#txtSGCode").text('');
 		}
 		
+	//Load all settlement
+		 function funSetAllLocationAllPrpoerty() {
+				var searchUrl = "";
+				searchUrl = getContextPath()+ "/loadAllLocationForAllProperty.html";
+				$.ajax({
+					type : "GET",
+					url : searchUrl,
+					dataType : "json",
+					beforeSend : function(){
+						 $("#wait").css("display","block");
+				    },
+				    complete: function(){
+				    	 $("#wait").css("display","none");
+				    },
+					success : function(response) {
+						if (response.strLocCode == 'Invalid Code') {
+							alert("Invalid Location Code");
+							$("#txtFromLocCode").val('');
+							$("#lblFromLocName").text("");
+							$("#txtFromLocCode").focus();
+						} else
+						{
+							$.each(response, function(i,item)
+							 		{
+								funfillToLocationGrid(response[i].strLocCode,response[i].strLocName);
+									});
+							
+						}
+					},
+					error : function(jqXHR, exception) {
+						if (jqXHR.status === 0) {
+							alert('Not connect.n Verify Network.');
+						} else if (jqXHR.status == 404) {
+							alert('Requested page not found. [404]');
+						} else if (jqXHR.status == 500) {
+							alert('Internal Server Error [500].');
+						} else if (exception === 'parsererror') {
+							alert('Requested JSON parse failed.');
+						} else if (exception === 'timeout') {
+							alert('Time out error.');
+						} else if (exception === 'abort') {
+							alert('Ajax request aborted.');
+						} else {
+							alert('Uncaught Error.n' + jqXHR.responseText);
+						}
+					}
+				});
+			}
 		
+			
+	
 		
 	</script>
 </head>
@@ -624,6 +674,7 @@
 				<li class="active" data-state="tab1" style="width: 25%; left: 10%">GENERAL</li>
 				<li data-state="tab2" style="width: 10%; padding-left: 55px">Tax On Tax</li>
 				<li data-state="tab3" style="width: 10%; padding-left: 55px">Tax On Subgroup</li>
+<!-- 				<li data-state="tab4" style="width: 10%; padding-left: 55px">Settlement Wise Tax</li> -->
 			</ul>
 		
 			<div id="tab1" class="tab_content" style="height: 700px">
@@ -868,6 +919,31 @@
 				</div>
 			</div>
 		</div>
+		
+<!-- 			<div id="tab4" class="tab_content" style="height: 520px"> -->
+<!-- 			<br/> -->
+<!-- 			<br/> -->
+<!-- 							<table id="" class="masterTable" -->
+<!-- 								style="width: 100%; border-collapse: separate;"> -->
+<!-- 								<tbody> -->
+<!-- 									<tr bgcolor="#72BEFC"> -->
+<!-- 										<td width="15%"><input type="checkbox" checked="checked"  -->
+<!-- 										id="chkSettlement"/>Select</td> -->
+<!-- 										<td width="25%">Settlement Code</td> -->
+<!-- 										<td width="65%">Settlement Name</td> -->
+
+<!-- 									</tr> -->
+<!-- 								</tbody> -->
+<!-- 							</table> -->
+<!-- 							<table id="tblSettlement" class="masterTable" -->
+<!-- 								style="width: 100%; border-collapse: separate;"> -->
+
+<!-- 								<tr bgcolor="#72BEFC"> -->
+									
+
+<!-- 								</tr> -->
+<!-- 							</table> -->
+<!-- 				</div> -->
 			
 		<br />
 		<br />

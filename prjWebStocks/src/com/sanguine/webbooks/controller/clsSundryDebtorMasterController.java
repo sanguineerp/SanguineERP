@@ -1,6 +1,10 @@
 package com.sanguine.webbooks.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +32,7 @@ import com.sanguine.webbooks.model.clsACGroupMasterModel;
 import com.sanguine.webbooks.model.clsChargeMasterModel;
 import com.sanguine.webbooks.model.clsChargeMasterModel_ID;
 import com.sanguine.webbooks.model.clsSundaryCreditorMasterModel;
+import com.sanguine.webbooks.model.clsSundryDebtorMasterItemDetialModel;
 import com.sanguine.webbooks.model.clsSundryDebtorMasterModel;
 import com.sanguine.webbooks.model.clsSundryDebtorMasterModel_ID;
 import com.sanguine.webbooks.model.clsSundryDebtorOpeningBalMasterModel;
@@ -125,6 +130,7 @@ public class clsSundryDebtorMasterController {
 		List<clsSundryDebtorOpeningBalMasterModel> list = new ArrayList<clsSundryDebtorOpeningBalMasterModel>();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		objModel = objSundryDebtorMasterService.funGetSundryDebtorMaster(debtorCode, clientCode);
+
 		double currValue = Double.parseDouble(req.getSession().getAttribute("currValue").toString());
 		if(objModel!=null)
 		{
@@ -156,6 +162,29 @@ public class clsSundryDebtorMasterController {
 		{
 		objModel.setListSundryDetorOpenongBalModel(listProperty);
 		}
+		
+		String sqlItemDtl = "select a.strProductCode,a.strProductName,a.dblAMCAmt,a.dblLicenceAmt,a.strAMCType,a.dteInstallation,a.intWarrantyDays from tblsundarydebtoritemdetail a where a.strDebtorCode = '" + debtorCode + "'  and a.strClientCode='" + clientCode + "'";
+
+		List listItemDtl = objGlobalFunctionsService.funGetListModuleWise(sqlItemDtl, "sql");
+		List<clsSundryDebtorMasterItemDetialModel> listItemData =new ArrayList<clsSundryDebtorMasterItemDetialModel>();
+		
+		if(listItemDtl.size()>0)
+		{
+//			for(int i=0;i<listItemDtl.size();i++)
+//			{
+//				Object[] obj1=(Object[])listItemDtl.get(i);
+//				clsSundryDebtorMasterItemDetialModel objItemDtl=new clsSundryDebtorMasterItemDetialModel();
+//				objItemDtl.setStrProductCode(obj1[0].toString());
+//				objItemDtl.setStrProductName(obj1[1].toString());
+//				objItemDtl.setDblAMCAmt(Double.parseDouble(obj1[2].toString()));
+//				objItemDtl.setDblLicenceAmt(Double.parseDouble(obj1[3].toString()));
+//				objItemDtl.setStrAMCType(obj1[4].toString());
+//				objItemDtl.setDteInstallation(obj1[5].toString());
+//				objItemDtl.setIntWarrantyDays(Integer.parseInt(obj1[6].toString()));
+//				listItemData.add(objItemDtl);
+//			}
+		objModel.setListSundryDetorItemDetailModel(listItemDtl);
+		}
 		if (null == objModel) {
 			objModel = new clsSundryDebtorMasterModel();
 			objModel.setStrDebtorCode("Invalid Code");
@@ -181,9 +210,11 @@ public class clsSundryDebtorMasterController {
 
 			clsSundryDebtorMasterModel objModel = funPrepareModel(objBean, userCode, clientCode, propertyCode);
 			List<clsSundryDebtorOpeningBalMasterModel> list = objBean.getListSundryDetorOpenongBalModel();
+			List<clsSundryDebtorMasterItemDetialModel> listItemDtl = objBean.getListSundryDetorItemDetailModel();
 			clsSundryDebtorOpeningBalMasterModel obj = new clsSundryDebtorOpeningBalMasterModel();
+			clsSundryDebtorMasterItemDetialModel objItemDetialModel = new clsSundryDebtorMasterItemDetialModel();
 			List<clsSundryDebtorOpeningBalMasterModel> listOfOpeningBal = new ArrayList<clsSundryDebtorOpeningBalMasterModel>();
-			
+			List<clsSundryDebtorMasterItemDetialModel> listOfItemDetail = new ArrayList<clsSundryDebtorMasterItemDetialModel>();;
 			if(objBean.getStrCurrencyType()!=null){
 				clsCurrencyMasterModel obCurrModel=objCurrencyMasterService.funGetCurrencyMaster(objBean.getStrCurrencyType(),clientCode);
 				if(obCurrModel!=null){
@@ -203,6 +234,22 @@ public class clsSundryDebtorMasterController {
 					listOfOpeningBal.add(obj);
 				}
 				objModel.setListSundryDetorOpenongBalModel(listOfOpeningBal);
+			}
+			if(listItemDtl.size()>0)
+			{
+				for (int i = 1; i < listItemDtl.size(); i++) {
+					objItemDetialModel = (clsSundryDebtorMasterItemDetialModel) listItemDtl.get(i);
+					if(!objItemDetialModel.getStrProductCode().equals(null)){
+						Date today = Calendar.getInstance().getTime();
+						DateFormat df = new SimpleDateFormat("HH:mm:ss");
+						String reportDate = df.format(today);
+						String[] dteInstalation=objItemDetialModel.getDteInstallation().split("-");
+						objItemDetialModel.setDteInstallation(dteInstalation[2]+"-"+dteInstalation[1]+"-"+dteInstalation[0]+" "+reportDate);
+						listOfItemDetail.add(objItemDetialModel);
+					}
+				}
+				objModel.setListSundryDetorItemDetailModel(listOfItemDetail);
+				
 			}
 
 			objSundryDebtorMasterService.funAddUpdateSundryDebtorMaster(objModel);

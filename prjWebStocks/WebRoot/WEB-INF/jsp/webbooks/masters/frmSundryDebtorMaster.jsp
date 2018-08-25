@@ -166,7 +166,7 @@
 	    if(flag)
 	    {
 	        var row=table.insertRow();
-		    var col0=row.insertCell(0);
+		   /*  var col0=row.insertCell(0);
 		    var col1=row.insertCell(1);
 		    var col2=row.insertCell(2);
 		    var col3=row.insertCell(3);
@@ -174,6 +174,8 @@
 		    var col5=row.insertCell(5);
 		    var col6=row.insertCell(6);
 		    var col7=row.insertCell(7);
+		   
+
 		    
 		    col0.innerHTML = $("#txtProductCode").val();
 		    col1.innerHTML = $("#txtProductName").val();
@@ -183,6 +185,20 @@
 		    col5.innerHTML = $("#txtInstallationDate").val();
 		    col6.innerHTML = $("#txtWarrInDays").val();
 		    col7.innerHTML = "<input type=\"button\" value=\"Delete\"  class=\"deletebutton\" onclick=\"funRemoveRow(this,'tblItemDetails')\" />";		    		   		    
+		     */
+		    
+		    row.insertCell(0).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].strProductCode\" id=\"strProductCode."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+$("#txtProductCode").val()+"' />";
+			row.insertCell(1).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].strProductName\" id=\"strProductName."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+$("#txtProductName").val()+"' />";
+			row.insertCell(2).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"decimal-places numberField\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblLicenceAmt\" id=\"dblLicenceAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+$("#txtLicenseAmount").val()+"' />";
+			row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"decimal-places numberField\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+$("#txtAMCAmount").val()+"' />";
+			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].strAMCType\" id=\"strAMCType."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+$("#cmbAMCType").val()+"' />";
+			
+			row.insertCell(5).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+$("#txtInstallationDate").val()+"' />";
+			row.insertCell(6).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].intWarrantyDays\" id=\"intWarrantyDays."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+$("#txtWarrInDays").val()+"' />";
+			
+			row.insertCell(7).innerHTML = "<input type=\"button\" value=\"Delete\"  class=\"deletebutton\" onclick=\"funRemoveRow(this,'tblItemDetails')\" />";		    		   		    
+		    
+		    
 		    
 		    $("#txtProductCode").val('');
 		    $("#txtProductName").val('');
@@ -402,7 +418,10 @@
 								funLoadOpeningBalTable(item[0],item[1],item[2],item[3]);
 							});	
 				        	
-			        		
+				        	$.each(response.listSundryDetorItemDetailModel, function(i, item) {
+								
+								funLoadItemDetial(item[0],item[1],item[2],item[3],item[4],item[5],item[6]);
+							});	
 				        	/* Opening Balanace  Details */
 				        	
 				        	/* Item Details */
@@ -449,7 +468,27 @@
 			row.insertCell(5).innerHTML="<input type=\"button\" value=\"Delete\"  class=\"deletebutton\" onclick=\"funRemoveRow(this,'tblOpeningBalance')\" />";   
 		
 	}
+
 	
+	function funLoadItemDetial(strProductCode,strProductName,dblAMCAmt,dblLicenceAmt,strAMCType,dteInstallation,intWarrantyDays)
+	{
+		
+			var table = document.getElementById("tblItemDetails");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    
+		    row.insertCell(0).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].strProductCode\" id=\"strProductCode."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+strProductCode+"' />";
+			row.insertCell(1).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].strProductName\" id=\"strProductName."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+strProductName+"' />";
+			row.insertCell(2).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"decimal-places numberField\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblLicenceAmt\" id=\"dblLicenceAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+dblLicenceAmt+"' />";
+			row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"decimal-places numberField\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+dblAMCAmt +"' />";
+			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].strAMCType\" id=\"strAMCType."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+strAMCType+"' />";
+			
+			row.insertCell(5).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+dteInstallation+"' />";
+			row.insertCell(6).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"width:98%; text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listSundryDetorItemDetailModel["+(rowCount)+"].intWarrantyDays\" id=\"intWarrantyDays."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+intWarrantyDays+"' />";
+			
+			row.insertCell(7).innerHTML = "<input type=\"button\" value=\"Delete\"  class=\"deletebutton\" onclick=\"funRemoveRow(this,'tblItemDetails')\" />";		    		   		    
+		    
+	}
 	function funSetReasonData(reasonCode)
 	{
 	   
@@ -941,7 +980,9 @@
 			case 'debtorAccountCode' : 
 				funSetGLCode(code);
 				break;
-				 
+		
+				
+				
 		}
 	}
 
@@ -1460,7 +1501,7 @@
 				        <th></th>		        
 			   	</tr>			   			
 			   	<tr>
-			    	<td style="padding-left: 0px"><s:input  id="txtProductCode"  path=""  cssClass="searchTextBox"  /></td>	
+			    	<td style="padding-left: 0px"><s:input  id="txtProductCode"  path=""  cssClass="searchTextBox" ondblclick="funHelp('productCodeWebBook')"  /></td>	
 			    	<td><s:input  id="txtProductName"  path=""  cssClass="longTextBox" style="width: 200px;" /></td>	
 			    	<td><s:input  id="txtLicenseAmount"  path=""  cssClass="longTextBox" style="width: 100px;" /></td>
 			    	<td><s:input  id="txtAMCAmount"  path=""  cssClass="longTextBox" style="width: 100px;" /></td>	

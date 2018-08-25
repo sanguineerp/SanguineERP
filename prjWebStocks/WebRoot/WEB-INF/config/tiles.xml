@@ -3914,6 +3914,18 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/frmWebBooksDeleteModuleList.jsp"></put-attribute>
 	</definition>
 	
+	
+	<definition name="frmAMCFlash" extends="base.definition">
+		<put-attribute name="title" value="AMC Flash"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/frmAMCFlash.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="frmAMCFlash_1" extends="base.definition4">
+		<put-attribute name="title" value="AMC Flash"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/frmAMCFlash.jsp"></put-attribute>
+	</definition>
+	
+	
 <!-- 	APGL Forms Entry Starts -->
 	
 	
