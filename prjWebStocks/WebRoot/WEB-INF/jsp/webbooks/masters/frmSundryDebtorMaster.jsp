@@ -980,8 +980,7 @@
 			case 'debtorAccountCode' : 
 				funSetGLCode(code);
 				break;
-		
-				
+						
 		}
 	}
 
