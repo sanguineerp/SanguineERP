@@ -2059,6 +2059,21 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ " ENGINE=InnoDB;";
 		funExecuteWebBooksQuery(sql);
 		
+		sql="CREATE TABLE `tblsundarydebtoritemdetail` ( "
+		  + " strClientCode` VARCHAR(10) NOT NULL, "
+		  + " strDebtorCode` VARCHAR(10) NOT NULL, "
+		  + " strProductCode` VARCHAR(10) NOT NULL, "
+		  + " strProductName` VARCHAR(100) NOT NULL DEFAULT '', "
+		  + " dblAMCAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.00', "
+		  + " dblLicenceAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.00', "
+		  + " strAMCType` VARCHAR(50) NOT NULL DEFAULT '', "
+		  + " dteInstallation` DATETIME NOT NULL DEFAULT '1900-01-01 00:00:00', "
+		  + " intWarrantyDays` INT NOT NULL DEFAULT '0' "
+		  + "  ) "
+		  + " COLLATE='latin1_swedish_ci' "	
+		  + " ENGINE=InnoDB; ";
+		funExecuteWebBooksQuery(sql);
+		
 		sql = " ALTER TABLE `tblpaymentdtl` " + " ADD COLUMN `strDebtorCode` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strPropertyCode` ";
 
 		funExecuteWebBooksQuery(sql);
@@ -2301,7 +2316,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+"  ('frmDebtorAgeingReport', 'Debtor Ageing Report', 'Reports', '6', 'R', '74', '74', '1', 'default.png', '5', '1', '1', '1', 'NO', 'NO', 'frmDebtorAgeingReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+"  ('frmCreditorAgeingReport', 'Creditor Ageing Report', 'Reports', '6', 'R', '74', '74', '1', 'default.png', '5', '1', '1', '1', 'NO', 'NO', 'frmCreditorAgeingReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ,"
 				+ " ('frmUserDefineReportProcessing', 'User Define Report Processing', 'Processing', 3, 'P', 3, 3, '1', 'default.png', '5', 1, '1', '1', 'YES', 'NO', 'frmUserDefineReportProcessing.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
-				+ " ('frmWebBooksStructureUpdate', 'Structure Update', 'Tools', 1, 'L', 6, 6, '1', 'defaults.png', '5', 1, '1', '1', 'NO', 'NO', 'frmWebBooksStructureUpdate.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ";
+				+ " ('frmWebBooksStructureUpdate', 'Structure Update', 'Tools', 1, 'L', 6, 6, '1', 'defaults.png', '5', 1, '1', '1', 'NO', 'NO', 'frmWebBooksStructureUpdate.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ,"
+				+ " ('frmAMCFlash', 'AMC Flash', 'Tools', 1, 'L', 6, 7, '1', 'defaults.png', '5', 1, '1', '1', 'NO', 'NO', 'frmAMCFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ";
+		
+		
 		funExecuteQuery(sql);
 		
 		/*----------------WebBook Forms End---------------------------*/
