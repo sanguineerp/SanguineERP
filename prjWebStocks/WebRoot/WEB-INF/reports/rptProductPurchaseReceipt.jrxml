@@ -300,6 +300,36 @@
 								</textField>
 							</jr:cell>
 						</jr:groupHeader>
+						<jr:groupFooter groupName="Group1">
+							<jr:cell style="table 2" height="20" rowSpan="1">
+								<box>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="0.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="0.0"/>
+								</box>
+								<textField>
+									<reportElement x="0" y="0" width="229" height="20" forecolor="#501FE0" uuid="b9f0e78e-6c61-4193-abbf-4d9e2a1886f4"/>
+									<textElement textAlignment="Right"/>
+									<textFieldExpression><![CDATA[$F{strGName}]]></textFieldExpression>
+								</textField>
+							</jr:cell>
+						</jr:groupFooter>
+						<jr:groupFooter groupName="Group2">
+							<jr:cell style="table 2" height="20" rowSpan="1">
+								<box>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="0.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="0.0"/>
+								</box>
+								<textField>
+									<reportElement x="0" y="0" width="229" height="20" forecolor="#299C17" uuid="87a50bdb-b804-4863-b3ac-d1d6966ceb1e"/>
+									<textElement textAlignment="Right"/>
+									<textFieldExpression><![CDATA[$F{strSGName}]]></textFieldExpression>
+								</textField>
+							</jr:cell>
+						</jr:groupFooter>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 							<box>
 								<topPen lineWidth="0.0"/>
@@ -327,6 +357,36 @@
 								<text><![CDATA[UOM]]></text>
 							</staticText>
 						</jr:tableHeader>
+						<jr:groupFooter groupName="Group2">
+							<jr:cell style="table 2" height="20" rowSpan="1">
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+								<box>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="0.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="0.0"/>
+								</box>
+								<staticText>
+									<reportElement x="10" y="0" width="36" height="20" forecolor="#299C17" uuid="f6f9e585-3662-41c0-9213-283830b38ccb"/>
+									<text><![CDATA[Total]]></text>
+								</staticText>
+							</jr:cell>
+						</jr:groupFooter>
+						<jr:groupFooter groupName="Group1">
+							<jr:cell style="table 2" height="20" rowSpan="1">
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+								<box>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="0.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="0.0"/>
+								</box>
+								<staticText>
+									<reportElement x="10" y="0" width="36" height="20" forecolor="#501FE0" uuid="1cdba61e-7f81-49d2-8d1d-e3b89819d48b"/>
+									<text><![CDATA[Total]]></text>
+								</staticText>
+							</jr:cell>
+						</jr:groupFooter>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 							<box>
 								<topPen lineWidth="0.0"/>
@@ -390,25 +450,9 @@
 								<textElement>
 									<font fontName="Serif" isBold="true"/>
 								</textElement>
-								<text><![CDATA[ Sub Total]]></text>
+								<text><![CDATA[  Total]]></text>
 							</staticText>
 						</jr:tableFooter>
-						<jr:groupFooter groupName="Group2">
-							<jr:cell height="20" rowSpan="1">
-								<staticText>
-									<reportElement x="0" y="0" width="68" height="20" forecolor="#299C17" uuid="9093a41b-63bd-4636-892f-4b053c0334d1"/>
-									<text><![CDATA[SubGroupTotal]]></text>
-								</staticText>
-							</jr:cell>
-						</jr:groupFooter>
-						<jr:groupFooter groupName="Group1">
-							<jr:cell height="20" rowSpan="1">
-								<staticText>
-									<reportElement x="0" y="0" width="68" height="20" forecolor="#501FE0" uuid="b528bdbb-c632-4f7f-84c9-05f572bde67c"/>
-									<text><![CDATA[Group Total]]></text>
-								</staticText>
-							</jr:cell>
-						</jr:groupFooter>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 							<box>
 								<topPen lineWidth="0.0"/>

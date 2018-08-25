@@ -5242,11 +5242,12 @@ public class clsReportsController {
 
 //		listLOCWiseData.add("rptMISLocationWiseReport_" + dteFromDate + "to" + dteToDate + "_" + userCode);
 
-		String sqlQuery = " select DISTINCT e.strSGName,c.strProdName,c.strIssueUOM, b.strProdCode,c.strSGCode " + " from tblmishd a ,tblmisdtl b,tblproductmaster c ,tbllocationmaster d,tblsubgroupmaster e   " + " where a.strMISCode=b.strMISCode and a.strLocFrom='" + fromLoc + "' and b.strProdCode=c.strProdCode  " + " and a.strLocTo=d.strLocCode and c.strSGCode=e.strSGCode  " + " and date(a.dtMISDate) between '" + fromDate + "' and '" + toDate + "'  "
-
-				+ " and " + " ( " + strToLocCodes + ") "
-
-				+ " group by b.strProdCode,a.strLocTo " + " order by e.strSGName ASC, c.strProdName ASC ";
+		String sqlQuery = " select DISTINCT e.strSGName,c.strProdName,c.strIssueUOM, b.strProdCode,c.strSGCode " 
+						+ " from tblmishd a ,tblmisdtl b,tblproductmaster c ,tbllocationmaster d,tblsubgroupmaster e   " 
+						+ " where a.strMISCode=b.strMISCode and a.strLocFrom='" + fromLoc + "' and b.strProdCode=c.strProdCode  " 
+						+ " and a.strLocTo=d.strLocCode and c.strSGCode=e.strSGCode  " + " and date(a.dtMISDate) between '" + fromDate + "' and '" + toDate + "'  "
+						+ " and " + " ( " + strToLocCodes + ") "
+						+ " group by b.strProdCode,a.strLocTo " + " order by e.strSGName ASC, c.strProdName ASC ";
 
 		List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 		/*
@@ -5313,6 +5314,7 @@ public class clsReportsController {
 				totList.add(sgName);
 				totList.add("");
 				totList.add("Total");
+				
 				for (int i = 0; i < tempToLoc.length; i++)
 				{
 					String sqlSGTot = " select c.strSGCode,e.strSGName,sum(b.dblTotalPrice),d.strLocName,sum(b.dblQty) " + " from tblmishd a ,tblmisdtl b,tblproductmaster c ,tbllocationmaster d,tblsubgroupmaster e " + " where a.strMISCode=b.strMISCode and a.strLocFrom='" + fromLoc + "' and b.strProdCode=c.strProdCode " + " and a.strLocTo=d.strLocCode and c.strSGCode=e.strSGCode and date(a.dtMISDate) " + " between '" + fromDate + "' and '" + toDate + "' and a.strLocTo='" + tempToLoc[i] + "' " + " and e.strSGCode='" + sgCode + "'  " + " group by e.strSGCode,a.strLocTo " + " order by e.strSGName ASC, c.strProdName ASC ";
@@ -5361,7 +5363,15 @@ public class clsReportsController {
 			for (int i = 0; i < tempToLoc.length; i++)
 			{
 
-				String sqlloc = " select  e.strSGName,c.strProdName,c.strUOM, " + " sum(b.dblQty ),sum(b.dblTotalPrice) , a.strLocTo " + " from tblmishd a ,tblmisdtl b,tblproductmaster c ,tbllocationmaster d,tblsubgroupmaster e " + " where a.strMISCode=b.strMISCode and a.strLocFrom='" + fromLoc + "' and b.strProdCode=c.strProdCode " + " and b.strProdCode= '" + prodCode + "' " + " and a.strLocTo=d.strLocCode and c.strSGCode=e.strSGCode and " + " a.strLocTo='" + tempToLoc[i] + "'  " + " and date(a.dtMISDate) between '" + fromDate + "' and '" + toDate + "' " + " group by b.strProdCode,a.strLocTo " + " order by e.strSGName ASC, c.strProdName ASC ";
+				String sqlloc = " select  e.strSGName,c.strProdName,c.strUOM, " 
+				+ " sum(b.dblQty ),sum(b.dblTotalPrice) , a.strLocTo " 
+				+ " from tblmishd a ,tblmisdtl b,tblproductmaster c ,tbllocationmaster d,tblsubgroupmaster e " 
+				+ " where a.strMISCode=b.strMISCode and a.strLocFrom='" + fromLoc + "' and b.strProdCode=c.strProdCode " 
+				+ " and b.strProdCode= '" + prodCode + "' " 
+				+ " and a.strLocTo=d.strLocCode and c.strSGCode=e.strSGCode and " 
+				+ " a.strLocTo='" + tempToLoc[i] + "'  " 
+				+ " and date(a.dtMISDate) between '" + fromDate + "' and '" + toDate + "' " 
+				+ " group by b.strProdCode,a.strLocTo " + " order by e.strSGName ASC, c.strProdName ASC ";
 
 				List listlocTot = objGlobalFunctionsService.funGetDataList(sqlloc, "sql");
 
@@ -5439,7 +5449,8 @@ public class clsReportsController {
 			cnt++;
 
 		}
-
+		if(listProdDtl.size()>0)
+		{
 		Object[] arrObj = (Object[]) listProdDtl.get(0);
 		List DataList = new ArrayList<>();
 		if (preSubGroup.length() == 0)
@@ -5496,6 +5507,7 @@ public class clsReportsController {
 			// grandTotal = 0;
 			fieldList.add(totList);
 		}
+	}
 
 		listLOCWiseData.add(fieldList);//2
 		

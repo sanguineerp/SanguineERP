@@ -120,10 +120,10 @@ public class clsClientDetails {
 			hmClientDtl.put("107.001", clsClientDetails.createClientDetails("107.001", "UNITED CRANE COMPONENTS PVT. LTD.", dFormat.parse("2016-03-30"), dFormat.parse("2017-09-30"))); // for checking
 			hmClientDtl.put("109.001", clsClientDetails.createClientDetails("109.001", "Chemistry 101", dFormat.parse("2016-04-11"), dFormat.parse("2017-04-11")));
 			hmClientDtl.put("110.001", clsClientDetails.createClientDetails("110.001", "CAKE SHOP", dFormat.parse("2016-01-23"), dFormat.parse("2016-05-30")));
-			hmClientDtl.put("111.001", clsClientDetails.createClientDetails("111.001", "MERWANS CONFECTIONERS PVT LTD", dFormat.parse("2016-05-07"), dFormat.parse("2037-12-30")));// HO
+			hmClientDtl.put("111.001", clsClientDetails.createClientDetails("111.001", "MERWANS CONFECTIONERS PVT LTD", dFormat.parse("2016-05-07"), dFormat.parse("2017-12-30")));// HO
 			hmClientDtl.put("112.001", clsClientDetails.createClientDetails("112.001", "GBC MEGA MOTELS", dFormat.parse("2016-05-11"), dFormat.parse("2017-05-11")));// HO																																										// Carnival
 			hmClientDtl.put("114.001", clsClientDetails.createClientDetails("114.001", "Dr. Asif Khan Wellness Clinic LLP", dFormat.parse("2016-05-14"), dFormat.parse("2017-05-14")));// HO
-			hmClientDtl.put("117.001", clsClientDetails.createClientDetails("117.001", "THE PREM'S HOTEL", dFormat.parse("2016-08-01"), dFormat.parse("2018-09-01")));// HO
+			hmClientDtl.put("117.001", clsClientDetails.createClientDetails("117.001", "THE PREM'S HOTEL", dFormat.parse("2016-08-01"), dFormat.parse("2019-06-30")));// HO
 			hmClientDtl.put("124.001", clsClientDetails.createClientDetails("124.001", "ATITHYA DINNING LLP", dFormat.parse("2016-11-04"), dFormat.parse("2018-10-04"))); // one month extends
 			hmClientDtl.put("127.001", clsClientDetails.createClientDetails("127.001", "Cumin Food & Beverage Pvt Ltd", dFormat.parse("2016-10-26"), dFormat.parse("2017-10-26")));
 			hmClientDtl.put("131.001", clsClientDetails.createClientDetails("131.001", "KETTLE AND KEG CAFE", dFormat.parse("2016-11-23"), dFormat.parse("2018-11-23")));
@@ -142,7 +142,7 @@ public class clsClientDetails {
 			hmClientDtl.put("169.001", clsClientDetails.createClientDetails("169.001", "A R HOSPITALITY", dFormat.parse("2017-05-10"), dFormat.parse("2018-05-10")));
 			hmClientDtl.put("172.001", clsClientDetails.createClientDetails("172.001", "DIOS HOTEL LLP", dFormat.parse("2017-05-25"), dFormat.parse("2018-08-25"))); // one
 			hmClientDtl.put("174.001", clsClientDetails.createClientDetails("174.001", "KRD Eateries Pvt Ltd", dFormat.parse("2017-06-06"), dFormat.parse("2017-10-31"))); // krimsons
-			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "TJS BREW WORKS", dFormat.parse("2017-06-06"), dFormat.parse("2018-08-22")));////renewed on 03-07-2018 for 7 days till 10-07-2018
+			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "TJS BREW WORKS", dFormat.parse("2017-06-06"), dFormat.parse("2018-08-30")));////renewed on 03-07-2018 for 7 days till 10-07-2018
 			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2019-06-08")));
 			hmClientDtl.put("181.001", clsClientDetails.createClientDetails("181.001", "RMV COMMUNICATION PVT LTD", dFormat.parse("2017-06-20"), dFormat.parse("2017-07-20")));
 			hmClientDtl.put("184.001", clsClientDetails.createClientDetails("184.001", "BALAJI TRADERS PVT LTD", dFormat.parse("2017-07-03"), dFormat.parse("2018-01-07")));
@@ -169,6 +169,7 @@ public class clsClientDetails {
 			
 			
 			hmClientDtl.put("258.001", clsClientDetails.createClientDetails("258.001", "SAI MADHUBAN HOSPITALITY PVT LTD", dFormat.parse("2018-05-27"), dFormat.parse("2019-05-27")));//Sunny Shriram contact no - 9769545955 email id - arrowhospitalityconsulting@gmail.com
+			hmClientDtl.put("259.001", clsClientDetails.createClientDetails("259.001", "PENTAGON INDIA RETAIL PVT LTD", dFormat.parse("2018-05-24"), dFormat.parse("2018-06-24")));//POS Licence
 			
 		} catch (Exception e) {
 			e.printStackTrace();
