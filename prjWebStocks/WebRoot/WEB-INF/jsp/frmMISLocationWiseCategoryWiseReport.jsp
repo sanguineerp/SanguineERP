@@ -39,7 +39,7 @@ $(document).ready(function()
 				
 				 funSetAllLocationAllPrpoerty();;
 				 
-				
+				 funGetGroupData();
 			
 		});
 		
@@ -239,8 +239,26 @@ function funHelp(transactionName)
 				 }
 				 $("#hidToLocCodes").val(strToLocCode);
 				
-		    	
-		   // }
+		 
+				 var strSGCode="";
+				 $('input[name="SubGroupthemes"]:checked').each(function() {
+					 if(strSGCode.length>0)
+						 {
+						 strSGCode=strSGCode+","+this.value;
+						 }
+						 else
+						 {
+							 strSGCode=this.value;
+						 }
+					 
+					});
+				 if(strSGCode=="")
+				 {
+				 	alert("Please Select SubGroup");
+				 	return false;
+				 }
+				 $("#hidSubCodes").val(strSGCode);
+		 
 	    
 	    var strFromLocCode="";
 		 
@@ -263,6 +281,10 @@ function funHelp(transactionName)
 		 	return false;
 		 }
 		 $("#hidFrmLocCodes").val(strFromLocCode);
+		 
+		
+	   	
+	   	
 		
    	document.forms["frmMaterialIssueRegisterReport"].submit();
    	}
@@ -322,17 +344,175 @@ function funHelp(transactionName)
 		      });
 	}
    	
+    //Get All Group data 
+    function funGetGroupData()
+	{
+		var searchUrl = getContextPath() + "/loadAllGroupData.html";
+		$.ajax({
+			type : "GET",
+			url : searchUrl,
+			dataType : "json",
+			success : function(response) {
+				funRemRows("tblGroup");
+				$.each(response, function(i,item)
+		 		{
+					funfillGroupGrid(response[i].strGCode,response[i].strGName);
+				});
+				funGroupChkOnClick();
+			},
+			error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }		            
+	        }
+		});
+	}
+    
+    //Fill Group Data
+	function funfillGroupGrid(strGroupCode,strGroupName)
+	{
+		
+		 	var table = document.getElementById("tblGroup");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    
+		    row.insertCell(0).innerHTML= "<input id=\"cbGSel."+(rowCount)+"\" type=\"checkbox\"  name=\"GCodethemes\" class=\"GCheckBoxClass selected \" checked=\"checked\" value='"+strGroupCode+"' onclick=\"funGroupChkOnClick()\"/>";
+		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box selected\" size=\"15%\" id=\"strGCode."+(rowCount)+"\" value='"+strGroupCode+"' >";
+		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box selected\" size=\"50%\" id=\"strGName."+(rowCount)+"\" value='"+strGroupName+"' >";
+	}
+		
+	//Select All Group
+	function funGroupChkOnClick()
+	{
+		var table = document.getElementById("tblGroup");
+	    var rowCount = table.rows.length;  
+	    var strGCodes="";
+	    for(no=0;no<rowCount;no++)
+	    {
+	        if(document.all("cbGSel."+no).checked==true)
+	        	{
+	        		if(strGCodes.length>0)
+	        			{
+	        				strGCodes=strGCodes+","+document.all("strGCode."+no).value;
+	        			}
+	        		else
+	        			{
+	        				strGCodes=document.all("strGCode."+no).value;
+	        			}
+	        	}
+	    }
+	    funGetSubGroupData(strGCodes);
+	}
+	
+	//Geting SubGroup Data On the basis of Selection Group
+	function funGetSubGroupData(strGCodes)
+	{
+		strCodes = strGCodes.split(",");
+		var count=0;
+		funRemRows("tblSubGroup");
+		for (ci = 0; ci < strCodes.length; ci++) 
+		 {
+			var searchUrl = getContextPath() + "/loadSubGroupCombo.html?code="+ strCodes[ci];
+			$.ajax({
+				type : "GET",
+				url : searchUrl,
+				dataType : "json",
+				beforeSend : function(){
+					 $("#wait").css("display","block");
+			    },
+			    complete: function(){
+			    	 $("#wait").css("display","none");
+			    },
+				success : function(response)
+				{
+					$.each(response, function(key, value) {
+						funfillSubGroup(key,value);
+					});
+							
+				},
+				error: function(jqXHR, exception) {
+			        if (jqXHR.status === 0) {
+			            alert('Not connect.n Verify Network.');
+			        } else if (jqXHR.status == 404) {
+			            alert('Requested page not found. [404]');
+			        } else if (jqXHR.status == 500) {
+			            alert('Internal Server Error [500].');
+			        } else if (exception === 'parsererror') {
+			            alert('Requested JSON parse failed.');
+			        } else if (exception === 'timeout') {
+			            alert('Time out error.');
+			        } else if (exception === 'abort') {
+			            alert('Ajax request aborted.');
+			        } else {
+			            alert('Uncaught Error.n' + jqXHR.responseText);
+			        }		            
+			    }
+			});
+		}
+		
+	}
+	
+	//Fill SubGroup Data
+	function funfillSubGroup(strSGCode,strSGName) 
+	{
+		var table = document.getElementById("tblSubGroup");
+	    var rowCount = table.rows.length;
+	    var row = table.insertRow(rowCount);
+	    
+	    row.insertCell(0).innerHTML= "<input id=\"cbSGSel."+(rowCount)+"\" type=\"checkbox\" checked=\"checked\" name=\"SubGroupthemes\" value='"+strSGCode+"' class=\"SGCheckBoxClass\" />";
+	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strSGCode."+(rowCount)+"\" value='"+strSGCode+"' >";
+	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strSGName."+(rowCount)+"\" value='"+strSGName+"' >";
+	}
+	
+	//Select All Group,SubGroup,From Location, To Location When Clicking Select All Check Box
+	 $(document).ready(function () 
+				{
+					$("#chkSGALL").click(function ()
+					{
+					    $(".SGCheckBoxClass").prop('checked', $(this).prop('checked'));
+					});
+					
+					$("#chkGALL").click(function () 
+					{
+					    $(".GCheckBoxClass").prop('checked', $(this).prop('checked'));
+					    funGroupChkOnClick();
+					  
+					});
+					$("#chkSuppALL").click(function () {
+					    $(".SuppCheckBoxClass").prop('checked', $(this).prop('checked'));
+					});
+					
+					
+					$("#chkLocALL").click(function () {
+					    $(".LocCheckBoxClass").prop('checked', $(this).prop('checked'));
+					});
+					
+				
+					
+				});
+			 
    	
    	
-   	
-   	
+	
    	
 </script>
 
 </head>
 <body onload="funOnLoad();">
 	<div id="formHeading">
-	Material Issue LocationWise CategoryWise Report
+	Material Issue Location - Group - Sub Group Wise Report
 	</div>
 	<s:form name="frmMISLocReport" method="POST"
 		action="rptMISLocationWiseCategoryWiseReport.html" target="_blank">
@@ -343,8 +523,8 @@ function funHelp(transactionName)
 			<tr>
 				<td><label>From Date</label>
 				<td><s:input path="dtFromDate" id="txtFromDate" required="required" cssClass="calenderTextBox" /></td>
-				<td ><label>To Date</label>
-				<td><s:input path="dtToDate" id="txtToDate" required="required" cssClass="calenderTextBox" /></td>
+				<td ><label>To Date</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<s:input path="dtToDate" id="txtToDate" required="required" cssClass="calenderTextBox" /></td>
 			</tr>
 			<tr>
 				<td><label>Report Type</label></td>
@@ -358,8 +538,9 @@ function funHelp(transactionName)
 				</td>
 				<td >From Location&nbsp;&nbsp;&nbsp;
 			<input type="text" id="txtFrmLocCode"  
-			style="width: 40%;background-position: 90px 2px;"  Class="searchTextBox"  ondblclick="funHelp('StoreLocationTo')"  ></input></td>
-			<td><label id="lblFrmLocName"></label></td>
+			style="width: 40%;background-position: 90px 2px;"  Class="searchTextBox"  ondblclick="funHelp('StoreLocationTo')"  ></input>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<label id="lblFrmLocName"></label></td>
 			</tr>
 			
 			<tr>
@@ -369,9 +550,6 @@ function funHelp(transactionName)
 			<input type="text" id="txtLocCode" 
 			 style="width: 35%;background-position: 150px 2px;"  Class="searchTextBox" placeholder="Type to search"  ></input>
 			<label id="lblLocName"></label></td>
-			<td colspan="2">
-			</td>
-			
 			
 			
 			</tr>
@@ -434,7 +612,69 @@ function funHelp(transactionName)
 				
 			
 			</tr>
+			<tr>
 			
+			<td colspan="4"><br></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+						<div
+							style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 150px; overflow-x: hidden; overflow-y: scroll;">
+							<table id="" class="display"
+								style="width: 100%; border-collapse: separate;">
+								<tbody>
+									<tr bgcolor="#72BEFC">
+										<td width="15%"><input type="checkbox" id="chkGALL"
+											checked="checked" onclick="funCheckUncheck()" />Select</td>
+										<td width="20%">Group Code</td>
+										<td width="65%">Group Name</td>
+
+									</tr>
+								</tbody>
+							</table>
+							<table id="tblGroup" class="masterTable"
+								style="width: 100%; border-collapse: separate;">
+								<tbody>
+									<tr bgcolor="#72BEFC">
+										<td width="15%"></td>
+										<td width="20%"></td>
+										<td width="65%"></td>
+
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						</td>
+						<td  colspan="2">
+						<div
+							style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 150px; overflow-x: hidden; overflow-y: scroll;">
+
+							<table id="" class="masterTable"
+								style="width: 100%; border-collapse: separate;">
+								<tbody>
+									<tr bgcolor="#72BEFC">
+										<td width="15%"><input type="checkbox" id="chkSGALL"
+											checked="checked" onclick="funCheckUncheckSubGroup()" />Select</td>
+										<td width="25%">Sub Group Code</td>
+										<td width="65%">Sub Group Name</td>
+
+									</tr>
+								</tbody>
+							</table>
+							<table id="tblSubGroup" class="masterTable"
+								style="width: 100%; border-collapse: separate;">
+								<tbody>
+									<tr bgcolor="#72BEFC">
+										<td width="15%"></td>
+										<td width="25%"></td>
+										<td width="65%"></td>
+
+									</tr>
+								</tbody>
+							</table>
+							
+						</div>
+				</td></tr>
 			
 
 		</table>
@@ -457,7 +697,7 @@ function funHelp(transactionName)
 			
 			<s:input type="hidden" id="hidToLocCodes" path="strToLoc"></s:input>	
 			<s:input type="hidden" id="hidFrmLocCodes" path="strFromLoc"></s:input>	
-			
+			<s:input type="hidden" id="hidSubCodes" path="strSGCode"></s:input>
 		</div>
 	</s:form>
 	<script type="text/javascript">
