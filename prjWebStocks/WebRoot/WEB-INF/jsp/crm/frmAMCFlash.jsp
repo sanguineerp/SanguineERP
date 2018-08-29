@@ -19,6 +19,7 @@ $(document).ready(function()
 			$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
 			$("#txtToDate").datepicker('setDate', 'today');
 
+			
 				
 			$(document).ajaxStart(function()
 			{
