@@ -1,4 +1,4 @@
-package com.sanguine.webbooks.bean;
+package com.sanguine.crm.bean;
 
 public class clsAMCFlashBean {
 

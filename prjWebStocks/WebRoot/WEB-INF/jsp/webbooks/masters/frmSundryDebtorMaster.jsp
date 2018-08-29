@@ -948,6 +948,8 @@
 		{		
 			case "debtorCode":
 				funRemRows("tblOpeningBalance");
+				funRemRows("tblItemDetails");
+				
 			     funSetDebtorMasterData(code);			    
 				 break;		
 			case "categoryCode":
@@ -980,10 +982,47 @@
 			case 'debtorAccountCode' : 
 				funSetGLCode(code);
 				break;
-						
+				
+			case 'productCodeWebBook' : 
+				funSetProductCode(code);
+				break;
 		}
 	}
 
+	
+	
+	function funSetProductCode(prodCode)
+	{
+		
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadProductCode.html?prodCode=" + prodCode,
+			dataType : "text",
+			success : function(response){ 
+				$("#txtProductCode").val(prodCode);
+				$("#txtProductName").val(response);
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+		
+		
+	}
 	
 	function funSetGLCode(code){
 
@@ -1238,7 +1277,7 @@
 							<li data-state="tab2" style="width: 75px; padding-left: 10px">Billing Detail</li>
 							<li data-state="tab3" style="width: 75px; padding-left: 10px">ECS Detail</li>
 							<li data-state="tab4" style="width: 100px; padding-left: 10px">Opening Balance</li>
-							<li data-state="tab5" style="width: 75px; padding-left: 10px">Item Detail</li>													
+							<li data-state="tab5" style="width: 100px; padding-left: 10px">Product Detail</li>													
 						</ul>
 					</div>
 				</th>
@@ -1506,7 +1545,7 @@
 				    <td><s:select id="cmbAMCType"  path="" items="${listDrCr}" cssClass="BoxW124px" style="width: 100px;" /></td>					    
 				    <td><s:input  id="txtInstallationDate"  path=""  cssClass="calenderTextBox" /></td>
 				    <td><s:input  id="txtWarrInDays"  path=""  cssClass="longTextBox" style="width: 100px;" /></td>
-				    <td><input type="button" value="Add"  class="smallButton" onclick='funAddRow("tblItemDetails")'/></td>					    				
+<!-- 				    <td><input type="button" value="Add"  class="smallButton" onclick='funAddRow("tblItemDetails")'/></td>					    				 -->
 			    </tr>		    				   
 			</table>		
 			<br>

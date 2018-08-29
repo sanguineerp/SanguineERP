@@ -94,7 +94,7 @@ public class clsClientDetails {
 			hmClientDtl.put("001.030", clsClientDetails.createClientDetails("001.030", "M/S.NIDO RESTAURANT & BAR", dFormat.parse("2015-08-01"), dFormat.parse("2016-08-30")));
 			hmClientDtl.put("001.031", clsClientDetails.createClientDetails("001.031", "M/S GOA PORTUGUESA REST. PVT. LTD.", dFormat.parse("2015-08-01"), dFormat.parse("2016-08-30")));
 			hmClientDtl.put("001.032", clsClientDetails.createClientDetails("001.032", "M/S. HOTEL METRO PALACE PVT. LTD.", dFormat.parse("2015-08-01"), dFormat.parse("2016-08-30")));
-			hmClientDtl.put("074.001", clsClientDetails.createClientDetails("074.001", "THE POONA CLUB LTD", dFormat.parse("2016-01-21"), dFormat.parse("2017-06-21")));
+			hmClientDtl.put("074.001", clsClientDetails.createClientDetails("074.001", "THE POONA CLUB LTD", dFormat.parse("2016-01-21"), dFormat.parse("2018-08-28")));
 
 			// WebStocks Clients
 			hmClientDtl.put("000.000", clsClientDetails.createClientDetails("000.000", "Demo Company", dFormat.parse("2014-06-19"), dFormat.parse("2017-10-22")));
@@ -156,10 +156,10 @@ public class clsClientDetails {
 			hmClientDtl.put("222.001", clsClientDetails.createClientDetails("222.001", "PURANCHAND & SONS", dFormat.parse("2018-01-06"), dFormat.parse("2018-01-10")));// temporory
 			hmClientDtl.put("223.001", clsClientDetails.createClientDetails("223.001", "BANYAN TREE HOSPITALITY LLP", dFormat.parse("2018-01-17"), dFormat.parse("2019-01-17")));// temporory
 			hmClientDtl.put("224.001", clsClientDetails.createClientDetails("224.001", "Friendship hospitality Associates", dFormat.parse("2018-01-19"), dFormat.parse("2019-01-19")));// pos
-			hmClientDtl.put("226.001", clsClientDetails.createClientDetails("226.001", "MAYA EAST AFRICA LTD.", dFormat.parse("2018-02-12"), dFormat.parse("2018-08-27")));// temporory
+			hmClientDtl.put("226.001", clsClientDetails.createClientDetails("226.001", "MAYA EAST AFRICA LTD.", dFormat.parse("2018-02-12"), dFormat.parse("2018-08-29")));// temporory
 			hmClientDtl.put("236.001", clsClientDetails.createClientDetails("236.001", "JAMUN HOSPITALITY CONSULTANCY LLP", dFormat.parse("2018-03-16"), dFormat.parse("2018-06-18")));
 			hmClientDtl.put("242.001", clsClientDetails.createClientDetails("242.001", "SRINATHJIS CUISINES PVT LTD", dFormat.parse("2018-04-03"), dFormat.parse("2018-08-18")));//renewed on 01-06-2018 for 1 month till 30-06-2018// Contact No-022-23755444 / 666  Email-Id-srinathjiscuisine@gmail.com
-			hmClientDtl.put("240.001", clsClientDetails.createClientDetails("240.001", "THOUSAND OAKS", dFormat.parse("2018-04-12"), dFormat.parse("2018-08-27")));//renewed on 20-08-2018 for 1 week till 27-08-2018 //renewed on 13-06-2018 for 1 month// Mr. Sanjeet Lamba", 2417 East Street (G T Road),Camp, Pune 411001. Tel: (020) 2634 3194 / 2634 5598
+			hmClientDtl.put("240.001", clsClientDetails.createClientDetails("240.001", "THOUSAND OAKS", dFormat.parse("2018-04-12"), dFormat.parse("2018-09-28")));//renewed on 20-08-2018 for 1 week till 27-08-2018 //renewed on 13-06-2018 for 1 month// Mr. Sanjeet Lamba", 2417 East Street (G T Road),Camp, Pune 411001. Tel: (020) 2634 3194 / 2634 5598
 			hmClientDtl.put("241.001", clsClientDetails.createClientDetails("241.001", "LALITHA HOSPITALITY PVT LTD", dFormat.parse("2018-04-06"), dFormat.parse("2019-04-06")));//(MUMBAI)//release on 06-05-2018 for 1 month till 06-06-2018 for 4 SPOS ,6 APOS,1 WebStocks,No SMS Pack.", "Mr.Santosh Shetty", "+919769214553", "Santoshshetty_0173@gmail.com"
 			hmClientDtl.put("244.001", clsClientDetails.createClientDetails("244.001", "VIVIDH HOSPITALITY", dFormat.parse("2018-04-17"), dFormat.parse("2019-04-17")));//release on 17-04-2018 for 1 year till 17-04-22019
 			hmClientDtl.put("245.001", clsClientDetails.createClientDetails("245.001", "LSD NO LIMITS LLP (C/O)", dFormat.parse("2018-04-19"), dFormat.parse("2019-04-19")));//renewed on 30-05-2018 for 1 year till 19-04-2019//release on 19-04-2018 for 1 month till 19-05-2018

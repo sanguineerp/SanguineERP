@@ -36,6 +36,12 @@
 				$("#wait").css("display","none");
 			});
 		});
+		
+		 $("#txtInstallationDate").datepicker(
+		 {
+			dateFormat : 'dd-mm-yy'
+		 });
+		$("#txtInstallationDate").datepicker('setDate', 'today');
 	});
 	
 	
@@ -465,16 +471,27 @@
 		    var itemName = $("#lblProdName").text();
 		    var margin = $("#txtMargin").val();
 		    var standingOrder = $("#txtStandingOrder").val();
+		    var amcAmount = $("#txtAMCAmount").val();
+		    var installationDate = $("#txtInstallationDate").val();
+		    var warrInDays = $("#txtWarrInDays").val();
+		    
 		    var table = document.getElementById("tblProdDet");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
 		    rowCount=listRow;
 		    row.insertCell(0).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";		    
 		    row.insertCell(1).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\" value='"+itemName+"'/>";
-		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+standingOrder+">";
-		    row.insertCell(3).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+amount+">";
-		    row.insertCell(4).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+margin+">";
-		    row.insertCell(5).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
+		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"9%\" class=\"decimal-places-amt\" value="+amount+">";
+		    row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"  style=\"text-align: right;\" name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+amcAmount+"' />";
+			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"9%\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+installationDate+"' />";
+			row.insertCell(5).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].intWarrantyDays\" id=\"intWarrantyDays."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+warrInDays+"' />";
+		    row.insertCell(6).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+standingOrder+">";
+		    row.insertCell(7).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+margin+">";
+		    row.insertCell(8).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
+		   
+		    
+		    
+		    
 		    funApplyNumberValidation();
 		    listRow++;
 		    return false;
@@ -667,18 +684,24 @@
 		}
 	}
 	
-	
-		function funloadAllProductinGrid(prodCode,itemName,amount,margin,standingOrder)
+		function funloadAllProductinGrid(prodCode,itemName,amount,margin,standingOrder,amcAmount,installationDate,warrInDays)
 		{
 		    var table = document.getElementById("tblProdDet");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
+		    
+		    
 		    row.insertCell(0).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";		    
 		    row.insertCell(1).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\" value='"+itemName+"'/>";
-		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+standingOrder+">";
-		    row.insertCell(3).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+amount+">";
-		    row.insertCell(4).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+margin+">";
-		    row.insertCell(5).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
+		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"9%\" class=\"decimal-places-amt\" value="+amount+">";
+		    row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"  style=\"text-align: right;\" name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+amcAmount+"' />";
+			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"9%\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+installationDate+"' />";
+			row.insertCell(5).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].intWarrantyDays\" id=\"intWarrantyDays."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+warrInDays+"' />";
+		    row.insertCell(6).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+standingOrder+">";
+		    row.insertCell(7).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+margin+">";
+		    row.insertCell(8).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
+		   
+		    
 		    funApplyNumberValidation();
 		    return false;
 		}
@@ -702,7 +725,7 @@
 				    	$.each(response, function(i,item)
 						    	{
 				    				count=i;
-				    				funloadAllProductinGrid(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder);
+				    				funloadAllProductinGrid(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder,item.dblAMCAmt,item.dblAMCAmt,item.dteInstallation,item.intWarrantyDays);
 						    	});
 				    	listRow=count+1;
 	
@@ -1237,7 +1260,7 @@
 			</div>
 		<div id="tab3" class="tab_content">
 				<!-- Kindly change funAddRow  So that it cnnot add products -->
-						<table style="width: 80%;" class="transTablex">
+						<table style="width: 100%;" class="transTablex">
 						<tr>
 <!-- 								<th><label></label></th> -->
 <!-- 								<th><label></label></th> -->
@@ -1252,22 +1275,24 @@
 								<td width="10%">Product Code:</td>
 								<td width="10%"><input id="txtProdCode" class="BoxW140px" style="width:90%" ondblclick="funHelp('productmaster')" ></input></td>
 								<td width="30%"><label id="lblProdName" class="namelabel"></label></td>
+								<td width="10%">Licence Amount:</td>
+						 		<td><input id="txtAmount" type="text" class="decimal-places-amt numberField"  style="width: 80px"></input></td>
+			    				<td width="10%">AMC Amount:</td>
+			    				<td><s:input  id="txtAMCAmount"  path="" class="decimal-places-amt numberField"  style="width: 100px;" /></td>	
+				  				
+				  				<td width="10%">Installation Date:</td>				    
+				    			<td><s:input  id="txtInstallationDate"  path=""  cssClass="calenderTextBox" /></td>
+				    			<td width="10%">Warranty In Day's:</td>
+				    			<td><s:input  id="txtWarrInDays"  path=""  cssClass="longTextBox" style="width: 100px;" /></td>
+								</tr>
+								<tr>
 								<td width="10%">Std Order Qty:</td>
 								<td width="10%"><input id="txtStandingOrder" type="text" class="decimal-places-amt numberField"  style="width: 80px"></input></td>
-								<td width="10%">Amount:</td>
-								<td width="10%"><input id="txtAmount" type="text" class="decimal-places-amt numberField"  style="width: 80px"></input></td>
+								
 								<td width="10%">Margin:</td>
 								<td width="10%"><input id="txtMargin" type="text" class="decimal-places-amt numberField" style="width: 50px" ></input></td>
-								
-								
 								<td width="10%" ><input id="btnAdd" type="button" class="smallButton" value="Add" onclick="return funAddRow()"></input></td>
-							
-							
-							
-							</tr>	
-							<tr></tr>
-							<tr>
-							<td width="10%" ><input id="btnAllProd" type="button" class="smallButton" value="All Product" onclick="return funLoadAllProduct()"></input></td>
+								<td width="10%" colspan="2"><input id="btnAllProd" type="button" class="smallButton" value="All Product" onclick="return funLoadAllProduct()"></input></td>
 							</tr>
 							
 							
@@ -1294,12 +1319,15 @@
 			<table style="height: 10px; border: #0F0;width: 100%;font-size:11px;
 			font-weight: bold;">
 				<tr bgcolor="#72BEFC">
-									<td style="border: 1px white solid;width:10%"><label>Product Code</label></td>
-									<td style="border: 1px  white solid;width:50%"><label>Product Name</label></td>
-									<td style="border: 1px  white solid;width:10%"><label>Std Order Qty</label></td>
-									<td style="border: 1px  white solid;width:10%"><label>Amount</label></td>
-									<td style="border: 1px  white solid;width:10%"><label>Margin %</label></td>
-									<td style="border: 1px  white solid;width:10%"><label>Delete</label></td>
+									<td style="width:10%"><label>Product Code</label></td>
+									<td style="width:25%"><label>Product Name</label></td>
+									<td style="width:10%"><label>Licence Amount</label></td>
+									<td style="width:10%"><label>AMC Amount</label></td>
+									<td style="width:10%"><label>Installation Date</label></td>
+									<td style="width:10%"><label>Warranty In Day's</label></td>
+									<td style="width:10%"><label>Std Order Qty</label></td>
+									<td style="width:10%"><label>Margin %</label></td>
+									<td style="width:10%"><label>Delete</label></td>
 				</tr>
 			</table>
 			<div
@@ -1309,7 +1337,10 @@
 					class="transTablex col11-center">
 					<tbody>
 					<col style="width:10%">					
-					<col style="width:50%">
+					<col style="width:25%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:10%">
 					<col style="width:10%">
 					<col style="width:10%">
 					<col style="width:10%">

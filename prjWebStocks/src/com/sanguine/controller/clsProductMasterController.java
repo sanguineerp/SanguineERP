@@ -410,7 +410,7 @@ public class clsProductMasterController {
 				objProductMasterService.funDeleteProdSupp(objGeneralModel.getStrProdCode(), clientCode);
 				for (int counter = 0; counter < listProdCustMargin.size(); counter++) {
 					clsProdSuppMasterModel objProdSupp = (clsProdSuppMasterModel) listProdCustMargin.get(counter);
-					if (objProdSupp.getDblStandingOrder() > 0) {
+//					if (objProdSupp.getDblStandingOrder() > 0) {
 						// objProductMasterService.funDeleteProdSuppWise(objProdSupp.getStrSuppCode(),
 						// objGeneralModel.getStrProdCode(), clientCode);
 
@@ -429,7 +429,7 @@ public class clsProductMasterController {
 						ob.setDblStandingOrder(objProdSupp.getDblStandingOrder());
 
 						objProductMasterService.funAddUpdateProdSupplier(ob);
-					}
+//					}
 
 				}
 			}

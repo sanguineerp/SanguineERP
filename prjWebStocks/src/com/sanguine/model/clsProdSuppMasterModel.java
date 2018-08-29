@@ -21,6 +21,12 @@ public class clsProdSuppMasterModel {
 
 	private String strProdName;
 
+	private double dblAMCAmt;
+	
+	private String dteInstallation;
+	
+	private int intWarrantyDays;
+	
 	public clsProdSuppMasterModel() {
 	}
 
@@ -166,6 +172,30 @@ public class clsProdSuppMasterModel {
 
 	public void setDblStandingOrder(double dblStandingOrder) {
 		this.dblStandingOrder = dblStandingOrder;
+	}
+
+	public double getDblAMCAmt() {
+		return dblAMCAmt;
+	}
+
+	public void setDblAMCAmt(double dblAMCAmt) {
+		this.dblAMCAmt = dblAMCAmt;
+	}
+
+	public String getDteInstallation() {
+		return dteInstallation;
+	}
+
+	public void setDteInstallation(String dteInstallation) {
+		this.dteInstallation = dteInstallation;
+	}
+
+	public int getIntWarrantyDays() {
+		return intWarrantyDays;
+	}
+
+	public void setIntWarrantyDays(int intWarrantyDays) {
+		this.intWarrantyDays = intWarrantyDays;
 	}
 
 }

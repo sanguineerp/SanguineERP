@@ -25,6 +25,7 @@ public class clsSundryDebtorMasterItemDetialModel implements Serializable {
 	private String dteInstallation;
 	
 	private int intWarrantyDays;
+	
 	public String getStrProductCode() {
 		return strProductCode;
 	}

@@ -1,6 +1,10 @@
 package com.sanguine.crm.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -376,10 +380,16 @@ public class clsPartyMasterController {
 				Obj.setStrSuppCode(objModel.getStrPCode());
 				Obj.setStrClientCode(clientCode);
 				Obj.setDtLastDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
-				if (Obj.getDblStandingOrder() != 0) {
+				Date today = Calendar.getInstance().getTime();
+				DateFormat df = new SimpleDateFormat("HH:mm:ss");
+				String reportDate = df.format(today);
+				String[] dteInstalation=Obj.getDteInstallation().split("-");
+				Obj.setDteInstallation(dteInstalation[2]+"-"+dteInstalation[1]+"-"+dteInstalation[0]+" "+reportDate);
+//				if (Obj.getDblStandingOrder() != 0) {
+					
 					System.out.println(i + "    " + Obj.getStrProdCode() + "===");
 					objProductMasterService.funAddUpdateProdSupplier(Obj);
-				}
+//				}
 			}
 		}
 		return objModel;

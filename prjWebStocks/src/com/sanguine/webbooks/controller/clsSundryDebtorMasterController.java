@@ -184,6 +184,9 @@ public class clsSundryDebtorMasterController {
 //				listItemData.add(objItemDtl);
 //			}
 		objModel.setListSundryDetorItemDetailModel(listItemDtl);
+		}else{
+			listItemDtl=new ArrayList();
+			objModel.setListSundryDetorItemDetailModel(listItemDtl);
 		}
 		if (null == objModel) {
 			objModel = new clsSundryDebtorMasterModel();
@@ -378,5 +381,28 @@ public class clsSundryDebtorMasterController {
 
 		return objModel;
 	}
+	
+	@RequestMapping(value = "/loadProductCode", method = RequestMethod.GET)
+	public @ResponseBody  String funLoadProduct(@RequestParam("prodCode") String prodCode, HttpServletRequest req) {
+		String urlHits = "1";
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+		String sql=" select a.strProdName  " 
+					  + " from "+webStockDB+".tblproductmaster a "
+					  + " where a.strProdCode='"+prodCode+"' and a.strClientCode='" + clientCode + "' ";
+		
+		List listItemDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		List<clsSundryDebtorMasterItemDetialModel> listItemData =new ArrayList<clsSundryDebtorMasterItemDetialModel>();
+		String ProductName="";
+		if(listItemDtl.size()>0)
+		{
+			ProductName=listItemDtl.get(0).toString();
+			
+		}
+		
+		return ProductName;
+		}
+	
+	
 
 }
