@@ -5176,10 +5176,23 @@ public class clsReportsController {
 		
 		String tempToLoc[] = objBean.getStrToLoc().split(",");
 		String fromLoc = objBean.getStrFromLoc();
-		// String tempSG[] = objBean.getStrSGCode().split(",");
-		String strToLocCodes = "";
+		 String tempSG[] = objBean.getStrSGCode().split(",");
+		String strToLocCodes = "",strSubGroupCodes="";
 		String strFromLocCodes = "";
 
+		for (int i = 0; i < tempSG.length; i++)
+		{
+			if (strSubGroupCodes.length() > 0)
+			{
+				strSubGroupCodes = strSubGroupCodes + " or c.strSGCode='" + tempSG[i] + "' ";
+			}
+			else
+			{
+				strSubGroupCodes = "c.strSGCode='" + tempSG[i] + "' ";
+
+			}
+		}
+		
 		for (int i = 0; i < tempToLoc.length; i++)
 		{
 			if (strToLocCodes.length() > 0)
@@ -5212,7 +5225,8 @@ public class clsReportsController {
 		
 		ArrayList<String> locNameList = new ArrayList<String>();
 		ArrayList<Object> hearderList = new ArrayList<Object>();
-
+		
+		hearderList.add("GRPName");
 		hearderList.add("SGName");
 		hearderList.add("Product");
 		hearderList.add("Issue UOM");
@@ -5242,12 +5256,12 @@ public class clsReportsController {
 
 //		listLOCWiseData.add("rptMISLocationWiseReport_" + dteFromDate + "to" + dteToDate + "_" + userCode);
 
-		String sqlQuery = " select DISTINCT e.strSGName,c.strProdName,c.strIssueUOM, b.strProdCode,c.strSGCode " 
-						+ " from tblmishd a ,tblmisdtl b,tblproductmaster c ,tbllocationmaster d,tblsubgroupmaster e   " 
+		String sqlQuery = " select DISTINCT e.strSGName,c.strProdName,c.strIssueUOM, b.strProdCode,c.strSGCode,f.strGName " 
+						+ " from tblmishd a ,tblmisdtl b,tblproductmaster c ,tbllocationmaster d,tblsubgroupmaster e ,tblgroupmaster f  " 
 						+ " where a.strMISCode=b.strMISCode and a.strLocFrom='" + fromLoc + "' and b.strProdCode=c.strProdCode  " 
 						+ " and a.strLocTo=d.strLocCode and c.strSGCode=e.strSGCode  " + " and date(a.dtMISDate) between '" + fromDate + "' and '" + toDate + "'  "
-						+ " and " + " ( " + strToLocCodes + ") "
-						+ " group by b.strProdCode,a.strLocTo " + " order by e.strSGName ASC, c.strProdName ASC ";
+						+ " and " + " ( " + strToLocCodes + ") and e.strGCode=f.strGCode and ("+strSubGroupCodes+")"
+						+ " group by b.strProdCode,a.strLocTo " + " order by f.strGName ,e.strSGName ASC, c.strProdName ASC ";
 
 		List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 		/*
@@ -5266,6 +5280,7 @@ public class clsReportsController {
 		 * totList.add("");
 		 */
 		List blankList = new ArrayList<>();
+		blankList.add("");
 		blankList.add("");
 		blankList.add("");
 		blankList.add("");
@@ -5311,6 +5326,7 @@ public class clsReportsController {
 
 				double totSGCol1 = 0,totalQty=0;
 				List totList = new ArrayList<>();
+				totList.add("");
 				totList.add(sgName);
 				totList.add("");
 				totList.add("Total");
@@ -5331,7 +5347,7 @@ public class clsReportsController {
 								totList.add(arrObjSG[4].toString());
 								totList.add(arrObjSG[2].toString());
 								totSGCol1 += Double.parseDouble(arrObjSG[2].toString());
-								totalQty += Double.parseDouble(arrObjSG[2].toString());
+								totalQty += Double.parseDouble(arrObjSG[4].toString());
 							}
 
 						}
@@ -5346,6 +5362,7 @@ public class clsReportsController {
 				totList.add(totalQty);
 				totList.add(totSGCol1);
 				totSGCol1 = 0;
+				totalQty=0;
 				fieldList.add(totList);
 				fieldList.add(blankList);
 				sgCode = arrObj[4].toString();
@@ -5355,6 +5372,7 @@ public class clsReportsController {
 			double qtyCol = 0;
 			double amtCol = 0;
 
+			DataList.add(arrObj[5].toString());
 			DataList.add(arrObj[0].toString());
 			DataList.add(arrObj[1].toString());
 			DataList.add(arrObj[2].toString());
@@ -5408,6 +5426,7 @@ public class clsReportsController {
 				preSubGroup = arrObj[0].toString();
 
 				List totList = new ArrayList<>();
+				totList.add("");
 				totList.add(sgName);
 				totList.add("");
 				totList.add("Total");
@@ -5427,7 +5446,7 @@ public class clsReportsController {
 								totList.add(arrObjSG[4].toString());
 								totList.add(arrObjSG[2].toString());
 								totSGCol2 += Double.parseDouble(arrObjSG[2].toString());
-								totalQty += Double.parseDouble(arrObjSG[2].toString());
+								totalQty += Double.parseDouble(arrObjSG[4].toString());
 							}
 
 						}
@@ -5442,6 +5461,7 @@ public class clsReportsController {
 				totList.add(totalQty);
 				totList.add(totSGCol2);
 				totSGCol2 = 0;
+				totalQty=0;
 				fieldList.add(totList);
 
 			}
@@ -5470,6 +5490,7 @@ public class clsReportsController {
 
 			double grandTotal = 0,totalQty=0;
 			List totList = new ArrayList<>();
+			totList.add("");
 			totList.add("");
 			totList.add("");
 			totList.add("Grand Total");

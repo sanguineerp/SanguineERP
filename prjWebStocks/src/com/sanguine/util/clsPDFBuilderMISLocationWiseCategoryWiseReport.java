@@ -140,10 +140,11 @@ public class clsPDFBuilderMISLocationWiseCategoryWiseReport extends AbstractView
 		pdfTable.setLockedWidth(true);
 
 		float[] columnWidths = new float[HeaderList.length];
-		columnWidths[0] = 200;
-		columnWidths[1] = 300;
-		columnWidths[2] = 100;
-		for (int rowtitile = 3; rowtitile < HeaderList.length; rowtitile++)
+		columnWidths[0] = 150;
+		columnWidths[1] = 250;
+		columnWidths[2] = 300;
+		columnWidths[3] = 100;
+		for (int rowtitile = 4; rowtitile < HeaderList.length; rowtitile++)
 		{
 			columnWidths[rowtitile] = 150F;
 		}
@@ -172,12 +173,12 @@ public class clsPDFBuilderMISLocationWiseCategoryWiseReport extends AbstractView
 		for (int rowCount = 0; rowCount < listData.size(); rowCount++)
 		{			
 			List arrObj = (List) listData.get(rowCount);
-			if(arrObj.get(0).toString().isEmpty()&& arrObj.get(2).toString().isEmpty())
+			if(arrObj.get(1).toString().isEmpty()&& arrObj.get(3).toString().isEmpty())
 			{
 				continue;
 			}
 			boolean isTotal=false;
-			if(arrObj.get(2).toString().equalsIgnoreCase("Total"))
+			if(arrObj.get(3).toString().equalsIgnoreCase("Total"))
 			{
 				isTotal=true;
 			}
@@ -187,7 +188,7 @@ public class clsPDFBuilderMISLocationWiseCategoryWiseReport extends AbstractView
 				if (null != arrObj.get(Count))
 				{
 
-					if (Count>2)
+					if (Count>3)
 					{
 						PdfPCell c = new PdfPCell();
 						if(isTotal)
@@ -206,7 +207,7 @@ public class clsPDFBuilderMISLocationWiseCategoryWiseReport extends AbstractView
 							c.setBorder(Rectangle.NO_BORDER);
 							c.setColspan(1);
 						}
-						if (Count > 1)
+						if (Count > 2)
 						{
 							c.setHorizontalAlignment(Element.ALIGN_RIGHT);
 						}
@@ -230,7 +231,7 @@ public class clsPDFBuilderMISLocationWiseCategoryWiseReport extends AbstractView
 							c.setBorder(Rectangle.NO_BORDER);
 							c.setColspan(1);
 						}
-						if (Count > 1)
+						if (Count > 2)
 						{
 							c.setHorizontalAlignment(Element.ALIGN_LEFT);
 						}
