@@ -208,7 +208,12 @@ public class clsWhatIfAnalysisController {
 
 	public String funGetProdInfo(String prodCode) {
 		String prodInfo = "";
-		String sql = " select ifnull(a.strProdName,''),if(IFNULL(a.strRecipeUOM,'')='',IFNULL(a.strReceivedUOM,''),a.strRecipeUOM),ifnull(b.strSuppCode,''),ifnull(c.strPName,''),a.dblRecipeConversion,a.dblReceiveConversion,ifnull(b.strLeadTime,'0') " 
+		/*String sql = " select ifnull(a.strProdName,''),if(IFNULL(a.strRecipeUOM,'')='',IFNULL(a.strReceivedUOM,''),a.strRecipeUOM),ifnull(b.strSuppCode,''),ifnull(c.strPName,''),a.dblRecipeConversion,a.dblReceiveConversion,ifnull(b.strLeadTime,'0') " 
+			+ " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strDefault='Y' "
+			+ " left outer join tblpartymaster c on b.strSuppCode=c.strPCode "
+			+ " where  a.strProdCode='" + prodCode + "'  ";*/
+		
+		String sql = " select ifnull(a.strProdName,''),a.strReceivedUOM,ifnull(b.strSuppCode,''),ifnull(c.strPName,''),a.dblRecipeConversion,a.dblReceiveConversion,ifnull(b.strLeadTime,'0') " 
 			+ " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strDefault='Y' "
 			+ " left outer join tblpartymaster c on b.strSuppCode=c.strPCode "
 			+ " where  a.strProdCode='" + prodCode + "'  ";
@@ -239,7 +244,8 @@ public class clsWhatIfAnalysisController {
 
 	public int funGetBOMNodes(String parentProdCode, double bomQty, double qty, List<String> listChildNodes) {
 			
-		String sql = "select b.strChildCode from  tblbommasterhd a,tblbommasterdtl b " + "where a.strBOMCode=b.strBOMCode and a.strParentCode='" + parentProdCode + "' ";
+		String sql = "select b.strChildCode from  tblbommasterhd a,tblbommasterdtl b " 
+			+ "where a.strBOMCode=b.strBOMCode and a.strParentCode='" + parentProdCode + "' ";
 		List listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
 		if (listTemp.size() > 0) {
 			for (int cnt = 0; cnt < listTemp.size(); cnt++) {
