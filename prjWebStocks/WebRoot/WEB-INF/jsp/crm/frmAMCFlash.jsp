@@ -29,27 +29,28 @@ $(document).ready(function()
 			{
 				$("#wait").css("display","none");
 			});
-			$("#divValueTotal").hide();
+			
 			
 			$("#btnExecute").click(function( event )
 			{
-				funFillAMC();					
+				funLoadAMCList();					
 			});
 		});
 		
-		function funFillAMC()
-		{			
+		
+		function funLoadAMCList()
+		{
 			var fromDate=$("#txtFromDate").val();
 			var toDate=$("#txtToDate").val();
-	    	var searchUrl=getContextPath()+"/loadAMCReport.html?fDate="+fromDate+"&tDate="+toDate;
+			var searchUrl="";
+	    	var searchUrl=getContextPath()+"/loadAMCReport.html?fromDate="+fromDate+"&toDate="+toDate;
 			$.ajax({
 			        type: "GET",
 			        url: searchUrl,
 				    dataType: "json",
 				    success: function(response)
 				    {
-				    	StkFlashData=response[0];
-				    	showTable();		       	
+				    	funFillTable(response);		       	
 
 				    },
 				    error: function(jqXHR, exception) {
@@ -71,6 +72,26 @@ $(document).ready(function()
 			        }
 			      });
 		}
+		
+		function funFillTable(resp)
+		{
+			for(var i=0;i<resp.length;i++)
+			{
+			 	var data=resp[i];
+				var table = document.getElementById("tblTranList");
+			    var rowCount = table.rows.length;
+			    var row = table.insertRow(rowCount);
+			
+			    row.insertCell(0).innerHTML= "<input id=\"cbSel."+(rowCount)+"\" size=\"3%\" type=\"checkbox\"  />";
+			    row.insertCell(1).innerHTML= "<input name=\"StrInvCode["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"13%\" id=\"StrInvCode."+(rowCount)+"\" value='"+data.strCustomerName+"'>";
+			    row.insertCell(2).innerHTML= "<input name=\"DteInvDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\"  style=\"text-align: right;\" size=\"34%\" id=\"DteInvDate."+(rowCount)+"\" value='"+data.dblLicenceAmt+"'>";
+			    row.insertCell(3).innerHTML= "<input name=\"DteInvDate1["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"13%\" id=\"DteInvDate1."+(rowCount)+"\" value='"+data.dteInstallation+"'>";
+			    row.insertCell(4).innerHTML= "<input name=\"DblSubTotalAmt["+(rowCount)+"]\" id=\"DblSubTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"13%\" class=\"Box\" value="+data.dteExpiry+">"; 
+			    row.insertCell(5).innerHTML= "<input name=\"strSerialNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\"  style=\"text-align: right;\" size=\"6%\" id=\"strSerialNo."+(rowCount)+"\" value='"+data.dblAMCAmt+"'>";
+		   }
+		}
+		
+		
 </script>
 <body>
 	<s:form name="AMCFlash" method="GET" action="" >
@@ -89,34 +110,50 @@ $(document).ready(function()
 			        </td>
 				</tr>
 				<tr>
-					<td colspan="4"><input id="btnExecute" type="button" class="form_button1" value="EXECUTE"/></td>
+					<td colspan="4"><input id="btnExecute" type="button" class="form_button1"   value="EXECUTE"/></td>
 				</tr>
 			</table>
 			
-			<dl id="Searchresult" style="width: 95%; margin-left: 26px; overflow:auto;"></dl>
-		<div id="Pagination" class="pagination" style="width: 80%;margin-left: 26px;">
-		
-		</div>
-		
-		<br>
-		<br>
-		
-		
-		<div id="divValueTotal"
-			style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 40px; margin: auto; overflow-x: hidden; overflow-y: hidden; width: 95%;">
-			<table id="tblTotalFlash" class="transTablex"
-				style="width: 100%; font-size: 11px; font-weight: bold;">
-				
-				<tr style="margin-left: 28px">
-				
-					<td id="labld26" style="width:20%; text-align:right">Total</td>
-					
-					<td id="tdTotValue" style="width:10%; align:right">
-						<input id="txtTotValue" style="width: 100%; text-align: right;" class="Box"></input>
-					</td>
-
+		<div id="divDocList" class="dynamicTableContainer"
+			style="height: 400px;">
+			<table style="width: 100%; border: #0F0;   overflow-x: scroll; overflow-y: scroll;"
+				class="transTablex col15-center">
+				<tr bgcolor="#72BEFC">
+					<td width="3%">Select<input type="checkbox" id="chkALL" onclick="funCheckUncheck()" /></td>
+					<td width="8%">Customer Name</td>
+					<td width="9%"> Licence Amount</td>
+					<td width="9%">Insatlation Date</td>
+					<td width="8%">Expiry Date</td>
+					<td width="6%">AMC Amount</td>
 				</tr>
 			</table>
+			<div
+				style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 330px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
+					<table id="tblTranList"
+					style="width: 100%; border: #0F0;  overflow-x: scroll; overflow-y: scroll;"
+					class="transTablex col15-center">
+					<tbody>
+					<col style="width: 3%">
+					<col style="width: 8%">
+					<!--  COl1   -->
+					<col style="width: 9%">
+					<!--  COl2   -->
+					<col style="width: 9%">
+					<!--  COl3   -->
+					<col style="width: 8%">
+					<!--  COl4   -->
+					<col style="width: 6%">
+				
+										
+					</tbody>
+
+				</table>
+			</div>
+
+		</div>
+		
+		<div id="wait" style="display:none;width:60px;height:60px;border:0px solid black;position:absolute;top:60%;left:55%;padding:2px;">
+				<img src="../${pageContext.request.contextPath}/resources/images/ajax-loader-light.gif" width="60px" height="60px" />
 			</div>
 	</s:form>
 </body>

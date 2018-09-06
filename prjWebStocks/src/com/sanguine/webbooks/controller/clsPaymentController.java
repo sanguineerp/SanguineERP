@@ -30,6 +30,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -812,7 +813,7 @@ public class clsPaymentController {
 	//Open Payment form  via Creditor Ledger
 	
 	@RequestMapping(value = "/frmPaymentCreditorLedger", method = RequestMethod.GET)
-	public ModelAndView funOpenFormViaCreditorLedger(Map<String, Object> model,@RequestParam("glCode") String glCode,@RequestParam("creditorCode") String creditorCode,@RequestParam("closingAmt") String closingAmt, HttpServletRequest request) {
+	public ModelAndView funOpenFormViaCreditorLedger( Model model1,Map<String, Object> model,@RequestParam("glCode") String glCode,@RequestParam("creditorCode") String creditorCode,@RequestParam("closingAmt") String closingAmt,@RequestParam("currCode") String currCode, HttpServletRequest request) {
 		
 		String urlHits = "1";
 		try {
@@ -826,6 +827,13 @@ public class clsPaymentController {
 		objModel.setAccountCode(glCode);
 		objModel.setClosingAmt(Double.parseDouble(closingAmt));
 		
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		Map<String, String> hmCurrency = objCurrencyMasterService.funCurrencyListToDisplay(clientCode);
+		if (hmCurrency.isEmpty()) {
+			hmCurrency.put("", "");
+		}
+		model.put("currencyList", hmCurrency);
+		model.put("currencyCodeViaCreditor", currCode);
 		model.put("urlHits", urlHits);
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmPayment_1", "command", objModel);

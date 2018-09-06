@@ -482,11 +482,11 @@
 		    row.insertCell(0).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";		    
 		    row.insertCell(1).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\" value='"+itemName+"'/>";
 		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"9%\" class=\"decimal-places-amt\" value="+amount+">";
-		    row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"  style=\"text-align: right;\" name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+amcAmount+"' />";
-			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"9%\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+installationDate+"' />";
+		    row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"8%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"  style=\"text-align: right;\" name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+amcAmount+"' />";
+			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"10%\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+installationDate+"' />";
 			row.insertCell(5).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].intWarrantyDays\" id=\"intWarrantyDays."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+warrInDays+"' />";
-		    row.insertCell(6).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+standingOrder+">";
-		    row.insertCell(7).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+margin+">";
+		    row.insertCell(6).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt\" value="+standingOrder+">";
+		    row.insertCell(7).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt\" value="+margin+">";
 		    row.insertCell(8).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
 		   
 		    
@@ -677,9 +677,9 @@
 	{
 		var table = document.getElementById("tblProdDet");
 		var rowCount = table.rows.length;
-		while(rowCount>1)
+		while(rowCount>0)
 		{
-			table.deleteRow(rowCount);
+			table.deleteRow(0);
 			rowCount--;
 		}
 	}
@@ -690,18 +690,17 @@
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
 		    
-		    
+		   
 		    row.insertCell(0).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";		    
 		    row.insertCell(1).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\" value='"+itemName+"'/>";
 		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"9%\" class=\"decimal-places-amt\" value="+amount+">";
-		    row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"  style=\"text-align: right;\" name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+amcAmount+"' />";
-			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"9%\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+installationDate+"' />";
+		    row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"8%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"  style=\"text-align: right;\" name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+amcAmount+"' />";
+			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"10%\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+installationDate+"' />";
 			row.insertCell(5).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].intWarrantyDays\" id=\"intWarrantyDays."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+warrInDays+"' />";
-		    row.insertCell(6).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+standingOrder+">";
-		    row.insertCell(7).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"10%\" class=\"decimal-places-amt\" value="+margin+">";
+		    row.insertCell(6).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt\" value="+standingOrder+">";
+		    row.insertCell(7).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt\" value="+margin+">";
 		    row.insertCell(8).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
 		   
-		    
 		    funApplyNumberValidation();
 		    return false;
 		}
@@ -725,7 +724,7 @@
 				    	$.each(response, function(i,item)
 						    	{
 				    				count=i;
-				    				funloadAllProductinGrid(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder,item.dblAMCAmt,item.dblAMCAmt,item.dteInstallation,item.intWarrantyDays);
+				    				funloadAllProductinGrid(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder,item.dblAMCAmt,item.dteInstallation,item.intWarrantyDays);
 						    	});
 				    	listRow=count+1;
 	
@@ -1316,7 +1315,7 @@
 								
 								
 		<div class="dynamicTableContainer" style="height: 450px;">
-			<table style="height: 10px; border: #0F0;width: 100%;font-size:11px;
+			<table style="height: 30px; border: #0F0;width: 100%;font-size:11px;
 			font-weight: bold;">
 				<tr bgcolor="#72BEFC">
 									<td style="width:10%"><label>Product Code</label></td>
@@ -1336,15 +1335,15 @@
 					style="width: 100%; height: 24px; border: #0F0; table-layout: fixed; overflow: scroll"
 					class="transTablex col11-center">
 					<tbody>
-					<col style="width:10%">					
-					<col style="width:25%">
+					<col style="width:11%">					
+					<col style="width:28%">
+					<col style="width:11%">
+					<col style="width:11%">
+					<col style="width:11%">
+					<col style="width:11%">
+					<col style="width:12%">
 					<col style="width:10%">
-					<col style="width:10%">
-					<col style="width:10%">
-					<col style="width:10%">
-					<col style="width:10%">
-					<col style="width:10%">
-					<col style="width:10%">
+					<col style="width:3%">
 					
 					</tbody>
 				</table>

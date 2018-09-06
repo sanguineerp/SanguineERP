@@ -55,6 +55,7 @@
 				funSetCreditoMasterData(code);
 			}
 		});
+		
 					
 	});
 	
@@ -660,6 +661,7 @@
 		
 		var glCode=$("#txtGLCode").val();	
 		var creditorCode=$("#txtFromDebtorCode").val();	
+		var currCode=$("#cmbCurrency").val();	
 		
 		if(glCode=="")
 		{
@@ -671,7 +673,7 @@
 			alert("Please select Creditor  Code");
 			
 		}else{
-	    response=window.open("frmPaymentCreditorLedger.html?formname="+transactionformName+"&glCode="+glCode+"&creditorCode="+creditorCode+"&closingAmt="+closingAmt,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+	    response=window.open("frmPaymentCreditorLedger.html?formname="+transactionformName+"&glCode="+glCode+"&creditorCode="+creditorCode+"&closingAmt="+closingAmt+"&currCode="+currCode,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
        
 		var timer = setInterval(function ()
 			    {

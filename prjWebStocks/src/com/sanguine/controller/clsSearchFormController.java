@@ -717,7 +717,7 @@ public class clsSearchFormController {
 					tableName = tableName + " where  ";
 				}
 
-				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
+				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strNotInUse='N' " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
 				listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Product Type,Specification,Cal Amt On" + ",Class,Non Stockable,PartNo";
 				idColumnName = "a.strProdCode";
 				searchFormTitle = "Product Master";
@@ -1930,7 +1930,7 @@ public class clsSearchFormController {
 					tableName = tableName + " where  ";
 				}
 
-				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
+				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode   " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
 				listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Product Type,Specification,Cal Amt On" + ",Class,Non Stockable,PartNo";
 				idColumnName = "a.strProdCode";
 				searchFormTitle = "Product Master";
@@ -3820,7 +3820,7 @@ public class clsSearchFormController {
 				tableName = tableName + " where  ";
 			}
 
-			tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
+			tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strNotInUse='N' " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
 			listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Product Type,Code,Specification,Cal Amt On" + ",Class,Non Stockable,PartNo";
 			idColumnName = "a.strProdCode";
 			searchFormTitle = "Product Master";

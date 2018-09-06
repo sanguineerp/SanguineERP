@@ -31,16 +31,16 @@
 			funSetGLCode(glCode);
 		}
 		
-		$("#txtGLCode").blur(function() 
-				{
-					var code=$('#txtGLCode').val();
-					if(code.trim().length > 0 && code !="?" && code !="/")
-					{
-						funSetGLCode(glCode);
-					}
-				});
+// 		$("#txtGLCode").blur(function() 
+// 				{
+// 					var code=$('#txtGLCode').val();
+// 					if(code.trim().length > 0 && code !="?" && code !="/")
+// 					{
+// 						funSetGLCode(glCode);
+// 					}
+// 				});
 
-	});
+ 	});
 	
 	function funHelp(transactionName)
 	{

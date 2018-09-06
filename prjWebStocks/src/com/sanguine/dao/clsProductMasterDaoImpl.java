@@ -360,14 +360,14 @@ public class clsProductMasterDaoImpl implements clsProductMasterDao {
 
 	@Override
 	public List funGetProdSuppWaiseProdList(String suppCode, String clientCode) {
-		String sql = "select a.strProdCode,a.dblLastCost,a.dblMargin,a.dblStandingOrder from tblprodsuppmaster a,tblproductmaster b " + "where a.strSuppCode='" + suppCode + "' and a.strClientCode= '" + clientCode + "' and a.strProdCode=b.strProdCode order by b.strProdName ";
+		String sql = "select a.strProdCode,a.dblLastCost,a.dblMargin,a.dblStandingOrder,a.dblAMCAmt,a.dteInstallation,a.intWarrantyDays from tblprodsuppmaster a,tblproductmaster b " + "where a.strSuppCode='" + suppCode + "' and a.strClientCode= '" + clientCode + "' and a.strProdCode=b.strProdCode order by b.strProdName ";
 		List list = sessionFactory.getCurrentSession().createSQLQuery(sql).list();
 
 		return list;
 	}
 
 	public List funGetProdSuppDtl(String prodCode, String strCustCode, String clientCode) {
-		String sql = "select a.strProdCode,a.dblLastCost,a.dblMargin from tblprodsuppmaster a " + "where a.strSuppCode='" + strCustCode + "' and a.strProdCode='" + prodCode + "'and a.strClientCode= '" + clientCode + "' ";
+		String sql = "select a.strProdCode,a.dblLastCost,a.dblMargin,a.dblAMCAmt,a.dteInstallation,a.intWarrantyDays from tblprodsuppmaster a " + "where a.strSuppCode='" + strCustCode + "' and a.strProdCode='" + prodCode + "'and a.strClientCode= '" + clientCode + "' ";
 		List list = sessionFactory.getCurrentSession().createSQLQuery(sql).list();
 
 		return list;

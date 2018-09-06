@@ -851,6 +851,7 @@ public class clsInvoiceController
 			{
 				if(objInvDtl.getStrProdCode()!=null)      //Change due to void invoice
 				{
+			
 					clsProdSuppMasterModel objProdCustModel = new clsProdSuppMasterModel();
 					objProdCustModel.setStrSuppCode(objHDModel.getStrCustCode());
 					objProdCustModel.setStrSuppName(objCust.getStrPName());
@@ -866,7 +867,25 @@ public class clsInvoiceController
 					objProdCustModel.setDblMargin(0);
 					objProdCustModel.setDblMaxQty(0);
 					objProdCustModel.setDblStandingOrder(0);
+					
 					objProdCustModel.setDtLastDate(objBean.getDteInvDate());
+					
+		
+					
+					List listProdsupp = objProductMasterService.funGetProdSuppDtl( objInvDtl.getStrProdCode(),objHDModel.getStrCustCode(), clientCode);
+					if(listProdsupp.size()>0)
+					{
+						Object[] arrObj = (Object[]) listProdsupp.get(0);	
+						objProdCustModel.setDblAMCAmt(Double.parseDouble(arrObj[3].toString()));
+						objProdCustModel.setDteInstallation(arrObj[4].toString());
+						objProdCustModel.setIntWarrantyDays(Integer.parseInt(arrObj[5].toString()));
+					}else{
+						objProdCustModel.setDblAMCAmt(0.0);
+						objProdCustModel.setDteInstallation("1900-01-01 00:00:00");
+						objProdCustModel.setIntWarrantyDays(0);
+						
+					}
+					
 					objProductMasterService.funAddUpdateProdSupplier(objProdCustModel);
 					funUpdatePurchagesPricePropertywise(objInvDtl.getStrProdCode(), objCust.getStrLocCode(), clientCode, objInvDtl.getDblUnitPrice() * dblCurrencyConv);
 				}

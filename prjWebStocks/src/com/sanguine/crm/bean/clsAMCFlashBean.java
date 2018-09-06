@@ -15,6 +15,8 @@ public class clsAMCFlashBean {
 	
 	private double dblAMCAmt;
 	
+	private double dblLicenceAmt;
+	
 
 	public String getDteFromDate() {
 		return dteFromDate;
@@ -62,6 +64,14 @@ public class clsAMCFlashBean {
 
 	public void setDblAMCAmt(double dblAMCAmt) {
 		this.dblAMCAmt = dblAMCAmt;
+	}
+
+	public double getDblLicenceAmt() {
+		return dblLicenceAmt;
+	}
+
+	public void setDblLicenceAmt(double dblLicenceAmt) {
+		this.dblLicenceAmt = dblLicenceAmt;
 	}
 
 

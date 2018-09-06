@@ -77,13 +77,13 @@ public class clsProdSuppMasterModel {
 		this.dtLastDate = dtLastDate;
 	}
 
-	@Column(name = "strLeadTime", columnDefinition = "VARCHAR(50) default '0'")
+	@Column(name = "strLeadTime", columnDefinition = "VARCHAR(50) default ''")
 	public String getStrLeadTime() {
 		return strLeadTime;
 	}
 
 	public void setStrLeadTime(String strLeadTime) {
-		this.strLeadTime = strLeadTime;
+		this.strLeadTime =this.strDefault =(String) setDefaultValue(strLeadTime, "");  
 	}
 
 	@Column(name = "strDefault", columnDefinition = "VARCHAR(255) NOT NULL dafault ''")
@@ -92,7 +92,7 @@ public class clsProdSuppMasterModel {
 	}
 
 	public void setStrDefault(String strDefault) {
-		this.strDefault = strDefault;
+		this.strDefault =(String) setDefaultValue(strDefault, ""); 
 	}
 
 	@Column(name = "strSuppPartNo", columnDefinition = "VARCHAR(255) NOT NULL dafault ''")
@@ -137,7 +137,7 @@ public class clsProdSuppMasterModel {
 	}
 
 	public void setDblMaxQty(double dblMaxQty) {
-		this.dblMaxQty = dblMaxQty;
+		this.dblMaxQty =(Double) setDefaultValue(dblMaxQty, "0"); 
 	}
 
 	public String getStrSuppName() {
@@ -154,7 +154,7 @@ public class clsProdSuppMasterModel {
 	}
 
 	public void setDblMargin(double dblMargin) {
-		this.dblMargin = dblMargin;
+		this.dblMargin = (Double)setDefaultValue(dblMargin, "0"); 
 	}
 
 	@Transient
@@ -171,7 +171,7 @@ public class clsProdSuppMasterModel {
 	}
 
 	public void setDblStandingOrder(double dblStandingOrder) {
-		this.dblStandingOrder = dblStandingOrder;
+		this.dblStandingOrder = (Double)setDefaultValue(dblStandingOrder, "0");  ;
 	}
 
 	public double getDblAMCAmt() {
@@ -179,7 +179,7 @@ public class clsProdSuppMasterModel {
 	}
 
 	public void setDblAMCAmt(double dblAMCAmt) {
-		this.dblAMCAmt = dblAMCAmt;
+		this.dblAMCAmt =(Double)setDefaultValue(dblAMCAmt, "0");
 	}
 
 	public String getDteInstallation() {
@@ -196,6 +196,20 @@ public class clsProdSuppMasterModel {
 
 	public void setIntWarrantyDays(int intWarrantyDays) {
 		this.intWarrantyDays = intWarrantyDays;
+	}
+	
+	private Object setDefaultValue(Object value, Object defaultValue) {
+		if (value != null && (value instanceof String && value.toString().length() > 0)) {
+			return value;
+		} else if (value != null && (value instanceof Double && value.toString().length() > 0)) {
+			return value;
+		} else if (value != null && (value instanceof Integer && value.toString().length() > 0)) {
+			return value;
+		} else if (value != null && (value instanceof Long && value.toString().length() > 0)) {
+			return value;
+		} else {
+			return defaultValue;
+		}
 	}
 
 }

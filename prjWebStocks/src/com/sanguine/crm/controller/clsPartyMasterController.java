@@ -385,6 +385,15 @@ public class clsPartyMasterController {
 				String reportDate = df.format(today);
 				String[] dteInstalation=Obj.getDteInstallation().split("-");
 				Obj.setDteInstallation(dteInstalation[2]+"-"+dteInstalation[1]+"-"+dteInstalation[0]+" "+reportDate);
+				Obj.setStrDefault("");
+				Obj.setStrLeadTime("");
+				Obj.setStrSuppPartDesc("");
+				Obj.setStrSuppName("");
+				Obj.setStrSuppPartNo("");
+				Obj.setStrSuppUOM("");
+				Obj.setDblLastCost(0);
+				Obj.setDblMaxQty(0);
+				
 //				if (Obj.getDblStandingOrder() != 0) {
 					
 					System.out.println(i + "    " + Obj.getStrProdCode() + "===");
@@ -428,7 +437,9 @@ public class clsPartyMasterController {
 					obj.setStrProdName(objModel.getStrProdName());
 					obj.setDblLastCost(Double.parseDouble(arrObj[1].toString()));
 					obj.setDblMargin(Double.parseDouble(arrObj[2].toString()));
-					obj.setDblStandingOrder(Double.parseDouble(arrObj[3].toString()));
+					obj.setDblAMCAmt(Double.parseDouble(arrObj[4].toString()));
+					obj.setDteInstallation(objGlobalFunctions.funGetDate("dd-MM-yyyy", arrObj[5].toString()));
+					obj.setIntWarrantyDays(Integer.parseInt(arrObj[6].toString()));
 					obj.setStrClientCode(clientCode);
 					listGenProdsupp.add(obj);
 				}

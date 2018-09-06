@@ -112,6 +112,13 @@
 			}
 		});
 		
+		var curr="${currencyCodeViaCreditor}";
+		
+		if(curr.trim().length>0)
+		{
+			 $('#cmbCurrency').val(curr);
+		}
+		
 		$('#txtDebtorCode').blur(function() {
 			var code = $('#txtDebtorCode').val();
 			if(code.trim().length > 0 && code !="?" && code !="/")
@@ -431,7 +438,7 @@
 
 function funSetcreditorMasterData(creditorCode)
 	{
-	   
+	  
 		var searchurl=getContextPath()+"/loadSundryCreditorMasterData.html?creditorCode="+creditorCode;
 		 $.ajax({
 			        type: "GET",

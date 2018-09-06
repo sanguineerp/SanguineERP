@@ -1422,9 +1422,13 @@
 				
 				$('#txtCustCode').blur(function () {
 					var code=$('#txtCustCode').val();
+					var cstName=$('#lblCustomerName').text();
 					if (code.trim().length > 0 && code !="?" && code !="/"){								  
+					if(cstName.trim().length<0)
+					 {
 						funSetCuster(code,"Y");
-					   }
+				     }
+					}
 					});
 				
 				$('#txtLocCode').blur(function () {
