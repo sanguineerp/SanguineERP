@@ -664,7 +664,13 @@
 	    
 	    row.insertCell(7).innerHTML= "<input name=\"listSODtl["+(rowCount)+"].dblWeight\" type=\"text\"  size=\"5%\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto  txtWeight\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
 	    row.insertCell(8).innerHTML= "<input name=\"listSODtl["+(rowCount)+"].dblTotalWeight\" readonly=\"readonly\" class=\"Box txtTotalWeight\" style=\"text-align: right;\" \size=\"5%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
-	    row.insertCell(9).innerHTML= "<input name=\"listSODtl["+(rowCount)+"].dblUnitPrice\" type=\"text\" class=\"Box \" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt inputText-Auto txtPrice \" id=\"txtPrice."+(rowCount)+"\" value="+dblPrice+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+		if($("#hidstrSOEditableYN").val()=="Yes")
+		{
+			 row.insertCell(9).innerHTML= "<input name=\"listSODtl["+(rowCount)+"].dblUnitPrice\"  type=\"text\" class=\"Box \" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt inputText-Auto txtPrice \" id=\"txtPrice."+(rowCount)+"\" value="+dblPrice+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+		}else{
+			 row.insertCell(9).innerHTML= "<input name=\"listSODtl["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\"  type=\"text\" class=\"Box \" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt inputText-Auto txtPrice \" id=\"txtPrice."+(rowCount)+"\" value="+dblPrice+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+		}
+	   
 	    row.insertCell(10).innerHTML= "<input name=\"listSODtl["+(rowCount)+"].dblDiscount\" type=\"text\" class=\"Box \" required = \"required\"  style=\"text-align: right;\" size=\"3%\" class=\"decimal-places-amt inputText-Auto txtDiscount \" id=\"txtDiscount."+(rowCount)+"\" value="+dblDiscount+" onblur=\"Javacsript:funUpdatePrice(this)\" >";	    
 	    row.insertCell(11).innerHTML= "<input name=\"listSODtl["+(rowCount)+"].dblAmount\" readonly=\"readonly\" class=\"Box txtAmount \" style=\"text-align: right;\" size=\"9%\" id=\"txtAmount."+(rowCount)+"\" value="+amount+" >";
 	    row.insertCell(12).innerHTML= "<input name=\"listSODtl["+(rowCount)+"].strRemarks\" size=\"14%\" id=\"txtRemarks."+(rowCount)+"\" value='"+strRemarks+"'/>";
