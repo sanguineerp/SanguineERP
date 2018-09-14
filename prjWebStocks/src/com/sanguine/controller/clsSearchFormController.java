@@ -931,6 +931,32 @@ public class clsSearchFormController {
 				
 			
 			}
+			
+			case "likeRatecontno": {
+				columnNames = " a.strRateContNo , DATE_FORMAT(Date(a.dtRateContDate),'%d-%m-%Y') ,b.strPName , c.strPropertyName ,DATE_FORMAT(Date(a.dtFromDate),'%d-%m-%Y')  ,DATE_FORMAT(Date(a.dtToDate),'%d-%m-%Y')  ,a.strUserCreated";
+				tableName = " select a.strRateContNo , DATE_FORMAT(Date(a.dtRateContDate),'%d-%m-%Y') ,b.strPName , c.strPropertyName ,DATE_FORMAT(Date(a.dtFromDate),'%d-%m-%Y')  ,DATE_FORMAT(Date(a.dtToDate),'%d-%m-%Y') ,a.strUserCreated FROM tblrateconthd a "
+						+" left outer join tblpartymaster b on a.strSuppCode=b.strPCode "
+						+" left outer join tblpropertymaster c on a.strPropertyCode=c.strPropertyCode where a.strClientCode='" + clientCode + "'"; 
+				boolean flgAuth = false;
+				if (null != req.getSession().getAttribute("hmAuthorization")) {
+					HashMap<String, Boolean> hmAuthorization = (HashMap) req.getSession().getAttribute("hmAuthorization");
+					if (hmAuthorization.get("Rate Contract")) {
+						flgAuth = true;
+					}
+				}
+				if (flgAuth) {
+					tableName += " and a.strAuthorise='No'";
+				}
+				tableName = tableName + " order by a.strRateContNo " + ShowTransAsc_Desc + " ";
+				listColumnNames = "Rate Contract No,Rate Contract Date,Supplier Name,Property Name, From Date , To Date, User Created";
+				idColumnName = "a.strRateContNo";
+				searchFormTitle = "Rate Contractor";
+				flgQuerySelection = true;
+				break;
+				
+			
+			}
+			
 			case "stkpostcode": {
 				columnNames = "a.strPSCode,a.dtPSDate,b.strLocName,a.strUserCreated,a.dtCreatedDate";
 				tableName = "clsStkPostingHdModel a,clsLocationMasterModel b " + "where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtPSDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";

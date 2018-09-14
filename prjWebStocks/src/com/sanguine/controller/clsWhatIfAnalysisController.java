@@ -107,12 +107,20 @@ public class clsWhatIfAnalysisController {
 		List<String> listChildNodes = new ArrayList<String>();
 		String param = request.getParameter("prodCode").toString();
 		String rateFrom = request.getParameter("rateFrom").toString();
+		String semiProduct = request.getParameter("semiProduct").toString();
+		
+		
 		param = param.substring(1, param.length());
 		String[] sp = param.split(",");
 		for (int cn = 0; cn < sp.length; cn++) {
 			String sp1[] = sp[cn].split("!");
 			double reqdQty = Double.parseDouble(sp1[1]);
+			if(semiProduct.equals("Yes"))
+			{
+			funGetBOMNodes(sp1[0], 0, reqdQty, listChildNodes,semiProduct);
+			}else{
 			funGetBOMNodes(sp1[0], 0, reqdQty, listChildNodes);
+			}
 		}
 		String proprtyWiseStock="N";
 		for (int cnt = 0; cnt < listChildNodes.size(); cnt++) {
@@ -256,6 +264,23 @@ public class clsWhatIfAnalysisController {
 		} else {
 			listChildNodes.add(parentProdCode + "," + qty);
 		}
+		return 1;
+	}
+	
+	public int funGetBOMNodes(String parentProdCode, double bomQty, double qty, List<String> listChildNodes,String semiProduct) {
+		
+		String sql = "select b.strChildCode from  tblbommasterhd a,tblbommasterdtl b " 
+			+ "where a.strBOMCode=b.strBOMCode and a.strParentCode='" + parentProdCode + "' ";
+		List listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
+	
+			for (int cnt = 0; cnt < listTemp.size(); cnt++) {
+				String childNode = (String) listTemp.get(cnt);
+				bomQty = funGetBOMQty(childNode, parentProdCode);
+				listChildNodes.add(childNode + "," + qty * bomQty);
+			}
+		
+			
+		
 		return 1;
 	}
 

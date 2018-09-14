@@ -1842,8 +1842,8 @@ public class clsReportsController {
 		String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
 		ExpfDate = objGlobal.funGetDate("yyyy-MM-dd", ExpfDate);
 		ExptDate = objGlobal.funGetDate("yyyy-MM-dd", ExptDate);
-		String hql = "select a.strBatchCode,a.strManuBatchCode,a.strProdCode,b.strProdName,a.strTransCode,d.strPName, DATE_FORMAT(c.dtGRNDate,'%d-%m-%Y'),DATE_FORMAT(a.dtExpiryDate,'%d-%m-%Y'),a.dblQty,a.dblPendingQty" + " from clsBatchHdModel a,clsProductMasterModel b,clsGRNHdModel c,clsSupplierMasterModel d " + " where a.strProdCode=b.strProdCode and a.strTransCode=c.strGRNCode"
-				+ " and c.strSuppCode=d.strPCode and a.strTransType='GRN' and a.dblPendingQty > 0 and c.dtGRNDate between '" + fromDate + "' and '" + toDate + "'" + " and  a.dtExpiryDate between '" + ExpfDate + "' and '" + ExptDate + "' and c.strLocCode='" + locCode + "' ";
+		String hql = "select a.strBatchCode,a.strManuBatchCode,a.strProdCode,b.strProdName,a.strTransCode,d.strPName, DATE_FORMAT(c.dtGRNDate,'%d-%m-%Y'),DATE_FORMAT(a.dtExpiryDate,'%d-%m-%Y'),a.dblQty,a.dblPendingQty,a.strManuBatchCode " + " from clsBatchHdModel a,clsProductMasterModel b,clsGRNHdModel c,clsSupplierMasterModel d " + " where a.strProdCode=b.strProdCode and a.strTransCode=c.strGRNCode"
+				+ " and c.strSuppCode=d.strPCode and a.strTransType='GRN' and a.dblPendingQty > 0 and date(c.dtGRNDate) between '" + fromDate + "' and '" + toDate + "'" + " and  date(a.dtExpiryDate) between '" + ExpfDate + "' and '" + ExptDate + "' and c.strLocCode='" + locCode + "' ";
 		if (!prodCode.equalsIgnoreCase("ALL")) {
 			hql = hql + " and a.strProdCode='" + prodCode + "'";
 
@@ -1898,11 +1898,11 @@ public class clsReportsController {
 		ExptDate = objGlobal.funGetDate("yyyy-MM-dd", ExptDate);
 
 		List ExpStock = new ArrayList();
-		String[] ExcelHeader = { "Product Name", "Batch Code", "Supplier Name", "GRN Date", "GRN Code", "GRN Qty", "Balance Qty", "Expiry Date" };
+		String[] ExcelHeader = { "Product Name", "Batch Code", "Supplier Name", "GRN Date", "GRN Code", "GRN Qty", "Balance Qty", "Expiry Date","ManuBatch Code" };
 		ExpStock.add(ExcelHeader);
 
-		String hql = "select a.strBatchCode,a.strManuBatchCode,a.strProdCode,b.strProdName,a.strTransCode,d.strPName, DATE_FORMAT(c.dtGRNDate,'%d-%m-%Y'),DATE_FORMAT(a.dtExpiryDate,'%d-%m-%Y'),a.dblQty,a.dblPendingQty" + " from clsBatchHdModel a,clsProductMasterModel b,clsGRNHdModel c,clsSupplierMasterModel d " + " where a.strProdCode=b.strProdCode and a.strTransCode=c.strGRNCode"
-				+ " and c.strSuppCode=d.strPCode and a.strTransType='GRN' and a.dblPendingQty > 0 and c.dtGRNDate between '" + fromDate + "' and '" + toDate + "'" + " and  a.dtExpiryDate between '" + ExpfDate + "' and '" + ExptDate + "' and c.strLocCode='" + locCode + "' and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode
+		String hql = "select a.strBatchCode,a.strManuBatchCode,a.strProdCode,b.strProdName,a.strTransCode,d.strPName, DATE_FORMAT(c.dtGRNDate,'%d-%m-%Y'),DATE_FORMAT(a.dtExpiryDate,'%d-%m-%Y'),a.dblQty,a.dblPendingQty,a.strManuBatchCode" + " from clsBatchHdModel a,clsProductMasterModel b,clsGRNHdModel c,clsSupplierMasterModel d " + " where a.strProdCode=b.strProdCode and a.strTransCode=c.strGRNCode"
+				+ " and c.strSuppCode=d.strPCode and a.strTransType='GRN' and a.dblPendingQty > 0 and date(c.dtGRNDate) between '" + fromDate + "' and '" + toDate + "'" + " and  date(a.dtExpiryDate) between '" + ExpfDate + "' and '" + ExptDate + "' and c.strLocCode='" + locCode + "' and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode
 				+ "' and c.strClientCode='" + clientCode + "'";
 
 		List list = objGlobalFunctionsService.funGetList(hql, "hql");
@@ -1919,6 +1919,7 @@ public class clsReportsController {
 			DataList.add(Double.parseDouble(arrObj[8].toString()));
 			DataList.add(Double.parseDouble(arrObj[9].toString()));
 			DataList.add(arrObj[7].toString());
+			DataList.add(arrObj[10].toString());
 			listExpFlashModel.add(DataList);
 		}
 		ExpStock.add(listExpFlashModel);

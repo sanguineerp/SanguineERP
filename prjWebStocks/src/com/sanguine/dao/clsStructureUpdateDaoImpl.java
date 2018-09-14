@@ -905,6 +905,29 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			e.printStackTrace();
 		}
 		funExecuteQuery(sql);
+		
+		sql="ALTER TABLE `tblpropertysetup` "
+			+" ADD COLUMN `strInvoiceRateEditable` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strGRNRateEditable`, "
+			+" ADD COLUMN `strSORateEditable` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strInvoiceRateEditable`;" ;
+		
+		funExecuteQuery(sql);
+		
+		try{
+			sql="update tblpropertysetup a set a.strInvoiceRateEditable='Yes' where "
+					+" a.strClientCode='"+clientCode+"' and (a.strInvoiceRateEditable='' or a.strInvoiceRateEditable=null)";
+			funExecuteQuery(sql);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		try{
+			sql="update tblpropertysetup a set a.strSORateEditable='Yes' where "
+					+" a.strClientCode='"+clientCode+"' and (a.strSORateEditable='' or a.strSORateEditable=null)";
+			funExecuteQuery(sql);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		sql="ALTER TABLE `tblproductmaster` ADD COLUMN `strHSNCode` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strComesaItem`;";
 		funExecuteQuery(sql);
 		

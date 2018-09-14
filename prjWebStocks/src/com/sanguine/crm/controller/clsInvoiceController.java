@@ -220,6 +220,7 @@ public class clsInvoiceController
 		}
 
 		String urlHits = "1";
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
 		try
 		{
 			urlHits = request.getParameter("saddr").toString();
@@ -263,6 +264,8 @@ public class clsInvoiceController
 			model.put("authorizationInvoiceCode", authorizationInvoiceCode);
 		}
 
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+		model.put("prodPriceEditable",objSetup.getStrInvoiceRateEditable());
 		if ("2".equalsIgnoreCase(urlHits))
 		{
 			return new ModelAndView("frmInovice_1", "command", new clsInvoiceBean());

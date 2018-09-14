@@ -33,7 +33,7 @@ public class clsSundryDebtorMasterModel implements Serializable {
 		strClientCode = objModelID.getStrClientCode();
 	}
 
-	@CollectionOfElements(fetch = FetchType.LAZY)
+	@CollectionOfElements(fetch = FetchType.EAGER)
 	@JoinTable(name = "tblsundarydebtoropeningbalance", joinColumns = { @JoinColumn(name = "strClientCode"), @JoinColumn(name = "strDebtorCode") })
 	@Id
 	@AttributeOverrides({ @AttributeOverride(name = "strDebtorCode", column = @Column(name = "strDebtorCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })

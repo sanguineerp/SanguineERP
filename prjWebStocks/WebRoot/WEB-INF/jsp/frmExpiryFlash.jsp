@@ -166,7 +166,7 @@ function pageselectCallback(page_index, jq)
     // Get number of elements per pagionation page from form
     var max_elem = Math.min((page_index+1) * items_per_page, ExpiryFlashData.length);
     var newcontent="";
-	   	newcontent = '<table id="tblExpiryFlash" class="transTablex" style="width: 100%;font-size:11px;font-weight: bold;"><tr bgcolor="#75c0ff"><td id="labls1">Product Name</td><td id="labls2">Batch Code</td><td id="labls3">Supplier Name</td><td id="labls4">GRN Date</td><td id="labls5">GRN Code</td><td id="labls6">GRN Qty</td><td id="labls7">Balance Qty</td><td id="labls8">Expiry Date</td></tr>';
+	   	newcontent = '<table id="tblExpiryFlash" class="transTablex" style="width: 100%;font-size:11px;font-weight: bold;"><tr bgcolor="#75c0ff"><td id="labls1">Product Name</td><td id="labls2">Batch Code</td><td id="labls3">Supplier Name</td><td id="labls4">GRN Date</td><td id="labls5">GRN Code</td><td id="labls6">GRN Qty</td><td id="labls7">Balance Qty</td><td id="labls8">Expiry Date</td><td id="labls9">ManuBatch Code</td></tr>';
 			   
 	    // Iterate through a selection of the content and build an HTML string
 	    for(var i=page_index*items_per_page;i<max_elem;i++)
@@ -178,8 +178,10 @@ function pageselectCallback(page_index, jq)
 	        newcontent += '<td style="padding-left: 5px;">'+ExpiryFlashData[i].strTransCode+'</td>';
 	        newcontent += '<td style="padding-right: 5px;text-align:right">'+parseFloat(ExpiryFlashData[i].dblQty).toFixed(maxAmountDecimalPlaceLimit)+'</td>';
 	        newcontent += '<td style="padding-right: 5px;text-align:right">'+parseFloat(ExpiryFlashData[i].dblPendingQty).toFixed(maxAmountDecimalPlaceLimit)+'</td>';
-	        newcontent += '<td style="padding-left: 5px;">'+ExpiryFlashData[i].dtExpiryDate+'</td><tr>';
-	    }
+	        newcontent += '<td style="padding-left: 5px;">'+ExpiryFlashData[i].dtExpiryDate+'</td>';
+	       
+	        newcontent += '<td style="padding-left: 5px;">'+ExpiryFlashData[i].strManuBatchCode+'</td></tr>';
+	         }
     newcontent += '</table>';
     // Replace old content with new content
     $('#Searchresult').html(newcontent);

@@ -295,7 +295,7 @@ public class clsSetupMasterDaoImpl implements clsSetupMasterDao {
 		objSetUpModel.setStrShowAllPartyToAllLoc(objPropSetUp3[43].toString());
 
 
-		String sql4 = "SELECT a.strRateHistoryFormat,a.strPOSlipFormat,a.strSRSlipFormat,a.strWeightedAvgCal,strGRNRateEditable "
+		String sql4 = "SELECT a.strRateHistoryFormat,a.strPOSlipFormat,a.strSRSlipFormat,a.strWeightedAvgCal,a.strGRNRateEditable,a.strInvoiceRateEditable,	a.strSORateEditable "
 				+ " FROM clsPropertySetupModel a where a.strPropertyCode='" + propertyCode + "' and  a.strClientCode ='" + clientCode + "' ";
 
 		Query query4 = sessionFactory.getCurrentSession().createQuery(sql4);
@@ -306,6 +306,8 @@ public class clsSetupMasterDaoImpl implements clsSetupMasterDao {
 		objSetUpModel.setStrSRSlipFormat(objPropSetUp4[2].toString());
 		objSetUpModel.setStrWeightedAvgCal(objPropSetUp4[3].toString());
 		objSetUpModel.setStrGRNRateEditable(objPropSetUp4[4].toString());
+		objSetUpModel.setStrInvoiceRateEditable(objPropSetUp4[5].toString());
+		objSetUpModel.setStrSORateEditable(objPropSetUp4[6].toString());
 	
 		return objSetUpModel;
 

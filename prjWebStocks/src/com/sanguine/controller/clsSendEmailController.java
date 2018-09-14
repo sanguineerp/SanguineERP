@@ -90,7 +90,7 @@ public class clsSendEmailController
 		try
 		{
 			String strPOCode = request.getParameter("strPOCode");
-			String subject = "Purchase Order";
+			String subject ="Purchase Order Generated From "+request.getSession().getAttribute("locationName").toString();
 			String message = "Purchase Order Slip";
 			String strReturnValue = "Email Send SuccessFully";
 
@@ -98,8 +98,7 @@ public class clsSendEmailController
 			String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 			String userCode = request.getSession().getAttribute("usercode").toString();
 			
-
-			
+		
 			String sql="SELECT CONCAT(ifnull(b.strEmail,''),',',ifnull(c.strEmail,''),',',ifnull(d.strEmail,''))EmailIds "
 			+"FROM tblpurchaseorderhd a "
 					+"left outer join tblpartymaster b on a.strSuppCode=b.strPCode "
@@ -118,9 +117,11 @@ public class clsSendEmailController
                 {
                 	if(receipientsArr[i].toString().trim().length()>0)
                 	{
+                	
                 		logger.info("To: " + receipientsArr[i].toString());
         				logger.info("Subject: " + subject);
         				logger.info("Message: " + message);
+        			
         				JasperPrint p = funCallRangePrintReport(strPOCode, request);// Calling
         																			// Attachment
         				ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -340,14 +341,13 @@ public class clsSendEmailController
 		try
 		{
 			String strPICode = request.getParameter("strPICode");
-			String subject = "Purchase Indent";
+			String subject ="Purchase Indent Generated From "+request.getSession().getAttribute("locationName").toString();
 			String message = "Purchase Indent Slip";
 			String strReturnValue = "Email Send SuccessFully";
 
 			String clientCode = request.getSession().getAttribute("clientCode").toString();
 			String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 			String userCode = request.getSession().getAttribute("usercode").toString();
-			
 			// prints debug info
 //			String sql = "select b.strEmail from tblpurchaseorderhd a,tblpartymaster b " + " where a.strSuppCode=b.strPCode and  a.strPOCode='" + strPOCode + "'";
 			String sql = "SELECT CONCAT(c.strEmail,',',d.strEmail) "

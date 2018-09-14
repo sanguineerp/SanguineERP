@@ -266,7 +266,7 @@
 		<groupExpression><![CDATA[$F{strCategory}]]></groupExpression>
 		<groupHeader>
 			<band height="21">
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="5" y="2" width="547" height="18" printWhenGroupChanges="strCategory" forecolor="#106B1F" backcolor="#FCFCFF" uuid="ff312b22-ed3b-429a-94f0-42d4dfcedf15"/>
 					<textElement>
 						<font isBold="true"/>
@@ -278,7 +278,7 @@
 		<groupFooter>
 			<band/>
 			<band height="40">
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="5" y="2" width="278" height="18" printWhenGroupChanges="strCategory" forecolor="#106B1F" backcolor="#FCFCFF" uuid="61016090-e3b0-4204-86ac-24207cdb30df">
 						<printWhenExpression><![CDATA[$F{strCategory}.equals("")]]></printWhenExpression>
 					</reportElement>
@@ -296,7 +296,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$P{totalIncome}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="3" y="24" width="278" height="16" printWhenGroupChanges="strCategory" forecolor="#106B1F" backcolor="#FCFCFF" uuid="cf1db70c-a6a8-4989-9693-b1989ca2264f">
 						<printWhenExpression><![CDATA[!$F{strCategory}.equals("")]]></printWhenExpression>
 					</reportElement>
@@ -321,7 +321,7 @@
 		<groupExpression><![CDATA[$F{strGroupCategory}]]></groupExpression>
 		<groupHeader>
 			<band height="22">
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="20" y="2" width="178" height="18" printWhenGroupChanges="Group1" forecolor="#323292" uuid="211f1591-7964-45b6-a6b5-211b88281b95"/>
 					<textElement>
 						<font isBold="true"/>
@@ -332,14 +332,14 @@
 		</groupHeader>
 		<groupFooter>
 			<band height="27">
-				<textField>
-					<reportElement x="20" y="2" width="193" height="18" printWhenGroupChanges="Group1" forecolor="#323292" uuid="7ad1182e-6840-485c-aa89-10aabc6f4f46">
+				<textField isBlankWhenNull="true">
+					<reportElement x="20" y="2" width="100" height="18" printWhenGroupChanges="Group1" forecolor="#323292" uuid="7ad1182e-6840-485c-aa89-10aabc6f4f46">
 						<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					</reportElement>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{strGroupName} + "  "+"Total"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{strGroupName}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.###;(#,##0.###)" isBlankWhenNull="true">
 					<reportElement x="280" y="3" width="120" height="20" forecolor="#323292" uuid="8201a2da-2e31-4c51-9877-eece2b57913d"/>
@@ -498,13 +498,6 @@
 					<pen lineStyle="Dotted"/>
 				</graphicElement>
 			</line>
-			<textField>
-				<reportElement x="5" y="2" width="547" height="18" printWhenGroupChanges="strCategory" forecolor="#106B1F" backcolor="#FCFCFF" uuid="6343728a-845d-48f1-9d6e-e6cc3cbb6d81"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{strCategory}]]></textFieldExpression>
-			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -515,11 +508,11 @@
 	</columnHeader>
 	<detail>
 		<band height="25" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="30" y="0" width="240" height="20" uuid="1a366c41-3ee4-4be7-9d5d-66d0d1b867ff"/>
 				<textFieldExpression><![CDATA[$F{strAccountName}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.###;(#,##0.###)">
+			<textField pattern="#,##0.###;(#,##0.###)" isBlankWhenNull="true">
 				<reportElement x="280" y="0" width="119" height="20" uuid="11e26235-aa04-41dc-8a9b-08dc147e149f">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>

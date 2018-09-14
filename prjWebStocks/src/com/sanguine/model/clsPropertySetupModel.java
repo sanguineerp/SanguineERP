@@ -186,6 +186,12 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	@Column(name = "strGRNRateEditable", columnDefinition = "VARCHAR(10) default ''")
 	private String strGRNRateEditable;
 	
+	@Column(name = "strInvoiceRateEditable", columnDefinition = "VARCHAR(10) default ''")
+	private String strInvoiceRateEditable;
+	
+	@Column(name = "strSORateEditable", columnDefinition = "VARCHAR(10) default ''")
+	private String strSORateEditable;
+	
 	
 	// BAnk Dtl Tab
 	private String strBankName;
@@ -1157,6 +1163,22 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 
 	public void setStrGRNRateEditable(String strGRNRateEditable) {
 		this.strGRNRateEditable = strGRNRateEditable;
+	}
+
+	public String getStrInvoiceRateEditable() {
+		return strInvoiceRateEditable;
+	}
+
+	public void setStrInvoiceRateEditable(String strInvoiceRateEditable) {
+		this.strInvoiceRateEditable = strInvoiceRateEditable;
+	}
+
+	public String getStrSORateEditable() {
+		return strSORateEditable;
+	}
+
+	public void setStrSORateEditable(String strSORateEditable) {
+		this.strSORateEditable = strSORateEditable;
 	}
 	
 	

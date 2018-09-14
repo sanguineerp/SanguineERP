@@ -190,7 +190,7 @@ public class clsSalesOrderController
 			clsSubGroupMasterModel sgModel = (clsSubGroupMasterModel) objSG;
 			dataSG.add(sgModel);
 		}
-
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		// String locCode =
@@ -236,7 +236,10 @@ public class clsSalesOrderController
 		uomList = objclsUOMService.funGetUOMList(clientCode);
 		uomList.add("");
 		model.put("uomList", uomList);
-
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+		model.put("prodPriceEditable",objSetup.getStrSORateEditable() );
+		
+		
 		Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
 		model.put("settlementList", settlementList);
 		// if(null==req.getSession().getAttribute("CalStock"))

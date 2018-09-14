@@ -160,6 +160,8 @@
 				}
 				window.open('attachDoc.html?transName=frmInovice.jsp&formName=Invoice&code='+$("#txtDCCode").val(),"mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 			});
+			
+			$("#hidstrInvoiceEditableYN").val("${prodPriceEditable}");
 		});
 		
 		
@@ -477,6 +479,13 @@
 					$("#hidProdType").val(response[0][6]);
 					$("#hidPrevInvCode").val(response[0][8]);
 					$("#hidPreInvPrice").val(response[0][9]);
+					if($("#hidstrInvoiceEditableYN").val()=="Yes")
+					{
+						$("#hidUnitPrice").attr('readonly', false);	
+					}else{
+						$("#hidUnitPrice").attr('readonly',true);
+					}
+					
 					if(parseFloat(response[0][11])==0)
 					{
 						$("#txtPurchasePrice").val(parseFloat((response[0][10])/parseFloat(currValue)).toFixed(maxQuantityDecimalPlaceLimit));
@@ -2971,6 +2980,7 @@ function funChangeCombo() {
 <!-- 			<input type="hidden" id="hidUnitPrice" ><input> -->
 <%-- 			<s:input type="hidden" id="hidSettlementCode" path="strSettlementCode"></s:input> --%>
 	
+	<input id="hidstrInvoiceEditableYN"  value=""  type="hidden"  ><input>
 	</s:form>
 	<script type="text/javascript">
 	funApplyNumberValidation();

@@ -1407,6 +1407,8 @@ public class clsPurchaseOrderController {
 				}
 				else if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 3")){
 					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipForAll.jrxml");
+				}else if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 4")){
+					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipFormat4.jrxml");
 				}
 
 				String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");

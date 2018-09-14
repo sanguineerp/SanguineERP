@@ -1802,6 +1802,25 @@
 				   }
 				});
 			
+			$('#txtProdCode').keydown(function(e){
+				var code=$('#txtProdCode').val();
+				if (e.which == 9){
+				  	if (code.trim().length > 8) {
+				  		funSetProduct(code);
+				  	}
+				  	
+				}
+				if(e.which == 13)
+				{
+					if(code.trim().length > 8 )
+					{
+						 funCallBarCodeProduct(code)
+					}else if (code.trim().length > 0)
+			  		{
+			  			funSetProduct(code);
+			  		}
+				}
+			});
 			$('#txtProdCode').blur(function () {
 				var code=$('#txtProdCode').val();
 				if ($("#cmbAgainst").val() == 'Purchase Indent')

@@ -112,7 +112,9 @@
 		    	prodList+=","+prodCode+"!"+qty;
 		    }
 		    var rateFrom=$("#cmbRatePickUpFrom").val();
-		    	var searchUrl=getContextPath()+"/getChildNodes1.html?prodCode="+prodList+"&rateFrom="+rateFrom;
+		    var semiProduct=$("#cmbSemiProduct").val();
+		    
+		    	var searchUrl=getContextPath()+"/getChildNodes1.html?prodCode="+prodList+"&rateFrom="+rateFrom+"&semiProduct="+semiProduct;
 		    	
 		    	$.ajax({
 			        type: "GET",
@@ -410,6 +412,16 @@
 							<select  id="cmbRatePickUpFrom" class="BoxW48px" style="width:130px" >
 							<option selected="selected" value="Product Master">Product Master</option>
 							<option value="Last Purchase Rate">Last Purchase Rate</option>
+								
+							</select>
+						</td>
+						
+						
+						<td width="10%">Show Semi Product</td>
+						<td>
+							<select  id="cmbSemiProduct" class="BoxW48px" style="width:130px" >
+							<option selected="selected" value="No">No</option>
+							<option value="Yes">Yes</option>
 								
 							</select>
 						</td>

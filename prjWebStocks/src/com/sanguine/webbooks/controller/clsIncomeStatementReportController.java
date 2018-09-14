@@ -111,7 +111,7 @@ public class clsIncomeStatementReportController
 			String companyName = req.getSession().getAttribute("companyName").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
-			String currencyCode = objBean.getStrCurrency();
+			String currencyCode =req.getSession().getAttribute("currencyCode").toString();;
 			double conversionRate = 1;
 			String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
 			StringBuilder sbSql = new StringBuilder();
@@ -768,8 +768,12 @@ public class clsIncomeStatementReportController
 //			Collections.sort(listOfImcomeStatement);
 
 //			hm.put("listOfImcomeStatement", listOfImcomeStatement);
-
-
+			if(listOfIncomeStatement.size()<=0)
+			{
+				clsIncomeStmtReportBean obj=new clsIncomeStmtReportBean();
+				listOfIncomeStatement.add(obj);
+			}
+			
 			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
 
 			JasperDesign jd = JRXmlLoader.load(reportName);

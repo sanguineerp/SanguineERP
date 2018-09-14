@@ -1357,6 +1357,7 @@
 												<s:option value="Format 1">Format 1</s:option>
 												<s:option value="Format 2">Format 2</s:option>
 												<s:option value="Format 3">Format 3 (Global)</s:option>
+												<s:option value="Format 4">Format 4</s:option>
 											</s:select></td>
 									</tr>
 									<tr>
@@ -1381,6 +1382,25 @@
 										<td>GRN Rate Editable</td>
 										<td>
 										<s:select path="strGRNRateEditable" id="strGRNRateEditable"
+												cssClass="BoxW48px" cssStyle="width:50%">
+												<s:option selected="selected" value="Yes">Yes</s:option>
+												<s:option value="No">No</s:option>
+										</s:select>
+										</td>
+			
+										<td>Sales Order Rate Editable</td>
+										<td>
+										<s:select path="strSORateEditable" id="strSORateEditable"
+												cssClass="BoxW48px" cssStyle="width:50%">
+												<s:option selected="selected" value="Yes">Yes</s:option>
+												<s:option value="No">No</s:option>
+										</s:select>
+										</td>
+										</tr>
+										<tr>
+										<td>Invoice Rate Editable</td>
+										<td>
+										<s:select path="strInvoiceRateEditable" id="strInvoiceRateEditable"
 												cssClass="BoxW48px" cssStyle="width:50%">
 												<s:option selected="selected" value="Yes">Yes</s:option>
 												<s:option value="No">No</s:option>

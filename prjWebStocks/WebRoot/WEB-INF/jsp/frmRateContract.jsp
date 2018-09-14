@@ -108,6 +108,10 @@
 			    case 'tcForSetup':
 			    	funSetTCFields(code);
 			        break;
+			        
+			    case 'likeRatecontno':
+			    	funSetLikeRateConData(code);
+			        break;
 			}
 		}
 		
@@ -204,6 +208,58 @@
 				    	else
 				    	{
 					    	$("#txtRateContractNo").val(response.strRateContNo);
+					    	$("#txtSupplierCode").val(response.strSuppCode);
+					    	$("#txtSupplierName").text(response.strSuppName);
+					    	$("#txtRateContDate").val(response.dtRateContDate);
+					    	$("#txtFromDate").val(response.dtFromDate);
+					    	$("#txtToDate").val(response.dtToDate);
+					    	$("#cmbDateChange").val(response.strDateChg);
+					    	$("#cmbCurrency").val(response.strCurrency);
+					    	$("#cmbAllProduct").val(response.strProdFlag);
+					    	funGetProdData1(response.listRateContDtl);
+					    	funGetTC(response.listTCMaster);
+					    	$("#txtProdCode").focus();
+					    	
+				    	}
+				    },
+				    error: function(jqXHR, exception) {
+			            if (jqXHR.status === 0) {
+			                alert('Not connect.n Verify Network.');
+			            } else if (jqXHR.status == 404) {
+			                alert('Requested page not found. [404]');
+			            } else if (jqXHR.status == 500) {
+			                alert('Internal Server Error [500].');
+			            } else if (exception === 'parsererror') {
+			                alert('Requested JSON parse failed.');
+			            } else if (exception === 'timeout') {
+			                alert('Time out error.');
+			            } else if (exception === 'abort') {
+			                alert('Ajax request aborted.');
+			            } else {
+			                alert('Uncaught Error.n' + jqXHR.responseText);
+			            }		            
+			        }
+			      });
+		}
+		
+		function funSetLikeRateConData(code)
+		{
+			var searchUrl="";
+			searchUrl=getContextPath()+"/frmRateContract1.html?rateContNo="+code;
+			$.ajax({
+			        type: "GET",
+			        url: searchUrl,
+				    dataType: "json",
+				    success: function(response)
+				    {
+				    	if('Invalid Code' == response.strRateContNo){
+				    		alert('Invalid Code');	
+					    	$("#txtLikeRateContractNo").val('');					    	
+					    	$("#txtLikeRateContractNo").focus();
+				    	}
+				    	else
+				    	{
+					    	$("#txtLikeRateContractNo").val(response.strRateContNo);
 					    	$("#txtSupplierCode").val(response.strSuppCode);
 					    	$("#txtSupplierName").text(response.strSuppName);
 					    	$("#txtRateContDate").val(response.dtRateContDate);
@@ -637,6 +693,11 @@
 				            <s:input id="txtRateContDate" required="required" path="dtRateContDate" pattern="\d{1,2}-\d{1,2}-\d{4}"  cssClass="calenderTextBox"/>
 				        	<s:errors path="dtRateContDate"></s:errors>
 				        </td>
+				        
+				         <td width="16%"><label id="lblLikeRateContNo" >Like Rate Contract Code</label></td>
+				        <td width="16%"><s:input id="txtLikeRateContractNo" path="" ondblclick="funHelp('likeRatecontno')"  cssClass="searchTextBox"/></td>
+				        
+				        
 				    </tr>
 					    
 				    <tr>

@@ -70,6 +70,10 @@
 				currValue=1.0;
 			}
 			$("#txtDblCurrencyConv").val(currValue);
+		
+			$("#hidstrSOEditableYN").val("${prodPriceEditable}");
+			
+		
 	});
 		
 	$(document).ready(function() {
@@ -536,6 +540,16 @@
 							$("#txtWeight").val(response[0][7]);
 							$("#txtQty").focus();
 							$("#btnAddChar").attr("disabled",false);
+							
+							if($("#hidstrSOEditableYN").val()=="Yes")
+							{
+								$("#txtPrice").attr('readonly', false);	
+							}else{
+								$("#txtPrice").attr('readonly',true);
+							}
+							
+							
+							
 							var custCode = $("#txtCustCode").val();
 							var soDate = $("#txtSODate").val();
 							funGetSalesAvg(custCode,response[0][0],soDate); 
@@ -2420,7 +2434,8 @@ function funGetKeyCode(event,controller) {
 				width="60px" height="60px" />
 							
 		</div>
-
+			<input id="hidstrSOEditableYN"  value=""  type="hidden"  ><input>
+			
 	</s:form>
 	<script type="text/javascript">
 		funApplyNumberValidation();

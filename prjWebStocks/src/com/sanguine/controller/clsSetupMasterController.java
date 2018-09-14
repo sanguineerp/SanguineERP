@@ -552,6 +552,8 @@ public class clsSetupMasterController
 		bean.setStrSRSlipFormat(objSetup.getStrSRSlipFormat());
 		bean.setStrWeightedAvgCal(objSetup.getStrWeightedAvgCal());
 		bean.setStrGRNRateEditable(objSetup.getStrGRNRateEditable());
+		bean.setStrSORateEditable(objSetup.getStrSORateEditable());
+		bean.setStrInvoiceRateEditable(objSetup.getStrInvoiceRateEditable());
 		/*
 		 * Bank Tab
 		 */
@@ -1098,6 +1100,8 @@ public class clsSetupMasterController
 		objPropertySetupModel.setStrInvNote(bean.getStrInvNote());
 		objPropertySetupModel.setStrCurrencyCode(bean.getStrCurrencyCode());
 		objPropertySetupModel.setStrGRNRateEditable(bean.getStrGRNRateEditable());
+		objPropertySetupModel.setStrInvoiceRateEditable(bean.getStrInvoiceRateEditable());
+		objPropertySetupModel.setStrSORateEditable(bean.getStrSORateEditable());
 		
 		/*
 		 * if(bean.isStrShowAllPropCustomer()==true) {

@@ -3,6 +3,7 @@ package com.sanguine.bean;
 import java.util.List;
 import java.util.Map;
 
+
 import com.sanguine.model.clsProcessSetupModel;
 import com.sanguine.model.clsTCMasterModel;
 import com.sanguine.model.clsTransactionTimeModel;
@@ -233,6 +234,12 @@ public class clsSetupMasterBean {
 	private List<clsTransactionTimeModel> listclsTransactionTimeModel;
 	
 	private String strGRNRateEditable;
+	
+	private String strInvoiceRateEditable;
+	
+	private String 	strSORateEditable;
+	
+	
 
 	public List<clsWorkFlowModel> getListclsWorkFlowModel() {
 		return listclsWorkFlowModel;
@@ -1317,6 +1324,22 @@ public class clsSetupMasterBean {
 
 	public void setStrGRNRateEditable(String strGRNRateEditable) {
 		this.strGRNRateEditable = strGRNRateEditable;
+	}
+
+	public String getStrInvoiceRateEditable() {
+		return strInvoiceRateEditable;
+	}
+
+	public void setStrInvoiceRateEditable(String strInvoiceRateEditable) {
+		this.strInvoiceRateEditable = strInvoiceRateEditable;
+	}
+
+	public String getStrSORateEditable() {
+		return strSORateEditable;
+	}
+
+	public void setStrSORateEditable(String strSORateEditable) {
+		this.strSORateEditable = strSORateEditable;
 	}
 
 
