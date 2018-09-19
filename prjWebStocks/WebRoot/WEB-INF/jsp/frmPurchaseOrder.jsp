@@ -57,8 +57,42 @@
 				funSetPurchaseIndent();
 			}
 			funOnChangeCurrency();
+			funLoadTermsConditonFromSetUp();
+
 		});
 		
+	  function funLoadTermsConditonFromSetUp()
+		{
+		gurl=getContextPath()+"/purchaseOrderTC.html";
+		
+	    $.ajax({
+			type: "GET",
+		    url:gurl,
+		    dataType: "json",
+		    success: function(response)
+		    {
+		    	funGetTC(response);
+			},
+			error: function(jqXHR, exception) {
+		    	if (jqXHR.status === 0) {
+		        	alert('Not connect.n Verify Network.');
+		        } else if (jqXHR.status == 404) {
+		            alert('Requested page not found. [404]');
+		        } else if (jqXHR.status == 500) {
+		            alert('Internal Server Error [500].');
+		        } else if (exception === 'parsererror') {
+		            alert('Requested JSON parse failed.');
+		        } else if (exception === 'timeout') {
+		            alert('Time out error.');
+		        } else if (exception === 'abort') {
+		            alert('Ajax request aborted.');
+		        } else {
+		            alert('Uncaught Error.n' + jqXHR.responseText);
+		        }
+		    }
+	    });
+			
+		}
 			
 		/**
 		 * Ready Function for Tax
@@ -2631,6 +2665,7 @@
 				class="form_button" /></a>
 		</p>
 		<br>
+		
 		<div id="wait"
 			style="display: none; width: 60px; height: 60px; border: 0px solid black; position: absolute; top: 60%; left: 55%; padding: 2px;">
 			<img

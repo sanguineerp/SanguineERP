@@ -1,8 +1,12 @@
+
 package com.sanguine.webbooks.controller;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +29,19 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
+
+
+
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 
 import com.mysql.jdbc.Connection;
 import com.sanguine.base.service.intfBaseService;
@@ -40,6 +51,7 @@ import com.sanguine.service.clsCurrencyMasterService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.util.clsReportBean;
+import com.sanguine.webbooks.bean.clsCreditorOutStandingReportBean;
 import com.sanguine.webbooks.bean.clsIncomeStmtReportBean;
 
 @Controller
@@ -324,6 +336,10 @@ public class clsIncomeStatementReportController
 				listOfIncomeStatement.add(entry.getValue());
 			}
 			
+			Collections.sort(listOfIncomeStatement,new clsIncomeStatementCatComparator());
+			Collections.sort(listOfIncomeStatement,new clsIncomeStatementGroupComparator());
+			
+			
 			//double totalAmt=totalSalesAmt-totalOtherExpenses+totalOtherIncome-totalExpenseAmt;
 			
 			BigDecimal value1=totalSalesAmt.subtract(totalOtherExpenses);
@@ -335,6 +351,16 @@ public class clsIncomeStatementReportController
 			hm.put("dblProfitOfTheYear" ,totalAmt);
 			
 			
+//	            	Comparator<clsIncomeStmtReportBean> billWiseComparator = new Comparator<clsIncomeStmtReportBean>()
+//	            	{
+//	                	@Override
+//	                	public int compare(clsIncomeStmtReportBean o1, clsIncomeStmtReportBean o2)
+//	                	{
+//	                    	return o1.getStrGroupCode().compareTo(o2.getStrGroupCode());
+//	                	}
+//	            	};
+//	            	Collections.sort(listOfIncomeStatement,new clsIncomeStatementComparator());
+//	            	
 			/*
 			sbSql.setLength(0);
 			sbSql.append("select a.strType,b.strCategory,b.strGroupName,d.strCrDr,sum(d.dblCrAmt) as Sale,a.strAccountName "
@@ -861,7 +887,8 @@ public class clsIncomeStatementReportController
 				+ "where a.strGroupCode=b.strGroupCode "
 				+ "and b.strCategory='"+catType+"' "
 				+ "and a.strType='GL Code' "
-				+ "group by a.strAccountCode  ");
+				+ "group by a.strAccountCode  "
+				+" order by b.strGroupCode ,a.strAccountCode ");
 		
 		
 		List listJV = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
@@ -1042,4 +1069,25 @@ public class clsIncomeStatementReportController
 
 	}
 
+	
+}
+//
+class clsIncomeStatementGroupComparator implements Comparator<clsIncomeStmtReportBean>
+{
+
+	@Override
+	public int compare(clsIncomeStmtReportBean arg0, clsIncomeStmtReportBean arg1) {
+		// TODO Auto-generated method stub
+		return arg0.getStrGroupName().compareTo(arg1.getStrGroupName());
+	}
+}
+
+ class clsIncomeStatementCatComparator implements Comparator<clsIncomeStmtReportBean>
+{
+
+	@Override
+	public int compare(clsIncomeStmtReportBean arg0, clsIncomeStmtReportBean arg1) {
+		// TODO Auto-generated method stub
+		return arg0.getStrCategory().compareTo(arg1.getStrCategory());
+	}
 }

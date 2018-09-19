@@ -120,19 +120,19 @@ public class clsBalanceSheetController {
 				String userCode = req.getSession().getAttribute("usercode").toString();
 				String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 				String currencyCode = objBean.getStrCurrency();
-				double conversionRate = 1;
+//				double conversionRate = 1;
 				String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
 				StringBuilder sbSql = new StringBuilder();
-				sbSql.append("select dblConvToBaseCurr from " + webStockDB + ".tblcurrencymaster where strCurrencyCode='" + currencyCode + "' and strClientCode='" + clientCode + "' ");
-				try
-				{
-					List list = objBaseService.funGetList(sbSql, "sql");
-					conversionRate = Double.parseDouble(list.get(0).toString());
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
+//				sbSql.append("select dblConvToBaseCurr from " + webStockDB + ".tblcurrencymaster where strCurrencyCode='" + currencyCode + "' and strClientCode='" + clientCode + "' ");
+//				try
+//				{
+//					List list = objBaseService.funGetList(sbSql, "sql");
+//					conversionRate = Double.parseDouble(list.get(0).toString());
+//				}
+//				catch (Exception e)
+//				{
+//					e.printStackTrace();
+//				}
 
 				double currValue = Double.parseDouble(req.getSession().getAttribute("currValue").toString());
 

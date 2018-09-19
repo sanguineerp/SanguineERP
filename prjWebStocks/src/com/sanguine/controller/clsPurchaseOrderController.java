@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,7 +120,7 @@ public class clsPurchaseOrderController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/frmPurchaseOrder", method = RequestMethod.GET)
-	public ModelAndView funOpenPurchaseOrderForm(@ModelAttribute("command") clsPurchaseOrderBean bean, Map<String, Object> model, HttpServletRequest request) {
+	public ModelAndView funOpenPurchaseOrderForm(@ModelAttribute("command") clsPurchaseOrderBean bean, Map<String, Object> model,Model model1, HttpServletRequest request) {
 
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String propCode = request.getSession().getAttribute("propertyCode").toString();
@@ -179,14 +180,14 @@ public class clsPurchaseOrderController {
 		 */
 
 		model.put("urlHits", urlHits);
-		
+		List<clsTCMasterModel> listTCMasterForPO = new ArrayList<clsTCMasterModel>();
 		String sql_Setup = "select a.strTCCode,b.strTCName,a.strTCDesc " + "from clsTCTransModel a,clsTCMasterModel b " + "where a.strTCCode=b.strTCCode and a.strTransCode=:transCode " + "and a.strClientCode=:clientCode and a.strTransType=:transType";
 		List listTC_Setup = objTCTransService.funGetTCTransList(sql_Setup, propCode, clientCode, "Property Setup");
 		if (listTC_Setup.size() == 0) {
 			List<clsTCMasterModel> listTCMaster = objTCMaster.funGetTCMasterList(clientCode);
 			bean.setListTCMaster(listTCMaster);
 		} else {
-			List<clsTCMasterModel> listTCMasterForPO = new ArrayList<clsTCMasterModel>();
+		
 			for (int cnt = 0; cnt < listTC_Setup.size(); cnt++) {
 				clsTCMasterModel objTCMasterModel = new clsTCMasterModel();
 				Object[] arrObject = (Object[]) listTC_Setup.get(cnt);
@@ -198,7 +199,7 @@ public class clsPurchaseOrderController {
 			bean.setListTCMaster(listTCMasterForPO);
 		}
 
-		model.put("TCMasterList", bean);
+		model1.addAttribute("TCMasterList", listTCMasterForPO);
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmPurchaseOrder_1");
@@ -209,6 +210,34 @@ public class clsPurchaseOrderController {
 		}
 	}
 
+	
+	//Fill Terms and Condition 
+	@RequestMapping(value = "/purchaseOrderTC", method = RequestMethod.GET)
+	public @ResponseBody List funFillTermsAndCondition(HttpServletRequest request)
+	{
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
+		List<clsTCMasterModel> listTCMasterForPO = new ArrayList<clsTCMasterModel>();
+		String sql_Setup = "select a.strTCCode,b.strTCName,a.strTCDesc " + "from clsTCTransModel a,clsTCMasterModel b " + "where a.strTCCode=b.strTCCode and a.strTransCode=:transCode " + "and a.strClientCode=:clientCode and a.strTransType=:transType";
+		List listTC_Setup = objTCTransService.funGetTCTransList(sql_Setup, propCode, clientCode, "Property Setup");
+		if (listTC_Setup.size() == 0) {
+			List<clsTCMasterModel> listTCMaster = objTCMaster.funGetTCMasterList(clientCode);
+		} else {
+		
+			for (int cnt = 0; cnt < listTC_Setup.size(); cnt++) {
+				clsTCMasterModel objTCMasterModel = new clsTCMasterModel();
+				Object[] arrObject = (Object[]) listTC_Setup.get(cnt);
+				objTCMasterModel.setStrTCCode(arrObject[0].toString());
+				objTCMasterModel.setStrTCName(arrObject[1].toString());
+				objTCMasterModel.setStrTCDesc(arrObject[2].toString());
+				listTCMasterForPO.add(objTCMasterModel);
+			}
+		
+		}
+		return listTCMasterForPO;
+	}
+	
+	
 	/**
 	 * Fill Against Combo Box
 	 * 

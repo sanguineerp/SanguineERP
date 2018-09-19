@@ -377,6 +377,9 @@ public class clsPartyMasterController {
 			objProductMasterService.funDeleteSuppProds(objBean.getStrPCode(), clientCode);
 			for (int i = 0; i < arrListProdSupp.size(); i++) {
 				clsProdSuppMasterModel Obj = arrListProdSupp.get(i);
+				
+				if(!(Obj.getStrProdCode()==null))
+				{
 				Obj.setStrSuppCode(objModel.getStrPCode());
 				Obj.setStrClientCode(clientCode);
 				Obj.setDtLastDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
@@ -391,13 +394,14 @@ public class clsPartyMasterController {
 				Obj.setStrSuppName("");
 				Obj.setStrSuppPartNo("");
 				Obj.setStrSuppUOM("");
-				Obj.setDblLastCost(0);
+//				Obj.setDblLastCost(0);
 				Obj.setDblMaxQty(0);
 				
 //				if (Obj.getDblStandingOrder() != 0) {
 					
 					System.out.println(i + "    " + Obj.getStrProdCode() + "===");
 					objProductMasterService.funAddUpdateProdSupplier(Obj);
+				}
 //				}
 			}
 		}
@@ -441,6 +445,7 @@ public class clsPartyMasterController {
 					obj.setDteInstallation(objGlobalFunctions.funGetDate("dd-MM-yyyy", arrObj[5].toString()));
 					obj.setIntWarrantyDays(Integer.parseInt(arrObj[6].toString()));
 					obj.setStrClientCode(clientCode);
+					obj.setDblStandingOrder(Double.parseDouble(arrObj[3].toString()));
 					listGenProdsupp.add(obj);
 				}
 			}

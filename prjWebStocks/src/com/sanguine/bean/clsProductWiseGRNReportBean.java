@@ -29,6 +29,16 @@ public class clsProductWiseGRNReportBean {
 	private double dblUnitPrice;
 
 	private String strCatCode;
+	
+	private double dblPOQty;
+	
+	private double dblGRNQty;
+
+	private double dblPORate;
+	
+	private double dblGRNRate;
+	
+	private double dblVarianceInRate;
 
 	public String getStrCatCode() {
 		return strCatCode;
@@ -140,6 +150,46 @@ public class clsProductWiseGRNReportBean {
 
 	public void setDblUnitPrice(double dblUnitPrice) {
 		this.dblUnitPrice = dblUnitPrice;
+	}
+
+	public double getDblPOQty() {
+		return dblPOQty;
+	}
+
+	public void setDblPOQty(double dblPOQty) {
+		this.dblPOQty = dblPOQty;
+	}
+
+	public double getDblGRNQty() {
+		return dblGRNQty;
+	}
+
+	public void setDblGRNQty(double dblGRNQty) {
+		this.dblGRNQty = dblGRNQty;
+	}
+
+	public double getDblPORate() {
+		return dblPORate;
+	}
+
+	public void setDblPORate(double dblPORate) {
+		this.dblPORate = dblPORate;
+	}
+
+	public double getDblGRNRate() {
+		return dblGRNRate;
+	}
+
+	public void setDblGRNRate(double dblGRNRate) {
+		this.dblGRNRate = dblGRNRate;
+	}
+
+	public double getDblVarianceInRate() {
+		return dblVarianceInRate;
+	}
+
+	public void setDblVarianceInRate(double dblVarianceInRate) {
+		this.dblVarianceInRate = dblVarianceInRate;
 	}
 
 }

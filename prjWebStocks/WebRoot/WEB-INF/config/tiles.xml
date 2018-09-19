@@ -1891,13 +1891,22 @@
 	  </definition>
 	  
 	  	  
-	 	<definition name="frmWebStockRepostingJV" extends="base.definition">
+	 <definition name="frmWebStockRepostingJV" extends="base.definition">
 		<put-attribute name="title" value="Reposting JV Webstock"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/jsp/frmWebStockRepostingJV.jsp"></put-attribute>
 	</definition>
 	<definition name="frmWebStockRepostingJV_1" extends="base.definition4">
 		<put-attribute name="title" value="Reposting JV Webstock"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/jsp/frmWebStockRepostingJV.jsp"></put-attribute>
+	</definition> 
+	
+	<definition name="frmSupplierWisePurchaseGRNVarianceReport" extends="base.definition">
+		<put-attribute name="title" value="Purchase GRN Variance Report"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/frmSupplierWisePurchaseGRNVarianceReport.jsp"></put-attribute>
+	</definition>
+	<definition name="frmSupplierWisePurchaseGRNVarianceReport_1" extends="base.definition4">
+		<put-attribute name="title" value="Purchase GRN Variance Report"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/frmSupplierWisePurchaseGRNVarianceReport.jsp"></put-attribute>
 	</definition> 
 
     

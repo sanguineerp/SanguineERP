@@ -1,5 +1,7 @@
 package com.sanguine.webbooks.bean;
 
+import java.math.BigDecimal;
+
 public class clsProfitLossReportBean {
 
 	private String dteFromDate;
@@ -8,13 +10,19 @@ public class clsProfitLossReportBean {
 
 	private String strVouchNo;
 
-	private double dblAmt;
+	private BigDecimal dblAmt;
 
 	private String strNarration;
 
 	private String strAccountName;
 	
 	private String strCurrency;
+	
+	private double dblPurAmt;
+
+	private double dblSaleAmt;
+	
+	
 	
 	
 
@@ -50,13 +58,7 @@ public class clsProfitLossReportBean {
 		this.strVouchNo = strVouchNo;
 	}
 
-	public double getDblAmt() {
-		return dblAmt;
-	}
 
-	public void setDblAmt(double dblAmt) {
-		this.dblAmt = dblAmt;
-	}
 
 	public String getStrNarration() {
 		return strNarration;
@@ -72,6 +74,30 @@ public class clsProfitLossReportBean {
 
 	public void setStrAccountName(String strAccountName) {
 		this.strAccountName = strAccountName;
+	}
+
+	public double getDblPurAmt() {
+		return dblPurAmt;
+	}
+
+	public void setDblPurAmt(double dblPurAmt) {
+		this.dblPurAmt = dblPurAmt;
+	}
+
+	public double getDblSaleAmt() {
+		return dblSaleAmt;
+	}
+
+	public void setDblSaleAmt(double dblSaleAmt) {
+		this.dblSaleAmt = dblSaleAmt;
+	}
+
+	public BigDecimal getDblAmt() {
+		return dblAmt;
+	}
+
+	public void setDblAmt(BigDecimal dblAmt) {
+		this.dblAmt = dblAmt;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.sanguine.webbooks.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +37,9 @@ import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
+import com.sanguine.util.clsReportBean;
 import com.sanguine.webbooks.bean.clsDebtorLedgerBean;
+import com.sanguine.webbooks.bean.clsIncomeStmtReportBean;
 import com.sanguine.webbooks.bean.clsProfitLossReportBean;
 
 @Controller
@@ -177,30 +181,87 @@ public class clsProfitLossReportController {
 			// }
 			// }
 
-			double totalIncome = 0.0;
-			double totalExpense = 0.0;
-			String sqlIncome = "select a.strAccountName,ifnull((b.dblAmt-c.dblAmt)/17.0,0) as dblAmt ,a.strAccountCode ,d.strGroupName,d.strCategory " + " from tblacgroupmaster  d  ,tblacmaster a  " + " left outer join tblreceiptdebtordtl b on a.strAccountCode=b.strAccountCode " + " and b.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   "
-					+ " left outer join tblpaymentdebtordtl c on a.strAccountCode=c.strAccountCode   " + " and c.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   " + " where a.strType='GL Code' and a.strCreditor ='No' and a.strDebtor='No' and a.strGroupCode=d.strGroupCode " + " and d.strCategory='DIRECT INCOME' " + " and a.strClientCode='" + clientCode + "' and a.strPropertyCode='"
-					+ propertyCode + "' "
-					+ " order by b.dteBillDate;";
+			double conversionRate = 1;
+//			String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
+//			StringBuilder sbSql = new StringBuilder();
+//			sbSql.append("select dblConvToBaseCurr from " + webStockDB + ".tblcurrencymaster where strCurrencyCode='" + currencyCode + "' and strClientCode='" + clientCode + "' ");
+//			try
+//			{
+//				List list = objBaseService.funGetList(sbSql, "sql");
+//				conversionRate = Double.parseDouble(list.get(0).toString());
+//			}
+			
+			
+			String prevProdCode="";
+			int cnt=-1;
+			
+			List<clsProfitLossReportBean> listProduct=new ArrayList<clsProfitLossReportBean>(); 
+			String sqlIncome = "SELECT b.strProdCode,c.strProdName,c.dblCostRM,b.dblQty, b.dblUnitPrice, b.dblQty*b.dblUnitPrice,right(b.strProdCode,7) "
+							 + " FROM tblinvoicehd a,tblinvoicedtl b,tblproductmaster c "
+							 + " WHERE DATE(a.dteInvDate) BETWEEN '" + dteFromDate + "' and '" + dteToDate + "' AND a.strInvCode=b.strInvCode "
+							 + " AND b.strProdCode=c.strProdCode AND a.strClientCode='"+clientCode+"' "
+							 + " order by b.strProdCode";
 
-			List listIncome = objGlobalFunctionsService.funGetDataList(sqlIncome, "sql");
-			if (listIncome.size() > 0) {
-				for (int i = 0; i < listIncome.size(); i++) {
-					Object[] obj = (Object[]) listIncome.get(i);
-					clsProfitLossReportBean objProfitLoss = new clsProfitLossReportBean();
-					objProfitLoss.setStrVouchNo(obj[0].toString());
-					objProfitLoss.setDblAmt(Double.parseDouble(obj[1].toString()));
-					objProfitLoss.setStrNarration(obj[2].toString());
-					dataListRecipt.add(objProfitLoss);
+			List listIncome = objGlobalFunctionsService.funGetList(sqlIncome, "sql");
+			
+			
+			for(int i=0;i<listIncome.size();i++)
+			{
+				Object[] objArr = (Object[]) listIncome.get(i);
+				String prodCode = objArr[0].toString();
+				double qty = Double.parseDouble(objArr[3].toString());
+				double purchaseAmt = (Double.parseDouble(objArr[2].toString())*qty)/conversionRate;
+				double saleAmt = (Double.parseDouble(objArr[5].toString()))/conversionRate;
+				clsProfitLossReportBean objProfitLoss = new clsProfitLossReportBean();			
 
-					totalIncome = totalIncome + Double.parseDouble(obj[1].toString());
+
+				if(prevProdCode.equals(objArr[0].toString()) )
+				{
+					objProfitLoss=listProduct.get(cnt);
+				
+					objProfitLoss.setDblPurAmt(objProfitLoss.getDblPurAmt()+purchaseAmt);
+					objProfitLoss.setDblSaleAmt(objProfitLoss.getDblSaleAmt()+saleAmt);
+					System.out.println(prodCode+"      "+qty+"      "+purchaseAmt+"      "+saleAmt);
 				}
+				else
+				{
+					
+					objProfitLoss.setDblPurAmt(purchaseAmt);
+					objProfitLoss.setDblSaleAmt(saleAmt);
+					listProduct.add(objProfitLoss);
+					cnt++;
+				}
+				prevProdCode=prodCode;
 			}
-
-			String sqlExtraExpense = "select a.strAccountName,ifnull((b.dblAmt-c.dblAmt)/17.0,0) as dblAmt ,a.strAccountCode ,d.strGroupName,d.strCategory " + " from tblacgroupmaster  d  ,tblacmaster a  " + " left outer join tblreceiptdebtordtl b on a.strAccountCode=b.strAccountCode " + " and b.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   "
-					+ " left outer join tblpaymentdebtordtl c on a.strAccountCode=c.strAccountCode   " + " and c.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   " + " where a.strType='GL Code' and a.strCreditor ='No' and a.strDebtor='No' and a.strGroupCode=d.strGroupCode " + " and d.strCategory='INDIRECT EXPENSE' " + " and a.strClientCode='" + clientCode + "' and a.strPropertyCode='"
-					+ propertyCode + "' order by b.dteBillDate ;";
+			
+			Map<String,clsProfitLossReportBean> hmSalesIncStmt = new HashMap<String,clsProfitLossReportBean>();
+			funCalculateIncomeStmt("Expense", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, clientCode, hmSalesIncStmt,propertyCode);
+			
+		// Sale Receipt
+			funCalculateIncomeStmt("Expense", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, clientCode, hmSalesIncStmt,propertyCode);
+					
+		// Sale Payment
+			funCalculateIncomeStmt("Expense", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, clientCode, hmSalesIncStmt,propertyCode);	
+			BigDecimal totalExpense=new BigDecimal(0);
+			for(Map.Entry<String, clsProfitLossReportBean> entry:hmSalesIncStmt.entrySet())
+			{
+				
+				//listOfIncomeStatement.add(entry.getValue());
+				clsProfitLossReportBean objProfitLoss = new clsProfitLossReportBean();
+				objProfitLoss.setStrAccountName(entry.getValue().getStrAccountName());
+				objProfitLoss.setDblAmt(entry.getValue().getDblAmt());
+				totalExpense=totalExpense.add(entry.getValue().getDblAmt());
+			
+				dataListExtraExpense.add(objProfitLoss);
+				
+			}
+/*			String sqlExtraExpense = "select a.strAccountName,ifnull((b.dblAmt-c.dblAmt)/17.0,0) as dblAmt ,a.strAccountCode ,d.strGroupName,d.strCategory "
+									+ " from tblacgroupmaster  d  ,tblacmaster a  " + " left outer join tblreceiptdebtordtl b on a.strAccountCode=b.strAccountCode " 
+									+ " and b.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   "
+									+ " left outer join tblpaymentdebtordtl c on a.strAccountCode=c.strAccountCode   "
+									+ " and c.dteBillDate  between '" + dteFromDate + "' and '" + dteToDate + "'   " + " where a.strType='GL Code' and a.strCreditor ='No' and a.strDebtor='No' and a.strGroupCode=d.strGroupCode " 
+									+ " and d.strCategory like'%EXPENSE' " + " and a.strClientCode='" + clientCode + "' and a.strPropertyCode='"
+									+ propertyCode + "' order by b.dteBillDate ;";
 
 			List listExpenses = objGlobalFunctionsService.funGetDataList(sqlExtraExpense, "sql");
 			if (listExpenses.size() > 0) {
@@ -214,6 +275,28 @@ public class clsProfitLossReportController {
 						dataListExtraExpense.add(objProfitLoss);
 					}
 				}
+			}*/
+			BigDecimal purAmt=new BigDecimal(0);
+			BigDecimal dblRevenue = new BigDecimal(0);
+			for(clsProfitLossReportBean obj:listProduct)
+			{
+				 purAmt=purAmt.add(BigDecimal.valueOf(obj.getDblPurAmt()));
+				 dblRevenue=dblRevenue.add(BigDecimal.valueOf(obj.getDblSaleAmt()));
+			}
+			BigDecimal grossProfit=dblRevenue.subtract(purAmt);			
+			
+			///Percentage Calculation
+			
+			BigDecimal perCostOfGoodSold=purAmt.divide(dblRevenue, 2, RoundingMode.HALF_UP);
+			perCostOfGoodSold=perCostOfGoodSold.multiply(new BigDecimal(100));
+			
+			BigDecimal perTotalExp=totalExpense.divide(dblRevenue, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+			BigDecimal perGrossProfit=grossProfit.divide(dblRevenue, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+			BigDecimal netProfit=grossProfit.subtract(totalExpense);
+			BigDecimal perNetProfit=netProfit.divide(dblRevenue, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+			if (perNetProfit.compareTo(BigDecimal.ZERO) < 0)
+			{
+				perNetProfit=perNetProfit.multiply(new BigDecimal(-1));
 			}
 
 			HashMap hm = new HashMap();
@@ -231,8 +314,19 @@ public class clsProfitLossReportController {
 			hm.put("dataListExtraExpense", dataListExtraExpense);
 			hm.put("dataListRecipt", dataListRecipt);
 			hm.put("totalExpense", totalExpense);
-			hm.put("totalIncome", totalIncome);
-
+			
+			hm.put("dblGrossProfit", grossProfit);
+			hm.put("dblRevenue", dblRevenue);
+			hm.put("dblCostofGood", purAmt);
+			
+			hm.put("perCostOfGoodSold", perCostOfGoodSold);
+			hm.put("perTotalExp", perTotalExp);
+			hm.put("netProfit", netProfit);
+			hm.put("perNetProfit", perNetProfit);
+			hm.put("perGrossProfit", perGrossProfit);
+			
+			
+			
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 
@@ -270,5 +364,65 @@ public class clsProfitLossReportController {
 		}
 
 	}
+	
+	private void funCalculateIncomeStmt(String catType, String hdTableName, String dtlTableName, String fromDate, String toDate
+			,  String clientCode,  Map<String,clsProfitLossReportBean> hmIncomeStatement,String propCode)
+	{
+		StringBuilder sbSql=new StringBuilder();
+		sbSql.setLength(0);
+		StringBuilder sbOp=new StringBuilder(); 		
+		
+		
+//		sbSql.append("select a.strType,b.strCategory,b.strGroupName,d.strCrDr,sum(d."+crdrColumn+"),a.strAccountName,a.strAccountCode "
+//				+ "from tblacmaster a,tblacgroupmaster b,"+hdTableName+" c,"+dtlTableName+" d "
+//				+ "where a.strGroupCode=b.strGroupCode "
+//				+ "and a.strAccountCode=d.strAccountCode "
+//				+ "and c.strVouchNo=d.strVouchNo "
+//				+ "and b.strCategory='"+catType+"' "
+//				+ "and a.strType='GL Code' "
+//				+ "and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' "
+//				+ "group by a.strAccountCode order by b.strCategory; ");
+		
+		
+		
+		
+		sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),if((c.strVouchNo is null),0,ifnull(sum(d.dblDrAmt),0)),a.strAccountName,a.strAccountCode,if((c.strVouchNo is null),0,ifnull(sum(d.dblCrAmt),0)) from  tblacgroupmaster b,tblacmaster a "
+				+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
+				+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' and a.strPropertyCode='"+propCode+"'  "
+				+ "where a.strGroupCode=b.strGroupCode "
+				+ "and b.strCategory like'%EXPENSE' "
+				+ "and a.strType='GL Code' "
+				+ "group by a.strAccountCode  ");
+		
+		
+		List listJV = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
+		if (listJV != null && listJV.size() > 0)
+		{
+			for(int cn=0;cn<listJV.size();cn++)
+			{
+				Object[] objArr = (Object[]) listJV.get(cn);
+
+				BigDecimal totalAmount = BigDecimal.valueOf(Double.parseDouble(objArr[4].toString())).subtract(BigDecimal.valueOf(Double.parseDouble(objArr[7].toString())));
+				
+				String accountCode=objArr[6].toString();
+				clsProfitLossReportBean objBean = new clsProfitLossReportBean();
+				
+				if(hmIncomeStatement.containsKey(accountCode))
+				{
+					objBean=hmIncomeStatement.get(accountCode);
+					objBean.setDblAmt(objBean.getDblAmt().add(totalAmount));
+				}
+				else
+				{
+				
+					objBean.setStrAccountName(objArr[5].toString());
+				    objBean.setDblAmt(totalAmount);
+				}
+			
+				hmIncomeStatement.put(accountCode, objBean);
+			}
+		}
+	}
+	
 
 }
