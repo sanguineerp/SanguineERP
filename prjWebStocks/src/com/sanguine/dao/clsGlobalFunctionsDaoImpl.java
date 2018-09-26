@@ -382,7 +382,7 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 		// +
 		// "or a.strProdCode IN (select distinct(strProdCode) from tblproductiondtl)) ";
 
-		String sql = "insert into tblcurrentstock (strProdCode,strProdName,strLocCode,strClientCode,strUserCode) " + " select a.strProdCode,a.strProdName,'" + locCode + "','" + clientCode + "','" + userCode + "' from tblproductmaster a group by a.strProdCode ";
+		String sql = "insert into tblcurrentstock (strProdCode,strProdName,strLocCode,strClientCode,strUserCode) " + " select a.strProdCode,a.strProdName,'" + locCode + "','" + clientCode + "','" + userCode + "' from tblproductmaster a where a.strClientCode='"+clientCode+"' ";
 
 		if (stockableItem.equals("No")) {
 			sql += " where a.strNonStockableItem='Y' ";
