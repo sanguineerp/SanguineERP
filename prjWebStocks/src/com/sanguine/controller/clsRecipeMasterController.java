@@ -1,5 +1,6 @@
 package com.sanguine.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -22,8 +24,10 @@ import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +63,9 @@ public class clsRecipeMasterController {
 	@Autowired
 	private ServletContext servletContext;
 	private clsGlobalFunctions objGlobal = null;
+	
+	@Autowired 
+	private  clsWhatIfAnalysisController objWhatIfAnalysisController;
 
 	@RequestMapping(value = "/frmBOMMaster", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
@@ -383,30 +390,91 @@ public class clsRecipeMasterController {
 
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptRecipesList.jrxml");
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
-
-			String sqlDtlQuery = "SELECT   h.strBOMCode as strBOMCode,h.strParentCode as strParentCode, " + "h.strprocesscode as strprocesscode,h.dblQty as ParentDdlQty,h.strUOM as ParentstrUOM, " + "p.strProdName as ParentProdName,ifnull(lp.strlocname,'') as parentLocation, d.strChildCode, " + "cp.strProdName as childProductName,cp.strRecipeUOM as childUOM, d.dblQty,cp.dblCostRM as  price, "
-					+ "IFNULL(pr.strprocessname,'') as strprocessname,ifnull(cl.strlocname,'') as childLocation  ," + "date(h.dtCreatedDate) as dtCreatedDate,date(h.dtValidFrom) as dtValidFrom," + "date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty) as value "
-					+ "from tblbommasterhd  h inner join tblbommasterdtl AS d ON h.strBOMCode = d.strBOMCode and d.strClientCode='" + clientCode + "' " + "left outer join tblproductmaster   p ON h.strParentCode = p.strProdCode and p.strClientCode='" + clientCode + "' " + "left outer join tblproductmaster AS cp ON d.strChildCode = cp.strProdCode and cp.strClientCode='" + clientCode + "' "
-					+ "left outer join tbllocationmaster  lp ON lp.strLocCode = p.strLocCode and lp.strClientCode='" + clientCode + "' " + "left outer join tbllocationmaster AS cl ON cl.strLocCode = cp.strLocCode and cl.strClientCode='" + clientCode + "' " + "left outer join tblprocessmaster pr on h.strprocesscode=pr.strprocesscode and pr.strClientCode='" + clientCode + "' "
+			
+			String sqlDtlQuery = "SELECT   h.strBOMCode as strBOMCode,h.strParentCode as strParentCode, " 
+					+ "h.strprocesscode as strprocesscode,h.dblQty as ParentDdlQty,h.strUOM as ParentstrUOM, " 
+					+ "p.strProdName as ParentProdName,ifnull(lp.strlocname,'') as parentLocation, d.strChildCode, "
+					+ "cp.strProdName as childProductName,cp.strRecipeUOM as childUOM, d.dblQty,cp.dblCostRM/cp.dblRecipeConversion as  price, "
+					+ "IFNULL(pr.strprocessname,'') as strprocessname,ifnull(cl.strlocname,'') as childLocation  ,"
+					+ "date(h.dtCreatedDate) as dtCreatedDate,date(h.dtValidFrom) as dtValidFrom," 
+					+ "date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty) as value "
+					+ "from tblbommasterhd  h inner join tblbommasterdtl AS d ON h.strBOMCode = d.strBOMCode and d.strClientCode='" + clientCode + "' " 
+					+ "left outer join tblproductmaster   p ON h.strParentCode = p.strProdCode and p.strClientCode='" + clientCode + "' " + "left outer join tblproductmaster AS cp ON d.strChildCode = cp.strProdCode and cp.strClientCode='" + clientCode + "' "
+					+ "left outer join tbllocationmaster  lp ON lp.strLocCode = p.strLocCode and lp.strClientCode='" + clientCode + "' " + "left outer join tbllocationmaster AS cl ON cl.strLocCode = cp.strLocCode and cl.strClientCode='" + clientCode + "' "
+					+ "left outer join tblprocessmaster pr on h.strprocesscode=pr.strprocesscode and pr.strClientCode='" + clientCode + "' "
 					+ "where  h.strClientCode='" + clientCode + "'";
 			if (!ProdCode.equals("")) {
 				sqlDtlQuery += " and h.strParentCode='" + ProdCode + "'  ";
 			}
-
+			List<String> listChildNodes11 = new ArrayList<String>();
+			List<clsRecipeMasterBean> listDtlBean=new ArrayList<clsRecipeMasterBean>(); 
+			List listChildRate = objGlobalFunctionsService.funGetList(sqlDtlQuery, "sql");
+			if(listChildRate.size()>0)
+			{
+				for(int i=0;i<listChildRate.size();i++)
+				{
+					
+					Object[] obj=(Object[])listChildRate.get(i);
+					double bomrate =Double.parseDouble(obj[11].toString());
+					double bomAmt=Double.parseDouble(obj[18].toString());
+					clsRecipeMasterBean objBean=new clsRecipeMasterBean();
+					objBean.setStrParentCode(obj[1].toString());
+					objBean.setStrParentName(obj[5].toString());
+					objBean.setStrChildCode(obj[7].toString());
+					objBean.setStrChildName(obj[8].toString());
+					objBean.setDblQty(Double.parseDouble(obj[10].toString()));
+					objBean.setStrUOM(obj[9].toString());
+					objBean.setStrLocation(obj[13].toString());
+					
+					funGetBOMNodes(obj[7].toString(), 0,Double.parseDouble(obj[10].toString()), listChildNodes11);
+					if(listChildNodes11.size()>0)
+					{
+						bomrate=0.0;
+						bomAmt=0.0;
+					for(String prodCode11:listChildNodes11)
+					{
+						
+//						String temp11 = (String) listChildNodes11.get(cnt);
+						String prodCode1 = prodCode11.split(",")[0];
+						double reqdQty11 = Double.parseDouble(prodCode11.split(",")[1]);
+//						bomrate=funGetBOMRate(prodCode1, clientCode);	
+					
+						List listBom=funGetBOMRate(prodCode1, clientCode);	
+						double rate=Double.parseDouble(listBom.get(0).toString());
+						double amt=Double.parseDouble(listBom.get(1).toString());
+//						bomAmt+=(amt*reqdQty11);
+						bomrate+=amt;
+						bomAmt=bomAmt+(rate*reqdQty11);
+					}
+					}
+					objBean.setDblAmount(bomAmt);
+					objBean.setDblPrice(bomrate);
+					objBean.setDtValidFrom(obj[15].toString());
+					objBean.setDtValidTo(obj[16].toString());
+					listDtlBean.add(objBean);
+					
+				}
+			}
+			
+		
+			
+			
+			
+			
 			String sqlHDQuery = "";
-			JasperDesign jd = JRXmlLoader.load(reportName);
-			/*
-			 * JRDesignQuery newQuery= new JRDesignQuery();
-			 * newQuery.setText(sqlDtlQuery); jd.setQuery(newQuery);
-			 */
+//			JasperDesign jd = JRXmlLoader.load(reportName);
+//			/*
+//			 * JRDesignQuery newQuery= new JRDesignQuery();
+//			 * newQuery.setText(sqlDtlQuery); jd.setQuery(newQuery);
+//			 */
+//
+//			JRDesignQuery subQuery = new JRDesignQuery();
 
-			JRDesignQuery subQuery = new JRDesignQuery();
-
-			subQuery.setText(sqlDtlQuery);
-			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
-			JRDesignDataset subDataset = (JRDesignDataset) datasetMap.get("dsRecipesDtl");
-			subDataset.setQuery(subQuery);
-			JasperReport jr = JasperCompileManager.compileReport(jd);
+//			subQuery.setText(sqlDtlQuery);
+//			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
+//			JRDesignDataset subDataset = (JRDesignDataset) datasetMap.get("dsRecipesDtl");
+//			subDataset.setQuery(subQuery);
+//			JasperReport jr = JasperCompileManager.compileReport(jd);
 
 			HashMap hm = new HashMap();
 			hm.put("strCompanyName", companyName);
@@ -419,30 +487,126 @@ public class clsRecipeMasterController {
 			hm.put("strState", objSetup.getStrState());
 			hm.put("strCountry", objSetup.getStrCountry());
 			hm.put("strPin", objSetup.getStrPin());
+			hm.put("listDtlBean", listDtlBean);
+			JasperDesign jd = JRXmlLoader.load(reportName);
+			JasperReport jr = JasperCompileManager.compileReport(jd);
 
-			JasperPrint p = JasperFillManager.fillReport(jr, hm, con);
-			if (type.trim().equalsIgnoreCase("pdf")) {
+			JasperPrint jp = JasperFillManager.fillReport(jr, hm, new JREmptyDataSource());
+			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+			jprintlist.add(jp);
+
+			if (jprintlist.size() > 0) {
 				ServletOutputStream servletOutputStream = resp.getOutputStream();
-				byte[] bytes = null;
-				bytes = JasperRunManager.runReportToPdf(jr, hm, con);
-				resp.setContentType("application/pdf");
-				resp.setContentLength(bytes.length);
-				servletOutputStream.write(bytes, 0, bytes.length);
-				servletOutputStream.flush();
-				servletOutputStream.close();
-			} else if (type.trim().equalsIgnoreCase("xls")) {
-				JRExporter exporterXLS = new JRXlsExporter();
-				exporterXLS.setParameter(JRPdfExporterParameter.JASPER_PRINT, p);
-				exporterXLS.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, resp.getOutputStream());
-				resp.setHeader("Content-Disposition", "attachment;filename=" + "rptRecipesList." + type.trim());
-				exporterXLS.exportReport();
-				resp.setContentType("application/xlsx");
+				if (type.trim().equalsIgnoreCase("pdf")) {
+					JRExporter exporter = new JRPdfExporter();
+					resp.setContentType("application/pdf");
+					exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+					exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+					exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+					resp.setHeader("Content-Disposition", "inline;filename=" + "rptRecipeList." + type.trim());
+					exporter.exportReport();
+					servletOutputStream.flush();
+					servletOutputStream.close();
+				} else {
+					JRExporter exporter = new JRXlsExporter();
+					resp.setContentType("application/xlsx");
+					exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
+					exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, servletOutputStream);
+					exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+					resp.setHeader("Content-Disposition", "attachment;filename=" + "rptRecipeList." + type.trim());
+					exporter.exportReport();
+					servletOutputStream.flush();
+					servletOutputStream.close();
+				}
+			} else {
+				resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				try {
+					resp.getWriter().append("No Record Found");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	public List funGetBOMRate(String childCode, String clientCode) {
+		List bomDtl =new ArrayList();
+//		double bomDtl=0.0;
+		try {
+			String sql = "select a.dblCostRM ,a.dblCostRM/a.dblRecipeConversion from tblproductmaster a where a.strProdCode='" + childCode + "' and a.strClientCode='" + clientCode + "' ";
+			List listChildRate = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (listChildRate.size() > 0) {
+				for(int i=0;i<listChildRate.size();i++)
+				{ 
+					Object obj[]=(Object[])listChildRate.get(i);
+					
+					bomDtl.add(Double.parseDouble( obj[0].toString()));
+					bomDtl.add(Double.parseDouble( obj[1].toString()));
+//					bomDtl= Double.parseDouble(listChildRate.get(0).toString());
+					
+				}
+				
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bomDtl;
+	}
+	
+	public int funGetBOMNodes(String parentProdCode, double bomQty, double qty, List<String> listChildNodes) {
+		
+		String sql = "select b.strChildCode from  tblbommasterhd a,tblbommasterdtl b " 
+			+ "where a.strBOMCode=b.strBOMCode and a.strParentCode='" + parentProdCode + "' ";
+		List listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
+		if (listTemp.size() > 0) {
+			for (int cnt = 0; cnt < listTemp.size(); cnt++) {
+				String childNode = (String) listTemp.get(cnt);
+				bomQty = funGetBOMQty(childNode, parentProdCode);
+				funGetBOMNodes(childNode, bomQty, qty * bomQty, listChildNodes);
+				listChildNodes.add(childNode + "," + bomQty);
+			}
+		} else {
+			
+		}
+		return 1;
+	}
+	
+	public double funGetBOMQty(String childCode, String parentCode) {
+		double bomQty = 0;
+		try {
+			String sql = "select ifnull(left(((c.dblReceiveConversion/c.dblIssueConversion)/c.dblRecipeConversion),6) * b.dblQty,0) as BOMQty " + "from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + "where a.strBOMCode=b.strBOMCode and a.strParentCode=d.strProdCode and a.strParentCode='" + parentCode + "' and b.strChildCode=c.strProdCode " + "and b.strChildCode='"+ childCode + "'";
+			List listChildQty = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (listChildQty.size() > 0) {
+				bomQty = (Double) listChildQty.get(0);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bomQty;
+	}
+
+	
+	public double funGetBOMLastPurchaseRate(String childCode, String clientCode) {
+		double bomRate = 0;
+		try {
+			String sql = "select b.dblUnitPrice, from tblgrnhd a, tblgrndtl b where a.strGRNCode=b.strGRNCode and a.strClientCode='"+clientCode+"' and b.strProdCode='"+childCode+"' order by a.dtBillDate desc limit 1 ;";
+			List listChildRate = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (listChildRate.size() > 0) {
+				bomRate = Double.parseDouble(listChildRate.get(0).toString());
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bomRate;
+	}
+
 
 	// ///////////////////////////Yield Concept//////////////////////////////
 

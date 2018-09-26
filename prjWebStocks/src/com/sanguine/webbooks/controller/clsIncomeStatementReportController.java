@@ -1,6 +1,7 @@
 
 package com.sanguine.webbooks.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,12 +36,14 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 
 
 import com.mysql.jdbc.Connection;
@@ -810,8 +813,8 @@ public class clsIncomeStatementReportController
 			ServletOutputStream servletOutputStream = resp.getOutputStream();
 			if (jprintlist.size() > 0)
 			{
-				// if(objBean.getStrDocType().equals("PDF"))
-				// {
+				 if(objBean.getStrDocType().equals("PDF"))
+				 {
 				JRExporter exporter = new JRPdfExporter();
 				resp.setContentType("application/pdf");
 				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
@@ -822,22 +825,23 @@ public class clsIncomeStatementReportController
 				exporter.exportReport();
 				servletOutputStream.flush();
 				servletOutputStream.close();
-
 			}
+			
 			else
 			{
-				JRExporter exporter = new JRXlsExporter();
+				JRXlsExporter exporter = new JRXlsExporter();
 				resp.setContentType("application/xlsx");
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 				exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
-				exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, servletOutputStream);
+				exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, byteArrayOutputStream);
 				exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-				// resp.setHeader("Content-Disposition",
-				// "inline;filename=rptProductWiseGRNReport_"+dteFromDate+"_To_"+dteToDate+"_"+userCode+".xls");
+				resp.setHeader("Content-Disposition","inline;filename=rptIncomeStatement_"+dteFromDate+"_To_"+dteToDate+"_"+userCode+".xls");
 				exporter.exportReport();
+				servletOutputStream.write(byteArrayOutputStream.toByteArray()); 
 				servletOutputStream.flush();
 				servletOutputStream.close();
-				// }
 
+			}
 			}
 		}
 		catch (Exception e)

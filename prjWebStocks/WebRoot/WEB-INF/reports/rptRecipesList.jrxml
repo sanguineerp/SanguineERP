@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2017-03-25T16:43:40 -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fdb4c5f1-48e5-496b-9965-88cfcd411853">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -69,38 +68,21 @@
 	</style>
 	<subDataset name="dsRecipesDtl" uuid="6f945680-a45e-4bfc-8789-ae262d44b20b">
 		<queryString language="SQL">
-			<![CDATA[SELECT   h.strBOMCode as strBOMCode,h.strParentCode as strParentCode, h.strprocesscode as strprocesscode,h.dblQty as ParentDdlQty,
-h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'') as parentLocation,
- d.strChildCode, cp.strProdName as childProductName,cp.strRecipeUOM as childUOM, d.dblQty,cp.dblCostRM as  price,
-  IFNULL(pr.strprocessname,'') as strprocessname,ifnull(cl.strlocname,'') as childLocation  ,
-  date(h.dtCreatedDate) as dtCreatedDate,date(h.dtValidFrom) as dtValidFrom,
-  date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty) as value 
-  from tblbommasterhd  h 
-  inner join tblbommasterdtl AS d ON h.strBOMCode = d.strBOMCode and d.strClientCode='148.001' 
-  left outer join tblproductmaster   p ON h.strParentCode = p.strProdCode 
-  and p.strClientCode='148.001' 
-  left outer join tblproductmaster AS cp ON d.strChildCode = cp.strProdCode and cp.strClientCode='148.001' 
-  left outer join tbllocationmaster  lp ON lp.strLocCode = p.strLocCode and lp.strClientCode='148.001' 
-  left outer join tbllocationmaster AS cl ON cl.strLocCode = cp.strLocCode and cl.strClientCode='148.001' 
-  left outer join tblprocessmaster pr on h.strprocesscode=pr.strprocesscode and pr.strClientCode='148.001' 
-  where  h.strClientCode='148.001']]>
+			<![CDATA[]]>
 		</queryString>
-		<field name="ParentProdName" class="java.lang.String"/>
-		<field name="strChildCode" class="java.lang.String"/>
-		<field name="childProductName" class="java.lang.String"/>
-		<field name="dblQty" class="java.math.BigDecimal"/>
-		<field name="childUOM" class="java.lang.String"/>
-		<field name="price" class="java.math.BigDecimal"/>
-		<field name="childLocation" class="java.lang.String"/>
-		<field name="value" class="java.math.BigDecimal"/>
 		<field name="strParentCode" class="java.lang.String"/>
-		<field name="dtValidFrom" class="java.sql.Date"/>
-		<field name="dtValidTo" class="java.sql.Date"/>
-		<field name="ParentstrUOM" class="java.lang.String"/>
-		<field name="ParentDdlQty" class="java.lang.Double"/>
-		<field name="parentLocation" class="java.lang.String"/>
+		<field name="strParentName" class="java.lang.String"/>
+		<field name="strChildCode" class="java.lang.String"/>
+		<field name="strChildName" class="java.lang.String"/>
+		<field name="dblQty" class="java.lang.Double"/>
+		<field name="strUOM" class="java.lang.String"/>
+		<field name="dblAmount" class="java.lang.Double"/>
+		<field name="dblPrice" class="java.lang.Double"/>
+		<field name="strLocation" class="java.lang.String"/>
+		<field name="dtValidFrom" class="java.lang.String"/>
+		<field name="dtValidTo" class="java.lang.String"/>
 		<variable name="totVal" class="java.math.BigDecimal" resetType="Group" resetGroup="strParentCode" calculation="Sum">
-			<variableExpression><![CDATA[$F{value}]]></variableExpression>
+			<variableExpression><![CDATA[$F{dblAmount}]]></variableExpression>
 		</variable>
 		<group name="strParentCode">
 			<groupExpression><![CDATA[$F{strParentCode}]]></groupExpression>
@@ -115,10 +97,10 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 	<parameter name="strCompanyName" class="java.lang.String"/>
 	<parameter name="strUserCode" class="java.lang.String"/>
 	<parameter name="strImagePath" class="java.lang.String"/>
+	<parameter name="listDtlBean" class="java.util.List"/>
 	<queryString>
 		<![CDATA[select 1 from dual]]>
 	</queryString>
-	<field name="1" class="java.lang.Long"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -169,8 +151,8 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 			<componentElement>
 				<reportElement key="table 2" style="table 2" x="3" y="4" width="550" height="116" uuid="e0c93db9-fb2d-4e5d-9180-20b0ac9d4e4a"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="dsRecipesDtl" uuid="f0eea645-f87f-4ad8-91ef-e20cd37db812">
-						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<datasetRun subDataset="dsRecipesDtl" uuid="bcc82fe3-d92d-43c6-82e5-fe4d0ae5ded4">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listDtlBean})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:columnGroup width="550" uuid="cfb05db1-8515-4042-a545-f34fbca144e4">
 						<jr:groupHeader groupName="strParentCode">
@@ -180,23 +162,23 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 									<textElement>
 										<font fontName="Serif" size="10"/>
 									</textElement>
-									<textFieldExpression><![CDATA["Parent Product "+$F{strParentCode}+", Parent Name "+$F{ParentProdName}
-+", Date "+$F{dtValidFrom}+" To "+$F{dtValidTo} +", Qty "+$F{ParentDdlQty}
-+", "+$F{ParentstrUOM}+", Location "+$F{parentLocation}]]></textFieldExpression>
+									<textFieldExpression><![CDATA["Parent Product "+$F{strParentCode}+", Parent Name "+$F{strParentName}
+ +", Date "+$F{dtValidFrom}+" To "+$F{dtValidTo}+", Qty "+$F{dblQty}
++", "+$F{strUOM}+", Location "+$F{strLocation}]]></textFieldExpression>
 								</textField>
 							</jr:cell>
 						</jr:groupHeader>
 						<jr:groupFooter groupName="strParentCode">
 							<jr:cell style="table_TD" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="413" y="0" width="90" height="30" uuid="7032ba6f-3780-4d21-8357-35735a88be3b"/>
+									<reportElement x="0" y="0" width="550" height="15" uuid="7032ba6f-3780-4d21-8357-35735a88be3b"/>
 									<textElement>
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
 									<text><![CDATA[Total]]></text>
 								</staticText>
 								<textField pattern="###0.00;-###0.00">
-									<reportElement x="501" y="0" width="48" height="30" uuid="89d00433-47e9-49e3-abb7-5fcf9345b28f"/>
+									<reportElement x="0" y="15" width="550" height="15" uuid="89d00433-47e9-49e3-abb7-5fcf9345b28f"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
@@ -204,10 +186,10 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 								</textField>
 							</jr:cell>
 						</jr:groupFooter>
-						<jr:column width="150" uuid="713cc36a-f55b-4122-a9cf-cd336a43a1ac">
+						<jr:column width="154" uuid="713cc36a-f55b-4122-a9cf-cd336a43a1ac">
 							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="3" y="0" width="90" height="30" uuid="38fb0c1a-85a8-47f2-ae67-bbda20cd51f7"/>
+									<reportElement x="0" y="0" width="154" height="30" uuid="38fb0c1a-85a8-47f2-ae67-bbda20cd51f7"/>
 									<textElement>
 										<font fontName="Serif" size="12" isBold="true"/>
 									</textElement>
@@ -217,18 +199,18 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 							<jr:tableFooter style="table 2_TH" height="30" rowSpan="1"/>
 							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="5" y="0" width="143" height="20" uuid="2ef07cdc-6674-47b6-abba-89350eb46bab"/>
+									<reportElement x="0" y="0" width="154" height="20" uuid="2ef07cdc-6674-47b6-abba-89350eb46bab"/>
 									<textElement>
 										<font fontName="Serif"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{ParentProdName}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{strParentName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="45" uuid="acda11dd-11b4-466c-aed6-8906401725bd">
+						<jr:column width="46" uuid="acda11dd-11b4-466c-aed6-8906401725bd">
 							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="4" y="0" width="39" height="30" uuid="153d99bb-e7a9-4b88-84cd-a98b8ed625ae"/>
+									<reportElement x="0" y="0" width="46" height="30" uuid="153d99bb-e7a9-4b88-84cd-a98b8ed625ae"/>
 									<textElement>
 										<font fontName="Serif" size="12" isBold="true"/>
 									</textElement>
@@ -238,7 +220,7 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 							<jr:tableFooter style="table 2_TH" height="30" rowSpan="1"/>
 							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="3" y="0" width="40" height="20" uuid="ae7a3977-63f5-402f-9ddd-624fbb95db98"/>
+									<reportElement x="0" y="0" width="46" height="20" uuid="ae7a3977-63f5-402f-9ddd-624fbb95db98"/>
 									<textElement>
 										<font fontName="Serif"/>
 									</textElement>
@@ -246,10 +228,10 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="126" uuid="248b6f29-bd4c-43e7-bcf4-bc79b9c480bd">
+						<jr:column width="129" uuid="248b6f29-bd4c-43e7-bcf4-bc79b9c480bd">
 							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="2" y="0" width="90" height="30" uuid="2bd6f2c7-3941-48cf-854a-c2c16f127c0a"/>
+									<reportElement x="0" y="0" width="129" height="30" uuid="2bd6f2c7-3941-48cf-854a-c2c16f127c0a"/>
 									<textElement>
 										<font fontName="Serif" size="12" isBold="true"/>
 									</textElement>
@@ -259,18 +241,18 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 							<jr:tableFooter style="table 2_TH" height="30" rowSpan="1"/>
 							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="2" y="0" width="124" height="20" uuid="2e3487bb-c3e7-40b9-aad4-c1e35cd2921a"/>
+									<reportElement x="0" y="0" width="129" height="20" uuid="2e3487bb-c3e7-40b9-aad4-c1e35cd2921a"/>
 									<textElement>
 										<font fontName="Serif"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{childProductName}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{strChildName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="34" uuid="86aa422e-c23a-41e5-b4f6-0df1fa576485">
+						<jr:column width="35" uuid="86aa422e-c23a-41e5-b4f6-0df1fa576485">
 							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="1" y="0" width="31" height="30" uuid="a6b8caca-3113-4ee5-ba8f-3476569190d5"/>
+									<reportElement x="0" y="0" width="35" height="30" uuid="a6b8caca-3113-4ee5-ba8f-3476569190d5"/>
 									<textElement>
 										<font fontName="Serif" size="12" isBold="true"/>
 									</textElement>
@@ -279,8 +261,9 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 							</jr:tableHeader>
 							<jr:tableFooter style="table 2_TH" height="30" rowSpan="1"/>
 							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 								<textField>
-									<reportElement x="1" y="0" width="32" height="20" uuid="650b2086-26dd-47c5-acc0-aa1ca32a1a66"/>
+									<reportElement x="0" y="0" width="34" height="20" uuid="650b2086-26dd-47c5-acc0-aa1ca32a1a66"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif"/>
 									</textElement>
@@ -288,10 +271,10 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="39" uuid="fc82da25-7cbb-4f63-bf27-e2efbb065719">
+						<jr:column width="40" uuid="fc82da25-7cbb-4f63-bf27-e2efbb065719">
 							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="39" height="30" uuid="a1973443-0f32-45da-be4c-67b04afc5199"/>
+									<reportElement x="0" y="0" width="40" height="30" uuid="a1973443-0f32-45da-be4c-67b04afc5199"/>
 									<textElement>
 										<font fontName="Serif" size="12" isBold="true"/>
 									</textElement>
@@ -300,19 +283,20 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 							</jr:tableHeader>
 							<jr:tableFooter style="table 2_TH" height="30" rowSpan="1"/>
 							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 								<textField>
-									<reportElement x="3" y="0" width="36" height="20" uuid="2644075b-3979-46d6-81a9-98525ebd31be"/>
+									<reportElement x="10" y="0" width="29" height="20" uuid="2644075b-3979-46d6-81a9-98525ebd31be"/>
 									<textElement>
 										<font fontName="Serif"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{childUOM}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{strUOM}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="43" uuid="a7e20c02-831d-4af1-ae0a-a809a068847a">
 							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="3" y="0" width="37" height="30" uuid="75310da7-50dd-4029-9a18-5e794377c86b"/>
+									<reportElement x="0" y="0" width="43" height="30" uuid="75310da7-50dd-4029-9a18-5e794377c86b"/>
 									<textElement>
 										<font fontName="Serif" size="12" isBold="true"/>
 									</textElement>
@@ -321,19 +305,20 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 							</jr:tableHeader>
 							<jr:tableFooter style="table 2_TH" height="30" rowSpan="1"/>
 							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
-								<textField pattern="###0.00;-###0.00">
-									<reportElement x="4" y="0" width="38" height="20" uuid="5caaeb51-623b-4729-bfff-975315e8e934"/>
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+								<textField pattern="#0.0000">
+									<reportElement x="0" y="0" width="43" height="20" uuid="5caaeb51-623b-4729-bfff-975315e8e934"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{dblPrice}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="74" uuid="93733986-db52-4f0c-8a68-f8773783bc7b">
+						<jr:column width="64" uuid="93733986-db52-4f0c-8a68-f8773783bc7b">
 							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="2" y="0" width="71" height="30" uuid="4ebed7d9-3038-4f6c-9fff-ca66b55925a3"/>
+									<reportElement x="0" y="0" width="64" height="30" uuid="4ebed7d9-3038-4f6c-9fff-ca66b55925a3"/>
 									<textElement>
 										<font fontName="Serif" size="12" isBold="true"/>
 									</textElement>
@@ -342,19 +327,20 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 							</jr:tableHeader>
 							<jr:tableFooter style="table 2_TH" height="30" rowSpan="1"/>
 							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 								<textField>
-									<reportElement x="2" y="0" width="71" height="20" uuid="38d4109a-6751-4c1f-be7a-22a15345a238"/>
+									<reportElement x="10" y="0" width="53" height="20" uuid="38d4109a-6751-4c1f-be7a-22a15345a238"/>
 									<textElement>
 										<font fontName="Serif"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{childLocation}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{strLocation}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="39" uuid="1cdd51cd-8615-4449-9d87-03c62f82b520">
 							<jr:tableHeader style="table 2_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="2" y="0" width="37" height="30" uuid="6173ecdb-1f91-44ef-9996-d18758fc9dcc"/>
+									<reportElement x="0" y="0" width="39" height="30" uuid="6173ecdb-1f91-44ef-9996-d18758fc9dcc"/>
 									<textElement>
 										<font fontName="Serif" size="12" isBold="true"/>
 									</textElement>
@@ -363,12 +349,13 @@ h.strUOM as ParentstrUOM, p.strProdName as ParentProdName,ifnull(lp.strlocname,'
 							</jr:tableHeader>
 							<jr:tableFooter style="table 2_TH" height="30" rowSpan="1"/>
 							<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
-								<textField pattern="###0.00;-###0.00">
-									<reportElement x="0" y="0" width="37" height="20" uuid="cf9fc544-6e28-405f-8c29-3c22bcea170a"/>
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+								<textField pattern="#0.0000">
+									<reportElement x="0" y="0" width="39" height="20" uuid="cf9fc544-6e28-405f-8c29-3c22bcea170a"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{dblAmount}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>

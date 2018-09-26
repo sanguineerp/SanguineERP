@@ -22,6 +22,8 @@ public class clsProfitLossReportBean {
 
 	private double dblSaleAmt;
 	
+	private String strDocType;
+	
 	
 	
 	
@@ -98,6 +100,14 @@ public class clsProfitLossReportBean {
 
 	public void setDblAmt(BigDecimal dblAmt) {
 		this.dblAmt = dblAmt;
+	}
+
+	public String getStrDocType() {
+		return strDocType;
+	}
+
+	public void setStrDocType(String strDocType) {
+		this.strDocType = strDocType;
 	}
 
 }

@@ -1123,6 +1123,61 @@ public class clsProductMasterController {
 		}
 	}
 
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/rptProductListExport", method = RequestMethod.GET)
+	private ModelAndView funProductListExport(@ModelAttribute("command") clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req) {
+		
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String companyName = req.getSession().getAttribute("companyName").toString();
+		String userCode = req.getSession().getAttribute("usercode").toString();
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		String strLocCode = req.getSession().getAttribute("locationCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+		List listStock = new ArrayList();
+		String[] ExcelHeader = { "Product Code", "Product Name", "SubGroup Name","UOM","Cost","List Price","Location Name","Specification" };
+		listStock.add(ExcelHeader);
+		
+		String sql = "";
+		if (objSetup.getStrShowProdMaster().equalsIgnoreCase("Y")) {
+			sql = " select p.strProdCode as ProdCode,p.strProdName as ProdName,s.strSGName as SGName," + " p.strUOM as UOM,p.dblCostRM as CostRM,p.dblListPrice as ListPrice," + " ifnull(l.strlocname,'') as Locname,p.strSpecification as Specification ,p.strBinNo as BinNo " + " from tblproductmaster p" + " left outer join tblsubgroupmaster s on p.strSGCode=s.strSGCode and s.strClientcode='" + clientCode
+					+ "' " + " left outer join tbllocationmaster l on p.strloccode=l.strloccode and l.strClientcode='" + clientCode + "' " + " and l.strPropertyCode='" + propertyCode + "' where p.strClientcode='" + clientCode + "' and (p.strLocCode='" + strLocCode + "' or p.strLocCode='') ";
+			if (!objBean.getStrProdType().equalsIgnoreCase("ALL")) {
+				sql += " and p.strProdType='" + objBean.getStrProdType() + "' ";
+			}
+
+		} else {
+			sql = "select p.strProdCode as ProdCode,p.strProdName as ProdName,s.strSGName as SGName," + " p.strUOM as UOM,p.dblCostRM as CostRM,p.dblListPrice as ListPrice," + " ifnull(l.strlocname,'') as Locname,p.strSpecification as Specification ,p.strBinNo as BinNo " + " from tblproductmaster p" + " left outer join tblsubgroupmaster s on p.strSGCode=s.strSGCode and s.strClientcode='" + clientCode
+					+ "' " + " left outer join tbllocationmaster l on p.strloccode=l.strloccode and l.strClientcode='" + clientCode + "' " + " where p.strClientcode='" + clientCode + "' ";
+			if (!objBean.getStrProdType().equalsIgnoreCase("ALL")) {
+				sql += " and p.strProdType='" + objBean.getStrProdType() + "' ";
+			}
+		}
+		if (!objBean.getStrGCode().equalsIgnoreCase("ALL") && !objBean.getStrSGCode().equalsIgnoreCase("ALL")) {
+			sql += " and s.strSGCode='" + objBean.getStrSGCode() + "' and s.strGCode='" + objBean.getStrGCode() + "'";
+		} else if (!objBean.getStrGCode().equalsIgnoreCase("ALL") && objBean.getStrSGCode().equalsIgnoreCase("ALL")) {
+			sql += "  and s.strGCode='" + objBean.getStrGCode() + "'";
+		}
+		System.out.println(sql);
+		List list = objGlobalFunctionsService.funGetList(sql);
+		List listStockFlashModel = new ArrayList();
+		for (int cnt = 0; cnt < list.size(); cnt++) {
+			Object[] arrObj = (Object[]) list.get(cnt);
+			List DataList = new ArrayList<>();
+			DataList.add(arrObj[0].toString());
+			DataList.add(arrObj[1].toString());
+			DataList.add(arrObj[2].toString());
+			DataList.add(arrObj[3].toString());
+			DataList.add(Double.parseDouble(arrObj[4].toString()));
+			DataList.add(Double.parseDouble(arrObj[5].toString()));
+			DataList.add(arrObj[6].toString());
+			DataList.add(arrObj[7].toString());
+			listStockFlashModel.add(DataList);
+		}
+		listStock.add(listStockFlashModel);
+		return new ModelAndView("excelView", "stocklist", listStock);
+	}
 	private Blob funBlankBlob() {
 		Blob blob = new Blob() {
 

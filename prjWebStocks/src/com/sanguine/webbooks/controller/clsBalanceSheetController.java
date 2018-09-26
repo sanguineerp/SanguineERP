@@ -1,5 +1,6 @@
 package com.sanguine.webbooks.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -741,8 +742,8 @@ public class clsBalanceSheetController {
 				ServletOutputStream servletOutputStream = resp.getOutputStream();
 				if (jprintlist.size() > 0)
 				{
-					// if(objBean.getStrDocType().equals("PDF"))
-					// {
+				  if(objBean.getStrDocType().equals("PDF"))
+					{
 					JRExporter exporter = new JRPdfExporter();
 					resp.setContentType("application/pdf");
 					exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
@@ -757,19 +758,21 @@ public class clsBalanceSheetController {
 				}
 				else
 				{
-					JRExporter exporter = new JRXlsExporter();
+					
+					JRXlsExporter exporter = new JRXlsExporter();
 					resp.setContentType("application/xlsx");
+					ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 					exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
-					exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, servletOutputStream);
+					exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, byteArrayOutputStream);
 					exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-					// resp.setHeader("Content-Disposition",
-					// "inline;filename=rptProductWiseGRNReport_"+dteFromDate+"_To_"+dteToDate+"_"+userCode+".xls");
+					resp.setHeader("Content-Disposition","inline;filename=rptBalanceSheet_"+dteFromDate+"_To_"+dteToDate+"_"+userCode+".xls");
 					exporter.exportReport();
+					servletOutputStream.write(byteArrayOutputStream.toByteArray()); 
 					servletOutputStream.flush();
 					servletOutputStream.close();
-					// }
 
 				}
+			}
 			}
 			catch (Exception e)
 			{

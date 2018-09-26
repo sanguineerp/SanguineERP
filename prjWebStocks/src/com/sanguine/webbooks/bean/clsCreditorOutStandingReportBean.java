@@ -66,6 +66,8 @@ public class clsCreditorOutStandingReportBean
 	
 	private double dblOpCrAmt;
 	
+	
+	
 
 	public String getStrCurrency()
 	{

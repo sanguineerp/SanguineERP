@@ -2878,6 +2878,7 @@ public class clsGlobalFunctions {
 			String locationName= req.getSession().getAttribute("locationName").toString();
 			clsUserMasterModel objModel = objUserMasterService.funGetObject(strUserCode, clientCode);
 			
+			String userCode = req.getSession().getAttribute("usercode").toString();
 			String dteCurrDate = funGetCurrentDate("yyyy-MM-dd");
 			
 			String sql = "select a.strReqCode,b.strLocName as Locationby,a.strNarration,a.strUserCreated,'MIS' as FormName ,b.strLocCode as strLocOn " 
@@ -2921,12 +2922,238 @@ public class clsGlobalFunctions {
 						
 					}
 				}
+				
+					
+			
+			
+			
+			//For Autorisaation
+			Map<String, String> mapTransForms = new HashMap<String, String>();
+			String sql1 = "select b.strFormName,a.strFormDesc from clsTreeMasterModel a,clsWorkFlowForSlabBasedAuth b " + "where a.strFormName=b.strFormName and strClientCode='" + clientCode + "' " + "and (b.strUser1='" + userCode + "' or b.strUser2='" + userCode + "' or b.strUser3='" + userCode + "' " + "or b.strUser4='" + userCode + "' or b.strUser5='" + userCode + "' ) " + "order by a.strFormDesc";
+			List listForms = objGlobalFunctionsService.funGetList(sql1, "hql");
+			int count = 0;
+			for (int cnt = 0; cnt < listForms.size(); cnt++)
+			{
+				Object[] arrObj = (Object[]) listForms.get(cnt);
+				String transName = arrObj[0].toString();
+				int countofOneForm = funCountTransaction(transName, clientCode, userCode);
+				count+=countofOneForm;
+//				mapTransForms.put(arrObj[0].toString(), arrObj[1].toString() + "  (" + count + ")");
+			
+				// mapTransForms.put(arrObj[0].toString(),arrObj[1].toString());
+			}
+			if(count>0)
+			{
+				sql=sql+
+				" union all "
+			  + " select '"+count+"',''  AS Locationby,'Authorization' as strNarration,'','Authorization' AS FormName,'' AS strLocOn";	
+			}
 			sql=sql+";";
 			list = objGlobalFunctionsService.funGetListReportQuery(sql);
+		
 		}
+		
+		
+		
+		
+		
+
+		
+//		
+		
 		return list;
 
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public int funCountTransaction(String transName, String clientCode, String userCode)
+	{
+		String sql = "";
+		int count = 0;
+		List list = null;
+		switch (transName)
+		{
+		case "frmGRN":
+			sql = "select count(*)" + "from tblgrnhd a left outer join tblpartymaster b on a.strSuppCode=b.strPCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmGRN') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+		case "frmPurchaseOrder":
+
+			sql = "select count(*) " + "from tblpurchaseorderhd a left outer join tblpartymaster b on a.strSuppCode=b.strPCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmPurchaseOrder') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmBillPassing":
+			sql = "select count(*) " + "from tblbillpasshd a left outer join tblpartymaster b on a.strSuppCode=b.strPCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmBillPassing') " + "group by a.strBillPassNo";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmMIS":
+			sql = "select count(*) from tblmishd a " + "left outer join tbllocationmaster b on a.strLocFrom=b.strLocCode and b.strClientCode = '" + clientCode + "' " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmMIS') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+		case "frmMaterialReq":
+			sql = "select count(*) " + "from tblreqhd a left outer join tbllocationmaster b on a.strLocBy=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmMaterialReq') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmMaterialReturn":
+			sql = "select count(*) " + "from tblmaterialreturnhd a left outer join tbllocationmaster b on a.strLocFrom=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmMaterialReturn') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmPhysicalStkPosting":
+			sql = "select count(*) " + "from tblstockpostinghd a left outer join tbllocationmaster b on a.strLocCode=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmPhysicalStkPosting') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmProduction":
+			sql = "select count(*) " + "from tblproductionhd a left outer join tbllocationmaster b on a.strLocCode=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmProduction') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmProductionOrder":
+			sql = "select count(*) " + "from tblproductionorderhd a left outer join tbllocationmaster b on a.strLocCode=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmProductionOrder') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmPurchaseIndent":
+			sql = "select count(*) " + "from tblpurchaseindendhd a left outer join tbllocationmaster b on a.strLocCode=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmPurchaseIndent') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmPurchaseReturn":
+			sql = "select count(*) " + "from tblpurchasereturnhd a left outer join tbllocationmaster b on a.strLocCode=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmPurchaseReturn') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmStockAdjustment":
+			sql = "count(*) " + "from tblstockadjustmenthd a left outer join tbllocationmaster b on a.strLocCode=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmStockAdjustment') ";
+
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmStockTransfer":
+			sql = "select count(*) " + "from tblstocktransferhd a left outer join tbllocationmaster b on a.strFromLocCode=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmStockTransfer') ";
+
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+
+		case "frmRateContract":
+			sql = "select count(*) " + "from tblrateconthd a left outer join tblpartymaster b on a.strSuppCode=b.strPCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmRateContract') ";
+
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+			
+		case "frmInovice":
+			sql = "select count(*) " + "from tblinvoicehd a left outer join tblpartymaster b on a.strCustCode=b.strPCode " 
+				+ " where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmInovice') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+			
+		case "frmSalesOrder":
+				sql = "select count(*) " + "from tblsalesorderhd a left outer join tblpartymaster b on a.strCustCode=b.strPCode " 
+					+ " where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmSalesOrder') ";
+				list = objGlobalFunctionsService.funGetList(sql, "sql");
+				if (list.size() > 0)
+				{
+					count = Integer.parseInt(list.get(0).toString());
+				}
+				break;
+		case "frmSalesReturn":
+			sql = "select count(*) " + "from tblsalesreturnhd a left outer join tblpartymaster b on a.strCustCode=b.strPCode " 
+					+ " where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmSalesReturn') ";
+				list = objGlobalFunctionsService.funGetList(sql, "sql");
+				if (list.size() > 0)
+				{
+					count = Integer.parseInt(list.get(0).toString());
+				}
+				break;
+		
+		case "frmDeliveryChallan":
+			sql = "select count(*) " + "from tbldeliverychallanhd a left outer join tblpartymaster b on a.strCustCode=b.strPCode " 
+					+ " where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmDeliveryChallan') ";
+				list = objGlobalFunctionsService.funGetList(sql, "sql");
+				if (list.size() > 0)
+				{
+					count = Integer.parseInt(list.get(0).toString());
+				}
+				break;
+				
+		case "frmStockReq":
+			sql = "select count(*) " + "from tblreqhd a left outer join tbllocationmaster b on a.strLocBy=b.strLocCode " + "where a.strClientCode = '" + clientCode + "' " + "and (a.intLevel +1) IN (select if(strUser1 = '" + userCode + "',1,if(strUser2 = '" + userCode + "',2,if(strUser3 = '" + userCode + "',3,if(strUser4 = '" + userCode + "',4,if(strUser5 = '" + userCode + "',5,0))))) as intLevel " + "from tblworkflowforslabbasedauth " + "where strformname = 'frmStockReq') ";
+			list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list.size() > 0)
+			{
+				count = Integer.parseInt(list.get(0).toString());
+			}
+			break;
+			
+		}
+
+		return count;
+	}
+
 
 	/**
 	 * Excise Conversion ML Data into Peg

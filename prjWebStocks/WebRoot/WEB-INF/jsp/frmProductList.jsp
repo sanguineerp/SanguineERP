@@ -56,6 +56,28 @@
 		});
 		}
 	}
+    
+    function funCallFormAction(actionName,object) 
+	{	
+	
+	 
+
+			if($("#cmbDocType").val()=="XLS")
+	    	{
+	    		flag=false;
+		    	var reportType=$("#cmbDocType").val();
+				var locCodeFrom=$("#txtLocFrom").val();
+				var locCodeTo=$("#txtLocTo").val();
+				var param1=reportType+","+locCodeFrom+","+locCodeTo;
+
+				document.forms[0].action =  "rptProductListExport.html";
+	    	}
+			else
+				{
+					 document.forms[0].action = "rptProductList.html";
+				}
+	    }
+			  
     </script>
   </head>
   
@@ -106,7 +128,7 @@
 			</table>
 			<br>
 			<p align="center">
-				<input type="submit" value="Submit"  class="form_button"/>
+				<input type="submit" value="Submit"  class="form_button" onclick="return funCallFormAction('submit',this)" />
 				 <input type="button" value="Reset" class="form_button " />
 			</p>
 			

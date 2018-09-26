@@ -327,7 +327,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				</textElement>
 				<textFieldExpression><![CDATA["Phone: "+$P{strPhoneNo}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="201" y="60" width="345" height="15" uuid="1cefc823-d46a-4944-83b5-13d6ce435456"/>
 				<textElement textAlignment="Center">
 					<font fontName="Serif"/>
@@ -338,14 +338,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				<reportElement x="3" y="9" width="190" height="80" uuid="6dd21804-41e4-4e59-8ecf-4c663b9cc446"/>
 				<imageExpression><![CDATA[$P{strImagePath}]]></imageExpression>
 			</image>
-			<textField>
-				<reportElement x="282" y="169" width="270" height="15" uuid="333d267e-45ec-4338-875f-85891d331ab7"/>
-				<textElement>
-					<font fontName="Serif" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{strVAddress2}]]></textFieldExpression>
-			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="282" y="155" width="270" height="15" uuid="700a0a02-555f-43fc-930d-3272a705d057"/>
 				<textElement>
 					<font fontName="Serif" size="8"/>
@@ -359,20 +352,6 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				</textElement>
 				<text><![CDATA[BILL TO ADDRESS]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="282" y="183" width="270" height="15" uuid="0ffd4591-9262-4138-8315-4e854bab14e5"/>
-				<textElement>
-					<font fontName="Serif" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{strVCity}+"-" + $F{strVPin}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="282" y="198" width="270" height="15" uuid="03c946c4-ffa3-4ba5-aeb4-e5be6dbf8be1"/>
-				<textElement>
-					<font fontName="Serif" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{strVState}+", "+$F{strVCountry}]]></textFieldExpression>
-			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="4" y="185" width="257" height="15" uuid="7be1af41-42f5-4561-ac9f-c8bec0ef6d93"/>
 				<textElement>
@@ -491,7 +470,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="dsPODtl" uuid="cf744873-de5e-4cfd-b1e0-63db3e0e4efb"/>
-					<jr:columnGroup width="375" uuid="3c43ed19-832c-4a4c-9df0-67d77e83d16c">
+					<jr:columnGroup width="395" uuid="3c43ed19-832c-4a4c-9df0-67d77e83d16c">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [5]"/>
 						<jr:columnFooter style="table_TD" height="21" rowSpan="1"/>
 						<jr:column width="34" uuid="ee36dd74-f788-432a-9e5a-fb4b8c039b85">
@@ -547,11 +526,11 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="210" uuid="0c87f8fe-27e4-43a7-bb3a-5902f88a4569">
+						<jr:column width="240" uuid="0c87f8fe-27e4-43a7-bb3a-5902f88a4569">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 							<jr:tableHeader style="table_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="210" height="30" uuid="5825bb93-4647-4583-9e24-02edea7a108c"/>
+									<reportElement x="0" y="0" width="240" height="30" uuid="5825bb93-4647-4583-9e24-02edea7a108c"/>
 									<box leftPadding="1" rightPadding="1"/>
 									<textElement textAlignment="Left" verticalAlignment="Middle">
 										<font fontName="Serif" size="9" isBold="true"/>
@@ -561,7 +540,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 							</jr:tableHeader>
 							<jr:detailCell style="table_TD" height="20" rowSpan="1">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="0" y="0" width="210" height="20" uuid="3438d505-fae0-4c3c-ba5d-02a8c58feaa3"/>
+									<reportElement x="0" y="0" width="240" height="20" uuid="3438d505-fae0-4c3c-ba5d-02a8c58feaa3"/>
 									<box leftPadding="1" rightPadding="1"/>
 									<textElement>
 										<font fontName="Serif" size="8"/>
@@ -570,28 +549,30 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="50" uuid="9de60cca-9d76-4c72-b2fb-28ebdf09b549">
+						<jr:column width="40" uuid="9de60cca-9d76-4c72-b2fb-28ebdf09b549">
 							<property name="local_mesure_unitheight" value="pixel"/>
 							<property name="local_mesure_unitwidth" value="pixel"/>
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
 							<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 								<staticText>
-									<reportElement x="0" y="0" width="50" height="30" uuid="9b8ec9a1-954a-4e27-a4db-0813bf5895f8">
+									<reportElement x="0" y="0" width="30" height="30" uuid="9b8ec9a1-954a-4e27-a4db-0813bf5895f8">
 										<property name="local_mesure_unitwidth" value="pixel"/>
 										<property name="com.jaspersoft.studio.unit.width" value="px"/>
 										<property name="local_mesure_unitx" value="pixel"/>
 										<property name="com.jaspersoft.studio.unit.x" value="px"/>
 									</reportElement>
 									<box leftPadding="1" rightPadding="1"/>
-									<textElement textAlignment="Left" verticalAlignment="Middle">
+									<textElement textAlignment="Right" verticalAlignment="Middle">
 										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
 									<text><![CDATA[QTY]]></text>
 								</staticText>
 							</jr:tableHeader>
 							<jr:detailCell style="table_TD" height="20" rowSpan="1">
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 								<textField pattern="#0.000">
-									<reportElement x="0" y="0" width="50" height="20" uuid="5aa467c2-e228-4557-a0eb-6f18eb786e55">
+									<reportElement x="0" y="0" width="30" height="20" uuid="5aa467c2-e228-4557-a0eb-6f18eb786e55">
 										<property name="local_mesure_unitwidth" value="pixel"/>
 										<property name="com.jaspersoft.studio.unit.width" value="px"/>
 									</reportElement>
@@ -634,24 +615,24 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 							</jr:detailCell>
 						</jr:column>
 					</jr:columnGroup>
-					<jr:columnGroup width="77" uuid="e0efb1d4-f399-42e8-9046-17ad215125a9">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [2]"/>
+					<jr:columnGroup width="75" uuid="e0efb1d4-f399-42e8-9046-17ad215125a9">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [1]"/>
 						<jr:columnFooter height="21" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="77" height="21" uuid="6bd2fdb8-c037-4516-aabf-7b8361dd3c51"/>
+								<reportElement x="0" y="0" width="75" height="21" uuid="6bd2fdb8-c037-4516-aabf-7b8361dd3c51"/>
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="10" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Sub Total ]]></text>
 							</staticText>
 						</jr:columnFooter>
-						<jr:column width="45" uuid="4912c506-4361-40d9-a482-9a3367f14819">
+						<jr:column width="75" uuid="4912c506-4361-40d9-a482-9a3367f14819">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
 							<jr:tableHeader style="table_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="45" height="30" uuid="054ba738-4eaa-4216-9ba0-0dc51176f022"/>
+									<reportElement x="0" y="0" width="75" height="30" uuid="054ba738-4eaa-4216-9ba0-0dc51176f022"/>
 									<box leftPadding="1" rightPadding="1"/>
-									<textElement textAlignment="Left" verticalAlignment="Middle">
+									<textElement textAlignment="Right" verticalAlignment="Middle">
 										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
 									<text><![CDATA[RATE (Rs)]]></text>
@@ -660,7 +641,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 							<jr:tableFooter height="0"/>
 							<jr:detailCell style="table_TD" height="20" rowSpan="1">
 								<textField pattern="###0.00">
-									<reportElement x="0" y="0" width="45" height="20" uuid="c1f6a033-bae8-4954-b1d6-4f946e136b0b">
+									<reportElement x="0" y="0" width="75" height="20" uuid="c1f6a033-bae8-4954-b1d6-4f946e136b0b">
 										<property name="local_mesure_unity" value="pixel"/>
 										<property name="com.jaspersoft.studio.unit.y" value="px"/>
 										<property name="local_mesure_unitwidth" value="pixel"/>
@@ -674,47 +655,14 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="32" uuid="34a53e8e-e59d-43c1-8c7f-56f430ca6b64">
-							<property name="local_mesure_unitwidth" value="pixel"/>
-							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
-							<jr:tableHeader style="table_TH" height="30" rowSpan="1">
-								<staticText>
-									<reportElement x="0" y="0" width="32" height="30" uuid="993bfc5b-489e-44da-a74d-5bd1581a3b32">
-										<property name="local_mesure_unitwidth" value="pixel"/>
-										<property name="com.jaspersoft.studio.unit.width" value="px"/>
-										<property name="local_mesure_unitx" value="pixel"/>
-										<property name="com.jaspersoft.studio.unit.x" value="px"/>
-									</reportElement>
-									<box leftPadding="1" rightPadding="1"/>
-									<textElement textAlignment="Left" verticalAlignment="Middle">
-										<font fontName="Serif" size="9" isBold="true"/>
-									</textElement>
-									<text><![CDATA[Disc]]></text>
-								</staticText>
-							</jr:tableHeader>
-							<jr:tableFooter height="0"/>
-							<jr:detailCell style="table_TD" height="20" rowSpan="1">
-								<textField pattern="###0.00">
-									<reportElement x="0" y="0" width="32" height="20" uuid="7664e0b2-c31f-47bc-9af8-4dd0fb3ed737">
-										<property name="local_mesure_unitwidth" value="pixel"/>
-										<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									</reportElement>
-									<box leftPadding="1" rightPadding="1"/>
-									<textElement textAlignment="Right">
-										<font fontName="Serif" size="8"/>
-									</textElement>
-									<textFieldExpression><![CDATA[$F{dbldiscount}]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
 					</jr:columnGroup>
-					<jr:column width="97" uuid="2f7a9e21-df83-4ab2-9a7d-c5f52871f033">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
+					<jr:column width="80" uuid="2f7a9e21-df83-4ab2-9a7d-c5f52871f033">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
 						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="97" height="30" uuid="3269e6be-7dcb-4cf7-8dab-220c69d39892"/>
+								<reportElement x="0" y="0" width="80" height="30" uuid="3269e6be-7dcb-4cf7-8dab-220c69d39892"/>
 								<box leftPadding="1" rightPadding="1"/>
-								<textElement textAlignment="Left" verticalAlignment="Middle">
+								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="Serif" size="9" isBold="true"/>
 								</textElement>
 								<text><![CDATA[AMOUNT (Rs)]]></text>
@@ -723,7 +671,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 						<jr:tableFooter height="0"/>
 						<jr:columnFooter height="21" rowSpan="1">
 							<textField pattern="###0.00">
-								<reportElement x="0" y="0" width="97" height="21" uuid="8a6d9dec-5827-4c68-b9b1-6875a722d7d3">
+								<reportElement x="0" y="0" width="80" height="21" uuid="8a6d9dec-5827-4c68-b9b1-6875a722d7d3">
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
 								</reportElement>
@@ -736,7 +684,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 						</jr:columnFooter>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField pattern="###0.00">
-								<reportElement x="0" y="0" width="97" height="20" uuid="c15934c0-5d42-4ac2-8e22-18be114d5335">
+								<reportElement x="0" y="0" width="80" height="20" uuid="c15934c0-5d42-4ac2-8e22-18be114d5335">
 									<property name="local_mesure_unitwidth" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
 								</reportElement>
@@ -753,7 +701,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 		</band>
 		<band height="95">
 			<textField pattern="###0.00">
-				<reportElement style="table_TD" x="452" y="76" width="100" height="15" isPrintInFirstWholeBand="true" uuid="9d83de1c-4810-45e6-ace3-dc5f9bfdae2c">
+				<reportElement style="table_TD" x="452" y="59" width="100" height="15" isPrintInFirstWholeBand="true" uuid="9d83de1c-4810-45e6-ace3-dc5f9bfdae2c">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -763,21 +711,8 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblFinalAmt}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00">
-				<reportElement style="table_TD" x="452" y="22" width="100" height="15" isPrintInFirstWholeBand="true" uuid="48914c37-befa-4ecd-a8a1-6c3d50e7bf48">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="local_mesure_unitwidth" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Right">
-					<font fontName="Serif" size="8"/>
-					<paragraph lineSpacing="Single" rightIndent="1" spacingAfter="0"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{dblDiscount}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement style="table_TD" x="398" y="58" width="51" height="15" uuid="d9f4f973-7755-48f0-84bb-35183b4c00f4">
+				<reportElement style="table_TD" x="398" y="41" width="51" height="15" uuid="d9f4f973-7755-48f0-84bb-35183b4c00f4">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -797,7 +732,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				<textFieldExpression><![CDATA[$F{AmtInWords}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00">
-				<reportElement style="table_TD" x="452" y="58" width="100" height="15" isPrintInFirstWholeBand="true" uuid="76d4eb0b-90dd-49ad-aea6-3eed5dbe4f98">
+				<reportElement style="table_TD" x="452" y="41" width="100" height="15" isPrintInFirstWholeBand="true" uuid="76d4eb0b-90dd-49ad-aea6-3eed5dbe4f98">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -808,7 +743,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				<textFieldExpression><![CDATA[$F{dblTaxAmt}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="table_TD" x="398" y="76" width="51" height="15" uuid="15777f71-4429-429f-b50e-99225ca5e367">
+				<reportElement style="table_TD" x="398" y="59" width="51" height="15" uuid="15777f71-4429-429f-b50e-99225ca5e367">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -825,18 +760,6 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<text><![CDATA[Amount in word ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="table_TD" x="398" y="22" width="51" height="15" uuid="6d44f4c2-50cd-4e58-8f95-780076687975">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<textElement>
-					<font fontName="Serif" size="8"/>
-					<paragraph leftIndent="2"/>
-				</textElement>
-				<text><![CDATA[Discount ]]></text>
 			</staticText>
 			<componentElement>
 				<reportElement x="3" y="22" width="161" height="42" uuid="e0967a09-5740-4b36-9567-cb284ea19a03"/>
@@ -894,7 +817,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				</jr:table>
 			</componentElement>
 			<textField pattern="###0.00">
-				<reportElement style="table_TD" x="452" y="40" width="100" height="15" isPrintInFirstWholeBand="true" uuid="4023a8d7-2aab-427a-bac0-05c318d000ca">
+				<reportElement style="table_TD" x="452" y="23" width="100" height="15" isPrintInFirstWholeBand="true" uuid="4023a8d7-2aab-427a-bac0-05c318d000ca">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -905,7 +828,7 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				<textFieldExpression><![CDATA[$F{dblExtra}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="table_TD" x="398" y="40" width="51" height="15" uuid="539b87b2-74d3-4e35-87d3-f55ee00e05d5">
+				<reportElement style="table_TD" x="398" y="23" width="51" height="15" uuid="539b87b2-74d3-4e35-87d3-f55ee00e05d5">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>

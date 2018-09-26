@@ -55,6 +55,8 @@ public class clsIncomeStmtReportBean
 	
 	private String strCategory;
 	
+	private String strDocType;
+	
 	private double dblCol0;
 	private double dblCol1;
 	private double dblCol2;
@@ -388,6 +390,14 @@ public class clsIncomeStmtReportBean
 
 	public void setBdDrAmt(BigDecimal bdDrAmt) {
 		this.bdDrAmt = bdDrAmt;
+	}
+
+	public String getStrDocType() {
+		return strDocType;
+	}
+
+	public void setStrDocType(String strDocType) {
+		this.strDocType = strDocType;
 	}
 	
 	

@@ -37,8 +37,22 @@ public class clsRecipeMasterBean {
 	private double dblQty;
 
 	private String strMethod;
+	
+	private String strChildCode;
+	
+	private String strChildName;
+	
+	private double dblPrice;
+	
+	private double dblAmount;
 
+	private String strLocation;
+	
+	
+	
+	
 	private List<clsBomDtlModel> listBomDtlModel;
+	
 
 	public String getStrBOMCode() {
 		return strBOMCode;
@@ -174,6 +188,46 @@ public class clsRecipeMasterBean {
 
 	public void setStrMethod(String strMethod) {
 		this.strMethod = strMethod;
+	}
+
+	public String getStrChildCode() {
+		return strChildCode;
+	}
+
+	public void setStrChildCode(String strChildCode) {
+		this.strChildCode = strChildCode;
+	}
+
+	public String getStrChildName() {
+		return strChildName;
+	}
+
+	public void setStrChildName(String strChildName) {
+		this.strChildName = strChildName;
+	}
+
+	public double getDblPrice() {
+		return dblPrice;
+	}
+
+	public void setDblPrice(double dblPrice) {
+		this.dblPrice = dblPrice;
+	}
+
+	public double getDblAmount() {
+		return dblAmount;
+	}
+
+	public void setDblAmount(double dblAmount) {
+		this.dblAmount = dblAmount;
+	}
+
+	public String getStrLocation() {
+		return strLocation;
+	}
+
+	public void setStrLocation(String strLocation) {
+		this.strLocation = strLocation;
 	}
 
 }

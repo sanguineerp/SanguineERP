@@ -1,5 +1,6 @@
 package com.sanguine.webbooks.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -37,9 +37,6 @@ import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
-import com.sanguine.util.clsReportBean;
-import com.sanguine.webbooks.bean.clsDebtorLedgerBean;
-import com.sanguine.webbooks.bean.clsIncomeStmtReportBean;
 import com.sanguine.webbooks.bean.clsProfitLossReportBean;
 
 @Controller
@@ -90,7 +87,7 @@ public class clsProfitLossReportController {
 			if (objSetup == null) {
 				objSetup = new clsPropertySetupModel();
 			}
-			String type = "PDF";
+			
 			String fromDate = objBean.getDteFromDate();
 			String toDate = objBean.getDteToDate();
 
@@ -332,10 +329,11 @@ public class clsProfitLossReportController {
 
 			JasperPrint jp = JasperFillManager.fillReport(jr, hm, new JREmptyDataSource());
 			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+			ServletOutputStream servletOutputStream = resp.getOutputStream();
 			jprintlist.add(jp);
 
-			if (type.trim().equalsIgnoreCase("pdf")) {
-				ServletOutputStream servletOutputStream = resp.getOutputStream();
+			if (objBean.getStrDocType().trim().equalsIgnoreCase("pdf")) {
+				
 				byte[] bytes = null;
 				bytes = JasperRunManager.runReportToPdf(jr, hm, con);
 				resp.setContentType("application/pdf");
@@ -343,13 +341,19 @@ public class clsProfitLossReportController {
 				servletOutputStream.write(bytes, 0, bytes.length);
 				servletOutputStream.flush();
 				servletOutputStream.close();
-			} else if (type.trim().equalsIgnoreCase("xls")) {
-				JRExporter exporterXLS = new JRXlsExporter();
-				exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jp);
-				exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, resp.getOutputStream());
-				resp.setHeader("Content-Disposition", "attachment;filename=" + "rptReciptReport." + type.trim());
-				exporterXLS.exportReport();
+			} else if (objBean.getStrDocType().trim().equalsIgnoreCase("xls")) {
+				JRXlsExporter exporter = new JRXlsExporter();
 				resp.setContentType("application/xlsx");
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
+				exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, byteArrayOutputStream);
+				exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+				resp.setHeader("Content-Disposition","inline;filename=rptProfitLossReport_"+dteFromDate+"_To_"+dteToDate+"_"+userCode+".xls");
+				exporter.exportReport();
+				servletOutputStream.write(byteArrayOutputStream.toByteArray()); 
+				servletOutputStream.flush();
+				servletOutputStream.close();
+
 			}
 
 		} catch (Exception e) {

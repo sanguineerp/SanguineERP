@@ -47,6 +47,13 @@
 					<td width="10%"><label>To Date </label></td>
 					<td width="10%"><s:input id="txtToDate" path="dteToDate" required="true" readonly="readonly" cssClass="calenderTextBox"/>
 					</td>	
+					<td><label>Report Type</label></td>
+					<td>
+						<s:select id="cmbDocType" path="strDocType" cssClass="BoxW124px">
+				    		<s:option value="PDF">PDF</s:option>
+				    		<s:option value="XLS">EXCEL</s:option>
+				    		
+				    	</s:select></td>
 				</tr>
 <!-- 				<tr> -->
 <!-- 					<td><label>Currency </label></td> -->
@@ -56,6 +63,8 @@
 <!-- 				</tr> -->
 			</table>
 		</div>
+		<br />
+	<br />
 		<p align="center">
 				<input type="submit" value="Submit"  class="form_button" />
 				 <input type="button" value="Reset" class="form_button"  onclick="funResetFields()"/>

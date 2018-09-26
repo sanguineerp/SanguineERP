@@ -949,12 +949,15 @@
 				    dataType: "json",
 				    success: function(response)
 				    {
-				    	funDeleteTCTableAllRows();
-				    	$.each(response, function(i,item)
-						{
-				    		//alert(response[i][1]);
-							funAddTCForSupplier(response[i][0],response[i][1],response[i][2]);
-						});
+				    	if(response.length>0)
+				    	{
+					    	funDeleteTCTableAllRows();
+					    	$.each(response, function(i,item)
+							{
+					    		//alert(response[i][1]);
+								funAddTCForSupplier(response[i][0],response[i][1],response[i][2]);
+							});
+				        }
 				    },
 				    error: function(jqXHR, exception) {
 			            if (jqXHR.status === 0) {

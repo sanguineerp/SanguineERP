@@ -52,6 +52,14 @@
 <%-- 						</s:select></td> --%>
 <!-- 					<td colspan="2"></td> -->
 <!-- 				</tr> -->
+<tr>
+					<td><label>Report Type</label></td>
+					<td>
+						<s:select id="cmbDocType" path="strDocType" cssClass="BoxW124px">
+				    		<s:option value="PDF">PDF</s:option>
+				    		<s:option value="XLS">EXCEL</s:option>
+				    		
+				    	</s:select></td></tr>
 			</table>
 		</div>
 		<p align="center">

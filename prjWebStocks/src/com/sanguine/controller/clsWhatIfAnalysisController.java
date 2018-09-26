@@ -175,11 +175,37 @@ public class clsWhatIfAnalysisController {
 			}
 
 			double bomrate =0;
+			double amt=0.0;
+			List<String> listChildNodes11 = new ArrayList<String>();
+			if(semiProduct.equals("No")){
 			if(rateFrom.equals("Last Purchase Rate")){
 				bomrate=funGetBOMLastPurchaseRate(prodCode, clientCode);
 			}else{
 				bomrate=funGetBOMRate(prodCode, clientCode);	
 			}
+			amt=bomrate*reqdQty;
+			}
+			
+			if(semiProduct.equals("Yes")){
+				bomrate =0;
+				 amt=0.0;
+				funGetBOMNodes(prodCode, 0, reqdQty, listChildNodes11);
+				for(String prodCode11:listChildNodes11)
+				{
+//					String temp11 = (String) listChildNodes11.get(cnt);
+					String prodCode1 = prodCode11.split(",")[0];
+					double reqdQty11 = Double.parseDouble(prodCode11.split(",")[1]);
+					if(rateFrom.equals("Last Purchase Rate")){
+						bomrate=funGetBOMLastPurchaseRate(prodCode1, clientCode);
+					}else{
+						bomrate=funGetBOMRate(prodCode1, clientCode);	
+					}
+					bomrate=bomrate*reqdQty11;
+					amt=amt+bomrate;
+				}
+			}
+			
+		
 						
 			clsWhatIfAnalysisFields objWhatIfAnalysisFields=new clsWhatIfAnalysisFields();
 			objWhatIfAnalysisFields.setProdCode(prodCode);
@@ -191,7 +217,7 @@ public class clsWhatIfAnalysisController {
 			objWhatIfAnalysisFields.setSuppCode(suppCode);
 			objWhatIfAnalysisFields.setSuppName(suppName);
 			objWhatIfAnalysisFields.setLeadTime(leadTime);
-			objWhatIfAnalysisFields.setAmount(bomrate * reqdQty);
+			objWhatIfAnalysisFields.setAmount(amt);
 			objWhatIfAnalysisFields.setExpectedDate(expectedDate);
 			objWhatIfAnalysisFields.setCurrentStock(currentStock);
 			

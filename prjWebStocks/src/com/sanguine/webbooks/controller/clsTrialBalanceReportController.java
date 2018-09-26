@@ -471,6 +471,7 @@ public class clsTrialBalanceReportController {
 			clsParameterSetupModel objModel = objParameterSetupService.funGetParameterSetup(clientCode, propertyCode);
 			if(null==objModel)
 			{
+				objModel=new clsParameterSetupModel();
 				objModel.setStrStockInHandAccCode("");
 				objModel.setStrStockInHandAccName("");
 				objModel.setStrClosingCode("");

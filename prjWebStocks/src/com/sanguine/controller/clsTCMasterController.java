@@ -66,7 +66,7 @@ public class clsTCMasterController {
 			objTCMasterService.funAddUpdate(objModel);
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "TC Code : ".concat(objModel.getStrTCCode()));
-			return new ModelAndView("redirect:/frmTCMaster.html?saddr=" + urlHits);
+			return new ModelAndView("redirect:/frmTCMaster.html?saddr=" + urlHits, "command", new clsTCMasterModel());
 		} else {
 			return new ModelAndView("frmTCMaster?saddr=" + urlHits, "command", new clsTCMasterModel());
 		}

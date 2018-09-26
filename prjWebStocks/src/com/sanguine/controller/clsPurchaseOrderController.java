@@ -1611,7 +1611,7 @@ public class clsPurchaseOrderController {
 				hm.put("strVAT", objSetup.getStrVAT());
 				hm.put("strCST", objSetup.getStrCST());
 				hm.put("strSAdd", shippingAddress);
-				hm.put("strBAdd", billAddress);
+				hm.put("strBAdd", billAddress.toUpperCase());
 				
 
 				if (strPartyType.equalsIgnoreCase("Foreign") && clientCode.equals("226.001")) {
