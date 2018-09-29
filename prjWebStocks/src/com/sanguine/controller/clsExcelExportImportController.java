@@ -151,7 +151,11 @@ public class clsExcelExportImportController {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		// String
 		// locCode=request.getSession().getAttribute("locationCode").toString();
+		
 		String locCode = request.getParameter("strLocCode");
+		String sgCode = request.getParameter("sgCode");
+		String gCode = request.getParameter("gCode");
+		
 		String header = "Group Name, SubGroupName,ProductCode,ProductName,Qty,UOM";
 		List ExportList = new ArrayList();
 		String[] ExcelHeader = header.split(",");
@@ -162,8 +166,32 @@ public class clsExcelExportImportController {
 		if (objSetup.getStrShowAllProdToAllLoc() == null || objSetup.getStrShowAllProdToAllLoc() == "N") {
 			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";
 		} else {
+			if (!locCode.equals("") || !locCode.isEmpty()) {
 			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
+			if (!sgCode.equals("") || !sgCode.isEmpty()) 
+			{
+				hql += "and a.strSGCode='"+sgCode+"'";
+			}
+			
+			if (!gCode.equals("") || !gCode.isEmpty()) 
+			{
+				hql += "and b.strGCode='"+gCode+"'";
+			}
+			}else{
+				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
+				if (!sgCode.equals("") || !sgCode.isEmpty()) 
+				{
+					hql += "and a.strSGCode='"+sgCode+"'";
+				}
+				
+				if (!gCode.equals("") || !gCode.isEmpty()) 
+				{
+					hql += "and b.strGCode='"+gCode+"'";
+				}
+			}
+		
 		}
+		
 
 		List list = objGlobalFunctionsService.funGetList(hql, "hql");
 		List PhyStkPstlist = new ArrayList();

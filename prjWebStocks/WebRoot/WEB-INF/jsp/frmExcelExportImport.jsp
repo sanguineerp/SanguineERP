@@ -39,7 +39,10 @@
 				window.location.href=getContextPath()+"/frmOpeningStkExcelExport.html?strLocCode="+LocCode;
 				break;
 			case "frmPhysicalStkPosting":
-				window.location.href=getContextPath()+"/PhyStkPstExcelExport.html?strLocCode="+LocCode;
+				LocCode=$("#txtLocCode").val();
+				var gCode=$("#txtGroupCode").val();
+				var sgCode=$("#txtSubGroupCode").val();
+				window.location.href=getContextPath()+"/PhyStkPstExcelExport.html?strLocCode="+LocCode+"&gCode="+gCode+"&sgCode="+sgCode;
 				break;
 			case "frmLocationMaster":
 				window.location.href=getContextPath()+"/LocationMasterReorderLevelExcelExport.html?locCode="+LocCode;
@@ -130,6 +133,9 @@
 		
 		if(transactionformName=="frmPhysicalStkPosting")
 			{
+			
+// 			document.all["divFilter"].style.display = 'block';
+			document.getElementById("divFilter").style.display = 'block';
 				LocCode='<%=request.getParameter("strLocCode") %>'
 			}
 		if(transactionformName=="frmOpeningStock")
@@ -144,6 +150,163 @@
 		
 	}
 	
+	function funHelp(transactionName)
+	{
+		fieldName=transactionName;
+	//	 window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
+		 window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
+    }
+	
+	function funSetData(code)
+	{
+		switch (fieldName) 
+		{
+		    case 'locationmaster':
+		    	funSetLocation(code);
+		        break;
+		    case 'subgroup':
+		    	funSetSubGroup(code);
+		        break;
+		   
+		   case 'group':
+		    	funSetGroup(code);
+		        break;
+		}
+	}
+	
+	/**
+	* Get and set Location Data Passing value(Location Code)
+    **/
+	function funSetLocation(code)
+	{
+		var searchUrl="";
+		searchUrl=getContextPath()+"/loadLocationMasterData.html?locCode="+code;			
+		$.ajax({
+		        type: "GET",
+		        url: searchUrl,
+			    dataType: "json",
+			    success: function(response)
+			    {
+			    	if(response.strLocCode=='Invalid Code')
+			       	{
+			       		alert("Invalid Location Code");
+			       		$("#txtLocCode").val('');
+			       		$("#lblLocName").text("");
+			       		$("#txtLocCode").focus();
+			       	}
+			       	else
+			       	{
+			    	$("#txtLocCode").val(response.strLocCode);
+	        		$("#lblLocName").text(response.strLocName);	
+	        		
+			       	}
+			    },
+			    error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+		      });
+	}
+	
+	function funSetSubGroup(code)
+	{
+		var searchUrl="";
+		
+		searchUrl=getContextPath()+"/loadSubGroupMasterData.html?subGroupCode="+code;
+		
+		$.ajax({
+		        type: "GET",
+		        url: searchUrl,
+			    dataType: "json",
+			    success: function(response)
+			    {
+			    	if('Invalid Code' == response.strSGCode){
+			    		alert('Invalid Code');
+			    		$("#txtSubGroupCode").val('');
+			    		$("#txtSubGroupCode").focus();
+			    	}else{
+			    	$("#txtSubGroupCode").val(code);
+			    	$("#txtSubGroupName").text(response.strSGName);
+			    	
+			    	}
+			    },
+			    error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+		      });
+	}
+	
+	
+	function funSetGroup(code)
+	{
+			 $.ajax({
+				        type: "GET",
+				        url: getContextPath()+"/loadGroupMasterData.html?groupCode="+code,
+				        dataType: "json",
+				        success: function(response)
+				        {
+				        	if(response.strGCode=='Invalid Code')
+				        	{
+				        		alert("Invalid Group Code");
+				        		$("#txtGroupCode").val('');
+				        		$("#lblgroupname").text('');
+				        		$("#txtGroupCode").focus();
+				        	}
+				        	else
+				        	{
+				        		$("#txtGroupCode").val(response.strGCode);
+					        	$("#lblgroupname").text(response.strGName);						    
+					        	$("#txtGroupName").focus();
+				        	}
+						},
+						error: function(jqXHR, exception) {
+				            if (jqXHR.status === 0) {
+				                alert('Not connect.n Verify Network.');
+				            } else if (jqXHR.status == 404) {
+				                alert('Requested page not found. [404]');
+				            } else if (jqXHR.status == 500) {
+				                alert('Internal Server Error [500].');
+				            } else if (exception === 'parsererror') {
+				                alert('Requested JSON parse failed.');
+				            } else if (exception === 'timeout') {
+				                alert('Time out error.');
+				            } else if (exception === 'abort') {
+				                alert('Ajax request aborted.');
+				            } else {
+				                alert('Uncaught Error.n' + jqXHR.responseText);
+				            }		            
+				        }
+			      });
+		
+		
+	}
 </script>
 </head>
 <body onload="funOnLoad();">
@@ -160,8 +323,35 @@
 		    <tr>
 		    	<td><input type="file" id="File"  Width="50%" accept="application/vnd.ms-excel"  ></input></td>    
 		    </tr>
+		       </tbody>
+	</table>
+  <div id="divFilter" style="display:none;">
+  <table>
+	   <tbody>
+		    <tr>
+			   <td width="120px"><label>Location Code </label></td>
+			   <td><input id="txtLocCode" name="txtLocCode"  ondblclick="funHelp('locationmaster')"  cssClass="searchTextBox"/></td>
+				<td colspan="2">
+					<label id="lblLocName">All</label>
+			  </td>
+			</tr>
+				 <tr> 
+			    <td><label path="strGCode" >Group Code</label></td>
+		        <td><input type="text" id="txtGroupCode" name="txtGroupCode" autocomplete="off"    ondblclick="funHelp('group')" required="true" cssClass="searchTextBox" /></td><td><label id="lblgroupname">All</label></td>
+				
+			</tr>
+			
+				<tr>
+				        <td><label >Sub-Group Code</label></td>
+				        <td ><input id="txtSubGroupCode" name="subGroupCode"  ondblclick="funHelp('subgroup')" autocomplete="off" cssClass="searchTextBox"/></td>
+				       <td><label id="txtSubGroupName">All</label></td>
+				        <td></td>
+				       
+			   		</tr>    	
+		  
 	    </tbody>
 	</table>
+	</div>
 	<br>
     <p align="center">
 			<input id="btnSubmit" type="button" class="form_button" value="Submit" onclick="return funSubmit();"/>

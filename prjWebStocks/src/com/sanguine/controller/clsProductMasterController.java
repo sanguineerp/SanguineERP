@@ -187,6 +187,7 @@ public class clsProductMasterController {
 		listType.add("Scrap");
 		listType.add("Non-Inventory");
 		listType.add("Trading");
+		listType.add("Semi Finished");
 		model.put("typeList", listType);
 
 		List<String> listCalAmtOn = new ArrayList<>();

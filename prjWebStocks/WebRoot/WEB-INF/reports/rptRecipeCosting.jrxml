@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptRecipeCosting" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2b650191-aecf-4f50-a07a-fdd0e7eab753">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -62,7 +62,7 @@ group by b.strChildCode order by a.strParentCode]]>
 		<groupHeader>
 			<band height="40">
 				<textField>
-					<reportElement x="63" y="15" width="93" height="20" uuid="0dd66924-cbb1-4c47-91c0-b47423d3b858"/>
+					<reportElement x="63" y="15" width="182" height="20" uuid="0dd66924-cbb1-4c47-91c0-b47423d3b858"/>
 					<textElement>
 						<font fontName="Serif" size="12" isBold="true"/>
 					</textElement>
@@ -276,7 +276,7 @@ group by b.strChildCode order by a.strParentCode]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{strChildCode}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement style="Detail" x="61" y="0" width="87" height="15" uuid="ee71ecf9-fe23-48b6-b61d-543d0e70259c"/>
 				<textElement>
 					<font size="10" isBold="false"/>
@@ -290,15 +290,15 @@ group by b.strChildCode order by a.strParentCode]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{strUOM}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00#" isBlankWhenNull="true">
-				<reportElement style="Detail" x="191" y="0" width="51" height="15" uuid="0d647583-b7df-44ae-8c22-e17f932dc319"/>
+			<textField pattern="#,##0.000" isBlankWhenNull="true">
+				<reportElement style="Detail" x="191" y="0" width="54" height="15" uuid="0d647583-b7df-44ae-8c22-e17f932dc319"/>
 				<textElement textAlignment="Right">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{InitialWt}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00#" isBlankWhenNull="true">
-				<reportElement style="Detail" x="244" y="0" width="46" height="15" uuid="4923b5f0-3655-47a8-b6d4-5e1cc7313843"/>
+				<reportElement style="Detail" x="250" y="0" width="41" height="15" uuid="4923b5f0-3655-47a8-b6d4-5e1cc7313843"/>
 				<textElement textAlignment="Right">
 					<font size="10" isBold="false"/>
 				</textElement>

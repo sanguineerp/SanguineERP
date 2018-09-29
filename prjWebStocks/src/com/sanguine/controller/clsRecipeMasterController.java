@@ -367,17 +367,18 @@ public class clsRecipeMasterController {
 	private void funReport(@ModelAttribute("command") clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req) {
 		String ProdCode = objBean.getStrDocCode();
 		String type = objBean.getStrDocType();
-		funCallReport(ProdCode, type, resp, req);
+		String rateFrom =objBean.getStrShowBOM();
+		funCallReport(ProdCode, type,rateFrom, resp, req);
 	}
 
 	@RequestMapping(value = "/invokeRecipesList", method = RequestMethod.GET)
 	private void funCallReportOnClick(@RequestParam(value = "docCode") String docCode, HttpServletResponse resp, HttpServletRequest req) {
 		String type = "pdf";
-		funCallReport(docCode, type, resp, req);
+//		funCallReport(docCode, type, resp, req);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void funCallReport(String ProdCode, String type, HttpServletResponse resp, HttpServletRequest req) {
+	private void funCallReport(String ProdCode, String type,String rateFrom , HttpServletResponse resp, HttpServletRequest req) {
 		try {
 			objGlobal = new clsGlobalFunctions();
 			Connection con = objGlobal.funGetConnection(req);
@@ -385,7 +386,7 @@ public class clsRecipeMasterController {
 			String companyName = req.getSession().getAttribute("companyName").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
-
+			
 			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptRecipesList.jrxml");
@@ -397,7 +398,7 @@ public class clsRecipeMasterController {
 					+ "cp.strProdName as childProductName,cp.strRecipeUOM as childUOM, d.dblQty,cp.dblCostRM/cp.dblRecipeConversion as  price, "
 					+ "IFNULL(pr.strprocessname,'') as strprocessname,ifnull(cl.strlocname,'') as childLocation  ,"
 					+ "date(h.dtCreatedDate) as dtCreatedDate,date(h.dtValidFrom) as dtValidFrom," 
-					+ "date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty) as value "
+					+ "date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty) as value,d.dblQty "
 					+ "from tblbommasterhd  h inner join tblbommasterdtl AS d ON h.strBOMCode = d.strBOMCode and d.strClientCode='" + clientCode + "' " 
 					+ "left outer join tblproductmaster   p ON h.strParentCode = p.strProdCode and p.strClientCode='" + clientCode + "' " + "left outer join tblproductmaster AS cp ON d.strChildCode = cp.strProdCode and cp.strClientCode='" + clientCode + "' "
 					+ "left outer join tbllocationmaster  lp ON lp.strLocCode = p.strLocCode and lp.strClientCode='" + clientCode + "' " + "left outer join tbllocationmaster AS cl ON cl.strLocCode = cp.strLocCode and cl.strClientCode='" + clientCode + "' "
@@ -406,7 +407,7 @@ public class clsRecipeMasterController {
 			if (!ProdCode.equals("")) {
 				sqlDtlQuery += " and h.strParentCode='" + ProdCode + "'  ";
 			}
-			List<String> listChildNodes11 = new ArrayList<String>();
+			
 			List<clsRecipeMasterBean> listDtlBean=new ArrayList<clsRecipeMasterBean>(); 
 			List listChildRate = objGlobalFunctionsService.funGetList(sqlDtlQuery, "sql");
 			if(listChildRate.size()>0)
@@ -417,6 +418,13 @@ public class clsRecipeMasterController {
 					Object[] obj=(Object[])listChildRate.get(i);
 					double bomrate =Double.parseDouble(obj[11].toString());
 					double bomAmt=Double.parseDouble(obj[18].toString());
+					if(rateFrom.equals("Last Purchase Rate")){
+						List listRate =funGetBOMLastPurchaseRate(obj[7].toString(), clientCode);
+						if(listRate.size()>0){
+						bomrate=Double.parseDouble(listRate.get(0).toString());
+						bomAmt=bomrate*Double.parseDouble(obj[19].toString());
+					    }
+					}
 					clsRecipeMasterBean objBean=new clsRecipeMasterBean();
 					objBean.setStrParentCode(obj[1].toString());
 					objBean.setStrParentName(obj[5].toString());
@@ -425,7 +433,7 @@ public class clsRecipeMasterController {
 					objBean.setDblQty(Double.parseDouble(obj[10].toString()));
 					objBean.setStrUOM(obj[9].toString());
 					objBean.setStrLocation(obj[13].toString());
-					
+					List<String> listChildNodes11 = new ArrayList<String>();
 					funGetBOMNodes(obj[7].toString(), 0,Double.parseDouble(obj[10].toString()), listChildNodes11);
 					if(listChildNodes11.size()>0)
 					{
@@ -439,12 +447,20 @@ public class clsRecipeMasterController {
 						double reqdQty11 = Double.parseDouble(prodCode11.split(",")[1]);
 //						bomrate=funGetBOMRate(prodCode1, clientCode);	
 					
-						List listBom=funGetBOMRate(prodCode1, clientCode);	
-						double rate=Double.parseDouble(listBom.get(0).toString());
-						double amt=Double.parseDouble(listBom.get(1).toString());
+						
 //						bomAmt+=(amt*reqdQty11);
-						bomrate+=amt;
-						bomAmt=bomAmt+(rate*reqdQty11);
+						if(rateFrom.equals("Last Purchase Rate")){
+							List listBomRate=funGetBOMLastPurchaseRate(prodCode1, clientCode);
+							bomrate+=Double.parseDouble(listBomRate.get(0).toString());
+							bomAmt=bomAmt+(Double.parseDouble(listBomRate.get(1).toString())*reqdQty11);
+						}else{
+							List listBom=funGetBOMRate(prodCode1, clientCode);	
+							double rate=Double.parseDouble(listBom.get(0).toString());
+							double amt=Double.parseDouble(listBom.get(1).toString());
+							bomrate+=amt;
+							bomAmt=bomAmt+(rate*reqdQty11);
+						}
+						
 					}
 					}
 					objBean.setDblAmount(bomAmt);
@@ -592,19 +608,28 @@ public class clsRecipeMasterController {
 	}
 
 	
-	public double funGetBOMLastPurchaseRate(String childCode, String clientCode) {
-		double bomRate = 0;
+	public List funGetBOMLastPurchaseRate(String childCode, String clientCode) {
+		List bomDtl =new ArrayList();
 		try {
-			String sql = "select b.dblUnitPrice, from tblgrnhd a, tblgrndtl b where a.strGRNCode=b.strGRNCode and a.strClientCode='"+clientCode+"' and b.strProdCode='"+childCode+"' order by a.dtBillDate desc limit 1 ;";
+			String sql = "select  b.dblUnitPrice/c.dblRecipeConversion , b.dblUnitPrice from tblgrnhd a, tblgrndtl b,tblproductmaster c where a.strGRNCode=b.strGRNCode and a.strClientCode='"+clientCode+"' and b.strProdCode='"+childCode+"'  and b.strProdCode=c.strProdCode order by a.dtBillDate desc limit 1 ;";
 			List listChildRate = objGlobalFunctionsService.funGetList(sql, "sql");
 			if (listChildRate.size() > 0) {
-				bomRate = Double.parseDouble(listChildRate.get(0).toString());
+				for(int i=0;i<listChildRate.size();i++)
+				{ 
+					Object obj[]=(Object[])listChildRate.get(i);
+					
+					bomDtl.add(Double.parseDouble( obj[0].toString()));
+					bomDtl.add(Double.parseDouble( obj[1].toString()));
+//					bomDtl= Double.parseDouble(listChildRate.get(0).toString());
+					
+				}
+				
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return bomRate;
+		return bomDtl;
 	}
 
 

@@ -690,9 +690,9 @@ public class clsSearchFormController {
 			}
 
 			case "subgroup": {
-				columnNames = "strSGCode,strSGName,intSortingNo";
+				columnNames = "strSGCode,strSGName,intSortingNo,ifnull(a.strGCode,'') ";
 				tableName = "select strSGCode,strSGName,intSortingNo from tblsubgroupmaster where strClientCode='" + clientCode + "' ";
-				listColumnNames = "Sub-Group Code,Sub-Group Name,Sorting No";
+				listColumnNames = "Sub-Group Code,Sub-Group Name,Sorting No,Group Code";
 				idColumnName = "strSGCode";
 				searchFormTitle = "Sub Group Master";
 				flgQuerySelection = true;
@@ -777,7 +777,7 @@ public class clsSearchFormController {
 
 			case "childcode": {
 				columnNames = "strProdCode,strPartNo,strProdName,strProdType";
-				tableName = "clsProductMasterModel where strClientCode='" + clientCode + "'";
+				tableName = "clsProductMasterModel where strClientCode='" + clientCode + "' and a.strNotInUse='N' ";
 				listColumnNames = "Product Code,POS Item Code,Product Name,Product Type";
 				idColumnName = "strProdCode";
 				searchFormTitle = "Product Master";
@@ -1633,7 +1633,7 @@ public class clsSearchFormController {
 				} else {
 					tableName = tableName + "  where   ";
 				}
-				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strProdType='Produced' " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
+				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode  and a.strNotInUse='N' and a.strProdType in ('Produced','Semi finished' ) " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
 				listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Product Type,Code,Specification,Cal Amt On" + ",Class,Non Stockable,PartNo";
 				idColumnName = "a.strProdCode";
 				searchFormTitle = "Product Master";

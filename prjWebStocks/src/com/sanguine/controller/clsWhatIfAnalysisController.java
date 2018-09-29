@@ -142,22 +142,23 @@ public class clsWhatIfAnalysisController {
 			
 			String productInfo = funGetProdInfo(prodCode);
 			String leadTime = "0", prodName = "", uom = "", suppCode = "", suppName = "";
-			double receiveConversion=1;
+			double conversion=1;
+			
 			
 			if (productInfo.trim().length() > 0) {
 				String[] spProd = productInfo.split("#");
 				prodName = spProd[0];
-				uom = spProd[1];
+				uom = spProd[7];
 				suppCode = spProd[2];
 				suppName = spProd[3];
-				receiveConversion = Double.parseDouble(spProd[5]);
-				if(spProd.length>6)
+				conversion = Double.parseDouble(spProd[4]);
+				if(spProd.length>8)
 					leadTime = spProd[6];
 
 			} else {
 				clsProductMasterModel objModel = objProductMasterService.funGetObject(prodCode, clientCode);
 				prodName = objModel.getStrProdName();
-				receiveConversion = objModel.getDblReceiveConversion();
+				conversion = objModel.getDblReceiveConversion();
 			}
 
 			Calendar cal = Calendar.getInstance();
@@ -210,7 +211,7 @@ public class clsWhatIfAnalysisController {
 			clsWhatIfAnalysisFields objWhatIfAnalysisFields=new clsWhatIfAnalysisFields();
 			objWhatIfAnalysisFields.setProdCode(prodCode);
 			objWhatIfAnalysisFields.setProdName(prodName);
-			objWhatIfAnalysisFields.setReqdQty(reqdQty*receiveConversion);
+			objWhatIfAnalysisFields.setReqdQty(reqdQty*conversion);
 			objWhatIfAnalysisFields.setUom(uom);
 			objWhatIfAnalysisFields.setOpenPOQty(openPOQty);
 			objWhatIfAnalysisFields.setOrderQty(orderQty);
@@ -223,7 +224,7 @@ public class clsWhatIfAnalysisController {
 			
 			if(hmChildNodes.containsKey(prodCode))
 			{
-				double reqdQty1=reqdQty*receiveConversion;
+				double reqdQty1=reqdQty*conversion;
 				double amount1=bomrate * reqdQty;
 				
 				objWhatIfAnalysisFields=hmChildNodes.get(prodCode);
@@ -247,7 +248,7 @@ public class clsWhatIfAnalysisController {
 			+ " left outer join tblpartymaster c on b.strSuppCode=c.strPCode "
 			+ " where  a.strProdCode='" + prodCode + "'  ";*/
 		
-		String sql = " select ifnull(a.strProdName,''),a.strReceivedUOM,ifnull(b.strSuppCode,''),ifnull(c.strPName,''),a.dblRecipeConversion,a.dblReceiveConversion,ifnull(b.strLeadTime,'0') " 
+		String sql = " select ifnull(a.strProdName,''),a.strReceivedUOM,ifnull(b.strSuppCode,''),ifnull(c.strPName,''),a.dblRecipeConversion,a.dblReceiveConversion,ifnull(b.strLeadTime,'0') ,a.strRecipeUOM" 
 			+ " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strDefault='Y' "
 			+ " left outer join tblpartymaster c on b.strSuppCode=c.strPCode "
 			+ " where  a.strProdCode='" + prodCode + "'  ";
@@ -255,7 +256,7 @@ public class clsWhatIfAnalysisController {
 		List list = objGlobalFunctionsService.funGetList(sql, "sql");
 		if (list.size() > 0) {
 			Object[] arrObj = (Object[]) list.get(0);
-			prodInfo = arrObj[0] + "#" + arrObj[1] + "#" + arrObj[2] + "#" + arrObj[3] + "#" + arrObj[4]+ "#" + arrObj[5]+ "#" + arrObj[6];
+			prodInfo = arrObj[0] + "#" + arrObj[1] + "#" + arrObj[2] + "#" + arrObj[3] + "#" + arrObj[4]+ "#" + arrObj[5]+ "#" + arrObj[6]+ "#" + arrObj[7];
 		}
 
 		return prodInfo;

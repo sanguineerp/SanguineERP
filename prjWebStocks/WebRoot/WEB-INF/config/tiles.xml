@@ -1909,6 +1909,7 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/frmSupplierWisePurchaseGRNVarianceReport.jsp"></put-attribute>
 	</definition> 
 
+
     
 	<!-- 	End Of Webstock Tiles Entry -->
 	

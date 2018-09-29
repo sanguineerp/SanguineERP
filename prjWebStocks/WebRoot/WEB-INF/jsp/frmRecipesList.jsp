@@ -60,7 +60,16 @@
 				    	</s:select>
 					</td>
 				</tr>
-				
+				<tr>
+						<td width="10%">Rate PickUp From</td>
+						<td>
+							<s:select  id="cmbRatePickUpFrom" path="strShowBOM" class="BoxW48px" style="width:130px" >
+							<option selected="selected" value="Product Master">Product Master</option>
+							<option value="Last Purchase Rate">Last Purchase Rate</option>
+								
+							</s:select>
+						</td>
+						</tr>
 				<tr>
 				<td colspan="2"></td>
 					<!-- <td><input type="submit" value="Submit" /></td>
