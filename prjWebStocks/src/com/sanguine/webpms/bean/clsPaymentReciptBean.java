@@ -42,6 +42,8 @@ public class clsPaymentReciptBean {
 	private double dblBalanceAmount;
 	
 	private String strGuestCode;
+	
+	private int intNOfNights;
 
 	public String getStrReceiptNo() {
 		return strReceiptNo;
@@ -201,6 +203,14 @@ public class clsPaymentReciptBean {
 
 	public void setStrGuestCode(String strGuestCode) {
 		this.strGuestCode = strGuestCode;
+	}
+
+	public int getIntNOfNights() {
+		return intNOfNights;
+	}
+
+	public void setIntNOfNights(int intNOfNights) {
+		this.intNOfNights = intNOfNights;
 	}
 
 }

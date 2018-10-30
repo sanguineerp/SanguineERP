@@ -418,15 +418,41 @@ public class clsBalanceSheetController {
 				
 				Map<String,clsIncomeStmtReportBean> hmOtherExpensesIncStmt = new HashMap<String,clsIncomeStmtReportBean>();
 				
+				 cnt=1;
+					if (!startDate.equals(dteFromDate)) {
+						String tempFromDate = dteFromDate.split("-")[2] + "-" + dteFromDate.split("-")[1] + "-" + dteFromDate.split("-")[0];
+						SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
+						Date dt1;
+						try {
+							dt1 = obj.parse(tempFromDate);
+							GregorianCalendar cal = new GregorianCalendar();
+							cal.setTime(dt1);
+							cal.add(Calendar.DATE, -1);
+							String newToDate = (cal.getTime().getYear() + 1900) + "-" + (cal.getTime().getMonth() + 1) + "-" + (cal.getTime().getDate());
 
+			 //  CAPITAL AND RESERVES Receipt 
+			    funCalculateBalanceSheetListAccountCode("LIABILITY", "tbljvhd", "tbljvdtl", startDate, newToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listACC,propertyCode);
+			    cnt++;
+			   //  CAPITAL AND RESERVES Receipt 
+				funCalculateBalanceSheetListAccountCode("LIABILITY", "tblreceipthd", "tblreceiptdtl", startDate, newToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listACC,propertyCode);
+										
+			 //  CAPITAL AND RESERVES Payment	
+				funCalculateBalanceSheetListAccountCode("LIABILITY", "tblpaymenthd", "tblpaymentdtl", startDate, newToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listACC,propertyCode);
+
+				}catch(Exception e)
+						{
+							
+						}
+					}
+					
 //				// LIABILITY JV
-//					funCalculateBalanceSheet("LIABILITY", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmOtherExpensesIncStmt);
+					funCalculateBalanceSheetListAccountCode("LIABILITY", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listACC,propertyCode);
 //						
 //				// LIABILITY 
-//					funCalculateBalanceSheet("LIABILITY", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmOtherExpensesIncStmt);
+					funCalculateBalanceSheetListAccountCode("LIABILITY", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listACC,propertyCode);
 //							
 //				//LIABILITY	
-//					funCalculateBalanceSheet("LIABILITY", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmOtherExpensesIncStmt);
+					funCalculateBalanceSheetListAccountCode("LIABILITY", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listACC,propertyCode);
 							
 				// Calculate Gross Profit = Total Income (Sales) - Total Other Expenses (COG)	
 					
@@ -435,7 +461,12 @@ public class clsBalanceSheetController {
 					totalSalesAmt=totalSalesAmt.add(entry.getValue().getDblValue());
 					listOfBalancesheet.add(entry.getValue());
 				}
-					
+				
+				for(int i=0;i<listOfBalancesheet.size();i++)
+				{
+				System.out.println(	listOfBalancesheet.get(i).getStrGroupName());
+				System.out.println(	listOfBalancesheet.get(i).getStrAccountName());
+				}
 				for(Map.Entry<String, clsIncomeStmtReportBean> entry:hmOtherExpensesIncStmt.entrySet())
 				{
 					totalOtherExpenses=totalOtherExpenses.add(entry.getValue().getDblValue());
@@ -558,10 +589,10 @@ public class clsBalanceSheetController {
 		
 		BigDecimal netCurrenAsset=new BigDecimal(0); 
 		BigDecimal totNetAsset=new BigDecimal(0); 
-		if(!hmCalNetAssets.isEmpty()){
-		netCurrenAsset=hmCalNetAssets.get("CURRENT ASSETS").subtract(hmCalNetAssets.get("CURRENT LIABILITIES"));
-		totNetAsset=hmCalNetAssets.get("NON- CURRENT ASSETS").add(netCurrenAsset);
-		}
+//		if(!hmCalNetAssets.isEmpty()){
+//		netCurrenAsset=hmCalNetAssets.get("CURRENT ASSETS").subtract(hmCalNetAssets.get("CURRENT LIABILITIES"));
+//		totNetAsset=hmCalNetAssets.get("NON- CURRENT ASSETS").add(netCurrenAsset);
+//		}
 		
 		hm.put("netCurrenAsset",netCurrenAsset);
 		hm.put("totNetAsset",totNetAsset);
@@ -1108,7 +1139,7 @@ public class clsBalanceSheetController {
 						BigDecimal opAmt=new BigDecimal(0);
 						sbOp.append(" select IF(a.strCrDr='Dr',a.intOpeningBal,0) dblDebitAmt, IF(a.strCrDr='Cr',a.intOpeningBal,0) dblCreditAmt, (IF(a.strCrDr='Dr',a.intOpeningBal,0) - IF(a.strCrDr='Cr',a.intOpeningBal,0)) dblBalanceAmt  from tblacmaster a where a.strAccountCode='"+objArr[7].toString()+"' "
 					     +" and a.strClientCode='"+clientCode+"' ");
-						List listOP = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
+						List listOP = objGlobalFunctionsService.funGetListModuleWise(sbOp.toString(), "sql");
 					    if(listOP.size()>0)
 					    {
 					    	Object obj[]=(Object[])listOP.get(0);
@@ -1236,17 +1267,19 @@ public class clsBalanceSheetController {
 			
 			StringBuilder sbOp=new StringBuilder(); 		
 			
-			for(String acc:list)
-			{
+//			for(String acc:list)
+//			{
 			sbSql.setLength(0);
 			sbSql.append("select a.strType,a.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),if((c.strVouchNo is null),0, IFNULL(SUM(d.dblCrAmt),0) )AS Sale, if((c.strVouchNo is null),0,IFNULL(SUM(d.dblDrAmt),0)) AS Purchase,a.strAccountName,a.strAccountCode, "
 					+" b.strCategory from  tblacgroupmaster b,tblacmaster a "
 					+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
 					+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"'  and a.strPropertyCode='"+propCode+"' "
 					+" where a.strGroupCode=b.strGroupCode "
-					+" and a.strAccountCode='"+acc+"' "
+//					+" and a.strAccountCode='"+acc+"' "
+					+ "and b.strCategory='"+catType+"' "
 //					+" and a.strType='GL Code'  "
-					+" group by a.strAccountCode  ");
+					+" group by a.strAccountCode  "
+					+" ORDER BY b.strGroupName ");
 			
 			List listJV = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
 			if (listJV != null && listJV.size() > 0)
@@ -1254,11 +1287,12 @@ public class clsBalanceSheetController {
 				for(int cn=0;cn<listJV.size();cn++)
 				{
 					Object[] objArr = (Object[]) listJV.get(cn);
-
+					System.out.println(objArr[2].toString());
 					String groupCategory = objArr[1].toString();
 					String groupName = objArr[2].toString();
 					BigDecimal creditAmount = BigDecimal.valueOf(Double.parseDouble(objArr[4].toString()));
 					BigDecimal debitAmount = BigDecimal.valueOf(Double.parseDouble(objArr[5].toString()));
+	
 					
 					
 					BigDecimal totalAmt=debitAmount.subtract(creditAmount);
@@ -1301,7 +1335,7 @@ public class clsBalanceSheetController {
 			}
 			
 			
-			}
+//			}
 		}
 		
 		

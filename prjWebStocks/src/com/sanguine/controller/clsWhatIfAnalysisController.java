@@ -220,7 +220,7 @@ public class clsWhatIfAnalysisController {
 			objWhatIfAnalysisFields.setLeadTime(leadTime);
 			objWhatIfAnalysisFields.setAmount(amt);
 			objWhatIfAnalysisFields.setExpectedDate(expectedDate);
-			objWhatIfAnalysisFields.setCurrentStock(currentStock);
+			objWhatIfAnalysisFields.setCurrentStock(currentStock*conversion);
 			
 			if(hmChildNodes.containsKey(prodCode))
 			{

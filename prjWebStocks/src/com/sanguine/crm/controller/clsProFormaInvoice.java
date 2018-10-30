@@ -508,7 +508,7 @@ public class clsProFormaInvoice {
 							prodRateForTaxCal = objInvDtl.getDblUnitPrice() * objInvDtl.getDblWeight() * dblCurrencyConv;
 						}
 						String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0";
-						Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0", req);
+						Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
 						System.out.println("Map Size= " + hmProdTaxDtl.size());
 
 						Map<String, clsProFormaInvoiceTaxDtlModel> hmInvTaxDtl = new HashMap<String, clsProFormaInvoiceTaxDtlModel>();

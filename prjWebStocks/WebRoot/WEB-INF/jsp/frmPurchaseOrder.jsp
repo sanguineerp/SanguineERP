@@ -165,8 +165,8 @@
 		    dteOP=arrdtOP[2]+"-"+arrdtOP[1]+"-"+arrdtOP[0];
 			var CIFAmt=$("#txtCIF").val();
 			var subTotal=$("#txtSubTotal").val();
-			
-		    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Purchase&transDate="+dteOP+"&CIFAmt="+CIFAmt;
+			var settlement='';
+		    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Purchase&transDate="+dteOP+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement;
 			
 		    $.ajax({
 				type: "GET",

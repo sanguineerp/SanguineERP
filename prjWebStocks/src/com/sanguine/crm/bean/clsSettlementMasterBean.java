@@ -9,6 +9,8 @@ public class clsSettlementMasterBean {
 	private boolean strApplicable;
 
 	private String strSettlementType;
+	
+	private String strInvSeriesChar;
 
 	public String getStrSettlementCode() {
 		return strSettlementCode;
@@ -40,6 +42,14 @@ public class clsSettlementMasterBean {
 
 	public void setStrSettlementType(String strSettlementType) {
 		this.strSettlementType = strSettlementType;
+	}
+
+	public String getStrInvSeriesChar() {
+		return strInvSeriesChar;
+	}
+
+	public void setStrInvSeriesChar(String strInvSeriesChar) {
+		this.strInvSeriesChar = strInvSeriesChar;
 	}
 
 }

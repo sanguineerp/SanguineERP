@@ -57,6 +57,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
 import com.sanguine.base.service.intfBaseService;
+import com.sanguine.bean.clsStockFlashBean;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.controller.clsJVGeneratorController;
 import com.sanguine.crm.bean.clsInvoiceBean;
@@ -110,6 +111,7 @@ import com.sanguine.service.clsStkAdjustmentService;
 import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.util.clsNumberToWords;
 import com.sanguine.util.clsReportBean;
+import com.sanguine.webbooks.model.clsReceiptHdModel;
 import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
 
 @Controller
@@ -543,7 +545,7 @@ public class clsInvoiceController
 						prodRateForTaxCal = objInvDtl.getDblUnitPrice() * objInvDtl.getDblWeight() * dblCurrencyConv;
 					}*/
 					String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0";
-					Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0", req);
+					Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
 					System.out.println("Map Size= " + hmProdTaxDtl.size());
 
 					Map<String, clsInvoiceTaxDtlModel> hmInvTaxDtl = new HashMap<String, clsInvoiceTaxDtlModel>();
@@ -672,7 +674,64 @@ public class clsInvoiceController
 				{
 					String[] invDate = objHDModel.getDteInvDate().split("-");
 					String dateInvoice = invDate[2] + "-" + invDate[1] + "-" + invDate[0];
-					String invCode = objGlobalFunctions.funGenerateDocumentCode("frmInvoice", dateInvoice, req);
+					String invCode ="";
+				
+						
+						
+						String transYear="A";
+						List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();
+						if (listClsCompanyMasterModel.size() > 0) {
+							clsCompanyMasterModel objCompanyMasterModel = listClsCompanyMasterModel.get(listClsCompanyMasterModel.size() - 1);
+							transYear=objCompanyMasterModel.getStrYear();
+						}
+						
+						String[] spDate = dateInvoice.split("-");
+						String transMonth = objGlobalFunctions.funGetAlphabet(Integer.parseInt(spDate[1])-1);
+						String sql = "select ifnull(max(MID(a.strInvCode,8,5)),'' ) " + " from tblinvoicehd a where MID(a.strInvCode,5,1) = '" + transYear + "' " + " and MID(a.strInvCode,6,1) = '" + transMonth + "' " + " and MID(a.strInvCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
+						String sqlAudit = " select ifnull(max(MID(a.strTransCode,8,5)),'' ) " + " from tblaudithd a where MID(a.strTransCode,5,1) = '" + transYear + "' " + " and MID(a.strTransCode,6,1) = '" + transMonth + "' " + " and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Invoice' ;  ";
+						
+						
+						List listAudit = objGlobalFunctionsService.funGetListModuleWise(sqlAudit, "sql");
+						long lastnoAudit;
+						if (listAudit != null && !listAudit.isEmpty() && !listAudit.contains("")) {
+							lastnoAudit = Integer.parseInt(listAudit.get(0).toString());
+
+						} else {
+							lastnoAudit = 0;
+						}
+						List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+						long lastnoLive;
+						if (list != null && !list.isEmpty() && !list.contains("")) {
+							lastnoLive = Integer.parseInt(list.get(0).toString());
+
+						} else {
+							lastnoLive = 0;
+						}
+
+						
+						clsSettlementMasterModel objModel = objSttlementMasterService.funGetObject(objBean.getStrSettlementCode(), clientCode);
+						if(objSetup.getStrSettlementWiseInvSer().equals("Yes"))
+						{
+							
+						if (lastnoLive > lastnoAudit) {
+							invCode = propCode + "IV" + transYear + transMonth + objModel.getStrInvSeriesChar() + String.format("%05d", lastnoLive + 1);
+						} else {
+							invCode = propCode + "IV" + transYear + transMonth + objModel.getStrInvSeriesChar() +String.format("%05d", lastnoAudit + 1);
+						}
+						
+						
+					}else{
+						
+						if (lastnoLive > lastnoAudit) {
+							invCode = propCode + "IV" + transYear + transMonth  + String.format("%05d", lastnoLive + 1);
+						} else {
+							invCode = propCode + "IV" + transYear + transMonth  +String.format("%05d", lastnoAudit + 1);
+						}
+					}
+//					else{
+//					invCode = objGlobalFunctions.funGenerateDocumentCode("frmInvoice", dateInvoice, req);
+//					
+//					}
 					objHDModel.setStrInvCode(invCode);
 					objHDModel.setStrUserCreated(userCode);
 					objHDModel.setDteCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
@@ -6578,6 +6637,8 @@ private double funGetExistenceProduct(double voidedQty,List<clsInvoiceModelDtl> 
 		}
 	   return voidedQty;
 }
+
+
 
 	
 

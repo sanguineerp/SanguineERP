@@ -279,24 +279,6 @@
 			<band/>
 			<band height="40">
 				<textField isBlankWhenNull="true">
-					<reportElement x="5" y="2" width="278" height="18" printWhenGroupChanges="strCategory" forecolor="#106B1F" backcolor="#FCFCFF" uuid="61016090-e3b0-4204-86ac-24207cdb30df">
-						<printWhenExpression><![CDATA[$F{strCategory}.equals("")]]></printWhenExpression>
-					</reportElement>
-					<textElement>
-						<font isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA["DIRECT INCOME"+"     "+"TOTAL"]]></textFieldExpression>
-				</textField>
-				<textField pattern="#,##0.###;(#,##0.###)" isBlankWhenNull="true">
-					<reportElement x="280" y="3" width="120" height="20" isPrintInFirstWholeBand="true" printWhenGroupChanges="strCategory" forecolor="#106B1F" uuid="84aab117-a164-4f02-bdb6-f0e3c5e35e9e">
-						<printWhenExpression><![CDATA[$F{strCategory}.equals("")]]></printWhenExpression>
-					</reportElement>
-					<textElement textAlignment="Right">
-						<font isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$P{totalIncome}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
 					<reportElement x="3" y="24" width="278" height="16" printWhenGroupChanges="strCategory" forecolor="#106B1F" backcolor="#FCFCFF" uuid="cf1db70c-a6a8-4989-9693-b1989ca2264f">
 						<printWhenExpression><![CDATA[!$F{strCategory}.equals("")]]></printWhenExpression>
 					</reportElement>
@@ -306,7 +288,7 @@
 					<textFieldExpression><![CDATA[$F{strCategory}+"     "+"TOTAL"]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.###;(#,##0.###)" isBlankWhenNull="true">
-					<reportElement x="285" y="23" width="115" height="17" isPrintInFirstWholeBand="true" printWhenGroupChanges="strCategory" forecolor="#106B1F" uuid="33b6ee38-33c6-4ec5-be05-5ccdac8b8a9d">
+					<reportElement x="285" y="23" width="205" height="17" isPrintInFirstWholeBand="true" printWhenGroupChanges="strCategory" forecolor="#106B1F" uuid="33b6ee38-33c6-4ec5-be05-5ccdac8b8a9d">
 						<printWhenExpression><![CDATA[!$F{strCategory}.equals("")]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Right">
@@ -342,7 +324,7 @@
 					<textFieldExpression><![CDATA[$F{strGroupName}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.###;(#,##0.###)" isBlankWhenNull="true">
-					<reportElement x="280" y="3" width="120" height="20" forecolor="#323292" uuid="8201a2da-2e31-4c51-9877-eece2b57913d"/>
+					<reportElement x="280" y="3" width="222" height="20" forecolor="#323292" uuid="8201a2da-2e31-4c51-9877-eece2b57913d"/>
 					<textElement textAlignment="Right">
 						<font isBold="true"/>
 					</textElement>
@@ -472,7 +454,7 @@
 				<text><![CDATA[GROSS PROFIT]]></text>
 			</staticText>
 			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
-				<reportElement x="282" y="208" width="120" height="13" forecolor="#323292" uuid="53575f59-fb58-41cd-a381-f0bbc162ce78">
+				<reportElement x="282" y="208" width="220" height="13" forecolor="#323292" uuid="53575f59-fb58-41cd-a381-f0bbc162ce78">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -490,7 +472,7 @@
 				<textElement>
 					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
-				<text><![CDATA[DIRECT INCOME]]></text>
+				<text><![CDATA[Revenue]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="120" width="554" height="1" uuid="ebf2cc92-78bb-4f00-a550-a84554b01a98"/>
@@ -588,21 +570,6 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="25" splitType="Stretch">
-			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
-				<reportElement x="283" y="4" width="117" height="20" uuid="9c233bb1-258f-4745-937c-92857a436322"/>
-				<textElement textAlignment="Right">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{dblProfitOfTheYear}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="4" width="270" height="20" uuid="25027ab0-f824-4e39-acfe-c50d0e0d1450"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[PROFIT OF THE YEAR]]></text>
-			</staticText>
-		</band>
+		<band splitType="Stretch"/>
 	</summary>
 </jasperReport>

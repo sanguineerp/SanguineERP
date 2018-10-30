@@ -844,7 +844,8 @@ $(document).ready(function()
 		function forTax(prodCodeForTax){
 			var dteInv =$('#txtDCDate').val();
 			var CIFAmt=0;
-		    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteInv+"&CIFAmt="+CIFAmt,
+			var settlement='';
+		    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
 		    
 		    		$.ajax({
 		    		

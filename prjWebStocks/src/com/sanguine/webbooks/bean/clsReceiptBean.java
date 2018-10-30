@@ -75,6 +75,8 @@ public class clsReceiptBean {
 	private String strCurrency;
 	
 	private double dblConversion;
+	
+    private String stInvCode;;
 
 	private List<clsReceiptDetailBean> listReceiptBeanDtl;
 
@@ -367,6 +369,14 @@ public class clsReceiptBean {
 
 	public void setDblConversion(double dblConversion) {
 		this.dblConversion = dblConversion;
+	}
+
+	public String getStInvCode() {
+		return stInvCode;
+	}
+
+	public void setStInvCode(String stInvCode) {
+		this.stInvCode = stInvCode;
 	}
 
 	

@@ -55,6 +55,9 @@ public class clsSettlementMasterModel implements Serializable {
 
 	@Column(name = "intId")
 	private long intId;
+	
+	@Column(name="strInvSeriesChar")
+	private String strInvSeriesChar;
 
 	public String getStrSettlementCode() {
 		return strSettlementCode;
@@ -134,5 +137,13 @@ public class clsSettlementMasterModel implements Serializable {
 
 	public void setIntId(long intId) {
 		this.intId = intId;
+	}
+
+	public String getStrInvSeriesChar() {
+		return strInvSeriesChar;
+	}
+
+	public void setStrInvSeriesChar(String strInvSeriesChar) {
+		this.strInvSeriesChar = strInvSeriesChar;
 	}
 }

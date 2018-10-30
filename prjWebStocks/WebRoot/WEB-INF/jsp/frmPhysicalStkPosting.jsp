@@ -830,9 +830,10 @@
 		{
 			var transactionformName="frmPhysicalStkPosting";
 			var locCode=$('#txtLocCode').val();
+			var dtPhydate=$("#txtStkPostDate").val();
 			
 		//	response=window.showModalDialog("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
-			response=window.open("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+			response=window.open("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode+"&dtPhydate="+dtPhydate,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
 	        
 			var timer = setInterval(function ()
 				    {

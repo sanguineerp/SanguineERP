@@ -143,6 +143,9 @@ public class clsReceiptHdModel implements Serializable {
 	@Transient
 	private String strDebtorName;
 
+	@Transient
+	private String stInvCode;
+	
 	// Setter-Getter Methods
 	public String getStrVouchNo() {
 		return strVouchNo;
@@ -422,6 +425,14 @@ public class clsReceiptHdModel implements Serializable {
 
 	public void setDblConversion(double dblConversion) {
 		this.dblConversion = (double) setDefaultValue(dblConversion,1.0);
+	}
+
+	public String getStInvCode() {
+		return stInvCode;
+	}
+
+	public void setStInvCode(String stInvCode) {
+		this.stInvCode = stInvCode;
 	}
 
 }

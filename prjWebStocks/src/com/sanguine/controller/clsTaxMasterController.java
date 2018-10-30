@@ -25,6 +25,7 @@ import com.sanguine.bean.clsTaxMasterBean;
 import com.sanguine.model.clsSettlementMasterModel;
 import com.sanguine.model.clsTaxHdModel;
 import com.sanguine.model.clsTaxHdModel_ID;
+import com.sanguine.model.clsTaxSettlementMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsTaxMasterService;
 import com.sanguine.util.clsReportBean;
@@ -227,10 +228,42 @@ public class clsTaxMasterController {
 		objModel.setStrNotApplicableForComesa(objBean.getStrNotApplicableForComesa());
 		objModel.setStrTaxReversal(objBean.getStrTaxReversal());
 		objModel.setStrChargesPayable(objBean.getStrChargesPayable());
+	List <clsTaxSettlementMasterModel>listsettlemnt=new ArrayList<clsTaxSettlementMasterModel>();
+	if(objBean.getListTaxSettlement()!=null)
+			{
+		if(objBean.getListTaxSettlement().size()>0)
+		{
+			for(clsTaxSettlementMasterModel obj:objBean.getListTaxSettlement())
+			{
+				if (null != obj.getStrApplicable())
+				{
+				obj.setStrApplicable("Yes");
+				}else{
+					obj.setStrApplicable("No");
+				}
+				
+				listsettlemnt.add(obj);
+				
+				
+			}
+			objModel.setListTaxSettlement(listsettlemnt);
+//			objModel.setListTaxSettlementDtl(listSettlementTax);
+		}
+		}
 		
-		// List<clsTaxSubGroupDtl> listTaxSGDtl=new
-		// ArrayList<clsTaxSubGroupDtl>();
+//			clsTaxSettlementMasterModel obj=new clsTaxSettlementMasterModel();
+//			if(objBean.getStrSettlementCode().length()>0)
+//			{
+//			String settlecode[]=objBean.getStrSettlementCode().split(",");
+//			for(String code:settlecode)
+//			{
+//			 obj.setStrTaxCode(objModel.getStrTaxCode());
+//			 obj.setStrSettlementCode(code);
+//			 objTaxMasterService.funAddUpdateDtl(obj);
+//			}	
+//			}
 
+		
 		return objModel;
 	} 
 
@@ -322,5 +355,25 @@ public class clsTaxMasterController {
 
 		return list;
 	}
+	@RequestMapping(value = "/loadTaxSettlementData", method = RequestMethod.GET)
+	public @ResponseBody List funLoadTaxSettlementData(@RequestParam("taxCode") String code, HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		List list = objTaxMasterService.funGetTaxSettlement(code);
+	
+		return list;
+	}
+	
+//	@RequestMapping(value = "/loadCRMSettlementData", method = RequestMethod.GET)
+//	public @ResponseBody List funLoadSettlementList(HttpServletRequest request) {
+//		String clientCode = request.getSession().getAttribute("clientCode").toString();
+//		List list = objTaxMasterService.funGetSettlementList(clientCode);
+//		if (null == list) {
+//			list = new ArrayList();
+//			list.add("Invalid Code");
+//		}
+//
+//		return list;
+//	}
+//	
 
 }

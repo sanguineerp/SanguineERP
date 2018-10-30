@@ -6,7 +6,7 @@ import com.sanguine.bean.clsParentDataForBOM;
 import com.sanguine.model.clsBomDtlModel;
 import com.sanguine.model.clsBomHdModel;
 import com.sanguine.model.clsTaxHdModel;
-import com.sanguine.model.clsTaxSettlementMasterModel;
+
 
 public interface clsRecipeMasterService {
 	public void funAddUpdate(clsBomHdModel object);

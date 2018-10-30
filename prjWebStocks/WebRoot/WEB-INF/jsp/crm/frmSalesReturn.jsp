@@ -1272,10 +1272,11 @@ function funHelp(transactionName)
 	    prodCodeForTax=prodCodeForTax.substring(1,prodCodeForTax.length).trim();
 	    var dteSR =$("#txtSRDate").val();
 	    var CIFAmt=0;
+	    var settlement=$("#cmbCurrency").val();
 	    
 	    $.ajax({
 			type: "GET",
-		    url: getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteSR+"&CIFAmt="+CIFAmt,
+		    url: getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteSR+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
 		    dataType: "json",
 		    success: function(response)
 		    {

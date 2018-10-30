@@ -23,6 +23,7 @@
 <script type="text/javascript">
  var transactionformName="";
  var LocCode="";
+ var dtPhydate='';
  
     //Get Project Path
 	function getContextPath() 
@@ -39,10 +40,15 @@
 				window.location.href=getContextPath()+"/frmOpeningStkExcelExport.html?strLocCode="+LocCode;
 				break;
 			case "frmPhysicalStkPosting":
-				LocCode=$("#txtLocCode").val();
+				
 				var gCode=$("#txtGroupCode").val();
 				var sgCode=$("#txtSubGroupCode").val();
-				window.location.href=getContextPath()+"/PhyStkPstExcelExport.html?strLocCode="+LocCode+"&gCode="+gCode+"&sgCode="+sgCode;
+				var prodWiseStock=$("#cmbProdStock").val();
+				
+					window.location.href=getContextPath()+"/PhyStkPstExcelExport.html?locCode="+LocCode+"&gCode="+gCode+"&sgCode="+sgCode+"&strTransDate="+dtPhydate+"&strUOM=RecUOM&prodWiseStock="+prodWiseStock;	
+			
+//  			window.location.href=getContextPath()+"/PhyStkPstExcelExport.html?locCode="+LocCode+"&gCode="+gCode+"&sgCode="+sgCode;
+				
 				break;
 			case "frmLocationMaster":
 				window.location.href=getContextPath()+"/LocationMasterReorderLevelExcelExport.html?locCode="+LocCode;
@@ -79,7 +85,16 @@
 			{
 				var jForm = new FormData();    
 			    jForm.append("file", $('#File').get(0).files[0]);
-			    searchUrl=getContextPath()+"/ExcelExportImport.html?formname="+transactionformName;	
+			    
+			  
+			   if(transactionformName=='frmPhysicalStkPosting')
+				{
+				   var prodStock= $("#cmbProdStock").val();
+				   searchUrl=getContextPath()+"/ExcelExportImport.html?formname="+transactionformName+"&prodStock="+prodStock;
+				}else{
+					searchUrl=getContextPath()+"/ExcelExportImport.html?formname="+transactionformName;
+				}
+			    	
 		        $.ajax({
 		           // url : $("#uploadExcel").attr('action'),
 		            url : searchUrl,
@@ -133,7 +148,7 @@
 		
 		if(transactionformName=="frmPhysicalStkPosting")
 			{
-			
+			dtPhydate='<%=request.getParameter("dtPhydate") %>'
 // 			document.all["divFilter"].style.display = 'block';
 			document.getElementById("divFilter").style.display = 'block';
 				LocCode='<%=request.getParameter("strLocCode") %>'
@@ -328,13 +343,22 @@
   <div id="divFilter" style="display:none;">
   <table>
 	   <tbody>
-		    <tr>
-			   <td width="120px"><label>Location Code </label></td>
-			   <td><input id="txtLocCode" name="txtLocCode"  ondblclick="funHelp('locationmaster')"  cssClass="searchTextBox"/></td>
-				<td colspan="2">
-					<label id="lblLocName">All</label>
-			  </td>
-			</tr>
+	   
+	   <tr>
+	   <td>Show Stock Wise Product</td>
+				<td colspan="3"><select id="cmbProdStock" Class="BoxW124px" >
+						<option value="Yes">Yes</option>
+						<option selected="selected" value="No">No</option>
+						
+				</select></td>
+<!-- 	   </tr> -->
+<!-- 		    <tr> -->
+<!-- 			   <td width="120px"><label>Location Code </label></td> -->
+<!-- 			   <td><input id="txtLocCode" name="txtLocCode"  ondblclick="funHelp('locationmaster')"  cssClass="searchTextBox"/></td> -->
+<!-- 				<td colspan="2"> -->
+<!-- 					<label id="lblLocName">All</label> -->
+<!-- 			  </td> -->
+<!-- 			</tr> -->
 				 <tr> 
 			    <td><label path="strGCode" >Group Code</label></td>
 		        <td><input type="text" id="txtGroupCode" name="txtGroupCode" autocomplete="off"    ondblclick="funHelp('group')" required="true" cssClass="searchTextBox" /></td><td><label id="lblgroupname">All</label></td>

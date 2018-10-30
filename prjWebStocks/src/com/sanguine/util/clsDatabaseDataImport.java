@@ -585,7 +585,7 @@ public class clsDatabaseDataImport {
 				objGlobalFunctionsService.funExcuteQuery(blankTable);
 				while (resultSet.next()) {
 
-					String mysql = " INSERT INTO `tbltaxsettlementmaster` (`intId`,`strSettlementCode`,`strTaxCode` ) " + " value( '" + lastNo + "','" + resultSet.getString(2) + "' , '" + resultSet.getString(1) + "' ) ";
+					String mysql = " INSERT INTO `tbltaxsettlement` (`intId`,`strSettlementCode`,`strTaxCode` ) " + " value( '" + lastNo + "','" + resultSet.getString(2) + "' , '" + resultSet.getString(1) + "' ) ";
 
 					objGlobalFunctionsService.funExcuteQuery(mysql);
 

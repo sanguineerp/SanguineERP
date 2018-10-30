@@ -24,6 +24,7 @@
 </style>
 <script type="text/javascript">
 
+	var settlemantWiseSeries='No';
 
 	//Textfiled On blur geting data
 	$(function() {
@@ -35,6 +36,8 @@
 				funSetData(code);
 			}
 		});
+		
+		settlemantWiseSeries="${selltemetInv}";
 		
 	});
 
@@ -81,6 +84,7 @@
 				        	{
 					        	$("#txtSettlementDesc").val(response.strSettlementDesc);
 					        	$("#cmbSettlementType").val(response.strSettlementType);
+					        	$("#txtInvSeriesChar").val(response.strInvSeriesChar);
 					        	
 					        	if(response.strApplicable=='true')
 				        		{
@@ -137,6 +141,21 @@
 				}
 			}%>
 		});
+		
+		function funValidateFields()
+		{
+			if(settlemantWiseSeries=='Yes')
+			{
+				
+				if($("#txtInvSeriesChar").val().trim()=="")
+				{
+					alert("Please Fill Settlement Wise Series");
+					return false;
+				}
+			}
+			return true;
+			
+	    }
 </script>
 
 
@@ -181,12 +200,19 @@
 				<td><label>Applicable</label></td>
 				<td><s:input colspan="1" type="checkbox" id="chkApplicable" 
 						name="chkApplicable" path="strApplicable" value ="true" style="width:8%" />
+			
+			<td><label>Settlement Wise Invoice Series </label></td>
+				 <td > 
+				<s:select id="txtInvSeriesChar" path="strInvSeriesChar" items="${alphabetList}"   cssClass="BoxW124px">
+				    
+		         	</s:select>	
+				</td>	
 			</tr>
 		</table>
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button"/> 
+			<input type="submit" value="Submit" tabindex="3"  onclick="return funValidateFields()" class="form_button"/> 
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 	</s:form>

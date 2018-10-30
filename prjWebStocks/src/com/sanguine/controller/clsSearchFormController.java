@@ -459,7 +459,7 @@ public class clsSearchFormController {
 	@SuppressWarnings("finally")
 	private Map<String, Object> funGetSearchDetail(String formName, String search_with, HttpServletRequest req) {
 		Map<String, Object> mainMap = new HashMap<>();
-
+		String strWebBooksDB=req.getSession().getAttribute("WebBooksDB").toString();
 		try {
 			String propCode = req.getSession().getAttribute("propertyCode").toString();
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
@@ -751,8 +751,10 @@ public class clsSearchFormController {
 			}
 			case "prodforPO": {
 				columnNames = "a.strProdCode,a.strProdName,c.strSGName,d.strGName,a.strUOM,a.strBarCode," + " a.strNonStockableItem,e.strPOCode,e.dblOrdQty ";
-				tableName = " select a.strProdCode,a.strProdName,c.strSGName,d.strGName,a.strUOM,a.strBarCode," + " a.strNonStockableItem,e.strPOCode,e.dblOrdQty " + " from tblproductmaster a,tblreorderlevel b , tblsubgroupmaster c ," + " tblgroupmaster d ,tblpurchaseorderdtl e" + " where a.strProdCode=b.strProdCode and b.strLocationCode='" + strLocCode + "' "
-						+ " and e.strProdCode=a.strProdCode and e.strPOCode='" + POCode + "'  and a.strSGCode=c.strSGCode and c.strGCode=d.strGCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "'" + " and d.strClientCode='" + clientCode + "' and e.strClientCode='" + clientCode + "' ";
+				tableName =" from tblproductmaster a,tblreorderlevel b , tblsubgroupmaster c ,"
+						  + " tblgroupmaster d ,tblpurchaseorderdtl e" 
+						  + " where a.strProdCode=b.strProdCode and b.strLocationCode='" + strLocCode + "' "
+						  + " and e.strProdCode=a.strProdCode and e.strPOCode='" + POCode + "'  and a.strSGCode=c.strSGCode and c.strGCode=d.strGCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "'" + " and d.strClientCode='" + clientCode + "' and e.strClientCode='" + clientCode + "' ";
 				listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Code,Non Stockable,POCode,POQty ";
 				idColumnName = "a.strProdCode";
 				searchFormTitle = "Product Master";
@@ -776,8 +778,8 @@ public class clsSearchFormController {
 			}
 
 			case "childcode": {
-				columnNames = "strProdCode,strPartNo,strProdName,strProdType";
-				tableName = "clsProductMasterModel where strClientCode='" + clientCode + "' and a.strNotInUse='N' ";
+				columnNames = "strProdCode,strPartNo,strProdName,strProdType ";
+				tableName = "clsProductMasterModel where strClientCode='" + clientCode + "' and strNotInUse='N' ";
 				listColumnNames = "Product Code,POS Item Code,Product Name,Product Type";
 				idColumnName = "strProdCode";
 				searchFormTitle = "Product Master";
@@ -2165,7 +2167,6 @@ public class clsSearchFormController {
 				searchFormTitle = "Sales Order";
 				break;
 			}	
-
 			}
 
 			if (null != jArrSearchList) {
@@ -2395,7 +2396,7 @@ public class clsSearchFormController {
 				tempClientCode = "All";
 			}
 
-			columnNames = "a.strBrandCode,a.strBrandName,b.strSizeName,b.intQty,ifnull(d.dblRate,'0') as rate,c.strSubCategoryName";
+			columnNames = "a.strBrandCode,a.strBrandName,b.strSizeName,b.intQty,ifnull(d.dblRate,'0') as rate,c.strSubCategoryName ";
 			tableName = " from tblbrandmaster a LEFT OUTER JOIN tblratemaster d ON d.strBrandCode = a.strBrandCode  AND d.strClientCode='" + clientCode + "'," + " tblsizemaster b,tblsubcategorymaster c " + " where a.strSizeCode = b.strSizeCode AND a.strSubCategoryCode=c.strSubCategoryCode " + " AND a.strClientCode='" + tempClientCode + "' ";
 			listColumnNames = "Brand Code,Brand Name, Size, Quantity,Rate,Sub Category";
 			idColumnName = "strBrandCode";
@@ -3743,6 +3744,7 @@ public class clsSearchFormController {
 		String idColumnName = "";
 		String searchFormTitle = "";
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		String strWebBooksDB=req.getSession().getAttribute("WebBooksDB").toString();
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 		String strShowTransOrder = objSetup.getStrShowTransAsc_Desc();
 		JSONArray jArrSearchList = null;
@@ -4550,6 +4552,46 @@ public class clsSearchFormController {
 			idColumnName = "strRegionCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
 			searchFormTitle = "Region Master";
+			break;
+		}
+		
+		///WEBBooksHep in WebStock Recipt are genertaed though Invoice
+		case "cashBankAccNo": {
+			columnNames = "strAccountCode,strAccountName,strOperational,strType";
+			tableName = " from "+strWebBooksDB+".tblacmaster " + "where strClientCode='" + clientCode + "' and strType!='GL Code' ";
+			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+				tableName += " and strPropertyCode = '" + propertyCode + "' ";
+			}
+			listColumnNames = "Account Code,Account Name,Operational,Type";
+			idColumnName = "strAccountCode";
+			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			flgQuerySelection = true;
+			searchFormTitle = "Account Master";
+			break;
+		}
+		
+		case "receiptNo": {
+			columnNames = "a.strReceiptNo,date(a.dteReceiptDate),a.strAgainst,a.strCheckInNo,a.strReservationNo,a.strBillNo ";
+			tableName = " from "+strWebBooksDB+".tblreceipthd a ";
+			listColumnNames = "Receipt No,Receipt Date,Against,Check In No,Reservation No,Bill No";
+			idColumnName = "strReceiptNo";
+			flgQuerySelection = true;
+			// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+			searchFormTitle = "Payment Receipt";
+			break;
+		}
+		
+		case "bankCode": {
+			columnNames = "strBankCode,strBankName,strBranch,strMICR";
+			tableName = " from "+strWebBooksDB+".tblbankmaster where strClientCode='" + clientCode + "' ";
+			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+				tableName += " and strPropertyCode = '" + propertyCode + "' ";
+			}
+			listColumnNames = "Bank Code,Bank Name,Branch Name,MIRC";
+			idColumnName = "strBankCode";
+			flgQuerySelection = true;
+			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			searchFormTitle = "Bank Master";
 			break;
 		}
 		

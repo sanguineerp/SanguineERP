@@ -14,6 +14,7 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.CollectionOfElements;
 
@@ -39,6 +40,16 @@ public class clsTaxHdModel extends clsBaseModel implements Serializable {
 	@AttributeOverrides({ @AttributeOverride(name = "strTaxCode", column = @Column(name = "strTaxCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })
 	List<clsTaxSubGroupDtl> listTaxSGDtl = new ArrayList<clsTaxSubGroupDtl>();
 
+	
+	@CollectionOfElements(fetch = FetchType.EAGER)
+	@JoinTable(name = "tbltaxsettlement", joinColumns = { @JoinColumn(name = "strClientCode"), @JoinColumn(name = "strTaxCode") })
+	@Id
+	@AttributeOverrides({ @AttributeOverride(name = "strTaxCode", column = @Column(name = "strTaxCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })
+	List<clsTaxSettlementMasterModel> listTaxSettlement = new ArrayList<clsTaxSettlementMasterModel>();
+
+	
+	
+	
 	@Column(name = "strTaxCode")
 	private String strTaxCode;
 
@@ -143,6 +154,9 @@ public class clsTaxHdModel extends clsBaseModel implements Serializable {
 	
 	@Column(name = "strChargesPayable")
 	private String strChargesPayable;
+	
+	@Transient
+	private String strSettlementCode;
 
 	public String getStrTaxCode() {
 		return strTaxCode;
@@ -431,6 +445,30 @@ public class clsTaxHdModel extends clsBaseModel implements Serializable {
 	public void setStrChargesPayable(String strChargesPayable) {
 		this.strChargesPayable =(String) setDefaultValue(strChargesPayable, "N"); ;
 	}
+
+	public String getStrSettlementCode() {
+		return strSettlementCode;
+	}
+
+	public void setStrSettlementCode(String strSettlementCode) {
+		this.strSettlementCode = strSettlementCode;
+	}
+
+	public List<clsTaxSettlementMasterModel> getListTaxSettlement() {
+		return listTaxSettlement;
+	}
+
+	public void setListTaxSettlement(List<clsTaxSettlementMasterModel> listTaxSettlement) {
+		this.listTaxSettlement = listTaxSettlement;
+	}
+
+//	public List<clsTaxSettlementDtlModel> getListTaxSettlementDtl() {
+//		return listTaxSettlementDtl;
+//	}
+//
+//	public void setListTaxSettlementDtl(List<clsTaxSettlementDtlModel> listTaxSettlementDtl) {
+//		this.listTaxSettlementDtl = listTaxSettlementDtl;
+//	}
 	
 	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.sanguine.model.clsSettlementMasterModel;
+import com.sanguine.model.clsTaxSettlementMasterModel;
 import com.sanguine.model.clsTaxSubGroupDtl;
 
 public class clsTaxMasterBean {
@@ -40,11 +41,14 @@ public class clsTaxMasterBean {
 	private String strNotApplicableForComesa;
 	private String strTaxReversal;
 	private String strChargesPayable;
+	private String strSettlementCode;
 	
 
 	private List<clsSettlementMasterModel> listSettlement;
 
 	private List<clsTaxSubGroupDtl> listTaxSGDtl;
+	
+	private List<clsTaxSettlementMasterModel> listTaxSettlement;
 
 	private String strExternalCode;
 
@@ -303,5 +307,23 @@ public class clsTaxMasterBean {
 	public void setStrChargesPayable(String strChargesPayable) {
 		this.strChargesPayable = strChargesPayable;
 	}
+
+	public List<clsTaxSettlementMasterModel> getListTaxSettlement() {
+		return listTaxSettlement;
+	}
+
+	public void setListTaxSettlement(List<clsTaxSettlementMasterModel> listTaxSettlement) {
+		this.listTaxSettlement = listTaxSettlement;
+	}
+
+	public String getStrSettlementCode() {
+		return strSettlementCode;
+	}
+
+	public void setStrSettlementCode(String strSettlementCode) {
+		this.strSettlementCode = strSettlementCode;
+	}
+
+
 
 }

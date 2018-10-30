@@ -125,7 +125,7 @@ public class clsBillPrintingController {
 			 */
 
 			String sqlParametersFromBill = " SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo ,date(b.dteArrivalDate),b.tmeArrivalTime , " + " ifnull(date(b.dteDepartureDate),'NA'),ifnull(b.tmeDepartureTime,'NA')  , ifnull(d.strGuestPrefix,''), " + " ifnull(d.strFirstName,''),ifnull(d.strMiddleName,''),ifnull(d.strLastName,'') , "
-					+ " b.intNoOfAdults,b.intNoOfChild ,a.strBillNo ,d.strGuestCode,a.strGSTNo,a.strCompanyName"//17
+					+ " b.intNoOfAdults,b.intNoOfChild ,a.strBillNo ,IFNULL(d.strGuestCode,''),a.strGSTNo,a.strCompanyName"//17
 					+ " FROM tblbillhd a  " + " LEFT OUTER JOIN tblcheckinhd  b ON a.strReservationNo=b.strReservationNo " + " LEFT OUTER JOIN tblcheckindtl c ON b.strCheckInNo=c.strCheckInNo AND a.strRoomNo=c.strRoomNo  " + " LEFT OUTER JOIN tblguestmaster d ON c.strGuestCode=d.strGuestCode  "
 					+ " LEFT OUTER JOIN tblroom e ON e.strRoomCode=a.strRoomNo " + "where a.strBillNo='" + billNo + "'  ";
 

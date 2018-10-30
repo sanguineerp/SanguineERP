@@ -1399,7 +1399,7 @@
 				
 			<tr>
 				<td ><label>#Adult</label></td>
-				<td><s:input id="txtNoOfAdults" name="txtNoOfAdults" path="intNoOfAdults" type="number" min="0" step="1" class="longTextBox" style="width: 38%;text-align: right;"/></td>
+				<td><s:input id="txtNoOfAdults" value = '1' name="txtNoOfAdults" path="intNoOfAdults" type="number" min="0" step="1" class="longTextBox" style="width: 38%;text-align: right;"/></td>
 				<td><label>#Child</label></td>
 				<td><s:input id="txtNoOfChild" path="intNoOfChild" type="number" min="0" step="1" name="txtNoOfChild" class="longTextBox" style="width: 38%;text-align: right;"/></td>				
 			</tr> 

@@ -239,6 +239,10 @@ public class clsSetupMasterBean {
 	
 	private String 	strSORateEditable;
 	
+	private String strSettlementWiseInvSer;
+	
+	private String strGRNProdPOWise;
+	
 	
 
 	public List<clsWorkFlowModel> getListclsWorkFlowModel() {
@@ -1340,6 +1344,22 @@ public class clsSetupMasterBean {
 
 	public void setStrSORateEditable(String strSORateEditable) {
 		this.strSORateEditable = strSORateEditable;
+	}
+
+	public String getStrSettlementWiseInvSer() {
+		return strSettlementWiseInvSer;
+	}
+
+	public void setStrSettlementWiseInvSer(String strSettlementWiseInvSer) {
+		this.strSettlementWiseInvSer = strSettlementWiseInvSer;
+	}
+
+	public String getStrGRNProdPOWise() {
+		return strGRNProdPOWise;
+	}
+
+	public void setStrGRNProdPOWise(String strGRNProdPOWise) {
+		this.strGRNProdPOWise = strGRNProdPOWise;
 	}
 
 

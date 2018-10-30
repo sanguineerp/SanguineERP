@@ -30,16 +30,21 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
 import com.sanguine.base.service.intfBaseService;
+import com.sanguine.bean.clsStockFlashBean;
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.crm.bean.clsInvoiceBean;
+import com.sanguine.crm.controller.clsInvoiceController;
 import com.sanguine.model.clsCurrencyMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsCurrencyMasterService;
@@ -94,11 +99,15 @@ public class clsReceiptController {
 
 	@Autowired
 	intfBaseService objBaseService;
+	
 	@Autowired
 	clsEmployeeMasterController objEmployeeMasterController;
 	
 	@Autowired
 	private clsSundryCreditorMasterService objSundryCreditorMasterService;
+	
+	@Autowired
+	private clsInvoiceController objInvController;
 	
 	// Open Receipt
 	@RequestMapping(value = "/frmReceipt", method = RequestMethod.GET)
@@ -575,11 +584,11 @@ public class clsReceiptController {
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/webbooks/rptReciptReport.jrxml");
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 			String strPaymentMode="",strChequeNo="",strBankName="";
-			String sqlHd = "select strVouchNo ,Date(dteVouchDate),strNarration,strType,strChequeNo,ifnull(b.strBankName,''),a.strCurrency,a.dblConversion "
+			StringBuilder sqlHd =new StringBuilder( "select strVouchNo ,Date(dteVouchDate),strNarration,strType,strChequeNo,ifnull(b.strBankName,''),a.strCurrency,a.dblConversion "
 					+ "from tblreceipthd a left outer join tblbankmaster b on  a.strDrawnOn = b.strBankCode"
-					+ " where strVouchNo='" + VoucherNo + "'";
+					+ " where strVouchNo='" + VoucherNo + "'");
 
-			List list = objGlobalFunctionsService.funGetListModuleWise(sqlHd, "sql");
+			List list = objBaseService.funGetListModuleWise(sqlHd, "sql", "WebBooks");
 			if (!list.isEmpty()) {
 				Object[] arrObj = (Object[]) list.get(0);
 				strVouchNo = arrObj[0].toString();
@@ -727,9 +736,15 @@ public class clsReceiptController {
 				// +
 				// "where a.strInvCode='"+jObj.get("strInvCode").toString()+"' and a.strClientCode='"+clientCode+"';  ";
 
-				String sql = " select ifnull(sum(a.dblPayedAmt),0) from tblreceiptinvdtl a  " + "where a.strInvCode='" + jObj.get("strInvCode").toString() + "' and a.strClientCode='" + clientCode + "';  ";
+				StringBuilder sql =new StringBuilder( " select ifnull(sum(a.dblPayedAmt),0) from tblreceiptinvdtl a  " + "where a.strInvCode='" + jObj.get("strInvCode").toString() + "' and a.strClientCode='" + clientCode + "'  ");
 				System.out.println(sql);
-				List list = objGlobalFunctionsService.funGetDataList(sql, "sql");
+				List list=new ArrayList();
+				try {
+					list = objBaseService.funGetListModuleWise(sql, "sql", "WebBooks");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
 				String sqlSalesRetrn = "select ifnull(sum(a.dblTotalAmt),0) from "+webStockDB+".tblsalesreturnhd a where a.strAgainst='Invoice' and a.strDCCode='" + jObj.get("strInvCode").toString() + "' " + " and a.strClientCode='" + clientCode + "' ";
@@ -811,6 +826,47 @@ public class clsReceiptController {
 		return jObjData;
 	
     }
+	
+	@RequestMapping(value = "/frmReceiptInvoice", method = RequestMethod.GET)
+	private ModelAndView funOpenReceiptInvoice(@ModelAttribute("command") clsReceiptBean objBean, BindingResult result, @RequestParam(value = "invCode") String invCode, HttpServletRequest request,Map<String, Object> model) throws Exception {
+		
+		
+		clsReceiptHdModel objModel=new clsReceiptHdModel();
+		
+		
+		clsInvoiceBean objInvBean=objInvController.funAssignFields(invCode.split(",")[0],request);
+		StringBuilder sqlLinkUp=new StringBuilder();
+		sqlLinkUp.append("select a.strAccountCode,a.strMasterName,a.strWebBookAccCode,a.strWebBookAccName from tbllinkup a where a.strMasterCode='"+objInvBean.getStrCustCode()+"' ");
+		List list =objBaseService.funGetListModuleWise(sqlLinkUp, "sql", "WebStocks");
+		if(list.size()>0){
+    		
+    			Object ob[]=(Object[])list.get(0);
+    			objBean.setStrDebtorCode(ob[0].toString());
+    			objBean.setStrDebtorName(ob[1].toString());
+    			objBean.setStrDebtorAccCode(ob[2].toString());
+    			objBean.setStrDebtorAccDesc(ob[3].toString());
+		}
+       
+		request.getSession().removeAttribute("otherModuleNo");
+		request.getSession().setAttribute("otherModuleNo","5");
+//		ModelAndView view = new ModelAndView("frmReceiptFromInvoice", "command", objModel);
+		
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		Map<String, String> hmCurrency = objCurrencyMasterService.funCurrencyListToDisplay(clientCode);
+		if (hmCurrency.isEmpty()) {
+			hmCurrency.put("", "");
+		}
+		
+		model.put("accCode", objBean.getStrDebtorAccCode());
+		model.put("accName", objBean.getStrDebtorAccDesc());
+		model.put("debtorCode", objBean.getStrDebtorCode());
+		model.put("debtorName", objBean.getStrDebtorName());
+		model.put("invCode", invCode.split(",")[0]);
+//		view.addObject("currencyList", hmCurrency);
+		return funOpenForm(model,  request);
+//		return view;
+		
+	}
 
 
 }

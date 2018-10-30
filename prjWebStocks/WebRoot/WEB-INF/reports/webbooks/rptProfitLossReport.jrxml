@@ -376,7 +376,7 @@
 				<text><![CDATA[GROSS PROFIT]]></text>
 			</staticText>
 			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
-				<reportElement x="281" y="57" width="120" height="13" forecolor="#323292" uuid="a4669228-e7c6-4fe7-bfe3-6b35c4f9874e">
+				<reportElement x="359" y="57" width="120" height="13" forecolor="#323292" uuid="a4669228-e7c6-4fe7-bfe3-6b35c4f9874e">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -387,7 +387,7 @@
 				<textFieldExpression><![CDATA[$P{dblGrossProfit}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="424" y="8" width="56" height="13" forecolor="#323292" uuid="dd102dc9-72e8-4854-8915-bdece07a7798">
+				<reportElement x="493" y="8" width="56" height="13" forecolor="#323292" uuid="dd102dc9-72e8-4854-8915-bdece07a7798">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -397,7 +397,7 @@
 				<text><![CDATA[100 %]]></text>
 			</staticText>
 			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
-				<reportElement x="420" y="34" width="60" height="13" forecolor="#323292" uuid="808e7db0-fd83-402f-9a73-9b4add5427ba">
+				<reportElement x="489" y="34" width="60" height="13" forecolor="#323292" uuid="808e7db0-fd83-402f-9a73-9b4add5427ba">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -408,7 +408,7 @@
 				<textFieldExpression><![CDATA[$P{perCostOfGoodSold}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
-				<reportElement x="420" y="57" width="60" height="13" forecolor="#323292" uuid="f8ed4a6f-8df0-4465-9929-2e1be510e892">
+				<reportElement x="489" y="57" width="60" height="13" forecolor="#323292" uuid="f8ed4a6f-8df0-4465-9929-2e1be510e892">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -585,7 +585,7 @@
 				<text><![CDATA[Net Profit]]></text>
 			</staticText>
 			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
-				<reportElement x="278" y="33" width="120" height="17" forecolor="#323292" uuid="9e0c3d77-d13e-40ec-bf99-81f0986c56af">
+				<reportElement x="357" y="33" width="120" height="17" forecolor="#323292" uuid="9e0c3d77-d13e-40ec-bf99-81f0986c56af">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -596,7 +596,7 @@
 				<textFieldExpression><![CDATA[$P{netProfit}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
-				<reportElement x="421" y="33" width="60" height="13" forecolor="#323292" uuid="e29f5683-d251-4152-8399-12a741eaaa9d">
+				<reportElement x="490" y="33" width="60" height="13" forecolor="#323292" uuid="e29f5683-d251-4152-8399-12a741eaaa9d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -617,7 +617,7 @@
 				<text><![CDATA[Total Expenses]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="281" y="0" width="117" height="20" forecolor="#323292" uuid="9c16f92c-47ae-4f0a-88e5-d464beea6cc8"/>
+				<reportElement x="360" y="0" width="117" height="20" forecolor="#323292" uuid="9c16f92c-47ae-4f0a-88e5-d464beea6cc8"/>
 				<box>
 					<bottomPen lineWidth="0.0"/>
 				</box>
@@ -625,7 +625,7 @@
 				<textFieldExpression><![CDATA[$P{totalExpense}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
-				<reportElement x="420" y="4" width="60" height="13" forecolor="#323292" uuid="b64f71e8-bdb3-4efd-950e-f4fdb36c4ce2">
+				<reportElement x="489" y="4" width="60" height="13" forecolor="#323292" uuid="b64f71e8-bdb3-4efd-950e-f4fdb36c4ce2">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>

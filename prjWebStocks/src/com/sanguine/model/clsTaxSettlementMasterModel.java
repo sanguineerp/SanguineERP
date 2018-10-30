@@ -3,33 +3,19 @@ package com.sanguine.model;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-@Entity
-@Table(name = "tbltaxsettlementmaster")
+@Embeddable
 public class clsTaxSettlementMasterModel implements Serializable {
-	private static final long serialVersionUID = 1L;
+	
 
-	@Id
-	@Column(name = "intId")
-	private long intId;
-
-	@Column(name = "strTaxCode")
-	private String strTaxCode;
-
-	@Column(name = "strSettlementCode")
 	private String strSettlementCode;
-
-	public String getStrTaxCode() {
-		return strTaxCode;
-	}
-
-	public void setStrTaxCode(String strTaxCode) {
-		this.strTaxCode = strTaxCode;
-	}
-
+	
+	private String strApplicable;
 	public String getStrSettlementCode() {
 		return strSettlementCode;
 	}
@@ -37,4 +23,18 @@ public class clsTaxSettlementMasterModel implements Serializable {
 	public void setStrSettlementCode(String strSettlementCode) {
 		this.strSettlementCode = strSettlementCode;
 	}
+
+	public String getStrApplicable() {
+		return strApplicable;
+	}
+
+	public void setStrApplicable(String strApplicable) {
+		this.strApplicable = strApplicable;
+	}
+
+
+	
+	
+
+
 }

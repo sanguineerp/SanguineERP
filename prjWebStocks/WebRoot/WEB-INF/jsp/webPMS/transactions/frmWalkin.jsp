@@ -486,7 +486,7 @@
 	function funfillIncomHeadGrid(data){
 		
 		$("#txtIncomeHead").val(data.strIncomeHeadCode);
-		$("#lblIncomeHeadName").text(data.strIncomeHeadDesc);
+		$("#txtIncomeHeadName").val(data.strIncomeHeadDesc);
 	 
 		//funAddIncomeHeadRow();
 		
@@ -1477,7 +1477,7 @@
 					
 					<tr>
 						<td><label>#Adult</label></td>
-						<td><s:input id="txtNoOfAdults" name="txtNoOfAdults" path="intNoOfAdults" type="number" min="0" step="1" class="longTextBox" style="text-align: right;width: 117px;"/></td>
+						<td><s:input id="txtNoOfAdults" value = '1' name="txtNoOfAdults" path="intNoOfAdults" type="number" min="1" step="1" class="longTextBox" style="text-align: right;width: 117px;"/></td>
 						<td><label>#Child</label></td>
 						<td><s:input id="txtNoOfChild" path="intNoOfChild" type="number" min="0" step="1" name="txtNoOfChild" class="longTextBox" style="text-align: right; width:20%"/></td>				
 					</tr>

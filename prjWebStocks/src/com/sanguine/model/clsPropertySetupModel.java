@@ -192,6 +192,12 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	@Column(name = "strSORateEditable", columnDefinition = "VARCHAR(10) default ''")
 	private String strSORateEditable;
 	
+	@Column(name="strSettlementWiseInvSer",columnDefinition="VARCHAR(10) default ''")
+	private String strSettlementWiseInvSer;
+	
+	@Column(name="strGRNProdPOWise",columnDefinition="VARCHAR(10) default ''")
+	private String strGRNProdPOWise;
+	
 	
 	// BAnk Dtl Tab
 	private String strBankName;
@@ -1179,6 +1185,22 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 
 	public void setStrSORateEditable(String strSORateEditable) {
 		this.strSORateEditable = strSORateEditable;
+	}
+
+	public String getStrSettlementWiseInvSer() {
+		return strSettlementWiseInvSer;
+	}
+
+	public void setStrSettlementWiseInvSer(String strSettlementWiseInvSer) {
+		this.strSettlementWiseInvSer = strSettlementWiseInvSer;
+	}
+
+	public String getStrGRNProdPOWise() {
+		return strGRNProdPOWise;
+	}
+
+	public void setStrGRNProdPOWise(String strGRNProdPOWise) {
+		this.strGRNProdPOWise = strGRNProdPOWise;
 	}
 	
 	

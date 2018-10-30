@@ -155,8 +155,10 @@
 					        	$("#txtIncomeHeadDesc").val(response.strIncomeHeadDesc);
 					        	$("#cmbDeptType").val(response.strDeptCode);
 					        	
-
+								if(response.strAccountCode!="NA")
+								{
 				        		funSetAccountCode(response.strAccountCode)
+								}
 				        	}
 						},
 						error: function(jqXHR, exception) {

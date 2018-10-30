@@ -62,6 +62,9 @@ public class clsExcelExportImportController {
 
 	@Autowired
 	private clsGRNController objGRNController;
+	
+	@Autowired
+	private clsGlobalFunctions objGlobalFunctions;
 
 	final static Logger logger = Logger.getLogger(clsExcelExportImportController.class);
 
@@ -152,11 +155,19 @@ public class clsExcelExportImportController {
 		// String
 		// locCode=request.getSession().getAttribute("locationCode").toString();
 		
-		String locCode = request.getParameter("strLocCode");
+		String locCode = request.getParameter("locCode");
 		String sgCode = request.getParameter("sgCode");
 		String gCode = request.getParameter("gCode");
+		String prodWiseStock = request.getParameter("prodWiseStock");
 		
-		String header = "Group Name, SubGroupName,ProductCode,ProductName,Qty,UOM";
+		String header ="";
+		if(prodWiseStock.equals("Yes"))
+		{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Stock,Qty,UOM";
+		}else{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Qty,UOM";
+		}
+				
 		List ExportList = new ArrayList();
 		String[] ExcelHeader = header.split(",");
 		ExportList.add(ExcelHeader);
@@ -202,15 +213,31 @@ public class clsExcelExportImportController {
 			clsSubGroupMasterModel subGroupModel = (clsSubGroupMasterModel) ob[1];
 			clsGroupMasterModel groupModel = (clsGroupMasterModel) ob[2];
 			List DataList = new ArrayList<>();
-
+			
+			if(prodWiseStock.equals("Yes")){
+			double stock=objGlobalFunctions.funGetStockForProductRecUOM(prodModel.getStrProdCode(),request);
+			if(stock>0)
+			{
 			DataList.add(groupModel.getStrGName());
 			DataList.add(subGroupModel.getStrSGName());
 			DataList.add(prodModel.getStrProdCode());
 			DataList.add(prodModel.getStrProdName());
+			
+			DataList.add(stock);
+			
 			DataList.add("");
 			DataList.add(prodModel.getStrUOM());
 			PhyStkPstlist.add(DataList);
-
+			}
+			}else{
+				DataList.add(groupModel.getStrGName());
+				DataList.add(subGroupModel.getStrSGName());
+				DataList.add(prodModel.getStrProdCode());
+				DataList.add(prodModel.getStrProdName());
+				DataList.add("");
+				DataList.add(prodModel.getStrUOM());
+				PhyStkPstlist.add(DataList);
+			}
 		}
 		ExportList.add(PhyStkPstlist);
 
@@ -417,6 +444,8 @@ public class clsExcelExportImportController {
 		int RowCount = 0;
 		String prodCode = "";
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		
+		String prodStock=request.getParameter("prodStock");
 		try {
 			int i = 1;
 			while (i <= worksheet.getLastRowNum()) {
@@ -439,7 +468,12 @@ public class clsExcelExportImportController {
 						}
 
 						PhyStkDtl.setStrProdName(prodName);
-						PhyStkDtl.setDblPStock(row.getCell(4).getNumericCellValue());
+						if(prodStock.equals("Yes"))
+						{
+							PhyStkDtl.setDblPStock(row.getCell(5).getNumericCellValue());
+						}else{
+							PhyStkDtl.setDblPStock(row.getCell(4).getNumericCellValue());
+						}
 						clsProductMasterModel Prodmodel = objProductMasterService.funGetObject(prodCode, clientCode);
 						PhyStkDtl.setDblPrice(Prodmodel.getDblCostRM());
 						PhyStkDtl.setDblWeight(Prodmodel.getDblWeight());

@@ -1,5 +1,7 @@
 package com.sanguine.crm.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +21,10 @@ import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.bean.clsManufactureMasterBean;
 import com.sanguine.crm.bean.clsSettlementMasterBean;
 import com.sanguine.crm.service.clsCRMSettlementMasterService;
+import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsSettlementMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsSetupMasterService;
 
 @Controller
 public class clsCRMSettlementMasterController {
@@ -31,6 +35,9 @@ public class clsCRMSettlementMasterController {
 
 	@Autowired
 	clsCRMSettlementMasterService objSttlementMasterService;
+	
+	@Autowired
+	private clsSetupMasterService objSetupMasterService;
 
 	@RequestMapping(value = "/frmCRMSettlementMaster", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
@@ -42,6 +49,18 @@ public class clsCRMSettlementMasterController {
 		}
 		model.put("urlHits", urlHits);
 
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+		
+		model.put("selltemetInv", objSetup.getStrSettlementWiseInvSer());
+		List<String> alphabetList = new ArrayList<>();
+		alphabetList.add(" ");
+		String[] alphabetSet = objGlobal.funGetAlphabetSet();
+		for (int i = 0; i < alphabetSet.length; i++) {
+			alphabetList.add(alphabetSet[i]);
+		}
+		model.put("alphabetList", alphabetList);
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmCRMSettlementMaster_1", "command", new clsSettlementMasterBean());
 		} else if ("1".equalsIgnoreCase(urlHits)) {
@@ -117,7 +136,20 @@ public class clsCRMSettlementMasterController {
 		objModel.setStrSettlementType(objBean.getStrSettlementType());
 		objModel.setDtLastModified(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 		objModel.setStrUserModified(userCode);
+		objModel.setStrInvSeriesChar(objBean.getStrInvSeriesChar());
 		return objModel;
 	}
+	
+	@RequestMapping(value = "/loadCRMSettlementData", method = RequestMethod.GET)
+	public @ResponseBody Map funGetSettlement(HttpServletRequest req)
+	{
+		 String clientCode = req.getSession().getAttribute("clientCode").toString();
+		 Map<String, String> settlementList = objSttlementMasterService.funGetSettlementComboBox(clientCode);
+		 return settlementList;
+	}
+	
+	
+	
+	
 
 }

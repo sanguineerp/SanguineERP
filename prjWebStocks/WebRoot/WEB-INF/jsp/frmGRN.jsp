@@ -1004,7 +1004,7 @@
 			var POCode=$("#cmbPODoc").val();
 			var suppCode=$("#txtSuppCode").val();
 			var billDate=$("#txtGRNDate").val();
-			searchUrl=getContextPath()+"/loadProductDataForPOTrans.html?prodCode="+code+"&POCode="+POCode+"&billDate="+billDate;
+			searchUrl=getContextPath()+"/loadProductDataForPOTrans.html?prodCode="+code+"&POCode="+POCode+"&billDate="+billDate+"&suppCode="+suppCode;
 			//alert(searchUrl);
 			$.ajax({
 				type : "GET",
@@ -1233,10 +1233,10 @@
 		    var arrdtGrn=dteGrn.split("-");
 		    dteGrn=arrdtGrn[2]+"-"+arrdtGrn[1]+"-"+arrdtGrn[0];
 		    var CIFAmt=$("#txtCIF").val();
-		    
+		    var settlement='';
 		    $.ajax({
 				type: "GET",
-			    url: getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Purchase&transDate="+dteGrn+"&CIFAmt="+CIFAmt,
+			    url: getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Purchase&transDate="+dteGrn+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
 			    dataType: "json",
 			    success: function(response)
 			    {
@@ -2054,6 +2054,12 @@
 								{
 									// Rate Editable false     
 									$('#txtCostRM').attr('readonly', true);
+								}else{
+									 if($("#cmbAgainst").val()=="Rate Contractor")
+										{
+										// Rate Editable false     
+										$('#txtCostRM').attr('readonly', true);
+										}
 								}
 							}
 						}
@@ -2424,7 +2430,7 @@
 										strVal=retval.returnValue.split("#")
 										$("#txtDocCode").val(strVal[0]);
 										
-										funSetPurchaseOrder();
+// 										funSetPurchaseOrder();
 										
 										var POCodes=strVal[0].split(",");
 										var html = '';
@@ -3332,8 +3338,12 @@ function funCalculateOtherChargesTotal()
 										onchange="funOnChange();" name="cmbAgainst"  cssClass="BoxW124px" path="strAgainst">
 										</s:select>
 									</td>
+									
+									
 							        <td>Consolidated PO &nbsp;&nbsp;&nbsp; <input type="checkbox" id="chkConsPO" ></td>
-							        <td colspan="7"><s:input id="txtDocCode" path="strPONo" readonly="readonly" ondblclick="funOpenAgainst()" class="searchTextBox"></s:input></td>
+							        <td ><s:input id="txtDocCode" path="strPONo" readonly="readonly" ondblclick="funOpenAgainst()" class="searchTextBox"></s:input></td>
+							    <td colspan="5"><input type="button" value="Fill" class="smallButton"
+										onclick="funSetPurchaseOrder();" id=btnFill /></td>
 							    </tr>
 							    
 							    <tr>

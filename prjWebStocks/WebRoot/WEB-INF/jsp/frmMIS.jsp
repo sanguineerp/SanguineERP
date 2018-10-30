@@ -778,7 +778,7 @@
 		    var table = document.getElementById("tblProdDet");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
-		    rowCount=listRow;
+// 		    rowCount=listRow;
 		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listMISDtl["+(rowCount)+"].strProdCode\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";
 		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"42%\" name=\"listMISDtl["+(rowCount)+"].strProdName\" id=\"strProdName."+(rowCount)+"\" value='"+strProdName+"' />";
 		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listMISDtl["+(rowCount)+"].strUOM\" id=\"strUOM."+(rowCount)+"\" value='"+strUOM+"' />";		    
@@ -807,6 +807,8 @@
 			var totalAmt=0;
 			var table = document.getElementById("tblProdDet");
 			var rowCount = table.rows.length;
+			
+		
 			for(var i=0;i<rowCount;i++)
 			{
 				totalAmt=parseFloat(document.getElementById("dblTotalPrice."+i).value)+totalAmt;
@@ -822,7 +824,10 @@
 		    var index = obj.parentNode.parentNode.rowIndex;
 		    var table = document.getElementById("tblProdDet");
 		    table.deleteRow(index);
-		    funClearProduct();
+		   
+		    funCalculateTotalAmt();
+		    
+		    
 		}
 		
 		/**
@@ -1368,7 +1373,7 @@
 		    var table = document.getElementById("tblProdDet");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
-		    rowCount=listRow;
+// 		    rowCount=listRow;
 		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listMISDtl["+(rowCount)+"].strProdCode\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";   
 		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"42%\" name=\"listMISDtl["+(rowCount)+"].strProdName\" id=\"strProdName."+(rowCount)+"\" value='"+strProdName+"' />";
 		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listMISDtl["+(rowCount)+"].strUOM\" id=\"strUOM."+(rowCount)+"\" value='"+strUOM+"' />";		    

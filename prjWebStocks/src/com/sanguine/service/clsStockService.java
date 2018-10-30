@@ -11,7 +11,7 @@ import com.sanguine.model.clsBomHdModel;
 import com.sanguine.model.clsInitialInventoryModel;
 import com.sanguine.model.clsOpeningStkDtl;
 import com.sanguine.model.clsTaxHdModel;
-import com.sanguine.model.clsTaxSettlementMasterModel;
+
 
 public interface clsStockService {
 	public void funAddUpdate(clsInitialInventoryModel object);

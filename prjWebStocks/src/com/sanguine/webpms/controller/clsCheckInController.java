@@ -315,20 +315,24 @@ public class clsCheckInController {
 				Map<Long, String> hmGuestMbWithCode = new HashMap<Long, String>();
 				List<clsCheckInDetailsBean> listCheckInDtlBean = objBean.getListCheckInDetailsBean();
                 for (clsCheckInDetailsBean objCheckInDtlBean : listCheckInDtlBean) {
-					clsGuestMasterBean objGuestMasterBean = new clsGuestMasterBean();
+					/*clsGuestMasterBean objGuestMasterBean = new clsGuestMasterBean();
 					objGuestMasterBean.setStrGuestCode(objCheckInDtlBean.getStrGuestCode());
 					objGuestMasterBean.setStrGuestPrefix("");
 					String[] arrSpGuest = objCheckInDtlBean.getStrGuestName().split(" ");
 					objGuestMasterBean.setStrFirstName(arrSpGuest[0]);
-					objGuestMasterBean.setStrMiddleName(arrSpGuest[1]);
-					objGuestMasterBean.setStrLastName(arrSpGuest[2]);
+					if(arrSpGuest.length>1){
+						objGuestMasterBean.setStrMiddleName(arrSpGuest[1]);
+						if(arrSpGuest.length==2){
+						objGuestMasterBean.setStrLastName(arrSpGuest[2]);
+						}
+						}
 					objGuestMasterBean.setIntFaxNo(0);
 					objGuestMasterBean.setIntPinCode(0);
 					objGuestMasterBean.setDteDOB("01-01-1900");
 					objGuestMasterBean.setIntMobileNo(objCheckInDtlBean.getLngMobileNo());
 					clsGuestMasterHdModel objGuestMasterModel = objGuestMasterService.funPrepareGuestModel(objGuestMasterBean, clientCode, userCode);
 					objGuestMasterDao.funAddUpdateGuestMaster(objGuestMasterModel);
-					hmGuestMbWithCode.put(objCheckInDtlBean.getLngMobileNo(), objGuestMasterModel.getStrGuestCode());
+					*/hmGuestMbWithCode.put(objCheckInDtlBean.getLngMobileNo(), objCheckInDtlBean.getStrGuestCode());
 					
 				}
 				List<clsCheckInDetailsBean> listCheckInDetailBean = new ArrayList<clsCheckInDetailsBean>();
@@ -400,6 +404,19 @@ public class clsCheckInController {
 			// }
 			// }
 			// }
+			
+			String sql1 = "select strfoliono from tblfoliohd " + " where strCheckInNo ='" + objBean.getStrCheckInNo() + "' ";
+			List listCheckIn = objGlobalFunctionsService.funGetListModuleWise(sql1, "sql");
+
+			
+
+			String folioN = "";
+			if(listCheckIn!=null && listCheckIn.size()>0)
+			{
+				 folioN = (String) listCheckIn.get(0);
+			}
+
+			
 			List<String> listCheckRomm = new ArrayList<String>();
 			List<clsFolioDtlModel> listFolioDtl = new ArrayList<clsFolioDtlModel>();
 			for (clsCheckInDtl objCheckInDtlModel : listCheckInDtlModel) {
@@ -417,6 +434,7 @@ public class clsCheckInController {
 					objFolioBean.setTmeDepartureTime(objHdModel.getTmeDepartureTime());
 					objFolioBean.setStrExtraBedCode(objCheckInDtlModel.getStrExtraBedCode());
 					objFolioBean.setStrGuestCode(objCheckInDtlModel.getStrGuestCode());
+					objFolioBean.setStrFolioNo(folioN);
 					
 					
 					clsFolioHdModel objFolioHdModel = objFolioController.funPrepareFolioModel(objFolioBean, clientCode, req);

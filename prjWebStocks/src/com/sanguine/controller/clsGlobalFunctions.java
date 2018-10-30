@@ -2070,7 +2070,11 @@ public class clsGlobalFunctions {
 	public Connection funGetConnection(HttpServletRequest req) {
 		Connection con = null;
 		String modelno = req.getSession().getAttribute("moduleNo").toString();
-
+		try
+		{
+			modelno=req.getSession().getAttribute("otherModuleNo").toString();
+		}
+		finally{
 		try {
 			switch (modelno) {
 			case "1":
@@ -2108,10 +2112,12 @@ public class clsGlobalFunctions {
 				con = (Connection) DriverManager.getConnection(conUrl + "?user=" + urluser + "&password=" + urlPassword);
 				break;
 			}
+		
 		} catch (Exception e) {
 			System.out.println("Error in conection");
 		}
 		return con;
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -2127,7 +2133,7 @@ public class clsGlobalFunctions {
 
 	@SuppressWarnings({ "rawtypes", "unused" })
 	@RequestMapping(value = "/getTaxDtlForProduct", method = RequestMethod.GET)
-	public @ResponseBody Map<String, String> funCalculateTax(@RequestParam("prodCode") String prodDetails, @RequestParam("taxType") String taxType, @RequestParam("transDate") String transDate, @RequestParam("CIFAmt") String CIFAmt, HttpServletRequest req) {
+	public @ResponseBody Map<String, String> funCalculateTax(@RequestParam("prodCode") String prodDetails, @RequestParam("taxType") String taxType, @RequestParam("transDate") String transDate, @RequestParam("CIFAmt") String CIFAmt,@RequestParam("strSettlement") String strSettlement,  HttpServletRequest req) {
 		Map<String, String> hmProductTaxDtl1 = new HashMap<String, String>();
 		List listTaxDtl = new ArrayList<String>();
 		List listTaxes = new ArrayList();
@@ -2136,6 +2142,7 @@ public class clsGlobalFunctions {
 		Map<String, clsTaxDtl> hmTaxCalDtl = new HashMap<String, clsTaxDtl>();
 		Map<String, clsTaxDtl> hmTaxCalDtlTemp = new HashMap<String, clsTaxDtl>();
 		Map<String, Map<String, clsTaxDtl>> hmProdTaxCalDtl = new HashMap<String, Map<String, clsTaxDtl>>();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
 		String shortName = "";
 		try {
 			Map<String, clsProductTaxDtl> hmProductTaxDtl = new HashMap<String, clsProductTaxDtl>();
@@ -2254,7 +2261,8 @@ public class clsGlobalFunctions {
 			for (Map.Entry<String, clsProductTaxDtl> entry : hmProductTaxDtl.entrySet()) {
 				System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
 				sbSql.setLength(0);
-
+				
+				
 				sbSql.append("select a.strPCode,b.strTaxCode,b.strTaxDesc,b.strTaxType,b.dblPercent,b.strTaxOnTax,b.strTaxOnTaxCode " 
 						+ " ,b.strTaxCalculation,b.strTaxOnSubGroup,b.strTaxRounded,b.strCalTaxOnMRP,b.strTaxOnGD,b.dblAbatement " 
 						+ " ,b.strExcisable,strTOTOnMRPItems,b.dblAmount,ifNull(b.strShortName ,'')" 
@@ -2263,6 +2271,8 @@ public class clsGlobalFunctions {
 						+ " and (b.strTaxIndicator='" + entry.getValue().getStrTaxIndicator() + "' or b.strTaxIndicator='') " 
 						+ " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' and b.strPropertyCode='" + propCode + "' "
 						+ " and b.strTaxReversal='N' ");
+				
+			
 				if (checkComesaRegionTax)
 					sbSql.append(" and strNotApplicableForComesa='N' ");
 				
@@ -2270,6 +2280,11 @@ public class clsGlobalFunctions {
 					sbSql.append(" and strNotApplicableForComesa='N' ");
 
 				sbSql.append(" order by b.strTaxOnTax,b.strTaxCode; ");
+				
+				
+				
+				
+				
 				System.out.println(sbSql);
 				List listTax = objGlobalFunctionsService.funGetList(sbSql.toString(), "sql");
 				for (int cnt = 0; cnt < listTax.size(); cnt++) {
@@ -2296,6 +2311,13 @@ public class clsGlobalFunctions {
 															// amt for sales
 															// taxes.
 					{
+						boolean checkSettlementWiseTax=false; 
+						if(objSetup.getStrSettlementWiseInvSer().equals("Yes"))
+						{
+							checkSettlementWiseTax=funGetSettlementWiseTax(taxCode,strSettlement);
+						}
+						if(checkSettlementWiseTax)
+						{
 						if (exciseable.equals("Y")) // Excisable field from
 													// taxmaster
 						{
@@ -2343,7 +2365,7 @@ public class clsGlobalFunctions {
 							flgEligibleForTax = true;
 
 						}
-					} else // Code to calculate taxable amt for Purchase taxes.
+					}} else // Code to calculate taxable amt for Purchase taxes.
 					{
 						if (exciseable.equals("Y")) // Excisable field from tax
 													// master.
@@ -5285,7 +5307,32 @@ return 1;
 
 	}
 	
-	
+	private boolean funGetSettlementWiseTax(String taxCode,String settlementCode)
+	{
+		boolean res=false;
+		StringBuilder sbSql=new StringBuilder();
+		sbSql.setLength(0);
+		sbSql.append("select * from tbltaxsettlement a where a.strTaxCode='"+taxCode+"' and a.strSettlementCode='"+settlementCode+"' and a.strApplicable='Yes'");
+		try
+		{
+			List list=objBaseService.funGetListModuleWise(sbSql, "sql", "WebStocks");
+			if(list.size()>0)
+			{
+				
+				res=true;
+			}
+		return res;
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+			
+		}
+		finally
+		{
+		return res;
+		}
+		
+	}
 
 
 }

@@ -21,4 +21,11 @@ public interface clsTaxMasterDao {
 	public List funGetTaxes(String taxCode, String clientCode);
 
 	public List funGetSubGroupList(String clientCode);
+	
+	public List funGetSettlementList(String clientCode);
+	
+	public List funGetTaxSettlement(String taxCode);
+	
+	
+	
 }

@@ -50,9 +50,23 @@
 		});
 		
 		
+		$("#txtArrivalTime").timepicker();
+		$("#txtDepartureTime").timepicker();
+		  
 		
+		$('#txtArrivalTime').timepicker({
+	        'timeFormat':'H:i:s'
+		});
+		$('#txtDepartureTime').timepicker({
+			        'timeFormat':'H:i:s'
+		});
+			
 		$('#txtArrivalTime').timepicker('setTime', new Date());
 		$('#txtDepartureTime').timepicker('setTime', new Date());
+		
+		$('#txtArrivalTime').timepicker();
+		$('#txtDepartureTime').timepicker();
+		
 		
 		
 		$('#txtPickUpTime').timepicker();
@@ -68,6 +82,9 @@
 		$('#txtPickUpTime').timepicker('setTime', new Date());
 		$('#txtDropTime').timepicker('setTime', new Date());
 		
+		
+		$("#txtPickUpTime").timepicker();
+		$("#txtDropTime").timepicker();
 		  
 		
 // 		$( "#txtArrivalDate" ).datepicker({

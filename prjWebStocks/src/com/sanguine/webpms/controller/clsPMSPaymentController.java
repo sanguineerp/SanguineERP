@@ -488,7 +488,7 @@ public class clsPMSPaymentController {
 				Object[] obj = (Object[])listFoliaData.get(i);
 				clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
 				
-				String sqlRecipt="select sum(a.dblReceiptAmt) from tblreceipthd a where a.strReservationNo='"+obj[5].toString()+"'  group by a.strCheckInNo " ;
+				String sqlRecipt="select sum(a.dblReceiptAmt) from tblreceipthd a where a.strReservationNo='"+obj[5].toString()+"'   group by a.strCheckInNo " ;
 				
 				List listRecipt = objGlobalFunctionsService.funGetListModuleWise(sqlRecipt, "sql");
 				double reciptAmt=0.0;
@@ -568,9 +568,16 @@ public class clsPMSPaymentController {
 						+ ",DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y') " + "from tblreceipthd a left outer join  tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo " + "left outer join  tblreservationdtl c on a.strReservationNo=c.strReservationNo " + "left outer join  tblreservationhd d on a.strReservationNo=d.strReservationNo "
 						+ "left outer join  tblsettlementmaster e on b.strSettlementCode=e.strSettlementCode " + "left outer join  tblguestmaster f    on c.strGuestCode=f.strGuestCode " + "where a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "'  ";
 				*/
-				String sqlPayment = "select a.strReceiptNo,ifnull(d.intNoOfAdults,''),ifnull(d.intNoOfChild,'')  ,ifnull(a.strReservationNo,'')" + ",ifnull(c.strRoomType,''),DATE_FORMAT(d.dteArrivalDate,'%d-%m-%Y'),DATE_FORMAT(d.dteDepartureDate,'%d-%m-%Y'),f.strFirstName" + ",f.strMiddleName,f.strLastName,ifnull(e.strSettlementDesc,''),a.dblPaidAmt,b.strRemarks"
-						+ ",DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y'),g.strRoomTypeDesc " + "from tblreceipthd a left outer join  tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo " + "left outer join  tblreservationdtl c on a.strReservationNo=c.strReservationNo " + "left outer join  tblreservationhd d on a.strReservationNo=d.strReservationNo "
-						+ "left outer join  tblsettlementmaster e on b.strSettlementCode=e.strSettlementCode " + "left outer join  tblguestmaster f    on c.strGuestCode=f.strGuestCode,tblroomtypemaster g " + "where c.strRoomType=g.strRoomTypeCode "
+				String sqlPayment = "select a.strReceiptNo,ifnull(d.intNoOfAdults,''),ifnull(d.intNoOfChild,'')  ,ifnull(a.strReservationNo,'')" 
+						+ ",ifnull(c.strRoomType,''),DATE_FORMAT(d.dteArrivalDate,'%d-%m-%Y'),DATE_FORMAT(d.dteDepartureDate,'%d-%m-%Y'),f.strFirstName" 
+						+ ",f.strMiddleName,f.strLastName,ifnull(e.strSettlementDesc,''),a.dblPaidAmt,b.strRemarks"
+						+ ",DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y'),g.strRoomTypeDesc " 
+						+ "from tblreceipthd a left outer join  tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo " 
+						+ "left outer join  tblreservationdtl c on a.strReservationNo=c.strReservationNo "
+						+ "left outer join  tblreservationhd d on a.strReservationNo=d.strReservationNo "
+						+ "left outer join  tblsettlementmaster e on b.strSettlementCode=e.strSettlementCode " 
+						+ "left outer join  tblguestmaster f    on c.strGuestCode=f.strGuestCode,tblroomtypemaster g " 
+						+ "where c.strRoomType=g.strRoomTypeCode "
 						+ "and a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "'  ";
 				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
 
@@ -637,10 +644,20 @@ public class clsPMSPaymentController {
 				 * clientCode+"'  ";
 				 */
 
-				String sqlPayment = " select a.strReceiptNo ,ifnull(c.intNoOfAdults,''),ifnull(c.intNoOfChild,''),a.strReservationNo,e.strBillNo, " + " ifnull(j.strRoomTypeDesc,'') ,DATE_FORMAT(c.dteArrivalDate,'%d-%m-%Y'), DATE_FORMAT(c.dteDepartureDate,'%d-%m-%Y'), " + " ifnull(h.strFirstName,''), ifnull(h.strMiddleName,''),ifnull(h.strLastName,''), "
-						+ "f.strSettlementDesc,a.dblPaidAmt,b.strRemarks, DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y') " + " from tblreceipthd a ,tblreceiptdtl b,tblcheckinhd c ,tblcheckindtl d ,tblbillhd e , " + " tblsettlementmaster f ,tblguestmaster h, tblroom i,tblroomtypemaster j " + " where a.strReceiptNo=b.strReceiptNo and a.strCheckInNo =c.strCheckInNo  "
-						+ "and c.strCheckInNo=d.strCheckInNo   and a.strReservationNo =c.strReservationNo " + " and a.strCheckInNo = e.strCheckInNo    " + "and a.strReservationNo =e.strReservationNo " + " and d.strCheckInNo = e.strCheckInNo    " + "and c.strCheckInNo = e.strCheckInNo  and d.strRoomNo = e.strRoomNo " + "  and d.strRoomNo = i.strRoomCode and i.strRoomTypeCode=j.strRoomTypeCode "
-						+ " and b.strSettlementCode=f.strSettlementCode and d.strGuestCode=h.strGuestCode " + " and a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "' ";
+				String sqlPayment = " select a.strReceiptNo ,ifnull(c.intNoOfAdults,''),ifnull(c.intNoOfChild,''),a.strReservationNo,e.strBillNo, " 
+						+ " ifnull(j.strRoomTypeDesc,'') ,DATE_FORMAT(c.dteArrivalDate,'%d-%m-%Y'), DATE_FORMAT(c.dteDepartureDate,'%d-%m-%Y'), " 
+						+ " ifnull(h.strFirstName,''), ifnull(h.strMiddleName,''),ifnull(h.strLastName,''), "
+						+ " f.strSettlementDesc,a.dblPaidAmt,b.strRemarks, DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y') " 
+						+ " from tblreceipthd a ,tblreceiptdtl b,tblcheckinhd c ,tblcheckindtl d ,tblbillhd e , " + " tblsettlementmaster f ,tblguestmaster h, tblroom i,tblroomtypemaster j " 
+						+ " where a.strReceiptNo=b.strReceiptNo and a.strCheckInNo =c.strCheckInNo  "
+						+ " and c.strCheckInNo=d.strCheckInNo   and a.strReservationNo =c.strReservationNo " 
+						+ " and a.strCheckInNo = e.strCheckInNo    " 
+						+ " and a.strReservationNo =e.strReservationNo " 
+						+ " and d.strCheckInNo = e.strCheckInNo    " 
+						+ " and c.strCheckInNo = e.strCheckInNo  and d.strRoomNo = e.strRoomNo " 
+						+ "  and d.strRoomNo = i.strRoomCode and i.strRoomTypeCode=j.strRoomTypeCode "
+						+ " and b.strSettlementCode=f.strSettlementCode and d.strGuestCode=h.strGuestCode " 
+						+ " and a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "' ";
 
 				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
 
@@ -754,6 +771,7 @@ public class clsPMSPaymentController {
 			e.printStackTrace();
 		}
 	}
+	
 
 	// Open Payment
 	@RequestMapping(value = "/frmPMSPaymentAdvanceAmount", method = RequestMethod.GET)

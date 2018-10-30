@@ -554,6 +554,8 @@ public class clsSetupMasterController
 		bean.setStrGRNRateEditable(objSetup.getStrGRNRateEditable());
 		bean.setStrSORateEditable(objSetup.getStrSORateEditable());
 		bean.setStrInvoiceRateEditable(objSetup.getStrInvoiceRateEditable());
+		bean.setStrSettlementWiseInvSer(objSetup.getStrSettlementWiseInvSer());
+		bean.setStrGRNProdPOWise(objSetup.getStrGRNProdPOWise());
 		/*
 		 * Bank Tab
 		 */
@@ -1102,6 +1104,8 @@ public class clsSetupMasterController
 		objPropertySetupModel.setStrGRNRateEditable(bean.getStrGRNRateEditable());
 		objPropertySetupModel.setStrInvoiceRateEditable(bean.getStrInvoiceRateEditable());
 		objPropertySetupModel.setStrSORateEditable(bean.getStrSORateEditable());
+		objPropertySetupModel.setStrSettlementWiseInvSer(bean.getStrSettlementWiseInvSer());
+		objPropertySetupModel.setStrGRNProdPOWise(bean.getStrGRNProdPOWise());
 		
 		/*
 		 * if(bean.isStrShowAllPropCustomer()==true) {

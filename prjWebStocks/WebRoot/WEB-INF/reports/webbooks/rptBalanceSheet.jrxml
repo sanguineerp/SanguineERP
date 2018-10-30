@@ -284,7 +284,7 @@
 					<textFieldExpression><![CDATA[$F{strCategory}+"  "+"Total"]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00#;(#,##0.00#)">
-					<reportElement x="330" y="1" width="100" height="20" printWhenGroupChanges="gpCategory" forecolor="#106B1F" uuid="dc65cf52-8435-4107-ad0f-b8accff841ae">
+					<reportElement x="330" y="1" width="200" height="20" printWhenGroupChanges="gpCategory" forecolor="#106B1F" uuid="dc65cf52-8435-4107-ad0f-b8accff841ae">
 						<printWhenExpression><![CDATA[!$F{strCategory}.equals("ASSETS")]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Right">
@@ -367,7 +367,7 @@
 					<textFieldExpression><![CDATA[$F{strGroupName}+"  "+"Total"]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00#;(#,##0.00#)">
-					<reportElement x="330" y="1" width="100" height="20" forecolor="#323292" uuid="02f93ac2-47bc-412d-b726-f781ce610460"/>
+					<reportElement x="330" y="1" width="200" height="20" forecolor="#323292" uuid="02f93ac2-47bc-412d-b726-f781ce610460"/>
 					<textElement textAlignment="Right">
 						<font isBold="true"/>
 					</textElement>

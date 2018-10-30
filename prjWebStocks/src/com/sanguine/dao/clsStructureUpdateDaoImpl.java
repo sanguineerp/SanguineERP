@@ -170,8 +170,48 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ " `strMonth11` DECIMAL(18,4) NOT NULL DEFAULT '0.0000', " + " `strMonth12` DECIMAL(18,4) NOT NULL DEFAULT '0.0000', " + " `strClientCode` VARCHAR(50) NOT NULL " + " ) " + " COLLATE='latin1_swedish_ci' " + " ENGINE=InnoDB ;";
 		funExecuteQuery(sql);
 
+		sql=" CREATE TABLE `tbltaxsettlementmaster` ( "
+		  +" `intId` BIGINT NOT NULL AUTO_INCREMENT, "
+		  +" `strTaxCode` VARCHAR(20) NOT NULL DEFAULT '', "
+		  +" `strSettlementCode` VARCHAR(20) NOT NULL DEFAULT '', "
+		  +" PRIMARY KEY (`intId`) "
+		  +" ) "
+		  +" COLLATE='utf16_general_ci' "
+		  +" ENGINE=InnoDB ";
+		funExecuteQuery(sql);
+		
+
+		sql=" CREATE TABLE `tbltaxsettlement` ( "
+		+" `strSettlementCode` VARCHAR(10) NOT NULL DEFAULT '', "
+		+" `strTaxCode` VARCHAR(10) NOT NULL , "
+		+" `strApplicable` VARCHAR(10) NOT NULL DEFAULT 'No', "
+		+" `strClientCode` VARCHAR (10) NOT NULL , "
+		+" PRIMARY KEY (`strClientCode`, `strTaxCode`) "
+		+" ) "
+		+" COLLATE='utf16_general_ci' "
+		+" ENGINE=InnoDB ";
+		
+		funExecuteQuery(sql);
+		
+		sql="DROP TABLE `tbltaxsettlementmaster`;";
+		funExecuteQuery(sql);
+
+		
+//		
+//		CREATE TABLE `tbltaxsettlementmaster` (
+//				`strSettlementCode` VARCHAR(10) NOT NULL DEFAULT '',
+//				`strTaxCode` VARCHAR(10) NOT NULL,
+//				`strApplicable` VARCHAR(10) NOT NULL DEFAULT 'No',
+//				`strClientCode` VARCHAR(10) NOT NULL,
+//				PRIMARY KEY (`strClientCode`, `strTaxCode`)
+//			)
+//			COLLATE='utf16_general_ci'
+//			ENGINE=InnoDB
+//			;
 
 
+		
+		
 		// Indexing in table
 
 		sql = "ALTER TABLE `tblpossalesdtl`	ADD COLUMN `intId` BIGINT NOT NULL AUTO_INCREMENT AFTER `strWSItemCode`,DROP PRIMARY KEY,ADD PRIMARY KEY (`intId`, `strClientCode`);";
@@ -931,6 +971,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblproductmaster` ADD COLUMN `strHSNCode` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strComesaItem`;";
 		funExecuteQuery(sql);
 		
+		sql="ALTER TABLE `tblpropertysetup` "
+			+" ADD COLUMN `strSettlementWiseInvSer` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strSORateEditable`;";
+		funExecuteQuery(sql);
 
 		sql = " DELETE FROM `tbltreemast`; ";
 		funExecuteQuery(sql);
@@ -940,6 +983,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		  +" ADD COLUMN `dteInstallation` DATETIME NOT NULL DEFAULT '1900-01-01 00:00:00' AFTER `dblAMCAmt`, "
 		  +" ADD COLUMN `intWarrantyDays` INT NOT NULL DEFAULT '0' AFTER `dteInstallation`; ";
 		funExecuteQuery(sql);
+		
+		sql="ALTER TABLE `tblpropertysetup` "
+				+" ADD COLUMN `strGRNProdPOWise` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strSettlementWiseInvSer`;" ;
+		funExecuteQuery(sql);
+
 
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
@@ -995,7 +1043,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ " ('frmCostOfIssue', 'Cost Of Issue', 'Stores', 9, 'R', 42, 20, '1', 'cost of issue.png', '1', 1, '1', '1', 'NO', 'NO', 'frmCostOfIssue.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmCustomerMaster', 'Customer Master', 'Master', 1, 'M', 52, 1, '1', 'default.png', '6', 1, '1', '1', 'NO', 'No', 'frmCustomerMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmDebtorLedger', 'Debtor Ledger Tool', 'Tools', 1, 'L', 1, 1, '12', 'default.png', '5', 1, '1', '1', 'NO', '1', 'frmDebtorLedger.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
-//				+ " ('frmDebtorReceipt', 'Debtor Receipt', 'Transaction', 1, 'T', 1, 1, '12', 'default.png', '5', 1, '1', '1', 'NO', '1', 'frmDebtorReceipt.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
+				+ " ('frmDebtorReceipt', 'Debtor Receipt', 'Transaction', 1, 'T', 1, 1, '12', 'default.png', '5', 1, '1', '1', 'NO', '1', 'frmDebtorReceipt.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmDeleteTransaction', 'Delete Transaction', 'Tools', 8, 'L', 46, 24, '1', 'delete trasaction.png', '1', 1, '1', '1', 'NO', 'NO', 'frmDeleteTransaction.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmDeliveryChallan', 'Delivery Challan', 'Sales', 2, 'T', 56, 3, '1', 'default.png', '6', 1, '1', '1', 'NO', 'Yes', 'frmDeliveryChallan.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmDeliveryChallanList', 'Delivery Challan List', 'Sub contracting Report', 3, 'R', 63, 5, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmDeliveryChallanList.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
@@ -1871,8 +1919,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteQuery(sql);
 		
 		
-		
-		
+		sql="ALTER TABLE `tblsettlementmaster` "
+		   +" ADD COLUMN `strInvSeriesChar` VARCHAR(20) NOT NULL DEFAULT '' AFTER `strUserModified`;" ;
+		funExecuteQuery(sql);
 
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
 				+ " ('frmInovice', 'Invoice', 'Sales', 2, 'T', 69, 10, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmInovice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
@@ -3442,7 +3491,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				funExecuteQuery(sql);
 				sql = "truncate table tbltaxhd";
 				funExecuteQuery(sql);
-				sql = "truncate table tbltaxsettlementmaster";
+				sql = "truncate table tbltaxsettlement";
 				funExecuteQuery(sql);
 				break;
 			}

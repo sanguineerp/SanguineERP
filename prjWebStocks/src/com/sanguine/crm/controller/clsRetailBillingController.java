@@ -422,7 +422,7 @@ public class clsRetailBillingController {
 						prodRateForTaxCal = objInvDtl.getDblUnitPrice() * objInvDtl.getDblWeight() * dblCurrencyConv;
 					}
 					String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0";
-					Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objGlobalFunctions.funGetDate("yyyy-MM-dd", objBean.getDteInvDate()), "0", req);
+					Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objGlobalFunctions.funGetDate("yyyy-MM-dd", objBean.getDteInvDate()), "0",objBean.getStrSettlementCode(), req);
 					System.out.println("Map Size= " + hmProdTaxDtl.size());
 
 					Map<String, clsInvoiceTaxDtlModel> hmInvTaxDtl = new HashMap<String, clsInvoiceTaxDtlModel>();

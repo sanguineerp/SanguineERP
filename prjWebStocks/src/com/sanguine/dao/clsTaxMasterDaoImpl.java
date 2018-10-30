@@ -10,10 +10,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.sanguine.model.clsSettlementMasterModel;
 import com.sanguine.model.clsTaxHdModel;
-import com.sanguine.model.clsTaxHdModel_ID;
 import com.sanguine.model.clsTaxSettlementMasterModel;
-import com.sanguine.webbooks.model.clsJVHdModel;
 
 @Repository("clsTaxMasterDao")
 public class clsTaxMasterDaoImpl implements clsTaxMasterDao {
@@ -101,6 +100,28 @@ public class clsTaxMasterDaoImpl implements clsTaxMasterDao {
 		List list = query.list();
 		return list;
 
+	}
+
+
+	public List funGetSettlementList(String clientCode) {
+		Query query = sessionFactory.getCurrentSession().createSQLQuery("select a.strSettlementCode,a.strSettlementDesc " + " from tblsettlementmaster a where a.strClientCode='" + clientCode + "' and a.strApplicable='true' ");
+		@SuppressWarnings("rawtypes")
+		List list = query.list();
+		return list;
+
+	}
+	
+	public List funGetTaxSettlement( String taxCode) {
+		// String
+		// sql="select a.strBOMCode from tblbommasterhd a where a.strParentCode='"+strParentCode+"' and a.strClientCode='"+strClientCode+"'";
+
+//		String hql = "select a.strSettlementCode, b.strSettlementDesc,a.strApplicable from tbltaxsettlement a,tblsettlementmaster b " + "where  a.strTaxCode= :taxCode and a.strSettlementCode=b.strSettlementCode";
+		Query query = sessionFactory.getCurrentSession().createSQLQuery("select a.strSettlementCode, b.strSettlementDesc,a.strApplicable from tbltaxsettlement a,tblsettlementmaster b " + "where  a.strTaxCode= '"+taxCode+"' and a.strSettlementCode=b.strSettlementCode");
+//		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+//		
+//		query.setParameter("taxCode", taxCode);
+		List list = query.list();
+		return list;
 	}
 
 }

@@ -45,7 +45,6 @@ import com.sanguine.webpms.dao.clsGuestMasterDao;
 import com.sanguine.webpms.dao.clsIncomeHeadMasterDao;
 import com.sanguine.webpms.dao.clsRoomTypeMasterDao;
 import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
-
 import com.sanguine.webpms.model.clsExtraBedMasterModel;
 import com.sanguine.webpms.model.clsGuestMasterHdModel;
 import com.sanguine.webpms.model.clsPackageMasterDtl;
@@ -327,21 +326,31 @@ public class clsReservationController {
 					clsGuestMasterBean objGuestMasterBean = new clsGuestMasterBean();
 					objGuestMasterBean.setStrGuestCode(objResDtlBean.getStrGuestCode());
 					objGuestMasterBean.setStrGuestPrefix("");
+					List listGuestData = objGuestMasterDao.funGetGuestMaster(objResDtlBean.getStrGuestCode(), clientCode);
+//					clsGuestMasterHdModel objGuestMasterModel1 = (clsGuestMasterHdModel) listGuestData.get(0);
+					//objGuestMasterModel.setDteDOB(objGlobal.funGetDate("dd-MM-yyyy", objGuestMasterModel.getDteDOB()));
+
 					String[] arrSpGuest = objResDtlBean.getStrGuestName().split(" ");
 					objGuestMasterBean.setStrFirstName(arrSpGuest[0]);
-					objGuestMasterBean.setStrMiddleName(objGlobal.funIfNull(arrSpGuest[1], "", arrSpGuest[1]));
-					if(arrSpGuest.length==2)
+					if(arrSpGuest.length>1)
 					{
-						objGuestMasterBean.setStrLastName("");
+					objGuestMasterBean.setStrMiddleName(objGlobal.funIfNull(arrSpGuest[1], "", arrSpGuest[1]));
+					}else{
+						objGuestMasterBean.setStrMiddleName("");
+					}
+					if(arrSpGuest.length>2)
+					{
+						objGuestMasterBean.setStrLastName(objGlobal.funIfNull(arrSpGuest[2], "", arrSpGuest[2]));
 					}
 					else
 					{
-						objGuestMasterBean.setStrLastName(objGlobal.funIfNull(arrSpGuest[2], "", arrSpGuest[2]));
+						objGuestMasterBean.setStrLastName("");
 					}
 					
 					objGuestMasterBean.setIntFaxNo(0);
 					objGuestMasterBean.setIntPinCode(0);
-					objGuestMasterBean.setDteDOB("01-01-1900");
+//					objGuestMasterBean.setDteDOB("01-01-1900");
+					
 					objGuestMasterBean.setIntMobileNo(objResDtlBean.getLngMobileNo());
 					objGuestMasterBean.setStrAddress(objResDtlBean.getStrAddress());
 

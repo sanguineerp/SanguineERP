@@ -44,7 +44,7 @@
 				$( "#lblPropName" ).text(propertyName);
 				$( "#txtPropCode" ).val(propCode);
 				
-
+				funLoadSettlement();
 			});
 	
 	
@@ -238,7 +238,8 @@
 					        	
 					        	funLoadTaxes(response.strTaxCode,response.strTaxOnTaxCode);
 					        	funFillGrid(response.listTaxSGDtl);
-					        
+					        	
+					            funFillSettlemnt(response.strTaxCode);
 				        	}
 						},
 						error: function(jqXHR, exception) {
@@ -339,7 +340,9 @@
 				$("#txtTaxPer").attr("disabled", true);
 			}
 			$("#txtAttName").focus();
-			$("#lblParentAttName").text("");			
+			$("#lblParentAttName").text("");
+			
+			
 		}
 		
 		
@@ -658,8 +661,140 @@
 			}
 		
 			
+			
+			function funLoadSettlement()
+			{
+				$('#tblSettlement tbody').empty();
+				 searchUrl=getContextPath()+"/loadCRMSettlementData.html";
+				$.ajax({
+			        type: "GET",
+			        url: searchUrl,
+				    dataType: "json",
+				    success: function(response)
+				    {
+				    $.each(response, function(key, value) {
+				    	funAddSettlemntRow(key,value)
+		 					});
+		 					
+		 				
+				    },
+				error: function(jqXHR, exception) {
+			            if (jqXHR.status === 0) {
+			                alert('Not connect.n Verify Network.');
+			            } else if (jqXHR.status == 404) {
+			                alert('Requested page not found. [404]');
+			            } else if (jqXHR.status == 500) {
+			                alert('Internal Server Error [500].');
+			            } else if (exception === 'parsererror') {
+			                alert('Requested JSON parse failed.');
+			            } else if (exception === 'timeout') {
+			                alert('Time out error.');
+			            } else if (exception === 'abort') {
+			                alert('Ajax request aborted.');
+			            } else {
+			                alert('Uncaught Error.n' + jqXHR.responseText);
+			            }
+			        }
+			    });
+			}
+			//Delete a All record from a grid
+			function funRemoveSelltementRows()
+			{
+				var table = document.getElementById("tblSettlement");
+				var rowCount = table.rows.length;
+				while(rowCount>0)
+				{
+					table.deleteRow(0);
+					rowCount--;
+				}
+			}
+		function funAddSettlemntRow(settlementCode,SettlementDesc)
+		{
+		    var table = document.getElementById("tblSettlement");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
 	
+		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"50%\" name=\"listTaxSettlement["+(rowCount)+"].strSettlementCode\"  id=\"strSettlementCode."+(rowCount)+"\" value='"+settlementCode+"' />";
+		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"SettlementDesc."+(rowCount)+"\" value='"+SettlementDesc+"' />";
+		    row.insertCell(2).innerHTML= "<input id=\"cbApplicable."+(rowCount)+"\" name=\"listTaxSettlement["+(rowCount)+"].strApplicable\" type=\"checkbox\" class=\"ApplicableCheckBoxClass\"  checked=\"checked\"  value='"+settlementCode+"' />";
+		    
+		}
 		
+		function btnSubmit_Onclick()
+		{
+		var strSettleCode="";
+					 var no=1;
+					 $('input[name="strApplicable"]:checked').each(function() {
+						 if(strSettleCode.length>0)
+							 {
+							
+	// 						 document.getElementById("txtTaxCode."+no).value='';
+							 strSettleCode=strSettleCode+","+this.value;
+							 }
+							 else
+							 {
+								 strSettleCode=this.value;
+							 }
+						 no=no+1;
+						 
+						});
+					 $("#hidSettlementCode").val(strSettleCode);
+			    	document.forms["taxForm"].submit();
+		    } 
+		    
+		    function funFillSettlemnt(taxcode)
+		    {
+		    	$('#tblSettlement tbody').empty();
+				 searchUrl=getContextPath()+"/loadTaxSettlementData.html?taxCode="+taxcode;
+				$.ajax({
+			        type: "GET",
+			        url: searchUrl,
+				    dataType: "json",
+				    success: function(response)
+				    {
+				     
+				     $.each(response, function(i,item)
+						 		{
+				    	 funFillTaxSettlemnt(response[i][0],response[i][1],response[i][2]);
+								});
+						
+				    },
+				error: function(jqXHR, exception) {
+			            if (jqXHR.status === 0) {
+			                alert('Not connect.n Verify Network.');
+			            } else if (jqXHR.status == 404) {
+			                alert('Requested page not found. [404]');
+			            } else if (jqXHR.status == 500) {
+			                alert('Internal Server Error [500].');
+			            } else if (exception === 'parsererror') {
+			                alert('Requested JSON parse failed.');
+			            } else if (exception === 'timeout') {
+			                alert('Time out error.');
+			            } else if (exception === 'abort') {
+			                alert('Ajax request aborted.');
+			            } else {
+			                alert('Uncaught Error.n' + jqXHR.responseText);
+			            }
+			        }
+			    });
+		    	
+		    }
+		    
+		    function funFillTaxSettlemnt(settlementCode,SettlementDesc,strApplicable)
+			{
+			    var table = document.getElementById("tblSettlement");
+			    var rowCount = table.rows.length;
+			    var row = table.insertRow(rowCount);
+		
+			    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"50%\" name=\"listTaxSettlement["+(rowCount)+"].strSettlementCode\"  id=\"strSettlementCode."+(rowCount)+"\" value='"+settlementCode+"' />";
+			    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"SettlementDesc."+(rowCount)+"\" value='"+SettlementDesc+"' />";
+			    if(strApplicable=='Yes')
+			    {
+			    row.insertCell(2).innerHTML= "<input id=\"cbApplicable."+(rowCount)+"\" name=\"listTaxSettlement["+(rowCount)+"].strApplicable\" type=\"checkbox\" class=\"ApplicableCheckBoxClass\"  checked=\"checked\"  value='"+settlementCode+"' />";
+			    }else{
+			    row.insertCell(2).innerHTML= "<input id=\"cbApplicable."+(rowCount)+"\" name=\"listTaxSettlement["+(rowCount)+"].strApplicable\" type=\"checkbox\" class=\"ApplicableCheckBoxClass\"   value='"+settlementCode+"' />";	
+			    }
+			}
 	</script>
 </head>
 
@@ -674,6 +809,8 @@
 				<li class="active" data-state="tab1" style="width: 25%; left: 10%">GENERAL</li>
 				<li data-state="tab2" style="width: 10%; padding-left: 55px">Tax On Tax</li>
 				<li data-state="tab3" style="width: 10%; padding-left: 55px">Tax On Subgroup</li>
+				<li data-state="tab4" style="width: 10%; padding-left: 55px">Settlement</li>
+
 <!-- 				<li data-state="tab4" style="width: 10%; padding-left: 55px">Settlement Wise Tax</li> -->
 			</ul>
 		
@@ -919,6 +1056,22 @@
 				</div>
 			</div>
 		</div>
+				<div id="tab4" class="tab_content" style="height: 550px">
+						
+							<div
+								style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+									<table id="tblSettlement"
+									style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+									class="transTablex col8-center">
+									<tbody>
+									<col style="width:10%"/>
+									<col style="width:16%">					
+									<col style="width:10%">
+								
+									</tbody>
+								</table>
+							</div>
+						</div>
 		
 <!-- 			<div id="tab4" class="tab_content" style="height: 520px"> -->
 <!-- 			<br/> -->
@@ -949,11 +1102,13 @@
 		<br />
 					
 		<p align="center">
-			<input type="submit" value="Submit" id="btnSubmit" class="form_button"/> 
+			<input type="submit" value="Submit" id="btnSubmit" class="form_button" "/> 
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 			
 		<s:input type="hidden" id="hidTaxesCodes" path="strTaxOnTaxCode"></s:input>
+		<s:input type="hidden" id="hidSettlementCode" path="strSettlementCode"></s:input>
+		
 		<br><br>
 	</s:form>
 </body>

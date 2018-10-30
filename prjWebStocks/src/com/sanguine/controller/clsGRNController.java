@@ -909,9 +909,14 @@ public class clsGRNController {
 		prodList =funGetSupplierWiseContractRateForPO(prodCode,strSuppCode,poCodes,billDate);
 		if(prodList==null)
 		{
+			prodList = new ArrayList();
 			sqlBuilder.setLength(0);
-			sqlBuilder.append( "select a.strProdCode,a.strProdName,e.dblPrice,a.dblWeight,a.strBinNo,a.strReceivedUOM," + " a.strExpDate,a.strNonStockableItem," + " e.dblOrdQty-ifnull(sum(f.dblQty),0) as dblOrdQty,e.strPOCode" + "	from tblproductmaster a,tblpurchaseorderdtl e" + " left outer join tblgrndtl f  on f.strCode=e.strPOCode and f.strCode='" + poCodes + "' " + "	and f.strClientCode='" + clientCode + "' "
-					+ " where  e.strProdCode=a.strProdCode and  e.strProdCode='" + prodCode + "' and e.strPOCode='" + poCodes + "'  " + " and a.strClientCode='" + clientCode + "' and e.strClientCode='" + clientCode + "'" + "	group by a.strProdCode");
+			sqlBuilder.append( "select a.strProdCode,a.strProdName,e.dblPrice,a.dblWeight,a.strBinNo,a.strReceivedUOM," 
+			+ " a.strExpDate,a.strNonStockableItem," + " e.dblOrdQty-ifnull(sum(f.dblQty),0) as dblOrdQty,e.strPOCode"
+			+ "	from tblproductmaster a,tblpurchaseorderdtl e" 
+			+ " left outer join tblgrndtl f  on f.strCode=e.strPOCode and f.strCode='" + poCodes + "' "
+			+ "	and f.strClientCode='" + clientCode + "'  AND e.strProdCode=f.strProdCode "
+			+ " where  e.strProdCode=a.strProdCode and  e.strProdCode='" + prodCode + "' and e.strPOCode='" + poCodes + "'  " + " and a.strClientCode='" + clientCode + "' and e.strClientCode='" + clientCode + "'" + "	group by a.strProdCode");
 			List list = objGlobalFunctionsService.funGetList(sqlBuilder.toString(), "sql");
 
 			
@@ -1861,7 +1866,7 @@ public class clsGRNController {
 				}
 			}
 			String prdDetailForTax = prodCode + "," + unitPrice + "," + suppCode + "," + qty + "," + disAmt;
-			Map<String, String> hmProdTax = objGlobalFunctions.funCalculateTax(prdDetailForTax, "Purchase", objGlobalFunctions.funGetDate("yyyy-MM-dd", dteGRN), "0", req);
+			Map<String, String> hmProdTax = objGlobalFunctions.funCalculateTax(prdDetailForTax, "Purchase", objGlobalFunctions.funGetDate("yyyy-MM-dd", dteGRN), "0","", req);
 
 			if (hmProdTax.size() > 0) {
 				for (Map.Entry<String, String> entry : hmProdTax.entrySet()) {
@@ -1910,7 +1915,7 @@ public class clsGRNController {
 			dataList.add(Double.parseDouble(ob[19].toString()) / currValue); // Rate
 			dataList.add(df.format(Double.parseDouble(ob[20].toString()) / currValue)); // Amount
 			dataList.add(df.format(dblTaxamt / currValue)); // TaxAmt
-			dblRowAmtTotal = Double.parseDouble(ob[20].toString()) + dblTaxamt;
+			dblRowAmtTotal = Double.parseDouble(ob[20].toString()) ;
 			dataList.add(df.format(dblRowAmtTotal / currValue)); // TotalAmt = Amt + taxAmt
 			grandToltal += dblRowAmtTotal;
 
@@ -2035,6 +2040,29 @@ public class clsGRNController {
 
 		openingStklist.add(dataListExtra);
 
+		
+		
+		sqlBuilderDisAmt.setLength(0);
+		double taxAmt=0.0;
+		double dblTaxamt=0.0;
+		sqlBuilderDisAmt = new StringBuilder(" select b.strTaxDesc,b.strTaxCode,sum(b.strTaxAmt)  FROM tblgrnhd a ,tblgrntaxdtl b " + " WHERE DATE(a.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' and a.strClientCode='" + clientCode + "' and (" + grnCode + " )  and a.strGRNCode=b.strGRNCode group by b.strTaxCode; " ) ;
+		List listTax = objGlobalFunctionsService.funGetList(sqlBuilderDisAmt.toString(), "sql");
+		hmTaxTotalGrid=new HashMap<String, Double>();
+		if (listTax.size() > 0) {
+			for(int i=0;i<listTax.size();i++){
+			Object[] obj = (Object[]) listTax.get(i);
+			
+			taxAmt = Double.parseDouble(obj[2].toString());
+			if (hmTaxTotalGrid.containsKey(obj[0].toString())) {
+				double dbltax = hmTaxTotalGrid.get(obj[0].toString());
+				hmTaxTotalGrid.put(obj[0].toString(), dbltax + taxAmt);
+			} else {
+				hmTaxTotalGrid.put(obj[0].toString(), taxAmt);
+			}
+			dblTaxamt += Double.parseDouble(obj[2].toString());
+			}
+		}
+		 
 		for (Map.Entry<String, Double> entry : hmTaxTotalGrid.entrySet()) {
 			List dataListTax = new ArrayList<>();
 			dataListTax.add("");
@@ -2068,7 +2096,8 @@ public class clsGRNController {
 
 			openingStklist.add(dataListTax);
 		}
-		grandToltal = grandToltal - totDisAmt + totExtraAmt;
+		System.out.println(dblTaxamt);
+		grandToltal = grandToltal - totDisAmt + totExtraAmt+dblTaxamt;
 		if (grandToltal > 0) {
 			List dataListgrandtotal = new ArrayList<>();
 			dataListgrandtotal.add("");
@@ -2211,7 +2240,7 @@ public class clsGRNController {
 		sqlBuilderDtl.append("SELECT  g.strGName AS GroupName,f.strSGName AS SubGroupName,  e.strLocName AS LocName,d.strPType AS PIndicator, " 
 				+ " IFNULL((a.dblTotal-(h.strTaxableAmt+h.strTaxAmt)),0.0) as NONTaxAmt, " 
 				+ " IFNULL(h.strTaxableAmt,0.0) AS TaxableAmt,IFNULL(h.strTaxAmt,0.0) AS TaxAmt, IFNULL((h.strTaxableAmt+h.strTaxAmt),0.0) AS TaxBillAmt, "
-				+ " IFNULL((a.dblSubTotal+a.dblDisAmt+a.dblTaxAmt+dblExtra), 0.0) as TotalAmt " 
+				+ " IFNULL((a.dblSubTotal-a.dblDisAmt+a.dblTaxAmt+dblExtra), 0.0) as TotalAmt " 
 				+ " FROM tblgrnhd a " 
 				+ " LEFT OUTER " 
 				+ " JOIN tblgrndtl b ON a.strGRNCode=b.strGRNCode " 

@@ -1758,8 +1758,8 @@ function funGetKeyCode(event,controller) {
 		{
 			var dteInv =$('#txtSODate').val();
 			var CIFAmt=0;
-			
-		    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteInv+"&CIFAmt="+CIFAmt,
+			var settlement=$('#cmbCurrency').val();
+		    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
 		    $.ajax({
 				type: "GET",
 			    url:gurl,    

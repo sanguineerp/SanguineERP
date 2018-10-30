@@ -108,6 +108,7 @@
 							<%session.removeAttribute("rptInvDate");%>
 							<%session.removeAttribute("rptDcCode");%>
 							var isOk=confirm("Do You Want to Generate Slip?");
+							var Ok=confirm("Do You Want to Generate Receipt?");
 							if(isOk){
 								
 								if(invoiceformat=="Format 1")
@@ -148,6 +149,13 @@
 								}
 
 						}
+							
+							
+							if(Ok){
+						
+									window.open(getContextPath()+"/frmReceiptInvoice.html?invCode="+code);
+								
+							}
 
 			<%}%><%}%>
 							
@@ -1596,8 +1604,8 @@
 	{
 		var dteInv =$('#txtDCDate').val();
 		var CIFAmt=0;
-		
-	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteInv+"&CIFAmt="+CIFAmt,
+		var settleCode=$("#cmbSettlement").val();
+	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settleCode,
 	    $.ajax({
 			type: "GET",
 		    url:gurl,

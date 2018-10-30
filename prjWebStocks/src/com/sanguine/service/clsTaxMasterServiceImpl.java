@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sanguine.dao.clsGroupMasterDao;
 import com.sanguine.dao.clsTaxMasterDao;
-import com.sanguine.model.clsGroupMasterModel;
 import com.sanguine.model.clsTaxHdModel;
+
 import com.sanguine.model.clsTaxSettlementMasterModel;
 
 @Service("objTaxMasterService")
@@ -70,5 +69,19 @@ public class clsTaxMasterServiceImpl implements clsTaxMasterService {
 	public List funGetSubGroupList(String clientCode) {
 		return objTaxMasterDao.funGetSubGroupList(clientCode);
 	}
-
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public List funGetSettlementList(String clientCode){
+		return objTaxMasterDao.funGetSettlementList(clientCode);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public List funGetTaxSettlement(String taxCode){
+		return objTaxMasterDao.funGetTaxSettlement(taxCode);
+	}
+	
+	
 }

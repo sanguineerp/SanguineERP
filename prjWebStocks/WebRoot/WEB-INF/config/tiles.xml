@@ -1910,7 +1910,6 @@
 	</definition> 
 
 
-    
 	<!-- 	End Of Webstock Tiles Entry -->
 	
 	
@@ -3932,10 +3931,12 @@
 		<put-attribute name="title" value="Transaction List"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/frmWebBooksDeleteModuleList.jsp"></put-attribute>
 	</definition>
-	
-	
-	
-	
+    
+     <definition name="frmReceiptFromInvoice" extends="base.definition">
+		<put-attribute name="title" value="Receipt"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/webbooks/frmReceipt.jsp"></put-attribute>
+	</definition>
 	
 <!-- 	APGL Forms Entry Starts -->
 	

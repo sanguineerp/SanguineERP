@@ -119,8 +119,42 @@
 			}
 		});
 		
+		var acc ='${accCode}';
+		if(!acc=='')
+		{
+			funRemoveAccountRows("tblInv");
+			$("#txtAccCode").val(acc);
+			$("#txtDescription").val('${accName}');
+			 $("#txtDebtorCode").val('${debtorCode}');
+			$("#txtDebtorName").val('${debtorName}');
+			   
+			var invCode= '${invCode}';
+			var debtorCode=$("#txtDebtorCode").val();
+			
+			funGetUnPayedInv(debtorCode,'');
+     	    funSetBalanceAmt("Debtor");
+     	    funcheckInvselectFrmInvocie(invCode);
+     	    funInvChkOnClick();
+		}
+		
 		
 	});
+	
+	function funcheckInvselectFrmInvocie(invCode)
+	{
+		var table = document.getElementById("tblInv");
+	    var rowCount = table.rows.length;  
+	    for(var no=0;no<rowCount;no++)
+	    {
+	    	var tblInvCode=document.getElementById("txtInvCode."+no).value;
+	        if(document.all("txtInvCode."+no).value==invCode)
+	        	{
+	        	   document.all("cbInvSel."+no).checked = true;	
+	        	}
+	    }
+	  
+	 	   
+	}
 
 	function funResetFields()
 	{
@@ -970,6 +1004,7 @@
 			type : "GET",
 			url : getContextPath()+ "/loadUnPayedInv.html?strDebtorCode="+strDebtor+"&strCurrency="+strCurrency,
 			dataType : "json",
+		    async: false ,
 			success : function(response){ 
 				$.each(response, function(i, item) {
 					

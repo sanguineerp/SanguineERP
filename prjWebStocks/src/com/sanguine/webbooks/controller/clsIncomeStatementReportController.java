@@ -276,7 +276,8 @@ public class clsIncomeStatementReportController
 //			BigDecimal grossProfit=totalSalesAmt.subtract(totalOtherExpenses);
 //			objSales1.setDblValue(grossProfit);
 			objSales1.setStrAccountName("");
-			objSales1.setStrCategory("DIRECT INCOME");
+//			objSales1.setStrCategory("DIRECT INCOME");
+			objSales1.setStrCategory("");
 //			listOfIncomeStatement.add(objSales1);
 			BigDecimal grossProfit=salesAmt.subtract(purAmt);			
 			hm.put("dblGrossProfit", grossProfit);
@@ -291,11 +292,20 @@ public class clsIncomeStatementReportController
 				funCalculateIncomeStmt("INDIRECT INCOME", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
 						
 			// Other Incomes Receipt 
-				funCalculateIncomeStmt("INDIRECT INCOMEE", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
+				funCalculateIncomeStmt("INDIRECT INCOME", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
 									
 			// Other Incomes Payment	
 				funCalculateIncomeStmt("INDIRECT INCOME", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
-								
+					
+				// Other Incomes JV
+				funCalculateIncomeStmt("DIRECT INCOME", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
+						
+			// Other Incomes Receipt 
+				funCalculateIncomeStmt("DIRECT INCOME", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
+									
+			// Other Incomes Payment	
+				funCalculateIncomeStmt("DIRECT INCOME", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, "dblCrAmt", clientCode, sbSql, hmOtherIncomeIncStmt,propertyCode);
+					
 			
 			Map<String,clsIncomeStmtReportBean> hmExpenseIncStmt = new HashMap<String,clsIncomeStmtReportBean>();	
 				
@@ -308,6 +318,16 @@ public class clsIncomeStatementReportController
 			// Expense Payment	
 				funCalculateIncomeStmt("INDIRECT EXPENSE", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
 
+				// Expense JV
+				funCalculateIncomeStmt("DIRECT EXPENSE", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
+						
+			// Expense Receipt 
+				funCalculateIncomeStmt("DIRECT EXPENSE", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
+							
+			// Expense Payment	
+				funCalculateIncomeStmt("DIRECT EXPENSE", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, "dblDrAmt", clientCode, sbSql, hmExpenseIncStmt,propertyCode);
+
+				
 				
 				for(Map.Entry<String, clsIncomeStmtReportBean> entry:hmOtherIncomeIncStmt.entrySet())
 				{
@@ -318,7 +338,7 @@ public class clsIncomeStatementReportController
 					objIncomeStmtreport.setStrGroupName(entry.getValue().getStrGroupName());
 					objIncomeStmtreport.setStrAccountName(entry.getValue().getStrAccountName());
 					objIncomeStmtreport.setDblValue(entry.getValue().getDblValue());
-					objIncomeStmtreport.setStrCategory("");
+					objIncomeStmtreport.setStrCategory(entry.getValue().getStrCategory());
 					listOfIncomeStatement.add(objIncomeStmtreport);
 					
 				}
