@@ -438,13 +438,6 @@ WHERE (po.strPOCode = '01POAA000001' and po.strClientCode='024.001' )]]>
 				</textElement>
 				<text><![CDATA[Purchase Order]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="200" y="76" width="345" height="15" uuid="c7d79b15-e24e-4950-a24f-a367e44a2a07"/>
-				<textElement textAlignment="Center">
-					<font fontName="Serif"/>
-				</textElement>
-				<textFieldExpression><![CDATA["GST: "+($P{strCST}==null ?" ":$P{strCST})]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="2" y="114" width="58" height="20" uuid="5e2395e5-63c1-424b-81c2-cda28605b72c"/>
 				<textElement>

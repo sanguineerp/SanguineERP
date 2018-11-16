@@ -216,7 +216,7 @@
 			} else {
 				$("#txtLocCode").val(response.strLocCode);						
 				$("#lblLocName").text(response.strLocName);
-				$("#txtCustCode").focus();
+// 				$("#txtCustCode").focus();
 			}
 		},
 		error : function(jqXHR, exception) {
@@ -1209,8 +1209,8 @@
 	{
 		var dteInv =$('#txtDCDate').val();
 		var CIFAmt=0;
-		
-	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteInv+"&CIFAmt="+CIFAmt,
+		var settlement='';
+	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
 	    $.ajax({
 			type: "GET",
 		    url:gurl,

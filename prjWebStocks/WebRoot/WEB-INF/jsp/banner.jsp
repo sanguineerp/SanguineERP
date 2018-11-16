@@ -40,8 +40,8 @@ $(document).ready(function(){
  	
  	
 <%}%>
-    NetworkcheckTimeinterval=parseInt(30)*100;
-	setInterval(function(){funCheckNetworkConnection()},NetworkcheckTimeinterval);
+//     NetworkcheckTimeinterval=parseInt(30)*100;
+// 	setInterval(function(){funCheckNetworkConnection()},NetworkcheckTimeinterval);
    	
 	
 function funGetNotification()
@@ -123,7 +123,10 @@ function funRemoveNotification()
 			case "Reorder Level" :
 				window.open("rptReorderLevelFromNotification.html?locCode="+locationby, '_blank').focus();
 				break;
-				
+			
+			case "Authorization" :
+				window.open("frmAuthorisationTool.html");
+				break;
 		}
 		
 	}

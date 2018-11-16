@@ -148,8 +148,10 @@ function funSetAccountCode(code){
 					        	$("#txtExtraBedTypeDesc").val(response.strExtraBedTypeDesc);
 					        	$("#txtNoOfBed").val(response.intNoBeds);
 					        	$("#txtChargePerBed").val(response.dblChargePerBed);
-					        	
+					        	if(response.strAccountCode!="NA")
+					        	{
 					        	funSetAccountCode(response.strAccountCode);
+					        	}
 				        	}
 						},
 						error: function(jqXHR, exception) {

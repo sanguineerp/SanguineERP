@@ -1,5 +1,7 @@
 package com.sanguine.crm.bean;
 
+import java.util.List;
+
 public class clsAMCFlashBean {
 
 	
@@ -16,6 +18,16 @@ public class clsAMCFlashBean {
 	private double dblAMCAmt;
 	
 	private double dblLicenceAmt;
+	
+	private String strCustCode;
+	
+	private String strCustomerCode;
+	
+	private String strInvCode;
+	
+	private String dteInvDate;
+	
+	private List <clsAMCFlashDtlBean>listAMCDtl;
 	
 
 	public String getDteFromDate() {
@@ -74,5 +86,46 @@ public class clsAMCFlashBean {
 		this.dblLicenceAmt = dblLicenceAmt;
 	}
 
+	public String getStrCustCode() {
+		return strCustCode;
+	}
+
+	public void setStrCustCode(String strCustCode) {
+		this.strCustCode = strCustCode;
+	}
+
+	public List<clsAMCFlashDtlBean> getListAMCDtl() {
+		return listAMCDtl;
+	}
+
+	public void setListAMCDtl(List<clsAMCFlashDtlBean> listAMCDtl) {
+		this.listAMCDtl = listAMCDtl;
+	}
+
+	public String getStrCustomerCode() {
+		return strCustomerCode;
+	}
+
+	public void setStrCustomerCode(String strCustomerCode) {
+		this.strCustomerCode = strCustomerCode;
+	}
+
+	public String getStrInvCode() {
+		return strInvCode;
+	}
+
+	public void setStrInvCode(String strInvCode) {
+		this.strInvCode = strInvCode;
+	}
+
+	public String getDteInvDate() {
+		return dteInvDate;
+	}
+
+	public void setDteInvDate(String dteInvDate) {
+		this.dteInvDate = dteInvDate;
+	}
+
+	
 
 }

@@ -124,7 +124,7 @@ public class clsClientDetails {
 			hmClientDtl.put("112.001", clsClientDetails.createClientDetails("112.001", "GBC MEGA MOTELS", dFormat.parse("2016-05-11"), dFormat.parse("2017-05-11")));// HO																																										// Carnival
 			hmClientDtl.put("114.001", clsClientDetails.createClientDetails("114.001", "Dr. Asif Khan Wellness Clinic LLP", dFormat.parse("2016-05-14"), dFormat.parse("2017-05-14")));// HO
 			hmClientDtl.put("117.001", clsClientDetails.createClientDetails("117.001", "THE PREM'S HOTEL", dFormat.parse("2016-08-01"), dFormat.parse("2019-06-30")));// HO
-			hmClientDtl.put("124.001", clsClientDetails.createClientDetails("124.001", "ATITHYA DINNING LLP", dFormat.parse("2016-11-04"), dFormat.parse("2018-10-31"))); // one month extends//one month licence extend  on 10-10-2018 to 31-10-2018 of teddy boy --Nikhil
+			hmClientDtl.put("124.001", clsClientDetails.createClientDetails("124.001", "ATITHYA DINNING LLP", dFormat.parse("2016-11-04"), dFormat.parse("2018-11-31"))); // renew for one month on 3-11-2018 //one month extends//one month licence extend  on 10-10-2018 to 31-10-2018 of teddy boy --Nikhil
 			hmClientDtl.put("127.001", clsClientDetails.createClientDetails("127.001", "Cumin Food & Beverage Pvt Ltd", dFormat.parse("2016-10-26"), dFormat.parse("2017-10-26")));
 			hmClientDtl.put("131.001", clsClientDetails.createClientDetails("131.001", "KETTLE AND KEG CAFE", dFormat.parse("2016-11-23"), dFormat.parse("2018-11-23")));
 			hmClientDtl.put("132.001", clsClientDetails.createClientDetails("132.001", "JBDD Hospitality LLP", dFormat.parse("2016-12-05"), dFormat.parse("2017-08-30")));
@@ -142,14 +142,14 @@ public class clsClientDetails {
 			hmClientDtl.put("169.001", clsClientDetails.createClientDetails("169.001", "A R HOSPITALITY", dFormat.parse("2017-05-10"), dFormat.parse("2018-05-10")));
 			hmClientDtl.put("172.001", clsClientDetails.createClientDetails("172.001", "DIOS HOTEL LLP", dFormat.parse("2017-05-25"), dFormat.parse("2018-08-25"))); // one
 			hmClientDtl.put("174.001", clsClientDetails.createClientDetails("174.001", "KRD Eateries Pvt Ltd", dFormat.parse("2017-06-06"), dFormat.parse("2017-10-31"))); // krimsons
-			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "TJS BREW WORKS", dFormat.parse("2017-06-06"), dFormat.parse("2018-11-01")));//renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
+			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "TJS BREW WORKS", dFormat.parse("2017-06-06"), dFormat.parse("2018-12-01")));//renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
 			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2019-06-08")));
 			hmClientDtl.put("181.001", clsClientDetails.createClientDetails("181.001", "RMV COMMUNICATION PVT LTD", dFormat.parse("2017-06-20"), dFormat.parse("2017-07-20")));
 			hmClientDtl.put("184.001", clsClientDetails.createClientDetails("184.001", "BALAJI TRADERS PVT LTD", dFormat.parse("2017-07-03"), dFormat.parse("2018-01-07")));
 			hmClientDtl.put("189.001", clsClientDetails.createClientDetails("189.001", "CLASSIC BANGLES", dFormat.parse("2017-08-31"), dFormat.parse("2018-08-10"))); // for demo
 			hmClientDtl.put("193.001", clsClientDetails.createClientDetails("193.001", "PRECISION FOOD WORKS", dFormat.parse("2017-08-25"), dFormat.parse("2019-08-25")));//renewed on 24-09-2018 for 1 year 
 			hmClientDtl.put("194.001", clsClientDetails.createClientDetails("194.001", "SWIG", dFormat.parse("2017-09-11"), dFormat.parse("2019-09-06"))); // Name
-			hmClientDtl.put("197.001", clsClientDetails.createClientDetails("197.001", "Juhu Hotel Pvt Ltd", dFormat.parse("2017-09-20"), dFormat.parse("2018-10-20")));// renewed on 31-10-2017 for 1 year till 20-09-2018b renamed  REZBERRY RHINOCERES to Juhu Hotel Pvt Ltd in JPOS
+			hmClientDtl.put("197.001", clsClientDetails.createClientDetails("197.001", "Juhu Hotel Pvt Ltd", dFormat.parse("2017-09-20"), dFormat.parse("2019-10-20")));// renewed on 31-10-2017 for 1 year till 20-09-2018b renamed  REZBERRY RHINOCERES to Juhu Hotel Pvt Ltd in JPOS
 			hmClientDtl.put("211.001", clsClientDetails.createClientDetails("211.001", "CHEFS CORNER", dFormat.parse("2017-11-29"), dFormat.parse("2018-11-29"))); // renewd
 			hmClientDtl.put("217.001", clsClientDetails.createClientDetails("217.001", "BURNT CRUST HOSPITALITY PVT LTD", dFormat.parse("2017-12-13"), dFormat.parse("2018-11-25")));//renewed on 03-07-2018 for 1 month till 03-08-2018// eenewed for one month till 05-10-2018
 			hmClientDtl.put("218.001", clsClientDetails.createClientDetails("218.001", "THE LIQUID WISDOM CO.PVT LTD", dFormat.parse("2018-01-15"), dFormat.parse("2018-12-13")));// temporory
@@ -175,7 +175,7 @@ public class clsClientDetails {
 			hmClientDtl.put("262.001", clsClientDetails.createClientDetails("262.001", "COCO JAMBO", dFormat.parse("2018-09-08"), dFormat.parse("2019-09-08")));//(AFRICA)//released on 08-09-2018 for 1 year till 08-09-2019 
 			hmClientDtl.put("263.001", clsClientDetails.createClientDetails("263.001", "FIESTA CLUB", dFormat.parse("2018-09-08"), dFormat.parse("2019-09-08")));//(AFRICA)//released on 08-09-2018 for 1 year till 08-09-2019hmClientDtl.put("263.001", clsClientDetails.createClientDetails("263.001", "FIESTA CLUB", dFormat.parse("2018-09-08"), dFormat.parse("2019-09-08")));//(AFRICA)//released on 08-09-2018 for 1 year till 08-09-2019
 			// 264-266 used for POS
-			hmClientDtl.put("267.001", clsClientDetails.createClientDetails("267.001", "AGA HOSPITALITY PVT LTD", dFormat.parse("2018-10-04"), dFormat.parse("2018-11-04")));// One month stsrt date 2018-10-04  end date Office	AddressB-304,	Dynasty	Business	Park,J.B.Nagar,Andheri	Kurla	Road,	Andheri	East	Mumbai-400059. Contact	Person(s)-Mr.Sandesh,Contact	Number(s)9987994188  Email	ID Sandesh.aga@gmail.com //MUBASHIR
+			hmClientDtl.put("267.001", clsClientDetails.createClientDetails("267.001", "AGA HOSPITALITY PVT LTD", dFormat.parse("2018-10-04"), dFormat.parse("2018-12-05")));// One month stsrt date 2018-10-04  end date Office	AddressB-304,	Dynasty	Business	Park,J.B.Nagar,Andheri	Kurla	Road,	Andheri	East	Mumbai-400059. Contact	Person(s)-Mr.Sandesh,Contact	Number(s)9987994188  Email	ID Sandesh.aga@gmail.com //MUBASHIR//Renew  on 04-05-2018 
 			// 268-269 used for POS
 			hmClientDtl.put("270.001", clsClientDetails.createClientDetails("270.001", "Hotel Troy Ltd", dFormat.parse("2018-10-17"), dFormat.parse("2018-11-17")));//Kenya Client renewed on 17-10-2018 for one month 17-11-2018 "Mr Chris Karugu", "0705244273", "info@hotel-troy.com",
 			

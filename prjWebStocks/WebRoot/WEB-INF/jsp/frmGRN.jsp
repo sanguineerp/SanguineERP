@@ -2680,7 +2680,7 @@
 			var table = document.getElementById("tblProduct");
 		    var rowCount = table.rows.length;
 		    
-		    var spGRNDate=$("#txtGRNDate").val().split('-');
+ 		    var spGRNDate=$("#txtGRNDate").val().split('-');
 		    var grnDate=spGRNDate[0]+'/'+spGRNDate[1]+'/'+spGRNDate[2];		    
 		    
 		    var grnDate = new Date(spGRNDate[2],spGRNDate[1]-1,spGRNDate[0]);
@@ -2692,7 +2692,7 @@
 		    	alert("Future date is not allowed for grn");
 		    	$("#txtGRNDate").focus();
 				return false;		    	
-		    }
+		    } 
 		    
 			if (!fun_isDate($("#txtGRNDate").val()))
 			{
@@ -2779,7 +2779,7 @@
 			//alert(funGetMonthEnd(document.all("txtLocCode").value,dtGRNDate));
 			if(funGetMonthEnd(document.all("txtLocCode").value,dtGRNDate)!=true)
 			{
-            	alert("Month End Not Done");
+            	alert("Month End Done For Selected Month");
 	            return false;
             }
 			else
@@ -2821,7 +2821,7 @@
 					}
 				}
 			});
-			if(strMonthEnd=="1")
+			if(strMonthEnd=="1" || strMonthEnd=="-1")
 				return false;
 			if(strMonthEnd=="0")
 				return true;

@@ -551,14 +551,14 @@ public class clsGlobalFunctions {
 		case "frmProFormaInvoice":
 
 			strDocLiteral = "PIV";
-			sql = "select ifnull(max(MID(a.strInvCode,7,6)),'' ) " + " from tblproformainvoicehd a where MID(a.strInvCode,5,1) = '" + transYear + "' " + " and MID(a.strInvCode,6,1) = '" + transMonth + "' " + " and MID(a.strInvCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
-			sqlAudit = " select ifnull(max(MID(a.strTransCode,7,6)),'' ) " + " from tblaudithd a where MID(a.strTransCode,5,1) = '" + transYear + "' " + " and MID(a.strTransCode,6,1) = '" + transMonth + "' " + " and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Invoice' ;  ";
+			sql = "select ifnull(max(MID(a.strInvCode,7,6)),'' ) " + " from tblproformainvoicehd a where MID(a.strInvCode,6,1) = '" + transYear + "' " + " and MID(a.strInvCode,7,1) = '" + transMonth + "' " + " and MID(a.strInvCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
+			sqlAudit = " select ifnull(max(MID(a.strTransCode,7,6)),'' ) " + " from tblaudithd a where MID(a.strTransCode,6,1) = '" + transYear + "' " + " and MID(a.strTransCode,7,1) = '" + transMonth + "' " + " and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Invoice' ;  ";
 			break;
 			
 		case "frmSalesOrder":
 
 			strDocLiteral = "SO";
-			sql = "select ifnull(max(MID(a.strSOCode,7,6)),'' )as strSOCode " + " from tblsalesorderhd a where MID(a.strSOCode,5,1) = '" + transYear + "' " + " and MID(a.strSOCode,6,1) = '" + transMonth + "' " + " and MID(a.strSOCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
+			sql = "select ifnull(max(MID(a.strSOCode,7,6)),'' )as strSOCode " + " from tblsalesorderhd a where MID(a.strSOCode,,1) = '" + transYear + "' " + " and MID(a.strSOCode,6,1) = '" + transMonth + "' " + " and MID(a.strSOCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
 
 			sqlAudit = " select ifnull(max(MID(a.strTransCode,7,6)),'' ) " + " from tblaudithd a where MID(a.strTransCode,5,1) = '" + transYear + "' " + " and MID(a.strTransCode,6,1) = '" + transMonth + "' " + " and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Sales Order' ;  ";
 

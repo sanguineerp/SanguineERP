@@ -367,7 +367,7 @@ public class clsProductMasterDaoImpl implements clsProductMasterDao {
 	}
 
 	public List funGetProdSuppDtl(String prodCode, String strCustCode, String clientCode) {
-		String sql = "select a.strProdCode,a.dblLastCost,a.dblMargin,a.dblAMCAmt,a.dteInstallation,a.intWarrantyDays from tblprodsuppmaster a " + "where a.strSuppCode='" + strCustCode + "' and a.strProdCode='" + prodCode + "'and a.strClientCode= '" + clientCode + "' ";
+		String sql = "select a.strProdCode,a.dblLastCost,a.dblMargin,a.dblAMCAmt,a.dteInstallation,a.intWarrantyDays,a.dblStandingOrder from tblprodsuppmaster a " + "where a.strSuppCode='" + strCustCode + "' and a.strProdCode='" + prodCode + "'and a.strClientCode= '" + clientCode + "' ";
 		List list = sessionFactory.getCurrentSession().createSQLQuery(sql).list();
 
 		return list;

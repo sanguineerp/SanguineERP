@@ -175,9 +175,9 @@ public class clsMonthEndController {
 
 				Date GrnDate = new Date(tempMonth + "/1/" + year);
 				int comparison = GrnDate.compareTo(monthEnddate);
-				if (comparison == -1) {
-					comparison = 0;
-				}
+//				if (comparison == -1) {
+//					comparison = 0;
+//				}
 				return comparison;
 			} else {
 				return 0;

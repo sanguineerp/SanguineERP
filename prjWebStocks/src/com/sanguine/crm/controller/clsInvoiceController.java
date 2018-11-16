@@ -937,14 +937,17 @@ public class clsInvoiceController
 					List listProdsupp = objProductMasterService.funGetProdSuppDtl( objInvDtl.getStrProdCode(),objHDModel.getStrCustCode(), clientCode);
 					if(listProdsupp.size()>0)
 					{
+						objProductMasterService.funDeleteProdSuppWise( objInvDtl.getStrProdCode(),objHDModel.getStrCustCode(), clientCode);
 						Object[] arrObj = (Object[]) listProdsupp.get(0);	
 						objProdCustModel.setDblAMCAmt(Double.parseDouble(arrObj[3].toString()));
 						objProdCustModel.setDteInstallation(arrObj[4].toString());
 						objProdCustModel.setIntWarrantyDays(Integer.parseInt(arrObj[5].toString()));
+						objProdCustModel.setDblStandingOrder(Double.parseDouble(arrObj[6].toString()));
 					}else{
 						objProdCustModel.setDblAMCAmt(0.0);
 						objProdCustModel.setDteInstallation("1900-01-01 00:00:00");
 						objProdCustModel.setIntWarrantyDays(0);
+						objProdCustModel.setDblStandingOrder(0.0);
 						
 					}
 					

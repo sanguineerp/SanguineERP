@@ -70,6 +70,7 @@ import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsProductReOrderLevelModel;
 import com.sanguine.model.clsProductReOrderLevelModel_ID;
 import com.sanguine.model.clsPropertySetupModel;
+import com.sanguine.model.clsSettlementMasterModel;
 import com.sanguine.model.clsSubGroupMasterModel;
 import com.sanguine.model.clsUserDtlModel;
 import com.sanguine.service.clsCurrencyMasterService;
@@ -110,6 +111,9 @@ public class clsProFormaInvoice {
 	private clsCurrencyMasterService objCurrencyMasterService;
 	@Autowired
 	private clsPartyMasterService objPartyMasterService;
+	
+	@Autowired
+	private clsCRMSettlementMasterService objSttlementMasterService;
 	
 	
 
@@ -612,15 +616,83 @@ public class clsProFormaInvoice {
 					double weight = 0.0;
 					List<clsProFormaInvoiceModelDtl> listInvoiceDtlModel = hmInvCustDtl.get(entry.getKey());
 
-					if (objBean.getStrInvCode().isEmpty()) // New Entry
+					if (null==objBean.getStrInvCode()||objBean.getStrInvCode().isEmpty()) // New Entry
 					{
+//						String[] invDate = objHDModel.getDteInvDate().split("-");
+//						String dateInvoice = invDate[2] + "-" + invDate[1] + "-" + invDate[0];
+//						String invCode = objGlobalFunctions.funGenerateDocumentCode("frmProFormaInvoice", dateInvoice, req);
+//						objHDModel.setStrInvCode(invCode);
+//						objHDModel.setStrUserCreated(userCode);
+//						objHDModel.setDteCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+//						objHDModel.setStrDulpicateFlag("N");
+						
+
 						String[] invDate = objHDModel.getDteInvDate().split("-");
 						String dateInvoice = invDate[2] + "-" + invDate[1] + "-" + invDate[0];
-						String invCode = objGlobalFunctions.funGenerateDocumentCode("frmProFormaInvoice", dateInvoice, req);
+						String invCode ="";
+					
+							
+							
+							String transYear="A";
+							List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();
+							if (listClsCompanyMasterModel.size() > 0) {
+								clsCompanyMasterModel objCompanyMasterModel = listClsCompanyMasterModel.get(listClsCompanyMasterModel.size() - 1);
+								transYear=objCompanyMasterModel.getStrYear();
+							}
+							
+							String[] spDate = dateInvoice.split("-");
+							String transMonth = objGlobalFunctions.funGetAlphabet(Integer.parseInt(spDate[1])-1);
+							String sql = "select ifnull(max(MID(a.strInvCode,9,5)),'' ) " + " from tblproformainvoicehd a where MID(a.strInvCode,6,1) = '" + transYear + "' " + " and MID(a.strInvCode,7,1) = '" + transMonth + "' " + " and MID(a.strInvCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
+							String sqlAudit = " select ifnull(max(MID(a.strTransCode,9,5)),'' ) " + " from tblaudithd a where MID(a.strTransCode,6,1) = '" + transYear + "' " + " and MID(a.strTransCode,7,1) = '" + transMonth + "' " + " and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Invoice' ;  ";
+					
+							
+							List listAudit = objGlobalFunctionsService.funGetListModuleWise(sqlAudit, "sql");
+							long lastnoAudit;
+							if (listAudit != null && !listAudit.isEmpty() && !listAudit.contains("")) {
+								lastnoAudit = Integer.parseInt(listAudit.get(0).toString());
+
+							} else {
+								lastnoAudit = 0;
+							}
+							List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+							long lastnoLive;
+							if (list != null && !list.isEmpty() && !list.contains("")) {
+								lastnoLive = Integer.parseInt(list.get(0).toString());
+
+							} else {
+								lastnoLive = 0;
+							}
+
+							
+							clsSettlementMasterModel objModel1 = objSttlementMasterService.funGetObject(objBean.getStrSettlementCode(), clientCode);
+							if(objSetup.getStrSettlementWiseInvSer().equals("Yes"))
+							{
+								
+							if (lastnoLive > lastnoAudit) {
+								invCode = propCode + "PIV" + transYear + transMonth + objModel1.getStrInvSeriesChar() + String.format("%05d", lastnoLive + 1);
+							} else {
+								invCode = propCode + "PIV" + transYear + transMonth + objModel1.getStrInvSeriesChar() +String.format("%05d", lastnoAudit + 1);
+							}
+							
+							
+						}else{
+							
+							if (lastnoLive > lastnoAudit) {
+								invCode = propCode + "PIV" + transYear + transMonth  + String.format("%05d", lastnoLive + 1);
+							} else {
+								invCode = propCode + "PIV" + transYear + transMonth  +String.format("%05d", lastnoAudit + 1);
+							}
+						}
+//						else{
+//						invCode = objGlobalFunctions.funGenerateDocumentCode("frmInvoice", dateInvoice, req);
+//						
+//						}
 						objHDModel.setStrInvCode(invCode);
 						objHDModel.setStrUserCreated(userCode);
 						objHDModel.setDteCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
 						objHDModel.setStrDulpicateFlag("N");
+					
+						
 					} else // Update
 					{
 						objHDModel.setStrUserCreated(userCode);
@@ -772,8 +844,25 @@ public class clsProFormaInvoice {
 					objProdCustModel.setStrSuppUOM("");
 					objProdCustModel.setDblMargin(0);
 					objProdCustModel.setDblMaxQty(0);
-					objProdCustModel.setDblStandingOrder(0);
+					
 					objProdCustModel.setDtLastDate(objBean.getDteInvDate());
+					List listProdsupp = objProductMasterService.funGetProdSuppDtl( objInvDtl.getStrProdCode(),objHDModel.getStrCustCode(), clientCode);
+					if(listProdsupp.size()>0)
+					{
+						objProductMasterService.funDeleteProdSuppWise( objInvDtl.getStrProdCode(),objHDModel.getStrCustCode(), clientCode);
+						Object[] arrObj = (Object[]) listProdsupp.get(0);	
+						objProdCustModel.setDblAMCAmt(Double.parseDouble(arrObj[3].toString()));
+						objProdCustModel.setDteInstallation(arrObj[4].toString());
+						objProdCustModel.setIntWarrantyDays(Integer.parseInt(arrObj[5].toString()));
+						objProdCustModel.setDblStandingOrder(Double.parseDouble(arrObj[6].toString()));
+					}else{
+						objProdCustModel.setDblAMCAmt(0.0);
+						objProdCustModel.setDteInstallation("1900-01-01 00:00:00");
+						objProdCustModel.setIntWarrantyDays(0);
+						objProdCustModel.setDblStandingOrder(0);
+						
+					}
+					
 					objProductMasterService.funAddUpdateProdSupplier(objProdCustModel);
 					funUpdatePurchagesPricePropertywise(objInvDtl.getStrProdCode(), objCust.getStrLocCode(), clientCode, objInvDtl.getDblUnitPrice() * dblCurrencyConv);
 				}
