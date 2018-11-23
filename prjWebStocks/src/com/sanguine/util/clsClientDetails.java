@@ -151,7 +151,7 @@ public class clsClientDetails {
 			hmClientDtl.put("194.001", clsClientDetails.createClientDetails("194.001", "SWIG", dFormat.parse("2017-09-11"), dFormat.parse("2019-09-06"))); // Name
 			hmClientDtl.put("197.001", clsClientDetails.createClientDetails("197.001", "Juhu Hotel Pvt Ltd", dFormat.parse("2017-09-20"), dFormat.parse("2019-10-20")));// renewed on 31-10-2017 for 1 year till 20-09-2018b renamed  REZBERRY RHINOCERES to Juhu Hotel Pvt Ltd in JPOS
 			hmClientDtl.put("211.001", clsClientDetails.createClientDetails("211.001", "CHEFS CORNER", dFormat.parse("2017-11-29"), dFormat.parse("2018-11-29"))); // renewd
-			hmClientDtl.put("217.001", clsClientDetails.createClientDetails("217.001", "BURNT CRUST HOSPITALITY PVT LTD", dFormat.parse("2017-12-13"), dFormat.parse("2018-11-25")));//renewed on 03-07-2018 for 1 month till 03-08-2018// eenewed for one month till 05-10-2018
+			hmClientDtl.put("217.001", clsClientDetails.createClientDetails("217.001", "BURNT CRUST HOSPITALITY PVT LTD", dFormat.parse("2017-12-13"), dFormat.parse("2018-12-03")));//renewed on 25-10-2018 for one month 03-10-018(from date is 03-11-2018)//renewed on 03-07-2018 for 1 month till 03-08-2018// eenewed for one month till 05-10-2018
 			hmClientDtl.put("218.001", clsClientDetails.createClientDetails("218.001", "THE LIQUID WISDOM CO.PVT LTD", dFormat.parse("2018-01-15"), dFormat.parse("2018-12-13")));// temporory
 			hmClientDtl.put("222.001", clsClientDetails.createClientDetails("222.001", "PURANCHAND & SONS", dFormat.parse("2018-01-06"), dFormat.parse("2018-01-10")));// temporory
 			hmClientDtl.put("223.001", clsClientDetails.createClientDetails("223.001", "BANYAN TREE HOSPITALITY LLP", dFormat.parse("2018-01-17"), dFormat.parse("2019-01-17")));// temporory
@@ -182,6 +182,8 @@ public class clsClientDetails {
 			
 			hmClientDtl.put("273.001", clsClientDetails.createClientDetails("273.001", "SHEESHA SKY LOUNGE", dFormat.parse("2018-10-25"), dFormat.parse("2019-10-24")));//released on 25-10-2018 for 1 Year till 24-10-2019 for 1 SPOS ,0 APOS,0 WebStocks,No SMS Pack,No Bill Deletion.", "Mr.Alam", "9920939306", "alam.sky@gmail.com");	
 		
+			hmClientDtl.put("277.001", clsClientDetails.createClientDetails("277.001", "Kapila Garden Restaurant", dFormat.parse("2018-11-21"), dFormat.parse("2018-12-21")));//relased on 21-11-2012 for 1 month
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

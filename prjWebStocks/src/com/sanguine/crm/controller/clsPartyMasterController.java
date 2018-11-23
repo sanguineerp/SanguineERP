@@ -374,12 +374,13 @@ public class clsPartyMasterController {
 		objModel.setDblReturnDiscount(objBean.getDblReturnDiscount());
 		List<clsProdSuppMasterModel> arrListProdSupp = objBean.getListclsProdSuppMasterModel();
 		if (arrListProdSupp != null) {
-			objProductMasterService.funDeleteSuppProds(objBean.getStrPCode(), clientCode);
+			
 			for (int i = 0; i < arrListProdSupp.size(); i++) {
 				clsProdSuppMasterModel Obj = arrListProdSupp.get(i);
 				
 				if(!(Obj.getStrProdCode()==null))
 				{
+				objProductMasterService.funDeleteSuppProds(Obj.getStrProdCode(), clientCode);
 				Obj.setStrSuppCode(objModel.getStrPCode());
 				Obj.setStrClientCode(clientCode);
 				Obj.setDtLastDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));

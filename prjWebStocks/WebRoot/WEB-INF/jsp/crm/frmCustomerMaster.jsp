@@ -478,11 +478,11 @@
 		    var table = document.getElementById("tblProdDet");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
-		    rowCount=listRow;
+// 		    rowCount=listRow;
 		    row.insertCell(0).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";		    
 		    row.insertCell(1).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\" value='"+itemName+"'/>";
 		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"9%\" class=\"decimal-places-amt\" value="+amount+">";
-		    row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"8%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"  style=\"text-align: right;\" name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+amcAmount+"' />";
+		    row.insertCell(3).innerHTML = "<input  size=\"8%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"   name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\"   value='"+amcAmount+"' />";
 			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"10%\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+installationDate+"' />";
 			row.insertCell(5).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].intWarrantyDays\" id=\"intWarrantyDays."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+warrInDays+"' />";
 		    row.insertCell(6).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt\" value="+standingOrder+">";
@@ -493,7 +493,7 @@
 		    
 		    
 		    funApplyNumberValidation();
-		    listRow++;
+		    rowCount++;
 		    return false;
 		}
 		 

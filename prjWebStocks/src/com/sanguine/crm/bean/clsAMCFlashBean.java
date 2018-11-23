@@ -27,6 +27,8 @@ public class clsAMCFlashBean {
 	
 	private String dteInvDate;
 	
+	private String strSettlementCode;
+	
 	private List <clsAMCFlashDtlBean>listAMCDtl;
 	
 
@@ -124,6 +126,14 @@ public class clsAMCFlashBean {
 
 	public void setDteInvDate(String dteInvDate) {
 		this.dteInvDate = dteInvDate;
+	}
+
+	public String getStrSettlementCode() {
+		return strSettlementCode;
+	}
+
+	public void setStrSettlementCode(String strSettlementCode) {
+		this.strSettlementCode = strSettlementCode;
 	}
 
 	

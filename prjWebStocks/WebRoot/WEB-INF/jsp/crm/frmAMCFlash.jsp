@@ -190,10 +190,66 @@ $(document).ready(function()
 		   }
 		}
 		
+		function funChangeCombo() {
+			
+			// Ajax call loadSettlementMasterData  --> pass settlement code
+			var code=$("#cmbSettlement").val();
+			var searchurl=getContextPath()+"/loadSettlementMasterData.html?code="+code;
+			 $.ajax({
+				        type: "GET",
+				        url: searchurl,
+				        dataType: "json",
+				        success: function(response)
+				        {
+				        	if(response.strSettlementCode=='Invalid Code')
+				        	{
+				        		alert("Settlement type not found");
+				        	}
+				        	else
+				        	{
+					        	$("#txtSettlementType").val(response.strSettlementType);
+					        	//alert($("#txtSettlementType").val());
+				        	}
+						},
+						error: function(jqXHR, exception) {
+				            if (jqXHR.status === 0) {
+				                alert('Not connect.n Verify Network.');
+				            } else if (jqXHR.status == 404) {
+				                alert('Requested page not found. [404]');
+				            } else if (jqXHR.status == 500) {
+				                alert('Internal Server Error [500].');
+				            } else if (exception === 'parsererror') {
+				                alert('Requested JSON parse failed.');
+				            } else if (exception === 'timeout') {
+				                alert('Time out error.');
+				            } else if (exception === 'abort') {
+				                alert('Ajax request aborted.');
+				            } else {
+				                alert('Uncaught Error.n' + jqXHR.responseText);
+				            }		            
+				        }
+			      });
+		}
+		
+		
+		//Check Validation before Submit the data
+		function funValidateFields() 
+		{
+
+			if(  $("#cmbSettlement").val() == null )
+			{
+		 		alert("Please Select Against");
+				return false;
+		 	}
+			
+			
+			
+		
+		}
 		
 </script>
 <body>
-	<s:form name="AMCFlash" method="GET" action="saveAMCInvoice.html?saddr=${urlHits}" >
+	<s:form name="AMCFlash" method="POST" action="saveAMCInvoice.html?saddr=${urlHits}" >
 	<table class="transTable">
 			<tr><th colspan="6"></th></tr>
 				<tr>
@@ -207,6 +263,11 @@ $(document).ready(function()
 			            <s:input id="txtToDate" name="toDate" path="dteToDate" cssClass="calenderTextBox"/>
 			        	<s:errors path="dteToDate"></s:errors>
 			        </td>
+			        
+					<td width="100px"><label>Settlement</label>
+					<td><s:select id="cmbSettlement" path="strSettlementCode"
+								items="${settlementList}" cssClass="BoxW124px" 
+								onkeypress="funGetKeyCode(event,'Settlement')" onclick="funChangeCombo()" /></td>
 				</tr>
 				<tr>
 					<td colspan="4"><input id="btnExecute" type="button" class="form_button1"   value="EXECUTE"/></td>
@@ -254,7 +315,7 @@ $(document).ready(function()
 
 		</div>
 		<div align="center">
-			<input type="submit" value="Submit" class="form_button" /> &nbsp; &nbsp; &nbsp; 
+			<input type="submit" value="Submit" onclick="return funValidateFields();" class="form_button" /> &nbsp; &nbsp; &nbsp; 
 			<input type="button" id="reset" name="reset" value="Reset" class="form_button" />
 		</div>
 		<div id="wait" style="display:none;width:60px;height:60px;border:0px solid black;position:absolute;top:60%;left:55%;padding:2px;">

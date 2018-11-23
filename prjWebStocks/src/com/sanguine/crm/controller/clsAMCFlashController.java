@@ -2,6 +2,7 @@ package com.sanguine.crm.controller;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import com.sanguine.crm.bean.clsAMCFlashBean;
 import com.sanguine.crm.bean.clsAMCFlashDtlBean;
 import com.sanguine.crm.bean.clsInvoiceBean;
 import com.sanguine.crm.bean.clsInvoiceDtlBean;
+import com.sanguine.crm.service.clsCRMSettlementMasterService;
 import com.sanguine.service.clsGlobalFunctionsService;
 
 
@@ -39,6 +41,9 @@ public class clsAMCFlashController {
 	@Autowired 
 	private clsProFormaInvoice objProFormaInvController;
 	
+	@Autowired
+	private clsCRMSettlementMasterService objSettlementService;
+	
 	// Open form
 		@RequestMapping(value = "/frmAMCFlash", method = RequestMethod.GET)
 		public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
@@ -49,6 +54,9 @@ public class clsAMCFlashController {
 				urlHits = "1";
 			}
 			model.put("urlHits", urlHits);
+			String clientCode = request.getSession().getAttribute("clientCode").toString();
+			Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
+			model.put("settlementList", settlementList);
 
 			if (urlHits.equalsIgnoreCase("1")) {
 				return new ModelAndView("frmAMCFlash", "command", new clsAMCFlashBean());
@@ -69,7 +77,8 @@ public class clsAMCFlashController {
 					 + " date(DATE_ADD(DATE_FORMAT(b.dteInstallation,'%Y-%m-%d'), INTERVAL b.intWarrantyDays DAY)) as exp ,a.strPCode"
 					 + " FROM tblpartymaster a,tblprodsuppmaster b "
 					 + " WHERE a.strPCode=b.strSuppCode AND a.strPType='cust' and date(DATE_ADD(DATE_FORMAT(b.dteInstallation,'%Y-%m-%d'), INTERVAL b.intWarrantyDays DAY)) between "
-					 + " '"+fromDate+"' and '"+toDate+"'";
+					 + " '"+fromDate+"' and '"+toDate+"'"
+					 +"  group by a.strPCode ";
 			
 			
 			
@@ -92,13 +101,14 @@ public class clsAMCFlashController {
 				listData.add(objBean);
 			}
 			}
+			
 			return listData;
 			
 		}
 		
 		
 		
-		@RequestMapping(value = "/saveAMCInvoice", method = RequestMethod.GET)
+		@RequestMapping(value = "/saveAMCInvoice", method = RequestMethod.POST)
 		public ModelAndView funSaveAMCInvoice(@ModelAttribute("command") @Valid clsAMCFlashBean objAMCBean, BindingResult result, HttpServletRequest request,HttpServletResponse resp) throws ParseException {
 		
 			
@@ -115,7 +125,7 @@ public class clsAMCFlashController {
 				objInvBean.setStrAgainst("Direct");
 				objInvBean.setStrLocCode(locationCode);
 				objInvBean.setDteInvDate(objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd"));
-				objInvBean.setStrSettlementCode("S000001");
+				objInvBean.setStrSettlementCode(objAMCBean.getStrSettlementCode());
 				objInvBean.setStrCurrencyCode("");
 				objInvBean.setStrClientCode(clientCode);
 				objInvBean.setStrWarrPeriod(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
@@ -164,8 +174,15 @@ public class clsAMCFlashController {
 			request.getSession().setAttribute("success", true);
 			request.getSession().setAttribute("successMessage", "Invoice Code : "+invCode);
 			objBean.setStrInvCode(invCode.toString().substring(0,invCode.length()-1));
+			Map<String, Object> model=new HashMap<String, Object>();
+		
 			
-			return new ModelAndView("frmAMCFlash", "command", objBean);
+			Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
+			model.put("settlementList", settlementList);
+			return new ModelAndView("frmAMCFlash", "command", new clsAMCFlashBean());
+			
+			
+			
 			
 		}
 }
