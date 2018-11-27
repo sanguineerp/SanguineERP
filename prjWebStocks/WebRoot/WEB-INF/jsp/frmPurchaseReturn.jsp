@@ -1138,7 +1138,7 @@
 		    var arrdtGrn=dteGrn.split("-");
 		    dteGrn=arrdtGrn[2]+"-"+arrdtGrn[1]+"-"+arrdtGrn[0];
 		    var CIFAmt=0;
-		    var settlement'';
+		    var settlement='';
 		    $.ajax({
 				type: "GET",
 			    url: getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Purchase&transDate="+dteGrn+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
