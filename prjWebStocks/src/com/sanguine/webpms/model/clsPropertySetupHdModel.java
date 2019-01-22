@@ -45,6 +45,8 @@ public class clsPropertySetupHdModel implements Serializable {
 	@Column(name = "strGSTNo")
 	private String strGSTNo;
 	
+	
+	
 
 	public String getStrGSTNo() {
 		return strGSTNo;
@@ -178,5 +180,7 @@ public class clsPropertySetupHdModel implements Serializable {
 	public void setStrRoomLimit(String strRoomLimit) {
 		this.strRoomLimit = (String) setDefaultValue(strRoomLimit, "");
 	}
+
+	
 
 }

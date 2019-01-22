@@ -3,6 +3,7 @@ package com.sanguine.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Query;
@@ -195,6 +196,16 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		sql="DROP TABLE `tbltaxsettlementmaster`;";
 		funExecuteQuery(sql);
+		
+		
+		sql="CREATE TABLE `tbldatabasebckup` ( "
+	       +" `dteDbBckkUp` DATETIME NOT NULL, "
+	       +" `strClientCode` VARCHAR(50) NOT NULL, "
+	       +" `strDbName` VARCHAR(50) NOT NULL "
+	       +" ) "
+	       +" COLLATE='latin1_swedish_ci' "
+	       +" ENGINE=InnoDB ";
+		funExecuteQuery(sql);
 
 		
 //		
@@ -298,7 +309,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql = " ALTER TABLE `tblproductmaster` ADD COLUMN `dblMRP` DECIMAL(18,2) NOT NULL DEFAULT '0.00' AFTER `strBarCode`;  ";
 		funExecuteQuery(sql);
 
-		sql = " ALTER TABLE `tblpropertysetup` " + " ADD COLUMN `strShowStockInOP` CHAR(1) NULL DEFAULT 'Y' AFTER `strLocWiseProductionOrder`, " + " ADD COLUMN `strShowAvgQtyInOP` CHAR(1) NULL DEFAULT 'Y' AFTER `strShowStockInOP`, " + " ADD COLUMN `strShowStockInSO` CHAR(1) NULL DEFAULT 'Y' AFTER `strShowAvgQtyInOP`, "
+		sql = " ALTER TABLE `tblpropertysetup` " + " ADD COLUMN `strShowStockInOP` CHAR(1) NOT NULL DEFAULT 'Y' AFTER `strLocWiseProductionOrder`, " + " ADD COLUMN `strShowAvgQtyInOP` CHAR(1) NULL DEFAULT 'Y' AFTER `strShowStockInOP`, " + " ADD COLUMN `strShowStockInSO` CHAR(1) NULL DEFAULT 'Y' AFTER `strShowAvgQtyInOP`, "
 				+ " ADD COLUMN `strShowAvgQtyInSO` CHAR(1) NULL DEFAULT 'Y' AFTER `strShowStockInSO`, " + " ADD COLUMN `strDivisionAdd` VARCHAR(255) NOT NULL DEFAULT '' AFTER `strShowAvgQtyInSO`; ";
 		funExecuteQuery(sql);
 
@@ -987,7 +998,12 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblpropertysetup` "
 				+" ADD COLUMN `strGRNProdPOWise` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strSettlementWiseInvSer`;" ;
 		funExecuteQuery(sql);
+		
+		
+		sql = "ALTER TABLE `tblpropertysetup`"
+				+" ADD COLUMN `strPORateEditable` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strGRNProdPOWise`;";
 
+		funExecuteQuery(sql);
 
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
@@ -2237,6 +2253,50 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				"";
 		funExecuteWebBooksQuery(sql);
 		
+		
+		sql = "CREATE TABLE IF NOT EXISTS `tblexpensemaster` ("
+				+"`strExpCode` VARCHAR(20) NOT NULL,"
+				+" `intGId` BIGINT(20) NOT NULL DEFAULT '0',"
+				+"`stnExpName` VARCHAR(100) NOT NULL DEFAULT '',"
+				+"`strExpShortName` VARCHAR(50) NOT NULL DEFAULT '',"
+				+"`strGLCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+"`strUserCreated` VARCHAR(50) NOT NULL DEFAULT '',"
+				+"`dtCreatedDate` DATETIME NOT NULL,"
+				+"`strUserModified` VARCHAR(50) NOT NULL DEFAULT '',"
+				+"`dtLastModified` DATETIME NOT NULL,"
+				+"`strClientCode` VARCHAR(10) NOT NULL DEFAULT '',"
+				+"PRIMARY KEY (`strExpCode`, `strClientCode`)";
+
+		funExecuteWebBooksQuery(sql);
+		
+		sql = " CREATE TABLE   IF NOT EXISTS `tblpettycashhd` ( "
+				+" `strVouchNo` VARCHAR(20) NOT NULL, "
+				+" `intId` BIGINT(20) NOT NULL AUTO_INCREMENT, "
+				+" `strClientCode` VARCHAR(10) NOT NULL, "
+				+" `dteVouchDate` DATETIME NOT NULL, "
+				+" `strNarration` VARCHAR(200) NOT NULL DEFAULT '', "
+				+" `strUserCreated` VARCHAR(50) NOT NULL DEFAULT '', "
+				+" `strUserEdited` VARCHAR(50) NOT NULL DEFAULT '', "
+				+" `dteDateEdited` DATETIME NOT NULL, "
+				+" `dteDateCreated` DATETIME NOT NULL, "
+				+" PRIMARY KEY (`strVouchNo`, `strClientCode`),"
+				+ "INDEX `intId` (`intId`) "
+				+" ) "
+				+" ENGINE=InnoDB ";
+		funExecuteWebBooksQuery(sql);
+
+		
+		sql=" CREATE TABLE  IF NOT EXISTS `tblpettycashdtl` ( "
+		   +" `strVouchNo` VARCHAR(20) NOT NULL, "
+		   +" `strClientCode` VARCHAR(50) NOT NULL, "
+		   +" `strExpCode` VARCHAR(20) NOT NULL, "
+		   +" `strNarration` VARCHAR(200) NOT NULL DEFAULT '', "
+		   +" `dblAmount` DECIMAL(18,4) NOT NULL DEFAULT '0.0000' "	
+		   +" ) "
+		   +" ENGINE=InnoDB " ;
+		
+		funExecuteWebBooksQuery(sql);
+		
 		sql="ALTER TABLE `tblemployeemaster` ALTER `dteCreatedDate` DROP DEFAULT,ALTER `dteLastModified` DROP DEFAULT;";
 		funExecuteWebBooksQuery(sql);
 		
@@ -2398,10 +2458,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+"  ('frmDebtorAgeingReport', 'Debtor Ageing Report', 'Reports', '6', 'R', '74', '74', '1', 'default.png', '5', '1', '1', '1', 'NO', 'NO', 'frmDebtorAgeingReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+"  ('frmCreditorAgeingReport', 'Creditor Ageing Report', 'Reports', '6', 'R', '74', '74', '1', 'default.png', '5', '1', '1', '1', 'NO', 'NO', 'frmCreditorAgeingReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ,"
 				+ " ('frmUserDefineReportProcessing', 'User Define Report Processing', 'Processing', 3, 'P', 3, 3, '1', 'default.png', '5', 1, '1', '1', 'YES', 'NO', 'frmUserDefineReportProcessing.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
-				+ " ('frmWebBooksStructureUpdate', 'Structure Update', 'Tools', 1, 'L', 6, 6, '1', 'defaults.png', '5', 1, '1', '1', 'NO', 'NO', 'frmWebBooksStructureUpdate.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ";
-				
-		
-		
+				+ " ('frmWebBooksStructureUpdate', 'Structure Update', 'Tools', 1, 'L', 6, 6, '1', 'defaults.png', '5', 1, '1', '1', 'NO', 'NO', 'frmWebBooksStructureUpdate.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
+				+ " ('frmExpenseMaster', 'Expense Master', 'Master', '12', 'M', '21', '21', '1', 'default.png', '5', '1', '1', '1', 'NO', 'NO', 'frmExpenseMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ,"
+		        + " ('frmPettyCashEntry', 'Petty Cash Entry', 'Transaction', '1', 'T', '1', '2', '13', 'default.png', '5', '1', '1', '1', 'NO', '1', 'frmPettyCashEntry.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
+		        + " ('frmPettyCashFlash', 'Petty Cash Flash', 'Tools', '4', 'L', '9', '9', '1', 'default.png', '5', '1', '1', '1', 'NO', 'NO', 'frmPettyCashFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) "; 
 		funExecuteQuery(sql);
 		
 		/*----------------WebBook Forms End---------------------------*/

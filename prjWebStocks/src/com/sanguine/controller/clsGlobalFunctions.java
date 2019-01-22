@@ -714,6 +714,14 @@ public class clsGlobalFunctions {
 	
 				sqlAudit = "select ifnull(max(MID(a.strTransNo,7,6)),'0' )as strVouchNo  " + " from tblaudithd a where MID(a.strTransNo,6,1) = '" + transMonth + "' " + " and MID(a.strTransNo,5,1) = '" + transYear + "'  " + " and MID(a.strTransNo,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + " and strTransType='frmReceipt' ";
 				break;
+				
+				case "frmPettyCashEntry":
+					
+					strDocLiteral = "PT";
+					sql = "select ifnull(max(MID(a.strVouchNo,7,6)),'0' )as strVouchNo  " + " from tblpettycashhd a where MID(a.strVouchNo,6,1) = '" + transMonth + "' " + " and MID(a.strVouchNo,5,1) = '" + transYear + "'  " + " and MID(a.strVouchNo,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
+		
+					sqlAudit = "select ifnull(max(MID(a.strTransNo,7,6)),'0' )as strVouchNo  " + " from tblaudithd a where MID(a.strTransNo,6,1) = '" + transMonth + "' " + " and MID(a.strTransNo,5,1) = '" + transYear + "'  " + " and MID(a.strTransNo,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + " and strTransType='frmPettyCashEntry' ";
+					break;	
 	
 			}
 			

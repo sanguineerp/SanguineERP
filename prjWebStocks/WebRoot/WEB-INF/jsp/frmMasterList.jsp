@@ -118,7 +118,7 @@
 					<option value="tblpropertymaster">Property Master</option>
 					<option value="tblreasonmaster">Reason Master</option>
 					<option value="tblsubgroupmaster">Sub Group Master</option>
-					<option value="tblprodsuppmaster">Supplier Master</option>
+					<option value="tblpartymaster">Supplier Master</option>
 					<option value="tbltaxhd">Tax Master</option>
 					<option value="tblprocessmaster">Process Master</option>
 					<option value="tbluserhd">User Master</option>

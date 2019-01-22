@@ -108,6 +108,7 @@ public class clsSetupMasterBean {
 	private String strEffectOfGRNWebBook;
 	private String strMultiCurrency;
 	private String strShowAllPartyToAllLoc;
+	private String strPORateEditable;
 	
 
 	// BAnk Dtl Tab
@@ -171,6 +172,8 @@ public class clsSetupMasterBean {
 	private String strSRSlipFormat;
 	
 	private String strWeightedAvgCal;
+	
+	
 
 	
 	public String getStrRateHistoryFormat() {
@@ -1360,6 +1363,16 @@ public class clsSetupMasterBean {
 
 	public void setStrGRNProdPOWise(String strGRNProdPOWise) {
 		this.strGRNProdPOWise = strGRNProdPOWise;
+	}
+
+	
+
+	public String getStrPORateEditable() {
+		return strPORateEditable;
+	}
+
+	public void setStrPORateEditable(String strPORateEditable) {
+		this.strPORateEditable = strPORateEditable;
 	}
 
 

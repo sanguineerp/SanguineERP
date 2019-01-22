@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.model.clsUserDtlModel;
 import com.sanguine.webpos.bean.clsPOSPSPDtl;
 import com.sanguine.webpos.bean.clsPOSPhysicalStockPostingBean;
 import com.sanguine.webpos.bean.clsPOSReasonMasterBean;
@@ -53,6 +57,16 @@ public class clsStockAdjustmentController {
 		typeList.add("Stock In");
 		typeList.add("Stock Out");
 		model.put("typeList", typeList);
+		
+		 model.put("stAdeditable",true);
+		    
+		    HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
+		    clsUserDtlModel objUserDtlModel = (clsUserDtlModel)hmUserPrivileges.get("frmStockAdjustment");
+		    if (objUserDtlModel != null) {
+		      if (objUserDtlModel.getStrEdit().equals("false")) {
+		        model.put("stAdeditable",false);
+		      }
+		    }
 		if ("2".equalsIgnoreCase(urlHits)) {
 
 			return new ModelAndView("frmPOSStkAdjustment_1", "command", new clsPOSPhysicalStockPostingBean());

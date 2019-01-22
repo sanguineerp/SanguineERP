@@ -12,6 +12,8 @@
 	/**
 	 * Ready Function for Ajax Waiting
 	 */
+	 
+	 var phystckeditable;
 	$(document).ready(function(){
 // 		 resetForms('stkPosting');
 		   $("#txtProdCode").focus();	
@@ -24,7 +26,10 @@
 		
 			  
 			  
-				  
+			  phystckeditable="${phystckeditable}" ;
+			  if(phystckeditable=="false"){
+				  $("#txtStkPostCode").prop('disabled', true);
+			  }	  
 				  
 			  
 	});

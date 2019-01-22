@@ -5203,6 +5203,35 @@ public class clsSearchFormController {
 			break;
 		}
 		
+		case"expense":
+        {
+                columnNames = "a.strExpCode,a.stnExpName,a.strExpShortName,a.strGLCode";
+                tableName = " select a.strExpCode,a.stnExpName,a.strExpShortName,IFNULL(a.strGLCode,'')"
+                                  + " from tblexpensemaster a  where a.strClientCode = '" + clientCode + "' ";
+                                 
+                listColumnNames = "Expense Code,Expense Name,Expense Short Name,GL Code ";
+                idColumnName = "a.strExpCode";
+                searchFormTitle = "Expense Master";
+                flgQuerySelection = true;
+                break;
+                
+        }
+		case"pettyCash":
+        {
+                columnNames = "a.strVouchNo,a.strNarration,a.strUserCreated,a.dteDateCreated";
+                tableName = " select a.strVouchNo,a.strNarration,a.strUserCreated,a.dteDateCreated from tblpettycashhd a "
+                          + "  where a.strClientCode = '" + clientCode + "' ";
+                                 
+                listColumnNames = "voucher No,Narration,User Created,User Edited ";
+                idColumnName = "a.strVouchNo";
+                searchFormTitle = "Petty Cash Entry";
+                flgQuerySelection = true;
+                break;
+                
+        }
+        
+        
+		
 	
 
 	}

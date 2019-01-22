@@ -1416,17 +1416,31 @@
 												<s:option  value="Yes">Yes</s:option>
 										</s:select>
 										</td>
+										</tr>
 										
-									</tr>
+										
+										
+										
+									
 									<tr>
 									<td >Show GRN Product PO Wise</td>
-										<td colspan="2">
+										<td >
 										<s:select path="strGRNProdPOWise" id="GRNProdPOWise"
 												cssClass="BoxW48px" cssStyle="width:50%">
 												<s:option selected="selected" value="No">No</s:option>
 												<s:option  value="Yes">Yes</s:option>
 										</s:select>
 										</td>
+										
+										<td>PO Rate Editable</td>
+										<td>
+										<s:select path="strPORateEditable" id="strPORavteEdit"
+												cssClass="BoxW48px" cssStyle="width:50%">
+												<s:option selected="selected" value="Yes">Yes</s:option>
+												<s:option  value="No">No</s:option>
+										</s:select>
+										</td>
+										
 									</tr>
 								</table>
 							</div>

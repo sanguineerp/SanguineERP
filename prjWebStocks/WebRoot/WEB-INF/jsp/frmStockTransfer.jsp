@@ -21,6 +21,8 @@
 		var gProdType,gUOM;
 		var urlHits;
 		var listRow=0;
+		var steditable;
+		
 		$(document).ready(function () {
 			$("#txtToLocCode").focus();
 			
@@ -39,6 +41,13 @@
 				  $(document).ajaxComplete(function(){
 				    $("#wait").css("display","none");
 				  });
+				  
+				  steditable="${steditable}" ;
+				  if(steditable=="false"){
+					  $("#txtSTCode").prop('disabled', true);
+				  }
+				  
+				  
 			}); 
 				
 		/**

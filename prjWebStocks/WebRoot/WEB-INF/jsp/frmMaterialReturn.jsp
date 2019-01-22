@@ -17,6 +17,7 @@ var ProductCodeArray=new Array();
 var ProductCodeVar=-1;
 var date;
 var listRow=0;
+var mreditable;
 
 	/**
 	 * Ready Function for Ajax Waiting
@@ -33,7 +34,10 @@ var listRow=0;
 			    $("#wait").css("display","none");
 			  });
 			  date=$("#txtMRDate").val();	 
-			  
+			  mreditable="${mreditable}" ;
+			  if(mreditable=="false"){
+				  $("#txtMRCode").prop('disabled', true);
+			  }
 		});
 		
 		/**

@@ -14,7 +14,7 @@
  	
  	
  	var selectedIndex;
- 	
+ 	 var misditable;
  	/**
 	 * Ready Function for Ajax Waiting
 	 */
@@ -27,6 +27,10 @@
 		$(document).ajaxComplete(function() {
 			$("#wait").css("display", "none");
 		});
+		misditable="${misditable}" ;
+		  if(misditable=="false"){
+			  $("#txtreqCode").prop('disabled', true);
+		  }
 
 	});
 </script>
@@ -716,12 +720,12 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 				    var dblStock=parseFloat(stock);
 				    var dblQty=parseFloat(dblProdQty1);
 				    
-				    if(dblQty > dblStock)
-				    {
-				    	alert("Quantity is greater than stock.");
+// 				    if(dblQty > dblStock)
+// 				    {
+// 				    	alert("Quantity is greater than stock.");
 				    	
-				    	return false;
-				    }
+// 				    	return false;
+// 				    }
 				    
 				    if(showReqVal=="N")
 			    	{

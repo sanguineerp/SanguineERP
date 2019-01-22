@@ -164,15 +164,22 @@ $(document).ready(function(){
 					       	if(response.strAvlForSale=='Y')
 				        	{
 				        		$("#chkAvlForSale").attr('checked', true);
+				        	}else{
+				        		
+				        		$("#chkAvlForSale").attr('checked', false);
 				        	}
 					       	if(response.strActive=='Y')
 				        	{
 				        		$("#chkActive").attr('checked', true);
-				        	}					       	
+				        	}	
+					       	else{
+				        		$("#chkActive").attr('checked', false);
+				        	}	
 					       	if(response.strPickable=='Y')
 				        	{
 				        		$("#chkPickable").attr('checked', true);
-				        	}					       	
+				        	}	
+					       	else
 					       	if(response.strReceivable=='Y')
 				        	{
 				        		$("#chkReceivable").attr('checked', true);

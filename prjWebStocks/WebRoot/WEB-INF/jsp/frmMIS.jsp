@@ -15,6 +15,7 @@
  /**On form Load It Reset form :Ritesh 22 Nov 2014
   * Ready Function for Ajax Waiting
  **/
+ var miseditable;
  $(document).ready(function () {
     resetForms('MIS');
     $("#txtLocTo").focus();
@@ -24,6 +25,11 @@
 	  $(document).ajaxComplete(function(){
 	    $("#wait").css("display","none");
 	  });
+	  
+	  miseditable="${miseditable}" ;
+	  if(miseditable=="false"){
+		  $("#txtMISCode").prop('disabled', true);
+	  }
 }); 
 
 </script>

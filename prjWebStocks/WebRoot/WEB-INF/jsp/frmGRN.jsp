@@ -12,6 +12,8 @@
 <title>GRN</title>
 <script type="text/javascript">
    //Set GRN textField focus when Form is Load
+   
+   var grneditable;
 	$(document).ready(function () {
 	    resetForms('grn');
 	    $("#txtGRNCode").focus();
@@ -44,6 +46,10 @@
 		    $("#wait").css("display","none");
 		});	  
 		funOnChangeCurrency();
+		  grneditable="${grneditable}" ;
+		  if(grneditable=="false"){
+			  $("#txtGRNCode").prop('disabled', true);
+		  }
 	});
 	
 </script>
@@ -168,9 +174,13 @@
 		    row.insertCell(6).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblWeight\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" size=\"5%\" class=\"decimal-places inputText-Auto\" id=\"txtWtUnit."+(rowCount)+"\" value='"+unitWeight+"'>";
 		    row.insertCell(7).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblTotalWt\" class=\"Box totalWeightCell\" readonly=\"readonly\" size=\"3%\" style=\"text-align: right;\"  id=\"txtTotalWeight."+(rowCount)+"\" value="+totalweight+">";
 		    row.insertCell(8).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblRejected\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" size=\"7%\" class=\"decimal-places inputText-Auto RejCell\"id=\"txtRejected."+(rowCount)+"\" value=0 onblur=\"funUpdatePrice(this);\">";
-		    row.insertCell(9).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"5%\" id=\"txtUOM."+(rowCount)+"\" value="+uom+">";
-		    row.insertCell(10).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblUnitPrice\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" size=\"6%\" class=\"decimal-places-amt inputText-Auto\" id=\"txtCostRM."+(rowCount)+"\" value='"+unitPrice+"'>";
-		    row.insertCell(11).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblDiscount\" type=\"text\" required = \"required\" style=\"text-align: right;width:100%\"  size=\"6%\" class=\"decimal-places-amt inputText-Auto\" id=\"txtDiscount."+(rowCount)+"\" value='"+dblDiscount+"' onblur=\"funUpdatePrice(this);\" >";
+		    row.insertCell(9).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"5%\" id=\"txtUOM."+(rowCount)+"\" value="+uom+">";if($("#hidstrRateEditableYN").val()=="No")
+		    if($("#hidstrRateEditableYN").val()=="No")
+		    {
+		    row.insertCell(10).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\"  type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" size=\"6%\" class=\"decimal-places-amt inputText-Auto\" id=\"txtCostRM."+(rowCount)+"\" value='"+unitPrice+"'>";
+			}else{
+				row.insertCell(10).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblUnitPrice\"  type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" size=\"6%\" class=\"decimal-places-amt inputText-Auto\" id=\"txtCostRM."+(rowCount)+"\" value='"+unitPrice+"'>";	
+			}row.insertCell(11).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblDiscount\" type=\"text\" required = \"required\" style=\"text-align: right;width:100%\"  size=\"6%\" class=\"decimal-places-amt inputText-Auto\" id=\"txtDiscount."+(rowCount)+"\" value='"+dblDiscount+"' onblur=\"funUpdatePrice(this);\" >";
 		    row.insertCell(12).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblPackForw\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\"  size=\"6%\" class=\"decimal-places inputText-Auto\" id=\"txtPack."+(rowCount)+"\" value=0 onblur=\"funUpdatePrice(this);\" >";
 		    row.insertCell(13).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblTotalPrice\" class=\"Box totalPriceCell\" readonly=\"readonly\" style=\"text-align: right;\" size=\"7%\" id=\"txtTotalPrice."+(rowCount)+"\" value='"+totalPrice+"' >";
 		    row.insertCell(14).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strRemarks\" style=\"text-align: right;\" size=\"17%\"  id=\"txtRemark."+(rowCount)+"\" value='"+""+"'>";
@@ -497,7 +507,12 @@
 		    row.insertCell(7).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblTotalWt\" class=\"Box totalWeightCell\" readonly=\"readonly\" size=\"6%\" style=\"text-align: right;\" id=\"txtTotalWeight."+(rowCount)+"\" value="+totalWt+">";
 		    row.insertCell(8).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblRejected\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" class=\"decimal-places inputText-Auto RejCell\" size=\"7%\" id=\"txtRejected."+(rowCount)+"\" value='"+rejected+"' onblur=\"funUpdatePrice(this);\">";
 		    row.insertCell(9).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"5%\" id=\"txtUOM."+(rowCount)+"\" value="+strUOM+">";
-		    row.insertCell(10).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblUnitPrice\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" class=\"decimal-places-amt inputText-Auto price\" size=\"6%\" id=\"txtCostRM."+(rowCount)+"\" value='"+unitPrice+"' onblur=\"funUpdatePrice(this);\">";
+		    if($00("#hidstrRateEditableYN").val()=="No")
+		    {
+		    	row.insertCell(10).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" class=\"decimal-places-amt inputText-Auto price\" size=\"6%\" id=\"txtCostRM."+(rowCount)+"\" value='"+unitPrice+"' onblur=\"funUpdatePrice(this);\">";
+		    }else{
+		    	row.insertCell(10).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblUnitPrice\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" class=\"decimal-places-amt inputText-Auto price\" size=\"6%\" id=\"txtCostRM."+(rowCount)+"\" value='"+unitPrice+"' onblur=\"funUpdatePrice(this);\">";
+		    }
 		    row.insertCell(11).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblDiscount\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" class=\"decimal-places-amt inputText-Auto txtDisc\" size=\"6%\" id=\"txtDiscount."+(rowCount)+"\" value='"+disc+"' onblur=\"funUpdatePrice(this);\">";
 		    row.insertCell(12).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblPackForw\"type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" class=\"decimal-places inputText-Auto\" size=\"6%\" id=\"txtPack."+(rowCount)+"\" value="+packforward+" onblur=\"funUpdatePrice(this);\">";
 		    row.insertCell(13).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblTotalPrice\" class=\"Box totalPriceCell\" readonly=\"readonly\" style=\"text-align: right;\" size=\"7%\" id=\"txtTotalPrice."+(rowCount)+"\" value="+totalPrice+">";
@@ -1035,6 +1050,11 @@
 						$("#txtExpiry").val(response[6]);
 						$("#hidstrStkble").val(response[7]);
 						$("#txtQtyRec").val(response[8]);
+						if($("#hidstrRateEditableYN").val()=="No")
+						{
+							// Rate Editable false     
+							$('#txtCostRM').attr('readonly', true);
+						}
 						gPOQty=response[8];
 						gPOCode=response[9];
 						if(response[7]=="Yes")
@@ -2048,8 +2068,7 @@
 								$("#txtCostRM").focus().select();
 							}
 							$("#btnAddChar").css('visibility', 'visible');
-							if(strRateFrom!="SupplierRate")
-							{
+							
 								if($("#hidstrRateEditableYN").val()=="No")
 								{
 									// Rate Editable false     
@@ -2061,7 +2080,7 @@
 										$('#txtCostRM').attr('readonly', true);
 										}
 								}
-							}
+							
 						}
 					},
 					error : function(jqXHR, exception) {

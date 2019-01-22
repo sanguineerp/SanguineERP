@@ -53,8 +53,7 @@ import com.sanguine.service.clsTransactionTimeService;
 import com.sanguine.service.clsUserMasterService;
 
 @Controller
-public class clsSetupMasterController
-{
+public class clsSetupMasterController {
 
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
@@ -90,21 +89,23 @@ public class clsSetupMasterController
 	private clsLocationMasterService objLocationMasterService;
 
 	@RequestMapping(value = "/frmSetup", method = RequestMethod.GET)
-	String funOpenSetupForm(@ModelAttribute("setUpAttribute") @Valid clsSetupMasterBean objBean, BindingResult result, HttpServletRequest request, Model model, Map<String, Object> model1)
-	{
+	String funOpenSetupForm(
+			@ModelAttribute("setUpAttribute") @Valid clsSetupMasterBean objBean,
+			BindingResult result, HttpServletRequest request, Model model,
+			Map<String, Object> model1) {
 		String urlHits = "1";
-		try
-		{
+		try {
 			urlHits = request.getParameter("saddr").toString();
-		}
-		catch (NullPointerException e)
-		{
+		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
 		model1.put("urlHits", urlHits);
-		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		String financialYear = request.getSession().getAttribute("financialYear").toString();
-		clsCompanyMasterModel ob = objSetupMasterService.funGetObject(clientCode);
+		String clientCode = request.getSession().getAttribute("clientCode")
+				.toString();
+		String financialYear = request.getSession()
+				.getAttribute("financialYear").toString();
+		clsCompanyMasterModel ob = objSetupMasterService
+				.funGetObject(clientCode);
 		clsSetupMasterBean bean = new clsSetupMasterBean();
 		bean.setStrCompanyCode(ob.getStrCompanyCode());
 		bean.setStrCompanyName(ob.getStrCompanyName());
@@ -183,14 +184,14 @@ public class clsSetupMasterController
 		listProcessForms1 = objSetupMasterService.funGetProcessSetupForms();
 		bean.setListProcessSetupForm(listProcessForms1);
 
-		Map<String, String> mapReason = objReasonMasterService.funGetResonList(clientCode);
-		if (mapReason.isEmpty())
-		{
+		Map<String, String> mapReason = objReasonMasterService
+				.funGetResonList(clientCode);
+		if (mapReason.isEmpty()) {
 			mapReason.put("", "");
 		}
-		Map<String, String> mapCurrency = objCurrencyMasterService.funGetAllCurrency(clientCode);
-		if (mapCurrency.isEmpty())
-		{
+		Map<String, String> mapCurrency = objCurrencyMasterService
+				.funGetAllCurrency(clientCode);
+		if (mapCurrency.isEmpty()) {
 			mapCurrency.put("", "");
 		}
 		model.addAttribute("listCurrency", mapCurrency);
@@ -198,131 +199,132 @@ public class clsSetupMasterController
 		model.addAttribute("setUpAttribute", bean);
 		model.addAttribute("processSetupFormList", listProcessForms1);
 		model.addAttribute("auditFormList", listProcessForms1);
-		if ("2".equalsIgnoreCase(urlHits))
-		{
+		if ("2".equalsIgnoreCase(urlHits)) {
 			return "frmSetup_1";
-		}
-		else if ("1".equalsIgnoreCase(urlHits))
-		{
+		} else if ("1".equalsIgnoreCase(urlHits)) {
 			return "frmSetup";
-		}
-		else
-		{
+		} else {
 			return "frmSetup";
 		}
 
 	}
 
 	@ModelAttribute("properties")
-	public Map<String, String> getAllProperties(HttpServletRequest request)
-	{
+	public Map<String, String> getAllProperties(HttpServletRequest request) {
 		Map<String, String> properties = null;
-		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		String usercode = request.getSession().getAttribute("usercode").toString();
-		if (usercode.equalsIgnoreCase("SANGUINE"))
-		{
+		String clientCode = request.getSession().getAttribute("clientCode")
+				.toString();
+		String usercode = request.getSession().getAttribute("usercode")
+				.toString();
+		if (usercode.equalsIgnoreCase("SANGUINE")) {
 			properties = objUserMasterService.funProperties(clientCode);
-		}
-		else
-		{
+		} else {
 			List<String> listPropCodes = new ArrayList<String>();
-			List listProperty = objGlobalFunctionsService.funGetDataList("select a.strPropertyCode  from tbluserlocdtl a " + " where a.strUserCode='" + usercode + "' and a.strClientCode='" + clientCode + "' " + " group by a.strPropertyCode ORDER by a.strPropertyCode ", "sql");
+			List listProperty = objGlobalFunctionsService
+					.funGetDataList(
+							"select a.strPropertyCode  from tbluserlocdtl a "
+									+ " where a.strUserCode='"
+									+ usercode
+									+ "' and a.strClientCode='"
+									+ clientCode
+									+ "' "
+									+ " group by a.strPropertyCode ORDER by a.strPropertyCode ",
+							"sql");
 
-			for (Object ob : listProperty)
-			{
+			for (Object ob : listProperty) {
 				listPropCodes.add(ob.toString());
 			}
 
-			properties = objUserMasterService.funGetUserWiseProperties(listPropCodes, clientCode);
+			properties = objUserMasterService.funGetUserWiseProperties(
+					listPropCodes, clientCode);
 
 		}
 
-		if (properties.isEmpty())
-		{
+		if (properties.isEmpty()) {
 			properties.put("", "");
 		}
 		return properties;
 	}
 
 	@ModelAttribute("users")
-	public Map<String, String> getAllUsers()
-	{
+	public Map<String, String> getAllUsers() {
 		Map<String, String> users = objUserMasterService.funGetUsers();
-		if (users.isEmpty())
-		{
+		if (users.isEmpty()) {
 			users.put("", "");
 		}
 		return users;
 	}
 
 	@RequestMapping(value = "/loadTCForSetup", method = RequestMethod.GET)
-	public @ResponseBody clsTCMasterModel funAssignFields(@RequestParam("tcCode") String tcCode, HttpServletRequest req)
-	{
-		String clientCode = req.getSession().getAttribute("clientCode").toString();
-		clsTCMasterModel objTCModel = objSetupMasterService.funGetTCForSetup(tcCode, clientCode);
+	public @ResponseBody clsTCMasterModel funAssignFields(
+			@RequestParam("tcCode") String tcCode, HttpServletRequest req) {
+		String clientCode = req.getSession().getAttribute("clientCode")
+				.toString();
+		clsTCMasterModel objTCModel = objSetupMasterService.funGetTCForSetup(
+				tcCode, clientCode);
 		return objTCModel;
 	}
 
 	@RequestMapping(value = "/loadPropertySetupForm", method = RequestMethod.POST)
-	String funLoadPropertySetup(@ModelAttribute("setUpAttribute") @Valid clsSetupMasterBean bean, BindingResult result, HttpServletRequest request, Model model, Map<String, Object> model1, HttpServletResponse response)
-	{
+	String funLoadPropertySetup(
+			@ModelAttribute("setUpAttribute") @Valid clsSetupMasterBean bean,
+			BindingResult result, HttpServletRequest request, Model model,
+			Map<String, Object> model1, HttpServletResponse response) {
 		String urlHits = "1";
-		try
-		{
+		try {
 			urlHits = request.getParameter("saddr").toString();
-		}
-		catch (NullPointerException e)
-		{
+		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
 
-		try
-		{
+		try {
 			model1.put("urlHits", urlHits);
 			// String code=bean.getStrProperty();
 			String code = bean.getStrProperty();
 			// request.getSession().getAttribute("userProperty").toString();
-			if (code.equals("ALL"))
-			{
+			if (code.equals("ALL")) {
 				code = bean.getStrProperty();
 			}
 
-			String clientCode = request.getSession().getAttribute("clientCode").toString();
-			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(code, clientCode);
+			String clientCode = request.getSession().getAttribute("clientCode")
+					.toString();
+			clsPropertySetupModel objSetup = objSetupMasterService
+					.funGetObjectPropertySetup(code, clientCode);
 
-			List<clsProcessSetupModel> listclsProcessSetupModel = objSetupMasterService.funGetProcessSetupModelList(code, clientCode);
+			List<clsProcessSetupModel> listclsProcessSetupModel = objSetupMasterService
+					.funGetProcessSetupModelList(code, clientCode);
 			List<clsTreeMasterModel> listProcessForms1 = null;
 
-			if (listclsProcessSetupModel.size() > 0)
-			{
+			if (listclsProcessSetupModel.size() > 0) {
 				listProcessForms1 = funSetSeletedProcess(listclsProcessSetupModel);
-			}
-			else
-			{
-				listProcessForms1 = objSetupMasterService.funGetProcessSetupForms();
+			} else {
+				listProcessForms1 = objSetupMasterService
+						.funGetProcessSetupForms();
 			}
 
 			// bean.setStrAdd1(objSetup.getStrAdd1());
 			bean.setListProcessSetupForm(listProcessForms1);
 
-			List<clsWorkFlowModel> listclsWorkFlowModel = objSetupMasterService.funGetWorkFlowModelList(code, clientCode);
+			List<clsWorkFlowModel> listclsWorkFlowModel = objSetupMasterService
+					.funGetWorkFlowModelList(code, clientCode);
 			bean.setListclsWorkFlowModel(listclsWorkFlowModel);
-			List<clsWorkFlowForSlabBasedAuth> listclsWorkFlowForSlabBasedAuth = objSetupMasterService.funGetWorkFlowForSlabBasedAuthList(code, clientCode);
-			if (null == objSetup)
-			{
+			List<clsWorkFlowForSlabBasedAuth> listclsWorkFlowForSlabBasedAuth = objSetupMasterService
+					.funGetWorkFlowForSlabBasedAuthList(code, clientCode);
+			if (null == objSetup) {
 				funSetBlankPropertyData(bean);
-			}
-			else
-			{
+			} else {
 				funSetPropertyData(objSetup, bean);
 			}
 
-			String sql_TC = "select a.strTCCode,b.strTCName,a.strTCDesc " + "from clsTCTransModel a,clsTCMasterModel b " + "where a.strTCCode=b.strTCCode and a.strTransCode=:transCode " + "and a.strClientCode=:clientCode and a.strTransType=:transType";
-			List listTC_Setup = objTCTransService.funGetTCTransList(sql_TC, code, clientCode, "Property Setup");
+			String sql_TC = "select a.strTCCode,b.strTCName,a.strTCDesc "
+					+ "from clsTCTransModel a,clsTCMasterModel b "
+					+ "where a.strTCCode=b.strTCCode and a.strTransCode=:transCode "
+					+ "and a.strClientCode=:clientCode and a.strTransType=:transType";
+			List listTC_Setup = objTCTransService.funGetTCTransList(sql_TC,
+					code, clientCode, "Property Setup");
 
 			List<clsTCMasterModel> listTCMasterForSetup = new ArrayList<clsTCMasterModel>();
-			for (int cnt = 0; cnt < listTC_Setup.size(); cnt++)
-			{
+			for (int cnt = 0; cnt < listTC_Setup.size(); cnt++) {
 				clsTCMasterModel objTCMasterModel = new clsTCMasterModel();
 				Object[] arrObject = (Object[]) listTC_Setup.get(cnt);
 				objTCMasterModel.setStrTCCode(arrObject[0].toString());
@@ -331,15 +333,16 @@ public class clsSetupMasterController
 				listTCMasterForSetup.add(objTCMasterModel);
 			}
 			// bean.setListTCForSetup(listTCMasterForSetup);
-			Map<String, String> mapCurrency = objCurrencyMasterService.funGetAllCurrency(clientCode);
-			if (mapCurrency.isEmpty())
-			{
+			Map<String, String> mapCurrency = objCurrencyMasterService
+					.funGetAllCurrency(clientCode);
+			if (mapCurrency.isEmpty()) {
 				mapCurrency.put("", "");
 			}
 			model.addAttribute("listCurrency", mapCurrency);
 			model.addAttribute("setUpAttribute", bean);
 			model.addAttribute("processSetupFormList", listProcessForms1);
-			model.addAttribute("listclsWorkFlowForSlabBasedAuth", listclsWorkFlowForSlabBasedAuth);
+			model.addAttribute("listclsWorkFlowForSlabBasedAuth",
+					listclsWorkFlowForSlabBasedAuth);
 			model.addAttribute("listTCForSetup", listTCMasterForSetup);
 			List<clsTreeMasterModel> Auditlist = null;
 			List<clsTreeMasterModel> AuditTemplist = new ArrayList<clsTreeMasterModel>();
@@ -347,17 +350,19 @@ public class clsSetupMasterController
 			String strForms = "";
 
 			List<clsTransactionTimeModel> listBeanTransactionTimeModel = new ArrayList<clsTransactionTimeModel>();
-			List<clsTransactionTimeModel> listTransactionTimeModel = objTransactionTimeService.funLoadTransactionTime(code, clientCode, "");
-			if (listTransactionTimeModel.size() > 0)
-			{
-				for (clsTransactionTimeModel ob : listTransactionTimeModel)
-				{
-					clsLocationMasterModel objLoc = objLocationMasterService.funGetObject(ob.getStrLocCode(), clientCode);
+			List<clsTransactionTimeModel> listTransactionTimeModel = objTransactionTimeService
+					.funLoadTransactionTime(code, clientCode, "");
+			if (listTransactionTimeModel.size() > 0) {
+				for (clsTransactionTimeModel ob : listTransactionTimeModel) {
+					clsLocationMasterModel objLoc = objLocationMasterService
+							.funGetObject(ob.getStrLocCode(), clientCode);
 					ob.setStrLocName(objLoc.getStrLocName());
 
 					// for displaying in UI
-					SimpleDateFormat displayFormat2 = new SimpleDateFormat("hh:mma");
-					SimpleDateFormat parseFormat2 = new SimpleDateFormat("HH:mm");
+					SimpleDateFormat displayFormat2 = new SimpleDateFormat(
+							"hh:mma");
+					SimpleDateFormat parseFormat2 = new SimpleDateFormat(
+							"HH:mm");
 					Date fdate, tdate;
 
 					String fromDate = ob.getTmeFrom();
@@ -374,60 +379,49 @@ public class clsSetupMasterController
 					listBeanTransactionTimeModel.add(ob);
 				}
 			}
-			model.addAttribute("listTransactionTime", listBeanTransactionTimeModel);
+			model.addAttribute("listTransactionTime",
+					listBeanTransactionTimeModel);
 
-			if (objSetup != null && null != objSetup.getStrAuditFrom())
-			{
+			if (objSetup != null && null != objSetup.getStrAuditFrom()) {
 				strForms = objSetup.getStrAuditFrom();
 				String trmp[] = strForms.split(",");
-				for (clsTreeMasterModel FormList : Auditlist)
-				{
+				for (clsTreeMasterModel FormList : Auditlist) {
 					clsTreeMasterModel on = new clsTreeMasterModel();
 					on.setStrFormDesc(FormList.getStrFormDesc());
 					on.setStrFormName(FormList.getStrFormName());
-					for (int i = 0; i < trmp.length; i++)
-					{
-						if (FormList.getStrFormName().equalsIgnoreCase(trmp[i].toString()))
-						{
+					for (int i = 0; i < trmp.length; i++) {
+						if (FormList.getStrFormName().equalsIgnoreCase(
+								trmp[i].toString())) {
 							on.setStrAuditForm("on");
 						}
 					}
 					AuditTemplist.add(on);
 				}
-			}
-			else
-			{
+			} else {
 				AuditTemplist = Auditlist;
 			}
 			model.addAttribute("auditFormList", AuditTemplist);
-			Map<String, String> mapReason = objReasonMasterService.funGetResonList(clientCode);
-			if (mapReason.isEmpty())
-			{
+			Map<String, String> mapReason = objReasonMasterService
+					.funGetResonList(clientCode);
+			if (mapReason.isEmpty()) {
 				mapReason.put("", "");
 			}
 			model.addAttribute("listReason", mapReason);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		if ("2".equalsIgnoreCase(urlHits))
-		{
+		if ("2".equalsIgnoreCase(urlHits)) {
 			return "frmSetup_1";
-		}
-		else if ("1".equalsIgnoreCase(urlHits))
-		{
+		} else if ("1".equalsIgnoreCase(urlHits)) {
 			return "frmSetup";
-		}
-		else
-		{
+		} else {
 			return "frmSetup";
 		}
 	}
 
-	private void funSetPropertyData(clsPropertySetupModel objSetup, clsSetupMasterBean bean)
-	{
+	private void funSetPropertyData(clsPropertySetupModel objSetup,
+			clsSetupMasterBean bean) {
 		// bean.setListProcessSetupForm(listProcessForms1);
 		bean.setStrIndustryType(objSetup.getStrIndustryType());
 
@@ -516,15 +510,27 @@ public class clsSetupMasterController
 		bean.setStrShowTransAsc_Desc(objSetup.getStrShowTransAsc_Desc());
 		bean.setStrNameChangeProdMast(objSetup.getStrNameChangeProdMast());
 		bean.setStrStkAdjReason(objSetup.getStrStkAdjReason());
-		bean.setIntNotificationTimeinterval(objSetup.getIntNotificationTimeinterval());
+		bean.setIntNotificationTimeinterval(objSetup
+				.getIntNotificationTimeinterval());
 		bean.setStrMonthEnd(objSetup.getStrMonthEnd());
 		bean.setStrShowAllProdToAllLoc(objSetup.getStrShowAllProdToAllLoc());
-		bean.setStrLocWiseProductionOrder(objSetup.getStrLocWiseProductionOrder());
-		bean.setStrShowAvgQtyInOP(objGlobal.funIfNull(objSetup.getStrShowAvgQtyInOP(), "Y", objSetup.getStrShowAvgQtyInOP()));
-		bean.setStrShowStockInOP(objGlobal.funIfNull(objSetup.getStrShowStockInOP(), "Y", objSetup.getStrShowStockInOP()));
-		bean.setStrShowAvgQtyInSO(objGlobal.funIfNull(objSetup.getStrShowAvgQtyInSO(), "Y", objSetup.getStrShowAvgQtyInSO()));
-		bean.setStrShowStockInSO(objGlobal.funIfNull(objSetup.getStrShowStockInSO(), "Y", objSetup.getStrShowStockInSO()));
-		bean.setStrEffectOfDiscOnPO(objGlobal.funIfNull(objSetup.getStrEffectOfDiscOnPO(), "Y", objSetup.getStrEffectOfDiscOnPO()));
+		bean.setStrLocWiseProductionOrder(objSetup
+				.getStrLocWiseProductionOrder());
+		bean.setStrShowAvgQtyInOP(objGlobal.funIfNull(
+				objSetup.getStrShowAvgQtyInOP(), "Y",
+				objSetup.getStrShowAvgQtyInOP()));
+		bean.setStrShowStockInOP(objGlobal.funIfNull(
+				objSetup.getStrShowStockInOP(), "Y",
+				objSetup.getStrShowStockInOP()));
+		bean.setStrShowAvgQtyInSO(objGlobal.funIfNull(
+				objSetup.getStrShowAvgQtyInSO(), "Y",
+				objSetup.getStrShowAvgQtyInSO()));
+		bean.setStrShowStockInSO(objGlobal.funIfNull(
+				objSetup.getStrShowStockInSO(), "Y",
+				objSetup.getStrShowStockInSO()));
+		bean.setStrEffectOfDiscOnPO(objGlobal.funIfNull(
+				objSetup.getStrEffectOfDiscOnPO(), "Y",
+				objSetup.getStrEffectOfDiscOnPO()));
 		bean.setStrInvFormat(objSetup.getStrInvFormat());
 		bean.setStrInvNote(objSetup.getStrInvNote());
 		bean.setStrCurrencyCode(objSetup.getStrCurrencyCode());
@@ -536,7 +542,8 @@ public class clsSetupMasterController
 		 * bean.setStrShowAllPropCustomer(true); }
 		 */
 
-		bean.setStrShowAllPropCustomer(funGetBoolean(objSetup.getStrShowAllPropCustomer()));
+		bean.setStrShowAllPropCustomer(funGetBoolean(objSetup
+				.getStrShowAllPropCustomer()));
 		// bean.setStrShowAllPropCustomer(objGlobal.funIfNull(objSetup.getStrShowAllPropCustomer()
 		// ,"N",objSetup.getStrShowAllPropCustomer()));
 		bean.setStrEffectOfInvoice(objSetup.getStrEffectOfInvoice());
@@ -544,7 +551,8 @@ public class clsSetupMasterController
 		bean.setStrMultiCurrency(objSetup.getStrMultiCurrency());
 
 		bean.setStrShowAllPartyToAllLoc(objSetup.getStrShowAllPartyToAllLoc());
-		bean.setStrShowAllTaxesOnTransaction(objSetup.getStrShowAllTaxesOnTransaction());
+		bean.setStrShowAllTaxesOnTransaction(objSetup
+				.getStrShowAllTaxesOnTransaction());
 
 		bean.setStrSOKOTPrint(funGetBoolean(objSetup.getStrSOKOTPrint()));
 		bean.setStrRateHistoryFormat(objSetup.getStrRateHistoryFormat());
@@ -556,6 +564,7 @@ public class clsSetupMasterController
 		bean.setStrInvoiceRateEditable(objSetup.getStrInvoiceRateEditable());
 		bean.setStrSettlementWiseInvSer(objSetup.getStrSettlementWiseInvSer());
 		bean.setStrGRNProdPOWise(objSetup.getStrGRNProdPOWise());
+		bean.setStrPORateEditable(objSetup.getStrPORateEditable());
 		/*
 		 * Bank Tab
 		 */
@@ -585,8 +594,7 @@ public class clsSetupMasterController
 		bean.setStrSMSContent(objSetup.getStrSMSContent());
 	}
 
-	private void funSetBlankPropertyData(clsSetupMasterBean bean)
-	{
+	private void funSetBlankPropertyData(clsSetupMasterBean bean) {
 		// bean.setListProcessSetupForm(listProcessForms1);
 		bean.setStrIndustryType("Hospitality");
 
@@ -703,110 +711,125 @@ public class clsSetupMasterController
 	}
 
 	@RequestMapping(value = "/saveSetupData", method = RequestMethod.POST)
-	ModelAndView funSaveSetupData(@ModelAttribute("command") @Valid clsSetupMasterBean bean, BindingResult result, HttpServletRequest req, @RequestParam("companyLogo") MultipartFile file) throws IOException
-	{
+	ModelAndView funSaveSetupData(
+			@ModelAttribute("command") @Valid clsSetupMasterBean bean,
+			BindingResult result, HttpServletRequest req,
+			@RequestParam("companyLogo") MultipartFile file) throws IOException {
 		String urlHits = "1";
 		FileOutputStream fileOuputStream = null;
-		try
-		{
+		try {
 			urlHits = req.getParameter("saddr").toString();
-		}
-		catch (NullPointerException e)
-		{
+		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
-		try
-		{
-			if (!result.hasErrors())
-			{
-				String userCode = req.getSession().getAttribute("usercode").toString();
+		try {
+			if (!result.hasErrors()) {
+				String userCode = req.getSession().getAttribute("usercode")
+						.toString();
 				// String userCode="SUPER";
 				String companyCode = bean.getStrCompanyCode();
 				String propertyCode = bean.getStrProperty();
-				String clientCode = req.getSession().getAttribute("clientCode").toString();
-				List<clsTreeMasterModel> listclsProcessSetupForms = bean.getListProcessSetupForm();
-				List<clsWorkFlowModel> listWorkFlowModel = bean.getListclsWorkFlowModel();
-				List<clsWorkFlowForSlabBasedAuth> listWorkFlowForSlabBasedAuth = bean.getListclsWorkFlowForSlabBasedAuth();
-				if (null != listclsProcessSetupForms && listclsProcessSetupForms.size() > 0)
-				{
-					objSetupMasterService.funDeleteProcessSetup(propertyCode, clientCode);
-					funSaveProcessSetupForm(listclsProcessSetupForms, propertyCode, clientCode);
+				String clientCode = req.getSession().getAttribute("clientCode")
+						.toString();
+				List<clsTreeMasterModel> listclsProcessSetupForms = bean
+						.getListProcessSetupForm();
+				List<clsWorkFlowModel> listWorkFlowModel = bean
+						.getListclsWorkFlowModel();
+				List<clsWorkFlowForSlabBasedAuth> listWorkFlowForSlabBasedAuth = bean
+						.getListclsWorkFlowForSlabBasedAuth();
+				if (null != listclsProcessSetupForms
+						&& listclsProcessSetupForms.size() > 0) {
+					objSetupMasterService.funDeleteProcessSetup(propertyCode,
+							clientCode);
+					funSaveProcessSetupForm(listclsProcessSetupForms,
+							propertyCode, clientCode);
 				}
 
-				objSetupMasterService.funDeleteWorkFlowAutorization(propertyCode, clientCode);
-				if (null != listWorkFlowModel && listWorkFlowModel.size() > 0)
-				{
+				objSetupMasterService.funDeleteWorkFlowAutorization(
+						propertyCode, clientCode);
+				if (null != listWorkFlowModel && listWorkFlowModel.size() > 0) {
 
-					for (clsWorkFlowModel ob : listWorkFlowModel)
-					{
+					for (clsWorkFlowModel ob : listWorkFlowModel) {
 						ob.setStrPropertyCode(propertyCode);
 						ob.setStrClientCode(clientCode);
 						ob.setStrUserCreated(userCode);
 						ob.setStrUserModified(userCode);
 						ob.setStrCompanyCode(bean.getStrCompanyCode());
-						ob.setDtDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
-						ob.setDtLastModified(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+						ob.setDtDateCreated(objGlobal
+								.funGetCurrentDateTime("yyyy-MM-dd"));
+						ob.setDtLastModified(objGlobal
+								.funGetCurrentDateTime("yyyy-MM-dd"));
 						objSetupMasterService.funAddWorkFlowAuthorization(ob);
 					}
 				}
 
 				// Save Terms and Condition fields....
-				if (null != bean.getListTCForSetup())
-				{
+				if (null != bean.getListTCForSetup()) {
 					clsGlobalFunctions objGlobal = new clsGlobalFunctions();
 
-					String sql_Delete = "delete from clsTCTransModel where strTransCode='" + propertyCode + "' " + "and strTransType='Property Setup' and strClientCode='" + clientCode + "'";
+					String sql_Delete = "delete from clsTCTransModel where strTransCode='"
+							+ propertyCode
+							+ "' "
+							+ "and strTransType='Property Setup' and strClientCode='"
+							+ clientCode + "'";
 					objTCTransService.funDeleteTCTransList(sql_Delete);
-					List<clsTCTransModel> listTCTransModel = objGlobal.funPrepareTCTransModel(bean.getListTCForSetup(), propertyCode, userCode, clientCode, "Property Setup");
-					for (int cnt = 0; cnt < listTCTransModel.size(); cnt++)
-					{
+					List<clsTCTransModel> listTCTransModel = objGlobal
+							.funPrepareTCTransModel(bean.getListTCForSetup(),
+									propertyCode, userCode, clientCode,
+									"Property Setup");
+					for (int cnt = 0; cnt < listTCTransModel.size(); cnt++) {
 						clsTCTransModel objTCTrans = listTCTransModel.get(cnt);
 						objTCTransService.funAddTCTrans(objTCTrans);
 					}
 				}
 
-				objSetupMasterService.funDeleteWorkFlowForslabBasedAuth(propertyCode, clientCode);
+				objSetupMasterService.funDeleteWorkFlowForslabBasedAuth(
+						propertyCode, clientCode);
 
-				if (null != listWorkFlowForSlabBasedAuth && listWorkFlowForSlabBasedAuth.size() > 0)
-				{
+				if (null != listWorkFlowForSlabBasedAuth
+						&& listWorkFlowForSlabBasedAuth.size() > 0) {
 
-					for (clsWorkFlowForSlabBasedAuth ob : listWorkFlowForSlabBasedAuth)
-					{
+					for (clsWorkFlowForSlabBasedAuth ob : listWorkFlowForSlabBasedAuth) {
 						ob.setStrPropertyCode(propertyCode);
 						ob.setStrClientCode(clientCode);
 						ob.setStrCompanyCode(companyCode);
 						ob.setStrUserCreated(userCode);
 						ob.setStrUserModified(userCode);
-						ob.setDtDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
-						ob.setDtLastModified(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
-						objSetupMasterService.funAddWorkFlowForslabBasedAuth(ob);
+						ob.setDtDateCreated(objGlobal
+								.funGetCurrentDateTime("yyyy-MM-dd"));
+						ob.setDtLastModified(objGlobal
+								.funGetCurrentDateTime("yyyy-MM-dd"));
+						objSetupMasterService
+								.funAddWorkFlowForslabBasedAuth(ob);
 					}
 				}
-				clsPropertySetupModel PropertySetupModel = funPrepareMaster(bean, userCode, req);
-				objSetupMasterService.funAddUpdatePropertySetupModel(PropertySetupModel);
+				clsPropertySetupModel PropertySetupModel = funPrepareMaster(
+						bean, userCode, req);
+				objSetupMasterService
+						.funAddUpdatePropertySetupModel(PropertySetupModel);
 				// System.out.println(file.getBytes());
-				if (file.getSize() != 0)
-				{
-					Blob blobProdImage = Hibernate.createBlob(file.getInputStream());
+				if (file.getSize() != 0) {
+					Blob blobProdImage = Hibernate.createBlob(file
+							.getInputStream());
 					clsCompanyLogoModel comLogo = new clsCompanyLogoModel();
 					comLogo.setStrCompanyCode(companyCode);
 					comLogo.setStrCompanyLogo(blobProdImage);
 					objSetupMasterService.funSaveUpdateCompanyLogo(comLogo);
 				}
-				if (null != bean.getListclsTransactionTimeModel())
-				{
-					for (clsTransactionTimeModel ob : bean.getListclsTransactionTimeModel())
-					{
+				if (null != bean.getListclsTransactionTimeModel()) {
+					for (clsTransactionTimeModel ob : bean
+							.getListclsTransactionTimeModel()) {
 
 						ob.setStrPropertyCode(propertyCode);
 						ob.setStrClientCode(clientCode);
 						ob.setStrTransactionName("");
 
 						// for saving in Database
-						SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
-						SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mma");
-						Date fdate,
-								tdate;
+						SimpleDateFormat displayFormat = new SimpleDateFormat(
+								"HH:mm");
+						SimpleDateFormat parseFormat = new SimpleDateFormat(
+								"hh:mma");
+						Date fdate, tdate;
 						String fromDate = ob.getTmeFrom();
 						fdate = parseFormat.parse(fromDate);
 						String todate = ob.getTmeTo();
@@ -820,22 +843,22 @@ public class clsSetupMasterController
 						objTransactionTimeService.funAddUpdate(ob);
 					}
 				}
-				clsCompanyLogoModel objCompanyLogo = objSetupMasterService.funGetCompanyLogoObject(companyCode);
-				if (objCompanyLogo.getStrCompanyLogo() != null)
-				{
+				clsCompanyLogoModel objCompanyLogo = objSetupMasterService
+						.funGetCompanyLogoObject(companyCode);
+				if (objCompanyLogo.getStrCompanyLogo() != null) {
 					Blob blob = objCompanyLogo.getStrCompanyLogo();
-					String imagePath = servletContext.getRealPath("/resources/images");
+					String imagePath = servletContext
+							.getRealPath("/resources/images");
 					int blobLength = (int) blob.length();
 					byte[] blobAsBytes = blob.getBytes(1, blobLength);
 
-					fileOuputStream = new FileOutputStream(imagePath + "/company_Logo.png");
+					fileOuputStream = new FileOutputStream(imagePath
+							+ "/company_Logo.png");
 					fileOuputStream.write(blobAsBytes);
 					fileOuputStream.close();
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -844,13 +867,10 @@ public class clsSetupMasterController
 	}
 
 	@SuppressWarnings("finally")
-	private int funSetAuthorizationFormStatus(HttpServletRequest req)
-	{
-		try
-		{
+	private int funSetAuthorizationFormStatus(HttpServletRequest req) {
+		try {
 			Map<String, Boolean> hmAuthorizationStatus = new HashMap<String, Boolean>();
-			if (null != req.getSession().getAttribute("hmAuthorization"))
-			{
+			if (null != req.getSession().getAttribute("hmAuthorization")) {
 				req.getSession().removeAttribute("hmAuthorization");
 			}
 			hmAuthorizationStatus.put("GRN", false);
@@ -875,132 +895,88 @@ public class clsSetupMasterController
 			hmAuthorizationStatus.put("Stock Req", false);
 
 			String sql_Auth = "select distinct(strFormName) from tblworkflowforslabbasedauth ";
-			List listAuthorization = objGlobalFunctionsService.funGetList(sql_Auth, "sql");
-			for (int cnt = 0; cnt < listAuthorization.size(); cnt++)
-			{
+			List listAuthorization = objGlobalFunctionsService.funGetList(
+					sql_Auth, "sql");
+			for (int cnt = 0; cnt < listAuthorization.size(); cnt++) {
 				String formName = (String) listAuthorization.get(cnt);
-				if (formName.equals("frmMaterialReq"))
-				{
+				if (formName.equals("frmMaterialReq")) {
 					hmAuthorizationStatus.remove("Material Req");
 					hmAuthorizationStatus.put("Material Req", true);
-				}
-				else if (formName.equals("frmGRN"))
-				{
+				} else if (formName.equals("frmGRN")) {
 					hmAuthorizationStatus.remove("GRN");
 					hmAuthorizationStatus.put("GRN", true);
-				}
-				else if (formName.equals("frmBillPassing"))
-				{
+				} else if (formName.equals("frmBillPassing")) {
 					hmAuthorizationStatus.remove("Bill Passing");
 					hmAuthorizationStatus.put("Bill Passing", true);
-				}
-				else if (formName.equals("frmMaterialReturn"))
-				{
+				} else if (formName.equals("frmMaterialReturn")) {
 					hmAuthorizationStatus.remove("Material Return");
 					hmAuthorizationStatus.put("Material Return", true);
-				}
-				else if (formName.equals("frmMIS"))
-				{
+				} else if (formName.equals("frmMIS")) {
 					hmAuthorizationStatus.remove("MIS");
 					hmAuthorizationStatus.put("MIS", true);
-				}
-				else if (formName.equals("frmPhysicalStkPosting"))
-				{
+				} else if (formName.equals("frmPhysicalStkPosting")) {
 					hmAuthorizationStatus.remove("Physical Stock Posting");
 					hmAuthorizationStatus.put("Physical Stock Posting", true);
-				}
-				else if (formName.equals("frmProduction"))
-				{
+				} else if (formName.equals("frmProduction")) {
 					hmAuthorizationStatus.remove("Production");
 					hmAuthorizationStatus.put("Production", true);
-				}
-				else if (formName.equals("frmProductionOrder"))
-				{
+				} else if (formName.equals("frmProductionOrder")) {
 					hmAuthorizationStatus.remove("Production Order");
 					hmAuthorizationStatus.put("Production Order", true);
-				}
-				else if (formName.equals("frmProduction"))
-				{
+				} else if (formName.equals("frmProduction")) {
 					hmAuthorizationStatus.remove("Production");
 					hmAuthorizationStatus.put("Production", true);
-				}
-				else if (formName.equals("frmPurchaseIndent"))
-				{
+				} else if (formName.equals("frmPurchaseIndent")) {
 					hmAuthorizationStatus.remove("Purchase Indent");
 					hmAuthorizationStatus.put("Purchase Indent", true);
-				}
-				else if (formName.equals("frmPurchaseOrder"))
-				{
+				} else if (formName.equals("frmPurchaseOrder")) {
 					hmAuthorizationStatus.remove("Purchase Order");
 					hmAuthorizationStatus.put("Purchase Order", true);
-				}
-				else if (formName.equals("frmPurchaseReturn"))
-				{
+				} else if (formName.equals("frmPurchaseReturn")) {
 					hmAuthorizationStatus.remove("Purchase Return");
 					hmAuthorizationStatus.put("Purchase Return", true);
-				}
-				else if (formName.equals("frmRateContract"))
-				{
+				} else if (formName.equals("frmRateContract")) {
 					hmAuthorizationStatus.remove("Rate Contract");
 					hmAuthorizationStatus.put("Rate Contract", true);
-				}
-				else if (formName.equals("frmStockAdjustment"))
-				{
+				} else if (formName.equals("frmStockAdjustment")) {
 					hmAuthorizationStatus.remove("Stock Adjustment");
 					hmAuthorizationStatus.put("Stock Adjustment", true);
-				}
-				else if (formName.equals("frmStockTransfer"))
-				{
+				} else if (formName.equals("frmStockTransfer")) {
 					hmAuthorizationStatus.remove("Stock Transfer");
 					hmAuthorizationStatus.put("Stock Transfer", true);
-				}
-				else if (formName.equals("frmWorkOrder"))
-				{
+				} else if (formName.equals("frmWorkOrder")) {
 					hmAuthorizationStatus.remove("Work Order");
 					hmAuthorizationStatus.put("Work Order", true);
-				}
-				else if (formName.equals("frmInvoice"))
-				{
+				} else if (formName.equals("frmInvoice")) {
 					hmAuthorizationStatus.remove("Invoice");
 					hmAuthorizationStatus.put("Invoice", true);
-				}
-				else if (formName.equals("frmSalesOrder"))
-				{
+				} else if (formName.equals("frmSalesOrder")) {
 					hmAuthorizationStatus.remove("Sales Order");
 					hmAuthorizationStatus.put("Sales Order", true);
-				}
-				else if (formName.equals("frmSalesReturn"))
-				{
+				} else if (formName.equals("frmSalesReturn")) {
 					hmAuthorizationStatus.remove("Sales Return");
 					hmAuthorizationStatus.put("Sales Return", true);
-				}
-				else if (formName.equals("frmDeliveryChallan"))
-				{
+				} else if (formName.equals("frmDeliveryChallan")) {
 					hmAuthorizationStatus.remove("Delivery Challan");
 					hmAuthorizationStatus.put("Delivery Challan", true);
-				}
-				else if (formName.equals("frmStockReq"))
-				{
+				} else if (formName.equals("frmStockReq")) {
 					hmAuthorizationStatus.remove("Stock Req");
 					hmAuthorizationStatus.put("Stock Req", true);
 				}
 			}
 
-			req.getSession().setAttribute("hmAuthorization", hmAuthorizationStatus);
+			req.getSession().setAttribute("hmAuthorization",
+					hmAuthorizationStatus);
 
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally
-		{
+		} finally {
 			return 1;
 		}
 	}
 
-	private clsPropertySetupModel funPrepareMaster(clsSetupMasterBean bean, String string, HttpServletRequest req)
-	{
+	private clsPropertySetupModel funPrepareMaster(clsSetupMasterBean bean,
+			String string, HttpServletRequest req) {
 		clsGlobalFunctions ob = new clsGlobalFunctions();
 		clsPropertySetupModel objPropertySetupModel = new clsPropertySetupModel();
 		objPropertySetupModel.setStrPropertyCode(bean.getStrProperty());
@@ -1069,7 +1045,8 @@ public class clsSetupMasterController
 		objPropertySetupModel.setStrTotalWorkhour(bean.getStrTotalWorkhour());
 		objPropertySetupModel.setDtFromTime(bean.getDtFromTime());
 		objPropertySetupModel.setDtToTime(bean.getDtToTime());
-		objPropertySetupModel.setStrWorkFlowbasedAuth(bean.getStrWorkFlowbasedAuth());
+		objPropertySetupModel.setStrWorkFlowbasedAuth(bean
+				.getStrWorkFlowbasedAuth());
 		objPropertySetupModel.setIntdec(bean.getIntdec());
 		objPropertySetupModel.setIntqtydec(bean.getIntqtydec());
 		objPropertySetupModel.setStrListPriceInPO(bean.getStrListPriceInPO());
@@ -1085,50 +1062,70 @@ public class clsSetupMasterController
 		objPropertySetupModel.setStrChangeUOMTrans(bean.getStrChangeUOMTrans());
 		objPropertySetupModel.setStrShowProdMaster(bean.getStrShowProdMaster());
 		objPropertySetupModel.setStrShowProdDoc(bean.getStrShowProdDoc());
-		objPropertySetupModel.setStrAllowDateChangeInMIS(bean.getStrAllowDateChangeInMIS());
-		objPropertySetupModel.setStrShowTransAsc_Desc(bean.getStrShowTransAsc_Desc());
-		objPropertySetupModel.setStrNameChangeProdMast(bean.getStrNameChangeProdMast());
+		objPropertySetupModel.setStrAllowDateChangeInMIS(bean
+				.getStrAllowDateChangeInMIS());
+		objPropertySetupModel.setStrShowTransAsc_Desc(bean
+				.getStrShowTransAsc_Desc());
+		objPropertySetupModel.setStrNameChangeProdMast(bean
+				.getStrNameChangeProdMast());
 		objPropertySetupModel.setStrStkAdjReason(bean.getStrStkAdjReason());
-		objPropertySetupModel.setIntNotificationTimeinterval(bean.getIntNotificationTimeinterval());
+		objPropertySetupModel.setIntNotificationTimeinterval(bean
+				.getIntNotificationTimeinterval());
 		objPropertySetupModel.setStrMonthEnd(bean.getStrMonthEnd());
-		objPropertySetupModel.setStrShowAllProdToAllLoc(bean.getStrShowAllProdToAllLoc());
-		objPropertySetupModel.setStrLocWiseProductionOrder(bean.getStrLocWiseProductionOrder());
-		objPropertySetupModel.setStrShowAvgQtyInOP(objGlobal.funIfNull(bean.getStrShowAvgQtyInOP(), "N", bean.getStrShowAvgQtyInOP()));
-		objPropertySetupModel.setStrShowStockInOP(objGlobal.funIfNull(bean.getStrShowStockInOP(), "N", bean.getStrShowStockInOP()));
-		objPropertySetupModel.setStrShowAvgQtyInSO(objGlobal.funIfNull(bean.getStrShowAvgQtyInSO(), "N", bean.getStrShowAvgQtyInSO()));
-		objPropertySetupModel.setStrShowStockInSO(objGlobal.funIfNull(bean.getStrShowStockInSO(), "N", bean.getStrShowStockInSO()));
-		objPropertySetupModel.setStrEffectOfDiscOnPO(objGlobal.funIfNull(bean.getStrEffectOfDiscOnPO(), "N", bean.getStrEffectOfDiscOnPO()));
+		objPropertySetupModel.setStrShowAllProdToAllLoc(bean
+				.getStrShowAllProdToAllLoc());
+		objPropertySetupModel.setStrLocWiseProductionOrder(bean
+				.getStrLocWiseProductionOrder());
+		objPropertySetupModel.setStrShowAvgQtyInOP(objGlobal.funIfNull(
+				bean.getStrShowAvgQtyInOP(), "N", bean.getStrShowAvgQtyInOP()));
+		objPropertySetupModel.setStrShowStockInOP(objGlobal.funIfNull(
+				bean.getStrShowStockInOP(), "N", bean.getStrShowStockInOP()));
+		objPropertySetupModel.setStrShowAvgQtyInSO(objGlobal.funIfNull(
+				bean.getStrShowAvgQtyInSO(), "N", bean.getStrShowAvgQtyInSO()));
+		objPropertySetupModel.setStrShowStockInSO(objGlobal.funIfNull(
+				bean.getStrShowStockInSO(), "N", bean.getStrShowStockInSO()));
+		objPropertySetupModel.setStrEffectOfDiscOnPO(objGlobal.funIfNull(
+				bean.getStrEffectOfDiscOnPO(), "N",
+				bean.getStrEffectOfDiscOnPO()));
 		objPropertySetupModel.setStrInvFormat(bean.getStrInvFormat());
 		objPropertySetupModel.setStrInvNote(bean.getStrInvNote());
 		objPropertySetupModel.setStrCurrencyCode(bean.getStrCurrencyCode());
-		objPropertySetupModel.setStrGRNRateEditable(bean.getStrGRNRateEditable());
-		objPropertySetupModel.setStrInvoiceRateEditable(bean.getStrInvoiceRateEditable());
+		objPropertySetupModel.setStrGRNRateEditable(bean
+				.getStrGRNRateEditable());
+		objPropertySetupModel.setStrInvoiceRateEditable(bean
+				.getStrInvoiceRateEditable());
 		objPropertySetupModel.setStrSORateEditable(bean.getStrSORateEditable());
-		objPropertySetupModel.setStrSettlementWiseInvSer(bean.getStrSettlementWiseInvSer());
+		objPropertySetupModel.setStrSettlementWiseInvSer(bean
+				.getStrSettlementWiseInvSer());
 		objPropertySetupModel.setStrGRNProdPOWise(bean.getStrGRNProdPOWise());
-		
+		objPropertySetupModel.setStrPORateEditable(bean.getStrPORateEditable());
+
 		/*
 		 * if(bean.isStrShowAllPropCustomer()==true) {
 		 * objPropertySetupModel.setStrShowAllPropCustomer("Y"); }else {
 		 * objPropertySetupModel.setStrShowAllPropCustomer("N"); }
 		 */
-		objPropertySetupModel.setStrShowAllPropCustomer(funGetYN(bean.isStrShowAllPropCustomer()));
+		objPropertySetupModel.setStrShowAllPropCustomer(funGetYN(bean
+				.isStrShowAllPropCustomer()));
 		// objPropertySetupModel.setStrShowAllPropCustomer(objGlobal.funIfNull(bean.getStrShowAllPropCustomer(),"N",bean.getStrShowAllPropCustomer()));
-		objPropertySetupModel.setStrEffectOfInvoice(bean.getStrEffectOfInvoice());
-		objPropertySetupModel.setStrEffectOfGRNWebBook(bean.getStrEffectOfGRNWebBook());
+		objPropertySetupModel.setStrEffectOfInvoice(bean
+				.getStrEffectOfInvoice());
+		objPropertySetupModel.setStrEffectOfGRNWebBook(bean
+				.getStrEffectOfGRNWebBook());
 		objPropertySetupModel.setStrMultiCurrency(bean.getStrMultiCurrency());
-		objPropertySetupModel.setStrShowAllPartyToAllLoc(objGlobal.funIfNull(bean.getStrShowAllPartyToAllLoc(), "N", bean.getStrShowAllPartyToAllLoc()));
-		objPropertySetupModel.setStrShowAllTaxesOnTransaction(bean.getStrShowAllTaxesOnTransaction());
+		objPropertySetupModel.setStrShowAllPartyToAllLoc(objGlobal.funIfNull(
+				bean.getStrShowAllPartyToAllLoc(), "N",
+				bean.getStrShowAllPartyToAllLoc()));
+		objPropertySetupModel.setStrShowAllTaxesOnTransaction(bean
+				.getStrShowAllTaxesOnTransaction());
 
-		if (bean.isStrSOKOTPrint())
-		{
+		if (bean.isStrSOKOTPrint()) {
 			objPropertySetupModel.setStrSOKOTPrint("Y");
-		}
-		else
-		{
+		} else {
 			objPropertySetupModel.setStrSOKOTPrint("N");
 		}
-		objPropertySetupModel.setStrRateHistoryFormat(bean.getStrRateHistoryFormat());
+		objPropertySetupModel.setStrRateHistoryFormat(bean
+				.getStrRateHistoryFormat());
 		objPropertySetupModel.setStrPOSlipFormat(bean.getStrPOSlipFormat());
 		objPropertySetupModel.setStrSRSlipFormat(bean.getStrSRSlipFormat());
 		objPropertySetupModel.setStrWeightedAvgCal(bean.getStrWeightedAvgCal());
@@ -1160,65 +1157,59 @@ public class clsSetupMasterController
 		objPropertySetupModel.setStrSMSAPI(bean.getStrSMSAPI());
 		objPropertySetupModel.setStrSMSContent(bean.getStrSMSContent());
 
-		objPropertySetupModel.setDtCreatedDate(ob.funGetCurrentDateTime("yyyy-MM-dd"));
-		objPropertySetupModel.setDtLastModified(ob.funGetCurrentDateTime("yyyy-MM-dd"));
+		objPropertySetupModel.setDtCreatedDate(ob
+				.funGetCurrentDateTime("yyyy-MM-dd"));
+		objPropertySetupModel.setDtLastModified(ob
+				.funGetCurrentDateTime("yyyy-MM-dd"));
 		objPropertySetupModel.setStrUserCreated(string);
 		objPropertySetupModel.setStrUserModified(string);
-		objPropertySetupModel.setClientCode(req.getSession().getAttribute("clientCode").toString());
+		objPropertySetupModel.setClientCode(req.getSession()
+				.getAttribute("clientCode").toString());
 		List auditFormList = bean.getListAuditForm();
 		String AuditFrom = "";
-		if (auditFormList != null)
-		{
-			for (int i = 0; i < auditFormList.size(); i++)
-			{
-				clsTreeMasterModel objTemp = (clsTreeMasterModel) auditFormList.get(i);
+		if (auditFormList != null) {
+			for (int i = 0; i < auditFormList.size(); i++) {
+				clsTreeMasterModel objTemp = (clsTreeMasterModel) auditFormList
+						.get(i);
 
-				if (null != objTemp.getStrAuditForm() && objTemp.getStrAuditForm().equalsIgnoreCase("on"))
-				{
+				if (null != objTemp.getStrAuditForm()
+						&& objTemp.getStrAuditForm().equalsIgnoreCase("on")) {
 					AuditFrom = AuditFrom + "," + objTemp.getStrFormName();
 				}
 			}
 			objPropertySetupModel.setStrAuditFrom(AuditFrom);
-		}
-		else
-		{
+		} else {
 			objPropertySetupModel.setStrAuditFrom("");
 		}
 		return objPropertySetupModel;
 	}
 
-	private List<clsTreeMasterModel> funSetSeletedProcess(List<clsProcessSetupModel> listclsProcessSetupModel)
-	{
-        Map<String,clsTreeMasterModel> hmProcessMap=new TreeMap<>();
+	private List<clsTreeMasterModel> funSetSeletedProcess(
+			List<clsProcessSetupModel> listclsProcessSetupModel) {
+		Map<String, clsTreeMasterModel> hmProcessMap = new TreeMap<>();
 		ArrayList<clsTreeMasterModel> listProcessForms1 = new ArrayList<clsTreeMasterModel>();
 
-		for (int i = 0; i < listclsProcessSetupModel.size(); i++)
-		{
+		for (int i = 0; i < listclsProcessSetupModel.size(); i++) {
 			clsTreeMasterModel objTemp = new clsTreeMasterModel();
-			clsProcessSetupModel obj = (clsProcessSetupModel) listclsProcessSetupModel.get(i);
+			clsProcessSetupModel obj = (clsProcessSetupModel) listclsProcessSetupModel
+					.get(i);
 			String processes = obj.getStrProcess();
 			String formName = obj.getStrForm();
 			String formDesc = obj.getStrFormDesc();
-			if(hmProcessMap.containsKey(formName))
-			{
-				
-			}
-			else
-			{
+			if (hmProcessMap.containsKey(formName)) {
+
+			} else {
 				objTemp.setStrFormName(formName);
 				objTemp.setStrFormDesc(formDesc);
-				
-				if (processes.length() > 0)
-				{
+
+				if (processes.length() > 0) {
 					String str = processes;
 					String delimiter = ",";
 					String[] temp;
 					temp = str.split(delimiter);
-					for (int j = 0; j < temp.length; j++)
-					{
+					for (int j = 0; j < temp.length; j++) {
 						String test = temp[j];
-						switch (test)
-						{
+						switch (test) {
 
 						case "Sales Order":
 							objTemp.setStrSalesOrder(test);
@@ -1310,16 +1301,16 @@ public class clsSetupMasterController
 
 				}
 				listProcessForms1.add(objTemp);
-				hmProcessMap.put(formName,objTemp);
+				hmProcessMap.put(formName, objTemp);
 			}
 		}
 		return listProcessForms1;
 
 	}
-	public void funSaveProcessSetupForm(List<clsTreeMasterModel> listForms, String propertyCode, String clientCode)
-	{
-		for (int i = 0; i < listForms.size(); i++)
-		{
+
+	public void funSaveProcessSetupForm(List<clsTreeMasterModel> listForms,
+			String propertyCode, String clientCode) {
+		for (int i = 0; i < listForms.size(); i++) {
 			clsProcessSetupModel objProcessSetupModel = new clsProcessSetupModel();
 			String Process = "";
 			String formName;
@@ -1327,114 +1318,92 @@ public class clsSetupMasterController
 			clsTreeMasterModel objTemp = (clsTreeMasterModel) listForms.get(i);
 			System.out.println("Form Desc=" + objTemp.getStrFormDesc());
 
-			if (null != objTemp.getStrSalesOrder())
-			{
+			if (null != objTemp.getStrSalesOrder()) {
 				Process = objTemp.getStrSalesOrder();
 			}
 
-			if (null != objTemp.getStrProductionOrder())
-			{
+			if (null != objTemp.getStrProductionOrder()) {
 				Process += "," + objTemp.getStrProductionOrder();
 			}
 
-			if (null != objTemp.getStrMinimumLevel())
-			{
+			if (null != objTemp.getStrMinimumLevel()) {
 				Process += "," + objTemp.getStrMinimumLevel();
 			}
 
-			if (null != objTemp.getStrRequisition())
-			{
+			if (null != objTemp.getStrRequisition()) {
 				Process += "," + objTemp.getStrRequisition();
 
 			}
 
-			if (null != objTemp.getStrDirect())
-			{
+			if (null != objTemp.getStrDirect()) {
 				Process += "," + objTemp.getStrDirect();
 			}
 
-			if (null != objTemp.getStrPurchaseIndent())
-			{
+			if (null != objTemp.getStrPurchaseIndent()) {
 				Process += "," + objTemp.getStrPurchaseIndent();
 			}
 
-			if (null != objTemp.getStrServiceOrder())
-			{
+			if (null != objTemp.getStrServiceOrder()) {
 				Process += "," + objTemp.getStrServiceOrder();
 			}
 
-			if (null != objTemp.getStrWorkOrder())
-			{
+			if (null != objTemp.getStrWorkOrder()) {
 				Process += "," + objTemp.getStrWorkOrder();
 			}
 
-			if (null != objTemp.getStrProject())
-			{
+			if (null != objTemp.getStrProject()) {
 				Process += "," + objTemp.getStrProject();
 			}
 
-			if (null != objTemp.getStrPurchaseOrder())
-			{
+			if (null != objTemp.getStrPurchaseOrder()) {
 				Process += "," + objTemp.getStrPurchaseOrder();
 			}
 
-			if (null != objTemp.getStrPurchaseReturn())
-			{
+			if (null != objTemp.getStrPurchaseReturn()) {
 				Process += "," + objTemp.getStrPurchaseReturn();
 			}
 
-			if (null != objTemp.getStrSalesReturn())
-			{
+			if (null != objTemp.getStrSalesReturn()) {
 				Process += "," + objTemp.getStrSalesReturn();
 			}
 
-			if (null != objTemp.getStrRateContractor())
-			{
+			if (null != objTemp.getStrRateContractor()) {
 				Process += "," + objTemp.getStrRateContractor();
 			}
 
-			if (null != objTemp.getStrGRN())
-			{
+			if (null != objTemp.getStrGRN()) {
 				Process += "," + objTemp.getStrGRN();
 			}
 
-			if (null != objTemp.getStrDeliveryNote())
-			{
+			if (null != objTemp.getStrDeliveryNote()) {
 				Process += "," + objTemp.getStrDeliveryNote();
 			}
 
-			if (null != objTemp.getStrOpeningStock())
-			{
+			if (null != objTemp.getStrOpeningStock()) {
 				Process += "," + objTemp.getStrOpeningStock();
 			}
 
-			if (null != objTemp.getStrSubContractorGRN())
-			{
+			if (null != objTemp.getStrSubContractorGRN()) {
 				Process += "," + objTemp.getStrSubContractorGRN();
 			}
 
-			if (null != objTemp.getStrSalesProjection())
-			{
+			if (null != objTemp.getStrSalesProjection()) {
 				Process += "," + objTemp.getStrSalesProjection();
 			}
 
-			if (null != objTemp.getStrInvoice())
-			{
+			if (null != objTemp.getStrInvoice()) {
 				Process += "," + objTemp.getStrInvoice();
 			}
 
-			if (null != objTemp.getStrMIS())
-			{
+			if (null != objTemp.getStrMIS()) {
 				Process += "," + objTemp.getStrMIS();
 			}
 
-			if (null != objTemp.getStrDeliverySchedule())
-			{
+			if (null != objTemp.getStrDeliverySchedule()) {
 				Process += "," + objTemp.getStrDeliverySchedule();
 			}
 
-			if (",".equals(Process.trim()))
-			{
+			if (",".equals(Process.trim())) {
 				Process = "";
 			}
 
@@ -1446,7 +1415,8 @@ public class clsSetupMasterController
 			objProcessSetupModel.setStrClientCode(clientCode);
 			objProcessSetupModel.setStrPropertyCode(propertyCode);
 
-			objSetupMasterService.funAddUpdateProcessSetup(objProcessSetupModel);
+			objSetupMasterService
+					.funAddUpdateProcessSetup(objProcessSetupModel);
 
 		}
 
@@ -1454,14 +1424,12 @@ public class clsSetupMasterController
 
 	/*
 	*/
-	public static String[] mySplit(String text, String delemeter)
-	{
+	public static String[] mySplit(String text, String delemeter) {
 		java.util.List<String> parts = new java.util.ArrayList<String>();
 
 		text += delemeter;
 
-		for (int i = text.indexOf(delemeter), j = 0; i != -1;)
-		{
+		for (int i = text.indexOf(delemeter), j = 0; i != -1;) {
 			parts.add(text.substring(j, i));
 			j = i + delemeter.length();
 			i = text.indexOf(delemeter, j);
@@ -1471,17 +1439,16 @@ public class clsSetupMasterController
 	}
 
 	@RequestMapping(value = "/getCompanyLogo", method = RequestMethod.GET)
-	public void getImage(HttpServletRequest req, HttpServletResponse response)
-	{
-		String strCompanyCode = req.getSession().getAttribute("companyCode").toString();
-		clsCompanyLogoModel objSetup = objSetupMasterService.funGetCompanyLogoObject(strCompanyCode);
-		try
-		{
+	public void getImage(HttpServletRequest req, HttpServletResponse response) {
+		String strCompanyCode = req.getSession().getAttribute("companyCode")
+				.toString();
+		clsCompanyLogoModel objSetup = objSetupMasterService
+				.funGetCompanyLogoObject(strCompanyCode);
+		try {
 			Blob image = null;
 			byte[] imgData = null;
 			image = objSetup.getStrCompanyLogo();
-			if (null != image && image.length() > 0)
-			{
+			if (null != image && image.length() > 0) {
 				imgData = image.getBytes(1, (int) image.length());
 				response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
 				OutputStream o = response.getOutputStream();
@@ -1489,45 +1456,32 @@ public class clsSetupMasterController
 				o.flush();
 				o.close();
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public boolean funGetBoolean(String value)
-	{
-		if (value == null || value.equalsIgnoreCase("N") || value.equalsIgnoreCase("No"))
-		{
+	public boolean funGetBoolean(String value) {
+		if (value == null || value.equalsIgnoreCase("N")
+				|| value.equalsIgnoreCase("No")) {
 			return false;
-		}
-		else
-		{
+		} else {
 			return true;
 		}
 	}
 
-	public String funGetYesNo(boolean value)
-	{
-		if (value == false)
-		{
+	public String funGetYesNo(boolean value) {
+		if (value == false) {
 			return "No";
-		}
-		else
-		{
+		} else {
 			return "Yes";
 		}
 	}
 
-	public String funGetYN(boolean value)
-	{
-		if (value == false)
-		{
+	public String funGetYN(boolean value) {
+		if (value == false) {
 			return "N";
-		}
-		else
-		{
+		} else {
 			return "Y";
 		}
 	}

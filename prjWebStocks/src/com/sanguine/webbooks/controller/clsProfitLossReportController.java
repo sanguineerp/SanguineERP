@@ -1,8 +1,13 @@
 package com.sanguine.webbooks.controller;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +30,8 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -428,5 +435,236 @@ public class clsProfitLossReportController {
 		}
 	}
 	
+	
+	@RequestMapping(value={"/rptProfitLossReport1"}, method={org.springframework.web.bind.annotation.RequestMethod.GET})
+	  private void funPOSProfitLossReport(@ModelAttribute("command") clsProfitLossReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
+	  {
+	    objGlobal = new clsGlobalFunctions();
+	    Connection con = objGlobal.funGetConnection(req);
+	    String strCurr = req.getSession().getAttribute("currValue").toString();
+	    double currValue = Double.parseDouble(strCurr);
+	    try
+	    {
+	      String clientCode = req.getSession().getAttribute("clientCode").toString();
+	      String companyName = req.getSession().getAttribute("companyName").toString();
+	      String userCode = req.getSession().getAttribute("usercode").toString();
+	      String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+	      clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+	      if (objSetup == null) {
+	        objSetup = new clsPropertySetupModel();
+	      }
+	      
+	      String fromDate = objBean.getDteFromDate();
+	      String toDate = objBean.getDteToDate();
+	      
+	      String fd = fromDate.split("-")[0];
+	      String fm = fromDate.split("-")[1];
+	      String fy = fromDate.split("-")[2];
+	      
+	      String td = toDate.split("-")[0];
+	      String tm = toDate.split("-")[1];
+	      String ty = toDate.split("-")[2];
+	      
+	      String dteFromDate = fy + "-" + fm + "-" + fd;
+	      String dteToDate = ty + "-" + tm + "-" + td;
+	      String reportName = servletContext.getRealPath("/WEB-INF/reports/webbooks/rptProfitLossReport.jrxml");
+	      String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+	      List<clsProfitLossReportBean> dataListPaymnet = new ArrayList();
+	      List<clsProfitLossReportBean> dataListRecipt = new ArrayList();
+	      List<clsProfitLossReportBean> dataListExtraExpense = new ArrayList();
+	      
+	      double conversionRate = 1.0D;
+	      
 
+	      String prevProdCode = "";
+	      int cnt = -1;
+	      
+	      List<clsProfitLossReportBean> listProduct = new ArrayList();
+	      
+	      JSONObject jObjJVData = new JSONObject();
+	      jObjJVData.put("dteFrom", dteFromDate);
+	      jObjJVData.put("dteTo", dteToDate);
+	      jObjJVData.put("strClientCode", clientCode);
+	      
+	      JSONObject jObj = funPOSTMethodUrlJosnObjectData("http://localhost:8080/prjSanguineWebService/WebBooksIntegration/funGetPOSData", jObjJVData);
+	      
+	      Double dblTotalSale = Double.valueOf(Double.parseDouble(jObj.get("TotalSale").toString()));
+	      Double dblTotalPurchase = Double.valueOf(Double.parseDouble(jObj.get("TotalPurchase").toString()));
+	      clsProfitLossReportBean objPL = new clsProfitLossReportBean();
+	      
+	      objPL.setDblPurAmt(dblTotalPurchase.doubleValue());
+	      objPL.setDblSaleAmt(dblTotalSale.doubleValue());
+	      listProduct.add(objPL);
+	      
+	      Map<String, clsProfitLossReportBean> hmSalesIncStmt = new HashMap();
+	      funCalculateIncomeStmt("Expense", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, clientCode, hmSalesIncStmt, propertyCode);
+	      
+
+	      funCalculateIncomeStmt("Expense", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, clientCode, hmSalesIncStmt, propertyCode);
+	      
+
+	      funCalculateIncomeStmt("Expense", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, clientCode, hmSalesIncStmt, propertyCode);
+	      BigDecimal totalExpense = new BigDecimal(0);
+	      for (Map.Entry<String, clsProfitLossReportBean> entry : hmSalesIncStmt.entrySet())
+	      {
+
+
+	        clsProfitLossReportBean objProfitLoss = new clsProfitLossReportBean();
+	        objProfitLoss.setStrAccountName(((clsProfitLossReportBean)entry.getValue()).getStrAccountName());
+	        objProfitLoss.setDblAmt(((clsProfitLossReportBean)entry.getValue()).getDblAmt());
+	        totalExpense = totalExpense.add(((clsProfitLossReportBean)entry.getValue()).getDblAmt());
+	        
+	        dataListExtraExpense.add(objProfitLoss);
+	      }
+	      
+
+	      BigDecimal purAmt = new BigDecimal(0);
+	      BigDecimal dblRevenue = new BigDecimal(0);
+	      for (clsProfitLossReportBean obj : listProduct)
+	      {
+	        purAmt = purAmt.add(BigDecimal.valueOf(obj.getDblPurAmt()));
+	        dblRevenue = dblRevenue.add(BigDecimal.valueOf(obj.getDblSaleAmt()));
+	      }
+	      BigDecimal grossProfit = dblRevenue.subtract(purAmt);
+	      
+
+
+	      BigDecimal perCostOfGoodSold = purAmt.divide(dblRevenue, 2, RoundingMode.HALF_UP);
+	      perCostOfGoodSold = perCostOfGoodSold.multiply(new BigDecimal(100));
+	      
+	      BigDecimal perTotalExp = totalExpense.divide(dblRevenue, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+	      BigDecimal perGrossProfit = grossProfit.divide(dblRevenue, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+	      BigDecimal netProfit = grossProfit.subtract(totalExpense);
+	      BigDecimal perNetProfit = netProfit.divide(dblRevenue, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+	      if (perNetProfit.compareTo(BigDecimal.ZERO) < 0)
+	      {
+	        perNetProfit = perNetProfit.multiply(new BigDecimal(-1));
+	      }
+	      
+	      HashMap hm = new HashMap();
+	      hm.put("strCompanyName", companyName);
+	      hm.put("strUserCode", userCode);
+	      hm.put("strImagePath", imagePath);
+	      hm.put("strAddr1", objSetup.getStrAdd1());
+	      hm.put("strAddr2", objSetup.getStrAdd2());
+	      hm.put("strCity", objSetup.getStrCity());
+	      hm.put("strState", objSetup.getStrState());
+	      hm.put("strCountry", objSetup.getStrCountry());
+	      hm.put("strPin", objSetup.getStrPin());
+	      hm.put("fromDate", fromDate);
+	      hm.put("toDate", toDate);
+	      hm.put("dataListExtraExpense", dataListExtraExpense);
+	      hm.put("dataListRecipt", dataListRecipt);
+	      hm.put("totalExpense", totalExpense);
+	      
+	      hm.put("dblGrossProfit", grossProfit);
+	      hm.put("dblRevenue", dblRevenue);
+	      hm.put("dblCostofGood", purAmt);
+	      
+	      hm.put("perCostOfGoodSold", perCostOfGoodSold);
+	      hm.put("perTotalExp", perTotalExp);
+	      hm.put("netProfit", netProfit);
+	      hm.put("perNetProfit", perNetProfit);
+	      hm.put("perGrossProfit", perGrossProfit);
+	      
+	      String strPL = "NET PROFIT";
+	      if (netProfit.compareTo(BigDecimal.ZERO) < 0)
+	      {
+	        strPL = "LOSS";
+	      }
+	      hm.put("strPL", strPL);
+	      JasperDesign jd = JRXmlLoader.load(reportName);
+	      JasperReport jr = JasperCompileManager.compileReport(jd);
+	      
+	      JasperPrint jp = JasperFillManager.fillReport(jr, hm, new JREmptyDataSource());
+	      List<JasperPrint> jprintlist = new ArrayList();
+	      ServletOutputStream servletOutputStream = resp.getOutputStream();
+	      jprintlist.add(jp);
+	      
+	      if (objBean.getStrDocType().trim().equalsIgnoreCase("pdf"))
+	      {
+	        byte[] bytes = null;
+	        bytes = JasperRunManager.runReportToPdf(jr, hm, con);
+	        resp.setContentType("application/pdf");
+	        resp.setContentLength(bytes.length);
+	        servletOutputStream.write(bytes, 0, bytes.length);
+	        servletOutputStream.flush();
+	        servletOutputStream.close();
+	      } else if (objBean.getStrDocType().trim().equalsIgnoreCase("xls")) {
+	        JRXlsExporter exporter = new JRXlsExporter();
+	        resp.setContentType("application/xlsx");
+	        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+	        exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
+	        exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, byteArrayOutputStream);
+	        exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+	        resp.setHeader("Content-Disposition", "inline;filename=rptProfitLossReport_" + dteFromDate + "_To_" + dteToDate + "_" + userCode + ".xls");
+	        exporter.exportReport();
+	        servletOutputStream.write(byteArrayOutputStream.toByteArray());
+	        servletOutputStream.flush();
+	        servletOutputStream.close();
+	      }
+	    }
+	    catch (Exception e)
+	    {
+	      e.printStackTrace();
+	      try
+	      {
+	        con.close();
+	      }
+	      catch (SQLException e1) {
+	        e1.printStackTrace();
+	      }
+	    }
+	    finally
+	    {
+	      try
+	      {
+	        con.close();
+	      }
+	      catch (SQLException e) {
+	        e.printStackTrace();
+	      }
+	    }
+	  }
+
+	
+	
+	 public JSONObject funPOSTMethodUrlJosnObjectData(String strUrl, JSONObject objRows) {
+		    JSONObject josnObjRet = new JSONObject();
+		    try
+		    {
+		      URL url = new URL(strUrl);
+		      HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+		      conn.setDoOutput(true);
+		      conn.setRequestMethod("POST");
+		      conn.setRequestProperty("Content-Type", "application/json");
+		      OutputStream os = conn.getOutputStream();
+		      os.write(objRows.toString().getBytes());
+		      os.flush();
+		      
+
+
+		      BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		      String output = "";String op = "";
+		      
+		      while ((output = br.readLine()) != null) {
+		        op = op + output;
+		      }
+		      System.out.println("Result= " + op);
+		      conn.disconnect();
+		      
+		      JSONParser parser = new JSONParser();
+		      Object obj = parser.parse(op);
+		      josnObjRet = (JSONObject)obj;
+		    }
+		    catch (Exception e)
+		    {
+		      e.printStackTrace();
+		    } finally {
+		      return josnObjRet;
+		    }
+		  }
+		
+
+	
 }

@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -49,6 +48,7 @@ import com.sanguine.model.clsMaterialReturnHdModel;
 import com.sanguine.model.clsMaterialReturnHdModel_ID;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsTransactionTimeModel;
+import com.sanguine.model.clsUserDtlModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsLocationMasterService;
 import com.sanguine.service.clsMISService;
@@ -127,6 +127,17 @@ public class clsMaterialReturnController {
 			list = new ArrayList<String>();
 			model.put("strProcessList", list);
 		}
+		
+		  model.put("mreditable", true);
+		    
+		    HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
+		    clsUserDtlModel objUserDtlModel = (clsUserDtlModel)hmUserPrivileges.get("frmMaterialReturn");
+		    if (objUserDtlModel != null) {
+		      if (objUserDtlModel.getStrEdit().equals("false")) {
+		        model.put("mreditable", false);
+		      }
+		    }
+		
 		clsMaterialReturnBean bean = new clsMaterialReturnBean();
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmMaterialReturn_1", "command", bean);
@@ -158,7 +169,7 @@ public class clsMaterialReturnController {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String propCode = req.getSession().getAttribute("propertyCode").toString();
 		String loginLocationCode = req.getSession().getAttribute("locationCode").toString();
-
+		objMRBean.setStrMRetCode(objGlobalFunctions.funIfNull(objMRBean.getStrMRetCode(), "", objMRBean.getStrMRetCode()));
 		List<clsTransactionTimeModel> listclsTransactionTimeModel = new ArrayList<clsTransactionTimeModel>();
 		listclsTransactionTimeModel = objTransactionTimeService.funLoadTransactionTime(propCode, clientCode, "");
 		String fromTime = "", toTime = "";

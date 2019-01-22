@@ -1,10 +1,34 @@
 package com.sanguine.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -273,14 +297,180 @@ public class clsStructureUpdateController {
 	        String dbWebbook=new clsGlobalFunctions().funTrimDBNameFromURL(clsGlobalFunctions.urlwebbooks);
 	        
 			clsDatabaseBackup obDB=new clsDatabaseBackup();
-			obDB.funTakeBackUpDB(dbWebmms);
+			
+			final String backupFilePathMail=obDB.funTakeBackUpDB(dbWebmms);
+			funSendDBBackupToSanguineAuditiing( backupFilePathMail, req);
 			new clsDatabaseBackup().funTakeBackUpDB(dbWebbook);
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			res="Failed";
 		}
 		return res;
 	}
+	
+
+    private void funSendDBBackupToSanguineAuditiing(String dbBackupFilePath,HttpServletRequest req)
+    {
+	Date dt = new Date();
+	String dateTime = "", date = "";
+	dateTime = dt.getDate() + "-" + (dt.getMonth() + 1) + "-" + (dt.getYear() + 1900) + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+	date = dt.getDate() + "-" + (dt.getMonth() + 1) + "-" + (dt.getYear() + 1900);
+
+	String filePath = System.getProperty("user.dir");
+	File logFile = new File(filePath + "/ErrorLogs/err " + date + ".txt");
+
+	dbBackupFilePath = System.getProperty("user.dir") + "\\DBBackup\\" + dbBackupFilePath + ".sql";
+	//String filePath = System.getProperty("user.dir")+"/DBBackup/1.sql";
+	File dbBackupFile = new File(dbBackupFilePath);
+
+	funSendDBBackup(logFile, dbBackupFile,req);
+    }
+    
+    
+    public void funSendDBBackup(File errorLogFile, File dbBackupFile,HttpServletRequest req)
+    {
+
+	try
+	{
+
+	    //mailed logic
+	    int ret = 0;
+	    final String from = "sanguineauditing@gmail.com";//change accordingly
+	    String to = "";//change accordingly
+	    
+		to="sanguineauditing@gmail.com";
+	    
+	    //Get the session object
+	    Properties props = new Properties();
+	    props.put("mail.smtp.host", "smtp.gmail.com");
+	    props.put("mail.smtp.socketFactory.port", "465");
+	    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+	    props.put("mail.smtp.auth", "true");
+	    props.put("mail.smtp.port", "465");
+
+	    Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator()
+	    {
+		protected PasswordAuthentication getPasswordAuthentication()
+		{
+		    //return new PasswordAuthentication("paritoshkumar112@gmail.com","singhparitosh123");//change accordingly  
+		    return new PasswordAuthentication(from, "Sanguine@2017");//change accordingly
+		}
+	    });
+	    MimeMessage message = new MimeMessage(session);
+	    //message.setFrom(new InternetAddress("paritoshkumar112@gmail.com"));//change accordingly
+	    message.setFrom(new InternetAddress(from));//change accordingly
+	
+
+	    String[] arrRecipient = to.split(",");
+
+	    if (to.trim().length() > 0)
+	    {
+		for (int cnt = 0; cnt < arrRecipient.length; cnt++)
+		{
+		    System.out.println(arrRecipient[cnt]);
+		    message.addRecipient(Message.RecipientType.TO, new InternetAddress(arrRecipient[cnt]));
+		}
+	    }
+	    String clientCode = req.getSession().getAttribute("clientCode").toString();
+	    message.setSubject("DB Backup '" +clientCode + "' '" + clientCode + "' " );
+
+	    String msgBody = "DB Backup '" + clientCode + "' ";
+	    //message.setText(msgBody);
+
+	    // Create the message part 
+	    BodyPart messageBodyPart = new MimeBodyPart();
+
+	    // Fill the message
+	    messageBodyPart.setText(msgBody);
+
+	    Multipart multipart = new MimeMultipart();
+	    // Set text message part
+	    multipart.addBodyPart(messageBodyPart);
+	    if (dbBackupFile.exists())
+	    {
+		FileOutputStream fos = null;
+		ZipOutputStream zipOut = null;
+		FileInputStream fis = null;
+		String destZIPFile = System.getProperty("user.dir") + "\\DBBackup\\" + dbBackupFile.getName() + ".zip";
+		//clsPosConfigFile.dbBackupPath+File.pathSeparator+dbBackupFile.getName()+".zip";
+
+		try
+		{
+		    fos = new FileOutputStream(destZIPFile);
+		    zipOut = new ZipOutputStream(new BufferedOutputStream(fos));
+		    File input = dbBackupFile;
+		    fis = new FileInputStream(input);
+		    ZipEntry ze = new ZipEntry(input.getName());
+		    System.out.println("Zipping the file: " + input.getName());
+		    zipOut.putNextEntry(ze);
+		    byte[] tmp = new byte[4 * 1024];
+		    int size = 0;
+		    while ((size = fis.read(tmp)) != -1)
+		    {
+			zipOut.write(tmp, 0, size);
+		    }
+		    zipOut.flush();
+		    zipOut.close();
+		}
+		catch (FileNotFoundException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
+		finally
+		{
+		    try
+		    {
+			if (fos != null)
+			{
+			    fos.close();
+			}
+			if (fis != null)
+			{
+			    fis.close();
+			}
+		    }
+		    catch (Exception ex)
+		    {
+
+		    }
+		}
+		File destZipFile = new File(destZIPFile);
+		if (destZipFile.exists())
+		{
+		    DataSource dbBackupSource = new FileDataSource(destZipFile);
+		    messageBodyPart = new MimeBodyPart();
+		    messageBodyPart.setDataHandler(new DataHandler(dbBackupSource));
+		    messageBodyPart.setFileName(dbBackupSource.getName());
+		    multipart.addBodyPart(messageBodyPart);
+		}
+	    }
+
+	    // Send the complete message parts
+	    message.setContent(multipart);
+
+	    if (to.length() > 0)
+	    {
+		//send message  
+		Transport.send(message);
+		System.out.println("message sent successfully");
+	    }
+	    else
+	    {
+		System.out.println("Email has No Recipient");
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+    }
 	
 	/**
 	 * Open Structure Update Form

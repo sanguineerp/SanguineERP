@@ -70,6 +70,7 @@ import com.sanguine.model.clsPurchaseOrderHdModel;
 import com.sanguine.model.clsPurchaseReturnDtlModel;
 import com.sanguine.model.clsSupplierMasterModel;
 import com.sanguine.model.clsTransectionProdCharModel;
+import com.sanguine.model.clsUserDtlModel;
 import com.sanguine.service.clsCurrencyMasterService;
 import com.sanguine.service.clsDeliveryScheduleService;
 import com.sanguine.service.clsGRNService;
@@ -186,6 +187,15 @@ public class clsGRNController {
 		List<String> uomList = new ArrayList<String>();
 		uomList = objclsUOMService.funGetUOMList(clientCode);
 		model.put("uomList", uomList);
+		model.put("grneditable", true);
+    
+        HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
+		clsUserDtlModel objUserDtlModel = (clsUserDtlModel)hmUserPrivileges.get("frmGRN");
+		if (objUserDtlModel != null) {
+		if (objUserDtlModel.getStrEdit().equals("false")) {
+		    model.put("grneditable",false);
+		  }
+		}
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmGRN_1", "command", objBean);
@@ -468,7 +478,7 @@ public class clsGRNController {
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
-
+		objBean.setStrGRNCode(objGlobalFunctions.funIfNull(objBean.getStrGRNCode(), "", objBean.getStrGRNCode()));
 		if (objBean.getStrGRNCode().trim().length() == 0) {
 			strmsg = "Inserted";
 		}
@@ -737,11 +747,32 @@ public class clsGRNController {
 		String strGeneratedMISCode = "";
 		String strMISCode = "";
 		String grnDate = objBean.getDtGRNDate();
+		String grnCode=objBean.getStrGRNCode();
 		StringBuilder sqlBuilder = new StringBuilder();
-		
+	    Map<String,clsMISHdModel> hmMIS=new HashMap<String,clsMISHdModel>();
 		for (clsGRNDtlModel objGRNDtl : objBean.getListGRNDtl()) {
 			if (null != objGRNDtl.getStrProdCode()) {
 				if (objGRNDtl.getStrStkble().equalsIgnoreCase("Y") && !objGRNDtl.getStrIssueLocation().equals("") && null != objGRNDtl.getStrStkble()) {
+				    if(hmMIS.containsKey(objGRNDtl.getStrIssueLocation()))
+				    {
+				    
+				    	
+				    	    clsMISHdModel objMISHdModel=  hmMIS.get(objGRNDtl.getStrIssueLocation());
+				    	    List listMISDtl=objMISHdModel.getClsMISDtlModel();
+				    	    clsMISDtlModel objMISDtlModel = new clsMISDtlModel();
+							objMISDtlModel.setStrProdCode(objGRNDtl.getStrProdCode());
+							objMISDtlModel.setDblQty(objGRNDtl.getDblQty());
+							objMISDtlModel.setDblUnitPrice(objGRNDtl.getDblUnitPrice());
+							objMISDtlModel.setDblTotalPrice(objGRNDtl.getDblTotalPrice());
+							objMISDtlModel.setStrRemarks(objGRNDtl.getStrRemarks());
+							objMISDtlModel.setStrReqCode(objMISHdModel.getStrReqCode());
+				    	   
+				    	   listMISDtl.add(objMISDtlModel);
+				    	   objMISHdModel.setClsMISDtlModel(listMISDtl);
+				    	   objMISService.funAddMISHd(objMISHdModel);
+				    	   hmMIS.put(objGRNDtl.getStrIssueLocation(), objMISHdModel);
+				    	   
+				    }else{
 					String reqCode = "";
 					String against = "Direct";
 					sqlBuilder.setLength(0);
@@ -785,21 +816,94 @@ public class clsGRNController {
 					List<clsMISDtlModel> listMISDtlModel = new ArrayList<clsMISDtlModel>();
 					listMISDtlModel.add(objMISDtlModel);
 					objMISHd.setClsMISDtlModel(listMISDtlModel);
-
-					objMISService.funAddMISHd(objMISHd);
-
-					sqlBuilder.setLength(0);
-					sqlBuilder.append("update tblgrndtl set strMISCode='" + strMISCode + "' " + "	where strgrnCode = '" + objGRNDtl.getStrGRNCode() + "' and strprodcode = '" + objMISDtlModel.getStrProdCode() + "' " + " and strIssueLocation='" + objGRNDtl.getStrIssueLocation() + "' and strClientCode='" + clientCode + "'");
-					objMISService.funInsertNonStkItemDirect(sqlBuilder.toString());
-
-					if (strGeneratedMISCode.length() > 0) {
-						strGeneratedMISCode = strGeneratedMISCode + "," + strMISCode;
-					} else {
-						strGeneratedMISCode = strMISCode;
-					}
+					 objMISService.funAddMISHd(objMISHd);
+					hmMIS.put(objGRNDtl.getStrIssueLocation(), objMISHd);
+				    }
 				}
-			}
+			} 
 		}
+		
+		 for(Map.Entry<String, clsMISHdModel> mapMIS :hmMIS.entrySet())
+		 {
+            clsMISHdModel objModel=mapMIS.getValue();			 
+            
+//            objMISService.funAddMISHd(objModel);
+            
+            for(clsMISDtlModel objDtlModel:objModel.getClsMISDtlModel())
+            {
+            	sqlBuilder.setLength(0);
+            	sqlBuilder.append("update tblgrndtl set strMISCode='" + objModel.getStrMISCode() + "' " + "	where strgrnCode = '" + grnCode + "' and strprodcode = '" + objDtlModel.getStrProdCode() + "' " + " and strIssueLocation='" + mapMIS.getKey() + "' and strClientCode='" + clientCode + "'");
+            	objMISService.funInsertNonStkItemDirect(sqlBuilder.toString());
+            }		
+            
+            if (strGeneratedMISCode.length() > 0) {
+				strGeneratedMISCode = strGeneratedMISCode + "," + objModel.getStrMISCode();
+			} else {
+				strGeneratedMISCode = objModel.getStrMISCode();
+			}
+		 }
+		
+//		for (clsGRNDtlModel objGRNDtl : objBean.getListGRNDtl()) {
+//			if (null != objGRNDtl.getStrProdCode()) {
+//				if (objGRNDtl.getStrStkble().equalsIgnoreCase("Y") && !objGRNDtl.getStrIssueLocation().equals("") && null != objGRNDtl.getStrStkble()) {
+//					String reqCode = "";
+//					String against = "Direct";
+//					sqlBuilder.setLength(0);
+//					sqlBuilder.append("select IfNULL(b.strReqCode,'') from tblpurchaseorderdtl a " + " inner join tblmrpidtl b on a.strPIcode =b.strPIcode and b.strClientCode='" + clientCode + "'" + " where a.strPOCode='" + objGRNDtl.getStrCode() + "' and a.strClientCode='" + clientCode + "' " + "group by b.strReqCode");
+//					List list = objGlobalFunctionsService.funGetList(sqlBuilder.toString(), "sql");
+//					if (!list.isEmpty() && list != null) {
+//						against = "Requisition";
+//						reqCode = list.get(0).toString();
+//					}
+//					if (objGRNDtl.getStrMISCode().isEmpty()) {
+//						strMISCode = objGlobalFunctions.funGenerateDocumentCode("frmMIS", grnDate, req);
+//						objMISHd = new clsMISHdModel(new clsMISHdModel_ID(strMISCode, clientCode));
+//						objMISHd.setIntid(0);
+//						objMISHd.setStrUserCreated(userCode);
+//						objMISHd.setDtCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+//					} else {
+//						strMISCode = objGRNDtl.getStrMISCode();
+//						objMISHd = new clsMISHdModel(new clsMISHdModel_ID(objGRNDtl.getStrMISCode().trim(), clientCode));
+//					}
+//
+//					objMISHd.setStrMISCode(strMISCode);
+//					objMISHd.setStrLocFrom(objBean.getStrLocCode());
+//					objMISHd.setStrLocTo(objGRNDtl.getStrIssueLocation());
+//					objMISHd.setDtMISDate(objGlobalFunctions.funGetDate("yyyy-MM-dd", grnDate));
+//					objMISHd.setStrUserModified(userCode);
+//					objMISHd.setStrNarration("Generated GRN Code:-" + strGRNCode);
+//					objMISHd.setDtLastModified(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+//					objMISHd.setStrAuthorise("Yes");
+//					objMISHd.setDblTotalAmt(objGRNDtl.getDblTotalPrice());
+//					objMISHd.setStrAgainst(against);
+//					objMISHd.setStrReqCode(reqCode);
+//
+//					clsMISDtlModel objMISDtlModel = new clsMISDtlModel();
+//					objMISDtlModel.setStrProdCode(objGRNDtl.getStrProdCode());
+//					objMISDtlModel.setDblQty(objGRNDtl.getDblQty());
+//					objMISDtlModel.setDblUnitPrice(objGRNDtl.getDblUnitPrice());
+//					objMISDtlModel.setDblTotalPrice(objGRNDtl.getDblTotalPrice());
+//					objMISDtlModel.setStrRemarks(objGRNDtl.getStrRemarks());
+//					objMISDtlModel.setStrReqCode(reqCode);
+//
+//					List<clsMISDtlModel> listMISDtlModel = new ArrayList<clsMISDtlModel>();
+//					listMISDtlModel.add(objMISDtlModel);
+//					objMISHd.setClsMISDtlModel(listMISDtlModel);
+//
+//					objMISService.funAddMISHd(objMISHd);
+//
+//					sqlBuilder.setLength(0);
+//					sqlBuilder.append("update tblgrndtl set strMISCode='" + strMISCode + "' " + "	where strgrnCode = '" + objGRNDtl.getStrGRNCode() + "' and strprodcode = '" + objMISDtlModel.getStrProdCode() + "' " + " and strIssueLocation='" + objGRNDtl.getStrIssueLocation() + "' and strClientCode='" + clientCode + "'");
+//					objMISService.funInsertNonStkItemDirect(sqlBuilder.toString());
+//
+//					if (strGeneratedMISCode.length() > 0) {
+//						strGeneratedMISCode = strGeneratedMISCode + "," + strMISCode;
+//					} else {
+//						strGeneratedMISCode = strMISCode;
+//					}
+//				}
+//			}
+//		}
 
 		return strGeneratedMISCode;
 	}
@@ -1444,6 +1548,7 @@ public class clsGRNController {
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String strFinYear = req.getSession().getAttribute("financialYear").toString();
+			String grnLocation="";
 			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 			if (objSetup == null) {
 				objSetup = new clsPropertySetupModel();
@@ -1452,13 +1557,14 @@ public class clsGRNController {
 			String currency="";
 			StringBuilder sqlBuilder = new StringBuilder();
 			sqlBuilder.setLength(0);
-			sqlBuilder.append(" select a.dblConversion,ifnull(strCurrency,'') from tblgrnhd a where a.strGRNCode='"+grnCode+"' ");
+			sqlBuilder.append(" select a.dblConversion,ifnull(a.strCurrency,'') ,b.strLocName from tblgrnhd a,tbllocationmaster b where a.strGRNCode='"+grnCode+"' and a.strLocCode=b.strLocCode");
 			List list = objGlobalFunctionsService.funGetList(sqlBuilder.toString(), "sql");	
 			if(list.size()>0)
 			{
 				Object obj[]=(Object[])list.get(0);
 				currValue=Double.parseDouble(obj[0].toString());
 				currency=obj[1].toString();
+				grnLocation=obj[2].toString();
 			}
 			clsCurrencyMasterModel objModel = objCurrencyMasterService.funGetCurrencyMaster(currency, clientCode);
 			if (null!=objModel )
@@ -1512,6 +1618,7 @@ public class clsGRNController {
 			hm.put("strFinYear", strFinYear);
 			hm.put("currValue", currValue);
 			hm.put("Currency",currency);
+			hm.put("location",grnLocation);
 			JasperPrint p = JasperFillManager.fillReport(jr, hm, con);
 			if (type.trim().equalsIgnoreCase("pdf")) {
 				ServletOutputStream servletOutputStream = resp.getOutputStream();
@@ -1802,7 +1909,8 @@ public class clsGRNController {
 
 			}
 		}
-
+		
+		String billNo = "";
 		List exportList = new ArrayList();
 		exportList.add("rptGRNRegisterReport_" + fromDate + "to" + toDate + "_" + userCode);
 		List titleData = new ArrayList<>();
@@ -1815,27 +1923,36 @@ public class clsGRNController {
 		filterData.add(fromDate);
 		filterData.add("To Date");
 		filterData.add(toDate);
+		
 
 		exportList.add(filterData);
 
 		DecimalFormat df = new DecimalFormat("#0.00");
 		
-		String header = "GRNCode ,GRNDate,SuppCode,SuppName,PIndicator,LocCode,LocName,ProdCode,  ProdName,  GroupCode, GroupName, " + "SGCode, SubGroupName, class,TaxCode,TaxName,TaxPer,RejQty,AcceptQty,Rate,Amount, TaxAmt,TotalAmt, ";
+		String header = "GRNCode ,BillNumber ,GRNDate,SuppCode,SuppName,PIndicator,LocCode,LocName,ProdCode,  ProdName,  GroupCode, GroupName, " + "SGCode, SubGroupName, class,TaxCode,TaxName,TaxPer,RejQty,AcceptQty,Rate,Amount, TaxAmt,TotalAmt, ";
 		String[] excelHeader = header.split(",");
 		exportList.add(excelHeader);
 
+	
 		StringBuilder sqlBuilderDtl = new StringBuilder();
 		sqlBuilderDtl.setLength(0);
 		sqlBuilderDtl.append("  select a.strGRNCode as GRNCode ,DATE_FORMAT(DATE(a.dtGRNDate),'%d-%m-%Y')  AS GRNDate,a.strSuppCode as SuppCode, d.strPName as SuppName," + "  d.strPType as PIndicator, a.strLocCode as LocCode,  e.strLocName as LocName,b.strProdCode, " + "  c.strProdName as ProdName,f.strGCode as GroupCode, g.strGName as GroupName, f.strSGCode, "
-				+ "  f.strSGName as SubGroupName, case c.strClass  WHEN '' THEN 'NA'  else c.strClass  end  as strClass," + "  'TaxCode','TaxName','TaxPer',  b.dblRejected as RejQty," + "  (b.dblQty-b.dblRejected) as AcceptQty,b.dblUnitPrice as Rate, " + "  b.dblUnitPrice*(b.dblQty-b.dblRejected) as Amount, 'TaxAmt'," + "  ifnull(a.dblTotal,'') as TotalAmt "
+				+ "  f.strSGName as SubGroupName, case c.strClass  WHEN '' THEN 'NA'  else c.strClass  end  as strClass," + "  'TaxCode','TaxName','TaxPer',  b.dblRejected as RejQty," + "  (b.dblQty-b.dblRejected) as AcceptQty,b.dblUnitPrice as Rate, " + "  b.dblUnitPrice*(b.dblQty-b.dblRejected) as Amount, 'TaxAmt'," + "  ifnull(a.dblTotal,'') as TotalAmt , IFNULL(a.strBillNo,'')"
 				+ "  from tblgrnhd a ,tblgrndtl b ,tblproductmaster c,tblpartymaster d,tbllocationmaster e,tblsubgroupmaster f,tblgroupmaster g  " + "	 where a.strGRNCode=b.strGRNCode and b.strProdCode=c.strProdCode " + "  and a.strSuppCode=d.strPCode and a.strLocCode=e.strLocCode and c.strSGCode=f.strSGCode " + "  and f.strGCode = g.strGCode and a.strClientCode='" + clientCode + "' "
 				+ "  and date(a.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' ");
 
 		sqlBuilderDtl.append(" and " + "(" + strLocCodes + ")" + "and " + "(" + strSuppCodes + ") ");
 
 		sqlBuilderDtl.append(" and a.strClientCode=b.strClientCode " + " and b.strClientCode=c.strClientCode " + " and c.strClientCode=d.strClientCode " + " and d.strClientCode=e.strClientCode " + " and e.strClientCode=f.strClientCode " + " and f.strClientCode=g.strClientCode and e.strPropertyCode='" + propertyCode + "' " + " order by a.strGRNCode,d.strPName,c.strProdName ");
+		
+		
 
+		
+		
 		List list = objGlobalFunctionsService.funGetList(sqlBuilderDtl.toString(), "sql");
+		
+
+	
 		List openingStklist = new ArrayList();
 		String strCurr = req.getSession().getAttribute("currValue").toString();
 		double currValue = Double.parseDouble(strCurr);
@@ -1892,6 +2009,8 @@ public class clsGRNController {
 
 			List dataList = new ArrayList<>();
 			dataList.add(ob[0].toString()); // GRNCode
+			billNo = ob[23].toString();
+			dataList.add(billNo);
 			dataList.add(ob[1].toString()); // GRNDate
 			dataList.add(ob[2].toString()); // SuppCode
 			dataList.add(ob[3].toString()); // SuppName
@@ -1922,9 +2041,11 @@ public class clsGRNController {
 			subToltal += Double.parseDouble(ob[20].toString());
 
 			openingStklist.add(dataList);
+		
 
 		}
 
+		
 		List dataListblank = new ArrayList<>();
 		for (int i = 0; i < 23; i++) {
 			dataListblank.add("");

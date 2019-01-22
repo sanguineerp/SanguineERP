@@ -52,8 +52,8 @@ import com.sanguine.model.clsMISHdModel_ID;
 import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsRequisitionHdModel;
+import com.sanguine.model.clsUserDtlModel;
 import com.sanguine.service.clsGlobalFunctionsService;
-import com.sanguine.service.clsGroupMasterService;
 import com.sanguine.service.clsLocationMasterService;
 import com.sanguine.service.clsMISService;
 import com.sanguine.service.clsProductMasterService;
@@ -145,6 +145,16 @@ public class clsMISController {
 			list = new ArrayList<String>();
 			model.put("strProcessList", list);
 		}
+		
+		  model.put("miseditable", true);
+		    
+		    HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
+		    clsUserDtlModel objUserDtlModel = (clsUserDtlModel)hmUserPrivileges.get("frmMIS");
+		    if (objUserDtlModel != null) {
+		      if (objUserDtlModel.getStrEdit().equals("false")) {
+		        model.put("miseditable", false);
+		      }
+		    }
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmMIS_1", "command", bean);
 		} else if ("1".equalsIgnoreCase(urlHits)) {
@@ -186,6 +196,7 @@ public class clsMISController {
 		
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		if (!result.hasErrors()) {
+			misBean.setStrMISCode(objGlobalFunctions.funIfNull(misBean.getStrMISCode(), "", misBean.getStrMISCode()));
 			List<clsMISDtlModel> listonMISDtl = misBean.getListMISDtl();
 			if (null != listonMISDtl && listonMISDtl.size() > 0) {
 				clsMISHdModel objMISHdModel = funPrepareModelHd(misBean, req);
@@ -254,7 +265,7 @@ public class clsMISController {
 		}
 		long lastNo = 0;
 		clsMISHdModel objMISHd = null;
-
+		misHdBean.setStrMISCode(objGlobalFunctions.funIfNull(misHdBean.getStrMISCode(), "", misHdBean.getStrMISCode()));
 		if (misHdBean.getStrMISCode().length() == 0) {
 			String strMISCode = objGlobalFunctions.funGenerateDocumentCode("frmMIS", misHdBean.getDtMISDate(), req);
 			objMISHd = new clsMISHdModel(new clsMISHdModel_ID(strMISCode, clientCode));

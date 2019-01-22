@@ -70,6 +70,7 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	private String strMask;
 	private String strRangeAdd;
 	private String strClientCode;
+	
 
 	@Column(name = "strDivisionAdd", columnDefinition = "VARCHAR(255) default ''")
 	private String strDivisionAdd;
@@ -197,6 +198,11 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	
 	@Column(name="strGRNProdPOWise",columnDefinition="VARCHAR(10) default ''")
 	private String strGRNProdPOWise;
+	
+	@Column(name = "strPORateEditable", columnDefinition = "VARCHAR(10) default ''")
+	private String strPORateEditable;
+	
+	
 	
 	
 	// BAnk Dtl Tab
@@ -1201,6 +1207,14 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 
 	public void setStrGRNProdPOWise(String strGRNProdPOWise) {
 		this.strGRNProdPOWise = strGRNProdPOWise;
+	}
+
+	public String getStrPORateEditable() {
+		return strPORateEditable;
+	}
+
+	public void setStrPORateEditable(String strPORateEditable) {
+		this.strPORateEditable = strPORateEditable;
 	}
 	
 	

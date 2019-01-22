@@ -216,6 +216,7 @@
 	<parameter name="strPin" class="java.lang.String"/>
 	<parameter name="strFinYear" class="java.lang.String"/>
 	<parameter name="Currency" class="java.lang.String"/>
+	<parameter name="location" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select 1 from dual]]>
 	</queryString>
@@ -321,9 +322,9 @@
 			<textField>
 				<reportElement x="7" y="67" width="209" height="15" uuid="0bdcb50f-6d5a-4a51-89f4-1519425deaf0"/>
 				<textElement>
-					<font fontName="Serif" size="8"/>
+					<font fontName="Serif" size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Date :"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Location :"+$P{location}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="7" y="64" width="209" height="1" uuid="4563b136-9227-4360-a4e2-ff6b50bbafe5"/>

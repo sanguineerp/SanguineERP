@@ -36,6 +36,8 @@ import com.sanguine.util.clsReportBean;
 public class clsMasterListReportController {
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
+	
+	@Autowired
 	private clsGlobalFunctions objGlobal;
 
 	@Autowired
@@ -136,9 +138,9 @@ public class clsMasterListReportController {
 				masterName = "Sub Group Master";
 				break;
 			}
-			case "tblprodsuppmaster": {
-				code = "strSGCode";
-				Name = "strSGName";
+			case "tblpartymaster": {
+				code = "strPCode";
+				Name = "strPName";
 				masterName = "Supplier Master";
 				break;
 			}

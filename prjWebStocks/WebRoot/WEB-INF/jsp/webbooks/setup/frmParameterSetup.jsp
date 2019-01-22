@@ -298,7 +298,7 @@
 	function funSetCheckStatusAndValue(currentCheckBox,flag)
 	{			    
 		var value=flag;
-	    if(value.toUpperCase()=="Y")
+	    if(value=="Y")
 	    {  
 	    	$(currentCheckBox).prop("checked",true);
 	    	$(currentCheckBox).val("Y");
@@ -463,6 +463,10 @@
 						funSetCheckStatusAndValue(chkMultipleDebtorYN,response.isMultipleDebtor);
 						$("#txtOnlineNEFTACCode").val(response.neftonlineAccountCode);
 						$("#txtOnlineNEFTACName").val(response.neftonlineAccountName);
+						$("#txtPettyCash").val(response.dblPettyAmt);
+						$("#strShowPLRevenue").val(response.strShowPLRevenue);
+						
+						
 					/* 	$("#").val(response.PDCAccountCode);
 						$("#").val(response.PDCAccountDesc);
 						$("#").val(response.sML); */		        	
@@ -646,57 +650,57 @@
         		<tr>
 			    	<td><label>Debtor Control A/C</label></td>
 			    	<td><s:input id="txtDebtorControlACCode" path="strControlCode" readonly="true" ondblclick="funSetACType('debtorControlAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtDebtorControlACName" path="strControlName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    				    		        			  
+			    	<td colspan="7"><s:input id="txtDebtorControlACName" path="strControlName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    				    		        			  
 				</tr>
 				<tr>
 			    	<td><label>Debtor Billable A/C</label></td>
 			    	<td><s:input id="txtDebtorBillableACCode" path="strBillableCode" readonly="true" ondblclick="funSetACType('debtorBillableAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtDebtorBillableACName" path="strBillableName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtDebtorBillableACName" path="strBillableName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Debtor Suspense A/C</label></td>
 			    	<td><s:input id="txtDebtorSuspenseACCode" path="strDbtrSuspAcctCode" readonly="true" ondblclick="funSetACType('debtorSuspenseAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtDebtorSuspenseACName" path="strDbtrSuspAcctName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtDebtorSuspenseACName" path="strDbtrSuspAcctName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>															
 				<tr>
 			    	<td><label>Debtors Suspense Code</label></td>
 			    	<td><s:input id="txtDebtorsSuspenseCode" path="strSuspenceCode" readonly="true" ondblclick="funSetACType('debtorSuspenseCode')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtDebtorsSuspenseName" path="strSuspenceName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtDebtorsSuspenseName" path="strSuspenceName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Rounding Off A/C</label></td>
 			    	<td><s:input id="txtRoundingOffACCode" path="strRoundingCode" readonly="true" ondblclick="funSetACType('roundingOffAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtRoundingOffACName" path="strRoundingName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtRoundingOffACName" path="strRoundingName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Reservation Advance Party A/C</label></td>
 			    	<td><s:input id="txtReservationAdvPartyACCode" path="strReserveAccCode" readonly="true" ondblclick="funSetACType('reservationAdvPartyAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtReservationAdvPartyACName" path="strReserveAccName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtReservationAdvPartyACName" path="strReserveAccName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Room Advance A/C</label></td>
 			    	<td><s:input id="txtRoomAdvACCode" path="strDbtRoomAdvCode" readonly="true" ondblclick="funSetACType('roomAdvAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtRoomAdvACName" path="strDbtRoomAdvName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtRoomAdvACName" path="strDbtRoomAdvName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Invoicer Advance </label></td>
 			    	<td><s:input id="txtInvoicerAdvCode" path="strInvoicerAdvCode" readonly="true" ondblclick="funSetACType('invoicerAdv')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtInvoicerAdvName" path="strInvoicerAdvName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtInvoicerAdvName" path="strInvoicerAdvName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Online NEFT A/C Code</label></td>
 			    	<td><s:input id="txtOnlineNEFTACCode" path="NEFTOnlineAccountCode" readonly="true" ondblclick="funSetACType('onlineNEFTAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtOnlineNEFTACName" path="NEFTOnlineAccountName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtOnlineNEFTACName" path="NEFTOnlineAccountName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Room A/C</label></td>
 			    	<td><s:input id="txtRoomACCode" path="strDbtRoomACCode" readonly="true" ondblclick="funSetACType('roomAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtRoomACName" path="strDbtRoomACName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtRoomACName" path="strDbtRoomACName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Post Dated Cheque A/C</label></td>
 			    	<td><s:input id="txtPostDatedChequeACCode" path="strPostDatedChequeACCode" readonly="true" ondblclick="funSetACType('postDatedAdvAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtPostDatedChequeACName" path="strPostDatedChequeACName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtPostDatedChequeACName" path="strPostDatedChequeACName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			  	    <td><label>Last A/R Transfer Date</label></td>	
@@ -713,12 +717,12 @@
 				<tr>
 			    	<td><label>ECS Bank</label></td>
 			    	<td><s:input id="txtECSBankCode" path="strECSBankcode" readonly="true" ondblclick="funSetACType('ecsBank')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtECSBankName" path="strECSBankName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtECSBankName" path="strECSBankName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Default Sanction</label></td>
 			    	<td><s:input id="txtDefaultSanctionCode" path="strSancCode" readonly="true" ondblclick="funSetACType('defaultSanction')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtDefaultSanctionName" path="strSancName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtDefaultSanctionName" path="strSancName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Reminder Letter Code Prefix</label></td>
@@ -751,12 +755,12 @@
 				<tr>
 			    	<td><label>Debtor Ledger A/C</label></td>
 			    	<td><s:input id="txtDebtorLedgerACCode" path="strDebtorLedgerACCode" readonly="true" ondblclick="funSetACType('debtorLedgerAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtDebtorLedgerACName" path="strDebtorLedgerACName" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtDebtorLedgerACName" path="strDebtorLedgerACName" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Advance A/C</label></td>
 			    	<td><s:input id="txtAdvACCode" path="strAdvanceACCode" readonly="true" ondblclick="funSetACType('advAC')" cssClass="searchTextBox"/></td>			        			        
-			    	<td colspan="7"><s:input id="txtAdvACName" path="strAdvanceAcct" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
+			    	<td colspan="7"><s:input id="txtAdvACName" path="strAdvanceAcct" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Master Driven Narration</label></td>
@@ -793,6 +797,7 @@
         		
         			<td ><label>Stock In Hand Name</label></td>
         			<td colspan="2"><s:input id="txtstckInHandName" path="strStockInHandAccName" cssClass="longTextBox"  /></td><%-- cssClass="longTextBox" --%>
+        			<td colspan="7"></td>
         		</tr>
         		
         			<tr>
@@ -801,6 +806,20 @@
         		
         			<td><label>Closing Stock Name</label></td>
         			<td colspan="2"><s:input id="txtstckInHandName" path="strClosingName" cssClass="longTextBox"  /></td><%-- cssClass="longTextBox" --%>
+        		<td colspan="7"></td>
+        		</tr>
+        		<tr>
+        		<td><label>Petty Cash</label></td>
+        			<td><s:input id="txtPettyCash" path="dblPettyAmt" class="decimal-places numberField"  value="0"  /></td><%-- cssClass="longTextBox" --%>
+        			
+        		<td><label>Show P/L Revenue Data </label></td>
+        			<td ><s:select path="strShowPLRevenue" id="strShowPLRevenue" cssClass="BoxW48px" cssStyle="width:100%">
+					         <s:option selected="selected" value="POS">POS Revenue</s:option>
+					         <s:option  value="Invoice">Invoice</s:option>
+					</s:select></td>
+					<td colspan="5"></td>
+					
+<!--         		<td colspan="1"></td> -->
         		</tr>
         	</table>
         </div>
@@ -849,15 +868,15 @@
         		</tr>
         		<tr>
 			    	<td><label>Common DataBase Name</label></td>			    				        			       
-			    	<td><s:input id="txtCommonDBName" path="strPOSCommonDB" required="true" cssClass="longTextBox" /></td>			    		        			   
+			    	<td><s:input id="txtCommonDBName" path="strPOSCommonDB" cssClass="longTextBox" /></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>Q File DataBase Name</label></td>			    				        			       
-			    	<td><s:input id="txtQFileDBName" path="strPOSQfileDB" required="true" cssClass="longTextBox" /></td>			    		        			   
+			    	<td><s:input id="txtQFileDBName" path="strPOSQfileDB" cssClass="longTextBox" /></td>			    		        			   
 				</tr>
 				<tr>
 			    	<td><label>MSDN DataBase Name</label></td>			    				        			       
-			    	<td><s:input id="txtMSDNDBName" path="strPOSMSDNdb" required="true" cssClass="longTextBox" /></td>			    		        			   
+			    	<td><s:input id="txtMSDNDBName" path="strPOSMSDNdb" cssClass="longTextBox" /></td>			    		        			   
 				</tr>
         	</table>
         </div>
@@ -931,7 +950,7 @@
         	<table class="masterTable">
         		<tr>
         			<td><label>SMTP Server ID</label></td>        						    				        			      
-			    	<td colspan="3"><s:input id="txtEmailSMTPServerId" path="strEmailSmtpServer" required="true" cssClass="longTextBox" /></td>			    		        			   				
+			    	<td colspan="3"><s:input id="txtEmailSMTPServerId" path="strEmailSmtpServer" cssClass="longTextBox" /></td>			    		        			   				
         		</tr>
         		<tr>
         			<td><label>Is SSL Required</label></td>        						    				        			      
@@ -939,19 +958,19 @@
         		</tr>
         		<tr>
         			<td><label>Port No.</label></td>        						    				        			      
-			    	<td colspan="3"><s:input id="txtPortNo" path="strEmailSMTPPort" required="true" cssClass="longTextBox" /></td>			    		        			   				
+			    	<td colspan="3"><s:input id="txtPortNo" path="strEmailSMTPPort" cssClass="longTextBox" /></td>			    		        			   				
         		</tr>
         		<tr>
         			<td><label>User ID</label></td>        						    				        			      
-			    	<td colspan="3"><s:input id="txtUserId" path="strUserid" required="true" cssClass="longTextBox" /></td>			    		        			   				
+			    	<td colspan="3"><s:input id="txtUserId" path="strUserid" cssClass="longTextBox" /></td>			    		        			   				
         		</tr>
         		<tr>
         			<td><label>Password</label></td>        						    				        			      
-			    	<td colspan="3"><s:password id="txtPassword" path="strPassword" required="true" cssClass="longTextBox" /></td>			    		        			   				
+			    	<td colspan="3"><s:password id="txtPassword" path="strPassword" cssClass="longTextBox" /></td>			    		        			   				
         		</tr>
         		<tr>
         			<td><label>From</label></td>        						    				        			      
-			    	<td><s:input id="txtFromEmailId" path="strEmailFrom" required="true" cssClass="longTextBox" style="width: 345px;" /></td>		
+			    	<td><s:input id="txtFromEmailId" path="strEmailFrom" cssClass="longTextBox" style="width: 345px;" /></td>		
 			    	<td><a href="#">(Show Details...)</a></td>
 			    	<td></td>   	    		        			   				
         		</tr>
@@ -970,19 +989,19 @@
         		<tr>
 			    	<td style="width: 135px;"><label>Invoice Letter Code</label></td>
 			    	<td><s:input id="txtInvoiceLetterCode" path="strLetterCode" readonly="true" ondblclick="funSetACType('')" cssClass="searchTextBox"/></td>			        			        
-			    	<td style="float: right; width: 165%; "><s:input id="txtInvoiceLetterName" path="" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>
+			    	<td style="float: right; width: 165%; "><s:input id="txtInvoiceLetterName" path="" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>
 			    	<td></td>			    		    				    		        			 
 				</tr>
 				<tr>
 			    	<td><label>Receipt Letter Code</label></td>
 			    	<td><s:input id="txtReceiptLetterCode" path="strReceiptLetterCode" readonly="true" ondblclick="funSetACType('')" cssClass="searchTextBox"/></td>			        			        
-			    	<td style="float: right; width: 165%; "><s:input id="txtReceiptLetterName" path="" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>
+			    	<td style="float: right; width: 165%; "><s:input id="txtReceiptLetterName" path="" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>
 			    	<td></td>			    			    				    		        			 
 				</tr>
 				<tr>
 			    	<td><label>ECS Letter Code</label></td>
 			    	<td><s:input id="txtECSLetterCode" path="strEcsLetterCode" readonly="true" ondblclick="funSetACType('')" cssClass="searchTextBox"/></td>			        			        
-			    	<td style="float: right; width: 165%; "><s:input id="txtECSLetterName" path="" required="true" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>
+			    	<td style="float: right; width: 165%; "><s:input id="txtECSLetterName" path="" readonly="true" cssClass="longTextBox" cssStyle="width:96%"/></td>
 			    	<td></td>	
 				</tr>
 				<tr>

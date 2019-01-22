@@ -48,6 +48,7 @@ import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsStkPostingDtlModel;
 import com.sanguine.model.clsStkPostingHdModel;
 import com.sanguine.model.clsStkPostingHdModel_ID;
+import com.sanguine.model.clsUserDtlModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsProductMasterService;
 import com.sanguine.service.clsSetupMasterService;
@@ -105,6 +106,17 @@ public class clsStkPostingController {
 			model.put("authorizationPhyStkCode", docCode);
 		}
 		model.put("urlHits", urlHits);
+		
+		model.put("phystckeditable", true);
+	    
+        HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
+		clsUserDtlModel objUserDtlModel = (clsUserDtlModel)hmUserPrivileges.get("frmPhysicalStkPosting");
+		if (objUserDtlModel != null) {
+		if (objUserDtlModel.getStrEdit().equals("false")) {
+		    model.put("phystckeditable",false);
+		  }
+		}
+		
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmPhysicalStkPosting_1", "command", new clsPhysicalStkPostBean());
 		} else if ("1".equalsIgnoreCase(urlHits)) {
@@ -203,6 +215,7 @@ public class clsStkPostingController {
 		String userCode = request.getSession().getAttribute("usercode").toString();
 		String propCode = request.getSession().getAttribute("propertyCode").toString();
 		String startDate = request.getSession().getAttribute("startDate").toString();
+		objBean.setStrPSCode(objGlobalFunctions.funIfNull(objBean.getStrPSCode(), "", objBean.getStrPSCode()));
 		clsStkPostingHdModel objHdModel = funPrepareModel(objBean, userCode, clientCode, propCode, startDate, request);
 		objGlobal = new clsGlobalFunctions();
 		if (!result.hasErrors()) {

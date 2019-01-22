@@ -398,7 +398,7 @@ public class clsRecipeMasterController {
 					+ "cp.strProdName as childProductName,cp.strRecipeUOM as childUOM, d.dblQty,cp.dblCostRM/cp.dblRecipeConversion as  price, "
 					+ "IFNULL(pr.strprocessname,'') as strprocessname,ifnull(cl.strlocname,'') as childLocation  ,"
 					+ "date(h.dtCreatedDate) as dtCreatedDate,date(h.dtValidFrom) as dtValidFrom," 
-					+ "date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty) as value,d.dblQty "
+					+ "date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty) as value,d.dblQty,p.dblRecipeConversion "
 					+ "from tblbommasterhd  h inner join tblbommasterdtl AS d ON h.strBOMCode = d.strBOMCode and d.strClientCode='" + clientCode + "' " 
 					+ "left outer join tblproductmaster   p ON h.strParentCode = p.strProdCode and p.strClientCode='" + clientCode + "' " + "left outer join tblproductmaster AS cp ON d.strChildCode = cp.strProdCode and cp.strClientCode='" + clientCode + "' "
 					+ "left outer join tbllocationmaster  lp ON lp.strLocCode = p.strLocCode and lp.strClientCode='" + clientCode + "' " + "left outer join tbllocationmaster AS cl ON cl.strLocCode = cp.strLocCode and cl.strClientCode='" + clientCode + "' "
@@ -434,6 +434,11 @@ public class clsRecipeMasterController {
 					objBean.setStrUOM(obj[9].toString());
 					objBean.setStrLocation(obj[13].toString());
 					List<String> listChildNodes11 = new ArrayList<String>();
+					
+					String sqlParentConver="select a.dblRecipeConversion from tblproductmaster a where a.strProdCode='"+obj[7].toString()+"' ";
+					List listParentConver = objGlobalFunctionsService.funGetList(sqlParentConver, "sql");
+					
+					
 					funGetBOMNodes(obj[7].toString(), 0,Double.parseDouble(obj[10].toString()), listChildNodes11);
 					if(listChildNodes11.size()>0)
 					{
@@ -462,6 +467,8 @@ public class clsRecipeMasterController {
 						}
 						
 					}
+					bomrate=bomAmt/Double.parseDouble(listParentConver.get(0).toString());
+					bomAmt=bomrate*Double.parseDouble(obj[19].toString());
 					}
 					objBean.setDblAmount(bomAmt);
 					objBean.setDblPrice(bomrate);
@@ -595,10 +602,11 @@ public class clsRecipeMasterController {
 	public double funGetBOMQty(String childCode, String parentCode) {
 		double bomQty = 0;
 		try {
-			String sql = "select ifnull(left(((c.dblReceiveConversion/c.dblIssueConversion)/c.dblRecipeConversion),6) * b.dblQty,0) as BOMQty " + "from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + "where a.strBOMCode=b.strBOMCode and a.strParentCode=d.strProdCode and a.strParentCode='" + parentCode + "' and b.strChildCode=c.strProdCode " + "and b.strChildCode='"+ childCode + "'";
+//			String sql = "select ifnull(left(((c.dblReceiveConversion/c.dblIssueConversion)/c.dblRecipeConversion),6) * b.dblQty,0) as BOMQty " + "from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + "where a.strBOMCode=b.strBOMCode and a.strParentCode=d.strProdCode and a.strParentCode='" + parentCode + "' and b.strChildCode=c.strProdCode " + "and b.strChildCode='"+ childCode + "'";
+			String sql = "select ifnull(((c.dblReceiveConversion/c.dblIssueConversion)/c.dblRecipeConversion) * b.dblQty,0) as BOMQty " + "from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + "where a.strBOMCode=b.strBOMCode and a.strParentCode=d.strProdCode and a.strParentCode='" + parentCode + "' and b.strChildCode=c.strProdCode " + "and b.strChildCode='"+ childCode + "'";
 			List listChildQty = objGlobalFunctionsService.funGetList(sql, "sql");
 			if (listChildQty.size() > 0) {
-				bomQty = (Double) listChildQty.get(0);
+				bomQty =  Double.parseDouble((listChildQty.get(0).toString()));
 			}
 
 		} catch (Exception e) {

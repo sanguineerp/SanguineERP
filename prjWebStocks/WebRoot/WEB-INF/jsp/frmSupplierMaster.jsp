@@ -794,7 +794,7 @@ var strcheckboxStatus="N";
 					    		<label>Bank Address Line 1  </label>
 					    	</td>
 					        <td colspan="3">
-					        	<s:input  id="txtBankAdd1" name="txtBankAdd1" path="strBankAdd1"  cssStyle="text-transform: uppercase;" cssClass="longTextBox"/>
+					        	<s:input  id="txtBankAdd1" name="txtBankAdd1" maxlength="45" path="strBankAdd1"  cssStyle="text-transform: uppercase;" cssClass="longTextBox"/>
 					        </td>
 				    	</tr>
 				    	
@@ -803,7 +803,7 @@ var strcheckboxStatus="N";
 				    			<label>Bank Address Line 2  </label>
 				    		</td>		
 		       				<td colspan="3">
-		       					<s:input id="txtBankAdd2"  name="txtBankAdd2" path="strBankAdd2" cssStyle="text-transform: uppercase;" cssClass="longTextBox"/>
+		       					<s:input id="txtBankAdd2"  name="txtBankAdd2" maxlength="45" path="strBankAdd2" cssStyle="text-transform: uppercase;" cssClass="longTextBox"/>
 		       				</td>
 				    	</tr>
 				    	

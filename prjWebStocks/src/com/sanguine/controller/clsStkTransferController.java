@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.json.simple.JSONArray;
@@ -50,7 +49,6 @@ import com.sanguine.crm.model.clsPartyMasterModel;
 import com.sanguine.crm.service.clsPartyMasterService;
 import com.sanguine.model.clsAuditDtlModel;
 import com.sanguine.model.clsAuditHdModel;
-import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsLinkUpHdModel;
 import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsProductMasterModel;
@@ -59,6 +57,7 @@ import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsStkTransferDtlModel;
 import com.sanguine.model.clsStkTransferHdModel;
 import com.sanguine.model.clsStkTransferHdModel_ID;
+import com.sanguine.model.clsUserDtlModel;
 import com.sanguine.service.clsAttributeMasterService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsLinkUpService;
@@ -141,6 +140,15 @@ public class clsStkTransferController
 		model.put("urlHits", urlHits);
 		clsStockTransferBean bean = new clsStockTransferBean();
 		bean.setStrMaterialIssue("");
+		model.put("steditable",true);
+	    
+	    HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
+	    clsUserDtlModel objUserDtlModel = (clsUserDtlModel)hmUserPrivileges.get("frmStockTransfer");
+	    if (objUserDtlModel != null) {
+	      if (objUserDtlModel.getStrEdit().equals("false")) {
+	        model.put("steditable", false);
+	      }
+	    }
 		if ("2".equalsIgnoreCase(urlHits))
 		{
 			return new ModelAndView("frmStockTransfer_1", "command", bean);
@@ -221,6 +229,7 @@ public class clsStkTransferController
 		objGlobal = new clsGlobalFunctions();
 		if (!result.hasErrors())
 		{
+			objBean.setStrSTCode(objGlobalFunctions.funIfNull(objBean.getStrSTCode(), "", objBean.getStrSTCode()));
 			List<clsStkTransferDtlModel> listStkTransDtl = objBean.getListStkTransDtl();
 			if (null != listStkTransDtl && listStkTransDtl.size() > 0)
 			{

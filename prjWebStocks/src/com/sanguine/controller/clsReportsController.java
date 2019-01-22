@@ -4836,9 +4836,101 @@ public class clsReportsController {
 		}
 		else
 		{
-			funCallBillWisePurchaseRegisterReport(objBean, resp, req);
+ 			 
+			
+				funCallBillWisePurchaseRegisterReport(objBean, resp, req);
+			
+			
+			
 		}
 	}
+	
+	
+	@RequestMapping(value = "/rptPurchaseRegisterReportExcelExport", method = RequestMethod.POST)
+	private void funCategoryWiseSalesOrderExcelReport(@ModelAttribute("command") clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
+	{
+
+		// funCallCategoryWiseSalesOrderReport(objBean, resp, req);
+
+		funCallBillWisePurchaseExcel(objBean, resp, req);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private ModelAndView funCallBillWisePurchaseExcel(clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
+	{
+		Connection con = objGlobalFunctions.funGetConnection(req);
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String companyName = req.getSession().getAttribute("companyName").toString();
+		String userCode = req.getSession().getAttribute("usercode").toString();
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+		
+		if (objSetup == null)
+		{
+			objSetup = new clsPropertySetupModel();
+		}
+		
+		List exportList = new ArrayList();
+
+		
+		String header = "Supplier Code,GRN no,Bill no,Location Name,GRN Date,Taxable Amt,Tax Amt,Total Amt";
+		
+		String[] excelHeader = header.split(",");
+
+		exportList.add(excelHeader);
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT d.strPName,a.strGRNCode,a.strBillNo, e.strLocName, DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y')dtGRNDate,ifnull(f.strTaxableAmt,0) AS Taxable_Amt,ifnull(f.strTaxAmt,0) AS TaxAmt,ifNull(a.dblTotal,0) AS Amt"
++" FROM tblgrnhd a left outer join tblgrntaxdtl f on a.strGRNCode=f.strGRNCode, tblpartymaster d,tbllocationmaster e "
++"WHERE a.strSuppCode=d.strPCode AND a.strLocCode=e.strLocCode ");
+		
+		List list = objGlobalFunctionsService.funGetList(sql.toString(), "sql");
+		List openinglist = new ArrayList();
+
+		HashMap<String, Double> hmTaxTotalGrid = new HashMap<String, Double>();
+		for (int i = 0; i < list.size(); i++) {
+
+			Object[] ob = (Object[]) list.get(i);
+		List dataList = new ArrayList<>();
+		
+		dataList.add(ob[0].toString());
+		dataList.add(ob[1].toString()); 
+		dataList.add(ob[2].toString()); 
+		dataList.add(ob[3].toString()); 
+		dataList.add(ob[4].toString()); 
+		dataList.add(Double.parseDouble(ob[5].toString())); 
+		dataList.add(Double.parseDouble(ob[6].toString()));
+		dataList.add(Double.parseDouble(ob[7].toString())); 
+
+		
+		openinglist.add(dataList);
+		
+		}	
+		
+		/*for (Map.Entry<String, Double> entry : hmTaxTotalGrid.entrySet()) {
+			List dataListTax = new ArrayList<>();
+
+			dataListTax.add("");
+			dataListTax.add("");
+			dataListTax.add("");
+			dataListTax.add("");
+			dataListTax.add("");
+			dataListTax.add("");
+			dataListTax.add("");	
+			
+			openinglist.add(dataListTax);
+		}*/
+		
+		exportList.add(openinglist);
+		
+		
+		return new ModelAndView("excelView", "stocklist", exportList);
+	
+	
+	}
+	
+	
+	
 	@SuppressWarnings(
 			{ "unused", "unused", "unused", "unchecked" })
 	private void funCallBillWisePurchaseRegisterReport(clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)

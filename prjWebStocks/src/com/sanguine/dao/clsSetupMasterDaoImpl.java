@@ -275,7 +275,7 @@ public class clsSetupMasterDaoImpl implements clsSetupMasterDao {
 
 		}
 
-		objSetUpModel.setStrShowStockInOP(objPropSetUp3[26].toString());
+ 		objSetUpModel.setStrShowStockInOP(objPropSetUp3[26].toString());
 		objSetUpModel.setStrShowAvgQtyInOP(objPropSetUp3[27].toString());
 		objSetUpModel.setStrShowStockInSO(objPropSetUp3[28].toString());
 		objSetUpModel.setStrShowAvgQtyInSO(objPropSetUp3[29].toString());
@@ -295,7 +295,7 @@ public class clsSetupMasterDaoImpl implements clsSetupMasterDao {
 		objSetUpModel.setStrShowAllPartyToAllLoc(objPropSetUp3[43].toString());
 
 
-		String sql4 = "SELECT a.strRateHistoryFormat,a.strPOSlipFormat,a.strSRSlipFormat,a.strWeightedAvgCal,a.strGRNRateEditable,a.strInvoiceRateEditable,	a.strSORateEditable,a.strSettlementWiseInvSer,a.strGRNProdPOWise "
+		String sql4 = "SELECT a.strRateHistoryFormat,a.strPOSlipFormat,a.strSRSlipFormat,a.strWeightedAvgCal,a.strGRNRateEditable,a.strInvoiceRateEditable,	a.strSORateEditable,a.strSettlementWiseInvSer,a.strGRNProdPOWise , a.strPORateEditable "
 				+ " FROM clsPropertySetupModel a where a.strPropertyCode='" + propertyCode + "' and  a.strClientCode ='" + clientCode + "' ";
 
 		Query query4 = sessionFactory.getCurrentSession().createQuery(sql4);
@@ -310,6 +310,7 @@ public class clsSetupMasterDaoImpl implements clsSetupMasterDao {
 		objSetUpModel.setStrSORateEditable(objPropSetUp4[6].toString());
 		objSetUpModel.setStrSettlementWiseInvSer(objPropSetUp4[7].toString());
 		objSetUpModel.setStrGRNProdPOWise(objPropSetUp4[8].toString());
+		objSetUpModel.setStrPORateEditable(objPropSetUp4[9].toString());
 		return objSetUpModel;
 
 	}

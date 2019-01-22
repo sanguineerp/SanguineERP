@@ -314,10 +314,11 @@ public class clsWhatIfAnalysisController {
 	public double funGetBOMQty(String childCode, String parentCode) {
 		double bomQty = 0;
 		try {
-			String sql = "select ifnull(left(((c.dblReceiveConversion/c.dblIssueConversion)/c.dblRecipeConversion),6) * b.dblQty,0) as BOMQty " + "from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + "where a.strBOMCode=b.strBOMCode and a.strParentCode=d.strProdCode and a.strParentCode='" + parentCode + "' and b.strChildCode=c.strProdCode " + "and b.strChildCode='"+ childCode + "'";
+//			String sql = "select ifnull(left(((c.dblReceiveConversion/c.dblIssueConversion)/c.dblRecipeConversion),6) * b.dblQty,0) as BOMQty " + "from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + "where a.strBOMCode=b.strBOMCode and a.strParentCode=d.strProdCode and a.strParentCode='" + parentCode + "' and b.strChildCode=c.strProdCode " + "and b.strChildCode='"+ childCode + "'";
+			String sql = "select ifnull(((c.dblReceiveConversion/c.dblIssueConversion)/c.dblRecipeConversion) * b.dblQty,0) as BOMQty " + "from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + "where a.strBOMCode=b.strBOMCode and a.strParentCode=d.strProdCode and a.strParentCode='" + parentCode + "' and b.strChildCode=c.strProdCode " + "and b.strChildCode='"+ childCode + "'";
 			List listChildQty = objGlobalFunctionsService.funGetList(sql, "sql");
 			if (listChildQty.size() > 0) {
-				bomQty = (Double) listChildQty.get(0);
+				bomQty =  Double.parseDouble((listChildQty.get(0).toString()));
 			}
 
 		} catch (Exception e) {

@@ -20,6 +20,7 @@
 	/**
 	* Ready function for Tab
 	**/
+	var poeditable;
 		$(document).ready(function() 
 		{	
 			$(".tab_content").hide();
@@ -58,6 +59,11 @@
 			}
 			funOnChangeCurrency();
 			funLoadTermsConditonFromSetUp();
+			poeditable="${poeditable}" ;
+			  if(poeditable=="false"){
+				  $("#txtPOCode").prop('disabled', true);
+			  }
+			
 
 		});
 		
@@ -878,6 +884,11 @@
 								$("#txtWeight").val(response[0][7]);
 								$("#txtOrderQty").focus();
 								
+								if($("#hidstrPORateEditableYN").val()=='No')
+								{
+									$('#txtPrice').attr('readonly', true);
+								}
+								
 								var searchUrl1=getContextPath()+"/loadProdRateFromRateContractor.html?suppCode="+gSuppCode+"&prodCode="+response[0][0];
 								$.ajax({
 								        type: "GET",
@@ -1375,7 +1386,14 @@
 		    row.insertCell(6).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblOrdQty\" type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto QtyCell\" id=\"txtOrdQty."+(rowCount)+"\" value="+dblOrdQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
 		    row.insertCell(7).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblWeight\" type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
 		    row.insertCell(8).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblTotalWeight\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"3.9%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
-		    row.insertCell(9).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblPrice\" type=\"text\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places-amt inputText-Auto price\" id=\"txtPrice."+(rowCount)+"\" value="+dblPrice+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+		    
+		    if($("#hidstrPORateEditableYN").val()=='No')
+			{
+		    	row.insertCell(9).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblPrice\" readonly=\"readonly\" type=\"text\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places-amt inputText-Auto price\" id=\"txtPrice."+(rowCount)+"\" value="+dblPrice+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+			}else{
+				row.insertCell(9).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblPrice\" type=\"text\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places-amt inputText-Auto price\" id=\"txtPrice."+(rowCount)+"\" value="+dblPrice+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+			}
+		    
 		    row.insertCell(10).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblDiscount\" type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places-amt inputText-Auto txtDisc\" id=\"txtDiscount."+(rowCount)+"\" value="+dblDiscount+" onblur=\"Javacsript:funCalDiscountItemWise(this)\" >";	    
 		    row.insertCell(11).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblAmount\" readonly=\"readonly\" class=\"Box totalValueCell\" style=\"text-align: right;\" size=\"6%\" id=\"txtAmount."+(rowCount)+"\" value="+amount+" >";
 		    row.insertCell(12).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strRemarks\" size=\"15%\" id=\"txtRemarks."+(rowCount)+"\" value='"+strRemarks+"'/>";
@@ -2729,7 +2747,7 @@
 				src="../${pageContext.request.contextPath}/resources/images/ajax-loader-light.gif"
 				width="60px" height="60px" />
 		</div>
-		
+		<s:input id="hidstrPORateEditableYN"  value="" path="StrPORateEditableYN" type="hidden"  ></s:input>
 	</s:form>
 	<script type="text/javascript">
 		funApplyNumberValidation();

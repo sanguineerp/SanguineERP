@@ -37,7 +37,7 @@
 	<br />
 	<br />
 
-	<s:form name="ProfitLoss" method="GET" action="rptProfitLossReport.html" target="_blank">
+	<s:form name="ProfitLoss" method="GET" action="rptProfitLossReport1.html" target="_blank">
 		<div>
 			<table class="transTable">
 			    <tr>

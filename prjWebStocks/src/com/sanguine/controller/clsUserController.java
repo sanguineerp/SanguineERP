@@ -108,6 +108,9 @@ public class clsUserController {
 	private clsCurrencyMasterService objCurrencyMasterService;
 
 	private static int intcheckSturctureUpdate = 0;
+	
+	@Autowired
+	clsStructureUpdateController objStructureUpdateController;
 
 	// public String webServiceUrl=wsServerIp +":"+ wsServerPortNo;
 	@Value("${applicationType}")
@@ -538,6 +541,15 @@ public class clsUserController {
 				}
 
 			}
+			String currentDate=objGlobalFun.funGetCurrentDate("yyyy-mm-dd");;
+			
+			String sqlDbBck="select a.strDbName,a.dteDbBckkUp from tbldatabasebckup a where date(a.dteDbBckkUp)='"+currentDate+"' ";
+			List listSqlBckUp=objGlobalService.funGetList(sqlUserDtl);
+			if(!(listSqlBckUp.size()>0))
+			{
+				objStructureUpdateController.takeDBBackUp(req);		
+			}
+			
 			funSetModuleImage(req, selectedModuleName);
 			return new ModelAndView("redirect:/frmPropertySelection.html");
 		}

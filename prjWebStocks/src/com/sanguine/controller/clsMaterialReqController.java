@@ -67,6 +67,7 @@ import com.sanguine.model.clsRequisitionHdModel;
 import com.sanguine.model.clsRequisitionHdModel_ID;
 import com.sanguine.model.clsSessionMasterModel;
 import com.sanguine.model.clsTransactionTimeModel;
+import com.sanguine.model.clsUserDtlModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsGroupMasterService;
 import com.sanguine.service.clsLocationMasterService;
@@ -110,6 +111,8 @@ public class clsMaterialReqController {
 	private clsSessionMasterService objSessionMasterService;
 	@Autowired
 	private clsTransactionTimeService objTransactionTimeService;
+	@Autowired 
+	private clsGlobalFunctions objGlobalFunctions;
 
 	/**
 	 * Open Material requisition Form
@@ -176,6 +179,17 @@ public class clsMaterialReqController {
 		uomList = objclsUOMService.funGetUOMList(clientCode);
 		model.put("uomList", uomList);
 		model.put("urlHits", urlHits);
+		
+		model.put("misditable", Boolean.valueOf(true));
+	    Object hmUserPrivileges = (HashMap)req.getSession().getAttribute("hmUserPrivileges");
+	    clsUserDtlModel objUserDtlModel = (clsUserDtlModel)((HashMap)hmUserPrivileges).get("frmMIS");
+	    if (objUserDtlModel != null) {
+	      if (objUserDtlModel.getStrEdit().equals("false")) {
+	        model.put("misditable", false);
+	      }
+	    }
+		
+		
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmMaterialReq_1", "command", bean);
 		} else if ("1".equalsIgnoreCase(urlHits)) {
@@ -229,6 +243,7 @@ public class clsMaterialReqController {
 			urlHits = "1";
 		}
 		List<clsTransactionTimeModel> listclsTransactionTimeModel = new ArrayList<clsTransactionTimeModel>();
+		reqBean.setStrReqCode(objGlobalFunctions.funIfNull(reqBean.getStrReqCode(), "", reqBean.getStrReqCode()));
 		listclsTransactionTimeModel = objTransactionTimeService.funLoadTransactionTimeLocationWise(propCode, clientCode, reqBean.getStrLocBy());
 		String fromTime = "", toTime = "";
 		if (!result.hasErrors()) {

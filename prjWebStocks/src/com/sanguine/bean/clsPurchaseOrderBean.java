@@ -58,6 +58,7 @@ public class clsPurchaseOrderBean {
 	private double dblCIF;
 	private double dblClearingAgentCharges;
 	private double dblVATClaim;
+	private String StrPORateEditableYN;
 
 	private List<clsTCMasterModel> listTCMaster;
 
@@ -483,5 +484,13 @@ public class clsPurchaseOrderBean {
 
 	public void setDblVATClaim(double dblVATClaim) {
 		this.dblVATClaim = dblVATClaim;
+	}
+
+	public String getStrPORateEditableYN() {
+		return StrPORateEditableYN;
+	}
+
+	public void setStrPORateEditableYN(String strPORateEditableYN) {
+		StrPORateEditableYN = strPORateEditableYN;
 	}
 }

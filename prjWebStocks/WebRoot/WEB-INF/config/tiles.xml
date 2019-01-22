@@ -1908,6 +1908,25 @@
 		<put-attribute name="title" value="Purchase GRN Variance Report"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/jsp/frmSupplierWisePurchaseGRNVarianceReport.jsp"></put-attribute>
 	</definition> 
+	
+		<definition name="frmStockReq" extends="base.definition">
+		<put-attribute name="title" value="Stock Requisition"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/frmStockReq.jsp"></put-attribute>
+	</definition>
+	<definition name="frmStockReq_1" extends="base.definition4">
+		<put-attribute name="title" value="Stock Requisition"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/frmStockReq.jsp"></put-attribute>
+	</definition>
+	
+		<definition name="frmStockReqSlip" extends="base.definition">
+		<put-attribute name="title" value="Stock Requisition Slip"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/frmStockReqSlip.jsp"></put-attribute>
+	</definition>
+	<definition name="frmStockReqSlip_1" extends="base.definition4">
+		<put-attribute name="title" value="Stock Requisition Slip"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/frmStockReqSlip.jsp"></put-attribute>
+	</definition>
+	
 
 
 	<!-- 	End Of Webstock Tiles Entry -->
@@ -4080,7 +4099,32 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/report/frmChartOfAccountReport.jsp"></put-attribute>
 	</definition>
 	
+		<definition name="frmExpenseMaster" extends="base.definition">
+		<put-attribute name="title" value="Expense Account Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/masters/frmExpenseMaster.jsp"></put-attribute>
+	</definition>
+	<definition name="frmExpenseMaster_1" extends="base.definition4">
+		<put-attribute name="title" value="Expense Account Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/masters/frmExpenseMaster.jsp"></put-attribute>
+	</definition>
 	
+		<definition name="frmPettyCashEntry" extends="base.definition">
+		<put-attribute name="title" value="Petty Cash Entry"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/frmPettyCashEntry.jsp"></put-attribute>
+	</definition>
+	<definition name="frmPettyCashEntry_1" extends="base.definition4">
+		<put-attribute name="title" value="Petty Cash Entry"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/frmPettyCashEntry.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="frmPettyCashFlash" extends="base.definition">
+		<put-attribute name="title" value="Petty Cash Flash"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/frmPettyCashFlash.jsp"></put-attribute>
+	</definition>
+	<definition name="frmPettyCashFlash_1" extends="base.definition4">
+		<put-attribute name="title" value="Petty Cash Flash"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/frmPettyCashFlash.jsp"></put-attribute>
+	</definition>
 	
 
 <!-- 	APGL Forms Entry Starts -->	

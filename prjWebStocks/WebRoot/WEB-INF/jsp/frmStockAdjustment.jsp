@@ -13,6 +13,8 @@
 /**
  * Ready Function for Ajax Waiting and reset form
  */
+ 
+ var stAdeditable;
 $(document).ready(function(){
 	 resetForms('stkAdjustment');
 	   $("#txtProdCode").focus();	
@@ -22,7 +24,13 @@ $(document).ready(function(){
 		  $(document).ajaxComplete(function(){
 		    $("#wait").css("display","none");
 		  });
-});
+		  
+		  
+	stAdeditable = "${stAdeditable}";
+		if (stAdeditable == "false") {
+			$("#txtSTCode").prop('disabled', true);
+		}
+	});
 </script>
 	<script type="text/javascript">
 	 /**

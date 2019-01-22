@@ -48,11 +48,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
-import com.sanguine.bean.clsClientBean;
 import com.sanguine.bean.clsPurchaseOrderBean;
 import com.sanguine.model.clsAuditDtlModel;
 import com.sanguine.model.clsAuditHdModel;
-import com.sanguine.model.clsCurrencyMasterModel;
 import com.sanguine.model.clsPOTaxDtlModel;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsPurchaseIndentDtlModel;
@@ -62,6 +60,7 @@ import com.sanguine.model.clsPurchaseOrderHdModel_ID;
 import com.sanguine.model.clsSupplierMasterModel;
 import com.sanguine.model.clsTCMasterModel;
 import com.sanguine.model.clsTCTransModel;
+import com.sanguine.model.clsUserDtlModel;
 import com.sanguine.service.clsCurrencyMasterService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsProductMasterService;
@@ -198,8 +197,22 @@ public class clsPurchaseOrderController {
 			}
 			bean.setListTCMaster(listTCMasterForPO);
 		}
+		clsPropertySetupModel objPropertySetupModel=objSetupMasterService.funGetObjectPropertySetup(propCode,clientCode);
+
+		//objBean.setStrRateEditableYN(objPropertySetupModel.getStrGRNRateEditable());
+		bean.setStrPORateEditableYN(objPropertySetupModel.getStrPORateEditable());
 
 		model1.addAttribute("TCMasterList", listTCMasterForPO);
+		
+		  model.put("poeditable", true);
+		    
+		    HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
+		    clsUserDtlModel objUserDtlModel = (clsUserDtlModel)hmUserPrivileges.get("frmPurchaseOrder");
+		    if (objUserDtlModel != null) {
+		      if (objUserDtlModel.getStrEdit().equals("false")) {
+		        model.put("poeditable", false);
+		      }
+		    }
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmPurchaseOrder_1");
@@ -721,7 +734,7 @@ public class clsPurchaseOrderController {
 			currConversion=objBean.getDblConversion();
 		}
 		
-
+		objBean.setStrPOCode(objGlobalFunctions.funIfNull(objBean.getStrPOCode(), "", objBean.getStrPOCode()));
 		
 		if (!result.hasErrors()) {
 			if (null != objBean.getStrSuppCode() && objBean.getStrSuppCode().trim().length() != 0) {
