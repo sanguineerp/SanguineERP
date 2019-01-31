@@ -2086,7 +2086,7 @@ public class clsGRNController {
 
 			openingStklist.add(dataListSubtotal);
 		}
-
+		if(!grnCode.equals("")){
 		StringBuilder sqlBuilderDisAmt = new StringBuilder(" SELECT ifnull(sum(a.dblDisAmt ),0)  ,ifnull(sum(a.dblExtra),0) FROM tblgrnhd a " + " WHERE DATE(a.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' and a.strClientCode='" + clientCode + "' and (" + grnCode + " ) ");
 		List listDis = objGlobalFunctionsService.funGetList(sqlBuilderDisAmt.toString(), "sql");
 		double totDisAmt = 0.0;
@@ -2252,6 +2252,7 @@ public class clsGRNController {
 
 			openingStklist.add(dataListgrandtotal);
 		}
+	}
 
 		exportList.add(openingStklist);
 

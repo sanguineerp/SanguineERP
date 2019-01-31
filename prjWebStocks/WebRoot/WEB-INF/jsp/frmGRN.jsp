@@ -174,7 +174,7 @@
 		    row.insertCell(6).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblWeight\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" size=\"5%\" class=\"decimal-places inputText-Auto\" id=\"txtWtUnit."+(rowCount)+"\" value='"+unitWeight+"'>";
 		    row.insertCell(7).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblTotalWt\" class=\"Box totalWeightCell\" readonly=\"readonly\" size=\"3%\" style=\"text-align: right;\"  id=\"txtTotalWeight."+(rowCount)+"\" value="+totalweight+">";
 		    row.insertCell(8).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblRejected\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" size=\"7%\" class=\"decimal-places inputText-Auto RejCell\"id=\"txtRejected."+(rowCount)+"\" value=0 onblur=\"funUpdatePrice(this);\">";
-		    row.insertCell(9).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"5%\" id=\"txtUOM."+(rowCount)+"\" value="+uom+">";if($("#hidstrRateEditableYN").val()=="No")
+		    row.insertCell(9).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"5%\" id=\"txtUOM."+(rowCount)+"\" value="+uom+">";
 		    if($("#hidstrRateEditableYN").val()=="No")
 		    {
 		    row.insertCell(10).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\"  type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" size=\"6%\" class=\"decimal-places-amt inputText-Auto\" id=\"txtCostRM."+(rowCount)+"\" value='"+unitPrice+"'>";
@@ -507,7 +507,7 @@
 		    row.insertCell(7).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblTotalWt\" class=\"Box totalWeightCell\" readonly=\"readonly\" size=\"6%\" style=\"text-align: right;\" id=\"txtTotalWeight."+(rowCount)+"\" value="+totalWt+">";
 		    row.insertCell(8).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblRejected\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" class=\"decimal-places inputText-Auto RejCell\" size=\"7%\" id=\"txtRejected."+(rowCount)+"\" value='"+rejected+"' onblur=\"funUpdatePrice(this);\">";
 		    row.insertCell(9).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"5%\" id=\"txtUOM."+(rowCount)+"\" value="+strUOM+">";
-		    if($00("#hidstrRateEditableYN").val()=="No")
+		    if($("#hidstrRateEditableYN").val()=="No")
 		    {
 		    	row.insertCell(10).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\" type=\"text\"  required = \"required\" style=\"text-align: right;width:100%\" class=\"decimal-places-amt inputText-Auto price\" size=\"6%\" id=\"txtCostRM."+(rowCount)+"\" value='"+unitPrice+"' onblur=\"funUpdatePrice(this);\">";
 		    }else{
@@ -2076,8 +2076,13 @@
 								}else{
 									 if($("#cmbAgainst").val()=="Rate Contractor")
 										{
-										// Rate Editable false     
-										$('#txtCostRM').attr('readonly', true);
+										 if(response.strRemark=="Not Contract Rate Amt")
+										 {
+											 $('#txtCostRM').attr('readonly', false);
+										 }else{
+										   // Rate Editable false     
+										   $('#txtCostRM').attr('readonly', true);
+										 }
 										}
 								}
 							

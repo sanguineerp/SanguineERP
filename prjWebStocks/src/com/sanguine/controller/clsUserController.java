@@ -229,7 +229,19 @@ public class clsUserController {
 				try {
 					Date systemDate = dFormat.parse(dFormat.format(new Date()));
 					Date WebStockExpiryDate = dFormat.parse(dFormat.format(clsClientDetails.hmClientDtl.get(clientCode).expiryDate));
+					
+					
 					if (systemDate.compareTo(WebStockExpiryDate) <= 0) {
+				
+						long diff = WebStockExpiryDate.getTime() - systemDate.getTime();
+						long diffDays = diff / (24 * 60 * 60 * 1000);
+						if(diffDays<=7)
+						{
+							req.getSession().removeAttribute("diffDays");
+							req.getSession().setAttribute("diffDays", diffDays);
+						}else{
+							req.getSession().setAttribute("diffDays", 0);
+						}
 						if (userBean.getStrUserCode().equalsIgnoreCase("SANGUINE")) {
 							Date dt = new Date();
 							int day = dt.getDate();
@@ -547,7 +559,7 @@ public class clsUserController {
 			List listSqlBckUp=objGlobalService.funGetList(sqlUserDtl);
 			if(!(listSqlBckUp.size()>0))
 			{
-				objStructureUpdateController.takeDBBackUp(req);		
+//				objStructureUpdateController.takeDBBackUp(req);		
 			}
 			
 			funSetModuleImage(req, selectedModuleName);

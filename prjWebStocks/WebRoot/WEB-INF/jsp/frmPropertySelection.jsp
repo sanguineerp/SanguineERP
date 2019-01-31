@@ -29,7 +29,7 @@
 //    			alert(PropertyError);
 //    		}
    	  
-   	  
+
   });
 
   $(document).ready(function()
@@ -46,7 +46,12 @@
 			alert("\n"+message);
 		<%
 		}%>
-
+		var diffDays='<%=session.getAttribute("diffDays").toString()%>';
+		if(diffDays != "0"){
+			
+			alert("Licence Will Expire In "+diffDays+" Days\n Please Contact Technical Support");
+<%-- 			<% session.removeAttribute("diffDays");%> --%>
+		}
 	});
   
   
@@ -307,5 +312,7 @@
 		</s:form>
 		</div>
 		<div id="loginfooter">Copyright &copy; 2014 Sanguine Software Solutions</div>
+		
+
 	</body>
 </html>

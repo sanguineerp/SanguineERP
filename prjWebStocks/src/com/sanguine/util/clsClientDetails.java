@@ -124,14 +124,14 @@ public class clsClientDetails {
 			hmClientDtl.put("112.001", clsClientDetails.createClientDetails("112.001", "GBC MEGA MOTELS", dFormat.parse("2016-05-11"), dFormat.parse("2017-05-11")));// HO																																										// Carnival
 			hmClientDtl.put("114.001", clsClientDetails.createClientDetails("114.001", "Dr. Asif Khan Wellness Clinic LLP", dFormat.parse("2016-05-14"), dFormat.parse("2017-05-14")));// HO
 			hmClientDtl.put("117.001", clsClientDetails.createClientDetails("117.001", "THE PREM'S HOTEL", dFormat.parse("2016-08-01"), dFormat.parse("2019-06-30")));// HO
-			hmClientDtl.put("124.001", clsClientDetails.createClientDetails("124.001", "ATITHYA DINNING LLP", dFormat.parse("2016-11-04"), dFormat.parse("2019-01-28")));//renewed for 8 days on 22-01-2019 till 28-01-2019 //renewd for 45 days on 29-11-2018 till 15-01-2019// renew for one month on 3-11-2018 //one month extends//one month licence extend  on 10-10-2018 to 31-10-2018 of teddy boy --Nikhil
+			hmClientDtl.put("124.001", clsClientDetails.createClientDetails("124.001", "ATITHYA DINNING LLP", dFormat.parse("2016-11-04"), dFormat.parse("2019-10-18")));//renewed for 8 days on 22-01-2019 till 28-01-2019 //renewd for 45 days on 29-11-2018 till 15-01-2019// renew for one month on 3-11-2018 //one month extends//one month licence extend  on 10-10-2018 to 31-10-2018 of teddy boy --Nikhil
 			hmClientDtl.put("127.001", clsClientDetails.createClientDetails("127.001", "Cumin Food & Beverage Pvt Ltd", dFormat.parse("2016-10-26"), dFormat.parse("2017-10-26")));
 			hmClientDtl.put("131.001", clsClientDetails.createClientDetails("131.001", "KETTLE AND KEG CAFE", dFormat.parse("2016-11-23"), dFormat.parse("2019-11-23")));// renwed on 24-11-2018 for one year(23-11-2019) //Contact Mr.Kiran 9892232593   kiran.pt79@hotmail.com
 			hmClientDtl.put("132.001", clsClientDetails.createClientDetails("132.001", "JBDD Hospitality LLP", dFormat.parse("2016-12-05"), dFormat.parse("2017-08-30")));
 			hmClientDtl.put("136.001", clsClientDetails.createClientDetails("136.001", "KINKI", dFormat.parse("2017-01-05"), dFormat.parse("2020-01-05")));// released on
 			hmClientDtl.put("137.001", clsClientDetails.createClientDetails("137.001", "IMAK HOSPITALITY LLP", dFormat.parse("2018-11-05"), dFormat.parse("2019-11-05")));// JPOS Client  renewed on 05-11-2018 for 1 year	// 05-01-2018, 1year
 			hmClientDtl.put("141.001", clsClientDetails.createClientDetails("141.001", "SANGUINE SOFTWARE SOLUTIONS PVT LTD", dFormat.parse("2017-01-30"), dFormat.parse("2099-01-30")));
-			hmClientDtl.put("148.001", clsClientDetails.createClientDetails("148.001", "MURPHIES", dFormat.parse("2017-02-16"), dFormat.parse("2018-02-16"), 4, 3));// release on 16-02-2017 for 1 year
+			hmClientDtl.put("148.001", clsClientDetails.createClientDetails("148.001", "MURPHIES", dFormat.parse("2017-02-16"), dFormat.parse("2019-02-15"), 4, 3));// release on 16-02-2017 for 1 year
 			hmClientDtl.put("151.001", clsClientDetails.createClientDetails("151.001", "Bottle Street Restaurant & Lounge", dFormat.parse("2017-02-23"), dFormat.parse("2018-03-27")));// renewed on 27-02-2017 for 1 month
 			hmClientDtl.put("155.001", clsClientDetails.createClientDetails("155.001", "CAVALLI THE LOUNGE", dFormat.parse("2017-03-24"), dFormat.parse("2018-03-24"))); // extend as pos
 			hmClientDtl.put("159.001", clsClientDetails.createClientDetails("159.001", "BIG PLATE CUISINES LLP", dFormat.parse("2017-06-02"), dFormat.parse("2019-04-14")));
@@ -142,7 +142,7 @@ public class clsClientDetails {
 			hmClientDtl.put("172.001", clsClientDetails.createClientDetails("172.001", "DIOS HOTEL LLP", dFormat.parse("2017-05-25"), dFormat.parse("2018-08-25"))); // one
  			hmClientDtl.put("173.002", clsClientDetails.createClientDetails("173.002", "Le Flamington", dFormat.parse("2018-12-15"), dFormat.parse("2019-12-24")));
 			hmClientDtl.put("174.001", clsClientDetails.createClientDetails("174.001", "KRD Eateries Pvt Ltd", dFormat.parse("2017-06-06"), dFormat.parse("2017-10-31"))); // krimsons
-			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "TJS BREW WORKS", dFormat.parse("2017-06-06"), dFormat.parse("2018-12-01")));//renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
+			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "COPPER STORY PRIVATE LIMITED", dFormat.parse("2017-06-06"), dFormat.parse("2019-02-05")));//renewed licence and rename TJS to Copper story privated limited till 01-02-2019 //renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
 			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2019-06-08")));
 			hmClientDtl.put("181.001", clsClientDetails.createClientDetails("181.001", "RMV COMMUNICATION PVT LTD", dFormat.parse("2017-06-20"), dFormat.parse("2017-07-20")));
 			hmClientDtl.put("184.001", clsClientDetails.createClientDetails("184.001", "BALAJI TRADERS PVT LTD", dFormat.parse("2017-07-03"), dFormat.parse("2018-01-07")));
@@ -192,6 +192,7 @@ public class clsClientDetails {
 			
 			hmClientDtl.put("287.001", clsClientDetails.createClientDetails("287.001", "OVER THE TOP HOSPITALITY", dFormat.parse("2018-12-05"), dFormat.parse("2019-08-31")));//released on 5-12-2018 till 31-08-2019 for 4 SPOS ,5 APOS,WebStocks,No SMS Pack,No Bill Deletion.", "Mr.Ravi", "9136025911", "Ravitejold@oldtimessake.in"
 			hmClientDtl.put("290.001", clsClientDetails.createClientDetails("290.001", "CREME HOSPITALITY AND MANAGEMENT", dFormat.parse("2018-12-15"), dFormat.parse("2019-02-15")));//renewed  for one month on 17-01-2019 form 15-01-2019 till 15-02-2019
+			hmClientDtl.put("293.001", clsClientDetails.createClientDetails("293.001", "ZELEB", dFormat.parse("2019-01-30"), dFormat.parse("2019-02-06")));//relased zaleb license for 8 days POS Client
 			hmClientDtl.put("294.001", clsClientDetails.createClientDetails("294.001", "SEERAN HOSPITALITY", dFormat.parse("2019-01-11"), dFormat.parse("2019-02-11")));//released for one month on 11-01-2019 to 11-02-2019 "Mr.Santosh ", "9820339701", "santosh.seeran@gmail.com"
 			
 		} catch (Exception e) {

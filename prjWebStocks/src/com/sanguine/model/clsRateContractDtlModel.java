@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tblratecontdtl")
@@ -44,6 +45,17 @@ public class clsRateContractDtlModel implements Serializable {
 
 	private String strProductName;
 	private String strPartNo;
+	
+	@Transient
+	private String strSuppName;
+
+	public String getStrSuppName() {
+		return strSuppName;
+	}
+
+	public void setStrSuppName(String strSuppName) {
+		this.strSuppName = strSuppName;
+	}
 
 	public String getStrProductName() {
 		return strProductName;

@@ -66,7 +66,11 @@ public class clsRecipeMasterController {
 	
 	@Autowired 
 	private  clsWhatIfAnalysisController objWhatIfAnalysisController;
-
+	
+//	double dblAmt=0.0;
+//	double dblRate=0.0;
+//	double bomrate =0.0;
+//	double bomAmt=0.0;
 	@RequestMapping(value = "/frmBOMMaster", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
 		String urlHits = "1";
@@ -412,12 +416,15 @@ public class clsRecipeMasterController {
 			List listChildRate = objGlobalFunctionsService.funGetList(sqlDtlQuery, "sql");
 			if(listChildRate.size()>0)
 			{
+				double bomrate =0.0;
+				double bomAmt=0.0;
+			
 				for(int i=0;i<listChildRate.size();i++)
 				{
 					
 					Object[] obj=(Object[])listChildRate.get(i);
-					double bomrate =Double.parseDouble(obj[11].toString());
-					double bomAmt=Double.parseDouble(obj[18].toString());
+					 bomrate =Double.parseDouble(obj[11].toString());
+					 bomAmt=Double.parseDouble(obj[18].toString());
 					if(rateFrom.equals("Last Purchase Rate")){
 						List listRate =funGetBOMLastPurchaseRate(obj[7].toString(), clientCode);
 						if(listRate.size()>0){
@@ -437,10 +444,13 @@ public class clsRecipeMasterController {
 					
 					String sqlParentConver="select a.dblRecipeConversion from tblproductmaster a where a.strProdCode='"+obj[7].toString()+"' ";
 					List listParentConver = objGlobalFunctionsService.funGetList(sqlParentConver, "sql");
-					
+					if(obj[7].toString().trim().equals("P0002059"))
+					{
+						System.out.print("aa");
+					}
 					
 					funGetBOMNodes(obj[7].toString(), 0,Double.parseDouble(obj[10].toString()), listChildNodes11);
-					if(listChildNodes11.size()>0)
+ 					if(listChildNodes11.size()>0)
 					{
 						bomrate=0.0;
 						bomAmt=0.0;
@@ -450,6 +460,7 @@ public class clsRecipeMasterController {
 //						String temp11 = (String) listChildNodes11.get(cnt);
 						String prodCode1 = prodCode11.split(",")[0];
 						double reqdQty11 = Double.parseDouble(prodCode11.split(",")[1]);
+						double recipe = Double.parseDouble(prodCode11.split(",")[1]);
 //						bomrate=funGetBOMRate(prodCode1, clientCode);	
 					
 						
@@ -463,7 +474,11 @@ public class clsRecipeMasterController {
 							double rate=Double.parseDouble(listBom.get(0).toString());
 							double amt=Double.parseDouble(listBom.get(1).toString());
 							bomrate+=amt;
-							bomAmt=bomAmt+(rate*reqdQty11);
+							bomAmt+=(rate*reqdQty11);
+							System.out.println(prodCode1+"----"+rate*reqdQty11);
+							System.out.println("Rate"+"----"+rate);
+							System.out.println("unitAmt"+"----"+amt);
+							System.out.println("reqdQty11"+"----"+reqdQty11);
 						}
 						
 					}
@@ -581,21 +596,88 @@ public class clsRecipeMasterController {
 		return bomDtl;
 	}
 	
-	public int funGetBOMNodes(String parentProdCode, double bomQty, double qty, List<String> listChildNodes) {
+/*public int funGetBOMNodes(String parentProdCode, double bomQty, double qty, List<String> listChildNodes,String rateFrom,String clientCode) {
 		
-		String sql = "select b.strChildCode from  tblbommasterhd a,tblbommasterdtl b " 
-			+ "where a.strBOMCode=b.strBOMCode and a.strParentCode='" + parentProdCode + "' ";
+	
+		double dblRecipe=1.0;
+		
+		String sql = "select b.strChildCode, c.dblRecipeConversion from  tblbommasterhd a,tblbommasterdtl b,tblproductmaster c " 
+			+ "where a.strBOMCode=b.strBOMCode and a.strParentCode='" + parentProdCode + "' and a.strParentCode=c.strProdCode ";
 		List listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
-		if (listTemp.size() > 0) {
+		if (listTemp.size() > 0) { 
+			
 			for (int cnt = 0; cnt < listTemp.size(); cnt++) {
-				String childNode = (String) listTemp.get(cnt);
+				 Object[] obj=(Object[])listTemp.get(cnt);
+//				String childNode = (String) listTemp.get(cnt);
+				 String childNode = obj[0].toString();
+				 
 				bomQty = funGetBOMQty(childNode, parentProdCode);
-				funGetBOMNodes(childNode, bomQty, qty * bomQty, listChildNodes);
-				listChildNodes.add(childNode + "," + bomQty);
+				
+				 
+				
+				if(rateFrom.equals("Last Purchase Rate")){
+					List listBomRate=funGetBOMLastPurchaseRate(childNode, clientCode);
+					bomrate+=Double.parseDouble(listBomRate.get(0).toString());
+					bomAmt=bomAmt+(Double.parseDouble(listBomRate.get(1).toString())*bomQty);
+				}else{
+					List listBom=funGetBOMRate(childNode, clientCode);	
+					double rate=Double.parseDouble(listBom.get(0).toString());
+					double amt=Double.parseDouble(listBom.get(1).toString());
+					dblRate+=amt;
+					dblAmt+=(rate*bomQty);
+					
+			
+				}
+				funGetBOMNodes(childNode, bomQty, qty * bomQty, listChildNodes, rateFrom,clientCode);
+				dblRecipe = Double.parseDouble(obj[1].toString());
+//				bomrate=bomAmt/dblRecipe;
+//			    bomAmt=bomrate*qty;
+				
+				listChildNodes.add(childNode + "," + bomQty +","+dblRecipe);
 			}
-		} else {
+			
+//			listChildNodes.add(parentProdCode + "," + bomQty);
+		}
+		else {
 			
 		}
+		bomrate+=dblRate;
+		bomAmt+=dblAmt/dblRecipe;;
+		dblAmt=0.0; 
+		dblRate=0.0;
+		System.out.println("parentProdCode"+"----"+parentProdCode);
+		System.out.println("bomrate"+"----"+bomrate);
+		System.out.println("bomAmt"+"----"+bomAmt);
+		return 1;
+	}
+	
+	*/
+	public int funGetBOMNodes(String parentProdCode, double bomQty, double qty, List<String> listChildNodes) {
+		
+		double dblAmt=0.0;
+		double dblRate=0.0;
+		String sql = "select b.strChildCode, c.dblRecipeConversion from  tblbommasterhd a,tblbommasterdtl b,tblproductmaster c " 
+			+ "where a.strBOMCode=b.strBOMCode and a.strParentCode='" + parentProdCode + "' and a.strParentCode=c.strProdCode ";
+		List listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
+		if (listTemp.size() > 0) { 
+			
+			for (int cnt = 0; cnt < listTemp.size(); cnt++) {
+				 Object[] obj=(Object[])listTemp.get(cnt);
+//				String childNode = (String) listTemp.get(cnt);
+				 String childNode = obj[0].toString();
+				 
+				bomQty = funGetBOMQty(childNode, parentProdCode);
+				funGetBOMNodes(childNode, bomQty, qty * bomQty, listChildNodes);
+				
+				listChildNodes.add(childNode + "," + bomQty);
+			}
+			
+//			listChildNodes.add(parentProdCode + "," + bomQty);
+		}
+		else {
+			
+		}
+		
 		return 1;
 	}
 	

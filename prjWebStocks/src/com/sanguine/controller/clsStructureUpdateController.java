@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -32,6 +31,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,6 +44,7 @@ import com.sanguine.model.clsTreeMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSecurityShellService;
 import com.sanguine.service.clsStructureUpdateService;
+import com.sanguine.util.clsClientDetails;
 import com.sanguine.util.clsDatabaseBackup;
 
 @Controller
@@ -57,6 +58,9 @@ public class clsStructureUpdateController {
 
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
+	
+	@Autowired
+	private JavaMailSender mailSender;
 
 	/**
 	 * Open Delete Module form
@@ -291,16 +295,30 @@ public class clsStructureUpdateController {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String res="DataBase Backup Done";
 		try{
-			
-			
+			String OS=System.getProperty("os.name").toLowerCase();
+			 String backupFilePathMail="";
 			String dbWebmms=new clsGlobalFunctions().funTrimDBNameFromURL(clsGlobalFunctions.conUrl);
 	        String dbWebbook=new clsGlobalFunctions().funTrimDBNameFromURL(clsGlobalFunctions.urlwebbooks);
 	        
 			clsDatabaseBackup obDB=new clsDatabaseBackup();
+			if(OS.equals("linux"))
+			{
+			  backupFilePathMail=obDB.funTakeBackUpDBForLinux(dbWebmms);
+			}else{
+				if(OS.contains("windows"))
+			backupFilePathMail=obDB.funTakeBackUpDB(dbWebmms);
+			}
 			
-			final String backupFilePathMail=obDB.funTakeBackUpDB(dbWebmms);
-			funSendDBBackupToSanguineAuditiing( backupFilePathMail, req);
+			  Date dtCurrentDate = new Date();
+		        String date = dtCurrentDate.getDate() + "-" + (dtCurrentDate.getMonth() + 1) + "-" + (dtCurrentDate.getYear() + 1900);
+		        String time = dtCurrentDate.getHours() + "-" + dtCurrentDate.getMinutes();
+		        String bckupdate = date+ " " +time;
+			funSendDBBackupToSanguineAuditiing( backupFilePathMail, OS,bckupdate,req);
 			new clsDatabaseBackup().funTakeBackUpDB(dbWebbook);
+		
+			System.out.print(OS);
+			
+			String insertSql="insert into tbldatabasebckup values('"+bckupdate+"','"+clientCode+"','"+dbWebmms+"')";
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -310,25 +328,20 @@ public class clsStructureUpdateController {
 	}
 	
 
-    private void funSendDBBackupToSanguineAuditiing(String dbBackupFilePath,HttpServletRequest req)
+    private void funSendDBBackupToSanguineAuditiing(String dbBackupFilePath,String os,String bckupdate,HttpServletRequest req)
     {
-	Date dt = new Date();
-	String dateTime = "", date = "";
-	dateTime = dt.getDate() + "-" + (dt.getMonth() + 1) + "-" + (dt.getYear() + 1900) + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-	date = dt.getDate() + "-" + (dt.getMonth() + 1) + "-" + (dt.getYear() + 1900);
-
-	String filePath = System.getProperty("user.dir");
-	File logFile = new File(filePath + "/ErrorLogs/err " + date + ".txt");
-
+    if(os.contains("windows")){
 	dbBackupFilePath = System.getProperty("user.dir") + "\\DBBackup\\" + dbBackupFilePath + ".sql";
-	//String filePath = System.getProperty("user.dir")+"/DBBackup/1.sql";
-	File dbBackupFile = new File(dbBackupFilePath);
-
-	funSendDBBackup(logFile, dbBackupFile,req);
+    }else {
+    	dbBackupFilePath = dbBackupFilePath + ".sql";
+    }
+    
+    File dbBackupFile = new File(dbBackupFilePath);
+	funSendDBBackup( dbBackupFile,bckupdate,req);
     }
     
     
-    public void funSendDBBackup(File errorLogFile, File dbBackupFile,HttpServletRequest req)
+    public void funSendDBBackup( File dbBackupFile,String bckupdate,HttpServletRequest req)
     {
 
 	try
@@ -373,9 +386,10 @@ public class clsStructureUpdateController {
 		}
 	    }
 	    String clientCode = req.getSession().getAttribute("clientCode").toString();
-	    message.setSubject("DB Backup '" +clientCode + "' '" + clientCode + "' " );
+	     clsClientDetails objClientDtl=clsClientDetails.hmClientDtl.get(clientCode);
+	    message.setSubject("DB Backup of '" +clientCode  + "' '" +objClientDtl.Client_Name + "' '" + bckupdate + "' " );
 
-	    String msgBody = "DB Backup '" + clientCode + "' ";
+	    String msgBody = "DB Backup of '" +clientCode  + "' '" +objClientDtl.Client_Name + "' '" + bckupdate + "' ";
 	    //message.setText(msgBody);
 
 	    // Create the message part 
@@ -471,6 +485,7 @@ public class clsStructureUpdateController {
 	}
 
     }
+	
 	
 	/**
 	 * Open Structure Update Form

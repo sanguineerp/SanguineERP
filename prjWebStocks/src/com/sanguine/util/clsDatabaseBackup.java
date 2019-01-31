@@ -19,60 +19,92 @@ public class clsDatabaseBackup {
 
 	private clsGlobalFunctions objGlobalFun;
 	
-	  public String funTakeBackUpDB(String dbName) throws Exception
-	    {
-	        //funCheckBackUpFilePath();
+	public String funTakeBackUpDB(String dbName) throws Exception
+    {
+        //funCheckBackUpFilePath();
 
-	        Date dtCurrentDate = new Date();
-	        String date = dtCurrentDate.getDate() + "-" + (dtCurrentDate.getMonth() + 1) + "-" + (dtCurrentDate.getYear() + 1900);
-	        String time = dtCurrentDate.getHours() + "-" + dtCurrentDate.getMinutes();
-	        String fileName = date + "_" + time + dbName;
-	        
-	        
-	        String batchFilePath = System.getProperty("user.dir") + "\\mysqldbbackup"+dbName+".bat";
-	        String filePath = System.getProperty("user.dir") + "/DBBackup";
-	        File file = new File(filePath);
-	        if (!file.exists())
-	        {
-	            file.mkdir();
-	        }
+        Date dtCurrentDate = new Date();
+        String date = dtCurrentDate.getDate() + "-" + (dtCurrentDate.getMonth() + 1) + "-" + (dtCurrentDate.getYear() + 1900);
+        String time = dtCurrentDate.getHours() + "-" + dtCurrentDate.getMinutes();
+        String fileName = date + "_" + time + dbName;
+        
+        
+        String batchFilePath = System.getProperty("user.dir") + "\\mysqldbbackup"+dbName+".bat";
+        String filePath = System.getProperty("user.dir") + "/DBBackup";
+        File file = new File(filePath);
+        if (!file.exists())
+        {
+            file.mkdir();
+        }
 
-	        File batchFile = new File(batchFilePath);
-	        if (!batchFile.exists())
-	        {
-	            batchFile.createNewFile();
-	        }
-	        BufferedWriter objWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(batchFile), "UTF8"));
-	        objWriter.write("@echo off");
-	        objWriter.newLine();
-	        objWriter.write("for /f \"tokens=1\" %%i in ('date /t') do set DATE_DOW=%%i");
-	        objWriter.newLine();
-	        objWriter.write("for /f \"tokens=2\" %%i in ('date /t') do set DATE_DAY=%%i");
-	        objWriter.newLine();
-	        objWriter.write("for /f %%i in ('echo %date_day:/=-%') do set DATE_DAY=%%i");
-	        objWriter.newLine();
+        File batchFile = new File(batchFilePath);
+        if (!batchFile.exists())
+        {
+            batchFile.createNewFile();
+        }
+        BufferedWriter objWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(batchFile), "UTF8"));
+        objWriter.write("@echo off");
+        objWriter.newLine();
+        objWriter.write("for /f \"tokens=1\" %%i in ('date /t')  do set DATE_DOW=%%i");
+        objWriter.newLine();
+        objWriter.write("for /f \"tokens=2\" %%i in ('date /t') do set DATE_DAY=%%i");
+        objWriter.newLine();
+        objWriter.write("for /f %%i in ('echo %date_day:/=-%') do set DATE_DAY=%%i");
+        objWriter.newLine();
 
-	        objWriter.write("for /f %%i in ('time /t') do set DATE_TIME=%%i");
-	        objWriter.newLine();
-	        objWriter.write("for /f %%i in ('echo %date_time::=-%') do set DATE_TIME=%%i");
-	        objWriter.newLine();
+        objWriter.write("for /f %%i in ('time /t') do set DATE_TIME=%%i");
+        objWriter.newLine();
+        objWriter.write("for /f %%i in ('echo %date_time::=-%') do set DATE_TIME=%%i");
+        objWriter.newLine();
 
-	        String fileFullNamemms = filePath + "\\" + fileName + ".sql";
-	        String dumpPath=clsGlobalFunctions.urlSqlDump;
+        String fileFullNamemms = filePath + "\\" + fileName + ".sql";
+        String dumpPath=clsGlobalFunctions.urlSqlDump;
 
-	        
-	        objWriter.write(dumpPath + " --hex-blob " + " -u " + clsGlobalFunctions.urluser + " -p" + clsGlobalFunctions.urlPassword + " -h " + "localhost" + " --default-character-set=utf8 --max_allowed_packet=64M --add-drop-table --skip-add-locks --skip-comments --add-drop-database --databases " + " " + dbName + ">" + "\"" + fileFullNamemms + "\" ");
-	        
-	      //  objWriter.write(dumpPath + " --hex-blob " + " -u " + clsGlobalFunctions.urluser + " -p" + clsGlobalFunctions.urlPassword + " -h " + "localhost" + " --default-character-set=utf8 --max_allowed_packet=64M --add-drop-table --skip-add-locks --skip-comments --add-drop-database --databases " + " " + dbWebbook + ">" + "\"" + fileFullName + "\" ");
-	        
-	       
-	        objWriter.flush();
-	        objWriter.close();
+        
+        objWriter.write(dumpPath + " --hex-blob " + " -u " + clsGlobalFunctions.urluser + " -p" + clsGlobalFunctions.urlPassword + " -h " + "localhost" + " --default-character-set=utf8 --max_allowed_packet=64M --add-drop-table --skip-add-locks --skip-comments --add-drop-database --databases " + " " + dbName + ">" + "\"" + fileFullNamemms + "\" ");
+        
+      //  objWriter.write(dumpPath + " --hex-blob " + " -u " + clsGlobalFunctions.urluser + " -p" + clsGlobalFunctions.urlPassword + " -h " + "localhost" + " --default-character-set=utf8 --max_allowed_packet=64M --add-drop-table --skip-add-locks --skip-comments --add-drop-database --databases " + " " + dbWebbook + ">" + "\"" + fileFullName + "\" ");
+        
+       
+        objWriter.flush();
+        objWriter.close();
 
-	        Process p = Runtime.getRuntime().exec("cmd /c " + "\"" + batchFilePath + "\"");
+        Process p = Runtime.getRuntime().exec("cmd /c " + "\"" + batchFilePath + "\"");
 
-	        return fileName;
-	    }
+        return fileName;
+    }
+
+	  
+	  public String funTakeBackUpDBForLinux(String dbName) throws Exception  {
+		  
+	
+			 Date dtCurrentDate = new Date();
+		        String date = dtCurrentDate.getDate() + "-" + (dtCurrentDate.getMonth() + 1) + "-" + (dtCurrentDate.getYear() + 1900);
+		        String time = dtCurrentDate.getHours() + "-" + dtCurrentDate.getMinutes();
+		        String fileName = date + "_" + time + dbName;
+		String executeCmd = "";
+		String filePath = System.getProperty("user.dir");
+      File file = new File(filePath);
+      if (!file.exists())
+      {
+          file.mkdir();
+      }
+      String fileFullNamemms =  System.getProperty("user.dir") +"/"+fileName ;
+		executeCmd = "mysqldump -u "+clsGlobalFunctions.urluser+" -p"+clsGlobalFunctions.urlPassword+" "+dbName+" -r"+fileFullNamemms+".sql";
+		
+		Process runtimeProcess =Runtime.getRuntime().exec(executeCmd);
+		int processComplete = runtimeProcess.waitFor();
+		if(processComplete == 0){
+		 
+		System.out.println("Backup taken successfully");
+		 
+		} else {
+		 
+			System.out.println("Could not take mysql backup");
+		 
+		}
+		return fileFullNamemms;
+	  }
 	  
 /*
 	 private boolean funCheckBackUpFilePath()

@@ -34,6 +34,34 @@
 		  $(document).ajaxComplete(function(){
 		    $("#wait").css("display","none");
 		  });
+		  
+			var message='';
+			<%if (session.getAttribute("success") != null) {
+				            if(session.getAttribute("successMessage") != null){%>
+				            message='<%=session.getAttribute("successMessage").toString()%>';
+				            <%
+				            session.removeAttribute("successMessage");
+				            }
+							boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
+							session.removeAttribute("success");
+							if (test) {
+							%>	
+				alert("Data Save successfully\n\n"+message);
+			<%
+			}}%>
+			
+			var code='';
+			<%if(null!=session.getAttribute("rptRateContractorCode")){%>
+			code='<%=session.getAttribute("rptRateContractorCode").toString()%>';
+			 '<%session.removeAttribute("rptRateContractorCode");%>'
+			
+			var isOk=confirm("Do You Want to Generate Slip?");
+			if(isOk){
+				//alert("/openRptMISSlip.html?rptMISCode="+code);
+			window.open(getContextPath()+"/rptRateContractReport.html?rptRateContractorCode="+code,'_blank');
+			}
+			<%}%>
+			
 	});
 </script>
 	<script type="text/javascript">
@@ -594,20 +622,7 @@
 			    $(".decimal-places-amt").numeric({ decimalPlaces: maxAmountDecimalPlaceLimit, negative: false });
 			}
 		 function funOnload() {
-				var message='';
-				<%if (session.getAttribute("success") != null) {
-					            if(session.getAttribute("successMessage") != null){%>
-					            message='<%=session.getAttribute("successMessage").toString()%>';
-					            <%
-					            session.removeAttribute("successMessage");
-					            }
-								boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
-								session.removeAttribute("success");
-								if (test) {
-								%>	
-					alert("Data Save successfully\n\n"+message);
-				<%
-				}}%>
+		
 				
 				var flagOpenFromAuthorization="${flagOpenFromAuthorization}";
 				if(flagOpenFromAuthorization == 'true')
