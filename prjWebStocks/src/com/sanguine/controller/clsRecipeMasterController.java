@@ -372,7 +372,7 @@ public class clsRecipeMasterController {
 		String ProdCode = objBean.getStrDocCode();
 		String type = objBean.getStrDocType();
 		String rateFrom =objBean.getStrShowBOM();
-		funCallReport(ProdCode, type,rateFrom, resp, req);
+		funCallReport(ProdCode, type,rateFrom, resp, req,objBean);
 	}
 
 	@RequestMapping(value = "/invokeRecipesList", method = RequestMethod.GET)
@@ -382,7 +382,7 @@ public class clsRecipeMasterController {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void funCallReport(String ProdCode, String type,String rateFrom , HttpServletResponse resp, HttpServletRequest req) {
+	private void funCallReport(String ProdCode, String type,String rateFrom , HttpServletResponse resp, HttpServletRequest req,clsReportBean obReportjBean) {
 		try {
 			objGlobal = new clsGlobalFunctions();
 			Connection con = objGlobal.funGetConnection(req);
@@ -411,6 +411,19 @@ public class clsRecipeMasterController {
 			if (!ProdCode.equals("")) {
 				sqlDtlQuery += " and h.strParentCode='" + ProdCode + "'  ";
 			}
+			
+			String SGCode = "";
+			String strSGCodes[] = obReportjBean.getStrSGCode().split(",");
+			for (int i = 0; i < strSGCodes.length; i++) {
+				if (SGCode.length() > 0) {
+					SGCode = SGCode + " or p.strSGCode='" + strSGCodes[i] + "' ";
+				} else {
+					SGCode = "p.strSGCode='" + strSGCodes[i] + "' ";
+				}
+
+			}
+
+			sqlDtlQuery = sqlDtlQuery + " and " + "(" + SGCode + ")";
 			
 			List<clsRecipeMasterBean> listDtlBean=new ArrayList<clsRecipeMasterBean>(); 
 			List listChildRate = objGlobalFunctionsService.funGetList(sqlDtlQuery, "sql");

@@ -131,7 +131,7 @@ public class clsPurchaseOrderController {
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
-		
+
 		/**
 		 * Code use when this form is open form authorization toll on click of
 		 * view Button Ritesh 25 Feb 2015
@@ -186,7 +186,7 @@ public class clsPurchaseOrderController {
 			List<clsTCMasterModel> listTCMaster = objTCMaster.funGetTCMasterList(clientCode);
 			bean.setListTCMaster(listTCMaster);
 		} else {
-		
+
 			for (int cnt = 0; cnt < listTC_Setup.size(); cnt++) {
 				clsTCMasterModel objTCMasterModel = new clsTCMasterModel();
 				Object[] arrObject = (Object[]) listTC_Setup.get(cnt);
@@ -201,18 +201,25 @@ public class clsPurchaseOrderController {
 
 		//objBean.setStrRateEditableYN(objPropertySetupModel.getStrGRNRateEditable());
 		bean.setStrPORateEditableYN(objPropertySetupModel.getStrPORateEditable());
-
 		model1.addAttribute("TCMasterList", listTCMasterForPO);
-		
-		  model.put("poeditable", true);
-		    
-		    HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
-		    clsUserDtlModel objUserDtlModel = (clsUserDtlModel)hmUserPrivileges.get("frmPurchaseOrder");
-		    if (objUserDtlModel != null) {
-		      if (objUserDtlModel.getStrEdit().equals("false")) {
-		        model.put("poeditable", false);
-		      }
-		    }
+		model.put("poeditable", true);
+
+		//Done this for not allowing user to complete transaction in Current Date
+		if(objPropertySetupModel.getStrCurrentDateForTransaction().equalsIgnoreCase("Yes"))
+		{
+			model.put("strCurrentDateForTransaction",true);
+		}
+		else
+		{
+			model.put("strCurrentDateForTransaction",false);
+		}
+		HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
+		clsUserDtlModel objUserDtlModel = (clsUserDtlModel)hmUserPrivileges.get("frmPurchaseOrder");
+		if (objUserDtlModel != null) {
+			if (objUserDtlModel.getStrEdit().equals("false")) {
+				model.put("poeditable", false);
+			}
+		}
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmPurchaseOrder_1");
@@ -223,7 +230,7 @@ public class clsPurchaseOrderController {
 		}
 	}
 
-	
+
 	//Fill Terms and Condition 
 	@RequestMapping(value = "/purchaseOrderTC", method = RequestMethod.GET)
 	public @ResponseBody List funFillTermsAndCondition(HttpServletRequest request)
@@ -236,7 +243,7 @@ public class clsPurchaseOrderController {
 		if (listTC_Setup.size() == 0) {
 			List<clsTCMasterModel> listTCMaster = objTCMaster.funGetTCMasterList(clientCode);
 		} else {
-		
+
 			for (int cnt = 0; cnt < listTC_Setup.size(); cnt++) {
 				clsTCMasterModel objTCMasterModel = new clsTCMasterModel();
 				Object[] arrObject = (Object[]) listTC_Setup.get(cnt);
@@ -245,12 +252,12 @@ public class clsPurchaseOrderController {
 				objTCMasterModel.setStrTCDesc(arrObject[2].toString());
 				listTCMasterForPO.add(objTCMasterModel);
 			}
-		
+
 		}
 		return listTCMasterForPO;
 	}
-	
-	
+
+
 	/**
 	 * Fill Against Combo Box
 	 * 
@@ -289,7 +296,7 @@ public class clsPurchaseOrderController {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String code = request.getParameter("POCode").toString();
 		clsPurchaseOrderBean bean = new clsPurchaseOrderBean();
-	
+
 		clsPurchaseOrderHdModel objPurchaseOrderHdModel = objPurchaseOrderService.funGetObject(code, clientCode);
 		if (null == objPurchaseOrderHdModel) {
 			bean.setStrPOCode("Invalid Code");
@@ -301,14 +308,14 @@ public class clsPurchaseOrderController {
 			if(currConversion==0){
 				currConversion=1;
 			}
-//			if (objSetup != null) {
-//				clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(objPurchaseOrderHdModel.getStrCurrency(), clientCode);
-//				if (objCurrModel != null) {
-//					currConversion = objCurrModel.getDblConvToBaseCurr();
-//
-//				}
-//
-//			}
+			//			if (objSetup != null) {
+			//				clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(objPurchaseOrderHdModel.getStrCurrency(), clientCode);
+			//				if (objCurrModel != null) {
+			//					currConversion = objCurrModel.getDblConvToBaseCurr();
+			//
+			//				}
+			//
+			//			}
 			bean.setStrPOCode(code);
 			bean.setStrVAddress1(objPurchaseOrderHdModel.getStrVAddress1());
 			bean.setStrVAddress2(objPurchaseOrderHdModel.getStrVAddress2());
@@ -477,7 +484,7 @@ public class clsPurchaseOrderController {
 	}
 
 
-	
+
 	/**
 	 * Load Pending Purchase Indent Data from Notification click
 	 * 
@@ -502,7 +509,7 @@ public class clsPurchaseOrderController {
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
-		
+
 		/**
 		 * Code use when this form is open form authorization toll on click of
 		 * view Button Ritesh 25 Feb 2015
@@ -550,7 +557,7 @@ public class clsPurchaseOrderController {
 		 */
 
 		model.put("urlHits", urlHits);
-		
+
 		String sql_Setup = "select a.strTCCode,b.strTCName,a.strTCDesc " + "from clsTCTransModel a,clsTCMasterModel b " + "where a.strTCCode=b.strTCCode and a.strTransCode=:transCode " + "and a.strClientCode=:clientCode and a.strTransType=:transType";
 		List listTC_Setup = objTCTransService.funGetTCTransList(sql_Setup, propCode, clientCode, "Property Setup");
 		if (listTC_Setup.size() == 0) {
@@ -572,9 +579,9 @@ public class clsPurchaseOrderController {
 		model.put("TCMasterList", objPOBean);
 		return new ModelAndView("frmPurchaseOrder", "command", objPOBean);
 	}
-	
-	
-	
+
+
+
 	/**
 	 * load Product Data
 	 * 
@@ -604,8 +611,8 @@ public class clsPurchaseOrderController {
 				sql = "select a.strProdcode,a.strProdName,a.strUOM,a.dblCostRM, ifnull(b.strSuppCode,'') as strSuppCode," + " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,a.strPartNo " + " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' and b.strDefault='Y' "
 						+ " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where  a.strProdCode='" + prodCode + "' and a.strClientCode='" + clientCode + "'";
 				//change for maya-- show sales price of product 
-//				sql = "select a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, ifnull(b.strSuppCode,'') as strSuppCode," + " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,a.strPartNo,a.dblCostRM " + " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' and b.strDefault='Y' "
-//						+ " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where  a.strProdCode='" + prodCode + "' and a.strClientCode='" + clientCode + "'";
+				//				sql = "select a.strProdcode,a.strProdName,a.strUOM,a.dblUnitPrice, ifnull(b.strSuppCode,'') as strSuppCode," + " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,a.strPartNo,a.dblCostRM " + " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' and b.strDefault='Y' "
+				//						+ " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where  a.strProdCode='" + prodCode + "' and a.strClientCode='" + clientCode + "'";
 			} else {
 				String locCode = req.getSession().getAttribute("locationCode").toString();
 
@@ -733,9 +740,9 @@ public class clsPurchaseOrderController {
 		if(objBean.getDblConversion()>0){
 			currConversion=objBean.getDblConversion();
 		}
-		
+
 		objBean.setStrPOCode(objGlobalFunctions.funIfNull(objBean.getStrPOCode(), "", objBean.getStrPOCode()));
-		
+
 		if (!result.hasErrors()) {
 			if (null != objBean.getStrSuppCode() && objBean.getStrSuppCode().trim().length() != 0) {
 				List<clsPurchaseOrderDtlModel> listclsPurchaseOrderDtlModel = objBean.getListPODtlModel();
@@ -759,7 +766,7 @@ public class clsPurchaseOrderController {
 							ob.setDblTaxableAmt(ob.getDblTaxableAmt()*currConversion);
 							ob.setDblTax(ob.getDblTax()*currConversion);
 							ob.setDblTotalPrice(ob.getDblTotalPrice()*currConversion);
-							
+
 							ob.setStrProcessCode("");
 							ob.setStrProdChar("");
 							ob.setStrTaxType("");
@@ -936,7 +943,7 @@ public class clsPurchaseOrderController {
 		double extraAmt = Double.parseDouble(objGlobal.funIfNull(String.valueOf(objBean.getDblExtra()), "0.0000", String.valueOf(objBean.getDblExtra())));
 		objPurchaseOrderHdModel.setDblExtra(extraAmt*currConversion);
 		double finalAmt = Double.parseDouble(objGlobal.funIfNull(String.valueOf(objBean.getDblFinalAmt()), "0.0000", String.valueOf(objBean.getDblFinalAmt())));
-		
+
 		objPurchaseOrderHdModel.setStrExcise(objGlobal.funIfNull(objBean.getStrExcise(), "", objBean.getStrExcise()));
 		double discountAmt = Double.parseDouble(objGlobal.funIfNull(String.valueOf(objBean.getDblDiscount()), "0.0000", String.valueOf(objBean.getDblDiscount())));
 		objPurchaseOrderHdModel.setDblDiscount(discountAmt*currConversion);
@@ -954,7 +961,7 @@ public class clsPurchaseOrderController {
 		objPurchaseOrderHdModel.setDtPayDate(objGlobal.funGetDate("yyyy-MM-dd", objBean.getDtPayDate()));
 		objPurchaseOrderHdModel.setDblConversion(currConversion);
 		objPurchaseOrderHdModel.setDblExchangeRate(0.00);
-		
+
 		if (clientCode.equals("226.001")) {
 			double vatAmt = 0;
 			if (objBean.getListPOTaxDtl() != null) {
@@ -965,7 +972,7 @@ public class clsPurchaseOrderController {
 			}
 			finalAmt = finalAmt + objBean.getDblFreight() + objBean.getDblInsurance() + objBean.getDblOtherCharges() + objBean.getDblClearingAgentCharges()+objBean.getDblVATClaim();
 			objPurchaseOrderHdModel.setDblFinalAmt(finalAmt*currConversion);
-			
+
 			double exchangeRate=(dblTotal + taxAmt + extraAmt) - discountAmt;
 			exchangeRate=exchangeRate+objBean.getDblFreight() + objBean.getDblInsurance() + objBean.getDblOtherCharges() + objBean.getDblClearingAgentCharges();
 			exchangeRate = exchangeRate - vatAmt;
@@ -1226,107 +1233,107 @@ public class clsPurchaseOrderController {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-//	public void funCallReport(String POcode, String type, HttpServletResponse resp, HttpServletRequest req) {
-//		try {
-//			objGlobal = new clsGlobalFunctions();
-//			Connection con = objGlobal.funGetConnection(req);
-//			String clientCode = req.getSession().getAttribute("clientCode").toString();
-//			String companyName = req.getSession().getAttribute("companyName").toString();
-//			String userCode = req.getSession().getAttribute("usercode").toString();
-//			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
-//
-//			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
-//			if (objSetup == null) {
-//				objSetup = new clsPropertySetupModel();
-//			}
-//			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlip.jrxml");
-//			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
-//			String sql = "SELECT po.strPOCode,date(po.dtPODate) as dtPODate,po.strSuppCode,po.strAgainst,po.strSOCode,po.dblFinalAmt," + " po.strVAddress1,po.strVAddress2,po.strVCity,po.strVState,po.strVCountry,po.strVPin,po.strSAddress1," + " po.strSAddress2,po.strSCity,po.strSState,po.strSCountry,po.strSPin,po.strYourRef,po.strPerRef,po.strEOE,"
-//					+ " po.strCode,date(po.dtDelDate) as dtDelDate,po.dblExtra,po.strFinalAmtInWord as AmtInWords,po.dblDiscount," + " po.strPayMode,po.strCurrency,po.strAmedment,po.strAmntNO,po.stredit,po.strUserAmed,date(po.dtPayDate) as dtPayDate,"
-//					+ " po.dblConversion,po.dtLastModified,po.strAuthorise,po.dblTaxAmt,s.strPName,s.strContact,s.strPhone,s.strMobile,s.strFax, s.strMAdd1, s.strMAdd2,s.strMCity," + " s.strMPin,s.strMState,s.strMCountry,u.strUserName,u.strSignatureImg FROM tblpurchaseorderhd AS po " + " left outer JOIN  tblpartymaster AS s ON po.strSuppCode = s.strPCode and s.strClientCode='" + clientCode + "' "
-//					+ " left outer join  tbluserhd u on po.strUserModified=u.strUserCode and u.strClientCode='" + clientCode + "' " + " left outer join tblcurrencymaster c on po.strCurrency=c.strCurrencyCode and c.strClientCode='" + clientCode + "' " + " WHERE (po.strPOCode = '" + POcode + "' and po.strClientCode='" + clientCode + "' ) ";
-//			JasperDesign jd = JRXmlLoader.load(reportName);
-//			JRDesignQuery newQuery = new JRDesignQuery();
-//			newQuery.setText(sql);
-//			jd.setQuery(newQuery);
-//			String sql2 = "SELECT  1 slno,   po.strProdCode,p.strProdName as strProdName, p.strUOM, po.dblOrdQty, po.dblPrice," + " po.dbldiscount,po.dblOrdQty*po.dblPrice-po.dbldiscount dblamt,  p.strPartNo,po.dblWeight,p.strCalAmtOn," + " po.strProdChar,p.strSpecification,po.strProcessCode,pr.strProcessName,po.strRemarks,ph.strEOE,po.strUpdate, ph.dblExtra "
-//					+ " FROM  tblpurchaseorderdtl po  INNER JOIN tblpurchaseorderhd ph ON po.strPOCode = ph.strPOCode and ph.strClientCode='" + clientCode + "' " + " INNER JOIN tblproductmaster p ON po.strProdCode = p.strProdCode and p.strClientCode='" + clientCode + "' " + " left outer JOIN tblprocessmaster pr ON po.strProcessCode = pr.strProcessCode and pr.strClientCode='" + clientCode + "' "
-//					+ "  where po.strPOCode='" + POcode + "' and po.strClientCode='" + clientCode + "' order by po.intindex";
-//			JRDesignQuery subQuery = new JRDesignQuery();
-//			subQuery.setText(sql2);
-//			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
-//			JRDesignDataset subDataset = (JRDesignDataset) datasetMap.get("dsPODtl");
-//			subDataset.setQuery(subQuery);
-//			String sql3 = "select a.strTCName,if(b.strTCDesc='null','',b.strTCDesc) as strTCDesc  from tbltctransdtl b,tbltcmaster a" + " where b.strTCCode=a.strTCCode and  b.strTransCode='" + POcode + "'" + " and b.strTransType='Purchase Order' and  b.strClientCode='" + clientCode + "'  and a.strClientCode='" + clientCode + "' ";
-//			JRDesignQuery subQuery1 = new JRDesignQuery();
-//			subQuery1.setText(sql3);
-//			JRDesignDataset subDataset1 = (JRDesignDataset) datasetMap.get("dsTC");
-//			subDataset1.setQuery(subQuery1);
-//
-//			String taxQuery = " select a.strTaxDesc,a.strTaxAmt from tblpotaxdtl a where strPOCode='" + POcode + "' and strClientCode='" + clientCode + "' ";
-//			JRDesignQuery subQuery2 = new JRDesignQuery();
-//			subQuery2.setText(taxQuery);
-//			JRDesignDataset subDataset2 = (JRDesignDataset) datasetMap.get("dsTax");
-//			subDataset2.setQuery(subQuery2);
-//
-//			JasperReport jr = JasperCompileManager.compileReport(jd);
-//
-//			HashMap hm = new HashMap();
-//			hm.put("strCompanyName", companyName);
-//			hm.put("strUserCode", userCode.toUpperCase());
-//			hm.put("strImagePath", imagePath);
-//			hm.put("strAddr1", objSetup.getStrAdd1());
-//			hm.put("strAddr2", objSetup.getStrAdd2());
-//			hm.put("strCity", objSetup.getStrCity());
-//			hm.put("strState", objSetup.getStrState());
-//			hm.put("strCountry", objSetup.getStrCountry());
-//			hm.put("strPin", objSetup.getStrPin());
-//			hm.put("strFax", objSetup.getStrFax());
-//			hm.put("strPhoneNo", objSetup.getStrPhone());
-//			hm.put("strEmailAddress", objSetup.getStrEmail());
-//			hm.put("strWebSite", objSetup.getStrWebsite());
-//			hm.put("strVAT", objSetup.getStrVAT());
-//			hm.put("strCST", objSetup.getStrCST());
-//			JasperPrint p = JasperFillManager.fillReport(jr, hm, con);
-//			if (type.trim().equalsIgnoreCase("pdf")) {
-//				JRExporter exporterXLS = new JRPdfExporter();
-//				exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, p);
-//				exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, resp.getOutputStream());
-//				resp.setHeader("Content-Disposition", "attachment;filename=" + "rptPOSlip_" + POcode + "." + type.trim());
-//				exporterXLS.exportReport();
-//				resp.setContentType("application/pdf");
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	//	public void funCallReport(String POcode, String type, HttpServletResponse resp, HttpServletRequest req) {
+	//		try {
+	//			objGlobal = new clsGlobalFunctions();
+	//			Connection con = objGlobal.funGetConnection(req);
+	//			String clientCode = req.getSession().getAttribute("clientCode").toString();
+	//			String companyName = req.getSession().getAttribute("companyName").toString();
+	//			String userCode = req.getSession().getAttribute("usercode").toString();
+	//			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+	//
+	//			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+	//			if (objSetup == null) {
+	//				objSetup = new clsPropertySetupModel();
+	//			}
+	//			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlip.jrxml");
+	//			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+	//			String sql = "SELECT po.strPOCode,date(po.dtPODate) as dtPODate,po.strSuppCode,po.strAgainst,po.strSOCode,po.dblFinalAmt," + " po.strVAddress1,po.strVAddress2,po.strVCity,po.strVState,po.strVCountry,po.strVPin,po.strSAddress1," + " po.strSAddress2,po.strSCity,po.strSState,po.strSCountry,po.strSPin,po.strYourRef,po.strPerRef,po.strEOE,"
+	//					+ " po.strCode,date(po.dtDelDate) as dtDelDate,po.dblExtra,po.strFinalAmtInWord as AmtInWords,po.dblDiscount," + " po.strPayMode,po.strCurrency,po.strAmedment,po.strAmntNO,po.stredit,po.strUserAmed,date(po.dtPayDate) as dtPayDate,"
+	//					+ " po.dblConversion,po.dtLastModified,po.strAuthorise,po.dblTaxAmt,s.strPName,s.strContact,s.strPhone,s.strMobile,s.strFax, s.strMAdd1, s.strMAdd2,s.strMCity," + " s.strMPin,s.strMState,s.strMCountry,u.strUserName,u.strSignatureImg FROM tblpurchaseorderhd AS po " + " left outer JOIN  tblpartymaster AS s ON po.strSuppCode = s.strPCode and s.strClientCode='" + clientCode + "' "
+	//					+ " left outer join  tbluserhd u on po.strUserModified=u.strUserCode and u.strClientCode='" + clientCode + "' " + " left outer join tblcurrencymaster c on po.strCurrency=c.strCurrencyCode and c.strClientCode='" + clientCode + "' " + " WHERE (po.strPOCode = '" + POcode + "' and po.strClientCode='" + clientCode + "' ) ";
+	//			JasperDesign jd = JRXmlLoader.load(reportName);
+	//			JRDesignQuery newQuery = new JRDesignQuery();
+	//			newQuery.setText(sql);
+	//			jd.setQuery(newQuery);
+	//			String sql2 = "SELECT  1 slno,   po.strProdCode,p.strProdName as strProdName, p.strUOM, po.dblOrdQty, po.dblPrice," + " po.dbldiscount,po.dblOrdQty*po.dblPrice-po.dbldiscount dblamt,  p.strPartNo,po.dblWeight,p.strCalAmtOn," + " po.strProdChar,p.strSpecification,po.strProcessCode,pr.strProcessName,po.strRemarks,ph.strEOE,po.strUpdate, ph.dblExtra "
+	//					+ " FROM  tblpurchaseorderdtl po  INNER JOIN tblpurchaseorderhd ph ON po.strPOCode = ph.strPOCode and ph.strClientCode='" + clientCode + "' " + " INNER JOIN tblproductmaster p ON po.strProdCode = p.strProdCode and p.strClientCode='" + clientCode + "' " + " left outer JOIN tblprocessmaster pr ON po.strProcessCode = pr.strProcessCode and pr.strClientCode='" + clientCode + "' "
+	//					+ "  where po.strPOCode='" + POcode + "' and po.strClientCode='" + clientCode + "' order by po.intindex";
+	//			JRDesignQuery subQuery = new JRDesignQuery();
+	//			subQuery.setText(sql2);
+	//			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
+	//			JRDesignDataset subDataset = (JRDesignDataset) datasetMap.get("dsPODtl");
+	//			subDataset.setQuery(subQuery);
+	//			String sql3 = "select a.strTCName,if(b.strTCDesc='null','',b.strTCDesc) as strTCDesc  from tbltctransdtl b,tbltcmaster a" + " where b.strTCCode=a.strTCCode and  b.strTransCode='" + POcode + "'" + " and b.strTransType='Purchase Order' and  b.strClientCode='" + clientCode + "'  and a.strClientCode='" + clientCode + "' ";
+	//			JRDesignQuery subQuery1 = new JRDesignQuery();
+	//			subQuery1.setText(sql3);
+	//			JRDesignDataset subDataset1 = (JRDesignDataset) datasetMap.get("dsTC");
+	//			subDataset1.setQuery(subQuery1);
+	//
+	//			String taxQuery = " select a.strTaxDesc,a.strTaxAmt from tblpotaxdtl a where strPOCode='" + POcode + "' and strClientCode='" + clientCode + "' ";
+	//			JRDesignQuery subQuery2 = new JRDesignQuery();
+	//			subQuery2.setText(taxQuery);
+	//			JRDesignDataset subDataset2 = (JRDesignDataset) datasetMap.get("dsTax");
+	//			subDataset2.setQuery(subQuery2);
+	//
+	//			JasperReport jr = JasperCompileManager.compileReport(jd);
+	//
+	//			HashMap hm = new HashMap();
+	//			hm.put("strCompanyName", companyName);
+	//			hm.put("strUserCode", userCode.toUpperCase());
+	//			hm.put("strImagePath", imagePath);
+	//			hm.put("strAddr1", objSetup.getStrAdd1());
+	//			hm.put("strAddr2", objSetup.getStrAdd2());
+	//			hm.put("strCity", objSetup.getStrCity());
+	//			hm.put("strState", objSetup.getStrState());
+	//			hm.put("strCountry", objSetup.getStrCountry());
+	//			hm.put("strPin", objSetup.getStrPin());
+	//			hm.put("strFax", objSetup.getStrFax());
+	//			hm.put("strPhoneNo", objSetup.getStrPhone());
+	//			hm.put("strEmailAddress", objSetup.getStrEmail());
+	//			hm.put("strWebSite", objSetup.getStrWebsite());
+	//			hm.put("strVAT", objSetup.getStrVAT());
+	//			hm.put("strCST", objSetup.getStrCST());
+	//			JasperPrint p = JasperFillManager.fillReport(jr, hm, con);
+	//			if (type.trim().equalsIgnoreCase("pdf")) {
+	//				JRExporter exporterXLS = new JRPdfExporter();
+	//				exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, p);
+	//				exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, resp.getOutputStream());
+	//				resp.setHeader("Content-Disposition", "attachment;filename=" + "rptPOSlip_" + POcode + "." + type.trim());
+	//				exporterXLS.exportReport();
+	//				resp.setContentType("application/pdf");
+	//			}
+	//
+	//		} catch (Exception e) {
+	//			e.printStackTrace();
+	//		}
+	//	}
 
-	
+
 	public void funCallReport(String POcode, String type, HttpServletResponse resp, HttpServletRequest req)
 	{
 		try
 		{
-		ServletOutputStream servletOutputStream = resp.getOutputStream();
-		String strPOCodes[] = POcode.split(",");
-		List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
-		for (int i = 0; i < strPOCodes.length; i++) {
-			JasperPrint p = funCallRangePrintReport(strPOCodes[i], resp, req);
-			jprintlist.add(p);
-		}
-		if (type.trim().equalsIgnoreCase("pdf")) {
-			JRExporter exporter = new JRPdfExporter();
-			resp.setContentType("application/pdf");
-			exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
-			exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
-			resp.setHeader("Content-Disposition", "inline;filename=" + "rptPOSlip." + type.trim());
-			exporter.exportReport();
-			servletOutputStream.flush();
-			servletOutputStream.close();
-		}
+			ServletOutputStream servletOutputStream = resp.getOutputStream();
+			String strPOCodes[] = POcode.split(",");
+			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+			for (int i = 0; i < strPOCodes.length; i++) {
+				JasperPrint p = funCallRangePrintReport(strPOCodes[i], resp, req);
+				jprintlist.add(p);
+			}
+			if (type.trim().equalsIgnoreCase("pdf")) {
+				JRExporter exporter = new JRPdfExporter();
+				resp.setContentType("application/pdf");
+				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+				resp.setHeader("Content-Disposition", "inline;filename=" + "rptPOSlip." + type.trim());
+				exporter.exportReport();
+				servletOutputStream.flush();
+				servletOutputStream.close();
+			}
 		} catch (IOException | JRException e) {
-		e.printStackTrace();
-	}
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * Range PO Printing
@@ -1413,283 +1420,283 @@ public class clsPurchaseOrderController {
 
 	@SuppressWarnings({ "finally", "rawtypes", "unchecked" })
 	public JasperPrint funCallRangePrintReport(String POcode, HttpServletResponse resp, HttpServletRequest req) {
-			objGlobal = new clsGlobalFunctions();
-			Connection con = objGlobal.funGetConnection(req);
-			JasperPrint p = null;
-			try {
+		objGlobal = new clsGlobalFunctions();
+		Connection con = objGlobal.funGetConnection(req);
+		JasperPrint p = null;
+		try {
 
-				String clientCode = req.getSession().getAttribute("clientCode").toString();
-				String companyName = req.getSession().getAttribute("companyName").toString();
-				String userCode = req.getSession().getAttribute("usercode").toString();
-				String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String companyName = req.getSession().getAttribute("companyName").toString();
+			String userCode = req.getSession().getAttribute("usercode").toString();
+			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 
-				clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
-				String billAddress = "";
-				String shippingAddress = "";
-				if (objSetup == null) {
-					objSetup = new clsPropertySetupModel();
-				} else {
-					billAddress = objSetup.getStrBAdd1() + "," + objSetup.getStrBAdd2() + "," + objSetup.getStrBCity() + "," + objSetup.getStrBState() + "," + objSetup.getStrBPin();
-					shippingAddress = objSetup.getStrSAdd1() + "," + objSetup.getStrSAdd2() + "," + objSetup.getStrSCity() + "," + objSetup.getStrSState() + "," + objSetup.getStrSPin();
-					;
+			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+			String billAddress = "";
+			String shippingAddress = "";
+			if (objSetup == null) {
+				objSetup = new clsPropertySetupModel();
+			} else {
+				billAddress = objSetup.getStrBAdd1() + "," + objSetup.getStrBAdd2() + "," + objSetup.getStrBCity() + "," + objSetup.getStrBState() + "," + objSetup.getStrBPin();
+				shippingAddress = objSetup.getStrSAdd1() + "," + objSetup.getStrSAdd2() + "," + objSetup.getStrSCity() + "," + objSetup.getStrSState() + "," + objSetup.getStrSPin();
+				;
+			}
+			//global format--> format 3
+			String reportName=servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipForAll.jrxml");
+			if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 1"))
+			{
+				reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlip.jrxml");
+				if (clientCode.equals("226.001")) {
+					//					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlip1.jrxml");
+					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlip2.jrxml");
 				}
-				//global format--> format 3
-				String reportName=servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipForAll.jrxml");
-				if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 1"))
-				{
-					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlip.jrxml");
-					if (clientCode.equals("226.001")) {
-	//					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlip1.jrxml");
-						reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlip2.jrxml");
-					}
-				}
-				else if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 2"))
-				{
-					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipWithoutAmtRateAndDisc.jrxml");
-				}
-				else if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 3")){
-					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipForAll.jrxml");
-				}else if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 4")){
-					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipFormat4.jrxml");
-				}
+			}
+			else if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 2"))
+			{
+				reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipWithoutAmtRateAndDisc.jrxml");
+			}
+			else if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 3")){
+				reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipForAll.jrxml");
+			}else if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 4")){
+				reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlipFormat4.jrxml");
+			}
 
-				String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
-				
-				double dblFOB = 0.0,dblFOBInBase=0.00;
-				double dblFreight = 0.0,dblFreightInBase=0.00;
-				double dblInsurance = 0.0,dblInsuranceInBase=0.00;
-				double dblOtherCharges = 0.0,dblOtherChargesInBase=0.00;
-				double dblCIF = 0.0,dblCIFInBase=0.00;
-				double conversionRate = 1;
-				double dblVATClaim = 0.0;
-				double dblClearingAgentCharges = 0.0;
-				String strPartyType = "";
-				double costOfConsignmentInBase=0.0,costOfConsignment=0.00;
-				double totalTaxAmt=0.00;
-				double grandTotalInBaseCurrency=0.00;
-				String strCurrencyName="";
-				String sql1 = "select a.dblFOB,a.dblFreight,a.dblInsurance,a.dblOtherCharges,a.dblCIF,c.strCurrencyName,a.dblConversion,a.dblClearingAgentCharges,a.dblVATClaim"
-						+ ",b.strPartyType,a.dblExchangeRate,a.dblTaxAmt,a.dblFinalAmt " 
-						+ " from tblpurchaseorderhd a,tblpartymaster b,tblcurrencymaster c " 
-						+ " where a.strSuppCode=b.strPCode and a.strPOCode='" + POcode + "' and b.strPartyType='Foreign' "
-						+ " and a.strCurrency=c.strCurrencyCode and a.strClientCode='" + clientCode + "' ";
-				List list = objGlobalFunctionsService.funGetList(sql1, "sql");
+			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+
+			double dblFOB = 0.0,dblFOBInBase=0.00;
+			double dblFreight = 0.0,dblFreightInBase=0.00;
+			double dblInsurance = 0.0,dblInsuranceInBase=0.00;
+			double dblOtherCharges = 0.0,dblOtherChargesInBase=0.00;
+			double dblCIF = 0.0,dblCIFInBase=0.00;
+			double conversionRate = 1;
+			double dblVATClaim = 0.0;
+			double dblClearingAgentCharges = 0.0;
+			String strPartyType = "";
+			double costOfConsignmentInBase=0.0,costOfConsignment=0.00;
+			double totalTaxAmt=0.00;
+			double grandTotalInBaseCurrency=0.00;
+			String strCurrencyName="";
+			String sql1 = "select a.dblFOB,a.dblFreight,a.dblInsurance,a.dblOtherCharges,a.dblCIF,c.strCurrencyName,a.dblConversion,a.dblClearingAgentCharges,a.dblVATClaim"
+					+ ",b.strPartyType,a.dblExchangeRate,a.dblTaxAmt,a.dblFinalAmt " 
+					+ " from tblpurchaseorderhd a,tblpartymaster b,tblcurrencymaster c " 
+					+ " where a.strSuppCode=b.strPCode and a.strPOCode='" + POcode + "' and b.strPartyType='Foreign' "
+					+ " and a.strCurrency=c.strCurrencyCode and a.strClientCode='" + clientCode + "' ";
+			List list = objGlobalFunctionsService.funGetList(sql1, "sql");
+			if (list != null && !list.isEmpty()) {
+				Object[] ob = (Object[]) list.get(0);
+				conversionRate = Double.parseDouble(ob[6].toString());
+				dblFOB = Double.parseDouble(ob[0].toString()) / conversionRate;
+				dblFreight = Double.parseDouble(ob[1].toString()) / conversionRate;
+				dblInsurance = Double.parseDouble(ob[2].toString()) / conversionRate;
+				dblOtherCharges = Double.parseDouble(ob[3].toString()) / conversionRate;
+				dblCIF = Double.parseDouble(ob[4].toString()) / conversionRate;
+				strCurrencyName=ob[5].toString();
+				dblFOBInBase = Double.parseDouble(ob[0].toString());
+				dblFreightInBase = Double.parseDouble(ob[1].toString());
+				dblInsuranceInBase = Double.parseDouble(ob[2].toString());
+				dblOtherChargesInBase = Double.parseDouble(ob[3].toString());
+				dblCIFInBase = Double.parseDouble(ob[4].toString());
+
+				dblClearingAgentCharges = Double.parseDouble(ob[7].toString()) / conversionRate;
+				dblVATClaim = Double.parseDouble(ob[8].toString()) / conversionRate;
+				strPartyType = ob[9].toString();
+				costOfConsignment=Double.parseDouble(ob[10].toString()) ;
+				costOfConsignmentInBase=Double.parseDouble(ob[10].toString()) / conversionRate;
+
+				totalTaxAmt=Double.parseDouble(ob[11].toString()) ;
+				grandTotalInBaseCurrency = Double.parseDouble(ob[12].toString()) / conversionRate;
+			}
+			else{
+				sql1="select ifnull(b.strCurrencyName,''),a.dblConversion from tblpurchaseorderhd a left outer join tblcurrencymaster b on a.strCurrency=b.strCurrencyCode "
+						+ " where a.strPOCode='"+POcode + "' AND a.strClientCode='" + clientCode + "';";
+				list = objGlobalFunctionsService.funGetList(sql1, "sql");
 				if (list != null && !list.isEmpty()) {
 					Object[] ob = (Object[]) list.get(0);
-					conversionRate = Double.parseDouble(ob[6].toString());
-					dblFOB = Double.parseDouble(ob[0].toString()) / conversionRate;
-					dblFreight = Double.parseDouble(ob[1].toString()) / conversionRate;
-					dblInsurance = Double.parseDouble(ob[2].toString()) / conversionRate;
-					dblOtherCharges = Double.parseDouble(ob[3].toString()) / conversionRate;
-					dblCIF = Double.parseDouble(ob[4].toString()) / conversionRate;
-					strCurrencyName=ob[5].toString();
-					dblFOBInBase = Double.parseDouble(ob[0].toString());
-					dblFreightInBase = Double.parseDouble(ob[1].toString());
-					dblInsuranceInBase = Double.parseDouble(ob[2].toString());
-					dblOtherChargesInBase = Double.parseDouble(ob[3].toString());
-					dblCIFInBase = Double.parseDouble(ob[4].toString());
-					
-					dblClearingAgentCharges = Double.parseDouble(ob[7].toString()) / conversionRate;
-					dblVATClaim = Double.parseDouble(ob[8].toString()) / conversionRate;
-					strPartyType = ob[9].toString();
-					costOfConsignment=Double.parseDouble(ob[10].toString()) ;
-					costOfConsignmentInBase=Double.parseDouble(ob[10].toString()) / conversionRate;
-					
-					totalTaxAmt=Double.parseDouble(ob[11].toString()) ;
-					grandTotalInBaseCurrency = Double.parseDouble(ob[12].toString()) / conversionRate;
+					conversionRate = Double.parseDouble(ob[1].toString());
+					strCurrencyName=ob[0].toString();
 				}
-				else{
-					sql1="select ifnull(b.strCurrencyName,''),a.dblConversion from tblpurchaseorderhd a left outer join tblcurrencymaster b on a.strCurrency=b.strCurrencyCode "
-							+ " where a.strPOCode='"+POcode + "' AND a.strClientCode='" + clientCode + "';";
-					list = objGlobalFunctionsService.funGetList(sql1, "sql");
-					if (list != null && !list.isEmpty()) {
-						Object[] ob = (Object[]) list.get(0);
-						conversionRate = Double.parseDouble(ob[1].toString());
-						strCurrencyName=ob[0].toString();
-					}
-				}
-				String sql = "SELECT po.strPOCode,date(po.dtPODate) as dtPODate,po.strSuppCode,po.strAgainst,po.strSOCode,po.dblFinalAmt/"+conversionRate+" as dblFinalAmt, po.strVAddress1,po.strVAddress2,po.strVCity,po.strVState,po.strVCountry,po.strVPin,po.strSAddress1," + " po.strSAddress2,po.strSCity,po.strSState,po.strSCountry,po.strSPin,po.strYourRef,po.strPerRef,po.strEOE,"
-						+ " po.strCode,date(po.dtDelDate) as dtDelDate,po.dblExtra/"+conversionRate+" as dblExtra,po.strFinalAmtInWord as AmtInWords,po.dblDiscount/"+conversionRate+" as dblDiscount," + " po.strPayMode,po.strCurrency,po.strAmedment,po.strAmntNO,po.stredit,po.strUserAmed,date(po.dtPayDate) as dtPayDate,"
-						+ " po.dblConversion,po.dtLastModified,po.strAuthorise,po.dblTaxAmt/"+conversionRate+" as dblTaxAmt,s.strPName,s.strContact,s.strPhone,s.strMobile,s.strFax, s.strMAdd1, s.strMAdd2,s.strMCity," + " s.strMPin,s.strMState,s.strMCountry,u.strUserName,u.strSignatureImg, " + " ((po.dblDiscount*100)/po.dblTotal) as dblDisPer "
-						+ " ,po.strUserCreated,po.strAuthLevel1,po.strAuthLevel2 " 
-						+ " FROM tblpurchaseorderhd AS po "
-						+ " left outer JOIN  tblpartymaster AS s ON po.strSuppCode = s.strPCode and s.strClientCode='" + clientCode + "' " + " left outer join  tbluserhd u on po.strUserModified=u.strUserCode and u.strClientCode='" + clientCode + "' " + " left outer join tblcurrencymaster c on po.strCurrency=c.strCurrencyCode and c.strClientCode='" + clientCode + "' " + " WHERE (po.strPOCode = '"
-						+ POcode + "' and po.strClientCode='" + clientCode + "' ) ";
-				System.out.println(sql);
-				
-				String taxQuery = "";
-				if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 1"))
-				{
+			}
+			String sql = "SELECT po.strPOCode,date(po.dtPODate) as dtPODate,po.strSuppCode,po.strAgainst,po.strSOCode,po.dblFinalAmt/"+conversionRate+" as dblFinalAmt, po.strVAddress1,po.strVAddress2,po.strVCity,po.strVState,po.strVCountry,po.strVPin,po.strSAddress1," + " po.strSAddress2,po.strSCity,po.strSState,po.strSCountry,po.strSPin,po.strYourRef,po.strPerRef,po.strEOE,"
+					+ " po.strCode,date(po.dtDelDate) as dtDelDate,po.dblExtra/"+conversionRate+" as dblExtra,po.strFinalAmtInWord as AmtInWords,po.dblDiscount/"+conversionRate+" as dblDiscount," + " po.strPayMode,po.strCurrency,po.strAmedment,po.strAmntNO,po.stredit,po.strUserAmed,date(po.dtPayDate) as dtPayDate,"
+					+ " po.dblConversion,po.dtLastModified,po.strAuthorise,po.dblTaxAmt/"+conversionRate+" as dblTaxAmt,s.strPName,s.strContact,s.strPhone,s.strMobile,s.strFax, s.strMAdd1, s.strMAdd2,s.strMCity," + " s.strMPin,s.strMState,s.strMCountry,u.strUserName,u.strSignatureImg, " + " ((po.dblDiscount*100)/po.dblTotal) as dblDisPer "
+					+ " ,po.strUserCreated,po.strAuthLevel1,po.strAuthLevel2 " 
+					+ " FROM tblpurchaseorderhd AS po "
+					+ " left outer JOIN  tblpartymaster AS s ON po.strSuppCode = s.strPCode and s.strClientCode='" + clientCode + "' " + " left outer join  tbluserhd u on po.strUserModified=u.strUserCode and u.strClientCode='" + clientCode + "' " + " left outer join tblcurrencymaster c on po.strCurrency=c.strCurrencyCode and c.strClientCode='" + clientCode + "' " + " WHERE (po.strPOCode = '"
+					+ POcode + "' and po.strClientCode='" + clientCode + "' ) ";
+			System.out.println(sql);
+
+			String taxQuery = "";
+			if(objSetup.getStrPOSlipFormat().equalsIgnoreCase("Format 1"))
+			{
 				if (strPartyType.equalsIgnoreCase("Foreign") && clientCode.equals("226.001")) {
 					reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseOrderSlip_ForeignSupplier.jrxml");
 				}
-				}
-				JasperDesign jd = JRXmlLoader.load(reportName);
-				JRDesignQuery newQuery = new JRDesignQuery();
-				newQuery.setText(sql);
-				jd.setQuery(newQuery);
+			}
+			JasperDesign jd = JRXmlLoader.load(reportName);
+			JRDesignQuery newQuery = new JRDesignQuery();
+			newQuery.setText(sql);
+			jd.setQuery(newQuery);
 
-				double POProductQty=0;
-				String sqlPurDtl = "SELECT  po.strProdCode, po.dblOrdQty, po.dblPrice" 
+			double POProductQty=0;
+			String sqlPurDtl = "SELECT  po.strProdCode, po.dblOrdQty, po.dblPrice" 
 					+ " FROM  tblpurchaseorderdtl po "
 					+ " where po.strPOCode='" + POcode + "' and po.strClientCode='" + clientCode + "' ";
-				List listPurDtl = objGlobalFunctionsService.funGetList(sqlPurDtl, "sql");
-				if (listPurDtl != null && !listPurDtl.isEmpty()) {
-					Object[] ob = (Object[]) listPurDtl.get(0);
-					POProductQty=Double.parseDouble(ob[1].toString());
-				}
-				
-				String sql2 = "SELECT  1 slno, po.strProdCode,p.strProdName as strProdName, p.strUOM, po.dblOrdQty, po.dblPrice/"+conversionRate+" as dblPrice ," 
+			List listPurDtl = objGlobalFunctionsService.funGetList(sqlPurDtl, "sql");
+			if (listPurDtl != null && !listPurDtl.isEmpty()) {
+				Object[] ob = (Object[]) listPurDtl.get(0);
+				POProductQty=Double.parseDouble(ob[1].toString());
+			}
+
+			String sql2 = "SELECT  1 slno, po.strProdCode,p.strProdName as strProdName, p.strUOM, po.dblOrdQty, po.dblPrice/"+conversionRate+" as dblPrice ," 
 					+ " po.dbldiscount/"+conversionRate+" as dbldiscount,(po.dblOrdQty*po.dblPrice-po.dbldiscount)/"+conversionRate+" dblamt,  p.strPartNo,po.dblWeight,p.strCalAmtOn," + " po.strProdChar,p.strSpecification,po.strProcessCode,pr.strProcessName,po.strRemarks,ph.strEOE,po.strUpdate,ph.dblExtra/"+conversionRate+" as dblExtra "
 					+ " FROM  tblpurchaseorderdtl po  INNER JOIN tblpurchaseorderhd ph ON po.strPOCode = ph.strPOCode and ph.strClientCode='" + clientCode + "' " + " INNER JOIN tblproductmaster p ON po.strProdCode = p.strProdCode and p.strClientCode='" + clientCode + "' " + " left outer JOIN tblprocessmaster pr ON po.strProcessCode = pr.strProcessCode and pr.strClientCode='" + clientCode + "' "
 					+ "  where po.strPOCode='" + POcode + "' and po.strClientCode='" + clientCode + "' order by po.intindex";
-				System.out.println(sql2);
-				JRDesignQuery subQuery = new JRDesignQuery();
-				subQuery.setText(sql2);
-				Map<String, JRDataset> datasetMap = jd.getDatasetMap();
-				JRDesignDataset subDataset = (JRDesignDataset) datasetMap.get("dsPODtl");
-				subDataset.setQuery(subQuery);
-				String sql3 = "select a.strTCName,if(b.strTCDesc='null','',b.strTCDesc) as strTCDesc  from tbltctransdtl b,tbltcmaster a" + " where b.strTCCode=a.strTCCode and  b.strTransCode='" + POcode + "'" + " and b.strTransType='Purchase Order' and  b.strClientCode='" + clientCode + "'  and a.strClientCode='" + clientCode + "' ";
-				JRDesignQuery subQuery1 = new JRDesignQuery();
-				subQuery1.setText(sql3);
-				JRDesignDataset subDataset1 = (JRDesignDataset) datasetMap.get("dsTC");
-				subDataset1.setQuery(subQuery1);
+			System.out.println(sql2);
+			JRDesignQuery subQuery = new JRDesignQuery();
+			subQuery.setText(sql2);
+			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
+			JRDesignDataset subDataset = (JRDesignDataset) datasetMap.get("dsPODtl");
+			subDataset.setQuery(subQuery);
+			String sql3 = "select a.strTCName,if(b.strTCDesc='null','',b.strTCDesc) as strTCDesc  from tbltctransdtl b,tbltcmaster a" + " where b.strTCCode=a.strTCCode and  b.strTransCode='" + POcode + "'" + " and b.strTransType='Purchase Order' and  b.strClientCode='" + clientCode + "'  and a.strClientCode='" + clientCode + "' ";
+			JRDesignQuery subQuery1 = new JRDesignQuery();
+			subQuery1.setText(sql3);
+			JRDesignDataset subDataset1 = (JRDesignDataset) datasetMap.get("dsTC");
+			subDataset1.setQuery(subQuery1);
 
-				
-				String taxQueryForBase="";
-				
-				taxQuery=" select a.strTaxDesc,a.strTaxAmt as strTaxAmt from tblpotaxdtl a where strPOCode='" + POcode + "' and strClientCode='" + clientCode + "' ";
-				if (clientCode.equals("226.001")) {
-					
-					taxQuery=" select a.strTaxDesc";
 
-					if (strPartyType.equalsIgnoreCase("Foreign"))
-					{
-						taxQuery+=",a.strTaxAmt AS strBaseTaxAmt";
-					}
-					taxQuery+=",a.strTaxAmt/" + conversionRate + " as strTaxAmt from tblpotaxdtl a where strPOCode='" + POcode + "' and strClientCode='" + clientCode + "' ";
-				}
+			String taxQueryForBase="";
 
-				JRDesignQuery subQuery2 = new JRDesignQuery();
-				subQuery2.setText(taxQuery);
-				JRDesignDataset subDataset2 = (JRDesignDataset) datasetMap.get("dsTax");
-				subDataset2.setQuery(subQuery2);
-				
-//				if (strPartyType.equalsIgnoreCase("Foreign") && clientCode.equals("226.001")) {
-//					JRDesignQuery subQuery3 = new JRDesignQuery();
-//					subQuery3.setText(taxQueryForBase);
-//					JRDesignDataset subDataset3 = (JRDesignDataset) datasetMap.get("dsOriginalAmtTax");
-//					subDataset3.setQuery(subQuery3);
-//				}
+			taxQuery=" select a.strTaxDesc,a.strTaxAmt as strTaxAmt from tblpotaxdtl a where strPOCode='" + POcode + "' and strClientCode='" + clientCode + "' ";
+			if (clientCode.equals("226.001")) {
 
-				String imgChefsCornerQualityPolicy ="";
-				if(clientCode.equals("211.001"))//CHEFS CORNER
+				taxQuery=" select a.strTaxDesc";
+
+				if (strPartyType.equalsIgnoreCase("Foreign"))
 				{
-					//imgChefsCornerQualityPolicy=servletContext.getRealPath("/resources/images/imgChefsCornerQualityPolicy.jpg");
-					imgChefsCornerQualityPolicy=""
-							+ "Quality Policy"
-							+ "\n"
-							+ "\n\t We at Chefs Corner are committed to provide Healthy,Quality,Tasty and Variety foods "
-							+ "to our customer in hygienic environment at all times by continual improvement and thus achieve "
-							+ "customer satisfaction by fulfilling all applicable requirements."
-							+ "\n\n"
-							+ "Quality Objectives"
-							+ "\n"
-							+ "\n> To Achieve Customer Satisfaction"
-							+ "\n> To Reduce Customer Complaints"
-							+ "\n> To Provide awareness to all employees"
-							+ "\n> To Reduce Wastage"
-							+ "\n";
+					taxQuery+=",a.strTaxAmt AS strBaseTaxAmt";
 				}
-				
-				
-				
-				JasperReport jr = JasperCompileManager.compileReport(jd);
-
-				HashMap hm = new HashMap();
-				hm.put("strCompanyName", companyName);
-				hm.put("strUserCode", userCode.toUpperCase());
-				hm.put("strImagePath", imagePath);
-				hm.put("imgQualityPolicy", imgChefsCornerQualityPolicy);
-				hm.put("strAddr1", objSetup.getStrAdd1());
-				hm.put("strAddr2", objSetup.getStrAdd2());
-				hm.put("strCity", objSetup.getStrCity());
-				hm.put("strState", objSetup.getStrState());
-				hm.put("strCountry", objSetup.getStrCountry());
-				hm.put("strPin", objSetup.getStrPin());
-				hm.put("strFax", objSetup.getStrFax());
-				hm.put("strPhoneNo", objSetup.getStrPhone());
-				hm.put("strEmailAddress", objSetup.getStrEmail());
-				hm.put("strWebSite", objSetup.getStrWebsite());
-				hm.put("strVAT", objSetup.getStrVAT());
-				hm.put("strCST", objSetup.getStrCST());
-				hm.put("strSAdd", shippingAddress);
-				hm.put("strBAdd", billAddress.toUpperCase());
-				
-
-				if (strPartyType.equalsIgnoreCase("Foreign") && clientCode.equals("226.001")) {
-					
-					double costOfProduct=0;
-					hm.put("dblFOB", funGetFormattedString(dblFOB));
-					hm.put("dblFreight", funGetFormattedString(dblFreight));
-					hm.put("dblInsurance", funGetFormattedString(dblInsurance));
-					hm.put("dblOtherCharges", funGetFormattedString(dblOtherCharges));
-					hm.put("dblCIF", funGetFormattedString(dblCIF));
-					hm.put("dblClearingAgentCharges", funGetFormattedString(dblClearingAgentCharges));
-					hm.put("dblVATClaim", funGetFormattedString(dblVATClaim));
-					hm.put("grandTotalInBaseCurrency", funGetFormattedString(grandTotalInBaseCurrency));
-					hm.put("dblCostOfConsignmentInBase",funGetFormattedString(costOfConsignmentInBase));
-					costOfProduct=costOfConsignmentInBase/POProductQty;
-					hm.put("dblCostOfProduct",costOfProduct);
-					
-					hm.put("dblFOBOriginal", dblFOBInBase);
-					hm.put("dblFreightOriginal", dblFreightInBase);
-					hm.put("dblInsuranceOriginal", dblInsuranceInBase);
-					hm.put("dblOtherChargesOriginal", dblOtherChargesInBase);
-					hm.put("dblCIFOriginal", dblCIFInBase);
-					hm.put("dblExchangeRate", conversionRate);
-					hm.put("dblCostOfConsignment",costOfConsignment/conversionRate );
-					hm.put("strForeignPartyType",strPartyType);
-					hm.put("strCurrency", strCurrencyName);
-						
-				}else if (clientCode.equals("226.001")) {
-					
-					hm.put("dblFOB", String.valueOf(dblFOB));
-					hm.put("dblFreight", String.valueOf(dblFreight));
-					hm.put("dblInsurance", String.valueOf(dblInsurance));
-					hm.put("dblOtherCharges", String.valueOf(dblOtherCharges));
-					hm.put("dblCIF", String.valueOf(dblCIF));
-					hm.put("dblClearingAgentCharges", String.valueOf(dblClearingAgentCharges));
-					hm.put("dblVATClaim", String.valueOf(dblVATClaim));
-					
-					hm.put("dblFOBOriginal", String.valueOf(dblFOBInBase));
-					hm.put("dblFreightOriginal", String.valueOf(dblFreightInBase));
-					hm.put("dblInsuranceOriginal", String.valueOf(dblInsuranceInBase));
-					hm.put("dblOtherChargesOriginal", String.valueOf(dblOtherChargesInBase));
-					hm.put("dblCIFOriginal", String.valueOf(dblCIFInBase));
-					hm.put("strLocalPartyType",strPartyType);
-					hm.put("strCurrency", strCurrencyName);
-					hm.put("dblConversionRate", conversionRate);
-				}
-
-				p = JasperFillManager.fillReport(jr, hm, con);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					con.close();
-				} catch (SQLException e) {
-
-					e.printStackTrace();
-				}
-				return p;
+				taxQuery+=",a.strTaxAmt/" + conversionRate + " as strTaxAmt from tblpotaxdtl a where strPOCode='" + POcode + "' and strClientCode='" + clientCode + "' ";
 			}
+
+			JRDesignQuery subQuery2 = new JRDesignQuery();
+			subQuery2.setText(taxQuery);
+			JRDesignDataset subDataset2 = (JRDesignDataset) datasetMap.get("dsTax");
+			subDataset2.setQuery(subQuery2);
+
+			//				if (strPartyType.equalsIgnoreCase("Foreign") && clientCode.equals("226.001")) {
+			//					JRDesignQuery subQuery3 = new JRDesignQuery();
+			//					subQuery3.setText(taxQueryForBase);
+			//					JRDesignDataset subDataset3 = (JRDesignDataset) datasetMap.get("dsOriginalAmtTax");
+			//					subDataset3.setQuery(subQuery3);
+			//				}
+
+			String imgChefsCornerQualityPolicy ="";
+			if(clientCode.equals("211.001"))//CHEFS CORNER
+			{
+				//imgChefsCornerQualityPolicy=servletContext.getRealPath("/resources/images/imgChefsCornerQualityPolicy.jpg");
+				imgChefsCornerQualityPolicy=""
+						+ "Quality Policy"
+						+ "\n"
+						+ "\n\t We at Chefs Corner are committed to provide Healthy,Quality,Tasty and Variety foods "
+						+ "to our customer in hygienic environment at all times by continual improvement and thus achieve "
+						+ "customer satisfaction by fulfilling all applicable requirements."
+						+ "\n\n"
+						+ "Quality Objectives"
+						+ "\n"
+						+ "\n> To Achieve Customer Satisfaction"
+						+ "\n> To Reduce Customer Complaints"
+						+ "\n> To Provide awareness to all employees"
+						+ "\n> To Reduce Wastage"
+						+ "\n";
+			}
+
+
+
+			JasperReport jr = JasperCompileManager.compileReport(jd);
+
+			HashMap hm = new HashMap();
+			hm.put("strCompanyName", companyName);
+			hm.put("strUserCode", userCode.toUpperCase());
+			hm.put("strImagePath", imagePath);
+			hm.put("imgQualityPolicy", imgChefsCornerQualityPolicy);
+			hm.put("strAddr1", objSetup.getStrAdd1());
+			hm.put("strAddr2", objSetup.getStrAdd2());
+			hm.put("strCity", objSetup.getStrCity());
+			hm.put("strState", objSetup.getStrState());
+			hm.put("strCountry", objSetup.getStrCountry());
+			hm.put("strPin", objSetup.getStrPin());
+			hm.put("strFax", objSetup.getStrFax());
+			hm.put("strPhoneNo", objSetup.getStrPhone());
+			hm.put("strEmailAddress", objSetup.getStrEmail());
+			hm.put("strWebSite", objSetup.getStrWebsite());
+			hm.put("strVAT", objSetup.getStrVAT());
+			hm.put("strCST", objSetup.getStrCST());
+			hm.put("strSAdd", shippingAddress);
+			hm.put("strBAdd", billAddress.toUpperCase());
+
+
+			if (strPartyType.equalsIgnoreCase("Foreign") && clientCode.equals("226.001")) {
+
+				double costOfProduct=0;
+				hm.put("dblFOB", funGetFormattedString(dblFOB));
+				hm.put("dblFreight", funGetFormattedString(dblFreight));
+				hm.put("dblInsurance", funGetFormattedString(dblInsurance));
+				hm.put("dblOtherCharges", funGetFormattedString(dblOtherCharges));
+				hm.put("dblCIF", funGetFormattedString(dblCIF));
+				hm.put("dblClearingAgentCharges", funGetFormattedString(dblClearingAgentCharges));
+				hm.put("dblVATClaim", funGetFormattedString(dblVATClaim));
+				hm.put("grandTotalInBaseCurrency", funGetFormattedString(grandTotalInBaseCurrency));
+				hm.put("dblCostOfConsignmentInBase",funGetFormattedString(costOfConsignmentInBase));
+				costOfProduct=costOfConsignmentInBase/POProductQty;
+				hm.put("dblCostOfProduct",costOfProduct);
+
+				hm.put("dblFOBOriginal", dblFOBInBase);
+				hm.put("dblFreightOriginal", dblFreightInBase);
+				hm.put("dblInsuranceOriginal", dblInsuranceInBase);
+				hm.put("dblOtherChargesOriginal", dblOtherChargesInBase);
+				hm.put("dblCIFOriginal", dblCIFInBase);
+				hm.put("dblExchangeRate", conversionRate);
+				hm.put("dblCostOfConsignment",costOfConsignment/conversionRate );
+				hm.put("strForeignPartyType",strPartyType);
+				hm.put("strCurrency", strCurrencyName);
+
+			}else if (clientCode.equals("226.001")) {
+
+				hm.put("dblFOB", String.valueOf(dblFOB));
+				hm.put("dblFreight", String.valueOf(dblFreight));
+				hm.put("dblInsurance", String.valueOf(dblInsurance));
+				hm.put("dblOtherCharges", String.valueOf(dblOtherCharges));
+				hm.put("dblCIF", String.valueOf(dblCIF));
+				hm.put("dblClearingAgentCharges", String.valueOf(dblClearingAgentCharges));
+				hm.put("dblVATClaim", String.valueOf(dblVATClaim));
+
+				hm.put("dblFOBOriginal", String.valueOf(dblFOBInBase));
+				hm.put("dblFreightOriginal", String.valueOf(dblFreightInBase));
+				hm.put("dblInsuranceOriginal", String.valueOf(dblInsuranceInBase));
+				hm.put("dblOtherChargesOriginal", String.valueOf(dblOtherChargesInBase));
+				hm.put("dblCIFOriginal", String.valueOf(dblCIFInBase));
+				hm.put("strLocalPartyType",strPartyType);
+				hm.put("strCurrency", strCurrencyName);
+				hm.put("dblConversionRate", conversionRate);
+			}
+
+			p = JasperFillManager.fillReport(jr, hm, con);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			}
+			return p;
 		}
+	}
 
 
 
-	
+
 	private String funGetFormattedString(double input) {
 		String output = BigDecimal.valueOf(input).toPlainString();
 		String pattern = "######.#######";
@@ -1779,10 +1786,10 @@ public class clsPurchaseOrderController {
 		return count;
 
 	}
-	
 
 
-private Double funGetDecimalFormatByGlobalPattern(double input,int qtyPlaces) {
+
+	private Double funGetDecimalFormatByGlobalPattern(double input,int qtyPlaces) {
 		String output = BigDecimal.valueOf(input).toPlainString();
 		String pattern = "##.";
 		while(qtyPlaces!=0){
@@ -1791,7 +1798,7 @@ private Double funGetDecimalFormatByGlobalPattern(double input,int qtyPlaces) {
 		}
 		DecimalFormat decimalFormat = new DecimalFormat(pattern);
 		output = decimalFormat.format(input);
-		
+
 		return Double.parseDouble(output);
 	}
 

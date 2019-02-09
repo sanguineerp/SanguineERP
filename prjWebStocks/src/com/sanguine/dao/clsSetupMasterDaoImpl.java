@@ -295,7 +295,7 @@ public class clsSetupMasterDaoImpl implements clsSetupMasterDao {
 		objSetUpModel.setStrShowAllPartyToAllLoc(objPropSetUp3[43].toString());
 
 
-		String sql4 = "SELECT a.strRateHistoryFormat,a.strPOSlipFormat,a.strSRSlipFormat,a.strWeightedAvgCal,a.strGRNRateEditable,a.strInvoiceRateEditable,	a.strSORateEditable,a.strSettlementWiseInvSer,a.strGRNProdPOWise , a.strPORateEditable "
+		String sql4 = "SELECT a.strRateHistoryFormat,a.strPOSlipFormat,a.strSRSlipFormat,a.strWeightedAvgCal,a.strGRNRateEditable,a.strInvoiceRateEditable,	a.strSORateEditable,a.strSettlementWiseInvSer,a.strGRNProdPOWise , a.strPORateEditable,a.strCurrentDateForTransaction "
 				+ " FROM clsPropertySetupModel a where a.strPropertyCode='" + propertyCode + "' and  a.strClientCode ='" + clientCode + "' ";
 
 		Query query4 = sessionFactory.getCurrentSession().createQuery(sql4);
@@ -311,6 +311,7 @@ public class clsSetupMasterDaoImpl implements clsSetupMasterDao {
 		objSetUpModel.setStrSettlementWiseInvSer(objPropSetUp4[7].toString());
 		objSetUpModel.setStrGRNProdPOWise(objPropSetUp4[8].toString());
 		objSetUpModel.setStrPORateEditable(objPropSetUp4[9].toString());
+		objSetUpModel.setStrCurrentDateForTransaction(objPropSetUp4[10].toString());//  StrAllowBackDateTransaction
 		return objSetUpModel;
 
 	}

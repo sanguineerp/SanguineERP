@@ -174,6 +174,14 @@ public class clsGRNController {
 		}
 		clsPropertySetupModel objPropertySetupModel=objSetupMasterService.funGetObjectPropertySetup(propCode,clientCode);
 
+		if(objPropertySetupModel.getStrCurrentDateForTransaction().equalsIgnoreCase("Yes"))
+		{
+			model.put("strCurrentDateForTransaction",true);
+		}
+		else
+		{
+			model.put("strCurrentDateForTransaction",false);
+		}
 		objBean.setStrRateEditableYN(objPropertySetupModel.getStrGRNRateEditable());
 		Map<String, String> hmCurrency = objCurrencyMasterService.funCurrencyListToDisplay(clientCode);
 		if (hmCurrency.isEmpty()) {

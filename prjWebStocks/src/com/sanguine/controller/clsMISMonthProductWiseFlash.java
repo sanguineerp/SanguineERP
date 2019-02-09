@@ -121,7 +121,7 @@ public class clsMISMonthProductWiseFlash
 		String prodCode = "";
 		String subGrpName = "";
 		List<String> listMonth = funGetMonth(fromDate, toDate);
-		String sql = "select  c.strProdName,c.strUOM ,sum(b.dblQty),DATE_FORMAT(a.dtMISDate,'%M'),b.strProdCode,f.strGName,e.strSGName ,e.strSGCode,c.strProdCode,c.dblCostRM from tblmishd a " + " left outer join tbllocationmaster d on d.strLocCode=a.strLocFrom ,tblmisdtl b " + " left outer join tblproductmaster c on b.strProdCode=c.strProdCode  " + " left outer join tblsubgroupmaster e on c.strSGCode=e.strSGCode " + " left outer join tblgroupmaster f on e.strGCode=f.strGCode " + " where a.dtMISDate between '" + fromDate + "' and '" + toDate + "' and a.strMISCode=b.strMISCode and a.strLocFrom='" + locCode + "' " + " group by   Month(a.dtMISDate),f.strGCode, c.strProdCode  " + " order by e.strSGName, c.strProdName, Month(a.dtMISDate)   asc ";
+		String sql = "select  c.strProdName,c.strUOM ,sum(b.dblQty),DATE_FORMAT(a.dtMISDate,'%M'),b.strProdCode,f.strGName,e.strSGName ,e.strSGCode,c.strProdCode,c.dblCostRM from tblmishd a " + " left outer join tbllocationmaster d on d.strLocCode=a.strLocFrom ,tblmisdtl b " + " left outer join tblproductmaster c on b.strProdCode=c.strProdCode  " + " left outer join tblsubgroupmaster e on c.strSGCode=e.strSGCode " + " left outer join tblgroupmaster f on e.strGCode=f.strGCode " + " where a.dtMISDate between '" + fromDate + "' and '" + toDate + "' and a.strMISCode=b.strMISCode and a.strLocFrom='" + locCode + "' " + " group by   Month(a.dtMISDate),f.strGCode, c.strProdCode  " + " order by e.strSGName, c.strProdName,Year(a.dtMISDate), Month(a.dtMISDate)   asc ";
 
 		List listMISFlsh = objGlobalService.funGetList(sql);
 		double totalQty = 0.0;
@@ -133,14 +133,12 @@ public class clsMISMonthProductWiseFlash
 			{
 
 				Object[] obj = (Object[]) listMISFlsh.get(i);
-
 				if (!hmProd.containsKey(obj[8].toString()))
 				{
 					if (!hmProd.isEmpty())
 					{
 						for (int cnt = j; cnt < listMonth.size(); cnt++)
 						{
-
 							list.add(0);
 						}
 					}
@@ -343,7 +341,7 @@ public class clsMISMonthProductWiseFlash
 		Map<String, List> hmHeader = new HashMap<String, List>();
 
 		List<String> listMonth = funGetMonth(fromDate, toDate);
-		String sql = "select  c.strProdName,c.strUOM ,sum(b.dblQty),DATE_FORMAT(a.dtMISDate,'%M'),b.strProdCode,f.strGName,e.strSGName ,e.strSGCode,c.strProdCode,c.dblCostRM from tblmishd a " + " left outer join tbllocationmaster d on d.strLocCode=a.strLocFrom ,tblmisdtl b " + " left outer join tblproductmaster c on b.strProdCode=c.strProdCode  " + " left outer join tblsubgroupmaster e on c.strSGCode=e.strSGCode " + " left outer join tblgroupmaster f on e.strGCode=f.strGCode " + " where a.dtMISDate between '" + fromDate + "' and '" + toDate + "' and a.strMISCode=b.strMISCode and a.strLocFrom='" + locCode + "' " + " group by   Month(a.dtMISDate),f.strGCode, c.strProdCode  " + " order by e.strSGName, c.strProdName, Month(a.dtMISDate)   asc ";
+		String sql = "select  c.strProdName,c.strUOM ,sum(b.dblQty),DATE_FORMAT(a.dtMISDate,'%M'),b.strProdCode,f.strGName,e.strSGName ,e.strSGCode,c.strProdCode,c.dblCostRM from tblmishd a " + " left outer join tbllocationmaster d on d.strLocCode=a.strLocFrom ,tblmisdtl b " + " left outer join tblproductmaster c on b.strProdCode=c.strProdCode  " + " left outer join tblsubgroupmaster e on c.strSGCode=e.strSGCode " + " left outer join tblgroupmaster f on e.strGCode=f.strGCode " + " where a.dtMISDate between '" + fromDate + "' and '" + toDate + "' and a.strMISCode=b.strMISCode and a.strLocFrom='" + locCode + "' " + " group by   Month(a.dtMISDate),f.strGCode, c.strProdCode  " + " order by e.strSGName, c.strProdName,Year(a.dtMISDate), Month(a.dtMISDate)   asc ";
 
 		List listMISFlsh = objGlobalService.funGetList(sql);
 		double totalQty = 0.0;

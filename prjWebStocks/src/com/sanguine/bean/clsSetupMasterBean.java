@@ -173,6 +173,7 @@ public class clsSetupMasterBean {
 	
 	private String strWeightedAvgCal;
 	
+	private String StrCurrentDateForTransaction;
 	
 
 	
@@ -1374,6 +1375,18 @@ public class clsSetupMasterBean {
 	public void setStrPORateEditable(String strPORateEditable) {
 		this.strPORateEditable = strPORateEditable;
 	}
+
+	public String getStrCurrentDateForTransaction() {
+		return StrCurrentDateForTransaction;
+	}
+
+	public void setStrCurrentDateForTransaction(String strCurrentDateForTransaction) {
+		StrCurrentDateForTransaction = strCurrentDateForTransaction;
+	}
+
+	
+
+
 
 
 	

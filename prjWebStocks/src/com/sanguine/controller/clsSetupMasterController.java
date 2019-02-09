@@ -534,6 +534,7 @@ public class clsSetupMasterController {
 		bean.setStrInvFormat(objSetup.getStrInvFormat());
 		bean.setStrInvNote(objSetup.getStrInvNote());
 		bean.setStrCurrencyCode(objSetup.getStrCurrencyCode());
+		bean.setStrCurrentDateForTransaction(objSetup.getStrCurrentDateForTransaction());
 
 		/*
 		 * if(objSetup.getStrShowAllPropCustomer()==null ||
@@ -1099,6 +1100,8 @@ public class clsSetupMasterController {
 				.getStrSettlementWiseInvSer());
 		objPropertySetupModel.setStrGRNProdPOWise(bean.getStrGRNProdPOWise());
 		objPropertySetupModel.setStrPORateEditable(bean.getStrPORateEditable());
+		objPropertySetupModel.setStrCurrentDateForTransaction(bean.getStrCurrentDateForTransaction());
+		
 
 		/*
 		 * if(bean.isStrShowAllPropCustomer()==true) {

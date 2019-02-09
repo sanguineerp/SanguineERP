@@ -21,6 +21,7 @@
 	* Ready function for Tab
 	**/
 	var poeditable;
+	var strCurrentDateForTransaction;
 		$(document).ready(function() 
 		{	
 			$(".tab_content").hide();
@@ -63,6 +64,12 @@
 			  if(poeditable=="false"){
 				  $("#txtPOCode").prop('disabled', true);
 			  }
+			  
+			 /*  strCurrentDateForTransaction="${strCurrentDateForTransaction}" ;
+			  if(strCurrentDateForTransaction=="false"){
+				  $("#txtPODate").prop('disabled', true);
+			  } */
+			
 			
 
 		});
@@ -1985,8 +1992,19 @@
 	    	alert("Future date is not allowed for PO");
 	    	$("#txtPODate").focus();
 			return false;		    	
+	    } 
+	    if($("#txtPOCode").val()==""){
+	    	strCurrentDateForTransaction="${strCurrentDateForTransaction}" ;
+		    if(strCurrentDateForTransaction=="true"){
+		    	if(dateDiff<0){
+		    		alert("Back date is not allowed for PO ");
+			    	$("#txtPODate").focus();
+					return false;		    	
+		    	}
+		    }	
 	    }
-		
+	    
+	    
 		if (!fun_isDate($("#txtPODate").val())) {
 			alert('Invalid Date');
 			$("#txtPODate").focus();

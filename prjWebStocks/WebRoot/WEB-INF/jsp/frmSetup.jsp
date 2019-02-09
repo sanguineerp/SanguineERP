@@ -1072,8 +1072,16 @@
 									<tr>
 										<td><label>E.C.C.No.</label></td>
 										<td><s:input path="strECCNo" cssClass="BoxW116px"/></td>
-									</tr>	
+										
+										
+									</tr>
+									
+									
+									
+									
+									
 
+								
 								</table>
 							</div>						
 
@@ -1441,6 +1449,20 @@
 										</s:select>
 										</td>
 										
+									</tr>
+									<tr>
+									
+									<td>Use Current Date For Transaction</td>
+										<td>
+										<s:select path="strCurrentDateForTransaction" id="cmbAllowBackDateTransaction"
+												cssClass="BoxW48px" cssStyle="width:50%">
+												<s:option selected="selected" value="No">No</s:option>
+												<s:option  value="Yes">Yes</s:option>
+										</s:select>
+										</td>
+									
+									
+									
 									</tr>
 								</table>
 							</div>

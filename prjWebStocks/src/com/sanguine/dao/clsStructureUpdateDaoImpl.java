@@ -1005,6 +1005,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 
 		funExecuteQuery(sql);
 
+		sql = "ALTER TABLE `tblpropertysetup` " 
+				+" ADD COLUMN `strCurrentDateForTransaction` VARCHAR(10) NOT NULL DEFAULT 'No' AFTER `strPORateEditable`;";
+		funExecuteQuery(sql);
+	
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
 		List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();

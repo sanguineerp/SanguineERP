@@ -117,7 +117,7 @@ public class clsClientDetails {
 			hmClientDtl.put("103.001", clsClientDetails.createClientDetails("103.001", "BOMBAY HIGH", dFormat.parse("2016-03-05"), dFormat.parse("2018-08-01"))); // extend
 			hmClientDtl.put("104.001", clsClientDetails.createClientDetails("104.001", "Bakers Treat", dFormat.parse("2016-03-07"), dFormat.parse("2017-04-07")));// HO																																									// Unit
 			hmClientDtl.put("106.001", clsClientDetails.createClientDetails("106.001", "Independence Brewing Co. Pvt Ltd", dFormat.parse("2016-03-21"), dFormat.parse("2017-03-21")));
-			hmClientDtl.put("107.001", clsClientDetails.createClientDetails("107.001", "UNITED CRANE COMPONENTS PVT. LTD.", dFormat.parse("2016-03-30"), dFormat.parse("2017-09-30"))); // for checking
+			hmClientDtl.put("107.001", clsClientDetails.createClientDetails("107.001", "UNITED CRANE COMPONENTS PVT. LTD.", dFormat.parse("2016-03-30"), dFormat.parse("2019-09-30"))); // testing  for checking
 			hmClientDtl.put("109.001", clsClientDetails.createClientDetails("109.001", "Chemistry 101", dFormat.parse("2016-04-11"), dFormat.parse("2017-04-11")));
 			hmClientDtl.put("110.001", clsClientDetails.createClientDetails("110.001", "CAKE SHOP", dFormat.parse("2016-01-23"), dFormat.parse("2016-05-30")));
 			hmClientDtl.put("111.001", clsClientDetails.createClientDetails("111.001", "MERWANS CONFECTIONERS PVT LTD", dFormat.parse("2016-05-07"), dFormat.parse("2050-12-30")));// HO
@@ -142,7 +142,7 @@ public class clsClientDetails {
 			hmClientDtl.put("172.001", clsClientDetails.createClientDetails("172.001", "DIOS HOTEL LLP", dFormat.parse("2017-05-25"), dFormat.parse("2018-08-25"))); // one
  			hmClientDtl.put("173.002", clsClientDetails.createClientDetails("173.002", "Le Flamington", dFormat.parse("2018-12-15"), dFormat.parse("2019-12-24")));
 			hmClientDtl.put("174.001", clsClientDetails.createClientDetails("174.001", "KRD Eateries Pvt Ltd", dFormat.parse("2017-06-06"), dFormat.parse("2017-10-31"))); // krimsons
-			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "COPPER STORY PRIVATE LIMITED", dFormat.parse("2017-06-06"), dFormat.parse("2019-02-05")));//renewed licence and rename TJS to Copper story privated limited till 01-02-2019 //renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
+			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "COPPER STORY PRIVATE LIMITED", dFormat.parse("2017-06-06"), dFormat.parse("2019-02-20")));//Renewed on 06-02-2019 for 15 days till 20-02-2019 //renewed licence and rename TJS to Copper story privated limited till 01-02-2019 //renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
 			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2019-06-08")));
 			hmClientDtl.put("181.001", clsClientDetails.createClientDetails("181.001", "RMV COMMUNICATION PVT LTD", dFormat.parse("2017-06-20"), dFormat.parse("2017-07-20")));
 			hmClientDtl.put("184.001", clsClientDetails.createClientDetails("184.001", "BALAJI TRADERS PVT LTD", dFormat.parse("2017-07-03"), dFormat.parse("2018-01-07")));
@@ -186,14 +186,14 @@ public class clsClientDetails {
 			
 			hmClientDtl.put("273.001", clsClientDetails.createClientDetails("273.001", "SHEESHA SKY LOUNGE", dFormat.parse("2018-10-25"), dFormat.parse("2019-10-24")));//released on 25-10-2018 for 1 Year till 24-10-2019 for 1 SPOS ,0 APOS,0 WebStocks,No SMS Pack,No Bill Deletion.", "Mr.Alam", "9920939306", "alam.sky@gmail.com");	
 		
-			hmClientDtl.put("277.001", clsClientDetails.createClientDetails("277.001", "Kapila Garden Restaurant", dFormat.parse("2018-11-21"), dFormat.parse("2019-01-31")));//renewed on 10-01-2019 till 31-01-2019//relased on 21-11-2018 for 1 month till 2018-12-21
+			hmClientDtl.put("277.001", clsClientDetails.createClientDetails("277.001", "Kapila Garden Restaurant", dFormat.parse("2018-11-21"), dFormat.parse("2019-02-15")));//Renewed on 01-02-2019 for 15 days till 15-02-2019//renewed on 10-01-2019 till 31-01-2019//relased on 21-11-2018 for 1 month till 2018-12-21
 			
 			hmClientDtl.put("284.001", clsClientDetails.createClientDetails("284.001", "CNP HOSPITALITY PVT LTD", dFormat.parse("2018-11-29"), dFormat.parse("2018-12-29")));//relased on 29-11-2018 for 1 month till 2018-12-29
 			
 			hmClientDtl.put("287.001", clsClientDetails.createClientDetails("287.001", "OVER THE TOP HOSPITALITY", dFormat.parse("2018-12-05"), dFormat.parse("2019-08-31")));//released on 5-12-2018 till 31-08-2019 for 4 SPOS ,5 APOS,WebStocks,No SMS Pack,No Bill Deletion.", "Mr.Ravi", "9136025911", "Ravitejold@oldtimessake.in"
 			hmClientDtl.put("290.001", clsClientDetails.createClientDetails("290.001", "CREME HOSPITALITY AND MANAGEMENT", dFormat.parse("2018-12-15"), dFormat.parse("2019-02-15")));//renewed  for one month on 17-01-2019 form 15-01-2019 till 15-02-2019
-			hmClientDtl.put("293.001", clsClientDetails.createClientDetails("293.001", "ZELEB", dFormat.parse("2019-01-30"), dFormat.parse("2019-02-06")));//relased zaleb license for 8 days POS Client
-			hmClientDtl.put("294.001", clsClientDetails.createClientDetails("294.001", "SEERAN HOSPITALITY", dFormat.parse("2019-01-11"), dFormat.parse("2019-02-11")));//released for one month on 11-01-2019 to 11-02-2019 "Mr.Santosh ", "9820339701", "santosh.seeran@gmail.com"
+			hmClientDtl.put("293.001", clsClientDetails.createClientDetails("293.001", "ZELEB", dFormat.parse("2019-01-30"), dFormat.parse("2019-12-27")));//renewed on 2-02-2019 for 1 year till 2019-12-27//relased zaleb license for 8 days POS Client
+			hmClientDtl.put("294.001", clsClientDetails.createClientDetails("294.001", "SEERAN HOSPITALITY", dFormat.parse("2019-01-11"), dFormat.parse("2020-01-11")));//Renewed on 06-02-2019 for 1 year till 11-01-2020 //released for one month on 11-01-2019 to 11-02-2019 "Mr.Santosh ", "9820339701", "santosh.seeran@gmail.com"
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -14,9 +14,19 @@
    //Set GRN textField focus when Form is Load
    
    var grneditable;
+   var strCurrentDateForTransaction;
+
 	$(document).ready(function () {
 	    resetForms('grn');
 	    $("#txtGRNCode").focus();
+	    
+	    /* strCurrentDateForTransaction="${strCurrentDateForTransaction}" ;
+		  if(strCurrentDateForTransaction=="true"){
+			//  $("#txtGRNDate").prop('disabled', true);
+			//  document.getElementById("txtGRNDate").readOnly = true;
+			 // document.getElementById("txtGRNDate").disabled = true;
+
+		  } */
 	});
 	
    //Set tab which have Active on form loding
@@ -2717,6 +2727,17 @@
 		    	$("#txtGRNDate").focus();
 				return false;		    	
 		    } 
+		    if($("#txtGRNCode").val()==""){
+		    	strCurrentDateForTransaction="${strCurrentDateForTransaction}" ;
+			    if(strCurrentDateForTransaction=="true"){
+			    	if(dateDiff<0){
+			    		alert("Back date is not allowed for GRN ");
+				    	$("#txtGRNDate").focus();
+						return false;		    	
+			    	}
+			    }	
+		    }
+		    
 		    
 			if (!fun_isDate($("#txtGRNDate").val()))
 			{

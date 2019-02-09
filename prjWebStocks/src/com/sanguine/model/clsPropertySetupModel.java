@@ -201,6 +201,8 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	
 	@Column(name = "strPORateEditable", columnDefinition = "VARCHAR(10) default ''")
 	private String strPORateEditable;
+	@Column(name = "strCurrentDateForTransaction", columnDefinition = "VARCHAR(10) default 'No'")
+	private String strCurrentDateForTransaction;
 	
 	
 	
@@ -1216,6 +1218,16 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	public void setStrPORateEditable(String strPORateEditable) {
 		this.strPORateEditable = strPORateEditable;
 	}
+
+	public String getStrCurrentDateForTransaction() {
+		return strCurrentDateForTransaction;
+	}
+
+	public void setStrCurrentDateForTransaction(String strCurrentDateForTransaction) {
+		this.strCurrentDateForTransaction = strCurrentDateForTransaction;
+	}
+
+
 	
 	
 }
