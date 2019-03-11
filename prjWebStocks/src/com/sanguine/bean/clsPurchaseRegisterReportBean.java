@@ -19,6 +19,8 @@ public class clsPurchaseRegisterReportBean {
 	private String strFromLocation;
 	
 	private String strBillNo;
+	
+	private String strGRNNo;
 
 	public String getStrPName() {
 		return strPName;
@@ -90,6 +92,14 @@ public class clsPurchaseRegisterReportBean {
 
 	public void setStrBillNo(String strBillNo) {
 		this.strBillNo = strBillNo;
+	}
+
+	public String getStrGRNNo() {
+		return strGRNNo;
+	}
+
+	public void setStrGRNNo(String strGRNNo) {
+		this.strGRNNo = strGRNNo;
 	}
 
 }

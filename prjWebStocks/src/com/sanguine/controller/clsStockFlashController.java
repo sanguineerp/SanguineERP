@@ -61,6 +61,14 @@ public class clsStockFlashController {
 			urlHits = "1";
 		}
 		model.put("urlHits", urlHits);
+		List<String> classProductList = new ArrayList<>();
+		classProductList.add("All");
+		classProductList.add("A");
+		classProductList.add("B");
+		classProductList.add("C");
+		
+		model.put("classProductlist", classProductList);
+		
 		return funGetModelAndView(req);
 	}
 
@@ -152,7 +160,9 @@ public class clsStockFlashController {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/frmStockFlashSummaryReport", method = RequestMethod.GET)
-	private @ResponseBody List funShowStockSummaryFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode, HttpServletRequest req, HttpServletResponse resp) {
+	private @ResponseBody List funShowStockSummaryFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode,@RequestParam(value = "prodClass") String prodClass, HttpServletRequest req, HttpServletResponse resp) {
+
+	//private @ResponseBody List funShowStockSummaryFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode, HttpServletRequest req, HttpServletResponse resp) {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String[] spParam1 = param1.split(",");
@@ -279,6 +289,11 @@ public class clsStockFlashController {
 		if (showZeroItems.equals("No")) {
 			sql += "and (a.dblOpeningStk >0 or a.dblGRN >0 or dblSCGRN >0 or a.dblStkTransIn >0 or a.dblStkAdjIn >0 " + "or a.dblMISIn >0 or a.dblQtyProduced >0 or a.dblMaterialReturnIn>0 or a.dblStkTransOut >0 " + "or a.dblStkAdjOut >0 or a.dblMISOut >0 or a.dblQtyConsumed  >0 or a.dblSales  >0 " + "or a.dblMaterialReturnOut  >0 or a.dblDeliveryNote > 0)";
 		}
+		if(!prodClass.equalsIgnoreCase("ALL"))
+		{
+			sql+="and b.strClass='" + prodClass + "' ";
+		}
+		
 
 		System.out.println(sql);
 		// List list=objStkFlashService.funGetStockFlashData(sql,clientCode,
@@ -363,10 +378,11 @@ public class clsStockFlashController {
 		return stkFlashList;
 	}
 
+	//private @ResponseBody List funShowStockDetailFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode, HttpServletRequest req, HttpServletResponse resp) {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/frmStockFlashDetailReport", method = RequestMethod.GET)
-	private @ResponseBody List funShowStockDetailFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode, HttpServletRequest req, HttpServletResponse resp) {
-		String clientCode = req.getSession().getAttribute("clientCode").toString();
+	private @ResponseBody List funShowStockDetailFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode,@RequestParam(value = "prodClass") String prodClass, HttpServletRequest req, HttpServletResponse resp) {	
+	String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 		String[] spParam1 = param1.split(",");
@@ -530,6 +546,11 @@ public class clsStockFlashController {
 
 		if (showZeroItems.equals("No")) {
 			sql += "and (a.dblOpeningStk >0 or a.dblGRN >0 or dblSCGRN >0 or a.dblStkTransIn >0 or a.dblStkAdjIn >0 " + "or a.dblMISIn >0 or a.dblQtyProduced >0 or a.dblMaterialReturnIn>0 or a.dblStkTransOut >0 " + "or a.dblStkAdjOut >0 or a.dblMISOut >0 or a.dblQtyConsumed  >0 or a.dblSales  >0 " + "or a.dblMaterialReturnOut  >0 or a.dblDeliveryNote > 0)";
+		}
+		
+		if(!prodClass.equalsIgnoreCase("ALL"))
+		{
+			sql+="and b.strClass='" + prodClass + "' ";
 		}
 
 		System.out.println(sql);
@@ -762,7 +783,8 @@ public class clsStockFlashController {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/frmMiniStockFlashReport", method = RequestMethod.GET)
-	private @ResponseBody List funShowMiniStockFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode, HttpServletRequest req, HttpServletResponse resp) {
+	private @ResponseBody List funShowMiniStockFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode,@RequestParam(value = "prodClass") String prodClass, HttpServletRequest req, HttpServletResponse resp) {
+	//private @ResponseBody List funShowMiniStockFlash(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode, HttpServletRequest req, HttpServletResponse resp) {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String[] spParam1 = param1.split(",");
@@ -846,6 +868,11 @@ public class clsStockFlashController {
 		if (showZeroItems.equals("No")) {
 			sql += "and (a.dblOpeningStk >0 or a.dblGRN >0 or dblSCGRN >0 or a.dblStkTransIn >0 or a.dblStkAdjIn >0 " + "or a.dblMISIn >0 or a.dblQtyProduced >0 or a.dblMaterialReturnIn>0 or a.dblStkTransOut >0 " + "or a.dblStkAdjOut >0 or a.dblMISOut >0 or a.dblQtyConsumed  >0 or a.dblSales  >0 " + "or a.dblMaterialReturnOut  >0 or a.dblDeliveryNote > 0)";
 		}
+		if(!prodClass.equalsIgnoreCase("ALL"))
+		{
+			sql+="and b.strClass='" + prodClass + "' ";
+		}
+		
 
 		System.out.println(sql);
 		// List list=objStkFlashService.funGetStockFlashData(sql,clientCode,
@@ -920,6 +947,7 @@ public class clsStockFlashController {
 		String strNonStkItems = spParam1[5];
 		String strGCode = spParam1[6];
 		String qtyWithUOM = spParam1[7];
+		String strProductClass = spParam1[8];
 		String fromDate = objGlobal.funGetDate("yyyy-MM-dd", fDate);
 		String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
 		String startDate = req.getSession().getAttribute("startDate").toString();
@@ -1044,6 +1072,12 @@ public class clsStockFlashController {
 		if (showZeroItems.equals("No")) {
 			sql += "and (a.dblOpeningStk >0 or a.dblGRN >0 or dblSCGRN >0 or a.dblStkTransIn >0 or a.dblStkAdjIn >0 " + "or a.dblMISIn >0 or a.dblQtyProduced >0 or a.dblMaterialReturnIn>0 or a.dblStkTransOut >0 " + "or a.dblStkAdjOut >0 or a.dblMISOut >0 or a.dblQtyConsumed  >0 or a.dblSales  >0 " + "or a.dblMaterialReturnOut  >0 or a.dblDeliveryNote > 0)";
 		}
+
+		if(!strProductClass.equalsIgnoreCase("ALL"))
+		{
+			sql+="and b.strClass='" + strProductClass + "' ";
+		}
+
 
 		System.out.println(sql);
 		

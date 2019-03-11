@@ -53,6 +53,7 @@
 	</field>
 	<field name="strBillNo" class="java.lang.String"/>
 	<field name="strFromLocation" class="java.lang.String"/>
+	<field name="strGRNNo" class="java.lang.String"/>
 	<variable name="amtTotal" class="java.lang.Double" resetType="Group" resetGroup="Sypplier" calculation="Sum">
 		<variableExpression><![CDATA[$F{dblAmount}]]></variableExpression>
 	</variable>
@@ -179,7 +180,7 @@
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="21" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="20" width="555" height="1" uuid="b43b0b76-76dc-48be-8576-a648dd9739ff"/>
 				<graphicElement>
@@ -200,7 +201,7 @@
 				<text><![CDATA[Amount]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="40" y="2" width="90" height="17" uuid="786696af-40ec-48e4-bc67-56f095796e42"/>
+				<reportElement style="Column header" x="40" y="2" width="70" height="17" uuid="786696af-40ec-48e4-bc67-56f095796e42"/>
 				<textElement textAlignment="Left">
 					<font fontName="Serif"/>
 				</textElement>
@@ -221,18 +222,25 @@
 				<text><![CDATA[Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="138" y="3" width="192" height="17" uuid="786696af-40ec-48e4-bc67-56f095796e42"/>
+				<reportElement style="Column header" x="202" y="3" width="150" height="17" uuid="786696af-40ec-48e4-bc67-56f095796e42"/>
 				<textElement textAlignment="Left">
 					<font fontName="Serif"/>
 				</textElement>
 				<text><![CDATA[Purchase Into]]></text>
 			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="120" y="2" width="70" height="17" uuid="1e569ab0-5a47-4478-959b-461406692c5a"/>
+				<textElement textAlignment="Left">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[GRN No]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<textField>
-				<reportElement style="Detail" x="40" y="2" width="90" height="15" uuid="36e40780-fb19-4658-a57e-2a395e5b57e2"/>
+				<reportElement style="Detail" x="40" y="2" width="70" height="15" uuid="36e40780-fb19-4658-a57e-2a395e5b57e2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
@@ -260,11 +268,18 @@
 				<textFieldExpression><![CDATA[$F{dtGRNDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="138" y="3" width="208" height="15" uuid="36e40780-fb19-4658-a57e-2a395e5b57e2"/>
+				<reportElement style="Detail" x="200" y="3" width="154" height="15" uuid="36e40780-fb19-4658-a57e-2a395e5b57e2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{strFromLocation}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="110" y="2" width="87" height="15" uuid="2b3d25a8-1061-4f1a-8f0c-751029f727b5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strGRNNo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

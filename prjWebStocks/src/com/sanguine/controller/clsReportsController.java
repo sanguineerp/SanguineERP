@@ -4929,8 +4929,6 @@ public class clsReportsController {
 	
 	}
 	
-	
-	
 	@SuppressWarnings(
 			{ "unused", "unused", "unused", "unchecked" })
 	private void funCallBillWisePurchaseRegisterReport(clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
@@ -4962,7 +4960,7 @@ public class clsReportsController {
 
 		ArrayList fieldList = new ArrayList();
 
-		String sqlQuery = " SELECT d.strPName,a.strBillNo, a.dblTotal AS Amt,e.strLocName, DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y')dtGRNDate " + " FROM tblgrnhd a,tblpartymaster d,tbllocationmaster e" + " WHERE  a.strSuppCode=d.strPCode  " + " and a.strLocCode=e.strLocCode ";
+		String sqlQuery = " SELECT d.strPName,a.strBillNo, a.dblTotal AS Amt,e.strLocName, DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y')dtGRNDate ,a.strGRNCode" + " FROM tblgrnhd a,tblpartymaster d,tbllocationmaster e" + " WHERE  a.strSuppCode=d.strPCode  " + " and a.strLocCode=e.strLocCode ";
 
 		if (null != objBean.getStrDocCode() && objBean.getStrDocCode().length() > 0)
 		{
@@ -5001,6 +4999,7 @@ public class clsReportsController {
 			objProdBean.setDblAmount(Double.parseDouble(prodArr[2].toString()));
 			objProdBean.setStrFromLocation(prodArr[3].toString());
 			objProdBean.setDtGRNDate(prodArr[4].toString());
+			objProdBean.setStrGRNNo(prodArr[5].toString());
 
 			fieldList.add(objProdBean);
 
@@ -5072,7 +5071,10 @@ public class clsReportsController {
 		}
 
 	}
-
+	
+	
+	
+	
 	@SuppressWarnings(
 			{ "unused", "unused", "unused", "unchecked" })
 			private void funCallPurchaseRegisterReport(clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)

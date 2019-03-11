@@ -25,6 +25,8 @@
 			 $("#cmbProperty").val(strPropCode);
 			 $("#cmbLocation").val(locationCode);
 			
+			 var weightedRate = 0.0;
+			
 			$("#btnExecute").click(function( event )
 			{
 				if($("#txtProdCode").val()=='')
@@ -314,7 +316,10 @@
 
 				rateForValue = rate;
 			}
-
+			//get weighted avg price from product master 
+			if(weightedRate>0){
+				rateForValue=weightedRate;
+			}		    
 			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec);
 			closingBalance = closingBalance - parseFloat(totalIssue);
 
@@ -409,6 +414,8 @@
 				success : function(response) {
 					$("#txtProdCode").val(response.strProdCode);
 					$("#lblProdName").text(response.strProdName);
+					weightedRate = response.dblCostRM;
+					
 				},
 				error : function(e) {
 					alert('Error:=' + e);

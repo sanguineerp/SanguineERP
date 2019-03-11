@@ -144,6 +144,7 @@
 			$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
 			$("#txtToDate").datepicker('setDate', 'today');
 			$("#cmbLocation").val("${locationCode}");
+			
 			$("#btnExecute").click(function( event )
 			{
 				var fromDate=$("#txtFromDate").val();
@@ -383,7 +384,8 @@
 			var prodType=$("#txtProdType").val();
 			var param1=reportType+","+locCode+","+propCode+","+showZeroItems+","+strSGCode+","+strNonStkItems+","+strGCode+","+qtyWithUOM;
 			var manufCode=$("#txtManufacturerCode").val();
-			var searchUrl=getContextPath()+"/frmStockFlashSummaryReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&prodType="+prodType+"&ManufCode="+manufCode;
+			var prodClass=$("#cmbProductClass").val();
+			var searchUrl=getContextPath()+"/frmStockFlashSummaryReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&prodType="+prodType+"&ManufCode="+manufCode+"&prodClass="+prodClass;
 			
 			$.ajax({
 			        type: "GET",
@@ -430,11 +432,12 @@
 			var strNonStkItems=$("#cmbNonStkItems").val();
 			var qtyWithUOM=$("#cmbQtyWithUOM").val();
 			var prodType=$("#txtProdType").val();
+			var prodClass=$("#cmbProductClass").val();
 			
 			var param1=reportType+","+locCode+","+propCode+","+showZeroItems+","+strSGCode+","+strNonStkItems+","+strGCode+","+qtyWithUOM;
 			var paramForStkLedger=locCode+","+propCode;		
 			var manufCode=$("#txtManufacturerCode").val();
-			var searchUrl=getContextPath()+"/frmStockFlashDetailReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&prodType="+prodType+"&ManufCode="+manufCode;
+			var searchUrl=getContextPath()+"/frmStockFlashDetailReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&prodType="+prodType+"&ManufCode="+manufCode+"&prodClass="+prodClass;
 			//alert(searchUrl);
 			
 			$.ajax({
@@ -485,7 +488,8 @@
 			var prodType=$("#txtProdType").val();
 			var param1=reportType+","+locCode+","+propCode+","+showZeroItems+","+strSGCode+","+strNonStkItems+","+strGCode+","+qtyWithUOM;
 			var manufCode=$("#txtManufacturerCode").val();
-			var searchUrl=getContextPath()+"/frmMiniStockFlashReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&prodType="+prodType+"&ManufCode="+manufCode;
+			var prodClass=$("#cmbProductClass").val();
+			var searchUrl=getContextPath()+"/frmMiniStockFlashReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&prodType="+prodType+"&ManufCode="+manufCode+"&prodClass="+prodClass;
 			
 			$.ajax({
 			        type: "GET",
@@ -532,8 +536,9 @@
 			var strNonStkItems=$("#cmbNonStkItems").val();
 			var qtyWithUOM=$("#cmbQtyWithUOM").val();
 			var prodType=$("#txtProdType").val();
-			
-			var param1=reportType+","+locCode+","+propCode+","+showZeroItems+","+strSGCode+","+strNonStkItems+","+strGCode+","+qtyWithUOM;
+			var prodClass=$("#cmbProductClass").val();
+
+			var param1=reportType+","+locCode+","+propCode+","+showZeroItems+","+strSGCode+","+strNonStkItems+","+strGCode+","+qtyWithUOM+","+prodClass;
 			var paramForStkLedger=locCode+","+propCode;		
 			var manufCode=$("#txtManufacturerCode").val();
 			var searchUrl=getContextPath()+"/frmStockFlashTotalReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&prodType="+prodType+"&ManufCode="+manufCode;
@@ -740,6 +745,11 @@
 							<option value="Excel">Excel</option>
 						</s:select>
 					</td>
+					<td><label >Product Class</label></td>
+				        <td><s:select id="cmbProductClass" name="class" path="strProductClass" items="${classProductlist}" cssClass="BoxW48px" /></td>
+					
+					
+					
 					<td colspan="7">						
 						<input id="btnExport" type="button" value="EXPORT"  class="form_button1"/>
 					</td>

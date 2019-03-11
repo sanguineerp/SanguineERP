@@ -372,7 +372,8 @@
 			    		var dblStock=funGetProductStock(response.strProdCode);
 			    		//alert(dblStock);
 			    		$("#spStock").text(dblStock);
-			    		$("#spStockUOM").text(response.strIssueUOM);
+			    		//$("#spStockUOM").text(response.strIssueUOM); changes done by sumeet for space
+			    		$("#spStockUOM").text(" "+response.strIssueUOM);
 				    	$("#txtProdCode").val(response.strProdCode);
 				    	$("#spProdName").text(response.strProdName);
 						$("#strUOM").val((response.strIssueUOM).toUpperCase());

@@ -136,7 +136,7 @@ public class clsGRNDaoImpl implements clsGRNDao {
 		 * +code+"' and a.strClientCode='"+clientCode+"'";
 		 */
 
-		sbsql.append("select c.strProdCode,a.strPOCode,a.dblOrdQty, ifnull(b.POQty,0), a.dblOrdQty - ifnull(b.POQty,0) ,a.dblPrice , " + " a.dblWeight,c.strUOM,c.strProdName,if(LENGTH(c.strExpDate)=0,'N',c.strExpDate),a.dblDiscount,ifnull(f.strLocCode,''), " + " ifnull(f.strLocName,'') ,ifnull(c.strNonStockableItem,'') ,ifnull(e.strReqCode,'') "
+		sbsql.append("select c.strProdCode,a.strPOCode,a.dblOrdQty, ifnull(b.POQty,0), a.dblOrdQty - ifnull(b.POQty,0) ,a.dblPrice , " + " a.dblWeight,c.strUOM,c.strProdName,if(LENGTH(c.strExpDate)=0,'N',c.strExpDate),a.dblDiscount,if(IFNULL(f.strLocCode,'')='',c.strLocCode,IFNULL(f.strLocCode,'')), " + " ifnull(f.strLocName,'') ,ifnull(c.strNonStockableItem,'') ,ifnull(e.strReqCode,'') "
 				+ " , ifnull(p.dblConversion,1),ifnull(p.strCurrency,''),p.dblFreight,p.dblInsurance,p.dblOtherCharges,p.dblCIF,p.dblClearingAgentCharges,p.dblVATClaim,p.dblFOB FROM tblpurchaseorderhd p, tblpurchaseorderdtl a left outer join (SELECT b.strCode AS POCode, b.strProdCode, SUM(b.dblQty) AS POQty " + " FROM tblgrnhd a INNER JOIN tblgrndtl b ON a.strGRNCode = b.strGRNCode  and b.strClientCode='"
 				+ clientCode
 				+ "'"
@@ -153,7 +153,7 @@ public class clsGRNDaoImpl implements clsGRNDao {
 				+ " left outer join tblreqhd e on e.strReqCode=d.strReqCode and e.strClientCode='"
 				+ clientCode
 				+ "'"
-				+ " left outer join tbllocationmaster f on f.strLocCode=e.strLocBy and f.strClientCode='"
+				+ " left outer join tbllocationmaster f on f.strLocCode=e.strLocBy or f.strLocCode=c.strLocCode and f.strClientCode='"
 				+ clientCode
 				+ "' "
 				+ " where a.dblOrdQty > ifnull(b.POQty,0) and a.strPOCode='"
