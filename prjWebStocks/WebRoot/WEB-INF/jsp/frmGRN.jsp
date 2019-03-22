@@ -15,6 +15,7 @@
    
    var grneditable;
    var strCurrentDateForTransaction;
+   var strRoundOffFinalAmtOnTransaction=${strRoundOffFinalAmtOnTransaction};
 
 	$(document).ready(function () {
 	    resetForms('grn');
@@ -705,8 +706,13 @@
 			} */
 			
     		$("#hidRoundOff").val(roundOff)
+			
+			if(strRoundOffFinalAmtOnTransaction){
+				$("#txtFinalAmt").val(finalAmtWithRoundoff);	
+			}else{
+				$("#txtFinalAmt").val(finalAmt);
+			}
 			finalAmt=Math.round(finalAmt);
-			$("#txtFinalAmt").val(finalAmtWithRoundoff);
 			$("#lblGRNGrandTotal").text(finalAmtWithRoundoff);
 			funCalculateOtherChargesTotal();
 			//HELLO
@@ -3322,7 +3328,12 @@ function funCalculateOtherChargesTotal()
 	
 	$("#hidRoundOff").val(roundOff)
 	
-	$("#txtFinalAmt").val(finalAmtWithRoundoff);
+	if(strRoundOffFinalAmtOnTransaction){
+		$("#txtFinalAmt").val(finalAmtWithRoundoff);	
+	}else{
+		$("#txtFinalAmt").val(finalAmt);
+	}
+	
 	$("#lblPOGrandTotal").text(finalAmtWithRoundoff);
 }
 	</script>

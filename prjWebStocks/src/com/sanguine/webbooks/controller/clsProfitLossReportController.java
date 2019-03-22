@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
@@ -401,7 +402,7 @@ public class clsProfitLossReportController {
 				+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
 				+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' and a.strPropertyCode='"+propCode+"'  "
 				+ "where a.strGroupCode=b.strGroupCode "
-				+ "and b.strCategory like'%EXPENSE' "
+				+ "and b.strCategory like'%EXPENSES' "
 				+ "and a.strType='GL Code' "
 				+ "group by a.strAccountCode  ");
 		
@@ -573,10 +574,13 @@ public class clsProfitLossReportController {
 	        strPL = "LOSS";
 	      }
 	      hm.put("strPL", strPL);
+	      List list = new ArrayList();
+	      list.add(hmSalesIncStmt);
+	      
 	      JasperDesign jd = JRXmlLoader.load(reportName);
 	      JasperReport jr = JasperCompileManager.compileReport(jd);
-	      
-	      JasperPrint jp = JasperFillManager.fillReport(jr, hm, new JREmptyDataSource());
+	      JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(list);
+	      JasperPrint jp = JasperFillManager.fillReport(jr, hm, beanCollectionDataSource);
 	      List<JasperPrint> jprintlist = new ArrayList();
 	      ServletOutputStream servletOutputStream = resp.getOutputStream();
 	      jprintlist.add(jp);

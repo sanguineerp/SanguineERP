@@ -118,6 +118,7 @@ public class clsPettyCashEntryController {
 			objModel.setStrUserEdited(userCode);
 			objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			objModel.setStrClientCode(clientCode);
+			objModel.setDblGrandTotal(objBean.getDblGrandTotal());
 			List <clsPettyCashEntryDtlModel>listPettyCashEntryDtlModel=new ArrayList<clsPettyCashEntryDtlModel>();
 			for(clsPettyCashEntryDtlModel objDtlModel:objBean.getListPettyCashDtl())
 			{

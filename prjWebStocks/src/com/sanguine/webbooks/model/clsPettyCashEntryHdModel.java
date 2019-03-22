@@ -65,6 +65,9 @@ public class clsPettyCashEntryHdModel implements Serializable {
 
 	@Column(name = "dteDateEdited")
 	private String dteDateEdited;
+	
+	@Column(name = "dblGrandTotal")
+	private double dblGrandTotal;
 
 	public String getStrVouchNo() {
 		return strVouchNo;
@@ -144,6 +147,14 @@ public class clsPettyCashEntryHdModel implements Serializable {
 
 	public void setListDtlModel(List<clsPettyCashEntryDtlModel> listDtlModel) {
 		this.listDtlModel = listDtlModel;
+	}
+
+	public double getDblGrandTotal() {
+		return dblGrandTotal;
+	}
+
+	public void setDblGrandTotal(double dblGrandTotal) {
+		this.dblGrandTotal = dblGrandTotal;
 	}
 
 

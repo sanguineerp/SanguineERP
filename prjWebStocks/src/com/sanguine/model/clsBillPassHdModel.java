@@ -65,6 +65,19 @@ public class clsBillPassHdModel implements Serializable {
 
 	@Column(name = "strClientCode", columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String strClientCode;
+	
+
+	@Column(name = "strSettlementType", columnDefinition = "VARCHAR(10) NOT NULL default ''")
+	private String strSettlementType;
+	
+	public String getStrSettlementType() {
+		return strSettlementType;
+	}
+
+	public void setStrSettlementType(String strSettlementType) {
+		this.strSettlementType = (String)setDefaultValue(strSettlementType, " ");
+	}
+
 
 	public long getIntId() {
 		return intId;

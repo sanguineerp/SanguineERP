@@ -5315,6 +5315,26 @@ return 1;
 
 	}
 	
+	public String funGetGlobalDecimalFormatString(HttpServletRequest req)
+	{
+	
+		StringBuilder decimalFormatBuilderForDoubleValue = new StringBuilder("0");
+		int decimalPlaces = Integer.parseInt(req.getSession().getAttribute("amtDecPlace").toString());
+		
+		for (int i = 0; i < decimalPlaces; i++)
+		{
+		    if (i == 0)
+		    {
+			decimalFormatBuilderForDoubleValue.append(".0");
+		    }
+		    else
+		    {
+			decimalFormatBuilderForDoubleValue.append("0");
+		    }
+		}
+		return decimalFormatBuilderForDoubleValue.toString();
+	}
+	
 	private boolean funGetSettlementWiseTax(String taxCode,String settlementCode)
 	{
 		boolean res=false;

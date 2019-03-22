@@ -174,7 +174,7 @@ public class clsSetupMasterBean {
 	private String strWeightedAvgCal;
 	
 	private String StrCurrentDateForTransaction;
-	
+	private String strRoundOffFinalAmtOnTransaction;
 
 	
 	public String getStrRateHistoryFormat() {
@@ -1382,6 +1382,15 @@ public class clsSetupMasterBean {
 
 	public void setStrCurrentDateForTransaction(String strCurrentDateForTransaction) {
 		StrCurrentDateForTransaction = strCurrentDateForTransaction;
+	}
+
+	public String getStrRoundOffFinalAmtOnTransaction() {
+		return strRoundOffFinalAmtOnTransaction;
+	}
+
+	public void setStrRoundOffFinalAmtOnTransaction(
+			String strRoundOffFinalAmtOnTransaction) {
+		this.strRoundOffFinalAmtOnTransaction = strRoundOffFinalAmtOnTransaction;
 	}
 
 	

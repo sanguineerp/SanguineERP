@@ -162,7 +162,7 @@
 			    	funSetBillPassing(code);
 			        break;
 			        
-			    case 'grncode':
+			    case 'grnForBillBassing':
 			    	funSetGRN(code);
 			        break;
 			        
@@ -194,6 +194,8 @@
 			        		$("#txtPassDate").val(response.dtPassDate);
 			        		$("#txtSupplierVoucherNo").val(response.strPVno);
 			        		$("#txtNarration").val(response.strNarration);
+			        		$("#cmbSettlementType").val(response.strSettlementType);
+			        		
 			        		funSetBillPassDtl(code);
 				    	}
 				    	else
@@ -791,7 +793,7 @@
 								
 								<tr>
 									<td><label>GRN Code</label></td>
-									<td><input id="txtGRNNo" ondblclick="funHelp('grncode');" class="searchTextBox"></td>
+									<td><input id="txtGRNNo" ondblclick="funHelp('grnForBillBassing');" class="searchTextBox"></td>
 									<td><label>Date</label></td>
 									<td ><label id="lblGRNDate"></label></td>
 									<td width="60px"><label>Challan No</label></td>
@@ -802,7 +804,11 @@
 								<tr>
 									<td><label>Adjustment</label></td>
 									<td><input type="number" id="txtAdjustAmt" value="0" style="text-align: right;" class="BoxW116px"></td>
-									<td colspan="6"><input id="btnAddGRN" type="button" value="Add" class="smallButton" /></td>
+									<td colspan="4"><input id="btnAddGRN" type="button" value="Add" class="smallButton" /></td>
+									<td><label>Settlement Type</label></td>
+									<td><s:select id="cmbSettlementType" path="strSettlementType" cssClass="BoxW116px" items="${settlementTypeList}"></s:select></td>
+		
+									
 								</tr>
 							</table>
 <br>

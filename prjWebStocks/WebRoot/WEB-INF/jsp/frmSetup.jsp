@@ -1460,7 +1460,11 @@
 												<s:option  value="Yes">Yes</s:option>
 										</s:select>
 										</td>
-									
+										<td>
+										Round Off Final Amt On Transaction
+										</td><td>
+										<s:checkbox path="strRoundOffFinalAmtOnTransaction" value="Y"/> 
+										</td>
 									
 									
 									</tr>

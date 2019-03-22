@@ -535,7 +535,7 @@ public class clsSetupMasterController {
 		bean.setStrInvNote(objSetup.getStrInvNote());
 		bean.setStrCurrencyCode(objSetup.getStrCurrencyCode());
 		bean.setStrCurrentDateForTransaction(objSetup.getStrCurrentDateForTransaction());
-
+		bean.setStrRoundOffFinalAmtOnTransaction(objSetup.getStrRoundOffFinalAmtOnTransaction());
 		/*
 		 * if(objSetup.getStrShowAllPropCustomer()==null ||
 		 * objSetup.getStrShowAllPropCustomer().equalsIgnoreCase("N")) {
@@ -591,7 +591,7 @@ public class clsSetupMasterController {
 		 */
 		bean.setStrSMSProvider(objSetup.getStrSMSProvider());
 		bean.setStrSMSAPI(objSetup.getStrSMSAPI());
-		;
+		
 		bean.setStrSMSContent(objSetup.getStrSMSContent());
 	}
 
@@ -1101,7 +1101,9 @@ public class clsSetupMasterController {
 		objPropertySetupModel.setStrGRNProdPOWise(bean.getStrGRNProdPOWise());
 		objPropertySetupModel.setStrPORateEditable(bean.getStrPORateEditable());
 		objPropertySetupModel.setStrCurrentDateForTransaction(bean.getStrCurrentDateForTransaction());
-		
+		objPropertySetupModel.setStrRoundOffFinalAmtOnTransaction(objGlobal.funIfNull(
+				bean.getStrRoundOffFinalAmtOnTransaction(), "N", bean.getStrRoundOffFinalAmtOnTransaction()));
+				
 
 		/*
 		 * if(bean.isStrShowAllPropCustomer()==true) {

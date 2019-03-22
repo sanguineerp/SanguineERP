@@ -152,6 +152,7 @@
 	<subDataset name="dsGrnDtl" uuid="b933778c-39c1-4d5c-abf2-648881533244">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="webstock"/>
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<parameter name="decimalFormaterForDoubleValue" class="java.lang.String"/>
 		<queryString>
 			<![CDATA[,p.dblUnitPrice as stdRate,p.dblUnitPrice*(g.dblQty-g.dblRejected) as stdAmt]]>
 		</queryString>
@@ -198,6 +199,7 @@
 	</subDataset>
 	<subDataset name="dsTaxDtl" uuid="8345be8b-d494-4322-8238-72a9f90a23c6">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="WebRoot\WEB-INF\reports\NEW_DATAADAPTER.xml"/>
+		<parameter name="decimalFormaterForDoubleValue" class="java.lang.String"/>
 		<queryString>
 			<![CDATA[select a.strTaxDesc,a.strTaxAmt from tblgrntaxdtl a where strGRNCode='01GRAB000001' and strClientCode='044.001']]>
 		</queryString>
@@ -217,6 +219,7 @@
 	<parameter name="strFinYear" class="java.lang.String"/>
 	<parameter name="Currency" class="java.lang.String"/>
 	<parameter name="location" class="java.lang.String"/>
+	<parameter name="decimalFormaterForDoubleValue" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select 1 from dual]]>
 	</queryString>
@@ -560,6 +563,7 @@
 									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblUnitPrice}]]></textFieldExpression>
+								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -582,6 +586,7 @@
 									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{stdRate}]]></textFieldExpression>
+								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -749,6 +754,7 @@ $F{dblWeight}]]></textFieldExpression>
 									<font size="8" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{subtot}]]></textFieldExpression>
+								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="table 2_TD" height="22" rowSpan="1">
@@ -759,6 +765,7 @@ $F{dblWeight}]]></textFieldExpression>
 									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[(((($F{dblQty}-$F{dblRejected})*$F{dblUnitPrice})-$F{dblDiscount})+$F{dblPackForw})]]></textFieldExpression>
+								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -775,12 +782,13 @@ $F{dblWeight}]]></textFieldExpression>
 						</jr:tableHeader>
 						<jr:columnHeader style="table 2_TH" height="28" rowSpan="1"/>
 						<jr:columnFooter style="Table 2_TD" height="30" rowSpan="1">
-							<textField>
+							<textField pattern="#,##0.00">
 								<reportElement x="0" y="0" width="38" height="30" uuid="ddff9952-1f6d-481c-902f-9d1d9df22f2f"/>
 								<textElement textAlignment="Right">
 									<font size="8" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{stdAmtTotal}]]></textFieldExpression>
+								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="table 2_TD" height="22">
@@ -790,6 +798,7 @@ $F{dblWeight}]]></textFieldExpression>
 									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{stdAmt}]]></textFieldExpression>
+								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -945,6 +954,7 @@ $F{dblWeight}]]></textFieldExpression>
 					<font fontName="Serif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblDisAmt}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="true">
 				<reportElement x="379" y="43" width="52" height="15" uuid="afd49cf1-0665-404b-853e-2fb0027bebe0"/>
@@ -952,6 +962,7 @@ $F{dblWeight}]]></textFieldExpression>
 					<font fontName="Serif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblExtra}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="379" y="101" width="52" height="19" uuid="1093f7ed-6054-4ecb-a809-ea8f8a0ccb53"/>
@@ -959,6 +970,7 @@ $F{dblWeight}]]></textFieldExpression>
 					<font fontName="Serif" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblTotal}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="###0.00" isBlankWhenNull="true">
 				<reportElement x="379" y="64" width="52" height="15" uuid="75acd584-ffc4-42f5-bbd7-dd393f21bbf2"/>
@@ -966,6 +978,7 @@ $F{dblWeight}]]></textFieldExpression>
 					<font fontName="Serif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblLessAmt}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="0" y="311" width="550" height="103" uuid="1a8d97fc-cc77-4c6b-aec0-ce6edb5e91f9"/>
@@ -1042,6 +1055,7 @@ $F{dblWeight}]]></textFieldExpression>
 					<font fontName="Serif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblTaxAmt}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
 			<componentElement>
 				<reportElement x="6" y="2" width="189" height="118" uuid="4f7be17d-6012-4d15-8f06-cd81db1519c2">
@@ -1103,6 +1117,7 @@ $F{dblWeight}]]></textFieldExpression>
 									<font fontName="Serif" size="8" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{strTaxAmt}]]></textFieldExpression>
+								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -1114,6 +1129,7 @@ $F{dblWeight}]]></textFieldExpression>
 					<font fontName="Serif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblDisRate}]]></textFieldExpression>
+				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
 			<staticText>
 				<reportElement x="207" y="26" width="162" height="15" uuid="06bd0332-7f13-4453-ad0b-f4b9f2537649"/>

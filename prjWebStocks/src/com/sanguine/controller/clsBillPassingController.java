@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.bean.clsBillPassingBean;
+import com.sanguine.crm.service.clsCRMSettlementMasterService;
 import com.sanguine.model.clsBillPassDtlModel;
 import com.sanguine.model.clsBillPassHdModel;
 import com.sanguine.model.clsBillPassingTaxDtlModel;
@@ -36,6 +37,9 @@ public class clsBillPassingController {
 	clsBillPassingService objBillPassingService;
 	@Autowired
 	clsGRNService objGRNService;
+	
+	@Autowired
+	private clsCRMSettlementMasterService objSettlementService;
 
 	@RequestMapping(value = "/frmBillPassing", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
@@ -59,6 +63,17 @@ public class clsBillPassingController {
 			model.put("authorizationBillPassingCode", docCode);
 		}
 		model.put("urlHits", urlHits);
+		
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		Map<String, String> settlementTypeList = objSettlementService.funGetSettlementComboBox(clientCode);
+		
+		if(settlementTypeList.size()==0)
+		{
+			settlementTypeList.put("S000001", "cash");
+		}
+		model.put("settlementTypeList", settlementTypeList);
+
+		
 
 		clsBillPassingBean objBean = new clsBillPassingBean();
 		if ("2".equalsIgnoreCase(urlHits)) {
@@ -291,6 +306,7 @@ public class clsBillPassingController {
 		}
 		objBillPassHdModel.setStrAgainst(objGlobal.funIfNull(objBean.getStrAgainst(), "", objBean.getStrAgainst()));
 		objBillPassHdModel.setStrAgainstCode(objGlobal.funIfNull(objBean.getStrAgainstCode(), "", objBean.getStrAgainstCode()));
+		objBillPassHdModel.setStrSettlementType(objGlobal.funIfNull(objBean.getStrSettlementType(), "", objBean.getStrSettlementType()));
 		return objBillPassHdModel;
 	}
 }

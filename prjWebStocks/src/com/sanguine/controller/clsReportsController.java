@@ -57,6 +57,7 @@ import com.ibm.icu.text.DecimalFormat;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.ResultSet;
 import com.mysql.jdbc.Statement;
+import com.sanguine.bean.clsBillPassingFlashBean;
 import com.sanguine.bean.clsProductWiseGRNReportBean;
 import com.sanguine.bean.clsPurchaseRegisterReportBean;
 import com.sanguine.model.clsBillPassHdModel;
@@ -4836,12 +4837,7 @@ public class clsReportsController {
 		}
 		else
 		{
- 			 
-			
-				funCallBillWisePurchaseRegisterReport(objBean, resp, req);
-			
-			
-			
+ 			funCallBillWisePurchaseRegisterReport(objBean, resp, req);
 		}
 	}
 	
@@ -6107,6 +6103,434 @@ public class clsReportsController {
 		}
 
 	}
+	
+	@RequestMapping(value = "/frmBillPassingFlash", method = RequestMethod.GET)
+	public ModelAndView funOpenSupplierOutStandingReport(Map<String, Object> model, HttpServletRequest request)
+	{
+		request.getSession().setAttribute("formName", "frmBillPassingFlash");
+
+		String urlHits = "1";
+		try
+		{
+			urlHits = request.getParameter("saddr").toString();
+		}
+		catch (NullPointerException e)
+		{
+			urlHits = "1";
+		}
+		model.put("urlHits", urlHits);
+
+		if ("2".equalsIgnoreCase(urlHits))
+		{
+			return new ModelAndView("frmBillPassingFlash_1", "command", new clsReportBean());
+		}
+		else
+		{
+			return new ModelAndView("frmBillPassingFlash", "command", new clsReportBean());
+		}
+
+	}
+	
+	@RequestMapping(value = "/rptBillPassingFlash", method = RequestMethod.POST)
+	private ModelAndView funSupplierReport(@ModelAttribute("command") clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
+	{
+
+		   return funCallOutSupplierBillReport(objBean, resp, req);
+		
+	}
+	
+	@SuppressWarnings(
+			{ "unused", "unused", "unused", "unchecked" })
+	private ModelAndView funCallOutSupplierBillReport(clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
+	{
+
+		Connection con = objGlobalFunctions.funGetConnection(req);
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String companyName = req.getSession().getAttribute("companyName").toString();
+		String userCode = req.getSession().getAttribute("usercode").toString();
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+		if (objSetup == null)
+		{
+			objSetup = new clsPropertySetupModel();
+		}
+
+		String reportName = servletContext.getRealPath("/WEB-INF/reports/rptSupplierPendingPassedBillReport.jrxml");
+		String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+
+		String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
+
+		String propNameSql = "select a.strPropertyName  from " + webStockDB + ".tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
+		List listPropName = objGlobalFunctionsService.funGetDataList(propNameSql, "sql");
+		String propName = "";
+		if (listPropName.size() > 0)
+		{
+			propName = listPropName.get(0).toString();
+		}
+		String dteFromDateTime=objBean.getDteFromDate();
+		String dtrToDateTime=objBean.getDteToDate();
+		String strSuppliearCode=objBean.getStrDocCode();
+		String strtypeOfBill=objBean.getStrBillType();
+		
+		String fd = dteFromDateTime.split("-")[2];
+		String fm = dteFromDateTime.split("-")[1];
+		String fy = dteFromDateTime.split("-")[0];
+
+		String td = dtrToDateTime.split("-")[2];
+		String tm = dtrToDateTime.split("-")[1];
+		String ty = dtrToDateTime.split("-")[0];
+
+		String dteFromDate = fd + "-" + fm + "-" + fy;
+		String dteToDate = td + "-" + tm + "-" + ty;
+		
+		ArrayList fieldList = new ArrayList();
+		List listBillExl = new ArrayList();
+
+		String sqlQuery="";
+		if(strtypeOfBill.equalsIgnoreCase("Passed Bills"))
+		{
+			 sqlQuery = " SELECT e.strPName,a.strBillNo, DATE_FORMAT(LEFT(c.dtPassDate,10),'%d-%m-%Y') AS BillPassDate,a.strGRNCode,IFNULL(f.strSettlementDesc,''),a.dblTotal "
+			 		+ " FROM tblgrnhd a, tblbillpassdtl d,tblpartymaster e, tblbillpasshd c left outer join tblsettlementmaster f on c.strSettlementType=f.strSettlementCode"
+			 		+ " WHERE a.strSuppCode=e.strPCode AND c.strBillPassNo=d.strBillPassNo AND d.strGRNCode=a.strGRNCode  ";
+			
+			if(!strSuppliearCode.equals(""))
+			{
+				sqlQuery = sqlQuery + " and a.strSuppCode='" + strSuppliearCode+ "' ";
+			}
+
+			sqlQuery = sqlQuery + " and DATE(c.dtPassDate) between  '" + dteFromDateTime + "' and '" + dtrToDateTime + "' and  a.strClientCode='"+clientCode+"' ";
+			sqlQuery = sqlQuery + "ORDER BY  c.dtPassDate ";
+		}
+		else
+		{
+			 sqlQuery = " SELECT b.strPName, a.strBillNo, DATE_FORMAT(LEFT(a.dtGRNDate,10),'%d-%m-%Y') AS grndate,a.strGRNCode,a.dblTotal"
+			 		+ " from tblgrnhd a ,tblpartymaster b"
+			 		+ " where a.strGRNCode not in(select k.strGRNCode from tblbillpassdtl k, tblbillpasshd m where k.strBillPassNo =m.strBillPassNo"
+			 		+ " and k.strGRNCode=a.strGRNCode and k.strClientCode=m.strClientCode  ) "
+			 		+ "  and a.strSuppCode=b.strPCode  ";
+				
+				if(!strSuppliearCode.equals(""))
+				{
+					sqlQuery = sqlQuery + " and a.strSuppCode='" + strSuppliearCode+ "' ";
+				}
+
+				
+
+				sqlQuery = sqlQuery + " and DATE(a.dtGRNDate) between  '" + dteFromDateTime + "' and '" + dtrToDateTime + "' and  a.strClientCode='"+clientCode+"' ";
+				sqlQuery = sqlQuery + "ORDER BY  a.dtGRNDate ";
+		}
+		
+
+		
+
+		List listBillDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
+
+		java.text.DecimalFormat objDecimalFormat = new java.text.DecimalFormat("0.00");
+		clsBillPassingFlashBean objBillBean = new clsBillPassingFlashBean();
+		for (int j = 0; j < listBillDtl.size(); j++)
+		{
+			
+			Object[] billArr= (Object[]) listBillDtl.get(j);
+
+			objBillBean.setStrPName(billArr[0].toString());
+			objBillBean.setStrBillNo(billArr[1].toString());
+			objBillBean.setDtGRNDate(billArr[2].toString());
+			objBillBean.setStrGRNNo(billArr[3].toString());
+			
+			if(strtypeOfBill.equalsIgnoreCase("Passed Bills"))
+			{
+				objBillBean.setStrSettlementType(billArr[4].toString());
+				objBillBean.setDblAmount(Double.parseDouble(billArr[5].toString()));
+			}
+			else
+			{
+				objBillBean.setDblAmount(Double.parseDouble(billArr[4].toString()));
+
+			}
+			
+			fieldList.add(objBillBean);
+
+		}
+
+		HashMap hm = new HashMap();
+		hm.put("strCompanyName", companyName);
+		hm.put("strUserCode", userCode);
+		hm.put("strImagePath", imagePath);
+		hm.put("strAddr1", objSetup.getStrAdd1());
+		hm.put("strAddr2", objSetup.getStrAdd2());
+		hm.put("strCity", objSetup.getStrCity());
+		hm.put("strState", objSetup.getStrState());
+		hm.put("strCountry", objSetup.getStrCountry());
+		hm.put("strPin", objSetup.getStrPin());
+		hm.put("dteFromDate", dteFromDate);
+		hm.put("dteToDate", dteToDate);
+		if(objBean.getStrDocType().equals("EXCEL"))
+		{
+			String strSuppName=objBillBean.getStrPName();
+			if(strSuppliearCode.equals(""))	
+			{
+				strSuppName="All Supplier";
+			}
+			String repeortfileName="";
+			if(strtypeOfBill.equalsIgnoreCase("Passed Bills"))
+			{
+				repeortfileName = "BillPassingReport" + "_" + strSuppName + "_" + dteFromDate + "_To_" + dteToDate + "_" + userCode;
+
+			}
+			else
+			{
+				 repeortfileName = "BillPendingReport" + "_" + strSuppName + "_" + dteFromDate + "_To_" + dteToDate + "_" + userCode;
+
+			}
+
+			repeortfileName = repeortfileName.replaceAll(" ", "");
+			listBillExl.add(repeortfileName);
+				//
+	
+			if(strtypeOfBill.equalsIgnoreCase("Passed Bills"))
+			{
+				String[] ExcelHeader= { "Supplier Name", "Bill No", "GRN Date", "GRN No","Settlement Type", "Amount" };
+				listBillExl.add(ExcelHeader);
+			}
+			else
+			{
+				String[] ExcelHeader= { "Supplier Name", "Bill No", "GRN Date", "GRN No", "Amount" };
+				listBillExl.add(ExcelHeader);
+			}
+		
+			
+			List billDataList=null;
+			List allBillDataList=new ArrayList<>();
+			double totalAmount=0;
+			for(int i=0;i<listBillDtl.size();i++)
+			{
+				billDataList=new ArrayList<>();
+				Object[] obj=(Object[]) listBillDtl.get(i);
+				billDataList.add(obj[0]);
+				billDataList.add(obj[1]);
+				billDataList.add(obj[2]);
+				billDataList.add(obj[3]);
+				if(strtypeOfBill.equalsIgnoreCase("Passed Bills"))
+				{
+					billDataList.add(obj[4]);
+					billDataList.add(obj[5]);
+					totalAmount = totalAmount + Double.parseDouble(obj[5].toString());
+
+				}
+				else
+				{
+					billDataList.add(obj[4]);
+					totalAmount = totalAmount + Double.parseDouble(obj[4].toString());
+
+				}
+				
+				allBillDataList.add(billDataList);
+				
+			}
+			
+			billDataList=new ArrayList<>();
+
+			billDataList.add("");
+
+			allBillDataList.add(billDataList);
+			
+			billDataList=new ArrayList<>();
+			
+			billDataList.add("Total");
+			billDataList.add("");
+			billDataList.add("");
+			billDataList.add("");
+			if(strtypeOfBill.equalsIgnoreCase("Passed Bills"))
+			{
+				billDataList.add("");
+			}
+			
+			billDataList.add(totalAmount);
+			
+			allBillDataList.add(billDataList);
+			
+			
+
+			listBillExl.add(allBillDataList);
+			
+			return new ModelAndView("excelViewWithReportName", "listWithReportName", listBillExl);
+			
+		}
+		else
+		{	
+			try
+			{
+				JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);
+				JasperDesign jd = JRXmlLoader.load(reportName);
+				JasperReport jr = JasperCompileManager.compileReport(jd);
+				JasperPrint jp = JasperFillManager.fillReport(jr, hm, beanCollectionDataSource);
+				List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+				jprintlist.add(jp);
+				ServletOutputStream servletOutputStream = resp.getOutputStream();
+				
+				if (jprintlist.size() > 0)
+				{
+					if (objBean.getStrDocType().equals("PDF"))
+					{
+						JRExporter exporter = new JRPdfExporter();
+						resp.setContentType("application/pdf");
+						exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+						exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+						exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+						resp.setHeader("Content-Disposition", "inline;filename=rptSupplierPendingPassedBillReport" + dteFromDate + "_To_" + dteToDate + "_" + userCode + ".pdf");
+						exporter.exportReport();
+						servletOutputStream.flush();
+						servletOutputStream.close();
+
+					}
+					else
+					{
+						JRExporter exporter = new JRXlsExporter();
+						resp.setContentType("application/xlsx");
+						exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
+						exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, servletOutputStream);
+						exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+						resp.setHeader("Content-Disposition", "inline;filename=rptSupplierPendingPassedBillReport" + dteFromDate + "_To_" + dteToDate + "_" + userCode + ".xls");
+						exporter.exportReport();
+						servletOutputStream.flush();
+						servletOutputStream.close();
+					}
+
+				}
+				else
+				{
+					resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					resp.getWriter().append("No Record Found");
+
+				}
+
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+		
+		return new ModelAndView("frmBillPassingFlash", "command", new clsReportBean());
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		@RequestMapping(value = "/loadBillPassingFlash", method = RequestMethod.GET)
+	public @ResponseBody List<clsBillPassingFlashBean> funGetSupplierPassedBillData(@RequestParam("fromDate") String fromDateTime,@RequestParam("toDate") String toDateTime,@RequestParam("suppCode") String strSuppliearCode,
+			@RequestParam("typeofBill") String typeOfBill,HttpServletRequest req){
+		
+		
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String companyName = req.getSession().getAttribute("companyName").toString();
+		ArrayList fieldList = new ArrayList();
+		String sqlQuery="";
+		if(typeOfBill.equalsIgnoreCase("Passed Bills"))
+		{
+			 sqlQuery = " SELECT e.strPName,a.strBillNo, DATE_FORMAT(LEFT(c.dtPassDate,10),'%d-%m-%Y') AS BillPassDate,a.strGRNCode,IFNULL(f.strSettlementDesc,''),a.dblTotal"
+			 		+ " FROM tblgrnhd a, tblbillpassdtl d,tblpartymaster e, tblbillpasshd c left outer join tblsettlementmaster f on c.strSettlementType=f.strSettlementCode"
+			 		+ " WHERE a.strSuppCode=e.strPCode AND c.strBillPassNo=d.strBillPassNo AND d.strGRNCode=a.strGRNCode ";
+			
+			if(!strSuppliearCode.equals(""))
+			{
+				sqlQuery = sqlQuery + " and a.strSuppCode='" + strSuppliearCode+ "' ";
+			}
+
+			/*String fd = fromDateTime.split("-")[2];
+			String fm = fromDateTime.split("-")[1];
+			String fy = fromDateTime.split("-")[0];
+
+			String td = toDateTime.split("-")[2];
+			String tm = toDateTime.split("-")[1];
+			String ty = toDateTime.split("-")[0];
+
+			String dteFromDate = fd + "-" + fm + "-" + fy;
+			String dteToDate = td + "-" + tm + "-" + ty;*/
+
+			sqlQuery = sqlQuery + " and DATE(c.dtPassDate) between  '" + fromDateTime + "' and '" + toDateTime + "' and  a.strClientCode='"+clientCode+"' ";
+			sqlQuery = sqlQuery + "ORDER BY  c.dtPassDate ";
+		}
+		else
+		{
+			 sqlQuery = " SELECT b.strPName, a.strBillNo, DATE_FORMAT(LEFT(a.dtGRNDate,10),'%d-%m-%Y') AS grndate,a.strGRNCode,a.dblTotal"
+			 		+ " from tblgrnhd a ,tblpartymaster b"
+			 		+ " where a.strGRNCode not in(select k.strGRNCode from tblbillpassdtl k, tblbillpasshd m where k.strBillPassNo =m.strBillPassNo"
+			 		+ " and k.strGRNCode=a.strGRNCode and k.strClientCode=m.strClientCode  ) "
+			 		+ "  and a.strSuppCode=b.strPCode  ";
+				
+				if(!strSuppliearCode.equals(""))
+				{
+					sqlQuery = sqlQuery + " and a.strSuppCode='" + strSuppliearCode+ "' ";
+				}
+
+				/*String fd = fromDateTime.split("-")[2];
+				String fm = fromDateTime.split("-")[1];
+				String fy = fromDateTime.split("-")[0];
+
+				String td = toDateTime.split("-")[2];
+				String tm = toDateTime.split("-")[1];
+				String ty = toDateTime.split("-")[0];
+
+				String dteFromDate = fd + "-" + fm + "-" + fy;
+				String dteToDate = td + "-" + tm + "-" + ty;*/
+
+				sqlQuery = sqlQuery + " and DATE(a.dtGRNDate) between  '" + fromDateTime + "' and '" + toDateTime + "' and  a.strClientCode='"+clientCode+"' ";
+				sqlQuery = sqlQuery + "ORDER BY  DATE(a.dtGRNDate) ";
+		}
+		
+
+		
+
+		List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
+
+		java.text.DecimalFormat objDecimalFormat = new java.text.DecimalFormat("0.00");
+
+		for (int j = 0; j < listProdDtl.size(); j++)
+		{
+			clsBillPassingFlashBean objBillBean = new clsBillPassingFlashBean ();
+			Object[] billArr = (Object[]) listProdDtl.get(j);
+
+			objBillBean.setStrPName(billArr[0].toString());
+			objBillBean.setStrBillNo(billArr[1].toString());
+			objBillBean.setDtGRNDate(billArr[2].toString());
+			objBillBean.setStrGRNNo(billArr[3].toString());
+			if(typeOfBill.equalsIgnoreCase("Passed Bills"))
+			{
+				objBillBean.setStrSettlementType(billArr[4].toString());
+				objBillBean.setDblAmount(Double.parseDouble(billArr[5].toString()));
+
+
+			}
+			else
+			{
+				objBillBean.setDblAmount(Double.parseDouble(billArr[4].toString()));
+
+			}
+
+
+			fieldList.add(objBillBean);
+
+		}
+		return fieldList;
+	}
+	
 
 
 }

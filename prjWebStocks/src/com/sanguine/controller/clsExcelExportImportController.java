@@ -1,6 +1,5 @@
 package com.sanguine.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,8 +11,10 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.tomcat.util.http.fileupload.FileUploadBase.IOFileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ibm.icu.text.SimpleDateFormat;
 import com.sanguine.model.clsGroupMasterModel;
+import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsOpeningStkDtl;
 import com.sanguine.model.clsPOSSalesDtlModel;
 import com.sanguine.model.clsProductMasterModel;
@@ -163,9 +165,9 @@ public class clsExcelExportImportController {
 		String header ="";
 		if(prodWiseStock.equals("Yes"))
 		{
-			header="Group Name, SubGroupName,ProductCode,ProductName,Stock,Qty,UOM";
+			header="Group Name, SubGroupName,ProductCode,ProductName,Stock,Qty,UOM,Location Name";
 		}else{
-			header="Group Name, SubGroupName,ProductCode,ProductName,Qty,UOM";
+			header="Group Name, SubGroupName,ProductCode,ProductName,Qty,UOM,Location Name";
 		}
 				
 		List ExportList = new ArrayList();
@@ -175,10 +177,10 @@ public class clsExcelExportImportController {
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
 		String hql = "";
 		if (objSetup.getStrShowAllProdToAllLoc() == null || objSetup.getStrShowAllProdToAllLoc() == "N") {
-			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsLocationMasterModel e,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode and a.strLocCode=e.strLocCode and e.strLocCode=d.strLocationCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";
 		} else {
 			if (!locCode.equals("") || !locCode.isEmpty()) {
-			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c,clsLocationMasterModel e " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strLocCode=e.strLocCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
 			if (!sgCode.equals("") || !sgCode.isEmpty()) 
 			{
 				hql += "and a.strSGCode='"+sgCode+"'";
@@ -189,7 +191,7 @@ public class clsExcelExportImportController {
 				hql += "and b.strGCode='"+gCode+"'";
 			}
 			}else{
-				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
+				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c,clsLocationMasterModel e ,clsProductReOrderLevelModel d,clsLocationMasterModel e" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode and a.strLocCode=e.strLocCode and e.strLocCode=d.strLocationCode" + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
 				if (!sgCode.equals("") || !sgCode.isEmpty()) 
 				{
 					hql += "and a.strSGCode='"+sgCode+"'";
@@ -212,6 +214,7 @@ public class clsExcelExportImportController {
 			clsProductMasterModel prodModel = (clsProductMasterModel) ob[0];
 			clsSubGroupMasterModel subGroupModel = (clsSubGroupMasterModel) ob[1];
 			clsGroupMasterModel groupModel = (clsGroupMasterModel) ob[2];
+			clsLocationMasterModel locationModel = (clsLocationMasterModel) ob[3];
 			List DataList = new ArrayList<>();
 			
 			if(prodWiseStock.equals("Yes")){
@@ -227,6 +230,7 @@ public class clsExcelExportImportController {
 			
 			DataList.add("");
 			DataList.add(prodModel.getStrUOM());
+			DataList.add(locationModel.getStrLocName());
 			PhyStkPstlist.add(DataList);
 			}
 			}else{
@@ -236,6 +240,7 @@ public class clsExcelExportImportController {
 				DataList.add(prodModel.getStrProdName());
 				DataList.add("");
 				DataList.add(prodModel.getStrUOM());
+				DataList.add(locationModel.getStrLocName());
 				PhyStkPstlist.add(DataList);
 			}
 		}
@@ -330,10 +335,20 @@ public class clsExcelExportImportController {
 		String formname = request.getParameter("formname").toString();
 		try {
 
-			// Creates a workbook object from the uploaded excelfile
-			HSSFWorkbook workbook = new HSSFWorkbook(excelfile.getInputStream());
+			XSSFWorkbook workbook = new XSSFWorkbook(excelfile.getInputStream());
 			// Creates a worksheet object representing the first sheet
-			HSSFSheet worksheet = workbook.getSheetAt(0);
+			XSSFSheet worksheet = workbook.getSheetAt(0);
+			
+			//OPCPackage pkg = OPCPackage.open(new File("file.xlsx"));
+			// Creates a workbook object from the uploaded excelfile
+			//HSSFWorkbook workbook = new HSSFWorkbook(excelfile.getInputStream());
+			
+			//HSSFSheet worksheet = workbook.getSheetAt(0);
+			// Reads the data in excel file until last row is encountered
+			// Creates a workbook object from the uploaded excelfile
+			/*HSSFWorkbook workbook = new HSSFWorkbook(excelfile.getInputStream());
+			// Creates a worksheet object representing the first sheet
+			HSSFSheet worksheet = workbook.getSheetAt(0);*/
 			// Reads the data in excel file until last row is encountered
 			switch (formname) {
 			case "frmOpeningStock":
@@ -374,7 +389,7 @@ public class clsExcelExportImportController {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List funOpeningStocks(HSSFSheet worksheet, HttpServletRequest request) {
+	public List funOpeningStocks(XSSFSheet worksheet, HttpServletRequest request) {
 		String expUOM = request.getSession().getAttribute("exportUOM").toString();
 
 		List listOpeningStklist = new ArrayList<>();
@@ -387,7 +402,7 @@ public class clsExcelExportImportController {
 				// Creates an object for the Candidate Model
 				clsOpeningStkDtl OpeningStkDtl = new clsOpeningStkDtl();
 				// Creates an object representing a single row in excel
-				HSSFRow row = worksheet.getRow(i++);
+				XSSFRow row = worksheet.getRow(i++);
 
 				// Sets the Read data to the model class
 				RowCount = row.getRowNum();
@@ -439,7 +454,7 @@ public class clsExcelExportImportController {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List funPhyStkPsting(HSSFSheet worksheet, HttpServletRequest request) {
+	public List funPhyStkPsting(XSSFSheet worksheet, HttpServletRequest request) {
 		List listPhyStklist = new ArrayList<>();
 		int RowCount = 0;
 		String prodCode = "";
@@ -452,7 +467,7 @@ public class clsExcelExportImportController {
 				// Creates an object for the Candidate Model
 				clsStkPostingDtlModel PhyStkDtl = new clsStkPostingDtlModel();
 				// Creates an object representing a single row in excel
-				HSSFRow row = worksheet.getRow(i++);
+				XSSFRow row = worksheet.getRow(i++);
 				// Sets the Read data to the model class
 				RowCount = row.getRowNum();
 				prodCode = row.getCell(2).getStringCellValue();
@@ -517,7 +532,7 @@ public class clsExcelExportImportController {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private List funLocMastReOrderLvl(HSSFSheet worksheet, HttpServletRequest request) {
+	private List funLocMastReOrderLvl(XSSFSheet worksheet, HttpServletRequest request) {
 		List listReoderLvllist = new ArrayList<>();
 		int RowCount = 0;
 		String prodCode = "";
@@ -528,7 +543,7 @@ public class clsExcelExportImportController {
 
 				List ReorderLvlList = new ArrayList<>();
 				// Creates an object representing a single row in excel
-				HSSFRow row = worksheet.getRow(i++);
+				XSSFRow row = worksheet.getRow(i++);
 				// Sets the Read data to the model class
 				String ReOrderlvl = String.valueOf(row.getCell(7).getNumericCellValue());
 				String ReOrderQty = String.valueOf(row.getCell(8).getNumericCellValue());
@@ -581,7 +596,7 @@ public class clsExcelExportImportController {
 		return UOM;
 	}
 
-	private List funLoadPOSSalesData(HSSFSheet worksheet, HttpServletRequest request) {
+	private List funLoadPOSSalesData(XSSFSheet worksheet, HttpServletRequest request) {
 		List listPOSSalelist = new ArrayList<>();
 		List<clsPOSSalesDtlModel> listPOSSalesDtl = new ArrayList<clsPOSSalesDtlModel>();
 		int RowCount = 0;
@@ -602,7 +617,7 @@ public class clsExcelExportImportController {
 
 				List POSDataList = new ArrayList<>();
 				// Creates an object representing a single row in excel
-				HSSFRow row = worksheet.getRow(i++);
+				XSSFRow row = worksheet.getRow(i++);
 				// Sets the Read data to the model class
 				clsPOSSalesDtlModel objSalesDtl = new clsPOSSalesDtlModel();
 				String posCode = (row.getCell(0) != null) ? row.getCell(0).getStringCellValue() : "";

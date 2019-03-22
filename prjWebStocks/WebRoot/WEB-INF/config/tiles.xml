@@ -1927,6 +1927,19 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/frmStockReqSlip.jsp"></put-attribute>
 	</definition>
 	
+	<definition name="frmBillPassingFlash_1" extends="base.definition4">
+		<put-attribute name="title" value="Bill Passing Flash"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/frmBillPassingFlash.jsp"></put-attribute>
+	</definition>
+    
+    <definition name="frmBillPassingFlash" extends="base.definition">
+		<put-attribute name="title" value="Bill Passing Flash"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/frmBillPassingFlash.jsp"></put-attribute>
+	</definition>
+	
+
 
 
 	<!-- 	End Of Webstock Tiles Entry -->

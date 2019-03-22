@@ -381,7 +381,12 @@ public class clsMISMonthProductWiseFlash
 					subGroupList.add("");
 					subGroupList.add("");
 					list.add(decimalFormater2Dec.format(totalQty));
-					list.add(decimalFormater2Dec.format(price * totalQty));
+					if(clientCode.equals("240.001")){
+						list.add(" ");	
+					}else{
+						list.add(decimalFormater2Dec.format(price * totalQty));
+					}
+					
 					if (i != 0)
 					{
 						hmProd.put(prodCode, list);
@@ -424,7 +429,12 @@ public class clsMISMonthProductWiseFlash
 				}
 			}
 			list.add(decimalFormater2Dec.format(totalQty));
-			list.add(decimalFormater2Dec.format(price * totalQty));
+			if(clientCode.equals("240.001")){
+				list.add(" ");	
+			}else{
+				list.add(decimalFormater2Dec.format(price * totalQty));	
+			}
+			
 			hmProd.put(prodCode, list);
 		}
 		hmHeader.put("Header", listMonth);
@@ -457,7 +467,12 @@ public class clsMISMonthProductWiseFlash
 
 		}
 		header += "Total Qty" + ",";
-		header += "Total Amount";
+		if(clientCode.equals("240.001")){
+			header += " ";
+		}else{
+			header += "Total Amount";
+		}
+		
 		String[] ExcelHeader = header.split(",");
 		ExportList.add(ExcelHeader);
 		ExportList.add(listReturn);

@@ -2166,7 +2166,31 @@ public class clsSearchFormController {
 				// flgQuerySelection=true;
 				searchFormTitle = "Sales Order";
 				break;
-			}	
+			}
+			case "grnForBillBassing": {
+
+				columnNames = "a.strGRNCode,a.dtGRNDate,c.strLocName,a.strAgainst,a.strPONo,b.strPName,a.strBillNo" + ",a.strPayMode,a.strUserCreated,a.dtDateCreated,a.strNarration,a.strRefNo";
+				tableName = "clsGRNHdModel a,clsSupplierMasterModel b ,clsLocationMasterModel c " + "where a.strSuppCode=b.strPCode and a.strLocCode=c.strLocCode  and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtGRNDate) between '" + finYear[0] + "' and '" + finYear[1] + "' "
+						+ " and a.strGRNCode not in(select strGRNCode from clsBillPassDtlModel where strClientCode='"+clientCode+"')";
+				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+					tableName = tableName + " and c.strPropertyCode='" + propCode + "' ";
+				}
+				boolean flgAuth = false;
+				if (null != req.getSession().getAttribute("hmAuthorization")) {
+					HashMap<String, Boolean> hmAuthorization = (HashMap) req.getSession().getAttribute("hmAuthorization");
+					if (hmAuthorization.get("GRN")) {
+						flgAuth = true;
+					}
+				}
+				if (flgAuth) {
+					tableName += " and a.strAuthorise='No'";
+				}
+				tableName = tableName + " order by a.strGRNCode " + ShowTransAsc_Desc + " ";
+				listColumnNames = "GRN Code,GRN Date,Location,Against,POCode,Supplier Name,GRN No," + "Pay Mode,User Created,Date Created,Narration,Ref No";
+				idColumnName = "strGRNCode";
+				searchFormTitle = "GRN";
+				break;
+			}
 			}
 
 			if (null != jArrSearchList) {

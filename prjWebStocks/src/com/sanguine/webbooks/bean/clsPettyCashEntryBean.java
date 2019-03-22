@@ -14,6 +14,8 @@ public class clsPettyCashEntryBean {
 	
 	public String strNarration;
 	
+	public double dblGrandTotal;
+	
     List<clsPettyCashEntryDtlModel > listPettyCashDtl=new ArrayList<clsPettyCashEntryDtlModel>();  
 
 
@@ -48,6 +50,14 @@ public class clsPettyCashEntryBean {
 
 	public void setStrVouchNo(String strVouchNo) {
 		this.strVouchNo = strVouchNo;
+	}
+
+	public double getDblGrandTotal() {
+		return dblGrandTotal;
+	}
+
+	public void setDblGrandTotal(double dblGrandTotal) {
+		this.dblGrandTotal = dblGrandTotal;
 	}
 	
 

@@ -181,7 +181,7 @@ public class clsPaymentController {
 			objPaymentBean = new clsPaymentBean();
 			objPaymentBean.setStrVouchNo("Invalid");
 		} else {
-			Map<String, clsPaymentDetailsBean> hmPaymentDtlBean = new HashMap<String, clsPaymentDetailsBean>();
+			Map<String, List<clsPaymentDetailsBean>> hmPaymentDtlBean = new HashMap<String, List<clsPaymentDetailsBean>>();
 
 			objPaymentBean = new clsPaymentBean();
 			objPaymentBean.setStrVouchNo(objPaymentHd.getStrVouchNo());
@@ -210,7 +210,13 @@ public class clsPaymentController {
 			objPaymentBean.setDteDateEdited(objGlobal.funGetDate("yyyy/MM/dd", objPaymentHd.getDteDateEdited()));
 
 			List<clsPaymentDetailsBean> listPaymentDtlBean = new ArrayList<clsPaymentDetailsBean>();
+			
 			for (clsPaymentDebtorDtlModel objPaymentDebtorDtl : objPaymentHd.getListPaymentDebtorDtlModel()) {
+				List<clsPaymentDetailsBean> listPay=new ArrayList<clsPaymentDetailsBean>();
+				if(hmPaymentDtlBean.containsKey(objPaymentDebtorDtl.getStrAccountCode())){
+					listPay=hmPaymentDtlBean.get(objPaymentDebtorDtl.getStrAccountCode());
+				}
+
 				clsPaymentDetailsBean objPaymentDtlNew = new clsPaymentDetailsBean();
 				objPaymentDtlNew.setStrAccountCode(objPaymentDebtorDtl.getStrAccountCode());
 				objPaymentDtlNew.setStrDebtorCode(objPaymentDebtorDtl.getStrDebtorCode());
@@ -219,52 +225,70 @@ public class clsPaymentController {
 				if (objPaymentDebtorDtl.getStrCrDr().equalsIgnoreCase("Cr")) {
 					objPaymentDtlNew.setDblCreditAmt(objPaymentDebtorDtl.getDblAmt() / currConversion);
 					objPaymentDtlNew.setDblDebitAmt(0.0000);
+					objPaymentDtlNew.setStrDC("Cr");
 				} else {
 					objPaymentDtlNew.setDblCreditAmt(0.0000);
 					objPaymentDtlNew.setDblDebitAmt(objPaymentDebtorDtl.getDblAmt() / currConversion);
+					objPaymentDtlNew.setStrDC("Dr");
 				}
-				hmPaymentDtlBean.put(objPaymentDebtorDtl.getStrAccountCode(), objPaymentDtlNew);
+				listPay.add(objPaymentDtlNew);
+				hmPaymentDtlBean.put(objPaymentDebtorDtl.getStrAccountCode(), listPay);
+
 			}
 
 			for (clsPaymentDtl objPaymentDtlModel : objPaymentHd.getListPaymentDtlModel()) {
-				clsPaymentDetailsBean objPaymentDtlBean = hmPaymentDtlBean.get(objPaymentDtlModel.getStrAccountCode());
-				if (null != objPaymentDtlBean) {
-					objPaymentDtlBean = new clsPaymentDetailsBean();
-					
-					if(objPaymentDtlModel.getStrDebtorCode().startsWith("D"))
-					{
-						clsSundryDebtorMasterModel objSunDebtor = objSundryDebtorMasterService.funGetSundryDebtorMaster(objPaymentDtlModel.getStrDebtorCode(), clientCode);
-						String debtorName="";
-						if (objSunDebtor != null) {
-							debtorName = objSunDebtor.getStrDebtorFullName();
-						}
-						objPaymentDtlBean.setStrDebtorCode(objPaymentDtlModel.getStrDebtorCode());
-						objPaymentDtlBean.setStrDebtorName(debtorName);
-					}else if(objPaymentDtlModel.getStrDebtorCode().startsWith("C")){
-					
-					clsSundaryCreditorMasterModel objSunCrModel= objSundryCreditorMasterService.funGetSundryCreditorMaster(objPaymentDtlModel.getStrDebtorCode(), clientCode);
-					objPaymentDtlBean.setStrDebtorCode(objPaymentDtlModel.getStrDebtorCode()) ;
-					objPaymentDtlBean.setStrDebtorName(objSunCrModel.getStrFirstName());
-				}if(objPaymentDtlModel.getStrDebtorCode().startsWith("E")){
-					clsEmployeeMasterModel objclsEmployeeMasterModel=objEmployeeMasterController.funAssignFields(objPaymentDtlModel.getStrDebtorCode(),request);
-					
-					objPaymentDtlBean.setStrDebtorCode(objclsEmployeeMasterModel.getStrEmployeeCode()) ;
-					objPaymentDtlBean.setStrDebtorName(objclsEmployeeMasterModel.getStrEmployeeName());
-					
+//				clsPaymentDetailsBean objPaymentDtlBean = hmPaymentDtlBean.get(objPaymentDtlModel.getStrAccountCode());
 				
-				} 
+				List <clsPaymentDetailsBean>listPayment = hmPaymentDtlBean.get(objPaymentDtlModel.getStrAccountCode());
+				
+				if (null != listPayment) {
+				if(listPayment.size()>0){
+				
+					for(clsPaymentDetailsBean objPaymentDtlBean:listPayment)
+					{
+						objPaymentDtlBean.setStrDimension("");
+						objPaymentDtlBean.setStrAccountCode(objPaymentDtlModel.getStrAccountCode());
+						objPaymentDtlBean.setStrDescription(objPaymentDtlModel.getStrAccountName());
+						listPaymentDtlBean.add(objPaymentDtlBean);
+					
+//					if(objPaymentDtlModel.getStrDebtorCode().startsWith("D"))
+//					{
+//						clsSundryDebtorMasterModel objSunDebtor = objSundryDebtorMasterService.funGetSundryDebtorMaster(objPaymentDtlModel.getStrDebtorCode(), clientCode);
+//						String debtorName="";
+//						if (objSunDebtor != null) {
+//							debtorName = objSunDebtor.getStrDebtorFullName();
+//						}
+//						objPaymentDtlBean.setStrDebtorCode(objPaymentDtlModel.getStrDebtorCode());
+//						objPaymentDtlBean.setStrDebtorName(debtorName);
+//					}else if(objPaymentDtlModel.getStrDebtorCode().startsWith("C")){
+//					
+//					clsSundaryCreditorMasterModel objSunCrModel= objSundryCreditorMasterService.funGetSundryCreditorMaster(objPaymentDtlModel.getStrDebtorCode(), clientCode);
+//					objPaymentDtlBean.setStrDebtorCode(objPaymentDtlModel.getStrDebtorCode()) ;
+//					objPaymentDtlBean.setStrDebtorName(objSunCrModel.getStrFirstName());
+//				}if(objPaymentDtlModel.getStrDebtorCode().startsWith("E")){
+//					clsEmployeeMasterModel objclsEmployeeMasterModel=objEmployeeMasterController.funAssignFields(objPaymentDtlModel.getStrDebtorCode(),request);
+//					
+//					objPaymentDtlBean.setStrDebtorCode(objclsEmployeeMasterModel.getStrEmployeeCode()) ;
+//					objPaymentDtlBean.setStrDebtorName(objclsEmployeeMasterModel.getStrEmployeeName());
+//					
+//				
+//				} 
+					}
+				}
 				}else {
-					objPaymentDtlBean = new clsPaymentDetailsBean();
+					clsPaymentDetailsBean objPaymentDtlBean = new clsPaymentDetailsBean();
 					objPaymentDtlBean.setStrDebtorCode("");
 					objPaymentDtlBean.setStrDebtorName("");
+					objPaymentDtlBean.setStrAccountCode(objPaymentDtlModel.getStrAccountCode());
+					objPaymentDtlBean.setStrDescription(objPaymentDtlModel.getStrAccountName());
+					objPaymentDtlBean.setStrDC(objPaymentDtlModel.getStrCrDr());
+					objPaymentDtlBean.setDblCreditAmt(objPaymentDtlModel.getDblCrAmt() / currConversion);
+					objPaymentDtlBean.setDblDebitAmt(objPaymentDtlModel.getDblDrAmt() / currConversion);
+					objPaymentDtlBean.setStrDimension("");
+					listPaymentDtlBean.add(objPaymentDtlBean);
 				}
-				objPaymentDtlBean.setStrAccountCode(objPaymentDtlModel.getStrAccountCode());
-				objPaymentDtlBean.setStrDescription(objPaymentDtlModel.getStrAccountName());
-				objPaymentDtlBean.setStrDC(objPaymentDtlModel.getStrCrDr());
-				objPaymentDtlBean.setDblCreditAmt(objPaymentDtlModel.getDblCrAmt() / currConversion);
-				objPaymentDtlBean.setDblDebitAmt(objPaymentDtlModel.getDblDrAmt() / currConversion);
-				objPaymentDtlBean.setStrDimension("");
-				listPaymentDtlBean.add(objPaymentDtlBean);
+			
+				
 			}
 			objPaymentBean.setListPaymentDetailsBean(listPaymentDtlBean);
 			hmPaymentDtlBean = null;

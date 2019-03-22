@@ -21,21 +21,26 @@ $(function() {
 
 //Execute button 
 
-$("#btnExecute").click(function( event )
-				{
+$(document).ready(function() {
+	
+	$("#btnExecute").click(function(event)
+			{
 
-	if($("#cmbType").val()=="Detail")
-		{
+if($("#cmbType").val()=="Detail")
+	{
 
-			funCalculatePettyCashFlashDetail();
-		}
-	else
-		{
-		funCalculatePettyCashFlasSummary();
-		}
-		
-		});
-				
+		funCalculatePettyCashFlashDetail();
+	}
+else
+	{
+	funCalculatePettyCashFlasSummary();
+	}
+	
+	});
+			
+
+});
+
 				
 function funCalculatePettyCashFlashDetail()
 {
@@ -43,11 +48,7 @@ function funCalculatePettyCashFlashDetail()
 	var toDat=$("#txtToDate").val();
 	var searchUrl=getContextPath()+"/rptPettyCashFlashDetail.html?fromDat="+fromDat+"&toDat="+toDat;
 
-	
-	
-	
-	
-	}
+}
 	
 	
 function funCalculatePettyCashFlasSummary()

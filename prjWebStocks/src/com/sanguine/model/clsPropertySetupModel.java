@@ -204,6 +204,9 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	@Column(name = "strCurrentDateForTransaction", columnDefinition = "VARCHAR(10) default 'No'")
 	private String strCurrentDateForTransaction;
 	
+	@Column(name = "strRoundOffFinalAmtOnTransaction", columnDefinition = "VARCHAR(1) default 'Y'")
+	private String strRoundOffFinalAmtOnTransaction;
+	
 	
 	
 	
@@ -1225,6 +1228,15 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 
 	public void setStrCurrentDateForTransaction(String strCurrentDateForTransaction) {
 		this.strCurrentDateForTransaction = strCurrentDateForTransaction;
+	}
+
+	public String getStrRoundOffFinalAmtOnTransaction() {
+		return strRoundOffFinalAmtOnTransaction;
+	}
+
+	public void setStrRoundOffFinalAmtOnTransaction(
+			String strRoundOffFinalAmtOnTransaction) {
+		this.strRoundOffFinalAmtOnTransaction =(String) setDefaultValue(strRoundOffFinalAmtOnTransaction, "Y");
 	}
 
 

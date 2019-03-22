@@ -145,6 +145,8 @@ public class clsReportBean {
 		
 	private double dblvalue;
 	
+	private String strBillType;
+	
 	private List<clsFundFlowBean> listFundFlowBean = new ArrayList<clsFundFlowBean>();
 
 	public String getStrWeekDay() {
@@ -619,6 +621,14 @@ public class clsReportBean {
 
 	public void setDblvalue(double dblvalue) {
 		this.dblvalue = dblvalue;
+	}
+
+	public String getStrBillType() {
+		return strBillType;
+	}
+
+	public void setStrBillType(String strBillType) {
+		this.strBillType = strBillType;
 	}
 
 	

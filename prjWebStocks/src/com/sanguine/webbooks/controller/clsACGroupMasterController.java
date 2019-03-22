@@ -55,18 +55,26 @@ public class clsACGroupMasterController {
 		 * listCategory.add(categoryList.get(i).toString()); }
 		 */
 
-		listCategory.add("SHARE CAPITAL");
-		listCategory.add("ASSETS");				
-		listCategory.add("BANK BALANCE");
-		listCategory.add("CASH BALANCE");		
-		listCategory.add("INDIRECT EXPENSE");//Expense
-		listCategory.add("DIRECT INCOME");//Income
-		listCategory.add("LIABILITY");
-		listCategory.add("SUNDRY DEBTOR");
-		listCategory.add("SUNDRY CREDITOR");
-		listCategory.add("DIRECT EXPENSES");//other expenses
-		listCategory.add("INDIRECT INCOME");//other income
+		if(clientCode.equals("261.001")){ //for Congo KD
+			listCategory.add("INCOME");
+			listCategory.add("EXPENSES");
+			listCategory.add("LIABILITY");
+			listCategory.add("ASSETS");
+		}else{
 		
+			listCategory.add("SHARE CAPITAL");
+			listCategory.add("ASSETS");				
+			listCategory.add("BANK BALANCE");
+			listCategory.add("CASH BALANCE");		
+			listCategory.add("INDIRECT EXPENSE");//Expense
+			listCategory.add("DIRECT INCOME");//Income
+			listCategory.add("LIABILITY");
+			listCategory.add("SUNDRY DEBTOR");
+			listCategory.add("SUNDRY CREDITOR");
+			listCategory.add("DIRECT EXPENSES");//other expenses
+			listCategory.add("INDIRECT INCOME");//other income
+			
+		}
 		
 		
 

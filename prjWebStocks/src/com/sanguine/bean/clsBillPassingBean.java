@@ -21,6 +21,17 @@ public class clsBillPassingBean {
 	private List<clsBillPassDtlModel> listBillPassDtl;
 	private List<clsBillPassingTaxDtlModel> listBillPassTaxDtl;
 	private long intId;
+	
+	private String strSettlementType;
+	
+	public String getStrSettlementType() {
+		return strSettlementType;
+	}
+
+	public void setStrSettlementType(String strSettlementType) {
+		this.strSettlementType = strSettlementType;
+	}
+
 
 	public long getIntId() {
 		return intId;

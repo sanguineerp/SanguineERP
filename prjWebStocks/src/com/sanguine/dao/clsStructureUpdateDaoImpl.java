@@ -1008,7 +1008,14 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql = "ALTER TABLE `tblpropertysetup` " 
 				+" ADD COLUMN `strCurrentDateForTransaction` VARCHAR(10) NOT NULL DEFAULT 'No' AFTER `strPORateEditable`;";
 		funExecuteQuery(sql);
-	
+		
+		sql="ALTER TABLE `tblpropertysetup` ADD COLUMN `strRoundOffFinalAmtOnTransaction` VARCHAR(1) NOT NULL DEFAULT 'Y' AFTER `strCurrentDateForTransaction`";
+		funExecuteQuery(sql);
+		
+		sql="ALTER TABLE `tblbillpasshd` ADD COLUMN `strSettlementType` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strAuthLevel5` ";
+		funExecuteQuery(sql);
+		
+		
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
 		List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();
@@ -1309,8 +1316,15 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		        + " ('frmWebStockRepostingJV', 'Reposting JV', 'Tools', '8', 'L', '91', '93', '1', 'default.png', '1', '1', '1', '1', 'NO', 'NO', 'frmWebStockRepostingJV.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmStockReq', 'Stock Requisition', 'Cost Center', 1, 'T', 9, 1, '1', 'Requisition-Form.png', '1', 1, '1', '1', 'YES', 'YES', 'frmStockReq.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Yes', NULL,NULL,NULL), "
 				+ " ('frmStockReqSlip', 'Stock Requisition Slip', 'Cost Center', 9, 'R', 37, 5, '1', 'Requisition-Slip.png', '1', 1, '1', '1', 'NO', 'NO', 'frmStockReqSlip.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL,NULL), "
-				+ " ('frmSupplierWisePurchaseGRNVarianceReport', 'Purchase GRN Variance Report', 'Listing', 9, 'R', 45, 23, '1', 'default.png', '1', 1, '1', '1', 'NO', 'NO', 'frmSupplierWisePurchaseGRNVarianceReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL,NULL) ";
+				+ " ('frmSupplierWisePurchaseGRNVarianceReport', 'Purchase GRN Variance Report', 'Listing', 9, 'R', 45, 23, '1', 'default.png', '1', 1, '1', '1', 'NO', 'NO', 'frmSupplierWisePurchaseGRNVarianceReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL,NULL)";
+				
+		
 		funExecuteQuery(sql);
+		
+		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`, `strInvoice`, `strDeliverySchedule`, `strFormAccessYN`) VALUES "
+				+" ('frmBillPassingFlash', 'Bill Passing Flash', 'Tools', 7, 'L', 23, 108, '1', 'defailt.png', '1', 1, '1', '1', 'NO', 'NO', 'frmBillPassingFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Yes', NULL, NULL, NULL, 'Y')";
+		funExecuteQuery(sql);
+		
 		}
 		
 		// //--------------------END----------------------------/////
