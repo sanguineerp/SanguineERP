@@ -290,12 +290,34 @@
 				    
 // 			        newcontent += '<td>'+ "<input name=\"listProdModel["+(rowCount)+"].strTaxIndicator\" type=\"checkbox\"   size=\"4%\" class=\"inputText-Auto\" id=\"strTaxIndicator."+(rowCount)+"\" value='"+productMasterData[rowCount].strTaxIndicator+"'></td>";
  				    newcontent += '<td>'+ "<select name=\"listProdModel["+(i)+"].strTaxIndicator\"   class=\"BoxW48px\"  style=\"width: 40px;\" readonly=\"readonly\" id=\"strTaxIndicator."+(i)+"\" >'"+funGetTaxIndicator(productMasterData[i].strTaxIndicator)+"'></td>";
-			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strNonStockableItem\"  type=\"checkbox\" class=\"inputText-Auto\"   size=\"4px\"  id=\"strNonStockableItem."+(i)+"\" value='"+productMasterData[i].strNonStockableItem+"'  ></td>";
+			        
+ 				    if(productMasterData[i].strNonStockableItem=='Y'){
+			        	newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strNonStockableItem\"  type=\"checkbox\" class=\"inputText-Auto\"   size=\"4px\"  id=\"strNonStockableItem."+(i)+"\" checked=\"checked\" value='"+productMasterData[i].strNonStockableItem+"'/></td>";	
+			        }else{
+			        	newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strNonStockableItem\"  type=\"checkbox\" class=\"inputText-Auto\"   size=\"4px\"  id=\"strNonStockableItem."+(i)+"\" value='"+productMasterData[i].strNonStockableItem+"'  /></td>";
+			        }
+ 				    
 			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].dblYieldPer\" type=\"box\"  required = \"required\" style=\"text-align: right;width:40px\"  size=\"4px\" class=\"decimal-places inputText-Auto\" id=\"dblYieldPer."+(i)+"\" value='"+productMasterData[i].dblYieldPer+"'  ></td>";
-			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strExciseable\" type=\"checkbox\" class=\"inputText-Auto\" readonly=\"readonly\"  size=\"4px\" id=\"strExciseable."+(i)+"\" value='"+productMasterData[i].strExciseable+"' ></td>";
-			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strNotInUse\"  type=\"checkbox\" class=\"inputText-Auto\" size=\"4px\"  id=\"txtRemark."+(i)+"\" value='"+productMasterData[i].strNotInUse+"'></td>";
+			       
+			        if(productMasterData[i].strExciseable=='Y'){ //Checkbox ticked  
+			        	newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strExciseable\" type=\"checkbox\" class=\"inputText-Auto\" readonly=\"readonly\"  size=\"4px\" id=\"strExciseable."+(i)+"\" checked=\"checked\" value='"+productMasterData[i].strExciseable+"' /></td>";	
+			        }else{
+			        	newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strExciseable\" type=\"checkbox\" class=\"inputText-Auto\" readonly=\"readonly\"  size=\"4px\" id=\"strExciseable."+(i)+"\" value='"+productMasterData[i].strExciseable+"' ></td>";
+			        }
+			        
+			        if(productMasterData[i].strNotInUse=='Y'){ //Checkbox ticked  
+			        	newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strNotInUse\"  type=\"checkbox\" class=\"inputText-Auto\" size=\"4px\"  id=\"txtRemark."+(i)+"\" checked=\"checked\" value='"+productMasterData[i].strNotInUse+"'></td>";
+			        }else{
+			        	newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strNotInUse\"  type=\"checkbox\" class=\"inputText-Auto\" size=\"4px\"  id=\"txtRemark."+(i)+"\" value='"+productMasterData[i].strNotInUse+"'></td>";
+			        }
+			        
+			        if(productMasterData[i].strNotInUse=='Y'){//Checkbox ticked
+			        	newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strPickMRPForTaxCal\" type=\"checkbox\"  size=\"4px\" class=\"inputText-Auto\" id=\"strPickMRPForTaxCal."+(i)+"\" checked=\"checked\" value='"+productMasterData[i].strPickMRPForTaxCal+"'></td>";
+			        }else{
+			        	newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strPickMRPForTaxCal\" type=\"checkbox\"  size=\"4px\" class=\"inputText-Auto\" id=\"strPickMRPForTaxCal."+(i)+"\" value='"+productMasterData[i].strPickMRPForTaxCal+"'></td>";	
+			        }
 					
-			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strPickMRPForTaxCal\" type=\"checkbox\"  size=\"4px\" class=\"inputText-Auto\" id=\"strPickMRPForTaxCal."+(i)+"\" value='"+productMasterData[i].strPickMRPForTaxCal+"'></td>";
+			        
 			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].strBarCode\" type=\"text\" class=\"Box \" size=\"4px\"  id=\"txtIssueLocation."+(i)+"\" value='"+productMasterData[i].strBarCode+"' ></td>";
 			        newcontent += '<td>'+ "<select name=\"listProdModel["+(i)+"].strReceivedUOM\" class=\"Box\" style=\"width:50px\"  id=\"strReceivedUOM."+(i)+"\"  "+getProductTypeUOM(productMasterData[i].strReceivedUOM)+"  ";
 			        newcontent += '<td>'+ "<input name=\"listProdModel["+(i)+"].dblReceiveConversion\"   size=\"4px\"  style=\"width:30px;text-align: right;\" id=\"dblReceiveConversion."+(i)+"\" value="+productMasterData[i].dblReceiveConversion+"></td>";

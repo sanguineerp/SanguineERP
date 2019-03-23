@@ -2227,7 +2227,7 @@ public class clsGlobalFunctions {
 					double unitPrice = Double.parseDouble(sp1[1]);
 					double qty = Double.parseDouble(sp1[3]);
 					double discAmt = Double.parseDouble(sp1[4]);
-					String sqlTaxIndicator = "select strProdCode,strTaxIndicator,dblMRP,strPickMRPForTaxCal,strExciseable " + " from tblproductmaster where strProdCode='" + productCode + "'";
+					String sqlTaxIndicator = "select strProdCode,strTaxIndicator,dblMRP,strPickMRPForTaxCal,strExciseable " + " from tblproductmaster where strProdCode='" + productCode + "' and strClientCode='"+clientCode+"' ";
 					listTaxDtl = objGlobalFunctionsService.funGetList(sqlTaxIndicator, "sql");
 					for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
 						double taxableAmt = unitPrice * qty;
@@ -2238,7 +2238,7 @@ public class clsGlobalFunctions {
 							objProdTaxDtl = hmProductTaxDtl.get(productCode);
 							objProdTaxDtl.setDblQty(objProdTaxDtl.getDblQty() + qty);
 						} else {
-							String sqlMarginDisc = "select a.dblDiscount,b.dblMargin " + " from tblpartymaster a,tblprodsuppmaster b " + " where a.strPCode=b.strSuppCode and a.strPCode='" + supplierCode + "' " + " and b.strProdCode='" + productCode + "' ";
+							String sqlMarginDisc = "select a.dblDiscount,b.dblMargin " + " from tblpartymaster a,tblprodsuppmaster b " + " where a.strPCode=b.strSuppCode and a.strClientCode=b.strClientCode and a.strPCode='" + supplierCode + "' " + " and b.strProdCode='" + productCode + "' and a.strClientCode='"+clientCode+"' ";
 							List listMarginDisc = objGlobalFunctionsService.funGetList(sqlMarginDisc, "sql");
 							if (listMarginDisc.size() > 0) {
 								Object[] arrObjMarginDisc = (Object[]) listMarginDisc.get(0);
