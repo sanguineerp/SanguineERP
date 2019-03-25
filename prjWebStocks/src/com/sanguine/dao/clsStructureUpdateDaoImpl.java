@@ -4114,6 +4114,30 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+" ADD COLUMN `strPrevCrDr` VARCHAR(255) NOT NULL DEFAULT '' AFTER `intPrevYearBal`; ";
 		funExecuteWebBooksQuery(sql);
 		
+		sql="ALTER TABLE `tblacmaster` CHANGE COLUMN `strGroupCode` `strSubGroupCode` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strDebtor`;";
+		funExecuteWebBooksQuery(sql);
+		
+		sql="CREATE TABLE `tblsubgroupmaster` (" 
+				+"`intSGCode` BIGINT(20) NOT NULL AUTO_INCREMENT,"
+				+"`strSubGroupCode` VARCHAR(50) NOT NULL,"
+				+"`strSubGroupName` VARCHAR(50) NOT NULL,"
+				+"`strGroupCode` VARCHAR(20) NOT NULL,"
+				+"`strUnderSubGroup` VARCHAR(50) NOT NULL DEFAULT '',"
+				+"`strUserCreated` VARCHAR(20) NOT NULL DEFAULT '',"
+				+"`strUserModified` VARCHAR(20) NOT NULL DEFAULT '',"
+				+"`dteCreatedDate` DATETIME NOT NULL,"
+				+"`dteLastModified` DATETIME NOT NULL,"
+				+"`strPropertyCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+"`strClientCode` VARCHAR(10) NOT NULL,"
+				+"PRIMARY KEY (`strSubGroupCode`, `strClientCode`),"
+				+"INDEX `intSGCode` (`intSGCode`)"
+			+")"
+			+"COLLATE='latin1_swedish_ci'"
+			+"ENGINE=InnoDB"
+			+"AUTO_INCREMENT=72"
+			+";";
+		funExecuteWebBooksQuery(sql);
+		
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
 				+ " ('frmSundryCreditorBill', 'Sundry Creditor Bill', 'Transaction', '1', 'T', '1', '1', '12', 'default.png', '5', '1', '1', '1', 'NO', '1', 'frmSundryCreditorBill.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmCreditorsOutStandingReport', 'Creditors Out Standing Report', 'Reports', '6', 'R', '6', '6', '1', 'default.png', '5', '1', '1', '1', 'NO', 'NO', 'frmCreditorsOutStandingReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ,"
@@ -4152,6 +4176,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ " ('frmWebBooksStructureUpdate', 'Structure Update', 'Tools', 1, 'L', 6, 6, '1', 'defaults.png', '5', 1, '1', '1', 'NO', 'NO', 'frmWebBooksStructureUpdate.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ";
 		funExecuteQuery(sql);
 		
+		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`, `strInvoice`, `strDeliverySchedule`, `strFormAccessYN`) VALUES "
+				+ " ('frmACSubGroupMaster', 'Sub Group Master', 'Master', 4, 'M', 5, 5, '1', 'default.png', '5', 1, '1', '1', 'NO', 'NO', 'frmACSubGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
+		funExecuteQuery(sql);
 		/*----------------WebBook Forms End---------------------------*/
 
 	}

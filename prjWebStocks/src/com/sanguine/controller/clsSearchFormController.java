@@ -67,6 +67,7 @@ public class clsSearchFormController {
 	String GrnCode = "";
 	String NonMoveSlowMovingpropCode = "";
 	String strModule = "1";
+	String strGroupCode="",strSubGroupCode="";
 	private String txtArrivalDate;
 
 	// Variable For Excise
@@ -124,6 +125,11 @@ public class clsSearchFormController {
 		}
 		if (req.getParameter("propCode") != null) {
 			NonMoveSlowMovingpropCode = req.getParameter("propCode").toString();
+		}
+		
+		if (req.getParameter("strGroupCode") != null) {
+			strGroupCode = req.getParameter("strGroupCode");
+			strSubGroupCode= req.getParameter("strSubGroupCode");
 		}
 
 		Map<String, Object> map = null;
@@ -5268,11 +5274,7 @@ public class clsSearchFormController {
 			break;
 		}
 		case "underSubGroupCode": {
-			String strGroupCode="",strSubGroupCode="";
-			if (req.getParameter("strGroupCode") != null) {
-				strGroupCode = req.getParameter("strGroupCode");
-				strSubGroupCode= req.getParameter("strGroupCode");
-			}
+			
 			columnNames = "strSubGroupCode,strSubGroupName,strGroupCode,strUnderSubGroup";
 			tableName = "clsACSubGroupMasterModel where strClientCode='" + clientCode + "' ";
 			if(!strGroupCode.isEmpty()){
