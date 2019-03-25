@@ -32,8 +32,8 @@ public class clsWebBooksAccountMasterServiceImpl implements clsWebBooksAccountMa
 	}
 
 	@Override
-	public String funGetMaxAccountNo(String strGroupCode, String clientCode, String propertyCode) {
-		return objWebBooksAccountMasterDao.funGetMaxAccountNo(strGroupCode, clientCode, propertyCode);
+	public String funGetMaxAccountNo(String subGroupCode, String clientCode, String propertyCode) {
+		return objWebBooksAccountMasterDao.funGetMaxAccountNo(subGroupCode, clientCode, propertyCode);
 	}
 
 	@Override

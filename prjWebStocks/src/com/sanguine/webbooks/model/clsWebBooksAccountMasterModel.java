@@ -59,8 +59,8 @@ public class clsWebBooksAccountMasterModel implements Serializable {
 	@Column(name = "strDebtor")
 	private String strDebtor;
 
-	@Column(name = "strGroupCode")
-	private String strGroupCode;
+	@Column(name = "strSubGroupCode")
+	private String strSubGroupCode;
 	
 	@Column(name = "intPrevYearBal", columnDefinition = "Decimal(18,4) NOT NULL default '0.00'")
 	private double intPrevYearBal;
@@ -68,16 +68,8 @@ public class clsWebBooksAccountMasterModel implements Serializable {
 	@Column(name = "strPrevCrDr",columnDefinition = "VARCHAR(20) NOT NULL default ''")
 	private String strPrevCrDr;
 
-	public String getStrGroupName() {
-		return strGroupName;
-	}
-
-	public void setStrGroupName(String strGroupName) {
-		this.strGroupName = strGroupName;
-	}
-
 	@Transient
-	private String strGroupName;
+	private String strSubGroupName;
 
 	@Column(name = "intPreYearGrpCode")
 	private String intPreYearGrpCode;
@@ -226,14 +218,6 @@ public class clsWebBooksAccountMasterModel implements Serializable {
 
 	public void setStrDebtor(String strDebtor) {
 		this.strDebtor = (String) setDefaultValue(strDebtor, "NA");
-	}
-
-	public String getStrGroupCode() {
-		return strGroupCode;
-	}
-
-	public void setStrGroupCode(String strGroupCode) {
-		this.strGroupCode = (String) setDefaultValue(strGroupCode, "NA");
 	}
 
 	
@@ -419,5 +403,21 @@ public class clsWebBooksAccountMasterModel implements Serializable {
 
 	public void setIntOpeningBal(double intOpeningBal) {
 		this.intOpeningBal =  (double) setDefaultValue(intOpeningBal, "");;
+	}
+
+	public String getStrSubGroupCode() {
+		return strSubGroupCode;
+	}
+
+	public void setStrSubGroupCode(String strSubGroupCode) {
+		this.strSubGroupCode = (String) setDefaultValue(strSubGroupCode, "NA");
+	}
+
+	public String getStrSubGroupName() {
+		return strSubGroupName;
+	}
+
+	public void setStrSubGroupName(String strSubGroupName) {
+		this.strSubGroupName = strSubGroupName;
 	}
 }

@@ -22,6 +22,7 @@ import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webbooks.bean.clsWebBooksAccountMasterBean;
 import com.sanguine.webbooks.model.clsACGroupMasterModel;
+import com.sanguine.webbooks.model.clsACSubGroupMasterModel;
 import com.sanguine.webbooks.model.clsEmployeeMasterModel;
 import com.sanguine.webbooks.model.clsWebBooksAccountMasterModel;
 import com.sanguine.webbooks.model.clsWebBooksAccountMasterModel_ID;
@@ -107,8 +108,8 @@ public class clsWebBooksAccountMasterController {
 			Object objects[] = (Object[]) listModel.get(0);
 
 			objModel = (clsWebBooksAccountMasterModel) objects[0];
-			clsACGroupMasterModel objGroupModel = (clsACGroupMasterModel) objects[1];
-			objModel.setStrGroupName(objGroupModel.getStrGroupName());
+			clsACSubGroupMasterModel objGroupModel = (clsACSubGroupMasterModel) objects[1];
+			objModel.setStrSubGroupName(objGroupModel.getStrSubGroupName());
 			
 			objModel = (clsWebBooksAccountMasterModel) objects[0];
 			
@@ -189,7 +190,7 @@ public class clsWebBooksAccountMasterController {
 		clsWebBooksAccountMasterModel objACModel;
 		if (objBean.getStrAccountCode().trim().length() == 0) {
 			lastNo = objGlobalFunctionsService.funGetLastNo("tblacmaster", "AccountMaster", "intGId", clientCode);
-			String nextAccountNo = objWebBooksAccountMasterService.funGetMaxAccountNo(objBean.getStrGroupCode(), clientCode, propertyCode);
+			String nextAccountNo = objWebBooksAccountMasterService.funGetMaxAccountNo(objBean.getStrSubGroupCode(), clientCode, propertyCode);
 
 			String[] objAccNOArr = nextAccountNo.split("-");
 			String accPrefixCode = objAccNOArr[0];
@@ -207,8 +208,8 @@ public class clsWebBooksAccountMasterController {
 		objACModel.setStrType(objBean.getStrType());
 		objACModel.setStrOperational(objBean.getStrOperational());
 		objACModel.setStrDebtor(objBean.getStrDebtor());
-		objACModel.setStrGroupCode(objBean.getStrGroupCode());
-		objACModel.setStrGroupName(objBean.getStrGroupName());
+		objACModel.setStrSubGroupCode(objBean.getStrSubGroupCode());
+		objACModel.setStrSubGroupName(objBean.getStrSubGroupName());
 		objACModel.setStrBranch(objBean.getStrBranch());
 		objACModel.setintOpeningBal(objBean.getIntOpeningBal());
 		objACModel.setStrTaxonPurchase(objGlobal.funIfNull(objBean.getStrTaxonPurchase(), "NA", objBean.getStrTaxonPurchase()));

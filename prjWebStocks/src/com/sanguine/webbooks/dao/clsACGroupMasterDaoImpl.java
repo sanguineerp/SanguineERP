@@ -34,5 +34,6 @@ public class clsACGroupMasterDaoImpl implements clsACGroupMasterDao {
 
 		return query.list();
 	}
-
+	
+	
 }

@@ -13,6 +13,8 @@ public class clsChartOfAccountReportBean
 	private String strCreditor;
 	private String strEmployee;
 	private String strGrpCategory;
+	private String strSubGroupCode;
+	private String strSubGroupName;
 	
 	public String getStrGroupCode() {
 		return strGroupCode;
@@ -73,6 +75,18 @@ public class clsChartOfAccountReportBean
 	}
 	public void setStrGrpCategory(String strGrpCategory) {
 		this.strGrpCategory = strGrpCategory;
+	}
+	public String getStrSubGroupCode() {
+		return strSubGroupCode;
+	}
+	public void setStrSubGroupCode(String strSubGroupCode) {
+		this.strSubGroupCode = strSubGroupCode;
+	}
+	public String getStrSubGroupName() {
+		return strSubGroupName;
+	}
+	public void setStrSubGroupName(String strSubGroupName) {
+		this.strSubGroupName = strSubGroupName;
 	}
 	
 	

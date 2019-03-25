@@ -27,7 +27,7 @@ public class clsWebBooksAccountMasterDaoImpl implements clsWebBooksAccountMaster
 	public List funGetWebBooksAccountMaster(String accountCode, String clientCode) {
 		List list = null;
 		try {
-			Query query = webBooksSessionFactory.getCurrentSession().createQuery("from clsWebBooksAccountMasterModel a,clsACGroupMasterModel b " + "where a.strGroupCode=b.strGroupCode  and a.strClientCode=b.strClientCode and a.strClientCode=:clientCode " + "and a.strAccountCode=:accountCode ");
+			Query query = webBooksSessionFactory.getCurrentSession().createQuery("from clsWebBooksAccountMasterModel a,clsACSubGroupMasterModel b " + "where a.strSubGroupCode=b.strSubGroupCode  and a.strClientCode=b.strClientCode and a.strClientCode=:clientCode " + "and a.strAccountCode=:accountCode ");
 
 			query.setParameter("accountCode", accountCode);
 			query.setParameter("clientCode", clientCode);
@@ -45,8 +45,8 @@ public class clsWebBooksAccountMasterDaoImpl implements clsWebBooksAccountMaster
 	}
 
 	@Override
-	public String funGetMaxAccountNo(String groupCode, String clientCode, String propertyCode) {
-		Query sqlNextAccountNo = webBooksSessionFactory.getCurrentSession().createSQLQuery("select ifnull(max(strAccountCode),CONCAT('" + groupCode + "','-01-','00')) " + "from  tblacmaster " + "where strGroupCode='" + groupCode + "' and strClientCode='" + clientCode + "' ");
+	public String funGetMaxAccountNo(String subGroupCode, String clientCode, String propertyCode) {
+		Query sqlNextAccountNo = webBooksSessionFactory.getCurrentSession().createSQLQuery("select ifnull(max(strAccountCode),CONCAT('" + subGroupCode + "','-01-','00')) " + "from  tblacmaster " + "where strSubGroupCode='" + subGroupCode + "' and strClientCode='" + clientCode + "' ");
 
 		return sqlNextAccountNo.list().get(0).toString();
 	}

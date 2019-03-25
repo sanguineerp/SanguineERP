@@ -113,12 +113,14 @@ public class clsChartOfAccountReportController {
 			startDate = spDate[2] + "-" + spDate[1] + "-" + spDate[0];
 			
 
-			String sql = "select b.strGroupCode, b.strGroupName, a.strAccountCode, " 
+			String sql = "select b.strSubGroupCode, b.strSubGroupName, a.strAccountCode, " 
 					+ " a.strAccountName, a.strOperational, a.strType, "
-					+ " a.strDebtor, a.strCreditor, a.strEmployee ,b.strCategory "   
-					+ " from tblacmaster a, tblacgroupmaster b "
-					+ " where a.strGroupCode = b.strGroupCode "
-					+ " order by a.strGroupCode, a.strAccountCode";
+					+ " a.strDebtor, a.strCreditor, a.strEmployee ,c.strCategory "
+					+ " ,c.strGroupCode,c.strGroupName "   
+					+ " from tblacmaster a, tblsubgroupmaster b,tblacgroupmaster c "
+					+ " where a.strSubGroupCode = b.strSubGroupCode "
+					+ " and b.strGroupCode=c.strGroupCode"
+					+ " order by a.strSubGroupCode,c.strGroupCode, a.strAccountCode";
 
 			List listAc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			if(listAc.size()>0)
@@ -127,8 +129,8 @@ public class clsChartOfAccountReportController {
 				{
 					Object[] obj = (Object[]) listAc.get(i);
 					clsChartOfAccountReportBean objBeanDtl = new clsChartOfAccountReportBean();
-					objBeanDtl.setStrGroupCode(obj[0].toString());
-					objBeanDtl.setStrGroupName(obj[1].toString());
+					objBeanDtl.setStrSubGroupCode(obj[0].toString());
+					objBeanDtl.setStrSubGroupName(obj[1].toString());
 					objBeanDtl.setStrAccountCode(obj[2].toString());
 					objBeanDtl.setStrAccountName(obj[3].toString());
 					objBeanDtl.setStrOperational(obj[4].toString());
@@ -137,6 +139,8 @@ public class clsChartOfAccountReportController {
 					objBeanDtl.setStrCreditor(obj[7].toString());
 					objBeanDtl.setStrEmployee(obj[8].toString());
 					objBeanDtl.setStrGrpCategory(obj[9].toString());
+					objBeanDtl.setStrGroupCode(obj[10].toString());
+					objBeanDtl.setStrGroupName(obj[11].toString());
 					fieldList.add(objBeanDtl);
 				}
 			}

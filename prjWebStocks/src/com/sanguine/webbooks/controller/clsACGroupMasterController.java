@@ -102,7 +102,6 @@ public class clsACGroupMasterController {
 			acGroupMasterModel = new clsACGroupMasterModel();
 			acGroupMasterModel.setStrGroupCode("Invalid Code");
 		}
-
 		return acGroupMasterModel;
 	}
 

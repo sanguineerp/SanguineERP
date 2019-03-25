@@ -474,6 +474,7 @@
 					<value>com.sanguine.webbooks.model.clsEmployeeMasterModel</value>
                     <value>com.sanguine.webbooks.model.clsExpenseMasterModel</value>
                     <value>com.sanguine.webbooks.model.clsPettyCashEntryHdModel </value>
+                 	<value>com.sanguine.webbooks.model.clsACSubGroupMasterModel </value>
 					
 					
 					

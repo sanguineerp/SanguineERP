@@ -3970,6 +3970,16 @@
 			value="/WEB-INF/jsp/webbooks/frmReceipt.jsp"></put-attribute>
 	</definition>
 	
+	
+	<definition name="frmACSubGroupMaster" extends="base.definition">
+		<put-attribute name="title" value="SubGroup Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/masters/frmACSubGroupMaster.jsp"></put-attribute>
+	</definition>
+	<definition name="frmACSubGroupMaster_1" extends="base.definition4">
+		<put-attribute name="title" value="SubGroup Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/masters/frmACSubGroupMaster.jsp"></put-attribute>
+	</definition>
+	
 <!-- 	APGL Forms Entry Starts -->
 	
 	

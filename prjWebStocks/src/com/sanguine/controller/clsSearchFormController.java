@@ -3041,12 +3041,13 @@ public class clsSearchFormController {
 		}
 
 		case "accountCode": {
-			columnNames = " a.strAccountCode,a.strAccountName,a.strOperational,a.strType,b.strGroupName,a.intOpeningBal,strDebtor,strCreditor ";
+			columnNames = " a.strAccountCode,a.strAccountName,a.strOperational,a.strType,c.strSubGroupName,a.intOpeningBal,strDebtor,strCreditor ";
 			//
 			
-			tableName = " from "+strWebBooksDB+".tblacmaster a,"+strWebBooksDB+".tblacgroupmaster b " + " where a.strGroupCode=b.strGroupCode ";
+			tableName = " from "+strWebBooksDB+".tblacmaster a,"+strWebBooksDB+".tblacgroupmaster b ,"+strWebBooksDB+".tblsubgroupmaster c "
+					+ " where a.strSubGroupCode=c.strSubGroupCode and c.strGroupCode=b.strGroupCode";
 
-			listColumnNames = " Account Code,Account Name,Operational,Type,Account Group,Opening Bal";
+			listColumnNames = " Account Code,Account Name,Operational,Type,Account SubGroup,Opening Bal";
 			idColumnName = " strAccountCode";
 			flgQuerySelection = true;
 			searchFormTitle = "Account Master LinkedUp";
@@ -4734,12 +4735,13 @@ public class clsSearchFormController {
 		}
 
 		case "accountCode": {
-			columnNames = "a.strAccountCode,a.strAccountName,a.strOperational,a.strType,b.strGroupName,a.strCreditor,a.strDebtor ";
-			tableName = "clsWebBooksAccountMasterModel a,clsACGroupMasterModel b where a.strClientCode='" + clientCode + "' and a.strGroupCode=b.strGroupCode ";
+			columnNames = "a.strAccountCode,a.strAccountName,a.strOperational,a.strType,c.strSubGroupName,a.strCreditor,a.strDebtor ";
+			tableName = "clsWebBooksAccountMasterModel a,clsACGroupMasterModel b ,clsACSubGroupMasterModel c where a.strClientCode='" + clientCode + "' and c.strGroupCode=b.strGroupCode "
+					+ " and a.strSubGroupCode=c.strSubGroupCode";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strPropertyCode = '" + propertyCode + "' ";
 			}
-			listColumnNames = "Account Code,Account Name,Operational,Type,Group Name, Creditor,Debtor";
+			listColumnNames = "Account Code,Account Name,Operational,Type,SubGroup Name, Creditor,Debtor";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
 			searchFormTitle = "Account Master";
@@ -5253,6 +5255,38 @@ public class clsSearchFormController {
                 break;
                 
         }
+		case "acSubGroupCode": {
+			columnNames = "strSubGroupCode,strSubGroupName,strGroupCode,strUnderSubGroup";
+			tableName = "clsACSubGroupMasterModel where strClientCode='" + clientCode + "' ";
+			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+				tableName += " and strPropertyCode = '" + propertyCode + "' ";
+			}
+			listColumnNames = "Sub Group Code,Sub Group Name,Group Code,Under SubGroup";
+			idColumnName = "strSubGroupCode";
+			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			searchFormTitle = "Sub Group Master";
+			break;
+		}
+		case "underSubGroupCode": {
+			String strGroupCode="",strSubGroupCode="";
+			if (req.getParameter("strGroupCode") != null) {
+				strGroupCode = req.getParameter("strGroupCode");
+				strSubGroupCode= req.getParameter("strGroupCode");
+			}
+			columnNames = "strSubGroupCode,strSubGroupName,strGroupCode,strUnderSubGroup";
+			tableName = "clsACSubGroupMasterModel where strClientCode='" + clientCode + "' ";
+			if(!strGroupCode.isEmpty()){
+				tableName = tableName+ " and strGroupCode='"+strGroupCode+"' and strSubGroupCode !='"+strSubGroupCode+"'";
+			}
+			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+				tableName += " and strPropertyCode = '" + propertyCode + "' ";
+			}
+			listColumnNames = "Sub Group Code,Sub Group Name,Group Code,Under SubGroup";
+			idColumnName = "strSubGroupCode";
+			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			searchFormTitle = "Sub Group Master";
+			break;
+		}
         
         
 		

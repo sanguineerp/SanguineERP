@@ -42,8 +42,8 @@
 				}
 			});
 			
-			$('#txtGroupCode').blur(function() {
-				var code = $('#txtGroupCode').val();
+			$('#txtSubGroupCode').blur(function() {
+				var code = $('#txtSubGroupCode').val();
 				if(code.trim().length > 0 && code !="?" && code !="/")
 				{
 					funSetAccountGroupDetails(code);
@@ -108,8 +108,8 @@
 				        	$("#cmbOperational").val(response.strOperational);
 				        	$("#cmbDebtor").val(response.strDebtor);
 				        	$("#cmbCreditor").val(response.strCreditor);
-				        	$("#txtGroupCode").val(response.strGroupCode);
-				        	$("#txtGroupName").val(response.strGroupName);
+				        	$("#txtSubGroupCode").val(response.strSubGroupCode);
+				        	$("#txtSubGroupName").val(response.strSubGroupName);
 				        	$("#txtBranch").val(response.strBranch);
 				        	$("#txtOpeningBal").val(response.intOpeningBal);
 				        	$("#cmbOpeningBal").val(response.strCreditor);
@@ -152,10 +152,9 @@
 		      });
 	}
 	
-	function funSetAccountGroupDetails(groupCode)
+	function funSetAccountGroupDetails(subGroupCode)
 	{
-	   
-		var searchurl=getContextPath()+"/loadACGroupMasterData.html?acGroupCode="+groupCode;
+		var searchurl=getContextPath()+"/loadACSubGroupMasterData.html?acSubGroupCode="+subGroupCode;
 		 $.ajax({
 	        type: "GET",
 	        url: searchurl,
@@ -165,12 +164,12 @@
 	        	if(response.strGroupCode=='Invalid Code')
 	        	{
 	        		alert("Invalid Group Code");
-	        		$("#txtGroupCode").val('');
+	        		$("#txtSubGroupCode").val('');
 	        	}
 	        	else
 	        	{
-	        		$("#txtGroupCode").val(response.strGroupCode);
-		        	$("#txtGroupName").val(response.strGroupName);
+	        		$("#txtSubGroupCode").val(response.strSubGroupCode);
+		        	$("#txtSubGroupName").val(response.strSubGroupName);
 		        					        	
 	        	}
 			},
@@ -202,7 +201,7 @@
 			     funSetAccountDetails(code);
 				 break;
 				 
-            case "acGroupCode":
+            case "acSubGroupCode":
                  funSetAccountGroupDetails(code);			    					   
 				 break; 
 				 
@@ -367,7 +366,7 @@
 	} */
 	function funValidateFields()
 	{
-		var groupCode=$("#txtGroupCode").val();
+		var groupCode=$("#txtSubGroupCode").val();
 		if(groupCode=='')
 		{
 			alert('Please select group!!!');
@@ -426,9 +425,9 @@
 				
 			</tr>
 			<tr>
-			    <td><label >Group Code</label></td>
-			    <td><s:input id="txtGroupCode" path="strGroupCode"  ondblclick="funHelp('acGroupCode')" cssClass="searchTextBox"/></td>			        			        
-			    <td colspan="2"><s:input id="txtGroupName" path="strGroupName" required="true" readonly="true" cssClass="longTextBox"/></td>			    			        			   
+			    <td><label >Sub Group Code</label></td>
+			    <td><s:input id="txtSubGroupCode" path="strSubGroupCode"  ondblclick="funHelp('acSubGroupCode')" cssClass="searchTextBox"/></td>			        			        
+			    <td colspan="2"><s:input id="txtSubGroupName" path="strSubGroupName" required="true" readonly="true" cssClass="longTextBox"/></td>			    			        			   
 				
 			</tr>
 			<tr>

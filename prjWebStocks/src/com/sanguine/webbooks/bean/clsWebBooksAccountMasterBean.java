@@ -20,9 +20,9 @@ public class clsWebBooksAccountMasterBean {
 
 	private String strDebtor;
 
-	private String strGroupCode;
+	private String strSubGroupCode;
 
-	private String strGroupName;
+	private String strSubGroupName;
 	
 	private String strEmployeeCode;
 	
@@ -66,15 +66,7 @@ public class clsWebBooksAccountMasterBean {
 	
 
 	// Setter-Getter Methods
-	
 
-	public String getStrGroupName() {
-		return strGroupName;
-	}
-
-	public void setStrGroupName(String strGroupName) {
-		this.strGroupName = strGroupName;
-	}
 	public String getStrAccountCode() {
 		return strAccountCode;
 	}
@@ -147,14 +139,7 @@ public class clsWebBooksAccountMasterBean {
 		this.strDebtor = strDebtor;
 	}
 
-	public String getStrGroupCode() {
-		return strGroupCode;
-	}
-
-	public void setStrGroupCode(String strGroupCode) {
-		this.strGroupCode = strGroupCode;
-	}
-
+	
 	public long getIntPreYearGrpCode() {
 		return intPreYearGrpCode;
 	}
@@ -314,6 +299,22 @@ public class clsWebBooksAccountMasterBean {
 
 	public void setIntPrevYearBal(double intPrevYearBal) {
 		this.intPrevYearBal = intPrevYearBal;
+	}
+
+	public String getStrSubGroupCode() {
+		return strSubGroupCode;
+	}
+
+	public void setStrSubGroupCode(String strSubGroupCode) {
+		this.strSubGroupCode = strSubGroupCode;
+	}
+
+	public String getStrSubGroupName() {
+		return strSubGroupName;
+	}
+
+	public void setStrSubGroupName(String strSubGroupName) {
+		this.strSubGroupName = strSubGroupName;
 	}
 	
 	
