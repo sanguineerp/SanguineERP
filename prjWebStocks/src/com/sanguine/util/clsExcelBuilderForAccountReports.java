@@ -28,7 +28,7 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 		List listExcelData = (List) model.get("excelDataList");
 		
 		String reportName = (String) listExcelData.get(0);
-		List listHeaderLevelInfo=(List)listExcelData.get(1);
+		List listHeaderLevelInfo=(List)listExcelData.get(3);
 		List listdate = new ArrayList();
 		try {
 			listdate = (List) listExcelData.get(2);
@@ -40,7 +40,7 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 		response.setHeader("Content-disposition", "attachment; filename=" + reportName.trim() + ".xls");
 
 		List listData = new ArrayList();
-		listData=(List)listExcelData.get(3);
+		listData=(List)listExcelData.get(4);
 		
 	// create a new Excel sheet
 		HSSFSheet sheet = workbook.createSheet("Sheet");
@@ -67,15 +67,21 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 		
 		// create header row
 		
-		int excelRowCount=1;
+		int excelRowCount=4;
+		HSSFRow header = sheet.createRow(excelRowCount);
+		for (int rowCount = 0; rowCount < listHeaderLevelInfo.size(); rowCount++) {
+			header.createCell(rowCount).setCellValue(listHeaderLevelInfo.get(rowCount).toString());
+			header.getCell(rowCount).setCellStyle(style);
+		}
+	
 
-		for (int rowCnt = 0; rowCnt < listHeaderLevelInfo.size(); rowCnt++) {
+		/*for (int rowCnt = 0; rowCnt < listHeaderLevelInfo.size(); rowCnt++) {
 			
 			HSSFRow data = sheet.createRow(excelRowCount);
 			excelRowCount++;
 			data.createCell(4).setCellValue(listHeaderLevelInfo.get(rowCnt).toString());
 			data.getCell(4).setCellStyle(style);
-		}
+		}*/
 		
 		HSSFRow fittler = sheet.createRow(excelRowCount);
 		excelRowCount++;

@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
+import org.apache.commons.collections.map.LinkedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.itextpdf.text.pdf.events.IndexEvents.Entry;
 import com.mysql.jdbc.Connection;
 import com.sanguine.base.service.intfBaseService;
 import com.sanguine.controller.clsGlobalFunctions;
@@ -1095,14 +1098,15 @@ public class clsBalanceSheetController {
 			
 			
 			StringBuilder sbOp=new StringBuilder(); 			
-			sbSql.append("select a.strType, a.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),ifnull(sum(d.dblCrAmt),0) as Sale,ifnull(sum(d.dblDrAmt),0) as Purchase,a.strAccountName,a.strAccountCode "
-					+"  from  tblacgroupmaster b,tblacmaster a "
+			sbSql.append("select a.strType, sb.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),ifnull(sum(d.dblCrAmt),0) as Sale,ifnull(sum(d.dblDrAmt),0) as Purchase,a.strAccountName,a.strAccountCode "
+					+"  from  tblsubgroupmaster sb,tblacgroupmaster b,tblacmaster a "
 					+" left outer join tbljvdtl d on  a.strAccountCode=d.strAccountCode " 
 					+" left outer join tbljvhd  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' "
-					+ "where a.strGroupCode=b.strGroupCode "
+					+ "where sb.strGroupCode=b.strGroupCode "
+					+ " and a.strSubGroupCode =sb.strSubGroupCode"
 					+ "and b.strCategory='"+catType+"' "
 					+ "and a.strType='GL Code' "
-					+ "group by a.strAccountCode  order by a.strGroupCode ,a.strAccountCode ; ");
+					+ "group by a.strAccountCode  order by b.strGroupCode ,a.strAccountCode ; ");
 			
 			List listJV = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
 			if (listJV != null && listJV.size() > 0)
@@ -1156,14 +1160,15 @@ public class clsBalanceSheetController {
 			
 			
 			
-			sbSql.append("select a.strType, a.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),ifnull(sum(d.dblCrAmt),0) as Sale,ifnull(sum(d.dblDrAmt),0) as Purchase,a.strAccountName,a.strAccountCode "
-					+"  from  tblacgroupmaster b,tblacmaster a "
+			sbSql.append("select a.strType, b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),ifnull(sum(d.dblCrAmt),0) as Sale,ifnull(sum(d.dblDrAmt),0) as Purchase,a.strAccountName,a.strAccountCode "
+					+"  from  tblacgroupmaster b,tblsubgroupmaster sb,tblacmaster a "
 					+" left outer join tblreceiptdtl d on  a.strAccountCode=d.strAccountCode " 
 					+" left outer join tblreceipthd  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' "
-					+ "where a.strGroupCode=b.strGroupCode "
+					+ " where sb.strGroupCode=b.strGroupCode "
+					+ " and a.strSubGroupCode=sb.strSubGroupCode"
 					+ "and b.strCategory='"+catType+"' "
 					+ "and a.strType='GL Code' "
-					+ "group by a.strAccountCode  order by a.strGroupCode ,a.strAccountCode ; ");
+					+ "group by a.strAccountCode  order by b.strGroupCode ,a.strAccountCode ; ");
 			
 			List listRec = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
 			if (listRec != null && listRec.size() > 0)
@@ -1201,14 +1206,14 @@ public class clsBalanceSheetController {
 				}
 			}
 			
-			sbSql.append("select a.strType, a.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),ifnull(sum(d.dblCrAmt),0) as Sale,ifnull(sum(d.dblDrAmt),0) as Purchase,a.strAccountName,a.strAccountCode "
-					+"  from  tblacgroupmaster b,tblacmaster a "
+			sbSql.append("select a.strType, b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),ifnull(sum(d.dblCrAmt),0) as Sale,ifnull(sum(d.dblDrAmt),0) as Purchase,a.strAccountName,a.strAccountCode "
+					+"  from  tblsubgroupmaster sb,tblacgroupmaster b,tblacmaster a "
 					+" left outer join tblpaymentdtl d on  a.strAccountCode=d.strAccountCode " 
 					+" left outer join tblpaymenthd  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' "
-					+ "where a.strGroupCode=b.strGroupCode "
+					+ "where a.strSubGroupCode=sb.strSubGroupCode and sb.strGroupCode=b.strGroupCode "
 					+ "and b.strCategory='"+catType+"' "
 					+ "and a.strType='GL Code' "
-					+ "group by a.strAccountCode  order by a.strGroupCode ,a.strAccountCode ; ");
+					+ "group by a.strAccountCode  order by a.strSubGroupCode,b.strGroupCode ,a.strAccountCode ; ");
 			
 			List listPay= objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
 			if (listPay != null && listPay.size() > 0)
@@ -1270,11 +1275,12 @@ public class clsBalanceSheetController {
 //			for(String acc:list)
 //			{
 			sbSql.setLength(0);
-			sbSql.append("select a.strType,a.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),if((c.strVouchNo is null),0, IFNULL(SUM(d.dblCrAmt),0) )AS Sale, if((c.strVouchNo is null),0,IFNULL(SUM(d.dblDrAmt),0)) AS Purchase,a.strAccountName,a.strAccountCode, "
-					+" b.strCategory from  tblacgroupmaster b,tblacmaster a "
+			sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),if((c.strVouchNo is null),0, IFNULL(SUM(d.dblCrAmt),0) )AS Sale, if((c.strVouchNo is null),0,IFNULL(SUM(d.dblDrAmt),0)) AS Purchase,a.strAccountName,a.strAccountCode, "
+					+" b.strCategory from tblsubgroupmaster sb, tblacgroupmaster b,tblacmaster a "
 					+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
 					+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"'  and a.strPropertyCode='"+propCode+"' "
-					+" where a.strGroupCode=b.strGroupCode "
+					+" where a.strSubGroupCode=sb.strSubGroupCode"
+					+ " and sb.strGroupCode=b.strGroupCode "
 //					+" and a.strAccountCode='"+acc+"' "
 					+ "and b.strCategory='"+catType+"' "
 //					+" and a.strType='GL Code'  "
@@ -1340,5 +1346,207 @@ public class clsBalanceSheetController {
 		
 		
 
+		
+		@RequestMapping(value = "/rptBalanceSheet2", method = RequestMethod.GET)
+		private ModelAndView funReport1(@ModelAttribute("command") clsCreditorOutStandingReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
+		{
+			List listExcelData = new ArrayList();
+			objGlobal = new clsGlobalFunctions();
+			Connection con = objGlobal.funGetConnection(req);
+			try
+			{
+				String clientCode = req.getSession().getAttribute("clientCode").toString();
+				String companyName = req.getSession().getAttribute("companyName").toString();
+				String userCode = req.getSession().getAttribute("usercode").toString();
+				String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+				String currencyCode = objBean.getStrCurrency();
+				String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
+				StringBuilder sbSql = new StringBuilder();
+
+				double currValue = Double.parseDouble(req.getSession().getAttribute("currValue").toString());
+
+				clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+				if (objSetup == null)
+				{
+					objSetup = new clsPropertySetupModel();
+				}
+				String type = "PDF";
+				String fromDate = objBean.getDteFromDate();
+				String toDate = objBean.getDteToDate();
+
+				String fd = fromDate.split("-")[0];
+				String fm = fromDate.split("-")[1];
+				String fy = fromDate.split("-")[2];
+
+				String td = toDate.split("-")[0];
+				String tm = toDate.split("-")[1];
+				String ty = toDate.split("-")[2];
+
+				String dteFromDate = fy + "-" + fm + "-" + fd;
+				String dteToDate = ty + "-" + tm + "-" + td;
+			
+				ArrayList dataList = new ArrayList();
+				List listSubGrp=null;
+				sbSql.setLength(0); 
+				sbSql.append("select b.strSubGroupCode,b.strSubGroupName,a.strGroupCode,a.strGroupName,a.strCategory from tblacgroupmaster a ,tblsubgroupmaster b"
+						+ " where a.strGroupCode=b.strGroupCode "
+						+ " and a.strClientCode=b.strClientCode and b.strUnderSubGroup ='' and a.strClientCode='"+clientCode+"'");
+				
+				Map<String,Object> hmGrpSubGrpAcc=new LinkedHashMap<String,Object>();
+				Map<String,Object> hmSubGrpUnderSbGrpAcc=new LinkedHashMap();
+				List listUnderSb = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
+				if (listUnderSb != null && listUnderSb.size() > 0)
+				{
+					for(int i=0;i<listUnderSb.size();i++){
+						Object obj[]=(Object[])listUnderSb.get(i);
+						hmSubGrpUnderSbGrpAcc=new LinkedHashMap();
+						String strGroupCode=obj[2].toString();
+						String strGroupName=obj[3].toString();
+						String strSubGroupCode=obj[0].toString();
+						String strSubGroupName=obj[1].toString();
+						String strGroupCat=obj[3].toString();
+						funGetUnderSubGroupList(strGroupCode,strSubGroupCode,strSubGroupName,hmSubGrpUnderSbGrpAcc );
+						hmGrpSubGrpAcc.put(strGroupCat+"-"+strGroupCode+" "+strGroupName+"!"+strSubGroupCode+" "+strSubGroupName, hmSubGrpUnderSbGrpAcc);
+					}
+				}
+			
+				System.out.println(hmGrpSubGrpAcc);
+				List<List<String>> listAssets=new ArrayList<List<String>>();
+				List<List<String>> listLiabilities=new ArrayList<List<String>>();
+				
+				for(String groupAcc:hmGrpSubGrpAcc.keySet()){
+					List accList=new ArrayList<>();
+					if(hmGrpSubGrpAcc.get(groupAcc) instanceof Map){
+						if(groupAcc.contains("-")){
+							accList.add(groupAcc.split("-")[0]);	
+							accList.add(groupAcc.split("-")[1]);	
+							
+							Map<String,Object> map1=(Map)hmGrpSubGrpAcc.get(groupAcc);
+							accList.addAll(funIterateMap(map1));
+						}
+					
+						
+					}else{
+						 accList.addAll((List)hmGrpSubGrpAcc.get(groupAcc));
+					}
+					listAssets.add(accList);
+				}
+				
+				listExcelData.add("BALANCE SHEET");	//0
+				List listData1=new ArrayList();
+				listData1.add(companyName);				
+				listData1.add("BALANCE SHEET");
+				listExcelData.add(listData1);	//1
+				
+				List listDates=new ArrayList();
+				listDates.add("From Date : "+fromDate);
+				listDates.add("To Date : "+toDate);
+				listExcelData.add(listDates);	//2
+								
+				List listData=new ArrayList();
+								
+				
+				List<List> listHeaders=new ArrayList<List>(); 
+				List list=new ArrayList();
+				list.add("ASSET");
+				listHeaders.add(list);
+				list=new ArrayList();
+				list.add("LIABILITY");
+				listHeaders.add(list);
+				
+				listExcelData.add(listHeaders); //3
+				
+				List<List> listTotals=new ArrayList<List>();
+				 list=new ArrayList();
+				list.add("TOTAL");
+				list.add(String.valueOf(0));
+				listTotals.add(list);
+				
+				
+				
+				
+				listData.add(listAssets);
+				listData.add(listLiabilities);
+				listData.add(listTotals);
+			//	listData.add(listCapitals);
+				//listData.add(listCapitalTotals);
+								
+				listExcelData.add(listData);	//3
+		}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				try
+				{
+					con.close();
+				}
+				catch (SQLException e)
+				{
+					e.printStackTrace();
+				}
+			}
+	return new ModelAndView("excelViewForAccountReports", "excelDataList", listExcelData);
+ }
+		private List funIterateMap(Map<String,Object> map){
+			List accList=null;
+			for(String groupAcc:map.keySet()){
+				if(map.get(groupAcc) instanceof Map){
+					Map map1=(Map)map.get(groupAcc);
+					accList=funIterateMap(map1);
+				}else{
+					accList=(List) map.get(groupAcc);
+				}	
+			}
+			
+			return accList;
+		}
+		
+		private void funGetUnderSubGroupList(String strGroupCode,String strSubGroupCode,String strSubGroupName,Map hmSubGrpUnderSbGrpAcc )
+		{
+			
+			String sql="select a.strGroupCode,a.strSubGroupCode,a.strSubGroupName,a.strUnderSubGroup"
+					+ " from tblsubgroupmaster a,tblacgroupmaster b "
+					+ " where a.strGroupCode=b.strGroupCode and a.strGroupCode='"+strGroupCode+"'"
+					+ " and a.strUnderSubGroup='"+strSubGroupCode+"' ";
+			
+			List listSubGrp= objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+			if (listSubGrp != null && listSubGrp.size() > 0)
+			{
+				List alSBGrpAccList1=new ArrayList<>();
+				Map<String,Object> hmSubGrpUnderSbGrpAcc1=new LinkedHashMap<>();
+				for(int j=0;j<listSubGrp.size();j++){
+					hmSubGrpUnderSbGrpAcc1=new LinkedHashMap();
+					Object obj1[]=(Object[])listSubGrp.get(j);
+					 
+					funGetUnderSubGroupList(obj1[0].toString(),obj1[1].toString(),obj1[2].toString(),hmSubGrpUnderSbGrpAcc1);
+					hmSubGrpUnderSbGrpAcc.put(obj1[1].toString()+"!"+obj1[2].toString(),hmSubGrpUnderSbGrpAcc1);
+				}
+			}else{
+				List alAcc=funGetSubGroupAcc(strSubGroupCode,hmSubGrpUnderSbGrpAcc );
+				hmSubGrpUnderSbGrpAcc.put(strSubGroupCode+"!"+strSubGroupName, alAcc);
+			}
+		}
+		
+		private List funGetSubGroupAcc(String strSubGroupCode,Map hmSubGrpUnderSbGrpAcc ){
+			
+			String sql="select  a.strAccountCode,a.strAccountName from tblacmaster a ,tblsubgroupmaster b where a.strSubGroupCode=b.strSubGroupCode and a.strClientCode=b.strClientCode "
+					+ " and b.strSubGroupCode='"+strSubGroupCode+"' ";
+
+			List listAcc= objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+			List alSBGrpAccList2=new ArrayList<>();
+			if (listAcc != null && listAcc.size() > 0)
+			{
+				for(int j=0;j<listAcc.size();j++){
+					Object ob[]=(Object[])listAcc.get(j);
+					alSBGrpAccList2.add(ob[0].toString()+" "+ob[1].toString());
+				}
+				
+			}
+			return alSBGrpAccList2;
+		}
+	
 		
 }

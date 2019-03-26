@@ -38,7 +38,7 @@
 	<br />
 	<br />
 
-	<s:form name="frmBalanceSheet" method="GET" action="rptBalanceSheet1.html" target="_blank">
+	<s:form name="frmBalanceSheet" method="GET" action="rptBalanceSheet2.html" target="_blank">
 		<div>
 			<table class="transTable">
 			    <tr>
