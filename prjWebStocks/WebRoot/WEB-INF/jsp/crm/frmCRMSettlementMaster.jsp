@@ -39,6 +39,13 @@
 		
 		settlemantWiseSeries="${selltemetInv}";
 		
+		if( "${moduleNo}" == 1)
+		{
+			
+		 	$('#txtInvSeriesChar').css('visibility','hidden');
+		    $('#lblsettleMaster').css('visibility','hidden');
+		
+		}
 	});
 
 
@@ -201,7 +208,7 @@
 				<td><s:input colspan="1" type="checkbox" id="chkApplicable" 
 						name="chkApplicable" path="strApplicable" value ="true" style="width:8%" />
 			
-			<td><label>Settlement Wise Invoice Series </label></td>
+			<td><label id="lblsettleMaster">Settlement Wise Invoice Series </label></td>
 				 <td > 
 				<s:select id="txtInvSeriesChar" path="strInvSeriesChar" items="${alphabetList}"   cssClass="BoxW124px">
 				    

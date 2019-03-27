@@ -20,6 +20,8 @@
 		funRoundOffLinkUpData('RoundOff');
 		funExtraChargesLinkUpData('ExtraCharge');
 		funOtherChargesLinkUpData('OtherCharge');
+		funSettlementLinkUpData('Settlement');	
+		
 		$(".tab_content").hide();
 		$(".tab_content:first").show();
 
@@ -79,6 +81,11 @@
 			case 'OtherChargeWeb-Service':
 				funSetOtherChargesAccount(acBrandrow,code);
 		        break;
+		        
+			case 'SettlementWeb-Service' :
+				funSetSettlementAccount(acBrandrow,code);
+				break;    
+		        
 		        
 		}
 	}
@@ -891,6 +898,89 @@
 	    });
 	}
 	
+	function funSettlementLinkUpData(code)
+	{
+		 var property=$('#cmbProperty').val();
+		 searchUrl=getContextPath()+"/loadCRMWebBooksLinkUpData.html?strDoc="+code;
+		$.ajax({
+	        type: "POST",
+	        url: searchUrl,
+		    dataType: "json",
+		    success: function(response)
+		    {
+		    	funDeleteTableAllRowsOfParticulorTable(code);
+		    	$.each(response, function(i,item)
+				{
+		    		funAddRowSettlementLinkUpData(item);
+				}); 
+		    },
+		    error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+	        }
+	    });
+	}
+	
+	function funAddRowSettlementLinkUpData(rowData)
+	{	
+		$('#hidLinkup').val("");
+		$('#hidLinkup').val("settlementLinkup");
+		var table = document.getElementById("tblSettlement");
+	    var rowCount = table.rows.length;
+	    var row = table.insertRow(rowCount);
+	    var strProdCode = rowData.strMasterCode;
+    	var strProdName = rowData.strMasterName;
+    	var strAcCode = rowData.strAccountCode;
+    	var strAcName = rowData.strMasterDesc;
+	    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listSettlementLinkUp["+(rowCount)+"].strMasterCode\"    id=\"txtProdcode."+(rowCount)+"\" value='"+strProdCode+"'  />";
+	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\"   name=\"listSettlementLinkUp["+(rowCount)+"].strMasterName\"  id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"' />";
+	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"searchTextBox\" name=\"listSettlementLinkUp["+(rowCount)+"].strAccountCode\"   id=\"txtSettlement."+(rowCount)+"\" value='"+strAcCode+"' ondblclick=\" funHelp1("+(rowCount)+",'SettlementWeb-Service') \" />";
+	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  name=\"listSettlementLinkUp["+(rowCount)+"].strMasterDesc\"    id=\"txtSettlementName."+(rowCount)+"\" value='"+strAcName+"' />";
+	}		
+	
+	function funSetSettlementAccount(acBrandrow,code)
+	{
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadCRMTaxLinkupDataFormWebService.html?strDocCode=" + code,
+			dataType : "json",
+			success : function(response){
+				document.getElementById("txtSettlement."+acBrandrow).value=response.strAccountCode;
+				document.getElementById("txtSettlementName."+acBrandrow).value=response.strAccountName;
+			},
+			error: function(jqXHR, exception) {
+			            if (jqXHR.status === 0) {
+			                alert('Not connect.n Verify Network.');
+			            } else if (jqXHR.status == 404) {
+			                alert('Requested page not found. [404]');
+			            } else if (jqXHR.status == 500) {
+			                alert('Internal Server Error [500].');
+			            } else if (exception === 'parsererror') {
+			                alert('Requested JSON parse failed.');
+			            } else if (exception === 'timeout') {
+			                alert('Time out error.');
+			            } else if (exception === 'abort') {
+			                alert('Ajax request aborted.');
+			            } else {
+			                alert('Uncaught Error.n' + jqXHR.responseText);
+			            }
+			}
+		});
+	}
+	
 	function funDeleteTableAllRowsOfParticulorTable(tableName)
 	{
 		switch(tableName)
@@ -977,6 +1067,7 @@
 							<li data-state="divRoundOff" style="width: 10%; padding-left: 55px">Round OFF</li>
 							<li data-state="divExtraCharge" style="width: 10%; padding-left: 55px">Extra Charges</li>
 							<li data-state="divOtherCharge" style="width: 10%; padding-left: 55px">Other Charges</li>
+							<li data-state="divSettlement" style="width: 10%; padding-left: 55px">Settlement</li>
 						</ul>
 						
 					&nbsp;&nbsp;
@@ -1155,6 +1246,43 @@
 								</table>
 							</div>
 						</div>
+						
+						<div id="divSettlement" class="tab_content" style="height: 550px">
+							<table
+								style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+								<tr bgcolor="#72BEFC">
+									<td style="width:10%;">Settlement Code</td>
+									<td style="width:15%;">Settlement Name</td>
+									<td style="width:10%;">Account Code</td>
+									<td style="width:15%;">Account Name</td>
+								</tr>
+							</table>
+							<div
+								style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+									<table id="tblSettlement"
+									style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+									class="transTablex col8-center">
+									<tbody>
+									<col style="width:10%"/>
+									<col style="width:16%">					
+									<col style="width:10%">
+									<col style="width:15%">
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
 					</div>
 				</td>
 			</tr>

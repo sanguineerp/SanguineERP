@@ -46,6 +46,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
 import com.sanguine.bean.clsGRNBean;
+import com.sanguine.crm.service.clsCRMSettlementMasterService;
 import com.sanguine.model.clsAuditDtlModel;
 import com.sanguine.model.clsAuditGRNTaxDtlModel;
 import com.sanguine.model.clsAuditHdModel;
@@ -124,6 +125,9 @@ public class clsGRNController {
 
 	@Autowired
 	clsCurrencyMasterService objCurrencyMasterService;
+
+	@Autowired
+	private clsCRMSettlementMasterService objSettlementService;
 
 	/**
 	 * Open GRN form
@@ -218,7 +222,16 @@ public class clsGRNController {
 				model.put("grneditable", false);
 			}
 		}
-
+		
+		
+		Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
+	    if(settlementList == null || settlementList.size()==0 )
+	    {
+	    	settlementList.put("cash", "cash");
+	    	settlementList.put("credit","credit");
+	    }
+	    model.put("settlementList", settlementList);
+	    
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmGRN_1", "command", objBean);
 		} else if ("1".equalsIgnoreCase(urlHits)) {

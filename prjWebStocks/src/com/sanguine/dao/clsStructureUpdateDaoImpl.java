@@ -1015,6 +1015,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblbillpasshd` ADD COLUMN `strSettlementType` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strAuthLevel5` ";
 		funExecuteQuery(sql);
 		
+		sql="UPDATE  `tbltreemast` SET `strFormDesc`='WebBooks Link Up' WHERE  `strFormName`='frmARLinkUp' AND `strModule`='1';";
+		funExecuteQuery(sql);
+		
 		
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
@@ -1322,7 +1325,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteQuery(sql);
 		
 		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`, `strInvoice`, `strDeliverySchedule`, `strFormAccessYN`) VALUES "
-				+" ('frmBillPassingFlash', 'Bill Passing Flash', 'Tools', 7, 'L', 23, 108, '1', 'defailt.png', '1', 1, '1', '1', 'NO', 'NO', 'frmBillPassingFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Yes', NULL, NULL, NULL, 'Y')";
+				+" ('frmBillPassingFlash', 'Bill Passing Flash', 'Tools', 7, 'L', 23, 108, '1', 'defailt.png', '1', 1, '1', '1', 'NO', 'NO', 'frmBillPassingFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Yes', NULL, NULL, NULL, 'Y'),"
+				+ "('frmSettlementMaster', 'Settlement Master', 'Master', 9, 'M', 25, 110, '1', 'default.png', '1', 1, '1', '1', 'NO', 'NO', 'frmCRMSettlementMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
 		funExecuteQuery(sql);
 		
 		}
@@ -2481,6 +2485,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		        + " ('frmPettyCashEntry', 'Petty Cash Entry', 'Transaction', '1', 'T', '1', '2', '13', 'default.png', '5', '1', '1', '1', 'NO', '1', 'frmPettyCashEntry.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 		        + " ('frmPettyCashFlash', 'Petty Cash Flash', 'Tools', '4', 'L', '9', '9', '1', 'default.png', '5', '1', '1', '1', 'NO', 'NO', 'frmPettyCashFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) "; 
 		funExecuteQuery(sql);
+		
+		
 		
 		/*----------------WebBook Forms End---------------------------*/
 
@@ -4136,6 +4142,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+"ENGINE=InnoDB"
 			+"AUTO_INCREMENT=72"
 			+";";
+		funExecuteWebBooksQuery(sql);
+		
+		sql="UPDATE `tbltreemast` SET `strFormDesc`='WebBooks Link Up' WHERE  `strFormName`='frmARLinkUp' AND `strModule`='1';";
 		funExecuteWebBooksQuery(sql);
 		
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "

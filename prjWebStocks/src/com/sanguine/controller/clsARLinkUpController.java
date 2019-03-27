@@ -453,29 +453,31 @@ public class clsARLinkUpController {
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 			StringBuilder sqlBuilderDelete = new StringBuilder();
 			List<clsLinkUpHdModel> listSubLinkUp = objBean.getListSubGroupLinkUp();
-			for (int cnt = 0; cnt < listSubLinkUp.size(); cnt++) {
-				clsLinkUpHdModel objModel = listSubLinkUp.get(cnt);
-				if (objModel.getStrAccountCode().length() > 0) {
-					sqlBuilderDelete.setLength(0);
-					sqlBuilderDelete.append(" delete from tbllinkup where strMasterCode='" + objModel.getStrMasterCode() + "' and strClientCode='" + clientCode + "' and strPropertyCode='" + propertyCode + "' and  strOperationType='Purchase' ");
-					objARLinkUpService.funExecute(sqlBuilderDelete.toString());
-					objModel.setStrExSuppCode("");
-					objModel.setStrExSuppName("");
-					objModel.setStrClientCode(clientCode);
-					objModel.setDteCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
-					objModel.setDteLastModified(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
-					objModel.setStrUserCreated(userCode);
-					objModel.setStrUserEdited(userCode);
-					objModel.setStrPropertyCode(propertyCode);
-					objModel.setStrOperationType("SubGroup");
-					objModel.setStrModuleType("Purchase");
-					objModel.setStrWebBookAccCode("");
-					objModel.setStrWebBookAccName("");
-					
-					objARLinkUpService.funAddUpdateARLinkUp(objModel);
+			if(listSubLinkUp!=null){
+				for (int cnt = 0; cnt < listSubLinkUp.size(); cnt++) {
+					clsLinkUpHdModel objModel = listSubLinkUp.get(cnt);
+					if (objModel.getStrAccountCode().length() > 0) {
+						sqlBuilderDelete.setLength(0);
+						sqlBuilderDelete.append(" delete from tbllinkup where strMasterCode='" + objModel.getStrMasterCode() + "' and strClientCode='" + clientCode + "' and strPropertyCode='" + propertyCode + "' and  strOperationType='Purchase' ");
+						objARLinkUpService.funExecute(sqlBuilderDelete.toString());
+						objModel.setStrExSuppCode("");
+						objModel.setStrExSuppName("");
+						objModel.setStrClientCode(clientCode);
+						objModel.setDteCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+						objModel.setDteLastModified(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+						objModel.setStrUserCreated(userCode);
+						objModel.setStrUserEdited(userCode);
+						objModel.setStrPropertyCode(propertyCode);
+						objModel.setStrOperationType("SubGroup");
+						objModel.setStrModuleType("Purchase");
+						objModel.setStrWebBookAccCode("");
+						objModel.setStrWebBookAccName("");
+						
+						objARLinkUpService.funAddUpdateARLinkUp(objModel);
+					}
 				}
 			}
-
+			
 			if (objBean.getListTaxLinkUp() != null) {
 				List<clsLinkUpHdModel> listTaxLinkUp = objBean.getListTaxLinkUp();
 				for (int cnt = 0; cnt < listTaxLinkUp.size(); cnt++) {

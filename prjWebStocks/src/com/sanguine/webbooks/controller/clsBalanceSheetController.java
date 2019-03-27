@@ -1404,9 +1404,14 @@ public class clsBalanceSheetController {
 						String strGroupName=obj[3].toString();
 						String strSubGroupCode=obj[0].toString();
 						String strSubGroupName=obj[1].toString();
-						String strGroupCat=obj[3].toString();
+						String strGroupCat=obj[4].toString();
 						funGetUnderSubGroupList(strGroupCode,strSubGroupCode,strSubGroupName,hmSubGrpUnderSbGrpAcc );
-						hmGrpSubGrpAcc.put(strGroupCat+"-"+strGroupCode+" "+strGroupName+"!"+strSubGroupCode+" "+strSubGroupName, hmSubGrpUnderSbGrpAcc);
+						if(strGroupCat.equalsIgnoreCase("INCOME")){
+							strGroupCat="ASSET";
+						}else if(strGroupCat.equalsIgnoreCase("EXPENSE")){
+							strGroupCat="LIABILITY";
+						}
+						hmGrpSubGrpAcc.put(strGroupCat+"-"+strGroupCode+"_"+strGroupName+"!"+strSubGroupCode+"_"+strSubGroupName, hmSubGrpUnderSbGrpAcc);
 					}
 				}
 			
@@ -1414,23 +1419,7 @@ public class clsBalanceSheetController {
 				List<List<String>> listAssets=new ArrayList<List<String>>();
 				List<List<String>> listLiabilities=new ArrayList<List<String>>();
 				
-				for(String groupAcc:hmGrpSubGrpAcc.keySet()){
-					List accList=new ArrayList<>();
-					if(hmGrpSubGrpAcc.get(groupAcc) instanceof Map){
-						if(groupAcc.contains("-")){
-							accList.add(groupAcc.split("-")[0]);	
-							accList.add(groupAcc.split("-")[1]);	
-							
-							Map<String,Object> map1=(Map)hmGrpSubGrpAcc.get(groupAcc);
-							accList.addAll(funIterateMap(map1));
-						}
-					
-						
-					}else{
-						 accList.addAll((List)hmGrpSubGrpAcc.get(groupAcc));
-					}
-					listAssets.add(accList);
-				}
+				
 				
 				listExcelData.add("BALANCE SHEET");	//0
 				List listData1=new ArrayList();
@@ -1465,13 +1454,14 @@ public class clsBalanceSheetController {
 				
 				
 				
-				listData.add(listAssets);
+				listData.add(hmGrpSubGrpAcc);
+				
 				listData.add(listLiabilities);
-				listData.add(listTotals);
+				//listData.add(listTotals);
 			//	listData.add(listCapitals);
 				//listData.add(listCapitalTotals);
 								
-				listExcelData.add(listData);	//3
+				listExcelData.add(listData);	//4
 		}
 			catch (Exception e)
 			{
@@ -1522,7 +1512,7 @@ public class clsBalanceSheetController {
 					Object obj1[]=(Object[])listSubGrp.get(j);
 					 
 					funGetUnderSubGroupList(obj1[0].toString(),obj1[1].toString(),obj1[2].toString(),hmSubGrpUnderSbGrpAcc1);
-					hmSubGrpUnderSbGrpAcc.put(obj1[1].toString()+"!"+obj1[2].toString(),hmSubGrpUnderSbGrpAcc1);
+					hmSubGrpUnderSbGrpAcc.putAll(hmSubGrpUnderSbGrpAcc1);
 				}
 			}else{
 				List alAcc=funGetSubGroupAcc(strSubGroupCode,hmSubGrpUnderSbGrpAcc );

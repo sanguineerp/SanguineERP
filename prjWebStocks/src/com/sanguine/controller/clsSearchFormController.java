@@ -5073,7 +5073,7 @@ public class clsSearchFormController {
 
 
 		case "PaymentNo": {
-			columnNames = "a.strVouchNo,a.strNarration,a.dteVouchDate,a.strType,a.strChequeNo,ifnull(b.strBankName,''),c.strDebtorName ";
+			columnNames = "a.strVouchNo,a.strNarration,a.dteVouchDate,a.strType,a.strChequeNo,ifnull(b.strBankName,''),ifnull(c.strDebtorName,'') ";
 			tableName = "from tblpaymenthd a left outer join tblbankmaster b on a.strDrawnOn=b.strBankCode left outer join tblpaymentdebtordtl c on a.strVouchNo=c.strVouchNo where a.strClientCode='" + clientCode + "' ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strPropertyCode = '" + propertyCode + "' ";

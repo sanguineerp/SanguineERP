@@ -3405,10 +3405,13 @@ function funCalculateOtherChargesTotal()
 							    <tr>
 								    <td><label id="lblPayMode" >Settlement Mode</label></td>
 							        <td> 
-								    	<s:select id="txtPayMode" path="strPayMode"  cssClass="BoxW124px" onkeypress="funGetKeyCode(event,'PayMode')">
+							        <s:select id="txtPayMode" path="strPayMode"  cssClass="BoxW124px" items="${settlementList}"  onkeypress="funGetKeyCode(event,'PayMode')">
+											
+										</s:select>
+								    	<%-- <s:select id="txtPayMode" path="strPayMode"  cssClass="BoxW124px" onkeypress="funGetKeyCode(event,'PayMode')">
 											<option value="Credit" selected>CREDIT</option>
 											<option value="Cash">CASH</option>
-										</s:select>
+										</s:select> --%>
 									</td>
 									<td ><label>Currency </label></td>
 									
