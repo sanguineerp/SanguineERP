@@ -2197,6 +2197,15 @@ public class clsSearchFormController {
 				searchFormTitle = "GRN";
 				break;
 			}
+			case "settlementMaster": {
+				columnNames = "strSettlementCode,strSettlementDesc,strSettlementType";
+				tableName = "clsSettlementMasterModel where strClientCode='" + clientCode + "'";
+				listColumnNames = "Settlement Code,Settlement Desc,Settlement Type";
+				idColumnName = "strSettlementCode";
+				searchFormTitle = "Settlement Master";
+				break;
+			}
+
 			}
 
 			if (null != jArrSearchList) {

@@ -98,7 +98,7 @@ group by b.strChildCode order by a.strParentCode]]>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
-					<text><![CDATA[Portion Size/Selling Price]]></text>
+					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="61" y="48" width="92" height="24" uuid="4100e09b-02ae-4bce-8a35-13d5792e7748"/>
@@ -119,7 +119,6 @@ group by b.strChildCode order by a.strParentCode]]>
 					<textElement textAlignment="Right">
 						<font fontName="Serif" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{dblListPrice}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00#" isBlankWhenNull="true">
 					<reportElement x="343" y="2" width="45" height="17" uuid="dae48cde-f5db-495d-9c69-47d980f8096d"/>

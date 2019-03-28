@@ -4147,7 +4147,7 @@ if (listPay.size() > 0) {
 
 // receipt
  sbSql.setLength(0);
-	sbSql.append( "  SELECT DATE(a.dteVouchDate) ,c.strDebtorName,'Recepit', a.strVouchNo, " + "DATE(a.dteChequeDate), "
+	sbSql.append( "  SELECT DATE(a.dteVouchDate) ,ifnull(c.strDebtorName,''),'Recepit', a.strVouchNo, " + "DATE(a.dteChequeDate), "
 		+ " b.dblDrAmt , b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,b.strCrDr,'','3','" + userCode + "','" + propertyCode + "','" + clientCode + "' "
 		+ " FROM tblreceiptdtl b,tblreceipthd a left outer join tblreceiptdebtordtl c on c.strVouchNo=a.strVouchNo"
 		+ "  WHERE a.strVouchNo=b.strVouchNo  " + " AND DATE(a.dteVouchDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' "

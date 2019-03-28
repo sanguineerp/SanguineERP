@@ -14,7 +14,6 @@ import com.sanguine.crm.model.clsInvoiceHdModel;
 import com.sanguine.crm.model.clsInvoiceModelDtl;
 import com.sanguine.crm.model.clsInvoiceTaxDtlModel;
 import com.sanguine.crm.model.clsPartyMasterModel;
-import com.sanguine.crm.model.clsSalesRetrunTaxModel;
 import com.sanguine.crm.model.clsSalesReturnDtlModel;
 import com.sanguine.crm.model.clsSalesReturnHdModel;
 import com.sanguine.crm.service.clsCRMSettlementMasterService;
@@ -37,6 +36,7 @@ import com.sanguine.service.clsProductMasterService;
 import com.sanguine.service.clsPurchaseReturnService;
 import com.sanguine.webbooks.bean.clsJVBean;
 import com.sanguine.webbooks.bean.clsJVDetailsBean;
+import com.sanguine.webbooks.bean.clsPaymentBean;
 import com.sanguine.webbooks.controller.clsJVController;
 import com.sanguine.webbooks.model.clsJVHdModel;
 
@@ -471,32 +471,35 @@ public class clsJVGeneratorController {
 					}
 				}
 	
-				if (objModel.getDblRoundOff() != 0) {
-					clsLinkUpHdModel objLinkRoundOff = objLinkupService.funGetARLinkUp("PURROUNDOFF", clientCode, propCode, "RoundOff", "Purchase");
-					if (objLinkRoundOff != null) {
-	
-						clsJVDetailsBean objJVDetailBean=new clsJVDetailsBean();
-						objJVDetailBean.setStrAccountCode(objLinkRoundOff.getStrAccountCode());
-						objJVDetailBean.setStrDescription(objLinkRoundOff.getStrMasterDesc());
-						if (objModel.getDblRoundOff() > 0) {
-							objJVDetailBean.setStrDC("Dr");
-							objJVDetailBean.setDblDebitAmt(objModel.getDblRoundOff());
-							objJVDetailBean.setDblCreditAmt(0.00);
-						} else {
-							objJVDetailBean.setStrDC("Cr");
-							objJVDetailBean.setDblCreditAmt(objModel.getDblRoundOff()*-1);
-							objJVDetailBean.setDblDebitAmt(0.00);
+				if(!clientCode.equals("261.001")){
+					if (objModel.getDblRoundOff() != 0) {
+						clsLinkUpHdModel objLinkRoundOff = objLinkupService.funGetARLinkUp("PURROUNDOFF", clientCode, propCode, "RoundOff", "Purchase");
+						if (objLinkRoundOff != null) {
+		
+							clsJVDetailsBean objJVDetailBean=new clsJVDetailsBean();
+							objJVDetailBean.setStrAccountCode(objLinkRoundOff.getStrAccountCode());
+							objJVDetailBean.setStrDescription(objLinkRoundOff.getStrMasterDesc());
+							if (objModel.getDblRoundOff() > 0) {
+								objJVDetailBean.setStrDC("Dr");
+								objJVDetailBean.setDblDebitAmt(objModel.getDblRoundOff());
+								objJVDetailBean.setDblCreditAmt(0.00);
+							} else {
+								objJVDetailBean.setStrDC("Cr");
+								objJVDetailBean.setDblCreditAmt(objModel.getDblRoundOff()*-1);
+								objJVDetailBean.setDblDebitAmt(0.00);
+							}
+							objJVDetailBean.setStrOneLineAcc("R");
+							listJVDetailBean.add(objJVDetailBean);
 						}
-						objJVDetailBean.setStrOneLineAcc("R");
-						listJVDetailBean.add(objJVDetailBean);
+						else
+						{
+							flgLinkup=false;
+							sbLinkUpErrorMessage.append("Check Round Off linkup, ");
+						}
 					}
-					else
-					{
-						flgLinkup=false;
-						sbLinkUpErrorMessage.append("Check Round Off linkup, ");
-					}
-				}
 
+				}
+				
 				String sqlGRNDtl = " select a.strGRNCode,a.dblTotal,b.strDebtorCode,b.strPName,date(a.dtGRNDate),a.strNarration ,date(a.dtDueDate),a.strBillNo,b.strPCode "
 					+ " from tblgrnhd a,tblpartymaster b "
 					+ " where a.strSuppCode =b.strPCode and a.strGRNCode='" + objModel.getStrGRNCode() + "' and a.strClientCode='" + objModel.getStrClientCode() + "' ";
@@ -600,6 +603,26 @@ public class clsJVGeneratorController {
 			{
 				jvCode=sbLinkUpErrorMessage.toString();
 			}
+			
+			//Generate Direct Payment for Jv in Cash Settlement
+			
+			if(objModel.getStrPayMode().equalsIgnoreCase("cash")){  //hard code settlement = cash
+				//funGeneratePaymentForGRNJV(objModel,objModel.getStrPayMode(), clientCode,  userCode,  propCode,req);
+				
+			}else if(objModel.getStrPayMode().startsWith("S00")){ 				//check cash settlement code
+
+				String sqlCheckGrnSettlement="select a.strSettlementType from tblsettlementmaster a where a.strSettlementCode='"+objModel.getStrPayMode()+"' ";
+				List listGrnSettlement = objGlobalFunctionsService.funGetList(sqlCheckGrnSettlement, "sql");
+				if (null != listGrnSettlement) {
+					String settlementType=(String) listGrnSettlement.get(0);
+					if("settlementType".equalsIgnoreCase("cash")){
+						funGeneratePaymentForGRNJV(objModel,objModel.getStrPayMode(), clientCode,  userCode,  propCode,req);
+					}
+					
+				}
+			}
+			
+			
 		}
 		return jvCode;
 	}
@@ -1674,6 +1697,47 @@ public class clsJVGeneratorController {
 	}
 	
 	
+	public String funGeneratePaymentForGRNJV(clsGRNHdModel objModel,String settlementCode,String clientCode, String userCode, String propCode,HttpServletRequest req){
+		StringBuilder sbSql=new StringBuilder();
+		clsPaymentBean objPaymentBean = new clsPaymentBean();
+		String paymentCode = "";
+		try{
+			double debitAmt = objModel.getDblTotal();
+			String strCurr = req.getSession().getAttribute("currValue").toString();
+			double currValue = Double.parseDouble(strCurr);
+			clsLinkUpHdModel objLinkCust = objLinkupService.funGetARLinkUp(settlementCode, clientCode, propCode, "Settlement", "Sale");
+			if (objLinkCust != null) {
+				if (objModel.getStrJVNo().equals("")) {
+					
+					objPaymentBean.setStrVouchNo("");
+					objPaymentBean.setDblAmt(debitAmt * currValue);
+				} else {
+					
+					objPaymentBean.setStrVouchNo(objModel.getStrJVNo());
+					objPaymentBean.setDblAmt(debitAmt);
+				}
+				
+				objPaymentBean.setStrVouchNo("");
+			}
+			
+			sbSql.setLength(0);
+			sbSql.append("select objJVModel from clsJVHdModel objJVModel where objJVModel.strSourceDocNo='"+objModel.getStrGRNCode()+"' and objJVModel.strClientCode='"+clientCode+"'");	
+			try
+			{
+				List listJVDtl=objBaseService.funGetListModuleWise(sbSql, "hql", "WebBooks");
+				if(listJVDtl.size()>0)
+				{
+					clsJVHdModel objJVHdModel=(clsJVHdModel)listJVDtl.get(0);
+					objJVBean.setStrVouchNo(objJVHdModel.getStrVouchNo());
+				}
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return paymentCode;
+	}
 
 	
 	

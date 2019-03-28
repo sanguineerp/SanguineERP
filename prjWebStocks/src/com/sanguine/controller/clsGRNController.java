@@ -45,6 +45,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
+import com.sanguine.base.service.clsBaseServiceImpl;
+import com.sanguine.base.service.intfBaseService;
 import com.sanguine.bean.clsGRNBean;
 import com.sanguine.crm.service.clsCRMSettlementMasterService;
 import com.sanguine.model.clsAuditDtlModel;
@@ -129,6 +131,8 @@ public class clsGRNController {
 	@Autowired
 	private clsCRMSettlementMasterService objSettlementService;
 
+	@Autowired
+	intfBaseService objBaseService;
 	/**
 	 * Open GRN form
 	 * 
@@ -579,6 +583,8 @@ public class clsGRNController {
 			if (null != listGRNDtl && listGRNDtl.size() > 0) {
 				grnCode = objHdModel.getStrGRNCode();
 				currValue = objHdModel.getDblConversion();
+				//Check MIS is Exist
+				funDeleteMISOfGRN(grnCode);
 				objGRNService.funDeleteDtl(grnCode, clientCode);
 				double totalValue = 0.00;
 				boolean flagDtlDataInserted = false;
@@ -617,71 +623,35 @@ public class clsGRNController {
 									"Property Wise")) {
 								// property wise rate save
 								double dblreOrderPrice = 0;
-								clsProductReOrderLevelModel objReOrder = objProductMasterService
-										.funGetProdReOrderLvl(
-												ob.getStrProdCode(),
-												objHdModel.getStrLocCode(),
-												clientCode);
+								clsProductReOrderLevelModel objReOrder = objProductMasterService.funGetProdReOrderLvl(ob.getStrProdCode(),objHdModel.getStrLocCode(),clientCode);
 								if (objReOrder != null) {
-									if (ob.getDblUnitPrice() != objReOrder
-											.getDblPrice()) {
-										dblreOrderPrice = objReOrder
-												.getDblPrice();
-										List<clsLocationMasterModel> listLocModel = objLocationMasterService
-												.funLoadLocationPropertyWise(
-														objSetUp.getStrPropertyCode(),
-														clientCode);
-
+									if (ob.getDblUnitPrice() != objReOrder.getDblPrice()) {
+										dblreOrderPrice = objReOrder.getDblPrice();
+										List<clsLocationMasterModel> listLocModel = objLocationMasterService.funLoadLocationPropertyWise(objSetUp.getStrPropertyCode(),clientCode);
 										proprtyWiseStock = propCode;
-										stock = objGlobalFunctions
-												.funGetCurrentStockForProduct(
-														ob.getStrProdCode(),
-														objHdModel
-																.getStrLocCode(),
-														clientCode,
-														userCode,
-														startDate,
-														objGlobalFunctions
-																.funGetCurrentDate("yyyy-MM-dd"),
-														proprtyWiseStock);
+										stock = objGlobalFunctions.funGetCurrentStockForProduct(ob.getStrProdCode(),objHdModel.getStrLocCode(),clientCode,userCode,startDate,
+												objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd"),proprtyWiseStock);
 										String strstock = stock.toString();
 
 										if (strstock.contains("-")) {
 											stock = 0.0;
 										}
 										weigthedvalue = stock * dblreOrderPrice;
-										double tempval = ob.getDblQty()
-												* ob.getDblUnitPrice();
+										double tempval = ob.getDblQty() * ob.getDblUnitPrice();
 										weightedStk = stock + ob.getDblQty();
 										if (weightedStk == 0.0) {
 											weightedStk = 1.0;
 										}
 										double temp = weigthedvalue + tempval;
 										weightedAvg = temp / weightedStk;
-										weightedAvg = Double.parseDouble(df
-												.format(temp / weightedStk)
-												.toString());
+										weightedAvg = Double.parseDouble(df.format(temp / weightedStk).toString());
 										objReOrder.setDblPrice(weightedAvg);
-										objProductMasterService
-												.funAddUpdateProdReOrderLvl(objReOrder);
+										objProductMasterService.funAddUpdateProdReOrderLvl(objReOrder);
 
 										for (clsLocationMasterModel obj : listLocModel) {
-											if (!(obj.getStrLocCode()
-													.equals(objHdModel
-															.getStrLocCode()))) {
-												System.out
-														.println("prod "
-																+ ob.getStrProdCode()
-																+ "Loc"
-																+ obj.getStrLocCode()
-																+ " HDLOC"
-																+ objHdModel
-																		.getStrLocCode());
-												clsProductReOrderLevelModel reeorderLevelForPropertyWiseLocation = objProductMasterService
-														.funGetProdReOrderLvl(
-																ob.getStrProdCode(),
-																obj.getStrLocCode(),
-																clientCode);
+											if (!(obj.getStrLocCode().equals(objHdModel.getStrLocCode()))) {
+												System.out.println("prod "+ ob.getStrProdCode()+ "Loc"+ obj.getStrLocCode()+ " HDLOC"+ objHdModel.getStrLocCode());
+												clsProductReOrderLevelModel reeorderLevelForPropertyWiseLocation = objProductMasterService.funGetProdReOrderLvl(ob.getStrProdCode(),obj.getStrLocCode(),clientCode);
 												if (reeorderLevelForPropertyWiseLocation != null) {
 													reeorderLevelForPropertyWiseLocation
 															.setDblPrice(weightedAvg);
@@ -1047,6 +1017,8 @@ public class clsGRNController {
 						objMISHd.setDblTotalAmt(objGRNDtl.getDblTotalPrice());
 						objMISHd.setStrAgainst(against);
 						objMISHd.setStrReqCode(reqCode);
+						objMISHd.setStrUserCreated(userCode);
+						objMISHd.setDtCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
 
 						clsMISDtlModel objMISDtlModel = new clsMISDtlModel();
 						objMISDtlModel.setStrProdCode(objGRNDtl
@@ -1058,6 +1030,8 @@ public class clsGRNController {
 								.getDblTotalPrice());
 						objMISDtlModel.setStrRemarks(objGRNDtl.getStrRemarks());
 						objMISDtlModel.setStrReqCode(reqCode);
+						
+						
 
 						List<clsMISDtlModel> listMISDtlModel = new ArrayList<clsMISDtlModel>();
 						listMISDtlModel.add(objMISDtlModel);
@@ -1093,85 +1067,6 @@ public class clsGRNController {
 				strGeneratedMISCode = objModel.getStrMISCode();
 			}
 		}
-
-		// for (clsGRNDtlModel objGRNDtl : objBean.getListGRNDtl()) {
-		// if (null != objGRNDtl.getStrProdCode()) {
-		// if (objGRNDtl.getStrStkble().equalsIgnoreCase("Y") &&
-		// !objGRNDtl.getStrIssueLocation().equals("") && null !=
-		// objGRNDtl.getStrStkble()) {
-		// String reqCode = "";
-		// String against = "Direct";
-		// sqlBuilder.setLength(0);
-		// sqlBuilder.append("select IfNULL(b.strReqCode,'') from tblpurchaseorderdtl a "
-		// +
-		// " inner join tblmrpidtl b on a.strPIcode =b.strPIcode and b.strClientCode='"
-		// + clientCode + "'" + " where a.strPOCode='" + objGRNDtl.getStrCode()
-		// + "' and a.strClientCode='" + clientCode + "' " +
-		// "group by b.strReqCode");
-		// List list =
-		// objGlobalFunctionsService.funGetList(sqlBuilder.toString(), "sql");
-		// if (!list.isEmpty() && list != null) {
-		// against = "Requisition";
-		// reqCode = list.get(0).toString();
-		// }
-		// if (objGRNDtl.getStrMISCode().isEmpty()) {
-		// strMISCode = objGlobalFunctions.funGenerateDocumentCode("frmMIS",
-		// grnDate, req);
-		// objMISHd = new clsMISHdModel(new clsMISHdModel_ID(strMISCode,
-		// clientCode));
-		// objMISHd.setIntid(0);
-		// objMISHd.setStrUserCreated(userCode);
-		// objMISHd.setDtCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
-		// } else {
-		// strMISCode = objGRNDtl.getStrMISCode();
-		// objMISHd = new clsMISHdModel(new
-		// clsMISHdModel_ID(objGRNDtl.getStrMISCode().trim(), clientCode));
-		// }
-		//
-		// objMISHd.setStrMISCode(strMISCode);
-		// objMISHd.setStrLocFrom(objBean.getStrLocCode());
-		// objMISHd.setStrLocTo(objGRNDtl.getStrIssueLocation());
-		// objMISHd.setDtMISDate(objGlobalFunctions.funGetDate("yyyy-MM-dd",
-		// grnDate));
-		// objMISHd.setStrUserModified(userCode);
-		// objMISHd.setStrNarration("Generated GRN Code:-" + strGRNCode);
-		// objMISHd.setDtLastModified(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
-		// objMISHd.setStrAuthorise("Yes");
-		// objMISHd.setDblTotalAmt(objGRNDtl.getDblTotalPrice());
-		// objMISHd.setStrAgainst(against);
-		// objMISHd.setStrReqCode(reqCode);
-		//
-		// clsMISDtlModel objMISDtlModel = new clsMISDtlModel();
-		// objMISDtlModel.setStrProdCode(objGRNDtl.getStrProdCode());
-		// objMISDtlModel.setDblQty(objGRNDtl.getDblQty());
-		// objMISDtlModel.setDblUnitPrice(objGRNDtl.getDblUnitPrice());
-		// objMISDtlModel.setDblTotalPrice(objGRNDtl.getDblTotalPrice());
-		// objMISDtlModel.setStrRemarks(objGRNDtl.getStrRemarks());
-		// objMISDtlModel.setStrReqCode(reqCode);
-		//
-		// List<clsMISDtlModel> listMISDtlModel = new
-		// ArrayList<clsMISDtlModel>();
-		// listMISDtlModel.add(objMISDtlModel);
-		// objMISHd.setClsMISDtlModel(listMISDtlModel);
-		//
-		// objMISService.funAddMISHd(objMISHd);
-		//
-		// sqlBuilder.setLength(0);
-		// sqlBuilder.append("update tblgrndtl set strMISCode='" + strMISCode +
-		// "' " + "	where strgrnCode = '" + objGRNDtl.getStrGRNCode() +
-		// "' and strprodcode = '" + objMISDtlModel.getStrProdCode() + "' " +
-		// " and strIssueLocation='" + objGRNDtl.getStrIssueLocation() +
-		// "' and strClientCode='" + clientCode + "'");
-		// objMISService.funInsertNonStkItemDirect(sqlBuilder.toString());
-		//
-		// if (strGeneratedMISCode.length() > 0) {
-		// strGeneratedMISCode = strGeneratedMISCode + "," + strMISCode;
-		// } else {
-		// strGeneratedMISCode = strMISCode;
-		// }
-		// }
-		// }
-		// }
 
 		return strGeneratedMISCode;
 	}
@@ -3278,5 +3173,28 @@ public class clsGRNController {
 		}
 
 		return prodList;
+	}
+	
+	private void funDeleteMISOfGRN(String grnCode)
+	{
+		String sql="SELECT a.strMISCode FROM tblmishd a WHERE a.strNarration LIKE '%"+grnCode+"%' ";
+		try
+		{
+			List listMis=objBaseService.funGetList(new StringBuilder(sql), "sql");
+			if(listMis.size()>0)
+			{
+				for(int i=0;i<listMis.size();i++)
+				{
+					String misCode=listMis.get(i).toString();
+					String sqlDelete="DELETE tblmishd,tblmisdtl FROM tblmishd INNER JOIN tblmisdtl ON "
+							+ "tblmishd.strMISCode=tblmisdtl.strMISCode WHERE tblmishd.strMISCode='"+misCode+"' ";
+					objBaseService.funExecuteUpdate(sqlDelete, "sql");
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

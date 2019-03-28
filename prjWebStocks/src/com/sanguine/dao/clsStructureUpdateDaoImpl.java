@@ -1015,8 +1015,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblbillpasshd` ADD COLUMN `strSettlementType` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strAuthLevel5` ";
 		funExecuteQuery(sql);
 		
-		sql="UPDATE  `tbltreemast` SET `strFormDesc`='WebBooks Link Up' WHERE  `strFormName`='frmARLinkUp' AND `strModule`='1';";
+		sql="UPDATE tbltreemast SET strFormDesc='WebBooks Link Up' WHERE strFormName='frmARLinkUp' AND strModule='1';";
 		funExecuteQuery(sql);
+		
 		
 		
 		/*----------------WebStock Forms only---------------------------*/
@@ -4144,8 +4145,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+";";
 		funExecuteWebBooksQuery(sql);
 		
-		sql="UPDATE `tbltreemast` SET `strFormDesc`='WebBooks Link Up' WHERE  `strFormName`='frmARLinkUp' AND `strModule`='1';";
-		funExecuteWebBooksQuery(sql);
+		
 		
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
 				+ " ('frmSundryCreditorBill', 'Sundry Creditor Bill', 'Transaction', '1', 'T', '1', '1', '12', 'default.png', '5', '1', '1', '1', 'NO', '1', 'frmSundryCreditorBill.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "

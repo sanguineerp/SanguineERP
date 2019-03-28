@@ -645,6 +645,35 @@ public class clsARLinkUpController {
 					}
 				}
 			}
+
+			List<clsLinkUpHdModel> listSettlementLinkUp = objBean.getListSettlementLinkUp();
+			if(listSettlementLinkUp!=null)
+			{
+				for (int cnt = 0; cnt < listSettlementLinkUp.size(); cnt++) {
+					clsLinkUpHdModel objModel = listSettlementLinkUp.get(cnt);
+					if (objModel.getStrAccountCode().length() > 0) {
+						sqlBuilderDelete.setLength(0);
+						sqlBuilderDelete = new StringBuilder(" delete from tbllinkup where strMasterCode='" + objModel.getStrMasterCode() + "' and strClientCode='" + clientCode + "' and strPropertyCode='" + propertyCode + "' "
+								+ " and strOperationType='Settlement' and strModuleType='Sale'");
+						objARLinkUpService.funExecute(sqlBuilderDelete.toString());
+						objModel.setStrExSuppCode("");
+						objModel.setStrExSuppName("");
+						objModel.setStrClientCode(clientCode);
+						objModel.setDteCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+						objModel.setDteLastModified(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+						objModel.setStrUserCreated(userCode);
+						objModel.setStrUserEdited(userCode);
+						objModel.setStrPropertyCode(propertyCode);
+						objModel.setStrOperationType("Settlement");
+						objModel.setStrModuleType("Sale");
+						objModel.setStrWebBookAccCode("");
+						objModel.setStrWebBookAccName("");
+						
+						objARLinkUpService.funAddUpdateARLinkUp(objModel);
+					}
+				}
+			}
+			
 			return new ModelAndView("redirect:/frmARLinkUp.html");
 		} else {
 			return new ModelAndView("frmARLinkUp");

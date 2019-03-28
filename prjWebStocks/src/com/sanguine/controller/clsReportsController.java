@@ -3873,9 +3873,42 @@ public class clsReportsController {
 
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 			String sql = "";
-			if (!(yieldCalculation == null)) {
+			/*if (!(yieldCalculation == null)) {
 
 				sql = " select a.strParentCode,d.strProdName as RecipeName, c.dblListPrice,b.strChildCode,c.strProdName as ProdName,c.strUOM," + " (b.dblQty/c.dblRecipeConversion) as InitialWt,c.dblYieldPer,(100-c.dblYieldPer) as lossPer,(c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100) as finalWT ," + " c.dblCostRM as Rate,(c.dblYieldPer*c.dblCostRM/100) as RecipeCost,"
+						+ " ((c.dblYieldPer*c.dblCostRM/100)*100/(select  sum((r.dblYieldPer*r.dblCostRM/100))" + " from tblbommasterhd p,tblbommasterdtl q, tblproductmaster r" + " where ";
+				if (!bomCode.equals("") || !bomCode.isEmpty()) {
+					sql = sql + " p.strBOMCode='" + bomCode + "' ";
+				}
+				sql = sql + " and p.strBOMCode=q.strBOMCode " + " and q.strChildCode = r.strProdCode and p.strParentCode=d.strProdCode" + " and p.strClientCode='" + clientCode + "' and p.strClientCode=q.strClientCode" + " and q.strClientCode=r.strClientCode  )) as eachProdPer " + " from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + " where  "
+						+ " a.strBOMCode=b.strBOMCode " + " and b.strChildCode = c.strProdCode and a.strParentCode=d.strProdCode  " + " and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode " + " and b.strClientCode=c.strClientCode  ";
+
+				if (!bomCode.equals("") || !bomCode.isEmpty()) {
+					sql = sql + " and  a.strBOMCode='" + bomCode + "' group by b.strChildCode  order by a.strParentCode ";
+				} else {
+					sql = sql + "   group by b.strChildCode  order by a.strParentCode ";
+				}
+
+			} else {
+				sql = " SELECT a.strParentCode,d.strProdName AS RecipeName, d.dblListPrice,b.strChildCode,c.strProdName AS ProdName,c.strUOM," + " (b.dblQty/c.dblRecipeConversion) AS InitialWt,c.dblYieldPer,(100-c.dblYieldPer) AS lossPer,(c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100) AS finalWT," + " c.dblCostRM AS Rate, ((b.dblQty/c.dblRecipeConversion)*c.dblCostRM) AS RecipeCost,"
+						+ " ((c.dblYieldPer*c.dblCostRM/100)*100/( SELECT SUM((r.dblYieldPer*r.dblCostRM/100))" + " FROM tblbommasterhd p,tblbommasterdtl q, tblproductmaster r" + " where ";
+				if (!bomCode.equals("") || !bomCode.isEmpty()) {
+					sql = sql + " p.strBOMCode='" + bomCode + "' and ";
+				}
+				sql = sql + "  p.strBOMCode=q.strBOMCode " + " and q.strChildCode = r.strProdCode and p.strParentCode=d.strProdCode" + " and p.strClientCode='" + clientCode + "' and p.strClientCode=q.strClientCode" + " and q.strClientCode=r.strClientCode  )) as eachProdPer " + " from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + " where  "
+						+ " a.strBOMCode=b.strBOMCode " + " and b.strChildCode = c.strProdCode and a.strParentCode=d.strProdCode  " + " and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode " + " and b.strClientCode=c.strClientCode  ";
+
+				if (!bomCode.equals("") || !bomCode.isEmpty()) {
+					sql = sql + " and  a.strBOMCode='" + bomCode + "' group by b.strChildCode  order by a.strParentCode ";
+				} else {
+					sql = sql + "   group by b.strChildCode  order by a.strParentCode ";
+				}
+
+			}*/
+			//VinayakB
+			if (!(yieldCalculation == null)) {
+
+				sql = " select a.strParentCode,d.strProdName as RecipeName, c.dblListPrice,b.strChildCode,c.strProdName as ProdName,c.strUOM," + " (b.dblQty/c.dblRecipeConversion) as InitialWt,c.dblYieldPer,(100-c.dblYieldPer) as lossPer,(c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100) as finalWT ," + " c.dblCostRM as Rate,((b.dblQty/c.dblRecipeConversion)*c.dblCostRM) as RecipeCost,"
 						+ " ((c.dblYieldPer*c.dblCostRM/100)*100/(select  sum((r.dblYieldPer*r.dblCostRM/100))" + " from tblbommasterhd p,tblbommasterdtl q, tblproductmaster r" + " where ";
 				if (!bomCode.equals("") || !bomCode.isEmpty()) {
 					sql = sql + " p.strBOMCode='" + bomCode + "' ";

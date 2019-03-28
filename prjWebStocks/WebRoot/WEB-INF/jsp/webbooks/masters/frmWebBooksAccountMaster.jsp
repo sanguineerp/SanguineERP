@@ -439,7 +439,7 @@
 			</tr>
 			<tr>
 			    <td><label>Opening Balance</label></td>			   			        			       
-			    <td  ><s:input id="txtOpeningBal"  style="text-align: right; width:118px"  path="intOpeningBal" type="number" min="0" required="true" cssClass="longTextBox"  oninput="validity.valid||(value='');"/></td>
+			    <td><s:input id="txtOpeningBal" class="decimal-places numberField" step="0.0001" path="intOpeningBal" type="number"  required="true"  /></td>
 <%-- 			    <td><s:select id="cmbOpeningBal" path="strCreditor" items="${listOpeningBalance}" cssClass="BoxW124px" /></td> --%>
 			    <td> <label>Dr/Cr</label></td>
 			    <td><s:select id="cmbDrCr" path="strCrDr" cssClass="BoxW124px" >
@@ -449,7 +449,7 @@
 			</tr>
 					<tr>
 			    <td><label>Previous Year Balance</label></td>			   			        			       
-			    <td  ><s:input id="txtPrevYearBal"  style="text-align: right; width:118px"  path="intPrevYearBal" type="number" min="0" required="true" cssClass="longTextBox"  oninput="validity.valid||(value='');"/></td>
+			    <td  ><s:input id="txtPrevYearBal" class="decimal-places numberField" step="0.0001"  path="intPrevYearBal" type="number" required="true"  /></td>
 			    <td> <label>Dr/Cr</label></td>
 			    <td><s:select id="cmbPrevDrCr" path="strPrevCrDr" cssClass="BoxW124px" >
 			    <option value="Cr">Cr</option>
