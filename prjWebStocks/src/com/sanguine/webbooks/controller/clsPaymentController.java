@@ -49,10 +49,12 @@ import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.util.clsReportBean;
 import com.sanguine.webbooks.apgl.model.clsSundaryCrBillGRNDtlModel;
+import com.sanguine.webbooks.bean.clsJVBean;
 import com.sanguine.webbooks.bean.clsPaymentBean;
 import com.sanguine.webbooks.bean.clsPaymentDetailsBean;
 import com.sanguine.webbooks.model.clsBankMasterModel;
 import com.sanguine.webbooks.model.clsEmployeeMasterModel;
+import com.sanguine.webbooks.model.clsJVHdModel;
 import com.sanguine.webbooks.model.clsPaymentDebtorDtlModel;
 import com.sanguine.webbooks.model.clsPaymentDtl;
 import com.sanguine.webbooks.model.clsPaymentGRNDtlModel;
@@ -331,9 +333,11 @@ public class clsPaymentController {
 				currConversion=objBean.getDblConversion();
 			}
 
-			clsPaymentHdModel objHdModel = funPrepareHdModel(objBean, userCode, clientCode, req, propCode, currConversion);
-			objPaymentService.funAddUpdatePaymentHd(objHdModel);
-
+			//clsPaymentHdModel objHdModel = funPrepareHdModel(objBean, userCode, clientCode, req, propCode, currConversion);
+			//objPaymentService.funAddUpdatePaymentHd(objHdModel);
+			
+			clsPaymentHdModel objHdModel = funGeneratePayment(objBean, userCode, clientCode,  req, propCode, currConversion);
+			
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Payment No : ".concat(objHdModel.getStrVouchNo()));
 			req.getSession().setAttribute("rptVoucherNo", objHdModel.getStrVouchNo());
@@ -342,6 +346,13 @@ public class clsPaymentController {
 		} else {
 			return new ModelAndView("frmPayment");
 		}
+	}
+	
+	public clsPaymentHdModel funGeneratePayment(clsPaymentBean objBean, String userCode, String clientCode, HttpServletRequest request, String propertyCode, double currValue)
+	{
+		clsPaymentHdModel objHdModel = funPrepareHdModel(objBean, userCode, clientCode, request, propertyCode, currValue);
+		objPaymentService.funAddUpdatePaymentHd(objHdModel);
+		return objHdModel;
 	}
 
 	// Convert bean to model function

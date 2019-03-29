@@ -37,8 +37,14 @@ import com.sanguine.service.clsPurchaseReturnService;
 import com.sanguine.webbooks.bean.clsJVBean;
 import com.sanguine.webbooks.bean.clsJVDetailsBean;
 import com.sanguine.webbooks.bean.clsPaymentBean;
+import com.sanguine.webbooks.bean.clsPaymentDetailsBean;
 import com.sanguine.webbooks.controller.clsJVController;
+import com.sanguine.webbooks.controller.clsPaymentController;
+import com.sanguine.webbooks.model.clsJVDtlModel;
 import com.sanguine.webbooks.model.clsJVHdModel;
+import com.sanguine.webbooks.model.clsPaymentGRNDtlModel;
+import com.sanguine.webbooks.model.clsPaymentHdModel;
+import com.sanguine.webbooks.service.clsSundryCreditorMasterService;
 
 @Controller
 public class clsJVGeneratorController {
@@ -79,6 +85,11 @@ public class clsJVGeneratorController {
 	@Autowired
 	clsSalesReturnController objSalesReturnController;
 	
+	@Autowired
+	private clsSundryCreditorMasterService objSundryCreditorMasterService;
+	
+	@Autowired
+	private clsPaymentController objPaymentController;
 	
 	public String funGenrateJVforGRN(String GRNCode, String clientCode, String userCode, String propCode, HttpServletRequest req) {
 				
@@ -592,11 +603,11 @@ public class clsJVGeneratorController {
 				flgLinkup=false;
 				sbLinkUpErrorMessage.append("Supplier linkup is not done");
 			}
-			
+			clsJVHdModel objJVHdModel =null;
 			if(flgLinkup)
 			{
 				objJVBean.setListJVDtlBean(listJVDetailBean);
-				clsJVHdModel objJVHdModel = objJVController.funGenerateJV(objJVBean, userCode, clientCode, "APGL", req,"GRN");
+				objJVHdModel = objJVController.funGenerateJV(objJVBean, userCode, clientCode, "APGL", req,"GRN");
 				jvCode=objJVHdModel.getStrVouchNo()+"! ";
 			}
 			else
@@ -615,8 +626,9 @@ public class clsJVGeneratorController {
 				List listGrnSettlement = objGlobalFunctionsService.funGetList(sqlCheckGrnSettlement, "sql");
 				if (null != listGrnSettlement) {
 					String settlementType=(String) listGrnSettlement.get(0);
-					if("settlementType".equalsIgnoreCase("cash")){
-						funGeneratePaymentForGRNJV(objModel,objModel.getStrPayMode(), clientCode,  userCode,  propCode,req);
+					if(settlementType.equalsIgnoreCase("cash")){
+						clsPaymentHdModel objPaymentHdModel = funGeneratePaymentForGRNJV(objModel,objJVHdModel,objModel.getStrPayMode(), clientCode,  userCode,  propCode,req);
+						
 					}
 					
 				}
@@ -1697,16 +1709,19 @@ public class clsJVGeneratorController {
 	}
 	
 	
-	public String funGeneratePaymentForGRNJV(clsGRNHdModel objModel,String settlementCode,String clientCode, String userCode, String propCode,HttpServletRequest req){
+	public clsPaymentHdModel funGeneratePaymentForGRNJV(clsGRNHdModel objModel,clsJVHdModel objJVHdModel,String settlementCode,String clientCode, String userCode, String propCode,HttpServletRequest req){
 		StringBuilder sbSql=new StringBuilder();
 		clsPaymentBean objPaymentBean = new clsPaymentBean();
+		clsPaymentHdModel objPaymentHdModel = new clsPaymentHdModel();
 		String paymentCode = "";
 		try{
 			double debitAmt = objModel.getDblTotal();
 			String strCurr = req.getSession().getAttribute("currValue").toString();
 			double currValue = Double.parseDouble(strCurr);
+			String strCashSettleBankAcc="",strCreditorCode="",strCreditorName="";
 			clsLinkUpHdModel objLinkCust = objLinkupService.funGetARLinkUp(settlementCode, clientCode, propCode, "Settlement", "Sale");
 			if (objLinkCust != null) {
+				strCashSettleBankAcc=objLinkCust.getStrAccountCode();
 				if (objModel.getStrJVNo().equals("")) {
 					
 					objPaymentBean.setStrVouchNo("");
@@ -1717,26 +1732,95 @@ public class clsJVGeneratorController {
 					objPaymentBean.setDblAmt(debitAmt);
 				}
 				
+			objLinkCust = objLinkupService.funGetARLinkUp(objModel.getStrSuppCode(), clientCode, propCode, "Supplier", "Purchase");
+				if (objLinkCust != null) {
+					strCreditorCode=objLinkCust.getStrAccountCode();
+					strCreditorName=objLinkCust.getStrMasterDesc();
+				}
+			
 				objPaymentBean.setStrVouchNo("");
 			}
 			
 			sbSql.setLength(0);
-			sbSql.append("select objJVModel from clsJVHdModel objJVModel where objJVModel.strSourceDocNo='"+objModel.getStrGRNCode()+"' and objJVModel.strClientCode='"+clientCode+"'");	
+			sbSql.append("select a.strVouchNo from tblpaymentgrndtl a where a.strGRNCode='"+objModel.getStrGRNCode()+"' and a.strClientCode='"+clientCode+"'");	
 			try
 			{
-				List listJVDtl=objBaseService.funGetListModuleWise(sbSql, "hql", "WebBooks");
-				if(listJVDtl.size()>0)
+				String currentDateTime=objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd");
+				String time=currentDateTime.split(" ")[1];
+				
+				List listJVDtl=objBaseService.funGetListModuleWise(sbSql, "sql", "WebBooks");
+				if(listJVDtl !=null && listJVDtl.size()>0)
 				{
-					clsJVHdModel objJVHdModel=(clsJVHdModel)listJVDtl.get(0);
-					objJVBean.setStrVouchNo(objJVHdModel.getStrVouchNo());
+					objPaymentBean.setStrVouchNo(listJVDtl.get(0).toString());
 				}
+				objPaymentBean.setStrBankCode(strCashSettleBankAcc);
+				objPaymentBean.setStrNarration("Payment Generated by GRN:" + objModel.getStrGRNCode());
+				objPaymentBean.setStrSancCode(strCreditorCode);
+				objPaymentBean.setStrType("");
+				objPaymentBean.setDteClearence(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				objPaymentBean.setDteChequeDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				objPaymentBean.setStrChequeNo("");
+				objPaymentBean.setDteVouchDate(objGlobalFunctions.funGetDate("dd-MM-yyyy", objModel.getDtGRNDate()) +" "+time);
+				objPaymentBean.setIntVouchMonth(1);
+				objPaymentBean.setDblAmt(debitAmt * currValue);
+				
+				objPaymentBean.setStrTransMode("R");
+				objPaymentBean.setStrModuleType("AR");
+				objPaymentBean.setStrUserCreated(userCode);
+				objPaymentBean.setStrUserEdited(userCode);
+				objPaymentBean.setDteDateCreated(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				objPaymentBean.setDteDateEdited(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				objPaymentBean.setStrClientCode(clientCode);
+				objPaymentBean.setStrPropertyCode(propCode);
+				objPaymentBean.setStrCurrency(objModel.getStrCurrency());
+				objPaymentBean.setDblConversion(objModel.getDblConversion());
+				
+				
+			// Payment hd entry end
+				
+				//Payment debtor dtl
+				List<clsPaymentDetailsBean> listPaymentDetailsBean = new ArrayList<clsPaymentDetailsBean>();
+				if(null!=objJVHdModel.getListJVDebtorDtlModel()){
+					clsPaymentDetailsBean objPaymentBeanDetails =new clsPaymentDetailsBean();
+					for(clsJVDtlModel objJVDtlModel:objJVHdModel.getListJVDtlModel()){
+
+						objPaymentBeanDetails.setStrDebtorCode("") ;
+						objPaymentBeanDetails.setStrDebtorName(strCreditorName);
+						objPaymentBeanDetails.setStrDebtorCode(strCreditorCode);
+						
+						objPaymentBeanDetails.setStrAccountCode(strCashSettleBankAcc);
+						objPaymentBeanDetails.setStrDC("Dr");
+						objPaymentBeanDetails.setDblDebitAmt(objJVDtlModel.getDblDrAmt());
+						objPaymentBeanDetails.setDblCreditAmt(objJVDtlModel.getDblCrAmt());
+						
+						
+						listPaymentDetailsBean.add(objPaymentBeanDetails);
+					}
+				}
+				objPaymentBean.setListPaymentDetailsBean(listPaymentDetailsBean);
+				
+				 
+				List<clsPaymentGRNDtlModel> listPaymentGRNDtl = new ArrayList<clsPaymentGRNDtlModel>();
+				clsPaymentGRNDtlModel objPaymentGRNDtlModel=new clsPaymentGRNDtlModel();
+					objPaymentGRNDtlModel.setDblGRNAmt(objModel.getDblTotal() * currValue);
+					objPaymentGRNDtlModel.setDblPayedAmt(objModel.getDblTotal() * currValue);
+					objPaymentGRNDtlModel.setStrPropertyCode(propCode);
+					
+				listPaymentGRNDtl.add(objPaymentGRNDtlModel);
+				objPaymentBean.setStrCurrency(objModel.getStrCurrency());
+					
+					
+					
+				 objPaymentHdModel = objPaymentController.funGeneratePayment(objPaymentBean, userCode, clientCode,  req, propCode, currValue);
+				
+				
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return paymentCode;
+		return objPaymentHdModel;
 	}
 
 	

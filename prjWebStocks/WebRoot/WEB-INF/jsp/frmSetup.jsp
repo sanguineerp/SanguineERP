@@ -1465,6 +1465,12 @@
 										</td><td>
 										<s:checkbox path="strRoundOffFinalAmtOnTransaction" value="Y"/> 
 										</td>
+									<tr>
+										<td>Post Round Off Amount to WebBooks</td>
+										<td>
+											<s:checkbox path="strPOSTRoundOffAmtToWebBooks" value="Y"/> 
+										</td>
+									</tr>
 									
 									
 									</tr>

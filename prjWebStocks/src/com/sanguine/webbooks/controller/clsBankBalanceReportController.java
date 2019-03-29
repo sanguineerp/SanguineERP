@@ -151,9 +151,13 @@ public class clsBankBalanceReportController {
 
 			double total=0.0;
 			String prevAcName="";
-			String sql = " select  b.strGroupCode,ifNull(b.strGroupName,''),a.strAccountCode,a.strAccountName,left(a.strAccountCode,8) as groupAcCode "
+			/*String sql = " select  b.strGroupCode,ifNull(b.strGroupName,''),a.strAccountCode,a.strAccountName,left(a.strAccountCode,8) as groupAcCode "
 					+ " from tblacmaster a,tblacgroupmaster b " 
-					+ " where  a.strGroupCode=b.strGroupCode and a.strType='BANK' and  a.strClientCode='" + clientCode + "' and a.strPropertyCode='" + propertyCode + "' ";
+					+ " where  a.strGroupCode=b.strGroupCode and a.strType='BANK' and  a.strClientCode='" + clientCode + "' and a.strPropertyCode='" + propertyCode + "' ";*/
+
+			String sql = " select  b.strGroupCode,ifNull(b.strGroupName,''),a.strAccountCode,a.strAccountName,left(a.strAccountCode,8) as groupAcCode "
+					+ " from tblacmaster a,tblacgroupmaster b, tblsubgroupmaster c " 
+					+ " where a.strSubGroupCode = c.strSubGroupCode and c.strGroupCode = a.strGroupCode and a.strType='BANK' and  a.strClientCode='" + clientCode + "' and a.strPropertyCode='" + propertyCode + "' ";
 			HashMap<String,clsCreditorOutStandingReportBean> hmTB=new HashMap<String,clsCreditorOutStandingReportBean>();
 			List listAc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			{

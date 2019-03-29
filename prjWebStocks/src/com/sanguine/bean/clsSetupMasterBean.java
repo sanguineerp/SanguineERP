@@ -175,7 +175,9 @@ public class clsSetupMasterBean {
 	
 	private String StrCurrentDateForTransaction;
 	private String strRoundOffFinalAmtOnTransaction;
+	private String strPOSTRoundOffAmtToWebBooks;
 
+	
 	
 	public String getStrRateHistoryFormat() {
 		return strRateHistoryFormat;
@@ -1391,6 +1393,14 @@ public class clsSetupMasterBean {
 	public void setStrRoundOffFinalAmtOnTransaction(
 			String strRoundOffFinalAmtOnTransaction) {
 		this.strRoundOffFinalAmtOnTransaction = strRoundOffFinalAmtOnTransaction;
+	}
+
+	public String getStrPOSTRoundOffAmtToWebBooks() {
+		return strPOSTRoundOffAmtToWebBooks;
+	}
+
+	public void setStrPOSTRoundOffAmtToWebBooks(String strPOSTRoundOffAmtToWebBooks) {
+		this.strPOSTRoundOffAmtToWebBooks = strPOSTRoundOffAmtToWebBooks;
 	}
 
 	

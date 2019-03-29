@@ -902,18 +902,15 @@ public class clsIncomeStatementReportController
 //				+ "and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' "
 //				+ "group by a.strAccountCode order by b.strCategory; ");
 		
-		
-		
-		
-		sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),if((c.strVouchNo is null),0,ifnull(sum(d.dblDrAmt),0)),a.strAccountName,a.strAccountCode,if((c.strVouchNo is null),0,ifnull(sum(d.dblCrAmt),0)) from  tblacgroupmaster b,tblacmaster a "
+		sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),if((c.strVouchNo is null),0,ifnull(sum(d.dblDrAmt),0)),a.strAccountName,a.strAccountCode,if((c.strVouchNo is null),0,ifnull(sum(d.dblCrAmt),0)) from  tblacgroupmaster b,tblsubgroupmaster e,tblacmaster a "
 				+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
-				+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' and a.strPropertyCode='"+propCode+"'  "
-				+ "where a.strGroupCode=b.strGroupCode "
+				+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo "
+				+ "and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' and a.strPropertyCode='"+propCode+"'  "
+				+ "where a.strSubGroupCode = e.strSubGroupCode and e.strGroupCode = a.strGroupCode "
 				+ "and b.strCategory='"+catType+"' "
 				+ "and a.strType='GL Code' "
 				+ "group by a.strAccountCode  "
 				+" order by b.strGroupCode ,a.strAccountCode ");
-		
 		
 		List listJV = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
 		if (listJV != null && listJV.size() > 0)

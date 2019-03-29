@@ -536,6 +536,7 @@ public class clsSetupMasterController {
 		bean.setStrCurrencyCode(objSetup.getStrCurrencyCode());
 		bean.setStrCurrentDateForTransaction(objSetup.getStrCurrentDateForTransaction());
 		bean.setStrRoundOffFinalAmtOnTransaction(objSetup.getStrRoundOffFinalAmtOnTransaction());
+		bean.setStrPOSTRoundOffAmtToWebBooks(objSetup.getStrPOSTRoundOffAmtToWebBooks());
 		/*
 		 * if(objSetup.getStrShowAllPropCustomer()==null ||
 		 * objSetup.getStrShowAllPropCustomer().equalsIgnoreCase("N")) {

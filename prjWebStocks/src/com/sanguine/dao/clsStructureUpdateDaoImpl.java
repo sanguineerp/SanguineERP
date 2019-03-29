@@ -1015,10 +1015,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblbillpasshd` ADD COLUMN `strSettlementType` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strAuthLevel5` ";
 		funExecuteQuery(sql);
 		
-		sql="UPDATE tbltreemast SET strFormDesc='WebBooks Link Up' WHERE strFormName='frmARLinkUp' AND strModule='1';";
+		
+		
+		sql="ALTER TABLE `tblpropertysetup` ADD COLUMN `strPOSTRoundOffAmtToWebBooks` VARCHAR(1) NOT NULL DEFAULT 'Y' AFTER `strRoundOffFinalAmtOnTransaction`";
 		funExecuteQuery(sql);
-		
-		
 		
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
@@ -1330,6 +1330,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmSettlementMaster', 'Settlement Master', 'Master', 9, 'M', 25, 110, '1', 'default.png', '1', 1, '1', '1', 'NO', 'NO', 'frmCRMSettlementMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
 		funExecuteQuery(sql);
 		
+		sql="UPDATE tbltreemast SET strFormDesc='WebBooks Link Up' WHERE strFormName='frmARLinkUp' AND strModule='1' ";
+		funExecuteQuery(sql);
 		}
 		
 		// //--------------------END----------------------------/////

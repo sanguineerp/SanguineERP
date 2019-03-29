@@ -285,11 +285,15 @@ public class clsRecipeMasterController {
 	public clsParentDataForBOM funGetParentDataForBOM(String parentProdCode, String clientCode, String bomCode) {
 		clsParentDataForBOM objParentProduct = new clsParentDataForBOM();
 
-		String sqlCheckBom = " select a.strBOMCode from tblbommasterhd a " + " where a.strParentCode='" + parentProdCode + "' and a.strClientCode='" + clientCode + "' ";
+		//String sqlCheckBom = " select a.strBOMCode from tblbommasterhd a " + " where a.strParentCode='" + parentProdCode + "' and a.strClientCode='" + clientCode + "' ";
+		String sqlCheckBom = "  select a.strBOMCode,b.strProdName from tblbommasterhd a,tblproductmaster b where a.strParentCode='"+parentProdCode+"' and a.strParentCode=b.strProdCode and a.strClientCode='"+clientCode+"'  ";
 		List listCheckBom = objRecipeMasterService.funGetProductList(sqlCheckBom);
 		if (bomCode.equals("")) {
 			if (listCheckBom.size() > 0) {
-				objParentProduct.setStrBOMCode(listCheckBom.get(0).toString());
+				Object[] obj = (Object[]) listCheckBom.get(0);
+				objParentProduct.setStrBOMCode(obj[0].toString());
+				objParentProduct.setStrParentName(obj[1].toString());
+				
 			} else {
 				String sql = "select a.strProdCode,a.strProdName,ifnull(a.strPartNo,'') as strPartNo,ifnull(a.strProdType,'') as strProdType, " + "ifnull(b.strSGCode,'') as strSGCode, ifnull(b.strSGName,'') as strSGName, " + "ifnull(c.strProcessCode,'') as strProcessCode, ifnull(d.strProcessName,'') as strProcessName, " + "ifnull(a.strUOM,'') as strUOM " + "from tblproductmaster a "
 						+ "left outer join tblsubgroupmaster b  on  a.strSGCode=b.strSGCode and b.strClientCode='" + clientCode + "' " + "left outer join tblprodprocess c on a.strProdCode=c.strProdCode and c.strClientCode='" + clientCode + "' " + "left outer join tblprocessmaster d on c.strProcessCode=d.strProcessCode and d.strClientCode='" + clientCode + "' " + "where a.strProdCode='"

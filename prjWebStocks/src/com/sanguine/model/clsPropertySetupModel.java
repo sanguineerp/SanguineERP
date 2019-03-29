@@ -207,7 +207,9 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	@Column(name = "strRoundOffFinalAmtOnTransaction", columnDefinition = "VARCHAR(1) default 'Y'")
 	private String strRoundOffFinalAmtOnTransaction;
 	
-	
+	@Column(name = "strPOSTRoundOffAmtToWebBooks", columnDefinition = "VARCHAR(1) default 'Y'")
+	private String strPOSTRoundOffAmtToWebBooks;
+
 	
 	
 	// BAnk Dtl Tab
@@ -243,6 +245,7 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	@Column(name = "strSMSContent", columnDefinition = "VARCHAR(500) default ''")
 	private String strSMSContent;
 
+	
 	// SMS setUp Tab End
 
 	public String getStrUserCreated() {
@@ -1237,6 +1240,14 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	public void setStrRoundOffFinalAmtOnTransaction(
 			String strRoundOffFinalAmtOnTransaction) {
 		this.strRoundOffFinalAmtOnTransaction =(String) setDefaultValue(strRoundOffFinalAmtOnTransaction, "Y");
+	}
+
+	public String getStrPOSTRoundOffAmtToWebBooks() {
+		return strPOSTRoundOffAmtToWebBooks;
+	}
+
+	public void setStrPOSTRoundOffAmtToWebBooks(String strPOSTRoundOffAmtToWebBooks) {
+		this.strPOSTRoundOffAmtToWebBooks = (String) setDefaultValue(strPOSTRoundOffAmtToWebBooks, "Y");;
 	}
 
 
