@@ -28,12 +28,14 @@ import com.sanguine.model.clsPurchaseReturnDtlModel;
 import com.sanguine.model.clsPurchaseReturnHdModel;
 import com.sanguine.model.clsPurchaseReturnTaxDtlModel;
 import com.sanguine.model.clsSettlementMasterModel;
+import com.sanguine.model.clsStkAdjustmentHdModel;
 import com.sanguine.model.clsTaxHdModel;
 import com.sanguine.service.clsGRNService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsLinkUpService;
 import com.sanguine.service.clsProductMasterService;
 import com.sanguine.service.clsPurchaseReturnService;
+import com.sanguine.service.clsStkAdjustmentService;
 import com.sanguine.webbooks.bean.clsJVBean;
 import com.sanguine.webbooks.bean.clsJVDetailsBean;
 import com.sanguine.webbooks.bean.clsPaymentBean;
@@ -90,6 +92,9 @@ public class clsJVGeneratorController {
 	
 	@Autowired
 	private clsPaymentController objPaymentController;
+	
+	@Autowired
+	private clsStkAdjustmentService objStkAdjService;
 	
 	public String funGenrateJVforGRN(String GRNCode, String clientCode, String userCode, String propCode, HttpServletRequest req) {
 				
@@ -1758,7 +1763,7 @@ public class clsJVGeneratorController {
 				objPaymentBean.setStrSancCode(strCreditorCode);
 				objPaymentBean.setStrType("");
 				objPaymentBean.setDteClearence(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
-				objPaymentBean.setDteChequeDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				objPaymentBean.setDteChequeDate(objGlobalFunctions.funGetDate("dd-MM-yyyy", objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd")));
 				objPaymentBean.setStrChequeNo("");
 				objPaymentBean.setDteVouchDate(objGlobalFunctions.funGetDate("dd-MM-yyyy", objModel.getDtGRNDate()) +" "+time);
 				objPaymentBean.setIntVouchMonth(1);
@@ -1780,16 +1785,16 @@ public class clsJVGeneratorController {
 				
 				//Payment debtor dtl
 				List<clsPaymentDetailsBean> listPaymentDetailsBean = new ArrayList<clsPaymentDetailsBean>();
-				if(null!=objJVHdModel.getListJVDebtorDtlModel()){
-					clsPaymentDetailsBean objPaymentBeanDetails =new clsPaymentDetailsBean();
+				if(null!=objJVHdModel.getListJVDtlModel()){
+					
 					for(clsJVDtlModel objJVDtlModel:objJVHdModel.getListJVDtlModel()){
-
+						clsPaymentDetailsBean objPaymentBeanDetails =new clsPaymentDetailsBean();
 						objPaymentBeanDetails.setStrDebtorCode("") ;
 						objPaymentBeanDetails.setStrDebtorName(strCreditorName);
 						objPaymentBeanDetails.setStrDebtorCode(strCreditorCode);
 						
-						objPaymentBeanDetails.setStrAccountCode(strCashSettleBankAcc);
-						objPaymentBeanDetails.setStrDC("Dr");
+						objPaymentBeanDetails.setStrAccountCode(objJVDtlModel.getStrAccountCode());
+						objPaymentBeanDetails.setStrDC(objJVDtlModel.getStrCrDr());
 						objPaymentBeanDetails.setDblDebitAmt(objJVDtlModel.getDblDrAmt());
 						objPaymentBeanDetails.setDblCreditAmt(objJVDtlModel.getDblCrAmt());
 						
@@ -1805,8 +1810,14 @@ public class clsJVGeneratorController {
 					objPaymentGRNDtlModel.setDblGRNAmt(objModel.getDblTotal() * currValue);
 					objPaymentGRNDtlModel.setDblPayedAmt(objModel.getDblTotal() * currValue);
 					objPaymentGRNDtlModel.setStrPropertyCode(propCode);
-					
+					objPaymentGRNDtlModel.setDteBillDate(objModel.getDtBillDate());
+					objPaymentGRNDtlModel.setStrGRNCode(objModel.getStrGRNCode());
+					objPaymentGRNDtlModel.setStrGRNBIllNo(objModel.getStrBillNo());
+					objPaymentGRNDtlModel.setDteGRNDate(objModel.getDtGRNDate());
+					objPaymentGRNDtlModel.setDteGRNDueDate(objModel.getDtDueDate());
+					objPaymentGRNDtlModel.setStrSelected("Tick");
 				listPaymentGRNDtl.add(objPaymentGRNDtlModel);
+				objPaymentBean.setListPaymentGRNDtl(listPaymentGRNDtl);
 				objPaymentBean.setStrCurrency(objModel.getStrCurrency());
 					
 					
@@ -1823,6 +1834,34 @@ public class clsJVGeneratorController {
 		return objPaymentHdModel;
 	}
 
+	
+
+	public String funGenrateJVforSTKAdjustment(String stkAdjCode, String clientCode, String userCode, String propCode, HttpServletRequest req) {
+				
+		StringBuilder sbSql=new StringBuilder();
+		clsJVBean objJVBean = new clsJVBean();
+		String jvCode = "";
+		List list=objStkAdjService.funGetObject(stkAdjCode, clientCode);
+		boolean flgLinkup=true;
+		StringBuilder sbLinkUpErrorMessage=new StringBuilder();
+		sbLinkUpErrorMessage.append("ERROR!");
+		List<clsJVDetailsBean> listJVDetailBean = new ArrayList<clsJVDetailsBean>();
+		
+		if(null!=list && list.size()>0)
+		{
+			Object[] arrObjHd=(Object[])list.get(0);
+			clsStkAdjustmentHdModel objModel=(clsStkAdjustmentHdModel)arrObjHd[0];
+			String date=objModel.getDtSADate().split(" ")[0];
+			objModel.setDtSADate(date);
+			
+			String currentDateTime=objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd");
+			String time=currentDateTime.split(" ")[1];
+			sbSql.setLength(0);
+			sbSql.append("");
+		}
+		return jvCode;
+	}
+	
 	
 	
 }

@@ -2205,6 +2205,17 @@ public class clsSearchFormController {
 				searchFormTitle = "Settlement Master";
 				break;
 			}
+			
+			case "LocationWeb-Service" :
+			{
+				listColumnNames = " strAccountCode , Account Name ";
+				searchFormTitle = "Account Master";
+				JSONObject jObjSearchData = funGetIndependentWebServiceDetails(formName, clientCode, propertyCode);
+				jArrSearchList = (JSONArray) jObjSearchData.get(formName);
+				break;
+				
+			
+			}
 
 			}
 
@@ -5880,6 +5891,13 @@ public class clsSearchFormController {
 				sbSql.setLength(0);
 				sbSql.append(" select a.strAccountCode , a.strAccountName "
 					+ " from tblacmaster a where a.strOperational='Yes' and a.strType='GL Code' and a.strDebtor='Yes' and a.strCreditor='No' and a.strEmployee='No' and a.strClientCode = '"+clientCode+"' and a.strPropertyCode='"+propCode+"'  ");
+			}
+			break;
+			
+			case "LocationWeb-Service":{
+				sbSql.setLength(0);
+				sbSql.append(" select a.strAccountCode , a.strAccountName "
+					+ " from tblacmaster a where a.strOperational='Yes' and a.strType='GL Code' and a.strDebtor='No' and strCreditor='Yes' and a.strEmployee='No' and a.strClientCode = '"+clientCode+"' and a.strPropertyCode='"+propCode+"'  ");
 			}
 			break;
 		}

@@ -10,6 +10,7 @@
 	var fieldName;
 	var rowNo;
 	var acBrandrow;
+	var selectedRowIndex;
 
 	$(function() 
 	{
@@ -20,7 +21,8 @@
 		funRoundOffLinkUpData('RoundOff');
 		funExtraChargesLinkUpData('ExtraCharge');
 		funOtherChargesLinkUpData('OtherCharge');
-		funSettlementLinkUpData('Settlement');	
+		funSettlementLinkUpData('Settlement');
+		funLocationLinkUpData('Location');
 		
 		$(".tab_content").hide();
 		$(".tab_content:first").show();
@@ -84,43 +86,49 @@
 		        
 			case 'SettlementWeb-Service' :
 				funSetSettlementAccount(acBrandrow,code);
-				break;    
-		        
-		        
+				break;
+				
+			case 'Excess' : //Excess Shortage
+				funSetLocationAccount(acBrandrow,code);
+				break;
+				
+			case 'Shortage' : // 
+				funSetLocationAccount(acBrandrow,code);
+				break;
 		}
 	}
 	
-	 function funSetBrand(acBrandrow,code)
-		{	
-		 
-		 $.ajax({
-				type : "GET",
-				url : getContextPath()+ "/loadBrandDataFormWebService.html?strBrandCode=" + code,
-				dataType : "json",
-				success : function(response){ 
+	function funSetBrand(acBrandrow,code)
+	{	
+	 
+	 $.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadBrandDataFormWebService.html?strBrandCode=" + code,
+			dataType : "json",
+			success : function(response){ 
 
-					document.getElementById("txtBrandCode."+acBrandrow).value=response.strBrandCode;						
-	    			document.getElementById("txtBrandName."+acBrandrow).value=response.strBrandName; 
-				},
-				 error: function(jqXHR, exception) {
-			            if (jqXHR.status === 0) {
-			                alert('Not connect.n Verify Network.');
-			            } else if (jqXHR.status == 404) {
-			                alert('Requested page not found. [404]');
-			            } else if (jqXHR.status == 500) {
-			                alert('Internal Server Error [500].');
-			            } else if (exception === 'parsererror') {
-			                alert('Requested JSON parse failed.');
-			            } else if (exception === 'timeout') {
-			                alert('Time out error.');
-			            } else if (exception === 'abort') {
-			                alert('Ajax request aborted.');
-			            } else {
-			                alert('Uncaught Error.n' + jqXHR.responseText);
-			            }
-			        }
-			});
-		}
+				document.getElementById("txtBrandCode."+acBrandrow).value=response.strBrandCode;						
+    			document.getElementById("txtBrandName."+acBrandrow).value=response.strBrandName; 
+			},
+			 error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+		        }
+		});
+	}
 	 
 	 function funSetExciseSupplier(acBrandrow,code)
 		{	
@@ -444,6 +452,11 @@
 		{
 			transactionName='AccountMasterGLOnlyWeb-Service';
 		}
+		 if(transactionName=='Excess' || transactionName=='Shortage')
+		{ //
+			transactionName='LocationWeb-Service';
+		} 
+		
 		window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;top=500,left=500")
 	}
 	
@@ -949,7 +962,106 @@
 	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\"   name=\"listSettlementLinkUp["+(rowCount)+"].strMasterName\"  id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"' />";
 	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"searchTextBox\" name=\"listSettlementLinkUp["+(rowCount)+"].strAccountCode\"   id=\"txtSettlement."+(rowCount)+"\" value='"+strAcCode+"' ondblclick=\" funHelp1("+(rowCount)+",'SettlementWeb-Service') \" />";
 	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  name=\"listSettlementLinkUp["+(rowCount)+"].strMasterDesc\"    id=\"txtSettlementName."+(rowCount)+"\" value='"+strAcName+"' />";
-	}		
+	}
+	
+	function funLocationLinkUpData(code)
+	{
+		var searchUrl="";
+		var property=$('#cmbProperty').val();
+		searchUrl=getContextPath()+"/loadARLinkUpData.html?strDoc="+code;
+		$.ajax({
+	        type: "POST",
+	        url: searchUrl,
+		    dataType: "json",
+		    success: function(response)
+		    {
+		    	funDeleteTableAllRowsOfParticulorTable(code);
+		    	$.each(response, function(i,item)
+				{
+		    		funAddRowLocationLinkUpData(item);
+				});
+		    },
+		    error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+	        }
+	    });
+	}
+	
+	function funAddRowLocationLinkUpData(rowData)
+	{	
+		$('#hidLinkup').val("");
+		$('#hidLinkup').val("locationLinkup");
+		var table = document.getElementById("tblLocation");
+	    var rowCount = table.rows.length;
+	    var row = table.insertRow(rowCount);
+	    var strLocCode = rowData.strMasterCode;
+    	var strLocName = rowData.strMasterName;
+    	var strAcCode = rowData.strAccountCode;
+    	var strAcName = rowData.strMasterDesc;
+    	var strWebAcCode = rowData.strWebBookAccCode;
+    	var strWebAcName = rowData.strWebBookAccName;
+	    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listLocationLinkUp["+(rowCount)+"].strMasterCode\"    id=\"txtProdcode."+(rowCount)+"\" value='"+strLocCode+"'  />";
+	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\"   name=\"listLocationLinkUp["+(rowCount)+"].strMasterName\"  id=\"txtProdName."+(rowCount)+"\" value='"+strLocName+"' />";
+	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"searchTextBox\"  name=\"listLocationLinkUp["+(rowCount)+"].strWebBookAccCode\" id=\"txtLocAcCode."+(rowCount)+"\" value='"+strWebAcCode+"' ondblclick=\" funHelp1("+(rowCount)+",'Excess') \" />";
+	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  name=\"listLocationLinkUp["+(rowCount)+"].strWebBookAccName\"    id=\"txtLocAcName."+(rowCount)+"\" value='"+strWebAcName+"' />";
+	    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"searchTextBox\" name=\"listLocationLinkUp["+(rowCount)+"].strAccountCode\"   id=\"txtSecLocAcCode."+(rowCount)+"\" value='"+strAcCode+"'  ondblclick=\" funHelp1("+(rowCount)+",'Shortage') \" />";
+	    row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  name=\"listLocationLinkUp["+(rowCount)+"].strMasterDesc\"    id=\"txtSecLocAcName."+(rowCount)+"\" value='"+strAcName+"' />";
+	    /* SundryCreditorWeb-Service */
+	}
+	
+	function funSetLocationAccount(acBrandrow,code)
+	{
+	
+	 $.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadLinkupDataFormWebService.html?strAccountCode=" + code,
+			dataType : "json",
+			success : function(response){ 
+				if(fieldName=="Excess")  //Excess Shortage
+				{
+					document.getElementById("txtLocAcCode."+acBrandrow).value=response.strDebtorCode;						
+	    			document.getElementById("txtLocAcName."+acBrandrow).value=response.strFirstName; 
+					
+				}else{
+					document.getElementById("txtSecLocAcCode."+acBrandrow).value=response.strDebtorCode;						
+	    			document.getElementById("txtSecLocAcName."+acBrandrow).value=response.strFirstName; 
+					
+				}
+				
+			},
+			 error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+		        }
+		});		
+	}
 	
 	function funSetSettlementAccount(acBrandrow,code)
 	{
@@ -1029,9 +1141,13 @@
 				$("#tblSaleSubGroup  tr").remove();
 				break;
 			}
+			case "Location" :
+			{
+				$("#tbl"+tableName+ " tr").remove();
+				break;
+			}
 		}
 	}	
-	
 	
 </script>
 
@@ -1068,6 +1184,7 @@
 							<li data-state="divExtraCharge" style="width: 10%; padding-left: 55px">Extra Charges</li>
 							<li data-state="divOtherCharge" style="width: 10%; padding-left: 55px">Other Charges</li>
 							<li data-state="divSettlement" style="width: 10%; padding-left: 55px">Settlement</li>
+							<li data-state="divLocation" style="width: 10%; padding-left: 55px">Location</li>
 						</ul>
 						
 					&nbsp;&nbsp;
@@ -1272,16 +1389,34 @@
 							</div>
 						</div>
 						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
+						<div id="divLocation" class="tab_content" style="height: 550px">
+							<table id="tblHeadLocation"
+								style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+								<tr bgcolor="#72BEFC">
+									<td style="width:10%;">Location Code</td>
+									<td style="width:15%;">Location Name</td>
+									<td style="width:10%;">Excess Code</td>
+									<td style="width:15%;">Excess Inventory</td>
+									<td style="width:10%;">Shortage Code</td>
+									<td style="width:15%;">Shortage Inventory</td>
+								</tr>
+							</table>
+							<div
+								style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+									<table id="tblLocation"
+									style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+									class="transTablex col8-center">
+									<tbody>
+									<col style="width:10%"/>
+									<col style="width:15.5%">
+									<col style="width:10%"/>					
+									<col style="width:15%">
+									<col style="width:10%"/>
+									<col style="width:15%">
+									</tbody>
+								</table>
+							</div>
+						</div>
 						
 					</div>
 				</td>

@@ -46,6 +46,7 @@ import com.mysql.jdbc.Connection;
 import com.sanguine.bean.clsStockAdjustmentBean;
 import com.sanguine.model.clsAuditDtlModel;
 import com.sanguine.model.clsAuditHdModel;
+import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
@@ -82,6 +83,8 @@ public class clsStkAdjustmentController {
 
 	private clsGlobalFunctions objGlobal = null;
 
+	@Autowired
+	private clsJVGeneratorController objJVGen;
 	/**
 	 * Open Stock Adjustment Form
 	 * 
@@ -197,6 +200,42 @@ public class clsStkAdjustmentController {
 
 					}
 				}
+				// For JV Generation
+				
+				clsCompanyMasterModel objCompModel = objSetupMasterService
+						.funGetObject(clientCode);
+				if (objCompModel.getStrWebBookModule().equals("Yes")) {
+
+					boolean authorisationFlag = false;
+					if (null != req.getSession()
+							.getAttribute("hmAuthorization")) {
+						HashMap<String, Boolean> hmAuthorization = (HashMap) req.getSession().getAttribute("hmAuthorization");
+						if (hmAuthorization.containsKey("Stock Adjustment")) {
+							authorisationFlag = hmAuthorization.get("Stock Adjustment");
+						}
+					}
+
+					if (!authorisationFlag) {
+						String retuenVal = objJVGen.funGenrateJVforSTKAdjustment(objHdModel.getStrSACode(),
+								clientCode, userCode, propCode, req);
+						String JVGenMessage = "";
+						String[] arrVal = retuenVal.split("!");
+
+						boolean flgJVPosting = true;
+						if (arrVal[0].equals("ERROR")) {
+							JVGenMessage = arrVal[1];
+							flgJVPosting = false;
+						} else {
+							//objHdModel.setStrJVNo(arrVal[0]);
+							//objGRNService.funAddUpdate(objHdModel);
+						}
+						req.getSession().setAttribute("JVGen", flgJVPosting);
+						req.getSession().setAttribute("JVGenMessage",
+								JVGenMessage);
+					}
+				}
+				
+				
 				if (flagDtlDataInserted) {
 					req.getSession().setAttribute("success", true);
 					req.getSession().setAttribute("successMessage", "SA Code : ".concat(objHdModel.getStrSACode()));

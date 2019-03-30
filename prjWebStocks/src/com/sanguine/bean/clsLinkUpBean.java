@@ -38,6 +38,8 @@ public class clsLinkUpBean {
 
 	public List<clsLinkUpHdModel> listOtherCharLinkUp;
 	
+	public List<clsLinkUpHdModel> listLocationLinkUp;
+	
 	
 	
 	public List<clsLinkUpHdModel> getListOtherCharLinkUp() {
@@ -166,6 +168,14 @@ public class clsLinkUpBean {
 
 	public void setListSaleSubGroupLinkUp(List<clsLinkUpHdModel> listSaleSubGroupLinkUp) {
 		this.listSaleSubGroupLinkUp = listSaleSubGroupLinkUp;
+	}
+
+	public List<clsLinkUpHdModel> getListLocationLinkUp() {
+		return listLocationLinkUp;
+	}
+
+	public void setListLocationLinkUp(List<clsLinkUpHdModel> listLocationLinkUp) {
+		this.listLocationLinkUp = listLocationLinkUp;
 	}
 
 }

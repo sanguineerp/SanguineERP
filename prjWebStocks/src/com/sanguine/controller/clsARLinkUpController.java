@@ -201,6 +201,29 @@ public class clsARLinkUpController {
 			sql = " SELECT IFNULL(b.strMasterCode,''),'', IFNULL(b.strMasterDesc,''), IFNULL(b.strAccountCode,''), IFNULL(b.strExSuppCode,''), IFNULL(b.strExSuppName,'') " + " FROM tbllinkup b where  b.strPropertyCode='" + propertyCode + "' and b.strOperationType='OtherCharge' and b.strModuleType='Purchase' order by IFNULL(b.strMasterDesc,'')";
 			
 		}
+		else if (strDoc.equals("Location")) 
+		{
+			sql = "  (SELECT a.strLocCode,a.strLocName, IFNULL(b.strMasterDesc,''), IFNULL(b.strAccountCode,''), IFNULL(b.strWebBookAccCode,''), IFNULL(b.strWebBookAccName,'')"
+					+ " FROM tbllocationmaster a LEFT OUTER JOIN tbllinkup b ON a.strLocCode=b.strMasterCode AND b.strPropertyCode='"+propertyCode+"' AND b.strOperationType='Location' AND b.strModuleType='Purchase'"
+					+ " WHERE a.strClientCode='"+clientCode+"'  ";
+			if (!propertyCode.equalsIgnoreCase("All")) {
+				sql += "and a.strPropertyCode='" + propertyCode + "' ";
+			}
+
+			sql += " AND IFNULL(b.strMasterDesc,'')='' ORDER BY a.strLocCode)  ";
+			
+			
+			sql += " UNION ALL ";
+			sql+=" (SELECT a.strLocCode,a.strLocName, IFNULL(b.strMasterDesc,''), IFNULL(b.strAccountCode,''), IFNULL(b.strWebBookAccCode,''), IFNULL(b.strWebBookAccName,'')"
+					+ " FROM tbllocationmaster a LEFT OUTER JOIN tbllinkup b ON a.strLocCode=b.strMasterCode AND b.strPropertyCode='"+propertyCode+"' AND b.strOperationType='Location' AND b.strModuleType='Purchase'"
+					+ " WHERE a.strClientCode='"+clientCode+"' ";
+			
+			if (!propertyCode.equalsIgnoreCase("All")) {
+				sql += "and a.strPropertyCode='" + propertyCode + "' ";
+			}
+
+			sql += " AND IFNULL(b.strMasterDesc,'')!='' ORDER BY a.strLocCode) ";	
+		}
 		
 
 		ArrayList list = (ArrayList) objGlobalFunctionsService.funGetDataList(sql, "sql");
@@ -438,6 +461,20 @@ public class clsARLinkUpController {
 				}
 			}
 		}
+		else if (strDoc.equals("Location")) 
+		{
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				clsLinkUpHdModel objModel = new clsLinkUpHdModel();
+				Object[] arrObj = (Object[]) list.get(cnt);
+				objModel.setStrMasterCode(arrObj[0].toString());
+				objModel.setStrMasterName(arrObj[1].toString());
+				objModel.setStrMasterDesc(arrObj[2].toString());
+				objModel.setStrAccountCode(arrObj[3].toString());
+				objModel.setStrWebBookAccCode(arrObj[4].toString());
+				objModel.setStrWebBookAccName(arrObj[5].toString());
+				listARLinkUp.add(objModel);
+			}
+		}
 		return listARLinkUp;
 	}
 
@@ -645,6 +682,33 @@ public class clsARLinkUpController {
 					}
 				}
 			}
+			
+			if (objBean.getListLocationLinkUp() != null) {
+				List<clsLinkUpHdModel> listLocationLinkUp = objBean.getListLocationLinkUp();
+				for (int cnt = 0; cnt < listLocationLinkUp.size(); cnt++) {
+					clsLinkUpHdModel objModel = listLocationLinkUp.get(cnt);
+					if (objModel.getStrAccountCode().length() > 0) {
+						sqlBuilderDelete.setLength(0);
+						sqlBuilderDelete.append(" delete from tbllinkup where strMasterCode='" + objModel.getStrMasterCode() + "' and strClientCode='" + clientCode + "' and strPropertyCode='" + propertyCode + "' ");
+						objARLinkUpService.funExecute(sqlBuilderDelete.toString());
+						objModel.setStrClientCode(clientCode);
+						objModel.setDteCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+						objModel.setDteLastModified(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+						objModel.setStrUserCreated(userCode);
+						objModel.setStrUserEdited(userCode);
+						objModel.setStrPropertyCode(propertyCode);
+						objModel.setStrOperationType("Location");
+						objModel.setStrModuleType("Purchase");
+						objModel.setStrExSuppCode("");
+						objModel.setStrExSuppName("");
+						objModel.setStrMasterDesc(objModel.getStrMasterDesc());
+						objModel.setStrAccountCode(objModel.getStrAccountCode());
+						objModel.setStrWebBookAccCode(objModel.getStrWebBookAccCode());
+						objModel.setStrWebBookAccName(objModel.getStrWebBookAccName());
+						objARLinkUpService.funAddUpdateARLinkUp(objModel);
+					}
+				}
+			}
 
 			List<clsLinkUpHdModel> listSettlementLinkUp = objBean.getListSettlementLinkUp();
 			if(listSettlementLinkUp!=null)
@@ -673,6 +737,7 @@ public class clsARLinkUpController {
 					}
 				}
 			}
+			
 			
 			return new ModelAndView("redirect:/frmARLinkUp.html");
 		} else {
