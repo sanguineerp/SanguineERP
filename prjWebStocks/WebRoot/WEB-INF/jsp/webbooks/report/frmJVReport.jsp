@@ -22,53 +22,41 @@ function funHelp(transactionName)
 	
 }
 
-		 	function funSetData(code)
-			{
-		 		$("#txtSOCode").val(code);
-				        
-				
-			}
-		 	
-		 	
-		 	
-
-	
-	
+	function funSetData(code)
+	{
+			$("#txtSOCode").val(code);
+	}
 	
 	function funCallFormAction(actionName,object) 
 	{
-			
 		if ($("#txtSOCode").val()=="") 
-		    {
-			 alert('Invalid Date');
+	    {
+			 alert('Enter Voucher No');
 			 $("#txtSODate").focus();
 			 return false;  
-		   }
-		
-		
-	  else
+	    }
+	   	else
 		{
-			return true;
-			
+			return true;	
 		}
 	}
 	
 	$(function()
+	{
+		$("#txtSOCode").blur(function() 
+		{
+			var code=$('#txtSOCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
 			{
-				$("#txtSOCode").blur(function() 
-						{
-							var code=$('#txtSOCode').val();
-							if(code.trim().length > 0 && code !="?" && code !="/")
-							{
-								if(code.trim().length>12)
-								{
-									alert("Invalid Voucher No");
-									$('#txtSOCode').val('');
-								}	
-							}
-						});
-				
-			});
+				if(code.trim().length>12)
+				{
+					alert("Invalid Voucher No");
+					$('#txtSOCode').val('');
+				}	
+			}
+		});
+		
+	});
 		
 </script>
 
@@ -96,8 +84,6 @@ function funHelp(transactionName)
 <%-- 										</s:select></td> --%>
 <!-- 								</tr> -->
 								<tr>
-								
-					
 									<td><label>Report Type</label></td>
 									<td ><s:select id="cmbDocType" path="strDocType"
 											cssClass="BoxW124px">
@@ -107,12 +93,20 @@ function funHelp(transactionName)
 											<s:option value="CSV">CSV</s:option>
 										</s:select></td>
                                   </tr>
+                                  
+                                  <tr>
+									<td><label>Property</label></td>
+									<td ><s:select id="cmbDocType" path="strPropertyCode"
+											cssClass="BoxW124px">
+											<s:options items="${listProperty}"/>
+										</s:select></td>
+                                  </tr>
 
 		</table>
 		
 		<p align="center">
 			<input type="submit" value="Submit"
-				onclick=""
+				onclick="return funCallFormAction('submit',this)"
 				class="form_button" /> &nbsp; &nbsp; &nbsp; <a
 				STYLE="text-decoration: none"
 				href="frmJVReport.html?saddr=${urlHits}"><input

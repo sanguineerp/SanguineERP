@@ -158,7 +158,8 @@ public class clsTrailBalanceFlashController {
 			startDate = spDate[2] + "-" + spDate[1] + "-" + spDate[0];
 			HashMap<String, Double> hmMap = new HashMap<String, Double>();
 
-			String sql = " select b.strGroupCode,b.strGroupName,a.strAccountCode,a.strAccountName " + " from tblacmaster a,tblacgroupmaster b " + " where a.strGroupCode=b.strGroupCode and  a.strClientCode='" + clientCode + "' and a.strPropertyCode='" + propertyCode + "' ORDER by a.strGroupCode  ";
+			String sql = " select b.strGroupCode,b.strGroupName,a.strAccountCode,a.strAccountName " + " from tblacmaster a,"
+					+ "tblsubgroupmaster s,tblacgroupmaster b " + " where a.strSubGroupCode=s.strSubGroupCode and  s.strGroupCode=b.strGroupCode and  a.strClientCode='" + clientCode + "' and a.strPropertyCode='" + propertyCode + "' ORDER by a.strGroupCode  ";
 
 			List listAc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			{
@@ -205,8 +206,8 @@ public class clsTrailBalanceFlashController {
 								}
 								funInsertCurrentAccountBal(acCode, dteFromDate, dteToDate, userCode, propertyCode, clientCode);
 
-								sql = " SELECT c.strGroupCode,c.strGroupName,a.strAccountCode,a.strAccountName, " + " ifnull(SUM(b.dblCrAmt),0.00), ifnull(SUM(b.dblDrAmt),0.00) " + " FROM tblacmaster a " + " left outer join tblcurrentaccountbal b on a.strAccountCode=b.strAccountCode AND b.strUserCode='" + userCode + "' AND b.strPropertyCode='" + propertyCode + "' AND b.strClientCode='"
-										+ clientCode + "' " + " left outer join tblacgroupmaster c on  a.strGroupCode=c.strGroupCode " + " WHERE   a.strAccountCode='" + acCode + "' GROUP BY a.strAccountCode; ";
+								sql = " SELECT c.strGroupCode,c.strGroupName,a.strAccountCode,a.strAccountName, " + " ifnull(SUM(b.dblCrAmt),0.00), ifnull(SUM(b.dblDrAmt),0.00) " + " FROM tblsubgroupmaster s,tblacmaster a " + " left outer join tblcurrentaccountbal b on a.strAccountCode=b.strAccountCode AND b.strUserCode='" + userCode + "' AND b.strPropertyCode='" + propertyCode + "' AND b.strClientCode='"
+										+ clientCode + "' " + " left outer join tblacgroupmaster c on  s.strGroupCode=c.strGroupCode " + " WHERE  a.strSubGroupCode=s.strSubGroupCode and a.strAccountCode='" + acCode + "' GROUP BY a.strAccountCode; ";
 
 								List listMainBal = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 								
@@ -269,7 +270,7 @@ public class clsTrailBalanceFlashController {
 								}
 							funInsertCurrentAccountBal(acCode, dteFromDate, dteToDate, userCode, propertyCode, clientCode);
 
-							sql = " select c.strGroupCode,c.strGroupName,a.strAccountCode,a.strAccountName,sum(a.dblCrAmt),sum(a.dblDrAmt) " + " from tblcurrentaccountbal a,tblacmaster b,tblacgroupmaster c " + " where a.strAccountCode=b.strAccountCode  and b.strGroupCode=c.strGroupCode " + " and a.strAccountCode='" + acCode + "' and a.strUserCode='" + userCode + "' " + " and a.strPropertyCode='"
+							sql = " select c.strGroupCode,c.strGroupName,a.strAccountCode,a.strAccountName,sum(a.dblCrAmt),sum(a.dblDrAmt) " + " from tblcurrentaccountbal a,tblacmaster b,tblsubgroupmaster s,tblacgroupmaster c " + " where a.strAccountCode=b.strAccountCode  and b.strSubGroupCode=s.strSubGroupCode and s.strGroupCode=c.strGroupCode " + " and a.strAccountCode='" + acCode + "' and a.strUserCode='" + userCode + "' " + " and a.strPropertyCode='"
 									+ propertyCode + "' and a.strClientCode='" + clientCode + "' group by a.strAccountCode ";
 
 							List listMainBal = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");

@@ -34,13 +34,13 @@
 	//Textfiled On blur geting data
 		$(function() {
 			
-			$('#txtAccountCode').blur(function() {
+			/* $('#txtAccountCode').blur(function() {
 				var code = $('#txtAccountCode').val();
 				if(code.trim().length > 0 && code !="?" && code !="/")
 				{
 					funSetAccountDetails(code);
 				}
-			});
+			}); */
 			
 			$('#txtSubGroupCode').blur(function() {
 				var code = $('#txtSubGroupCode').val();
@@ -161,7 +161,7 @@
 	        dataType: "json",
 	        success: function(response)
 	        {
-	        	if(response.strGroupCode=='Invalid Code')
+	        	if(response.strSubGroupCode=='Invalid Code')
 	        	{
 	        		alert("Invalid Group Code");
 	        		$("#txtSubGroupCode").val('');

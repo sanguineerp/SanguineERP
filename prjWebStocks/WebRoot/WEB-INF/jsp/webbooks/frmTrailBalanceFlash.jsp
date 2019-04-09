@@ -280,12 +280,12 @@ var StkFlashData;
 					<td width="10%"><s:input id="txtToDate" path="dteToDate" required="true" readonly="readonly" cssClass="calenderTextBox"/>
 					</td>	
 				</tr>
-<!-- 				<tr> -->
-<!-- 					<td><label>Currency </label></td> -->
-<%-- 					<td><s:select id="cmbCurrency" items="${currencyList}" path="strCurrency" cssClass="BoxW124px"> --%>
-<%-- 						</s:select></td> --%>
-<!-- 					<td colspan="2"></td> -->
-<!-- 				</tr> -->
+				<tr>
+					<td><label>Currency </label></td>
+					<td><s:select id="cmbCurrency" items="${currencyList}" path="strCurrency" cssClass="BoxW124px">
+						</s:select></td>
+					<td colspan="2"></td>
+				</tr>
 			</table>
 			<p align="center">
 				<input type="button" id="btnExecute" value="Excecute"  class="form_button" />

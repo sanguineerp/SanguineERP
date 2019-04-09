@@ -1104,7 +1104,8 @@ public class clsSetupMasterController {
 		objPropertySetupModel.setStrCurrentDateForTransaction(bean.getStrCurrentDateForTransaction());
 		objPropertySetupModel.setStrRoundOffFinalAmtOnTransaction(objGlobal.funIfNull(
 				bean.getStrRoundOffFinalAmtOnTransaction(), "N", bean.getStrRoundOffFinalAmtOnTransaction()));
-				
+		objPropertySetupModel.setStrPOSTRoundOffAmtToWebBooks(objGlobal.funIfNull(
+				bean.getStrPOSTRoundOffAmtToWebBooks(), "N", bean.getStrPOSTRoundOffAmtToWebBooks()));		
 
 		/*
 		 * if(bean.isStrShowAllPropCustomer()==true) {

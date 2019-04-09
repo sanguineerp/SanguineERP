@@ -1332,6 +1332,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		sql="UPDATE tbltreemast SET strFormDesc='WebBooks Link Up' WHERE strFormName='frmARLinkUp' AND strModule='1' ";
 		funExecuteQuery(sql);
+		
+		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`, `strInvoice`, `strDeliverySchedule`, `strFormAccessYN`) VALUES "
+				+ " ('frmACSubGroupMaster', 'Sub Group Master', 'Master', 4, 'M', 5, 5, '1', 'default.png', '5', 1, '1', '1', 'NO', 'NO', 'frmACSubGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
+		funExecuteQuery(sql);
 		}
 		
 		// //--------------------END----------------------------/////
@@ -4126,7 +4130,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblacmaster` CHANGE COLUMN `strGroupCode` `strSubGroupCode` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strDebtor`;";
 		funExecuteWebBooksQuery(sql);
 		
-		sql="CREATE TABLE `tblsubgroupmaster` (" 
+		sql="CREATE TABLE IF NOT EXISTS  `tblsubgroupmaster` (" 
 				+"`intSGCode` BIGINT(20) NOT NULL AUTO_INCREMENT,"
 				+"`strSubGroupCode` VARCHAR(50) NOT NULL,"
 				+"`strSubGroupName` VARCHAR(50) NOT NULL,"

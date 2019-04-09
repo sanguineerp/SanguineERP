@@ -229,6 +229,7 @@ public class clsPOSItemMasterImportController {
 						objModel.setStrExciseable("N");
 						objModel.setStrManufacturerCode("");
 						objModel.setStrComesaItem("N");
+						objModel.setStrHSNCode("");
 						objProductMasterService.funAddUpdateGeneral(objModel);
 
 						// for POS Linkup of item

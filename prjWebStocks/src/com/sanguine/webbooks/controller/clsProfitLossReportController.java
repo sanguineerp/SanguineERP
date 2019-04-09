@@ -398,10 +398,12 @@ public class clsProfitLossReportController {
 		
 		
 		
-		sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),if((c.strVouchNo is null),0,ifnull(sum(d.dblDrAmt),0)),a.strAccountName,a.strAccountCode,if((c.strVouchNo is null),0,ifnull(sum(d.dblCrAmt),0)) from  tblacgroupmaster b,tblacmaster a "
+		sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),if((c.strVouchNo is null),0,ifnull(sum(d.dblDrAmt),0)),a.strAccountName,a.strAccountCode,if((c.strVouchNo is null),0,ifnull(sum(d.dblCrAmt),0)) "
+				+ "from  tblacgroupmaster b,tblsubgroupmaster s,tblacmaster a "
 				+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
 				+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' and a.strPropertyCode='"+propCode+"'  "
-				+ "where a.strGroupCode=b.strGroupCode "
+				+ "where a.strSubGroupCode=s.strSubGroupCode "
+				+ " and b.strGroupCode=s.strGroupCode "
 				+ "and b.strCategory like'%EXPENSES' "
 				+ "and a.strType='GL Code' "
 				+ "group by a.strAccountCode  ");

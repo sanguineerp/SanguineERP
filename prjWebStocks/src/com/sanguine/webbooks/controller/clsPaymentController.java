@@ -102,7 +102,6 @@ public class clsPaymentController {
 	@Autowired
 	private clsCurrencyMasterService objCurrencyMasterService;
 
-
 	@Autowired
 	intfBaseService objBaseService;
 	
@@ -413,8 +412,8 @@ public class clsPaymentController {
 		for (clsPaymentDetailsBean objPaymentDetails : objBean.getListPaymentDetailsBean()) {
 			if (null != hmPaymentDtl.get(objPaymentDetails.getStrAccountCode())) {
 				clsPaymentDtl objPaymentDtlModel = hmPaymentDtl.get(objPaymentDetails.getStrAccountCode());
-				objPaymentDtlModel.setDblCrAmt((objPaymentDetails.getDblCreditAmt() + objPaymentDetails.getDblCreditAmt()) * currValue);
-				objPaymentDtlModel.setDblDrAmt((objPaymentDetails.getDblDebitAmt() + objPaymentDetails.getDblDebitAmt()) * currValue);
+				objPaymentDtlModel.setDblCrAmt((objPaymentDtlModel.getDblCrAmt() + objPaymentDetails.getDblCreditAmt()) * currValue);
+				objPaymentDtlModel.setDblDrAmt((objPaymentDtlModel.getDblDrAmt() + objPaymentDetails.getDblDebitAmt()) * currValue);
 				hmPaymentDtl.put(objPaymentDetails.getStrAccountCode(), objPaymentDtlModel);
 			} else {
 				clsPaymentDtl objPaymentDtlModel = new clsPaymentDtl();
@@ -546,6 +545,17 @@ public class clsPaymentController {
 		}
 		model.put("currencyList", hmCurrency);
 
+		String userCode = request.getSession().getAttribute("usercode").toString();
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
+		
+		HashMap<String, String> mapProperty = (HashMap) objGlobalFunctionsService.funGetUserWisePropertyList(clientCode, userCode, propCode);
+		mapProperty.put("All", "All");
+		if (mapProperty.isEmpty()) {
+			mapProperty.put("", "");
+		}
+		mapProperty = clsGlobalFunctions.funSortByValues(mapProperty);
+		model.put("listProperty", mapProperty);
+
 		
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmPaymentReport_1", "command", new clsReportBean());
@@ -562,6 +572,8 @@ public class clsPaymentController {
 		String VoucherNo = objBean.getStrDocCode();
 		String type = objBean.getStrDocType();
 		String currencyCode=objBean.getStrCurrency();
+
+		String strPropertyCode = objBean.getStrPropertyCode();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		double conversionRate=1;
 		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
@@ -570,14 +582,17 @@ public class clsPaymentController {
 		try
 		{
 			List list = objBaseService.funGetList(sbSql,"sql");
+			
+			if(list.size()>0)
 			conversionRate=Double.parseDouble(list.get(0).toString());
+			
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 		
 		double currValue = Double.parseDouble(req.getSession().getAttribute("currValue").toString());
-		funCallPaymentdtlReport(VoucherNo, type, resp, req, currValue,conversionRate);
+		funCallPaymentdtlReport(VoucherNo, type, resp, req, currValue,conversionRate,strPropertyCode);
 	}
 
 	@RequestMapping(value = "/openRptPaymentReport", method = RequestMethod.GET)
@@ -586,13 +601,15 @@ public class clsPaymentController {
 		String type = "pdf";
 		double conversionRate=1;
 		double currValue=0.0;
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+
 //		double currValue = Double.parseDouble(req.getSession().getAttribute("currValue").toString());
-		funCallPaymentdtlReport(VoucherNo, type, resp, req, currValue,conversionRate);
+		funCallPaymentdtlReport(VoucherNo, type, resp, req, currValue,conversionRate,propertyCode);
 	}
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void funCallPaymentdtlReport(String VoucherNo, String type, HttpServletResponse resp, HttpServletRequest req, double currValue,double conversionRate) {
+	public void funCallPaymentdtlReport(String VoucherNo, String type, HttpServletResponse resp, HttpServletRequest req, double currValue,double conversionRate,String strPropertyCode) {
 		try {
 
 			String strVouchNo = "",strCurrency="",currency="";
@@ -614,7 +631,12 @@ public class clsPaymentController {
 
 			String sqlHd = "select a.strVouchNo ,Date(a.dteVouchDate),a.strNarration,a.strType,ifNull(a.strChequeNo,''),ifnull(b.strBankName,''),a.strCurrency,a.dblConversion "
 					+ " from tblpaymenthd a left outer join  tblbankmaster b  on a.strDrawnOn=b.strBankCode where    a.strVouchNo='" + VoucherNo + "'";
-
+			
+			if(!strPropertyCode.equals("All"))
+			{
+				sqlHd += "and a.strPropertyCode='"+strPropertyCode+"' ";
+			}
+			
 			List list = objGlobalFunctionsService.funGetListModuleWise(sqlHd, "sql");
 			if (!list.isEmpty()) {
 				Object[] arrObj = (Object[]) list.get(0);
@@ -638,7 +660,13 @@ public class clsPaymentController {
 
 			
 			//String sqlDtl = "select strAccountCode,strAccountName ,dblCrAmt/" + currValue + " as dblCrAmt,dblDrAmt/" + currValue + " as dblDrAmt,strNarration from tblpaymentdtl  where strVouchNo='" + VoucherNo + "' order by strAccountCode;";
-			String sqlDtl = "select strAccountCode,strAccountName ,dblCrAmt /" + currConversion + " as dblCrAmt,dblDrAmt /" + currConversion + " as dblDrAmt,strNarration from tblpaymentdtl  where strVouchNo='" + VoucherNo + "' order by strAccountCode;";
+			//String sqlDtl = "select strAccountCode,strAccountName ,dblCrAmt /" + currConversion + " as dblCrAmt,dblDrAmt /" + currConversion + " as dblDrAmt,strNarration from tblpaymentdtl  where strVouchNo='" + VoucherNo + "' order by strAccountCode;";
+				String sqlDtl = "select strAccountCode,strAccountName ,dblCrAmt /" + currConversion + " as dblCrAmt,dblDrAmt /" + currConversion + " as dblDrAmt,strNarration from tblpaymentdtl a where strVouchNo='" + VoucherNo + "' ";
+				if(!strPropertyCode.equals("All"))
+				{
+					sqlDtl += "and a.strPropertyCode='"+strPropertyCode+"' ";
+				}
+				sqlDtl += "order by a.strAccountCode;";
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JRDesignQuery subQuery = new JRDesignQuery();
 			subQuery.setText(sqlDtl);
@@ -647,7 +675,14 @@ public class clsPaymentController {
 			subDataset.setQuery(subQuery);
 
 			//String sqldetordtl = "select strDebtorCode,strDebtorName,sum(dblAmt)/" + currValue + " as totdblAmt ,strCrDr,strBillNo,date(dteBillDate),strInvoiceNo,date(dteInvoiceDate),strNarration " + "from tblpaymentdebtordtl where strVouchNo='" + VoucherNo + "'  group by strDebtorCode ,strCrDr order by strDebtorCode;";
-			String sqldetordtl = "select strDebtorCode,strDebtorName,sum(dblAmt) /" + currConversion + " as totdblAmt ,strCrDr,strBillNo,date(dteBillDate),strInvoiceNo,date(dteInvoiceDate),strNarration " + "from tblpaymentdebtordtl where strVouchNo='" + VoucherNo + "'  group by strDebtorCode ,strCrDr order by strDebtorCode;";
+			//String sqldetordtl = "select strDebtorCode,strDebtorName,sum(dblAmt) /" + currConversion + " as totdblAmt ,strCrDr,strBillNo,date(dteBillDate),strInvoiceNo,date(dteInvoiceDate),strNarration " + "from tblpaymentdebtordtl where strVouchNo='" + VoucherNo + "'  group by strDebtorCode ,strCrDr order by strDebtorCode;";
+			String sqldetordtl = "select strDebtorCode,strDebtorName,sum(dblAmt) /" + currConversion + " as totdblAmt ,strCrDr,strBillNo,date(dteBillDate),strInvoiceNo,date(dteInvoiceDate),strNarration " + "from tblpaymentdebtordtl a where strVouchNo='" + VoucherNo + "'  ";
+			if(!strPropertyCode.equals("All"))
+			{
+				sqldetordtl += "and a.strPropertyCode='"+strPropertyCode+"' ";
+			}
+			sqldetordtl += " group by strDebtorCode ,strCrDr order by strDebtorCode;";
+
 			JRDesignQuery detorDtl = new JRDesignQuery();
 			detorDtl.setText(sqldetordtl);
 			JRDesignDataset detorDataset = (JRDesignDataset) datasetMap.get("dsPaymentDetor");

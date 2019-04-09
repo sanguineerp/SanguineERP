@@ -357,7 +357,7 @@
 				<text><![CDATA[Voucher No   :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="286" y="102" width="70" height="15" uuid="53a320ae-8c98-4eaf-bae5-f3d6999dfd6c"/>
+				<reportElement x="380" y="102" width="70" height="15" uuid="53a320ae-8c98-4eaf-bae5-f3d6999dfd6c"/>
 				<textElement>
 					<font fontName="Serif" isBold="true"/>
 				</textElement>
@@ -368,7 +368,7 @@
 				<textFieldExpression><![CDATA[$P{strVouchNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="357" y="102" width="132" height="15" uuid="caf05daa-3ec7-49d6-8b84-34201c8f903a"/>
+				<reportElement x="451" y="102" width="132" height="15" uuid="caf05daa-3ec7-49d6-8b84-34201c8f903a"/>
 				<textFieldExpression><![CDATA[$P{dteVouchDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -379,18 +379,18 @@
 				<text><![CDATA[Narration   :]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="76" y="130" width="204" height="15" uuid="6a33f32b-52a5-44de-97f5-a88ce7a645da"/>
+				<reportElement x="76" y="130" width="294" height="15" uuid="6a33f32b-52a5-44de-97f5-a88ce7a645da"/>
 				<textFieldExpression><![CDATA[$P{strNarration}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="287" y="130" width="70" height="15" uuid="a623b919-af38-49b5-a686-c12dd7913f6d"/>
+				<reportElement x="381" y="130" width="70" height="15" uuid="a623b919-af38-49b5-a686-c12dd7913f6d"/>
 				<textElement>
 					<font fontName="Serif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Currency :]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="357" y="130" width="204" height="15" uuid="6c1a255d-1321-40b9-8315-7d70d51b14c4"/>
+				<reportElement x="451" y="130" width="204" height="15" uuid="6c1a255d-1321-40b9-8315-7d70d51b14c4"/>
 				<textFieldExpression><![CDATA[$P{strCurrency}]]></textFieldExpression>
 			</textField>
 		</band>

@@ -28,6 +28,7 @@ import com.sanguine.model.clsPurchaseReturnDtlModel;
 import com.sanguine.model.clsPurchaseReturnHdModel;
 import com.sanguine.model.clsPurchaseReturnTaxDtlModel;
 import com.sanguine.model.clsSettlementMasterModel;
+import com.sanguine.model.clsStkAdjustmentDtlModel;
 import com.sanguine.model.clsStkAdjustmentHdModel;
 import com.sanguine.model.clsTaxHdModel;
 import com.sanguine.service.clsGRNService;
@@ -620,6 +621,9 @@ public class clsJVGeneratorController {
 				jvCode=sbLinkUpErrorMessage.toString();
 			}
 			
+			
+			
+			
 			//Generate Direct Payment for Jv in Cash Settlement
 			
 			if(objModel.getStrPayMode().equalsIgnoreCase("cash")){  //hard code settlement = cash
@@ -643,8 +647,6 @@ public class clsJVGeneratorController {
 		}
 		return jvCode;
 	}
-	
-	
 	
 	public String funGenrateJVforInvoice(String invoiceCode, String clientCode, String userCode, String propCode, HttpServletRequest req) {
 
@@ -973,7 +975,6 @@ public class clsJVGeneratorController {
 		return jvCode;
 	}
 	
-	
 	private String funGenerateReversalTaxJV(String docCode, String docDate,double docTaxableAmt, String customerCode, String clientCode, String userCode, String propCode, String transType, HttpServletRequest req,String currency,double conversionRate)
 	{
 		StringBuilder sbSql=new StringBuilder();
@@ -1174,8 +1175,6 @@ public class clsJVGeneratorController {
 		
 		return jvCode;	
 	}
-	
-
 
 	public String funGenrateJVforPurchaseReturn(String PRCode,  String clientCode, String userCode, String propCode, HttpServletRequest req) {
 		
@@ -1713,7 +1712,6 @@ public class clsJVGeneratorController {
 		return jvCode;
 	}
 	
-	
 	public clsPaymentHdModel funGeneratePaymentForGRNJV(clsGRNHdModel objModel,clsJVHdModel objJVHdModel,String settlementCode,String clientCode, String userCode, String propCode,HttpServletRequest req){
 		StringBuilder sbSql=new StringBuilder();
 		clsPaymentBean objPaymentBean = new clsPaymentBean();
@@ -1723,10 +1721,11 @@ public class clsJVGeneratorController {
 			double debitAmt = objModel.getDblTotal();
 			String strCurr = req.getSession().getAttribute("currValue").toString();
 			double currValue = Double.parseDouble(strCurr);
-			String strCashSettleBankAcc="",strCreditorCode="",strCreditorName="";
+			String strCashSettleBankAcc="",strCashSettleBankAccName="",strCreditorCode="",strCreditorName="",strCreditorAccCode="",strCreditorAccName="";
 			clsLinkUpHdModel objLinkCust = objLinkupService.funGetARLinkUp(settlementCode, clientCode, propCode, "Settlement", "Sale");
 			if (objLinkCust != null) {
 				strCashSettleBankAcc=objLinkCust.getStrAccountCode();
+				strCashSettleBankAccName=objLinkCust.getStrMasterDesc();
 				if (objModel.getStrJVNo().equals("")) {
 					
 					objPaymentBean.setStrVouchNo("");
@@ -1741,6 +1740,8 @@ public class clsJVGeneratorController {
 				if (objLinkCust != null) {
 					strCreditorCode=objLinkCust.getStrAccountCode();
 					strCreditorName=objLinkCust.getStrMasterDesc();
+					//strCreditorAccCode="";
+					//strCreditorAccName="";
 				}
 			
 				objPaymentBean.setStrVouchNo("");
@@ -1787,24 +1788,52 @@ public class clsJVGeneratorController {
 				List<clsPaymentDetailsBean> listPaymentDetailsBean = new ArrayList<clsPaymentDetailsBean>();
 				if(null!=objJVHdModel.getListJVDtlModel()){
 					
-					for(clsJVDtlModel objJVDtlModel:objJVHdModel.getListJVDtlModel()){
-						clsPaymentDetailsBean objPaymentBeanDetails =new clsPaymentDetailsBean();
+				for(clsJVDtlModel objJVDtlModel:objJVHdModel.getListJVDtlModel()){
+					//clsJVDtlModel objJVDtlModel=objJVHdModel.getListJVDtlModel().get(0);
+					//	objJVDtlModel.gets
+					clsPaymentDetailsBean objPaymentBeanDetails =new clsPaymentDetailsBean();
+					if(objJVDtlModel.getStrCrDr().equals("Dr")){
+						
 						objPaymentBeanDetails.setStrDebtorCode("") ;
+						objPaymentBeanDetails.setStrDebtorName("");
+						
+						objPaymentBeanDetails.setStrAccountCode(strCashSettleBankAcc);
+						objPaymentBeanDetails.setStrDescription(strCashSettleBankAccName);
+						objPaymentBeanDetails.setStrDC("Cr");
+						objPaymentBeanDetails.setDblDebitAmt(objJVDtlModel.getDblCrAmt());
+						objPaymentBeanDetails.setDblCreditAmt(objJVDtlModel.getDblDrAmt());
+					}else{
+						
+						objPaymentBeanDetails.setStrDebtorCode(strCreditorCode) ;
 						objPaymentBeanDetails.setStrDebtorName(strCreditorName);
-						objPaymentBeanDetails.setStrDebtorCode(strCreditorCode);
 						
 						objPaymentBeanDetails.setStrAccountCode(objJVDtlModel.getStrAccountCode());
-						objPaymentBeanDetails.setStrDC(objJVDtlModel.getStrCrDr());
-						objPaymentBeanDetails.setDblDebitAmt(objJVDtlModel.getDblDrAmt());
-						objPaymentBeanDetails.setDblCreditAmt(objJVDtlModel.getDblCrAmt());
+						objPaymentBeanDetails.setStrDescription(objJVDtlModel.getStrAccountName());
+						objPaymentBeanDetails.setStrDC("Dr");
+						objPaymentBeanDetails.setDblDebitAmt(objJVDtlModel.getDblCrAmt());
+						objPaymentBeanDetails.setDblCreditAmt(objJVDtlModel.getDblDrAmt());
 						
-						
-						listPaymentDetailsBean.add(objPaymentBeanDetails);
+					}
+					
+					listPaymentDetailsBean.add(objPaymentBeanDetails);
+					
+					
 					}
 				}
+				
+				
 				objPaymentBean.setListPaymentDetailsBean(listPaymentDetailsBean);
 				
 				 
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				List<clsPaymentGRNDtlModel> listPaymentGRNDtl = new ArrayList<clsPaymentGRNDtlModel>();
 				clsPaymentGRNDtlModel objPaymentGRNDtlModel=new clsPaymentGRNDtlModel();
 					objPaymentGRNDtlModel.setDblGRNAmt(objModel.getDblTotal() * currValue);
@@ -1834,8 +1863,6 @@ public class clsJVGeneratorController {
 		return objPaymentHdModel;
 	}
 
-	
-
 	public String funGenrateJVforSTKAdjustment(String stkAdjCode, String clientCode, String userCode, String propCode, HttpServletRequest req) {
 				
 		StringBuilder sbSql=new StringBuilder();
@@ -1845,7 +1872,8 @@ public class clsJVGeneratorController {
 		boolean flgLinkup=true;
 		StringBuilder sbLinkUpErrorMessage=new StringBuilder();
 		sbLinkUpErrorMessage.append("ERROR!");
-		List<clsJVDetailsBean> listJVDetailBean = new ArrayList<clsJVDetailsBean>();
+		
+		//List<clsJVDetailsBean> listLossJVDetailBean = new ArrayList<clsJVDetailsBean>();
 		
 		if(null!=list && list.size()>0)
 		{
@@ -1854,10 +1882,158 @@ public class clsJVGeneratorController {
 			String date=objModel.getDtSADate().split(" ")[0];
 			objModel.setDtSADate(date);
 			
+			
+			double debitAmt = objModel.getDblTotalAmt();
+			String strCurr = req.getSession().getAttribute("currValue").toString();
+			String currCode = req.getSession().getAttribute("currencyCode").toString();
+			double currValue = Double.parseDouble(strCurr);
+			String strExcessAccCode="",strExcessAccName="",strShortageAccCode="",strShortageAccName="";
+			clsLinkUpHdModel objLinkCust = objLinkupService.funGetARLinkUp(objModel.getStrLocCode(), clientCode, propCode, "Location", "Purchase");
+			if (objLinkCust != null) {
+				
+				 strExcessAccCode=objLinkCust.getStrAccountCode();
+				 strExcessAccName=objLinkCust.getStrMasterDesc();
+				 strShortageAccCode=objLinkCust.getStrWebBookAccCode();
+				 strShortageAccName=objLinkCust.getStrWebBookAccName();
+				
+			}
+			else
+			{
+				flgLinkup=false;
+				sbLinkUpErrorMessage.append("Check Excess and Shortage Account linkup");
+			}
+			
 			String currentDateTime=objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd");
 			String time=currentDateTime.split(" ")[1];
 			sbSql.setLength(0);
-			sbSql.append("");
+			sbSql.append("select a.strType from tblstockadjustmentdtl a where a.strSACode='"+objModel.getStrSACode()+"' group by a.strType;");
+			List listSTKInOutDtl;
+			try {
+				listSTKInOutDtl = objBaseService.funGetListModuleWise(sbSql, "hql", "WebBooks");
+				if(listSTKInOutDtl !=null && listSTKInOutDtl.size()>0)
+				{
+					for(int k=0;k<listSTKInOutDtl.size();k++){
+						List<clsJVDetailsBean> listJVDetailBean = new ArrayList<clsJVDetailsBean>();
+						double totalStkAdjustmentAmt=0;
+						// For Profit and Loss JV 
+						
+						objJVBean = new clsJVBean();
+						if (objModel.getStrRefNo().equals("")) {
+							
+							objJVBean.setStrVouchNo("");
+							objJVBean.setDblAmt(debitAmt * currValue);
+						} else {
+							
+							objJVBean.setStrVouchNo(objModel.getStrRefNo());
+							objJVBean.setDblAmt(debitAmt);
+						}
+						objJVBean.setStrVouchNo("");
+						
+						objJVBean.setStrNarration("JV Generated by Stk Adsjustment:" + objModel.getStrSACode());
+						objJVBean.setStrSancCode("");
+						objJVBean.setStrType("");
+						objJVBean.setDteVouchDate(objGlobalFunctions.funGetDate("dd-MM-yyyy", objModel.getDtSADate()) +" "+time);
+						objJVBean.setIntVouchMonth(1);
+						objJVBean.setDblAmt(debitAmt * currValue);
+						objJVBean.setStrTransType("R");
+						objJVBean.setStrTransMode("A");
+						objJVBean.setStrModuleType("AP");
+						objJVBean.setStrMasterPOS("WEBSTOCKS");
+						objJVBean.setStrUserCreated(userCode);
+						objJVBean.setStrUserEdited(userCode);
+						objJVBean.setDteDateCreated(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+						objJVBean.setDteDateEdited(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+						objJVBean.setStrClientCode(clientCode);
+						objJVBean.setStrPropertyCode(propCode);
+						objJVBean.setStrSource("Stk Adjustment");
+						objJVBean.setStrSourceDocNo(objModel.getStrSACode());
+						objJVBean.setStrCurrency(currCode);
+						objJVBean.setDblConversion(currValue);
+					// jvhd entry end
+			
+						List listTempDtl = objStkAdjService.funGetDtlList(stkAdjCode, clientCode);
+						clsJVDetailsBean objJVDetailBean=new clsJVDetailsBean();
+					for (int i = 0; i < listTempDtl.size(); i++) {
+						Object[] ob = (Object[]) listTempDtl.get(i);
+						clsStkAdjustmentDtlModel objDtl = (clsStkAdjustmentDtlModel) ob[0];
+		
+						objJVDetailBean=new clsJVDetailsBean();
+						clsProductMasterModel objProdModle = objProductMasterService.funGetObject(objDtl.getStrProdCode(), clientCode);
+						clsLinkUpHdModel objLinkSubGroup = objLinkupService.funGetARLinkUp(objProdModle.getStrSGCode(), clientCode, propCode, "SubGroup", "Purchase");
+						if (objProdModle != null && objLinkSubGroup != null) {
+							if(objDtl.getStrType().equalsIgnoreCase(listSTKInOutDtl.get(k).toString())){ //Check In / Out
+								objJVDetailBean.setStrAccountCode(objLinkSubGroup.getStrAccountCode());
+								objJVDetailBean.setStrDescription(objLinkSubGroup.getStrMasterDesc());
+								if(objDtl.getStrType().equalsIgnoreCase("IN")){
+									objJVDetailBean.setStrDC("Dr");
+									objJVDetailBean.setDblDebitAmt(objDtl.getDblPrice());
+									objJVDetailBean.setDblCreditAmt(0.00);
+									objJVDetailBean.setStrNarration("Profit JV");
+									totalStkAdjustmentAmt+=	objDtl.getDblPrice();
+								}else{
+									objJVDetailBean.setStrDC("cr");
+									objJVDetailBean.setDblDebitAmt(0.00);
+									objJVDetailBean.setDblCreditAmt(objDtl.getDblPrice());
+									objJVDetailBean.setStrNarration("Profit JV");
+									totalStkAdjustmentAmt+=	objDtl.getDblPrice();
+								}
+								
+								objJVDetailBean.setStrOneLineAcc("R");
+								
+								listJVDetailBean.add(objJVDetailBean);
+							}
+							
+						}
+								
+						}
+					
+					clsJVDetailsBean objJVDtlBean=new clsJVDetailsBean();
+					if(listSTKInOutDtl.get(k).toString().equalsIgnoreCase("IN")){
+						objJVDtlBean.setStrAccountCode(strExcessAccCode);
+						objJVDtlBean.setStrDescription(strExcessAccCode);
+						objJVDtlBean.setStrDC("Cr");
+						objJVDtlBean.setDblCreditAmt(totalStkAdjustmentAmt);
+						objJVDtlBean.setDblDebitAmt(0.00);
+						objJVDtlBean.setStrNarration("STK Adjustment Profit");
+							
+					}else{
+						objJVDtlBean.setStrAccountCode(strShortageAccCode);
+						objJVDtlBean.setStrDescription(strShortageAccName);
+						objJVDtlBean.setStrDC("Dr");
+						objJVDtlBean.setDblCreditAmt(0.00);
+						objJVDtlBean.setDblDebitAmt(totalStkAdjustmentAmt);
+						objJVDtlBean.setStrNarration("STK Adjustment Loss ");
+							
+						
+					}
+					objJVDtlBean.setStrOneLineAcc("R");
+					listJVDetailBean.add(objJVDtlBean);
+					
+					
+					clsJVHdModel objJVHdModel =null;
+					if(flgLinkup)
+					{
+						objJVBean.setListJVDtlBean(listJVDetailBean);
+						objJVHdModel = objJVController.funGenerateJV(objJVBean, userCode, clientCode, "APGL", req,"STKAdjuctment");
+						jvCode=objJVHdModel.getStrVouchNo()+"! ";
+					}
+					else
+					{
+						jvCode=sbLinkUpErrorMessage.toString();
+					}
+					}
+						
+					
+				}
+					
+					
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 		}
 		return jvCode;
 	}

@@ -880,8 +880,8 @@ public class clsBalanceSheetController {
 								
 				sbSql.setLength(0);
 				sbSql.append("select a.strType,b.strCategory,b.strGroupName,d.strCrDr,sum(d.dblCrAmt) as Sale,sum(d.dblDrAmt) as Purchase,a.strAccountName "
-					+ "from tblacmaster a,tblacgroupmaster b,tbljvhd c,tbljvdtl d "
-					+ "where a.strGroupCode=b.strGroupCode and a.strAccountCode=d.strAccountCode "
+					+ "from tblacmaster a,tblsubgroupmaster s,tblacgroupmaster b,tbljvhd c,tbljvdtl d "
+					+ "where s.strGroupCode=b.strGroupCode and a.strSubGroupCode=s.strSubGroupCode and a.strAccountCode=d.strAccountCode "
 					+ "and c.strVouchNo=d.strVouchNo and a.strType='GL Code' "
 					+ "and date(c.dteVouchDate) between '" + dteFromDate + "' and '" + dteToDate + "' "
 					+ "group by a.strAccountCode order by b.strCategory; ");
@@ -911,8 +911,8 @@ public class clsBalanceSheetController {
 				
 				sbSql.setLength(0);
 				sbSql.append("select a.strType,b.strCategory,b.strGroupName,d.strCrDr,sum(d.dblCrAmt) as Sale,sum(d.dblDrAmt) as Purchase,a.strAccountName "
-					+ "from tblacmaster a,tblacgroupmaster b,tblpaymenthd c,tblpaymentdtl d "
-					+ "where a.strGroupCode=b.strGroupCode and a.strAccountCode=d.strAccountCode "
+					+ "from tblacmaster a,tblacgroupmaster b,tblsubgroupmaster s,tblpaymenthd c,tblpaymentdtl d "
+					+ "where b.strGroupCode=s.strGroupCode and s.strSubGroupCode=a.strSubGroupCode and a.strAccountCode=d.strAccountCode "
 					+ "and c.strVouchNo=d.strVouchNo and a.strType='GL Code' "
 					+ "and date(c.dteVouchDate) between '" + dteFromDate + "' and '" + dteToDate + "' "
 					+ "group by a.strAccountCode order by b.strCategory; ");
@@ -942,8 +942,8 @@ public class clsBalanceSheetController {
 				
 				sbSql.setLength(0);
 				sbSql.append("select a.strType,b.strCategory,b.strGroupName,d.strCrDr,sum(d.dblCrAmt) as Sale,sum(d.dblDrAmt) as Purchase,a.strAccountName "
-					+ "from tblacmaster a,tblacgroupmaster b,tblreceipthd c,tblreceiptdtl d "
-					+ "where a.strGroupCode=b.strGroupCode and a.strAccountCode=d.strAccountCode "
+					+ "from tblacmaster a,tblacgroupmaster b,tblsubgroupmaster s,tblreceipthd c,tblreceiptdtl d "
+					+ "where s.strGroupCode=b.strGroupCode and s.strSubGroupCode=a.strSubGroupCode and a.strAccountCode=d.strAccountCode "
 					+ "and c.strVouchNo=d.strVouchNo and a.strType='GL Code' "
 					+ "and date(c.dteVouchDate) between '" + dteFromDate + "' and '" + dteToDate + "' "
 					+ "group by a.strAccountCode order by b.strCategory; ");

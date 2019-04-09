@@ -1636,11 +1636,11 @@ public class clsSearchFormController {
 			case "productProduced": {
 				columnNames = "a.strProdCode,a.strProdName,c.strSGName,d.strGName,a.strUOM,a.strProdType,a.strBarCode" + ",a.strSpecification,a.strCalAmtOn,a.strClass,a.strNonStockableItem,a.strPartNo";
 				tableName = "clsProductMasterModel a, clsSubGroupMasterModel c , clsGroupMasterModel d ";
-				if (showAllProd.equals("N")) {
-					tableName = tableName + " ,clsProductReOrderLevelModel b " + " where  a.strProdCode=b.strProdCode and  b.strLocationCode='" + strLocCode + "' and " + " b.strClientCode='" + clientCode + "' and ";
-				} else {
+				//if (showAllProd.equals("N")) {
+				//	tableName = tableName + " ,clsProductReOrderLevelModel b " + " where  a.strProdCode=b.strProdCode and  b.strLocationCode='" + strLocCode + "' and " + " b.strClientCode='" + clientCode + "' and ";
+				//} else {
 					tableName = tableName + "  where   ";
-				}
+				//}
 				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode  and a.strNotInUse='N' and a.strProdType in ('Produced','Semi finished' ) " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
 				listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Product Type,Code,Specification,Cal Amt On" + ",Class,Non Stockable,PartNo";
 				idColumnName = "a.strProdCode";
@@ -5098,6 +5098,7 @@ public class clsSearchFormController {
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strPropertyCode = '" + propertyCode + "' ";
 			}
+			tableName += " group by a.strVouchNo";
 			flgQuerySelection = true;
 			listColumnNames = "Vouch No,Narration,Date,Payment Type,Cheque No,Drawn On,Debtor Name";
 			idColumnName = "a.strVouchNo";
@@ -5156,9 +5157,10 @@ public class clsSearchFormController {
 		case "JVNoslip": {
 			columnNames = "strVouchNo,strNarration,dteVouchDate,strModuleType ";
 			tableName = "clsJVHdModel where strClientCode='" + clientCode + "'";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			tableName += " and strPropertyCode = '" + propertyCode + "' ";
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Vouch No,Narration,Date,Type";
 			idColumnName = "strVouchNo";
 			searchFormTitle = "JV";
@@ -5897,7 +5899,7 @@ public class clsSearchFormController {
 			case "LocationWeb-Service":{
 				sbSql.setLength(0);
 				sbSql.append(" select a.strAccountCode , a.strAccountName "
-					+ " from tblacmaster a where a.strOperational='Yes' and a.strType='GL Code' and a.strDebtor='No' and strCreditor='Yes' and a.strEmployee='No' and a.strClientCode = '"+clientCode+"' and a.strPropertyCode='"+propCode+"'  ");
+					+ " from tblacmaster a where a.strOperational='Yes' and a.strType='GL Code' and a.strDebtor='No' and strCreditor='No' and a.strEmployee='No' and a.strClientCode = '"+clientCode+"' and a.strPropertyCode='"+propCode+"'  ");
 			}
 			break;
 		}

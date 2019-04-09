@@ -688,7 +688,7 @@ function funSetDebtorMasterData(debtorCode)
 			debtorName=resListPaymentDtlBean[i].strDebtorName;
 			funAddDetailsRow(resListPaymentDtlBean[i].strAccountCode,resListPaymentDtlBean[i].strDebtorCode
 				,resListPaymentDtlBean[i].strDescription,resListPaymentDtlBean[i].strDC,''
-				,resListPaymentDtlBean[i].dblDebitAmt,resListPaymentDtlBean[i].dblCreditAmt);
+				,resListPaymentDtlBean[i].dblDebitAmt,resListPaymentDtlBean[i].dblCreditAmt,resListPaymentDtlBean[i].strDebtorName);
         });
 	}
 	
@@ -761,6 +761,7 @@ function funSetDebtorMasterData(debtorCode)
 		
 	    var debtorCode=$("#txtDebtorCode").val();
 	    var description=$("#txtDescription").val();
+	    var debtorName=$("#txtDebtorName").val();
 	    var transType=$("#cmbDrCr").val();
 	    var dimension=$("#cmbDimesion").val();
 	    var debitAmt=0;
@@ -771,23 +772,23 @@ function funSetDebtorMasterData(debtorCode)
 //	 	    if(transType=='Dr')
 //	 	    {
 		    	debitAmt=parseFloat(transAmt).toFixed(maxQuantityDecimalPlaceLimit);	
-		    	funAddDetailsRow(accountCode,debtorCode,description,'Dr',dimension,debitAmt,'0');
+		    	funAddDetailsRow(accountCode,debtorCode,description,'Dr',dimension,debitAmt,'0',debtorName);
 //	 	    }
 //	 	    else
 //	 	    {
 //	 	    }
 		   		 creditAmt=parseFloat(transAmt).toFixed(maxQuantityDecimalPlaceLimit);	    
-		    	funAddDetailsRow(bankCode,'',accountName,'Cr',dimension,'0',creditAmt);
+		    	//funAddDetailsRow(bankCode,'',accountName,'Cr',dimension,'0',creditAmt);
 	    	}else
 	    	{
 // 	    		 if(transType=='Dr')
 // 	    			{ 
 	    			 debitAmt=parseFloat(transAmt).toFixed(maxQuantityDecimalPlaceLimit);	
-	    			 funAddDetailsRow(accountCode,debtorCode,description,'Dr',dimension,debitAmt,'0');
+	    			 funAddDetailsRow(accountCode,debtorCode,description,'Dr',dimension,debitAmt,'0',debtorName);
 // 	    		 	}else
 // 	    		 	{
  	    		 		 	creditAmt=parseFloat(transAmt).toFixed(maxQuantityDecimalPlaceLimit);	    
-	    			    	funAddDetailsRow(bankCode,'',accountName,'Cr',dimension,'0',creditAmt);
+	    			    	//funAddDetailsRow(bankCode,'',accountName,'Cr',dimension,'0',creditAmt);
 // 	    		 	}
 	    		
 	    	}
@@ -798,7 +799,7 @@ function funSetDebtorMasterData(debtorCode)
 	
 	
 // Function to add detail grid rows	
-	function funAddDetailsRow(accountCode,debtorCode,description,transType,dimension,debitAmt,creditAmt) 
+	function funAddDetailsRow(accountCode,debtorCode,description,transType,dimension,debitAmt,creditAmt,debtorName) 
 	{
 	    var table = document.getElementById("tblReceiptDetails");
 	    var rowCount = table.rows.length;
@@ -807,14 +808,15 @@ function funSetDebtorMasterData(debtorCode)
 	    {
 	    	debtorCode="";
 	    }
-	    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"15%\" size=\"5%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strAccountCode\" id=\"strAccountCode."+(rowCount)+"\" value='"+accountCode+"' />";
-	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"12%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDebtorCode\" id=\"strDebtorCode."+(rowCount)+"\" value='"+debtorCode+"' />";
-	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"18%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDescription\" id=\"strDescription."+(rowCount)+"\" value='"+description+"' />";
-	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"5%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDC\" id=\"strDC."+(rowCount)+"\" value='"+transType+"' />";
-	    row.insertCell(4).innerHTML= "<input type=\"text\" class=\" debitAmt\"  onblur=\"Javacsript:funUpdateDebitAmount(this)\" size=\"10%\" name=\"listPaymentDetailsBean["+(rowCount)+"].dblDebitAmt\" style=\"text-align: right;width:98%;\" id=\"dblDebitAmt."+(rowCount)+"\" value='"+debitAmt+"'/>";
-	    row.insertCell(5).innerHTML= "<input type=\"text\" class=\" creditAmt\" onblur=\"Javacsript:funUpdateCreditAmount(this)\"  size=\"10%\" name=\"listPaymentDetailsBean["+(rowCount)+"].dblCreditAmt\" style=\"text-align: right;width:98%;\" id=\"dblCreditAmt."+(rowCount)+"\" value='"+creditAmt+"'/>";
-	    row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDimension\" id=\"strDimension."+(rowCount)+"\" value='"+dimension+"'/>";	        
-	    row.insertCell(7).innerHTML= "<input type=\"button\" class=\"deletebutton\" size=\"2%\" value = \"Delete\" onClick=\"Javacsript:funDeleteRow(this)\"/>";
+	    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"11%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strAccountCode\" id=\"strAccountCode."+(rowCount)+"\" value='"+accountCode+"' />";
+	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"18%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDescription\" id=\"strDescription."+(rowCount)+"\" value='"+description+"' />";
+	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"12%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDebtorCode\" id=\"strDebtorCode."+(rowCount)+"\" value='"+debtorCode+"' />";
+	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"14%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDebtorName\" id=\"strDebtorName."+(rowCount)+"\" value='"+debtorName+"' />";
+	    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"5%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDC\" id=\"strDC."+(rowCount)+"\" value='"+transType+"' />";
+	    row.insertCell(5).innerHTML= "<input type=\"text\" class=\" debitAmt\"  onblur=\"Javacsript:funUpdateDebitAmount(this)\" size=\"10%\" name=\"listPaymentDetailsBean["+(rowCount)+"].dblDebitAmt\" style=\"text-align: right;width:98%;\" id=\"dblDebitAmt."+(rowCount)+"\" value='"+debitAmt+"'/>";
+	    row.insertCell(6).innerHTML= "<input type=\"text\" class=\" creditAmt\" onblur=\"Javacsript:funUpdateCreditAmount(this)\"  size=\"10%\" name=\"listPaymentDetailsBean["+(rowCount)+"].dblCreditAmt\" style=\"text-align: right;width:98%;\" id=\"dblCreditAmt."+(rowCount)+"\" value='"+creditAmt+"'/>";
+	    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDimension\" id=\"strDimension."+(rowCount)+"\" value='"+dimension+"'/>";	        
+	    row.insertCell(8).innerHTML= "<input type=\"button\" class=\"deletebutton\" size=\"2%\" value = \"Delete\" onClick=\"Javacsript:funDeleteRow(this)\"/>";
 // 	    row.insertCell(8).innerHTML= "<input type=\"hidden\" readonly=\"readonly\" size=\"1%\" name=\"listPaymentDetailsBean["+(rowCount)+"].strDebtorName\" id=\"strDebtorName."+(rowCount)+"\" value='"+debtorName+"' />";
 	    
 	    debtorName='';
@@ -888,11 +890,17 @@ function funSetDebtorMasterData(debtorCode)
 		
 		totalAmt=totalDebitAmt-totalCreditAmt;
 		totalAmt=parseFloat(totalAmt).toFixed(maxAmountDecimalPlaceLimit);
+	
+		var totAmt=$("#txtAmt").val();
 		
 		$("#lblDebitAmt").text(totalDebitAmt);
-		$("#lblCreditAmt").text(totalCreditAmt);
-		$("#lblDiffAmt").text(totalAmt);
+		$("#lblCreditAmt").text(totAmt);
+		
 		$("#txtTotalAmt").val(totalAmt);
+		
+	
+		var totDiff=totAmt-totalDebitAmt;
+		$("#lblDiffAmt").text(totDiff);
 	}
 
 
@@ -902,6 +910,7 @@ function funSetDebtorMasterData(debtorCode)
 		$("#txtAccCode").val('');
 	    $("#txtDebtorCode").val('');
 	    $("#txtDescription").val('');
+	    $("#txtDebtorName").val('');
 	    $("#cmbDrCr").val('Dr');
 	    $("#txtAmount").val('0.00');
 	    $("#cmbDimesion").val('No');	    
@@ -913,8 +922,9 @@ function funSetDebtorMasterData(debtorCode)
 	    $("#txtDebtorCode").val('');
 	    $("#txtDescription").val('');
 	    $("#cmbDrCr").val('Dr');
-	   
-	    $("#cmbDimesion").val('No');	    
+	    $("#txtDebtorName").val('');
+	    $("#cmbDimesion").val('No');	
+	    $("#txtAmount").val('0.00');
 	}
 	
 	
@@ -969,11 +979,23 @@ function funSetDebtorMasterData(debtorCode)
 				break;
 		}
 	}
-
+	function funAddBankAccountRow()
+	{
+		if($("#txtVouchNo").val()==''){
+			var accountName =$("#lblBankDesc").text().trim();
+			var bankCode =$("#txtBankCode").val().trim();
+			var dimension=$("#cmbDimesion").val();
+			var creditAmt=$("#txtAmt").val(); 
+			
+			funAddDetailsRow(bankCode,'',accountName,'Cr',dimension,'0',creditAmt,'');	
+		}
+		
+	}
 
 // Function to Validate Header Fields
 	function funValidateHeaderFields()
 	{
+		
 		if($("#txtVouchDate").val()=='')
 		{
 			alert('Please Select Vouch Date!!!');
@@ -998,10 +1020,12 @@ function funSetDebtorMasterData(debtorCode)
 			alert('Please Enter Amount!!!');
 			return false;
 		}
+		
 		var debitAmt =parseFloat($("#lblDebitAmt").text())
 		var creditAmt =parseFloat($("#lblCreditAmt").text())
 		if(debitAmt>0 && creditAmt>0 && (debitAmt - creditAmt)==0  )
 			{
+				funAddBankAccountRow();	
 			  return true;
 			}else
 				{
@@ -1712,16 +1736,14 @@ function funSetDebtorMasterData(debtorCode)
 		<table
 			style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
 			<tr bgcolor="#72BEFC">
-				<td style="width:11%;">Account Code</td>
-				<td style="width:9%;">Creditor Code</td>
-				<td style="width:16%;">Description</td>
+				<td style="width:10%;">Account Code</td>
+				<td style="width:10%;">Description</td>
+				<td style="width:7%;">Creditor Code</td>
+				<td style="width:9%;">Creditor Name</td>
 				<td style="width:3%;">D/C</td>
 				<td style="width:5.3%;"  align ="right">Debit Amt</td>
 				<td style="width:6%;" align ="right">Credit Amt</td>
 				<td style="width:5%;">Dimension</td>
-<!-- 				<td style="width:8%;">One Line Account</td> -->
-<!-- 				<td style="width:13%;">Narration</td> -->
-<!-- 				<td style="width:5%;">DebtorYN</td> -->
 				<td style="width:1%;">Delete</td>
 			</tr>
 		</table>
@@ -1732,14 +1754,15 @@ function funSetDebtorMasterData(debtorCode)
 				style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
 				class="transTablex col8-center">
 			<tbody>
-						<col style="width=15%">
+						<col style="width=10%">
 						<col style="width:16%">
-						<col style="width:28%">
+						<col style="width:13%">
+						<col style="width:15%">
 						<col style="width:5%">
 						<col style="width:10%">
 						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:2%">
+						<col style="width:8%">
+						<col style="width:5%">
 <%-- 					<col style="width:2%;;"> --%>
 				</tbody>
 			</table>

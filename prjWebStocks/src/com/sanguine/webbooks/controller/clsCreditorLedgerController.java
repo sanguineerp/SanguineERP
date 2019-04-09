@@ -139,6 +139,7 @@ public class clsCreditorLedgerController {
 		try
 		{
 			List list = objBaseService.funGetList(sbSql,"sql");
+			if(list.size()>0)
 			conversionRate=Double.parseDouble(list.get(0).toString());
 		}catch(Exception e)
 		{
@@ -163,9 +164,10 @@ public class clsCreditorLedgerController {
 		String[] sp = docCode.split(",");
 		docCode = sp[0];
 		double conversionRate=1;
+		String propertyCode=req.getSession().getAttribute("propertyCode").toString();;
 		double currValue = Double.parseDouble(req.getSession().getAttribute("currValue").toString());
 		switch (sp[1]) {
-		case "Payment":
+		/*case "Payment":
 			objPaymentController.funCallPaymentdtlReport(docCode, "pdf", resp, req, currValue,conversionRate);
 			break;
 
@@ -175,6 +177,17 @@ public class clsCreditorLedgerController {
 
 		case "Recepit":
 			objclsReceiptController.funCallReciptdtlReport(docCode, "pdf", resp, req, currValue,conversionRate);
+			break;*/
+		case "Payment":
+			objPaymentController.funCallPaymentdtlReport(docCode, "pdf", resp, req, currValue,conversionRate,propertyCode);
+			break;
+
+		case "JV":
+			objJVController.funCallJVdtlReport(docCode, "pdf", resp, req,conversionRate,propertyCode);
+			break;
+
+		case "Recepit":
+			objclsReceiptController.funCallReciptdtlReport(docCode, "pdf", resp, req, currValue,conversionRate,propertyCode);
 			break;
 
 		}

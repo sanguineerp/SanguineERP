@@ -22,50 +22,42 @@ function funHelp(transactionName)
 	
 }
 
-		 	function funSetData(code)
-			{
-		 		$("#txtSOCode").val(code);
-				        
-				
-			}
-		 	
-		
-	
-	function funCallFormAction(actionName,object) 
+ 	function funSetData(code)
 	{
-			
+ 		$("#txtSOCode").val(code);	
+	}
+	
+ 	function funCallFormAction(actionName,object) 
+	{
 		if ($("#txtSOCode").val()=="") 
-		    {
-			 alert('Invalid Date');
+	    {
+			 alert('Enter Voucher No');
 			 $("#txtSODate").focus();
 			 return false;  
-		   }
-		
-		
-	  else
+	   	}
+		else
 		{
-			return true;
-			
+			return true;	
 		}
 	}
 	
 
 	$(function()
+	{
+		$("#txtSOCode").blur(function() 
+		{
+			var code=$('#txtSOCode').val();
+			if(code.trim().length > 0 && code !="?" && code !="/")
 			{
-				$("#txtSOCode").blur(function() 
-						{
-							var code=$('#txtSOCode').val();
-							if(code.trim().length > 0 && code !="?" && code !="/")
-							{
-								if(code.trim().length>12)
-								{
-									alert("Invalid Voucher No");
-									$('#txtSOCode').val('');
-								}	
-							}
-						});
-				
-			});
+				if(code.trim().length>12)
+				{
+					alert("Invalid Voucher No");
+					$('#txtSOCode').val('');
+				}	
+			}
+		});
+		
+	});
 
 		
 </script>
@@ -80,31 +72,36 @@ function funHelp(transactionName)
 		<input type="hidden" value="${urlHits}" name="saddr">
 		<br>
 		<table class="transTable">
-								<tr>
-									<td><label>Voucher No</label></td>
-									<td><s:input path="strDocCode" id="txtSOCode"
-											ondblclick="funHelp('ReceiptNoslip')"
-											cssClass="searchTextBox" /></td>
-																										
-								</tr>
+			<tr>
+				<td><label>Voucher No</label></td>
+				<td><s:input path="strDocCode" id="txtSOCode"
+						ondblclick="funHelp('ReceiptNoslip')"
+						cssClass="searchTextBox" /></td>
+																					
+			</tr>
 <!-- 								<tr> -->
 <!-- 									<td><label>Currency </label></td> -->
-									
+				
 <%-- 									<td><s:select id="cmbCurrency" items="${currencyList}" path="strCurrency" cssClass="BoxW124px"> --%>
 <%-- 										</s:select></td> --%>
 <!-- 								</tr> -->
-								<tr>
-								
-					
-									<td><label>Report Type</label></td>
-									<td ><s:select id="cmbDocType" path="strDocType"
-											cssClass="BoxW124px">
-											<s:option value="PDF">PDF</s:option>
-											<s:option value="XLS">EXCEL</s:option>
-											<s:option value="HTML">HTML</s:option>
-											<s:option value="CSV">CSV</s:option>
-										</s:select></td>
-                                  </tr>
+			<tr>
+				<td><label>Report Type</label></td>
+				<td ><s:select id="cmbDocType" path="strDocType"
+						cssClass="BoxW124px">
+						<s:option value="PDF">PDF</s:option>
+						<s:option value="XLS">EXCEL</s:option>
+						<s:option value="HTML">HTML</s:option>
+						<s:option value="CSV">CSV</s:option>
+					</s:select></td>
+           </tr>
+           
+           <tr>
+				<td><label>Property</label></td>
+				<td ><s:select id="cmbDocType" path="strPropertyCode" cssClass="BoxW124px">
+						<s:options items="${listProperty}"/>
+					</s:select></td>
+		   </tr>
 
 		</table>
 		

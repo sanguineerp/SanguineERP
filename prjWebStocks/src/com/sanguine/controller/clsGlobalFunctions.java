@@ -3685,7 +3685,7 @@ public class clsGlobalFunctions {
 	
 
 		sql = " SELECT DATE(a.dteVouchDate),a.strVouchNo,'JV'  ,ifnull(a.strSourceDocNo,'') , DATE(c.dteInvoiceDate) , "
-				+ " b.dblDrAmt ,b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,'Cr',ifnull(a.strNarration,''),'1','" + userCode + "','" + propertyCode + "','" + clientCode + "' ," 
+				+ " if(c.strCrDr='Dr',c.dblAmt,0), if(c.strCrDr='Cr',0,c.dblAmt),c.dblAmt,'Cr',ifnull(a.strNarration,''),'1','" + userCode + "','" + propertyCode + "','" + clientCode + "' ," 
 				+ " if((e.strCurrencyCode is null) or (e.strCurrencyCode ='NA' ) or (e.strCurrencyCode ='' ), "
 				+ " (select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster "
 				+ " where strCurrencyCode='"+currency+"') ,a.dblConversion) as conv2 "
@@ -3702,9 +3702,8 @@ public class clsGlobalFunctions {
 		try {
 			listjv = objBaseService.funGetListModuleWise(sbSql, "sql", "WebBooks");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-//		List listjv = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 		if (listjv.size() > 0) {
 			for (int i = 0; i < listjv.size(); i++) {
 				clsLedgerSummaryModel objSummaryledger = new clsLedgerSummaryModel();
@@ -3717,7 +3716,6 @@ public class clsGlobalFunctions {
 				objSummaryledger.setDteBillDate(objArr[4].toString());
 				objSummaryledger.setDblDebitAmt(Double.parseDouble(objArr[5].toString())/con);
 				objSummaryledger.setDblCreditAmt(Double.parseDouble(objArr[6].toString())/con);
-				;
 				objSummaryledger.setDblBalanceAmt(Double.parseDouble(objArr[7].toString())/con);
 				objSummaryledger.setStrBalCrDr(objArr[8].toString());
 				objSummaryledger.setStrNarration(objArr[9].toString());
@@ -3732,7 +3730,7 @@ public class clsGlobalFunctions {
 		}
 		
 
-		sql = " SELECT DATE(a.dteVouchDate) ,a.strVouchNo,'Payment', a.strVouchNo, DATE(a.dteChequeDate) ,b.dblDrAmt , b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,'Dr',ifnull(a.strNarration,''),'2','" + userCode + "','" + propertyCode + "','" + clientCode + "' ," 
+		sql = " SELECT DATE(a.dteVouchDate) ,a.strVouchNo,'Payment', a.strVouchNo, DATE(a.dteChequeDate) ,c.dblAmt as Dr, 0 Cr,c.dblAmt as bal,'Dr',ifnull(a.strNarration,''),'2','" + userCode + "','" + propertyCode + "','" + clientCode + "' ," 
 				+ " if((e.strCurrencyCode is null) or (e.strCurrencyCode ='NA' ) or (e.strCurrencyCode ='' ), "
 				+ " (select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster "
 				+ " where strCurrencyCode='"+currency+"') ,a.dblConversion) as conv2 "
@@ -3780,7 +3778,7 @@ public class clsGlobalFunctions {
 
 		// receipt
 				sql = "  SELECT DATE(a.dteVouchDate) ,a.strVouchNo,'Receipt', a.strVouchNo, " 
-				    + " DATE(a.dteChequeDate) ,  b.dblDrAmt , b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,b.strCrDr,ifnull(a.strNarration,''),'3','" + userCode + "','" + propertyCode + "','" + clientCode + "', "
+				    + " DATE(a.dteChequeDate) , 0 as Dr, c.dblAmt Cr,c.dblAmt as bal ,b.strCrDr,ifnull(a.strNarration,''),'3','" + userCode + "','" + propertyCode + "','" + clientCode + "', "
 					+ " if((e.strCurrencyCode is null) or (e.strCurrencyCode ='NA' ) or (e.strCurrencyCode ='' ), "
 					+ " (select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster "
 					+ " where strCurrencyCode='"+currency+"') ,a.dblConversion) as conv2 "
@@ -4002,9 +4000,9 @@ public class clsGlobalFunctions {
 					+ " (IF(b.strCrDr='Dr',b.dblOpeningbal,0) - IF(b.strCrDr='Cr',b.dblOpeningbal,0)) dblBalanceAmt, "
 					+ " if((e.strCurrencyCode is null) or (e.strCurrencyCode ='NA' ) or (e.strCurrencyCode ='' ), "
 					+ " (select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster "
-					+ " where strCurrencyCode='"+currency+"') ,a.dblConversion) as conv2 "
+					+ " where strCurrencyCode='"+currency+"') ,1) as conv2 "
 					+ " FROM tblemployeemaster a"
-					+ " left outer join "+webStockDB+".tblcurrencymaster e on a.strCurrencyType=e.strCurrencyCode and a.strCurrencyType='"+currency+"' "
+					+ " left outer join "+webStockDB+".tblcurrencymaster e on  a.strCurrencyCode='"+currency+"' "
 					+ ",tblemployeeopeningbalance b " 
 					+ " WHERE a.strEmployeeCode=b.strEmployeeCode AND b.strAccountCode='" + acCode + "' "
 					+ " AND b.strEmployeeCode='" + detorCretditorCode + "' AND a.strPropertyCode='" + propertyCode + "' " 
@@ -4210,7 +4208,7 @@ return 1;
 		String sql = "";
 		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
 		sql = " SELECT DATE(a.dteVouchDate) ,a.strVouchNo,'JV'  ,ifnull(a.strSourceDocNo,'')  , ifnull(DATE(c.dteInvoiceDate),DATE(a.dteVouchDate)) , " 
-			+ " b.dblDrAmt ,b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,'Cr',ifnull(a.strNarration,''),'1','" + userCode + "','" + propertyCode + "','" + clientCode + "', "
+			+ " IF(c.strCrDr='Dr',c.dblAmt,0), IF(c.strCrDr='Cr',c.dblAmt,0),c.dblAmt,'Cr',ifnull(a.strNarration,''),'1','" + userCode + "','" + propertyCode + "','" + clientCode + "', "
 			+ " if((e.strCurrencyCode is null) or (e.strCurrencyCode ='NA' ) or (e.strCurrencyCode ='' ), "
 			+ " (select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster "
 			+ " where strCurrencyCode='"+currency+"') ,a.dblConversion) as conv2 "
@@ -4253,7 +4251,8 @@ return 1;
 		}
 
 
-		sql = " SELECT DATE(a.dteVouchDate) ,a.strVouchNo,'Payment', a.strVouchNo,  DATE(a.dteChequeDate) ,b.dblDrAmt , b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,'Dr',ifnull(a.strNarration,''),'2','" + userCode + "','" + propertyCode + "','" + clientCode + "' ," 
+		sql = " SELECT DATE(a.dteVouchDate) ,a.strVouchNo,'Payment', a.strVouchNo,  DATE(a.dteChequeDate) ,"
+				+ " c.dblAmt as Dr, 0 Cr,c.dblAmt bal,'Dr',ifnull(a.strNarration,''),'2','" + userCode + "','" + propertyCode + "','" + clientCode + "' ," 
 				+ " if((e.strCurrencyCode is null) or (e.strCurrencyCode ='NA' ) or (e.strCurrencyCode ='' ), "
 				+ " (select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster "
 				+ " where strCurrencyCode='"+currency+"') ,a.dblConversion) as conv2 "

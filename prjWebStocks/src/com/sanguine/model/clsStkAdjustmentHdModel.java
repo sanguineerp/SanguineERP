@@ -71,6 +71,9 @@ public class clsStkAdjustmentHdModel implements Serializable {
 
 	@Transient
 	private String strLocName;
+	
+	@Transient
+	private String strRefNo;
 
 	public String getStrSACode() {
 		return strSACode;
@@ -214,5 +217,13 @@ public class clsStkAdjustmentHdModel implements Serializable {
 
 	public void setStrConversionUOM(String strConversionUOM) {
 		this.strConversionUOM = strConversionUOM;
+	}
+
+	public String getStrRefNo() {
+		return strRefNo;
+	}
+
+	public void setStrRefNo(String strRefNo) {
+		this.strRefNo = strRefNo;
 	}
 }
