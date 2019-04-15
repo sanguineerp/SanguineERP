@@ -1165,6 +1165,7 @@ public class clsGlobalFunctions {
 					objStkAdjDtl.setStrClientCode(stkPostDtl.getStrClientCode());
 					objStkAdjDtl.setStrDisplayQty(stkPostDtl.getStrDisplyQty());
 					objStkAdjDtl.setStrWSLinkedProdCode("");
+					objStkAdjDtl.setStrJVNo("");
 					objStkAdjService.funAddUpdateDtl(objStkAdjDtl);
 				}
 				String hql = "UPDATE clsStkPostingHdModel SET strSACode='" + strSACode + "' WHERE strPSCode='" + strphyStkpostCode + "' and strClientCode='" + clientCode + "' ";
@@ -1242,6 +1243,7 @@ public class clsGlobalFunctions {
 			objStkAdjDtl.setStrClientCode(stkPostDtl.getStrClientCode());
 			objStkAdjDtl.setStrDisplayQty(stkPostDtl.getStrDisplyQty());
 			objStkAdjDtl.setStrWSLinkedProdCode("");
+			objStkAdjDtl.setStrJVNo("");
 			objStkAdjService.funAddUpdateDtl(objStkAdjDtl);
 		}
 		String hql = "UPDATE clsStkPostingHdModel SET strSACode='" + strSACode + "' WHERE strPSCode='" + objStkPostingHdModel.getStrPSCode() + "' and strClientCode='" + clientCode + "' ";

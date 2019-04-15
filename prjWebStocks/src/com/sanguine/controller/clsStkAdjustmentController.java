@@ -216,7 +216,8 @@ public class clsStkAdjustmentController {
 					}
 
 					if (!authorisationFlag) {
-						String retuenVal = objJVGen.funGenrateJVforSTKAdjustment(objHdModel.getStrSACode(),
+						//funGenerateJVforSTKAdjustment(String stkAdjCode, String clientCode, String userCode, String propCode, HttpServletRequest req)
+						String retuenVal = objJVGen.funGenerateJVforSTKAdjustment(objHdModel.getStrSACode(),
 								clientCode, userCode, propCode, req);
 						String JVGenMessage = "";
 						String[] arrVal = retuenVal.split("!");

@@ -1020,6 +1020,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblpropertysetup` ADD COLUMN `strPOSTRoundOffAmtToWebBooks` VARCHAR(1) NOT NULL DEFAULT 'Y' AFTER `strRoundOffFinalAmtOnTransaction`";
 		funExecuteQuery(sql);
 		
+		sql="ALTER TABLE `tblstockadjustmentdtl` ADD COLUMN `strJVNo` VARCHAR(50) NOT NULL DEFAULT '' AFTER `dblParentQty`; ";
+		funExecuteQuery(sql);
+		
+		
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
 		List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();

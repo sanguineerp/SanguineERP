@@ -1480,63 +1480,64 @@ public class clsBalanceSheetController {
 			}
 	return new ModelAndView("excelViewForAccountReports", "excelDataList", listExcelData);
  }
-		private List funIterateMap(Map<String,Object> map){
-			List accList=null;
-			for(String groupAcc:map.keySet()){
-				if(map.get(groupAcc) instanceof Map){
-					Map map1=(Map)map.get(groupAcc);
-					accList=funIterateMap(map1);
-				}else{
-					accList=(List) map.get(groupAcc);
-				}	
-			}
-			
-			return accList;
-		}
 		
-		private void funGetUnderSubGroupList(String strGroupCode,String strSubGroupCode,String strSubGroupName,Map hmSubGrpUnderSbGrpAcc )
-		{
-			
-			String sql="select a.strGroupCode,a.strSubGroupCode,a.strSubGroupName,a.strUnderSubGroup"
-					+ " from tblsubgroupmaster a,tblacgroupmaster b "
-					+ " where a.strGroupCode=b.strGroupCode and a.strGroupCode='"+strGroupCode+"'"
-					+ " and a.strUnderSubGroup='"+strSubGroupCode+"' ";
-			
-			List listSubGrp= objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-			if (listSubGrp != null && listSubGrp.size() > 0)
-			{
-				List alSBGrpAccList1=new ArrayList<>();
-				Map<String,Object> hmSubGrpUnderSbGrpAcc1=new LinkedHashMap<>();
-				for(int j=0;j<listSubGrp.size();j++){
-					hmSubGrpUnderSbGrpAcc1=new LinkedHashMap();
-					Object obj1[]=(Object[])listSubGrp.get(j);
-					 
-					funGetUnderSubGroupList(obj1[0].toString(),obj1[1].toString(),obj1[2].toString(),hmSubGrpUnderSbGrpAcc1);
-					hmSubGrpUnderSbGrpAcc.putAll(hmSubGrpUnderSbGrpAcc1);
-				}
+	private List funIterateMap(Map<String,Object> map){
+		List accList=null;
+		for(String groupAcc:map.keySet()){
+			if(map.get(groupAcc) instanceof Map){
+				Map map1=(Map)map.get(groupAcc);
+				accList=funIterateMap(map1);
 			}else{
-				List alAcc=funGetSubGroupAcc(strSubGroupCode,hmSubGrpUnderSbGrpAcc );
-				hmSubGrpUnderSbGrpAcc.put(strSubGroupCode+"!"+strSubGroupName, alAcc);
-			}
+				accList=(List) map.get(groupAcc);
+			}	
 		}
 		
-		private List funGetSubGroupAcc(String strSubGroupCode,Map hmSubGrpUnderSbGrpAcc ){
-			
-			String sql="select  a.strAccountCode,a.strAccountName from tblacmaster a ,tblsubgroupmaster b where a.strSubGroupCode=b.strSubGroupCode and a.strClientCode=b.strClientCode "
-					+ " and b.strSubGroupCode='"+strSubGroupCode+"' ";
-
-			List listAcc= objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-			List alSBGrpAccList2=new ArrayList<>();
-			if (listAcc != null && listAcc.size() > 0)
-			{
-				for(int j=0;j<listAcc.size();j++){
-					Object ob[]=(Object[])listAcc.get(j);
-					alSBGrpAccList2.add(ob[0].toString()+" "+ob[1].toString());
-				}
-				
+		return accList;
+	}
+	
+	private void funGetUnderSubGroupList(String strGroupCode,String strSubGroupCode,String strSubGroupName,Map hmSubGrpUnderSbGrpAcc )
+	{
+		
+		String sql="select a.strGroupCode,a.strSubGroupCode,a.strSubGroupName,a.strUnderSubGroup"
+				+ " from tblsubgroupmaster a,tblacgroupmaster b "
+				+ " where a.strGroupCode=b.strGroupCode and a.strGroupCode='"+strGroupCode+"'"
+				+ " and a.strUnderSubGroup='"+strSubGroupCode+"' ";
+		
+		List listSubGrp= objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		if (listSubGrp != null && listSubGrp.size() > 0)
+		{
+			List alSBGrpAccList1=new ArrayList<>();
+			Map<String,Object> hmSubGrpUnderSbGrpAcc1=new LinkedHashMap<>();
+			for(int j=0;j<listSubGrp.size();j++){
+				hmSubGrpUnderSbGrpAcc1=new LinkedHashMap();
+				Object obj1[]=(Object[])listSubGrp.get(j);
+				 
+				funGetUnderSubGroupList(obj1[0].toString(),obj1[1].toString(),obj1[2].toString(),hmSubGrpUnderSbGrpAcc1);
+				hmSubGrpUnderSbGrpAcc.putAll(hmSubGrpUnderSbGrpAcc1);
 			}
-			return alSBGrpAccList2;
+		}else{
+			List alAcc=funGetSubGroupAcc(strSubGroupCode,hmSubGrpUnderSbGrpAcc );
+			hmSubGrpUnderSbGrpAcc.put(strSubGroupCode+"!"+strSubGroupName, alAcc);
 		}
+	}
+	
+	private List funGetSubGroupAcc(String strSubGroupCode,Map hmSubGrpUnderSbGrpAcc ){
+		
+		String sql="select  a.strAccountCode,a.strAccountName from tblacmaster a ,tblsubgroupmaster b where a.strSubGroupCode=b.strSubGroupCode and a.strClientCode=b.strClientCode "
+				+ " and b.strSubGroupCode='"+strSubGroupCode+"' ";
+
+		List listAcc= objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		List alSBGrpAccList2=new ArrayList<>();
+		if (listAcc != null && listAcc.size() > 0)
+		{
+			for(int j=0;j<listAcc.size();j++){
+				Object ob[]=(Object[])listAcc.get(j);
+				alSBGrpAccList2.add(ob[0].toString()+" "+ob[1].toString());
+			}
+			
+		}
+		return alSBGrpAccList2;
+	}
 	
 		
 }

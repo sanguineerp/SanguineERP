@@ -51,6 +51,8 @@ public class clsStkAdjustmentDtlModel {
 	@Column(name = "dblRate", columnDefinition = "DECIMAL(18,4) NOT NULL default '0'")
 	private double dblRate;
 
+	
+	
 	@Transient
 	private String strUOM;
 
@@ -102,6 +104,9 @@ public class clsStkAdjustmentDtlModel {
 	@Transient
 	private double dblParentDiscountedAmt;
 
+	@Column(name="strJVNo",columnDefinition = "VARCHAR(50) NOT NULL default ''")
+	private String strJVNo;
+	
 	public long getIntId() {
 		return intId;
 	}
@@ -376,6 +381,15 @@ public class clsStkAdjustmentDtlModel {
 				+ ", dblParentDiscountedAmt=" + dblParentDiscountedAmt + "]";
 	}
 
+	public String getStrJVNo() {
+		return strJVNo;
+	}
+
+	public void setStrJVNo(String strJVNo) {
+		this.strJVNo =  (String) setDefaultValue(strJVNo, "");
+	}
+
+	
 	
 
 }

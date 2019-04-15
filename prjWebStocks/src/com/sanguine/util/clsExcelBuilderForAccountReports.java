@@ -65,13 +65,13 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 		style2.setFont(font2);
 		
 		
-		CellStyle style3 = workbook.createCellStyle();
+		/*CellStyle style3 = workbook.createCellStyle();
 		Font font3 = workbook.createFont();
 		font3.setFontName("Arial");
 		style3.setFillForegroundColor(HSSFColor.YELLOW.index);
 		style3.setFillPattern(CellStyle.SOLID_FOREGROUND);
 		font3.setColor(HSSFColor.BLACK.index);
-		style3.setFont(font3);
+		style3.setFont(font3);*/
 		
 		// create header row
 		
@@ -178,7 +178,7 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 				if(!rowData.equals("ASSET")){ //Sub Group
 					if(rowData.contains("_")){
 						aRow.createCell(0).setCellValue(rowData.replace("_","  "));
-						aRow.getCell(0).setCellStyle(style3);	
+						//aRow.getCell(0).setCellStyle(style3);	
 					}else{
 						aRow.createCell(0).setCellValue("      "+rowData);
 					}
@@ -190,7 +190,7 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 					
 					if(rowData.contains("_")){ //sub Group 
 						aRow.createCell(1).setCellValue(rowData.replace("_","  "));
-						aRow.getCell(1).setCellStyle(style3);	
+						//aRow.getCell(1).setCellStyle(style3);	
 					}else{
 						aRow.createCell(1).setCellValue("      "+rowData);
 					}

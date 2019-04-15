@@ -42,6 +42,7 @@ import com.mysql.jdbc.Connection;
 import com.sanguine.bean.clsPhysicalStkPostBean;
 import com.sanguine.model.clsAuditDtlModel;
 import com.sanguine.model.clsAuditHdModel;
+import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
@@ -74,6 +75,9 @@ public class clsStkPostingController {
 	private clsGlobalFunctions objGlobalFunctions;
 	@Autowired
 	private clsProductMasterService objProductMasterService;
+	
+	@Autowired
+	private clsJVGeneratorController objJVGen;
 
 	/**
 	 * Open Physical Stock Posting Form
@@ -245,6 +249,38 @@ public class clsStkPostingController {
 					} else {
 						strSACode = objGlobalFunctions.funUpdateStkAdjustement(objHdModel.getStrPSCode(), objBean.getStrSACode(), request);
 					}
+					
+					clsCompanyMasterModel objCompModel = objSetupMasterService
+							.funGetObject(clientCode);
+					if (objCompModel.getStrWebBookModule().equals("Yes")) {
+
+						boolean authorisationFlag = false;
+						if (null != request.getSession()
+								.getAttribute("hmAuthorization")) {
+							HashMap<String, Boolean> hmAuthorization = (HashMap) request
+									.getSession().getAttribute("hmAuthorization");
+							if (hmAuthorization.containsKey("frmPhysicalStkPosting")) {
+								authorisationFlag = hmAuthorization.get("frmPhysicalStkPosting");
+							}
+						}
+
+						if (!authorisationFlag) {
+							String retuenVal = objJVGen.funGenerateJVforSTKAdjustment(strSACode,
+									clientCode, userCode, propCode, request);
+							String JVGenMessage = "";
+							String[] arrVal = retuenVal.split("!");
+
+							boolean flgJVPosting = true;
+							if (arrVal[0].equals("ERROR")) {
+								JVGenMessage = arrVal[1];
+								flgJVPosting = false;
+							}
+							request.getSession().setAttribute("JVGen", flgJVPosting);
+							request.getSession().setAttribute("JVGenMessage",
+									JVGenMessage);
+						}
+					}
+					
 					request.getSession().setAttribute("success", true);
 					request.getSession().setAttribute("successMessage", "PS Code : ".concat(objHdModel.getStrPSCode()));
 					request.getSession().setAttribute("rptStockPostingCode", objHdModel.getStrPSCode());
