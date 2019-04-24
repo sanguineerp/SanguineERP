@@ -66,6 +66,8 @@
 				        	$("#txtGroupName").focus();
 				        	$("#cmbCategory").val(response.strCategory);
 				        	$("#cmbDefaultType").val(response.strDefaultType);
+				        	$("#txtShortName").val(response.strShortName);
+				        	 
 			        	}
 					},
 					error: function(jqXHR, exception) {

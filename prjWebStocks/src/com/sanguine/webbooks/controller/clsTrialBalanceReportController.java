@@ -159,7 +159,7 @@ public class clsTrialBalanceReportController {
 			double dblStockInHand=0.0;
 			String reportType="Total";
 			String locationCode = req.getSession().getAttribute("locationCode").toString();
-			String param1=reportType+","+locationCode+","+propertyCode+",No,ALL,Both,ALL,No";
+			String param1=reportType+","+locationCode+","+propertyCode+",No,ALL,Both,ALL,No,''";
 			String paramForStkLedger=locationCode+","+propertyCode;		
 			String manufCode="";
 			String prodType="ALL";
@@ -261,6 +261,7 @@ public class clsTrialBalanceReportController {
 			{
 				if(null!=entry.getValue().getStrGroupName())
 				{
+					
 					clsCreditorOutStandingReportBean objHmBean =entry.getValue();
 					objHmBean.setStrGroupCode(entry.getValue().getStrGroupCode());
 					objHmBean.setStrGroupName(entry.getValue().getStrGroupName());
@@ -287,8 +288,20 @@ public class clsTrialBalanceReportController {
 					{
 						bDTotalCredit=bDTotalCredit.add(BigDecimal.valueOf(entry.getValue().getDblBalAmt()));
 					}
-					fieldList.add(objHmBean);
+							  
 					
+					
+					if(objHmBean.getDblCrAmt() == 0 
+							&& objBean.getDblDrAmt() == 0 
+							&& objBean.getDblOpCrAmt() == 0 
+							&& objBean.getDblOpDrAmt() == 0)
+					{
+						
+					}
+					else
+					{	
+						fieldList.add(objHmBean);
+					}
 //					System.out.println(objHmBean.getStrAccountCode()+","+objHmBean.getStrAccountName()+","+objHmBean.getDblDrAmt()+","+ objHmBean.getDblCrAmt() );
 				}
 			}
@@ -306,8 +319,17 @@ public class clsTrialBalanceReportController {
 			objHmBean.setDblBalAmt(openingAmt);
 			objHmBean.setDblDrAmt(dblStockInHand);
 			objHmBean.setDblCrAmt(0.00);
-			fieldList.add(objHmBean);
-			
+			if(objHmBean.getDblCrAmt() == 0 
+					&& objBean.getDblDrAmt() == 0 
+					&& objBean.getDblOpCrAmt() == 0 
+					&& objBean.getDblOpDrAmt() == 0)
+			{
+				
+			}
+			else
+			{
+				fieldList.add(objHmBean);
+			}
 			 objHmBean =new clsCreditorOutStandingReportBean();
 			objHmBean.setStrGroupCode("1002");
 			objHmBean.setStrGroupName("SALES");
@@ -321,7 +343,17 @@ public class clsTrialBalanceReportController {
 			objHmBean.setDblBalAmt(openingAmt);
 			objHmBean.setDblDrAmt(0.00);
 			objHmBean.setDblCrAmt(dblStockInHand);
-			fieldList.add(objHmBean);
+			if(objHmBean.getDblCrAmt() == 0 
+					&& objBean.getDblDrAmt() == 0 
+					&& objBean.getDblOpCrAmt() == 0 
+					&& objBean.getDblOpDrAmt() == 0)
+			{
+				
+			}
+			else
+				{
+					fieldList.add(objHmBean);
+				}
 			
 			
 			

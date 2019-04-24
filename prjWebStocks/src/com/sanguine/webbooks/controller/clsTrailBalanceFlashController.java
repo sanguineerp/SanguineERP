@@ -167,6 +167,9 @@ public class clsTrailBalanceFlashController {
 					for (int i = 0; i < listAc.size(); i++) {
 						Object[] objArr = (Object[]) listAc.get(i);
 						String acCode = objArr[2].toString();
+						if(acCode.equals("2002-001-15")){
+							System.out.println(acCode);
+						}
 						double openingbal = 0.00;
 						if (!startDate.equals(dteFromDate)) {
 							String tempFromDate = dteFromDate.split("-")[2] + "-" + dteFromDate.split("-")[1] + "-" + dteFromDate.split("-")[0];
@@ -206,8 +209,10 @@ public class clsTrailBalanceFlashController {
 								}
 								funInsertCurrentAccountBal(acCode, dteFromDate, dteToDate, userCode, propertyCode, clientCode);
 
-								sql = " SELECT c.strGroupCode,c.strGroupName,a.strAccountCode,a.strAccountName, " + " ifnull(SUM(b.dblCrAmt),0.00), ifnull(SUM(b.dblDrAmt),0.00) " + " FROM tblsubgroupmaster s,tblacmaster a " + " left outer join tblcurrentaccountbal b on a.strAccountCode=b.strAccountCode AND b.strUserCode='" + userCode + "' AND b.strPropertyCode='" + propertyCode + "' AND b.strClientCode='"
-										+ clientCode + "' " + " left outer join tblacgroupmaster c on  s.strGroupCode=c.strGroupCode " + " WHERE  a.strSubGroupCode=s.strSubGroupCode and a.strAccountCode='" + acCode + "' GROUP BY a.strAccountCode; ";
+								sql = " SELECT c.strGroupCode,c.strGroupName,a.strAccountCode,a.strAccountName, " + " ifnull(SUM(b.dblCrAmt),0.00), ifnull(SUM(b.dblDrAmt),0.00) " + " FROM tblacmaster a " + " left outer join tblcurrentaccountbal b on a.strAccountCode=b.strAccountCode AND b.strUserCode='" + userCode + "' AND b.strPropertyCode='" + propertyCode + "' AND b.strClientCode='"
+										+ clientCode + "'"
+										+ " left outer join tblsubgroupmaster s on a.strSubGroupCode=s.strSubGroupCode"
+										+ " left outer join tblacgroupmaster c on  s.strGroupCode=c.strGroupCode " + " WHERE a.strAccountCode='" + acCode + "' GROUP BY a.strAccountCode; ";
 
 								List listMainBal = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 								

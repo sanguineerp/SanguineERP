@@ -21,10 +21,11 @@ public class clsCurrentAccountBalMaodel {
 	public clsCurrentAccountBalMaodel(clsCurrentAccountBalMaodel_ID objModelID) {
 		strAccountCode = objModelID.getStrAccountCode();
 		strClientCode = objModelID.getStrClientCode();
+		strTransecType= objModelID.getStrTransecType();
 	}
 
 	@Id
-	@AttributeOverrides({ @AttributeOverride(name = "strAccountCode", column = @Column(name = "strAccountCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })
+	@AttributeOverrides({ @AttributeOverride(name = "strAccountCode", column = @Column(name = "strAccountCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")),@AttributeOverride(name = "strTransecType", column = @Column(name = "strTransecType")) })
 	@Column(name = "strAccountCode")
 	private String strAccountCode;
 

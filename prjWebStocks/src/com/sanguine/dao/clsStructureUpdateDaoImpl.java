@@ -4155,6 +4155,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+";";
 		funExecuteWebBooksQuery(sql);
 		
+		sql="ALTER TABLE `tblcurrentaccountbal` CHANGE COLUMN `strTransecType` `strTransecType` VARCHAR(255) NOT NULL DEFAULT '' AFTER `strPropertyCode`;";
+		funExecuteWebBooksQuery(sql);
+		
+		sql="ALTER TABLE `tblcurrentaccountbal` DROP PRIMARY KEY, ADD PRIMARY KEY (`strAccountCode`, `strClientCode`, `strTransecType`);";
+		funExecuteWebBooksQuery(sql);
 		
 		
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "

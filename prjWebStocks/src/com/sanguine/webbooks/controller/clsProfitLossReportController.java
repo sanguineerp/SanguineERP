@@ -517,7 +517,10 @@ public class clsProfitLossReportController {
 	        objProfitLoss.setDblAmt(((clsProfitLossReportBean)entry.getValue()).getDblAmt());
 	        totalExpense = totalExpense.add(((clsProfitLossReportBean)entry.getValue()).getDblAmt());
 	        
-	        dataListExtraExpense.add(objProfitLoss);
+	        if(objProfitLoss.getDblAmt().compareTo(new BigDecimal(0))==1){
+	        	dataListExtraExpense.add(objProfitLoss);	
+	        }
+	        
 	      }
 	      
 

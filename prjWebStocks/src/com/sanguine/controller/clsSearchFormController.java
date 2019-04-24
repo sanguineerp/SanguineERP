@@ -4635,9 +4635,9 @@ public class clsSearchFormController {
 		case "bankCode": {
 			columnNames = "strBankCode,strBankName,strBranch,strMICR";
 			tableName = " from "+strWebBooksDB+".tblbankmaster where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Bank Code,Bank Name,Branch Name,MIRC";
 			idColumnName = "strBankCode";
 			flgQuerySelection = true;
@@ -4726,9 +4726,9 @@ public class clsSearchFormController {
 		case "bankCode": {
 			columnNames = "strBankCode,strBankName,strBranch,strMICR";
 			tableName = "clsBankMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Bank Code,Bank Name,Branch Name,MIRC";
 			idColumnName = "strBankCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4738,9 +4738,9 @@ public class clsSearchFormController {
 		case "acGroupCode": {
 			columnNames = "strGroupCode,strGroupName,strShortName,strCategory,strDefaultType";
 			tableName = "clsACGroupMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Group Code,Group Name,Short Name,Category,Default Type";
 			idColumnName = "strGroupCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4750,9 +4750,9 @@ public class clsSearchFormController {
 		case "chargeCode": {
 			columnNames = "strChargeCode,strChargeName,strAcctCode";
 			tableName = "clsChargeMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Charge Code,Charge Name,Account Code";
 			idColumnName = "strChargeCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4761,13 +4761,13 @@ public class clsSearchFormController {
 		}
 
 		case "accountCode": {
-			columnNames = "a.strAccountCode,a.strAccountName,a.strOperational,a.strType,c.strSubGroupName,a.strCreditor,a.strDebtor ";
+			columnNames = "a.strAccountCode,a.strAccountName,a.strOperational,a.strType,c.strSubGroupName,a.strCreditor,a.strDebtor,a.strEmployee ";
 			tableName = "clsWebBooksAccountMasterModel a,clsACGroupMasterModel b ,clsACSubGroupMasterModel c where a.strClientCode='" + clientCode + "' and c.strGroupCode=b.strGroupCode "
 					+ " and a.strSubGroupCode=c.strSubGroupCode";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strPropertyCode = '" + propertyCode + "' ";
-			}
-			listColumnNames = "Account Code,Account Name,Operational,Type,SubGroup Name, Creditor,Debtor";
+			}*/
+			listColumnNames = "Account Code,Account Name,Operational,Type,SubGroup Name, Creditor,Debtor,Employee";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
 			searchFormTitle = "Account Master";
@@ -4777,9 +4777,9 @@ public class clsSearchFormController {
 		case "accountCodeCash": {
 			columnNames = "strAccountCode,strAccountName,strOperational,strType";
 			tableName = "clsWebBooksAccountMasterModel where strClientCode='" + clientCode + "' and strType='Cash' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Account Code,Account Name,Operational,Type";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4790,9 +4790,9 @@ public class clsSearchFormController {
 		case "accountCodeBank": {
 			columnNames = "strAccountCode,strAccountName,strOperational,strType";
 			tableName = "clsWebBooksAccountMasterModel where strClientCode='" + clientCode + "' and strType='Bank' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Account Code,Account Name,Operational,Type";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4803,9 +4803,9 @@ public class clsSearchFormController {
 		case "debtorAccountCode": {
 			columnNames = "strAccountCode,strAccountName,strOperational,strType";
 			tableName = "clsWebBooksAccountMasterModel where strClientCode='" + clientCode + "' and strDebtor='Yes' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Account Code,Account Name,Operational,Type";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4816,9 +4816,9 @@ public class clsSearchFormController {
 		case "creditorAccountCode": {
 			columnNames = "strAccountCode,strAccountName,strOperational,strType";
 			tableName = "clsWebBooksAccountMasterModel where strClientCode='" + clientCode + "' and strCreditor='Yes' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Account Code,Account Name,Operational,Type";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4829,9 +4829,9 @@ public class clsSearchFormController {
 		case "acHolderCode": {
 			columnNames = "strACHolderCode,strACHolderName,strDesignation,intMobileNumber,strEmailId";
 			tableName = "clsAccountHolderMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "AC Holder Code,AC Holder Name,Designation,Mobile Number,Email Id";
 			idColumnName = "strACHolderCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4841,9 +4841,9 @@ public class clsSearchFormController {
 		case "remarkCode": {
 			columnNames = "strRemarkCode,strDescription,strActiveYN";
 			tableName = "clsNarrationMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Remark Code,Description,ActiveYN";
 			idColumnName = "strRemarkCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4853,9 +4853,9 @@ public class clsSearchFormController {
 		case "interfaceCode": {
 			columnNames = "strInterfaceCode,strInterfaceName,strAccountCode,strAccountName";
 			tableName = "clsInterfaceMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Interface Code,Interface Name,Account Code,Account Name";
 			idColumnName = "strInterfaceCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4865,9 +4865,9 @@ public class clsSearchFormController {
 		case "sanctionCode": {
 			columnNames = "strSanctionCode,strSanctionName,strOperational";
 			tableName = "clsSanctionAutherityMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Sanction Code,Sanction Name,Operational";
 			idColumnName = "strSanctionCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4877,9 +4877,9 @@ public class clsSearchFormController {
 		case "debtorCode": {
 			columnNames = "strDebtorCode,strPrefix,strFirstName,strMiddleName,strLastName";
 			tableName = "clsSundryDebtorMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Debtor Code,Prefix,First Name,Middle Name,Last Name";
 			idColumnName = "strDebtorCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4890,9 +4890,9 @@ public class clsSearchFormController {
 		case "creditorCode": {
 			columnNames = "strCreditorCode,strPrefix,strFirstName,strMiddleName,strLastName";
 			tableName = "clsSundaryCreditorMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Creditor Code,Prefix,First Name,Middle Name,Last Name";
 			idColumnName = "strCreditorCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4903,9 +4903,9 @@ public class clsSearchFormController {
 		case "categoryCode": {
 			columnNames = "strCatCode,strCatName,strGroupCategoryCode,strcatdesc";
 			tableName = "clsCategoryMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Category Code,Category Name,Category Group Code,Category Desc";
 			idColumnName = "strCatCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4915,9 +4915,9 @@ public class clsSearchFormController {
 		case "cityCode": {
 			columnNames = "strCityCode,strCityName,strCountryCode,strStateCode,strSTDCode";
 			tableName = "clsCityMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "City Code,City Name,Country Code,State Code,SDT Code";
 			idColumnName = "strCityCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4927,9 +4927,9 @@ public class clsSearchFormController {
 		case "areaCode": {
 			columnNames = "strAreaCode,strAreaName,strCityCode,strUserCreated";
 			tableName = "clsAreaMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Area Code,Area Name,City Code,User Created";
 			idColumnName = "strAreaCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4939,9 +4939,9 @@ public class clsSearchFormController {
 		case "stateCode": {
 			columnNames = "strStateCode,strStateName,strStateDesc,strRegionCode,strCountryCode";
 			tableName = "clsStateMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "State Code,State Name,State Description,Region Code,Country Code";
 			idColumnName = "strStateCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4951,9 +4951,9 @@ public class clsSearchFormController {
 		case "regionCode": {
 			columnNames = "strRegionCode,strRegionName";
 			tableName = "clsRegionMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Region Code,Region Name";
 			idColumnName = "strRegionCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4963,9 +4963,9 @@ public class clsSearchFormController {
 		case "countryCode": {
 			columnNames = "strCountryCode,strCountryName";
 			tableName = "clsCountryMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Country Code,Country Name";
 			idColumnName = "strCountryCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4975,9 +4975,9 @@ public class clsSearchFormController {
 		case "reasonCode": {
 			columnNames = "strReasonCode,strReasonDesc";
 			tableName = "clsWebBooksReasonMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Reason Code,Reason Name";
 			idColumnName = "strReasonCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -4987,9 +4987,9 @@ public class clsSearchFormController {
 		case "memberCode": {
 			columnNames = "strDebtorCode,strPrefix,strFirstName,strMiddleName,strLastName";
 			tableName = "from tblsundarydebtormaster where strClientCode='" + clientCode + "'  ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Member Code,Prefix,First Name,Middle Name,Last Name";
 			idColumnName = "strDebtorCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -5002,9 +5002,9 @@ public class clsSearchFormController {
 		case "letterCode": {
 			columnNames = "strLetterCode,strLetterName,strReminderYN,strIsCircular";
 			tableName = "clsLetterMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Letter Code,Letter Name,Reminder Y/N,Circular Y/N";
 			idColumnName = "strLetterCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -5015,9 +5015,9 @@ public class clsSearchFormController {
 		case "GLCode": {
 			columnNames = "strAccountCode,strAccountName,strOperational,strType";
 			tableName = "clsWebBooksAccountMasterModel where strClientCode='" + clientCode + "' " + "and strType='GL Code' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Account Code,Account Name,Operational,Type";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -5028,9 +5028,9 @@ public class clsSearchFormController {
 		case "oneLineAcc": {
 			columnNames = "strAccountCode,strAccountName,strOperational,strType";
 			tableName = "clsWebBooksAccountMasterModel " + "where strDebtor='No' and strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Account Code,Account Name,Operational,Type";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -5039,8 +5039,9 @@ public class clsSearchFormController {
 		}
 
 		case "JVNo": {
-			columnNames = "a.strVouchNo,a.strNarration,a.dteVouchDate,a.strModuleType,a.strSource,ifnull(b.strDebtorName,''),ifnull(a.dblAmt,0.0),ifnull(b.strCrDr,'') ";
+			columnNames = "a.strVouchNo,a.strNarration,a.dteVouchDate,a.strModuleType,ifnull(a.strSource,'User'),ifnull(b.strDebtorName,''),ifnull(a.dblAmt,0.0),ifnull(b.strCrDr,'') ";
 			tableName =" from tbljvhd a left outer join tbljvdebtordtl b on  a.strVouchNo=b.strVouchNo where a.strClientCode='" + clientCode + "' group by  a.strVouchNo ";
+		//	tableName += " and strPropertyCode = '" + propertyCode + "' ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strPropertyCode = '" + propertyCode + "' ";
 			}
@@ -5053,10 +5054,12 @@ public class clsSearchFormController {
 		
 		case "UserCreatedJVNo": {
 			columnNames = "a.strVouchNo,a.strNarration,a.dteVouchDate,a.strModuleType,a.strSource,ifnull(b.strDebtorName,''),ifnull(a.dblAmt,0.0),ifnull(b.strCrDr,'') ";
-			tableName =" from tbljvhd a left outer join tbljvdebtordtl b on  a.strVouchNo=b.strVouchNo where a.strClientCode='" + clientCode + "' and a.strSource='User' group by  a.strVouchNo ";
+			tableName =" from tbljvhd a left outer join tbljvdebtordtl b on  a.strVouchNo=b.strVouchNo where a.strClientCode='" + clientCode + "' and a.strSource='User' ";
+			//tableName += " and strPropertyCode = '" + propertyCode + "' ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strPropertyCode = '" + propertyCode + "' ";
 			}
+			tableName += " group by  a.strVouchNo ";
 			listColumnNames = "Vouch No,Narration,Date,Type,Source,Name,Amount,DR/CR";
 			idColumnName = "strVouchNo";
 			flgQuerySelection = true;
@@ -5068,9 +5071,9 @@ public class clsSearchFormController {
 		case "cashBankAccNo": {
 			columnNames = "strAccountCode,strAccountName,strOperational,strType";
 			tableName = "clsWebBooksAccountMasterModel " + "where strClientCode='" + clientCode + "' and strType!='GL Code' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Account Code,Account Name,Operational,Type";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -5080,6 +5083,7 @@ public class clsSearchFormController {
 		case "ReceiptNo": {
 			columnNames = "a.strVouchNo,a.strNarration,a.dteVouchDate,a.strType,a.strChequeNo,ifnull(b.strBankName,''),a.strBranch,a.strReceiptType,ifnull(c.strDebtorName,'') ";
 			tableName = "from tblreceipthd a left outer join tblbankmaster b on a.strDrawnOn=b.strBankCode left outer join tblreceiptdebtordtl c on a.strVouchNo=c.strVouchNo where a.strClientCode='" + clientCode + "'";
+			//tableName += " and strPropertyCode = '" + propertyCode + "' ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strPropertyCode = '" + propertyCode + "' ";
 			}
@@ -5095,6 +5099,7 @@ public class clsSearchFormController {
 		case "PaymentNo": {
 			columnNames = "a.strVouchNo,a.strNarration,a.dteVouchDate,a.strType,a.strChequeNo,ifnull(b.strBankName,''),ifnull(c.strDebtorName,'') ";
 			tableName = "from tblpaymenthd a left outer join tblbankmaster b on a.strDrawnOn=b.strBankCode left outer join tblpaymentdebtordtl c on a.strVouchNo=c.strVouchNo where a.strClientCode='" + clientCode + "' ";
+			//tableName += " and strPropertyCode = '" + propertyCode + "' ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strPropertyCode = '" + propertyCode + "' ";
 			}
@@ -5145,6 +5150,7 @@ public class clsSearchFormController {
 		case "ReceiptNoslip": {
 			columnNames = "strVouchNo,strNarration,dteVouchDate,strModuleType ";
 			tableName = "clsReceiptHdModel where strClientCode='" + clientCode + "'";
+			//tableName += " and strPropertyCode = '" + propertyCode + "' ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
 			}
@@ -5157,10 +5163,10 @@ public class clsSearchFormController {
 		case "JVNoslip": {
 			columnNames = "strVouchNo,strNarration,dteVouchDate,strModuleType ";
 			tableName = "clsJVHdModel where strClientCode='" + clientCode + "'";
-			tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			//tableName += " and strPropertyCode = '" + propertyCode + "' ";
+			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}*/
+			}
 			listColumnNames = "Vouch No,Narration,Date,Type";
 			idColumnName = "strVouchNo";
 			searchFormTitle = "JV";
@@ -5170,6 +5176,7 @@ public class clsSearchFormController {
 		case "PaymentNoslip": {
 			columnNames = "strVouchNo,strNarration,dteVouchDate,strModuleType ";
 			tableName = "clsPaymentHdModel where strClientCode='" + clientCode + "'";
+			//tableName += " and strPropertyCode = '" + propertyCode + "' ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
 			}
@@ -5205,10 +5212,10 @@ public class clsSearchFormController {
 		{
 			columnNames = "strAccountCode,strAccountName,strOperational,strType";
 			tableName = "clsWebBooksAccountMasterModel where strClientCode='" + clientCode + "' and strEmployee='Yes' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y"))
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y"))
 			{
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Account Code,Account Name,Operational,Type";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -5220,10 +5227,10 @@ public class clsSearchFormController {
 		{
 			columnNames = "strAccountCode,strAccountName,strOperational,strType ";
 			tableName = " clsWebBooksAccountMasterModel where strClientCode='" + clientCode + "' and strType='Bank' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y"))
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y"))
 			{
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Account Code,Account Name,Operational,Type";
 			idColumnName = "strAccountCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -5286,9 +5293,9 @@ public class clsSearchFormController {
 		case "acSubGroupCode": {
 			columnNames = "strSubGroupCode,strSubGroupName,strGroupCode,strUnderSubGroup";
 			tableName = "clsACSubGroupMasterModel where strClientCode='" + clientCode + "' ";
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Sub Group Code,Sub Group Name,Group Code,Under SubGroup";
 			idColumnName = "strSubGroupCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
@@ -5302,9 +5309,9 @@ public class clsSearchFormController {
 			if(!strGroupCode.isEmpty()){
 				tableName = tableName+ " and strGroupCode='"+strGroupCode+"' and strSubGroupCode !='"+strSubGroupCode+"'";
 			}
-			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and strPropertyCode = '" + propertyCode + "' ";
-			}
+			}*/
 			listColumnNames = "Sub Group Code,Sub Group Name,Group Code,Under SubGroup";
 			idColumnName = "strSubGroupCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);

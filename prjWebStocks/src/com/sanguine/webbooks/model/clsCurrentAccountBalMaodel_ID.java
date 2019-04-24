@@ -15,12 +15,17 @@ public class clsCurrentAccountBalMaodel_ID implements Serializable {
 	@Column(name = "strClientCode")
 	private String strClientCode;
 
+	@Column(name = "strTransecType")
+	private String strTransecType;
+
+	
 	public clsCurrentAccountBalMaodel_ID() {
 	}
 
-	public clsCurrentAccountBalMaodel_ID(String strAccountCode, String strClientCode) {
+	public clsCurrentAccountBalMaodel_ID(String strAccountCode, String strClientCode,String strTransecType) {
 		this.strAccountCode = strAccountCode;
 		this.strClientCode = strClientCode;
+		this.strTransecType=strTransecType;
 	}
 
 	public String getStrAccountCode() {
@@ -45,6 +50,7 @@ public class clsCurrentAccountBalMaodel_ID implements Serializable {
 		int result = 1;
 		result = prime * result + ((strAccountCode == null) ? 0 : strAccountCode.hashCode());
 		result = prime * result + ((strClientCode == null) ? 0 : strClientCode.hashCode());
+		result = prime * result + ((strTransecType == null) ? 0 : strTransecType.hashCode());
 		return result;
 	}
 
@@ -67,7 +73,20 @@ public class clsCurrentAccountBalMaodel_ID implements Serializable {
 				return false;
 		} else if (!strClientCode.equals(other.strClientCode))
 			return false;
+		if (strTransecType == null) {
+			if (other.strTransecType != null)
+				return false;
+		} else if (!strTransecType.equals(other.strTransecType))
+			return false;
 		return true;
+	}
+
+	public String getStrTransecType() {
+		return strTransecType;
+	}
+
+	public void setStrTransecType(String strTransecType) {
+		this.strTransecType = strTransecType;
 	}
 
 }

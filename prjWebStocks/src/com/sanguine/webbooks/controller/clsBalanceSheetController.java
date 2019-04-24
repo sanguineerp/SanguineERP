@@ -181,7 +181,7 @@ public class clsBalanceSheetController {
 
 				
 				List<clsIncomeStmtReportBean> listOfBalancesheet = new ArrayList<clsIncomeStmtReportBean>();
-			
+				List<clsIncomeStmtReportBean> listOfDebtor = new ArrayList<clsIncomeStmtReportBean>();
 				 /* Income statement
 				 * 
 				 * 
@@ -189,171 +189,7 @@ public class clsBalanceSheetController {
 
 				List <String>listACC=new ArrayList<String>();
 				
-				listACC.add("1000-001-00");
 				
-				listACC.add("1000-002-00");
-				listACC.add("1000-003-00");
-				listACC.add("1000-004-00");
-				listACC.add("1000-005-00");
-				listACC.add("1000-006-00");
-				
-				///NON Current Asset
-				listACC.add("1001-011-01");
-				listACC.add("1001-011-00");
-				listACC.add("1001-010-19");
-				listACC.add("1001-010-18");
-				listACC.add("1001-010-17");
-				listACC.add("1001-011-02");
-				listACC.add("1001-011-03");
-
-				listACC.add("1001-011-04");
-				listACC.add("1001-011-05");
-				listACC.add("1001-011-06");
-				listACC.add("1001-011-07");
-				listACC.add("1001-011-08");
-				listACC.add("1001-010-16");
-				listACC.add("1001-010-14");
-				listACC.add("1001-010-13");
-				listACC.add("1001-010-01");
-				listACC.add("1001-010-02");
-				listACC.add("1001-010-03");
-
-				
-				listACC.add("1001-010-04");
-				listACC.add("1001-010-05");
-				listACC.add("1001-010-06");
-				listACC.add("1001-010-07");
-				listACC.add("1001-010-08");
-				listACC.add("1001-010-09");
-				listACC.add("1001-010-10");
-				listACC.add("1001-010-11");
-				listACC.add("1001-010-12");
-				listACC.add("1001-011-09");
-				listACC.add("1001-011-10");
-				listACC.add("1001-011-27");
-				listACC.add("1001-011-28");
-				listACC.add("1001-011-29");
-				listACC.add("1001-011-30");
-				listACC.add("1001-011-31");
-				listACC.add("1001-011-32");
-				listACC.add("1001-011-33");
-				listACC.add("1001-011-34");
-				listACC.add("1001-011-35");
-				listACC.add("1001-011-36");
-				listACC.add("1001-011-37");
-				listACC.add("1001-011-38");
-				listACC.add("1001-011-26");
-				listACC.add("1001-011-25");
-				listACC.add("1001-011-11");
-				listACC.add("1001-011-13");
-				listACC.add("1001-011-14");
-				listACC.add("1001-011-15");
-				listACC.add("1001-011-16");
-				listACC.add("1001-011-17");
-
-				listACC.add("1001-011-18");
-				listACC.add("1001-011-19");
-				listACC.add("1001-011-21");
-				listACC.add("1001-011-22");
-				listACC.add("1001-011-23");
-				listACC.add("1001-011-24");
-				listACC.add("1001-011-39");
-				listACC.add("1001-010-00");
-				listACC.add("1001-001-00");
-				listACC.add("1001-003-01");
-				listACC.add("1001-003-02");
-				listACC.add("1001-003-03");
-				listACC.add("1001-003-04");
-				listACC.add("1001-003-05");
-				listACC.add("1001-003-06");
-				listACC.add("1001-003-07");
-				listACC.add("1001-003-08");
-				listACC.add("1001-003-09");
-				listACC.add("1001-003-10");
-				listACC.add("1001-003-11");
-				listACC.add("1001-004-00");
-				listACC.add("1001-003-00");
-				listACC.add("1001-002-10");
-				listACC.add("1001-001-01");
-				listACC.add("1001-001-02");
-				listACC.add("1001-002-00");
-				listACC.add("1001-002-01");
-				listACC.add("1001-002-02");
-				listACC.add("1001-002-03");
-				listACC.add("1001-002-04");
-				listACC.add("1001-002-05");
-				listACC.add("1001-002-06");
-				listACC.add("1001-002-07");
-				listACC.add("1001-002-08");
-				listACC.add("1001-002-09");
-				listACC.add("1001-004-01");
-				listACC.add("1001-004-02");
-				listACC.add("1001-005-00");
-				listACC.add("1001-007-03");
-
-				listACC.add("1001-007-04");
-				listACC.add("1001-007-05");
-				listACC.add("1001-007-06");
-				listACC.add("1001-007-07");
-
-				listACC.add("1001-008-00");
-				listACC.add("1001-008-01");
-				listACC.add("1001-008-02");
-				listACC.add("1001-008-03");
-				listACC.add("1001-008-04");
-				listACC.add("1001-009-00");
-				listACC.add("1001-009-02");
-				listACC.add("1001-007-02");
-				listACC.add("1001-006-00");
-				listACC.add("1001-005-01");
-				listACC.add("1001-005-02");
-				listACC.add("1001-005-03");
-				listACC.add("1001-006-012");
-				listACC.add("1001-006-02");
-				listACC.add("1001-006-03");
-				listACC.add("1001-006-04");
-				listACC.add("1001-006-05");
-				listACC.add("1001-007-00");
-				listACC.add("1001-010-15");
-
-//////Current Libiality
-				
-				listACC.add("1006-003-02");
-				listACC.add("1006-003-01");
-				listACC.add("1006-003-00");
-				listACC.add("1006-002-21");
-				listACC.add("1006-002-20");
-				listACC.add("1006-002-19");
-				listACC.add("1006-002-14");
-				listACC.add("1006-004-00");
-				listACC.add("1006-004-01");
-				listACC.add("1006-004-02");
-				listACC.add("1006-004-03");
-				listACC.add("1006-004-04");
-				listACC.add("1006-005-00");
-				listACC.add("1006-005-01");
-				listACC.add("1006-005-02");
-
-
-				listACC.add("1006-005-03");
-				listACC.add("1006-002-13");
-				listACC.add("1006-002-12");
-				listACC.add("1006-000-00");
-				listACC.add("1006-001-00");
-				listACC.add("1006-001-01");
-				listACC.add("1006-001-02");
-				listACC.add("1006-002-00");
-				listACC.add("1006-002-01");
-				listACC.add("1006-002-02");
-				listACC.add("1006-002-03");
-				listACC.add("1006-002-04");
-				listACC.add("1006-002-11");
-				listACC.add("1006-002-10");
-				listACC.add("1006-002-09");
-				listACC.add("1006-002-08");
-				listACC.add("1006-002-07");
-				listACC.add("1006-002-06");
-				listACC.add("1006-002-05");
 
 				
 				BigDecimal totalSalesAmt=new BigDecimal(0);
@@ -368,7 +204,7 @@ public class clsBalanceSheetController {
 				String[] spDate = sp[0].split("/");
 				startDate = spDate[2] + "-" + spDate[1] + "-" + spDate[0];
 				int cnt=1;
-				if (!startDate.equals(dteFromDate)) {
+				/*if (!startDate.equals(dteFromDate)) {
 					String tempFromDate = dteFromDate.split("-")[2] + "-" + dteFromDate.split("-")[1] + "-" + dteFromDate.split("-")[0];
 					SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
 					Date dt1;
@@ -393,7 +229,7 @@ public class clsBalanceSheetController {
 						
 					}
 				}
-				
+				*/
 
 				// Sale JV
 				funCalculateBalanceSheetListAccountCode("ASSETS", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmSalesIncStmt,listACC,propertyCode);
@@ -422,7 +258,7 @@ public class clsBalanceSheetController {
 				Map<String,clsIncomeStmtReportBean> hmOtherExpensesIncStmt = new HashMap<String,clsIncomeStmtReportBean>();
 				
 				 cnt=1;
-					if (!startDate.equals(dteFromDate)) {
+					/*if (!startDate.equals(dteFromDate)) {
 						String tempFromDate = dteFromDate.split("-")[2] + "-" + dteFromDate.split("-")[1] + "-" + dteFromDate.split("-")[0];
 						SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
 						Date dt1;
@@ -446,7 +282,7 @@ public class clsBalanceSheetController {
 						{
 							
 						}
-					}
+					}*/
 					
 //				// LIABILITY JV
 					funCalculateBalanceSheetListAccountCode("LIABILITY", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listACC,propertyCode);
@@ -462,7 +298,10 @@ public class clsBalanceSheetController {
 				for(Map.Entry<String, clsIncomeStmtReportBean> entry:hmSalesIncStmt.entrySet())
 				{
 					totalSalesAmt=totalSalesAmt.add(entry.getValue().getDblValue());
-					listOfBalancesheet.add(entry.getValue());
+					if(entry.getValue().getDblValue().compareTo(new BigDecimal(0))!=0){
+						listOfBalancesheet.add(entry.getValue());	
+					}
+					
 				}
 				
 				for(int i=0;i<listOfBalancesheet.size();i++)
@@ -473,7 +312,10 @@ public class clsBalanceSheetController {
 				for(Map.Entry<String, clsIncomeStmtReportBean> entry:hmOtherExpensesIncStmt.entrySet())
 				{
 					totalOtherExpenses=totalOtherExpenses.add(entry.getValue().getDblValue());
-					listOfBalancesheet.add(entry.getValue());
+					if(entry.getValue().getDblValue().compareTo(new BigDecimal(0))!=0){
+						listOfBalancesheet.add(entry.getValue());	
+					}
+					
 				}
 			   
 				listACC=new ArrayList<String>();
@@ -486,7 +328,7 @@ public class clsBalanceSheetController {
 				Map<String,clsIncomeStmtReportBean> hmShareCapital= new HashMap<String,clsIncomeStmtReportBean>();	
 				
 				 cnt=1;
-					if (!startDate.equals(dteFromDate)) {
+				/*	if (!startDate.equals(dteFromDate)) {
 						String tempFromDate = dteFromDate.split("-")[2] + "-" + dteFromDate.split("-")[1] + "-" + dteFromDate.split("-")[0];
 						SimpleDateFormat obj = new SimpleDateFormat("dd-MM-yyyy");
 						Date dt1;
@@ -498,28 +340,28 @@ public class clsBalanceSheetController {
 							String newToDate = (cal.getTime().getYear() + 1900) + "-" + (cal.getTime().getMonth() + 1) + "-" + (cal.getTime().getDate());
 
 			 //  CAPITAL AND RESERVES Receipt 
-			    funCalculateBalanceSheetListAccountCode("CAPITAL AND RESERVES", "tbljvhd", "tbljvdtl", startDate, newToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
+			    funCalculateBalanceSheetListAccountCode("EQUITY  CAPITAL", "tbljvhd", "tbljvdtl", startDate, newToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
 			    cnt++;
 			   //  CAPITAL AND RESERVES Receipt 
-				funCalculateBalanceSheetListAccountCode("CAPITAL AND RESERVES", "tblreceipthd", "tblreceiptdtl", startDate, newToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
+				funCalculateBalanceSheetListAccountCode("EQUITY  CAPITAL", "tblreceipthd", "tblreceiptdtl", startDate, newToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
 										
 			 //  CAPITAL AND RESERVES Payment	
-				funCalculateBalanceSheetListAccountCode("CAPITAL AND RESERVES", "tblpaymenthd", "tblpaymentdtl", startDate, newToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
+				funCalculateBalanceSheetListAccountCode("EQUITY  CAPITAL", "tblpaymenthd", "tblpaymentdtl", startDate, newToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
 
 				}catch(Exception e)
 						{
 							
 						}
 					}
+					*/
 					
-					
-				funCalculateBalanceSheetListAccountCode("CAPITAL AND RESERVES", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
+				funCalculateBalanceSheetListAccountCode("EQUITY  CAPITAL", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
 				 cnt++;	
 			// Other SHARE CAPITAL Receipt 
-				funCalculateBalanceSheetListAccountCode("CAPITAL AND RESERVES", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
+				funCalculateBalanceSheetListAccountCode("EQUITY  CAPITAL", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
 									
 			// Other SHARE CAPITAL Payment	
-				funCalculateBalanceSheetListAccountCode("CAPITAL AND RESERVES", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
+				funCalculateBalanceSheetListAccountCode("EQUITY  CAPITAL", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmShareCapital,listACC,propertyCode);
 
 							
 				/*			
@@ -537,7 +379,10 @@ public class clsBalanceSheetController {
 				for(Map.Entry<String, clsIncomeStmtReportBean> entry:hmShareCapital.entrySet())
 				{
 					totalOtherIncome=totalOtherIncome.add(entry.getValue().getDblValue());
-					listOfBalancesheet.add(entry.getValue());
+					if(entry.getValue().getDblValue().compareTo(new BigDecimal(0))!=0){
+						listOfBalancesheet.add(entry.getValue());	
+					}
+					
 				}
 				
 				
@@ -575,19 +420,35 @@ public class clsBalanceSheetController {
 		 Collections.sort(listOfBalancesheet, objAcc);
 			
 		 Map<String,BigDecimal> hmCalNetAssets=new HashMap<String,BigDecimal>();
+		 clsIncomeStmtReportBean objBeanDebtorDtl;
 		if(listOfBalancesheet.size()>0)
 		{
-		for(clsIncomeStmtReportBean obj:listOfBalancesheet)
-		{
-			if(hmCalNetAssets.containsKey(obj.getStrGroupName()))
-			{
-				hmCalNetAssets.put(obj.getStrGroupName(),hmCalNetAssets.get(obj.getStrGroupName()).add(obj.getDblValue()));
-			}else{
-				hmCalNetAssets.put(obj.getStrGroupName(), obj.getDblValue());
-				
-			}
 			
-		}
+			int listcnt=0;
+			for(clsIncomeStmtReportBean obj:listOfBalancesheet)
+			{
+				if(hmCalNetAssets.containsKey(obj.getStrGroupName()))
+				{
+					hmCalNetAssets.put(obj.getStrGroupName(),hmCalNetAssets.get(obj.getStrGroupName()).add(obj.getDblValue()));
+				}else{
+					hmCalNetAssets.put(obj.getStrGroupName(), obj.getDblValue());
+					
+				}
+				
+				//
+				// fun get debtor detail
+				objBeanDebtorDtl=new clsIncomeStmtReportBean();
+				objBeanDebtorDtl.setStrAccountCode(obj.getStrAccountCode());
+				objBeanDebtorDtl.setStrAccountName(obj.getStrAccountName());
+				
+				
+				if(funGetAccWiseDebtorDetail(obj.getStrAccountCode() ,dteFromDate, dteToDate,clientCode,propertyCode,listOfDebtor))
+				{
+					listOfDebtor.add(listcnt,objBeanDebtorDtl);	
+					
+					listcnt=listOfDebtor.size();
+				}
+			}
 		}
 		
 		BigDecimal netCurrenAsset=new BigDecimal(0); 
@@ -597,8 +458,16 @@ public class clsBalanceSheetController {
 //		totNetAsset=hmCalNetAssets.get("NON- CURRENT ASSETS").add(netCurrenAsset);
 //		}
 		
+		hm.put("listDebtorDtl",listOfDebtor );
+		
 		hm.put("netCurrenAsset",netCurrenAsset);
 		hm.put("totNetAsset",totNetAsset);
+		
+		
+		
+		
+		
+			
 		
 		
 				
@@ -608,163 +477,10 @@ public class clsBalanceSheetController {
 				/**
 				 * Income statement
 				 * 
-				 * 
+				 * erased on 24-04-2019 
 				 */
 
-				
-				/*
-				
-				
-				
-				Map<String,clsCreditorOutStandingReportBean> hmBalanceSheetCatWiseData=new HashMap<String,clsCreditorOutStandingReportBean>();
-				double totalSalesAmt=0;
-				
-				sbSql.setLength(0);
-				sbSql.setLength(0);
-				sbSql.append("select a.strType,b.strCategory,b.strGroupName,d.strCrDr,sum(d.dblCrAmt) as Sale,sum(d.dblDrAmt) as Purchase,a.strAccountName,a.strAccountCode "
-					+ "from tblacmaster a,tblacgroupmaster b,tbljvhd c,tbljvdtl d "
-					+ "where a.strGroupCode=b.strGroupCode and a.strAccountCode=d.strAccountCode "
-					+ "and c.strVouchNo=d.strVouchNo and a.strType='GL Code' "
-					+ "and date(c.dteVouchDate) between '" + dteFromDate + "' and '" + dteToDate + "' "
-					+ "group by a.strAccountCode order by b.strCategory; ");
-				List listJV = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
-				if (listJV != null && listJV.size() > 0)
-				{
-					
-					for(int cn=0;cn<listJV.size();cn++)
-					{
-						
-						Object[] objArr = (Object[]) listJV.get(cn);
-						String groupCategory = objArr[1].toString();
-						String groupName = objArr[2].toString();
-						double creditAmount = Double.parseDouble(objArr[4].toString());
-						double debitAmount = Double.parseDouble(objArr[5].toString());
-						double totalAmt=debitAmount-creditAmount;
-						clsCreditorOutStandingReportBean objExpenses = new clsCreditorOutStandingReportBean();
-						objExpenses.setStrGroupCategory(groupCategory);
-						objExpenses.setStrGroupName(groupName);
-						objExpenses.setStrAccountName(objArr[6].toString());
-						if(hmBalanceSheetCatWiseData.containsKey(objArr[7].toString()))
-						{
-							objExpenses=hmBalanceSheetCatWiseData.get(objArr[7].toString());
-							objExpenses.setDblValue(totalAmt+objExpenses.getDblValue());
-						}
-						else
-						{
-							objExpenses.setDblValue(totalAmt);
-							hmBalanceSheetCatWiseData.put(objArr[7].toString(), objExpenses);
-						}
-						
-						
-					}
-	//					if(hmBalanceSheetCatWiseData.containsKey(groupCategory)) 
-	//					{
-	//						totalAmt=hmBalanceSheetCatWiseData.get(groupCategory)+totalAmt;
-	//					}
-	//					hmBalanceSheetCatWiseData.put(groupCategory,(totalAmt));
-				}
-				
-				sbSql.setLength(0);
-				sbSql.append("select a.strType,b.strCategory,b.strGroupName,d.strCrDr,sum(d.dblCrAmt) as Sale,sum(d.dblDrAmt) as Purchase,a.strAccountName,a.strAccountCode "
-					+ "from tblacmaster a,tblacgroupmaster b,tblpaymenthd c,tblpaymentdtl d "
-					+ "where a.strGroupCode=b.strGroupCode and a.strAccountCode=d.strAccountCode "
-					+ "and c.strVouchNo=d.strVouchNo and a.strType='GL Code' "
-					+ "and date(c.dteVouchDate) between '" + dteFromDate + "' and '" + dteToDate + "' "
-					+ "group by a.strAccountCode order by b.strCategory; ");
-				List listPayment = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
-				if (listPayment != null && listPayment.size() > 0)
-				{
-					for(int cn=0;cn<listPayment.size();cn++)
-					{
-					Object[] objArr = (Object[]) listPayment.get(cn);
-					String groupCategory = objArr[1].toString();
-					String groupName = objArr[2].toString();
-					double creditAmount = Double.parseDouble(objArr[4].toString());
-					double debitAmount = Double.parseDouble(objArr[5].toString());
-					double totalAmt=debitAmount-creditAmount;
-					clsCreditorOutStandingReportBean objExpenses = new clsCreditorOutStandingReportBean();
-					objExpenses.setStrGroupCategory(groupCategory);
-					objExpenses.setStrGroupName(groupName);
-					objExpenses.setStrAccountName(objArr[6].toString());
-					if(hmBalanceSheetCatWiseData.containsKey(objArr[7].toString()))
-					{
-						objExpenses=hmBalanceSheetCatWiseData.get(objArr[7].toString());
-						objExpenses.setDblValue(totalAmt+objExpenses.getDblValue());
-					}
-					else
-					{
-						objExpenses.setDblValue(totalAmt);
-						hmBalanceSheetCatWiseData.put(objArr[7].toString(), objExpenses);
-					}
-					}
-//					if(hmBalanceSheetCatWiseData.containsKey(groupCategory)) 
-//					{
-//						totalAmt=hmBalanceSheetCatWiseData.get(groupCategory)+totalAmt;
-//					}
-//					hmBalanceSheetCatWiseData.put(groupCategory,(totalAmt));
-				}
-				
-				sbSql.setLength(0);
-				sbSql.append("select a.strType,b.strCategory,b.strGroupName,d.strCrDr,sum(d.dblCrAmt) as Sale,sum(d.dblDrAmt) as Purchase,a.strAccountName,a.strAccountCode "
-					+ "from tblacmaster a,tblacgroupmaster b,tblreceipthd c,tblreceiptdtl d "
-					+ "where a.strGroupCode=b.strGroupCode and a.strAccountCode=d.strAccountCode "
-					+ "and c.strVouchNo=d.strVouchNo and a.strType='GL Code' "
-					+ "and date(c.dteVouchDate) between '" + dteFromDate + "' and '" + dteToDate + "' "
-					+ "group by a.strAccountCode order by b.strCategory; ");
-				List listReceipt = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
-				if (listReceipt != null && listReceipt.size() > 0)
-				{
-					for(int cn=0;cn<listReceipt.size();cn++)
-					{
-					Object[] objArr = (Object[]) listReceipt.get(cn);
-					String groupCategory = objArr[1].toString();
-					String groupName = objArr[2].toString();
-					double creditAmount = Double.parseDouble(objArr[4].toString());
-					double debitAmount = Double.parseDouble(objArr[5].toString());
-					double totalAmt=debitAmount-creditAmount;
-					clsCreditorOutStandingReportBean objExpenses = new clsCreditorOutStandingReportBean();
-					objExpenses.setStrGroupCategory(groupCategory);
-					objExpenses.setStrGroupName(groupName);
-					objExpenses.setStrAccountName(objArr[6].toString());
-					if(hmBalanceSheetCatWiseData.containsKey(objArr[7].toString()))
-					{
-						objExpenses=hmBalanceSheetCatWiseData.get(objArr[7].toString());
-						objExpenses.setDblValue(totalAmt+objExpenses.getDblValue());
-					}
-					else
-					{
-						objExpenses.setDblValue(totalAmt);
-						hmBalanceSheetCatWiseData.put(objArr[7].toString(), objExpenses);
-					}
-					
-					}
 
-				}
-		
-				for(Map.Entry<String, clsCreditorOutStandingReportBean> entry:hmBalanceSheetCatWiseData.entrySet())
-				{
-					String key = entry.getKey();
-					clsCreditorOutStandingReportBean objBean1=entry.getValue();
-					listOfImcomeStatement.add(objBean1);
-				}
-
-//				final String SORT_NAME = "INCOME EXPENSE TOTAL";
-//
-				Comparator<clsCreditorOutStandingReportBean> objComparator = new Comparator<clsCreditorOutStandingReportBean>()
-				{
-					@Override
-					public int compare(clsCreditorOutStandingReportBean o1, clsCreditorOutStandingReportBean o2)
-					{
-						return o1.getStrGroupCategory().compareToIgnoreCase(o2.getStrGroupCategory());
-					}
-				};
-
-				Collections.sort(listOfImcomeStatement, objComparator);
-				*/
-//
-//				hm.put("listOfImcomeStatement", listOfImcomeStatement);
-//
-//				dataList.add("1");
 
 				List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
 
@@ -825,7 +541,109 @@ public class clsBalanceSheetController {
 			}
 
 		}
-		
+		private boolean  funGetAccWiseDebtorDetail(String accCode ,String dteFromDate,String  dteToDate,
+				String clientCode,String propertyCode,List listOfDebtor){
+			boolean isDebtor=false;
+			Map<String,clsIncomeStmtReportBean> hmDebtor=new HashMap<String, clsIncomeStmtReportBean>();
+			String sql="select c.strDebtorCode,c.strDebtorName,c.strCrDr,sum(c.dblAmt) "
+				+" from tbljvhd a,tbljvdtl b, tbljvdebtordtl c  "
+				+" where a.strVouchNo=b.strVouchNo and a.strVouchNo=c.strVouchNo"
+				+" and b.strAccountCode=c.strAccountCode"
+				+" and b.strAccountCode='"+accCode+"'"
+				+" AND DATE(a.dteVouchDate) BETWEEN '"+dteFromDate+"' AND '"+dteToDate+"' " 
+				+" AND c.strClientCode='"+clientCode+"' AND a.strPropertyCode='"+propertyCode+"'"
+				+" group BY c.strDebtorCode;"; 
+			List listDebtor = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+			if (listDebtor != null && listDebtor.size() > 0)
+			{
+				clsIncomeStmtReportBean obBean;
+				for(int cn=0;cn<listDebtor.size();cn++)
+				{
+					isDebtor=true;
+					obBean= new clsIncomeStmtReportBean();
+					Object[] objArr = (Object[]) listDebtor.get(cn);
+					if(hmDebtor.containsKey(objArr[0].toString())){
+						obBean=hmDebtor.get(objArr[0].toString());
+						obBean.setDblBalAmt(obBean.getDblBalAmt()+Double.parseDouble(objArr[3].toString()));
+						
+					}else{
+						obBean.setStrAccountName(objArr[1].toString());
+						//obBean.setStrAccountCode(objArr[0].toString());
+						obBean.setDblBalAmt(Double.parseDouble(objArr[3].toString()));
+							
+					}
+					
+					hmDebtor.put(objArr[0].toString(),obBean);
+					
+				}
+			}
+			sql="select c.strDebtorCode,c.strDebtorName,c.strCrDr,sum(c.dblAmt) "
+					+" from tblpaymenthd a,tblpaymentdtl b, tblpaymentdebtordtl c  "
+					+" where a.strVouchNo=b.strVouchNo and a.strVouchNo=c.strVouchNo"
+					+" and b.strAccountCode=c.strAccountCode"
+					+" and b.strAccountCode='"+accCode+"'"
+					+" AND DATE(a.dteVouchDate) BETWEEN '"+dteFromDate+"' AND '"+dteToDate+"' " 
+					+" AND c.strClientCode='"+clientCode+"' AND a.strPropertyCode='"+propertyCode+"'"
+					+" group BY c.strDebtorCode;"; 
+				listDebtor = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+				if (listDebtor != null && listDebtor.size() > 0)
+				{
+					clsIncomeStmtReportBean obBean;
+					for(int cn=0;cn<listDebtor.size();cn++)
+					{
+					isDebtor=true;
+					obBean= new clsIncomeStmtReportBean();
+					Object[] objArr = (Object[]) listDebtor.get(cn);
+					if(hmDebtor.containsKey(objArr[0].toString())){
+						
+						obBean=hmDebtor.get(objArr[0].toString());
+						obBean.setDblBalAmt(obBean.getDblBalAmt()-Double.parseDouble(objArr[3].toString()));
+						
+					}else{
+						obBean.setStrAccountName(objArr[1].toString());
+						//obBean.setStrAccountCode(objArr[0].toString());
+						obBean.setDblBalAmt(Double.parseDouble(objArr[3].toString()));
+							
+					}
+					
+					hmDebtor.put(objArr[0].toString(),obBean);}
+				}
+			sql="select c.strDebtorCode,c.strDebtorName,c.strCrDr,sum(c.dblAmt) "
+					+" from tblreceipthd a,tblreceiptdtl b, tblreceiptdebtordtl c  "
+					+" where a.strVouchNo=b.strVouchNo and a.strVouchNo=c.strVouchNo"
+					+" and b.strAccountCode=c.strAccountCode"
+					+" and b.strAccountCode='"+accCode+"'"
+					+" AND DATE(a.dteVouchDate) BETWEEN '"+dteFromDate+"' AND '"+dteToDate+"' " 
+					+" AND c.strClientCode='"+clientCode+"' AND a.strPropertyCode='"+propertyCode+"'"
+					+" group BY c.strDebtorCode;"; 
+				listDebtor = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+				if (listDebtor != null && listDebtor.size() > 0)
+				{
+					clsIncomeStmtReportBean obBean;
+					for(int cn=0;cn<listDebtor.size();cn++)
+					{isDebtor=true;
+					obBean= new clsIncomeStmtReportBean();
+					Object[] objArr = (Object[]) listDebtor.get(cn);
+					if(hmDebtor.containsKey(objArr[0].toString())){
+						obBean=hmDebtor.get(objArr[0].toString());
+						obBean.setDblBalAmt(obBean.getDblBalAmt()+Double.parseDouble(objArr[3].toString()));
+						
+					}else{
+						obBean.setStrAccountName(objArr[1].toString());
+						//obBean.setStrAccountCode(objArr[0].toString());
+						obBean.setDblBalAmt(Double.parseDouble(objArr[3].toString()));
+							
+					}
+					
+					hmDebtor.put(objArr[0].toString(),obBean);}
+				}
+				
+				for(Map.Entry<String, clsIncomeStmtReportBean> entry:hmDebtor.entrySet())
+					{
+						listOfDebtor.add(entry.getValue());	
+					}
+			return isDebtor;
+		}
 		
 		
 		@RequestMapping(value = "/rptBalanceSheet", method = RequestMethod.GET)
@@ -1275,7 +1093,7 @@ public class clsBalanceSheetController {
 //			for(String acc:list)
 //			{
 			sbSql.setLength(0);
-			sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),if((c.strVouchNo is null),0, IFNULL(SUM(d.dblCrAmt),0) )AS Sale, if((c.strVouchNo is null),0,IFNULL(SUM(d.dblDrAmt),0)) AS Purchase,a.strAccountName,a.strAccountCode, "
+			sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),IFNULL(SUM(d.dblCrAmt),0) AS Sale, IFNULL(SUM(d.dblDrAmt),0) AS Purchase,a.strAccountName,a.strAccountCode, "
 					+" b.strCategory from tblsubgroupmaster sb, tblacgroupmaster b,tblacmaster a "
 					+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
 					+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"'  and a.strPropertyCode='"+propCode+"' "
