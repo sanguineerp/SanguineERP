@@ -544,7 +544,7 @@ public class clsBalanceSheetController {
 		private boolean  funGetAccWiseDebtorDetail(String accCode ,String dteFromDate,String  dteToDate,
 				String clientCode,String propertyCode,List listOfDebtor){
 			boolean isDebtor=false;
-			Map<String,clsIncomeStmtReportBean> hmDebtor=new HashMap<String, clsIncomeStmtReportBean>();
+			//Map<String,clsIncomeStmtReportBean> hmDebtor=new HashMap<String, clsIncomeStmtReportBean>();
 			String sql="select c.strDebtorCode,c.strDebtorName,c.strCrDr,sum(c.dblAmt) "
 				+" from tbljvhd a,tbljvdtl b, tbljvdebtordtl c  "
 				+" where a.strVouchNo=b.strVouchNo and a.strVouchNo=c.strVouchNo"
@@ -562,19 +562,24 @@ public class clsBalanceSheetController {
 					isDebtor=true;
 					obBean= new clsIncomeStmtReportBean();
 					Object[] objArr = (Object[]) listDebtor.get(cn);
-					if(hmDebtor.containsKey(objArr[0].toString())){
+					/*if(hmDebtor.containsKey(objArr[0].toString())){
 						obBean=hmDebtor.get(objArr[0].toString());
 						obBean.setDblBalAmt(obBean.getDblBalAmt()+Double.parseDouble(objArr[3].toString()));
 						
-					}else{
+					}else{*/
 						obBean.setStrAccountName(objArr[1].toString());
 						//obBean.setStrAccountCode(objArr[0].toString());
 						obBean.setDblBalAmt(Double.parseDouble(objArr[3].toString()));
-							
-					}
+						if(objArr[2].toString().equalsIgnoreCase("Cr")){
+							obBean.setStrName("Credit");	
+						}else{
+							obBean.setStrName("Debit");
+						}
+						
+					//}
 					
-					hmDebtor.put(objArr[0].toString(),obBean);
-					
+					//hmDebtor.put(objArr[0].toString(),obBean);
+						listOfDebtor.add(obBean);
 				}
 			}
 			sql="select c.strDebtorCode,c.strDebtorName,c.strCrDr,sum(c.dblAmt) "
@@ -594,19 +599,24 @@ public class clsBalanceSheetController {
 					isDebtor=true;
 					obBean= new clsIncomeStmtReportBean();
 					Object[] objArr = (Object[]) listDebtor.get(cn);
-					if(hmDebtor.containsKey(objArr[0].toString())){
+					/*if(hmDebtor.containsKey(objArr[0].toString())){
 						
 						obBean=hmDebtor.get(objArr[0].toString());
 						obBean.setDblBalAmt(obBean.getDblBalAmt()-Double.parseDouble(objArr[3].toString()));
 						
-					}else{
+					}else{*/
 						obBean.setStrAccountName(objArr[1].toString());
 						//obBean.setStrAccountCode(objArr[0].toString());
 						obBean.setDblBalAmt(Double.parseDouble(objArr[3].toString()));
-							
+						if(objArr[2].toString().equalsIgnoreCase("Cr")){
+							obBean.setStrName("Credit");	
+						}else{
+							obBean.setStrName("Debit");
+						}	
+					//}
+						listOfDebtor.add(obBean);
 					}
-					
-					hmDebtor.put(objArr[0].toString(),obBean);}
+					//hmDebtor.put(objArr[0].toString(),obBean);}
 				}
 			sql="select c.strDebtorCode,c.strDebtorName,c.strCrDr,sum(c.dblAmt) "
 					+" from tblreceipthd a,tblreceiptdtl b, tblreceiptdebtordtl c  "
@@ -624,24 +634,29 @@ public class clsBalanceSheetController {
 					{isDebtor=true;
 					obBean= new clsIncomeStmtReportBean();
 					Object[] objArr = (Object[]) listDebtor.get(cn);
-					if(hmDebtor.containsKey(objArr[0].toString())){
+					/*if(hmDebtor.containsKey(objArr[0].toString())){
 						obBean=hmDebtor.get(objArr[0].toString());
 						obBean.setDblBalAmt(obBean.getDblBalAmt()+Double.parseDouble(objArr[3].toString()));
 						
-					}else{
+					}else{*/
 						obBean.setStrAccountName(objArr[1].toString());
 						//obBean.setStrAccountCode(objArr[0].toString());
 						obBean.setDblBalAmt(Double.parseDouble(objArr[3].toString()));
-							
+						if(objArr[2].toString().equalsIgnoreCase("Cr")){
+							obBean.setStrName("Credit");	
+						}else{
+							obBean.setStrName("Debit");
+						}
+					//}
+						listOfDebtor.add(obBean);
+					//hmDebtor.put(objArr[0].toString(),obBean);}
 					}
-					
-					hmDebtor.put(objArr[0].toString(),obBean);}
 				}
 				
-				for(Map.Entry<String, clsIncomeStmtReportBean> entry:hmDebtor.entrySet())
+				/*for(Map.Entry<String, clsIncomeStmtReportBean> entry:hmDebtor.entrySet())
 					{
 						listOfDebtor.add(entry.getValue());	
-					}
+					}*/
 			return isDebtor;
 		}
 		

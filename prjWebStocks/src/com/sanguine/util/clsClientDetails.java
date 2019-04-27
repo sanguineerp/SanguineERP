@@ -161,7 +161,7 @@ public class clsClientDetails {
 			hmClientDtl.put("225.001", clsClientDetails.createClientDetails("225.001", "SHEESHA SKY LOUNGE HOSPITALITY AND SERVICES PVT LTD", dFormat.parse("2018-08-21"), dFormat.parse("2019-08-21")));//From POS 
 			hmClientDtl.put("226.001", clsClientDetails.createClientDetails("226.001", "MAYA EAST AFRICA LTD.", dFormat.parse("2018-02-12"), dFormat.parse("2019-09-06")));// Renewed for 2019-09-06 1 year as per sachin sir discussion
 			hmClientDtl.put("233.002", clsClientDetails.createClientDetails("233.002", "PLAYBOY INDIA", dFormat.parse("2018-06-13"), dFormat.parse("2018-08-13")));//playBoy 2nd outlet//renewed on 13-06-2018 for 1 month till 13-07-2018
-			hmClientDtl.put("233.001", clsClientDetails.createClientDetails("233.001", "PLAYBOY INDIA", dFormat.parse("2018-06-13"), dFormat.parse("2019-04-27")));//First Outlet 
+			hmClientDtl.put("233.001", clsClientDetails.createClientDetails("233.001", "PLAYBOY INDIA", dFormat.parse("2018-06-13"), dFormat.parse("2019-05-07")));///Renewed on 27-04-2019 for 10 days till 07-05-2019 //First Outlet 
 			hmClientDtl.put("233.003", clsClientDetails.createClientDetails("233.003", "SPJ HOSPITALITY AND HOTELS", dFormat.parse("2018-12-21"), dFormat.parse("2019-05-20")));//Renewed on 12-02-2019 till 20-05-2019
 			hmClientDtl.put("236.001", clsClientDetails.createClientDetails("236.001", "JAMUN HOSPITALITY CONSULTANCY LLP", dFormat.parse("2018-03-16"), dFormat.parse("2018-06-18")));
 			hmClientDtl.put("242.001", clsClientDetails.createClientDetails("242.001", "SRINATHJIS CUISINES PVT LTD", dFormat.parse("2018-04-03"), dFormat.parse("2018-08-18")));//renewed on 01-06-2018 for 1 month till 30-06-2018// Contact No-022-23755444 / 666  Email-Id-srinathjiscuisine@gmail.com

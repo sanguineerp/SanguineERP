@@ -289,9 +289,9 @@ public class clsTrialBalanceReportController {
 						bDTotalCredit=bDTotalCredit.add(BigDecimal.valueOf(entry.getValue().getDblBalAmt()));
 					}
 							  
+					fieldList.add(objHmBean);
 					
-					
-					if(objHmBean.getDblCrAmt() == 0 
+					/*if(objHmBean.getDblCrAmt() == 0 
 							&& objBean.getDblDrAmt() == 0 
 							&& objBean.getDblOpCrAmt() == 0 
 							&& objBean.getDblOpDrAmt() == 0)
@@ -301,7 +301,7 @@ public class clsTrialBalanceReportController {
 					else
 					{	
 						fieldList.add(objHmBean);
-					}
+					}*/
 //					System.out.println(objHmBean.getStrAccountCode()+","+objHmBean.getStrAccountName()+","+objHmBean.getDblDrAmt()+","+ objHmBean.getDblCrAmt() );
 				}
 			}
@@ -319,7 +319,7 @@ public class clsTrialBalanceReportController {
 			objHmBean.setDblBalAmt(openingAmt);
 			objHmBean.setDblDrAmt(dblStockInHand);
 			objHmBean.setDblCrAmt(0.00);
-			if(objHmBean.getDblCrAmt() == 0 
+			/*if(objHmBean.getDblCrAmt() == 0 
 					&& objBean.getDblDrAmt() == 0 
 					&& objBean.getDblOpCrAmt() == 0 
 					&& objBean.getDblOpDrAmt() == 0)
@@ -329,7 +329,8 @@ public class clsTrialBalanceReportController {
 			else
 			{
 				fieldList.add(objHmBean);
-			}
+			}*/
+			fieldList.add(objHmBean);
 			 objHmBean =new clsCreditorOutStandingReportBean();
 			objHmBean.setStrGroupCode("1002");
 			objHmBean.setStrGroupName("SALES");
@@ -343,7 +344,7 @@ public class clsTrialBalanceReportController {
 			objHmBean.setDblBalAmt(openingAmt);
 			objHmBean.setDblDrAmt(0.00);
 			objHmBean.setDblCrAmt(dblStockInHand);
-			if(objHmBean.getDblCrAmt() == 0 
+			/*if(objHmBean.getDblCrAmt() == 0 
 					&& objBean.getDblDrAmt() == 0 
 					&& objBean.getDblOpCrAmt() == 0 
 					&& objBean.getDblOpDrAmt() == 0)
@@ -353,9 +354,9 @@ public class clsTrialBalanceReportController {
 			else
 				{
 					fieldList.add(objHmBean);
-				}
+				}*/
 			
-			
+			fieldList.add(objHmBean);
 			
 			Collections.sort(fieldList, new clsTrialBalBeanComparator());
 			

@@ -257,6 +257,7 @@
 		<field name="strAccountName" class="java.lang.String"/>
 		<field name="dblBalAmt" class="java.lang.Double"/>
 		<field name="strAccountCode" class="java.lang.String"/>
+		<field name="strName" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="strAddr1" class="java.lang.String"/>
 	<parameter name="strAddr2" class="java.lang.String"/>
@@ -571,7 +572,7 @@
 	<summary>
 		<band height="114" splitType="Stretch">
 			<componentElement>
-				<reportElement key="table 5" style="Table 1_TH" x="3" y="20" width="487" height="50" uuid="1da966c1-a672-4cae-b54c-61e2f2480a00">
+				<reportElement key="table 5" style="Table 1_TH" x="3" y="20" width="487" height="60" uuid="1da966c1-a672-4cae-b54c-61e2f2480a00">
 					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 5_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 5_CH"/>
@@ -581,7 +582,7 @@
 					<datasetRun subDataset="dsDebtorList" uuid="d4a53b0a-2429-493e-a8fd-e2e74ec24f56">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listDebtorDtl})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="310" uuid="41746431-e4a9-4153-82a6-6aaad205a644">
+					<jr:column width="270" uuid="41746431-e4a9-4153-82a6-6aaad205a644">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 						<jr:tableHeader style="Table 5_TH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
@@ -595,7 +596,7 @@
 						<jr:detailCell style="Table 5_TD" height="20" rowSpan="1">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 							<textField>
-								<reportElement x="0" y="0" width="310" height="20" isPrintWhenDetailOverflows="true" uuid="f8bf6efb-17b5-4e9e-9ad6-1b90474ffd30"/>
+								<reportElement x="0" y="0" width="270" height="20" isPrintWhenDetailOverflows="true" uuid="f8bf6efb-17b5-4e9e-9ad6-1b90474ffd30"/>
 								<box leftPadding="2"/>
 								<textElement>
 									<font isBold="false"/>
@@ -604,14 +605,33 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="140" uuid="84a4fb6d-2ab1-4f45-8f60-117a613c8165">
+					<jr:column width="100" uuid="c49a41e3-489c-40dd-a66d-8897cadb5a21">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:tableHeader style="Table 5_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="8eaba70c-2417-4314-ba14-45bf426bc765"/>
+								<text><![CDATA[Type]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table 5_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="20" uuid="3288af63-ee09-495a-8840-ba4839032f2e">
+									<printWhenExpression><![CDATA[$F{strName}!=null]]></printWhenExpression>
+								</reportElement>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{strName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="120" uuid="84a4fb6d-2ab1-4f45-8f60-117a613c8165">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 						<jr:tableHeader style="Table 5_TH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table 5_TD" height="20" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="140" height="20" uuid="cddbb50e-7530-4246-9b6f-61cbaa7a272b">
+								<reportElement x="0" y="0" width="120" height="20" uuid="cddbb50e-7530-4246-9b6f-61cbaa7a272b">
 									<printWhenExpression><![CDATA[$F{strAccountCode} ==null]]></printWhenExpression>
 								</reportElement>
+								<textElement textAlignment="Right"/>
 								<textFieldExpression><![CDATA[$F{dblBalAmt}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>

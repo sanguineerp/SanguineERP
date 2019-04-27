@@ -233,7 +233,7 @@ public class clsBankBookController {
 						+ " IF((c.strCurrencyCode IS NULL) OR (c.strCurrencyCode ='NA') OR (c.strCurrencyCode =''), "
 						+ "(SELECT dblConvToBaseCurr FROM "+webStockDB+".tblcurrencymaster WHERE strCurrencyCode='"+currency+"'),a.dblConversion) AS conv2,ifnull(ifnull(c.strCurrencyName,(select strCurrencyName from "+webStockDB+".tblcurrencymaster where strCurrencyCode=a.strCurrency)),"
 						+ "(SELECT strCurrencyName FROM "+webStockDB+".tblcurrencymaster WHERE strCurrencyCode='"+objSetup.getStrCurrencyCode()+"')) AS currency " 
-						+ " FROM tblpaymentdtl b,tblpaymenthd a LEFT OUTER JOIN sanguine_webmms.tblcurrencymaster c ON a.strCurrency=c.strCurrencyCode AND a.strCurrency='"+currency+"' "
+						+ " FROM tblpaymentdtl b,tblpaymenthd a LEFT OUTER JOIN "+webStockDB+".tblcurrencymaster c ON a.strCurrency=c.strCurrencyCode AND a.strCurrency='"+currency+"' "
 						+ " WHERE a.strVouchNo=b.strVouchNo and b.strAccountCode='" + objBean.getStrAccountCode() + "' "
 						+ " and date(a.dteVouchDate) BETWEEN '" + dteFromDate + "' and '" + dteToDate + "' AND a.strClientCode='"+ clientCode + "' "
 						+ " UNION all " + " SELECT DATE_FORMAT(a.dteVouchDate,'%d-%m-%Y') vouchDate,a.strVouchNo,'Receipt' Doc,0.00 payment,"
@@ -241,7 +241,7 @@ public class clsBankBookController {
 						+ " IF((c.strCurrencyCode IS NULL) OR (c.strCurrencyCode ='NA') OR (c.strCurrencyCode =''), "
 						+ "(SELECT dblConvToBaseCurr FROM "+webStockDB+".tblcurrencymaster WHERE strCurrencyCode='"+currency+"'),a.dblConversion) AS conv2,ifnull(ifnull(c.strCurrencyName,(select strCurrencyName from "+webStockDB+".tblcurrencymaster where strCurrencyCode=a.strCurrency))," 
 						+ "(SELECT strCurrencyName FROM "+webStockDB+".tblcurrencymaster WHERE strCurrencyCode='"+objSetup.getStrCurrencyCode()+"')) AS currency "
-						+ " FROM  tblreceiptdtl b,tblreceipthd a LEFT OUTER JOIN sanguine_webmms.tblcurrencymaster c ON a.strCurrency=c.strCurrencyCode AND a.strCurrency='"+currency+"' "	 
+						+ " FROM  tblreceiptdtl b,tblreceipthd a LEFT OUTER JOIN "+webStockDB+".tblcurrencymaster c ON a.strCurrency=c.strCurrencyCode AND a.strCurrency='"+currency+"' "	 
 						+ " WHERE a.strVouchNo=b.strVouchNo "
 						+ " and b.strAccountCode='" + objBean.getStrAccountCode() + "' "
 						+ " and  date(a.dteVouchDate) BETWEEN '" + dteFromDate + "' and '" + dteToDate
