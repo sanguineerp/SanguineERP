@@ -195,6 +195,9 @@ public class clsStkAdjustmentController {
 						// {
 						// ob.setStrWSLinkedProdCode("");
 						// }
+						if(ob.getStrJVNo()==null){
+							ob.setStrJVNo("");
+						}
 						objStkAdjService.funAddUpdateDtl(ob);
 						flagDtlDataInserted = true;
 
@@ -202,40 +205,39 @@ public class clsStkAdjustmentController {
 				}
 				// For JV Generation
 				
-				clsCompanyMasterModel objCompModel = objSetupMasterService
-						.funGetObject(clientCode);
-				if (objCompModel.getStrWebBookModule().equals("Yes")) {
+				if(flagDtlDataInserted){
+					clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(clientCode);
+					if (objCompModel.getStrWebBookModule().equals("Yes")) {
+						boolean authorisationFlag = false;
+						if (null != req.getSession().getAttribute("hmAuthorization")) {
+							HashMap<String, Boolean> hmAuthorization = (HashMap) req.getSession().getAttribute("hmAuthorization");
+							if (hmAuthorization.containsKey("Stock Adjustment")) {
+								authorisationFlag = hmAuthorization.get("Stock Adjustment");
+							}
+						}
+						if (!authorisationFlag) {
+							//funGenerateJVforSTKAdjustment(String stkAdjCode, String clientCode, String userCode, String propCode, HttpServletRequest req)
+							String retuenVal = objJVGen.funGenerateJVforSTKAdjustment(objHdModel.getStrSACode(),
+									clientCode, userCode, propCode, req);
+							String JVGenMessage = "";
+							String[] arrVal = retuenVal.split("!");
 
-					boolean authorisationFlag = false;
-					if (null != req.getSession()
-							.getAttribute("hmAuthorization")) {
-						HashMap<String, Boolean> hmAuthorization = (HashMap) req.getSession().getAttribute("hmAuthorization");
-						if (hmAuthorization.containsKey("Stock Adjustment")) {
-							authorisationFlag = hmAuthorization.get("Stock Adjustment");
+							boolean flgJVPosting = true;
+							if (arrVal[0].equals("ERROR")) {
+								JVGenMessage = arrVal[1];
+								flgJVPosting = false;
+							} else {
+								//objHdModel.setStrJVNo(arrVal[0]);
+								//objGRNService.funAddUpdate(objHdModel);
+							}
+							req.getSession().setAttribute("JVGen", flgJVPosting);
+							req.getSession().setAttribute("JVGenMessage",
+									JVGenMessage);
 						}
 					}
 
-					if (!authorisationFlag) {
-						//funGenerateJVforSTKAdjustment(String stkAdjCode, String clientCode, String userCode, String propCode, HttpServletRequest req)
-						String retuenVal = objJVGen.funGenerateJVforSTKAdjustment(objHdModel.getStrSACode(),
-								clientCode, userCode, propCode, req);
-						String JVGenMessage = "";
-						String[] arrVal = retuenVal.split("!");
-
-						boolean flgJVPosting = true;
-						if (arrVal[0].equals("ERROR")) {
-							JVGenMessage = arrVal[1];
-							flgJVPosting = false;
-						} else {
-							//objHdModel.setStrJVNo(arrVal[0]);
-							//objGRNService.funAddUpdate(objHdModel);
-						}
-						req.getSession().setAttribute("JVGen", flgJVPosting);
-						req.getSession().setAttribute("JVGenMessage",
-								JVGenMessage);
-					}
 				}
-				
+								
 				
 				if (flagDtlDataInserted) {
 					req.getSession().setAttribute("success", true);

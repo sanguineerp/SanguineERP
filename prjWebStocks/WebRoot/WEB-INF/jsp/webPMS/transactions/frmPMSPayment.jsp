@@ -29,6 +29,7 @@
 		    $("#txtSettlementCode").focus();
 		    $("#flagForAdvAmt").val("Y");
 		    $("#lblBalnceAmount").text(dblAmt);
+		   
 		    
 		  }
 		  else{
@@ -153,6 +154,7 @@
 	        		$("#lblGuestFullName").text(response[0].strFirstName+" "+response[0].strMiddleName+" "+response[0].strLastName);
 	        		$( "#txtReceiptAmt" ).focus();
 	        		$( "#lblBalnceAmount").text(response[0].dblBalanceAmount);
+	        		 $("#txtReceiptAmt").val(response[0].dblBalanceAmount);
 	        	}
 			},
 			error: function(jqXHR, exception) 
@@ -391,7 +393,9 @@
 			}
 			else if(parseFloat($("#txtReceiptAmt").val())>parseFloat($("#lblBalnceAmount").text()))
 			{
-				alert("Amount should not be greatet than balance amount");
+				
+
+				alert("Amount should not be greatet than balance amount"); 
 				 flg=false;
 			}
 		}

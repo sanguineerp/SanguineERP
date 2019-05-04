@@ -34,7 +34,7 @@
 		<field name="strProdName" class="java.lang.String"/>
 		<field name="dblQty" class="java.math.BigDecimal"/>
 		<field name="dblWeight" class="java.math.BigDecimal"/>
-		<field name="dblPrice" class="java.math.BigDecimal"/>
+		<field name="costRM" class="java.math.BigDecimal"/>
 		<field name="strRemark" class="java.lang.String"/>
 		<variable name="SrNo" class="java.lang.Double" calculation="Count">
 			<variableExpression><![CDATA[$V{SrNo}+new Double(1.0)]]></variableExpression>
@@ -44,7 +44,7 @@
 			<variableExpression><![CDATA[$F{dblQty}]]></variableExpression>
 		</variable>
 		<variable name="totalPrice" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[$F{dblPrice}]]></variableExpression>
+			<variableExpression><![CDATA[$F{costRM}]]></variableExpression>
 		</variable>
 	</subDataset>
 	<parameter name="strCompanyName" class="java.lang.String"/>
@@ -378,7 +378,7 @@
 										<font fontName="Serif" size="8"/>
 										<paragraph rightIndent="2"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{dblPrice}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{costRM}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>

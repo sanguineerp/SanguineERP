@@ -16,7 +16,7 @@ public class clsIncomeHeadMasterServiceImpl implements clsIncomeHeadMasterServic
 	private clsGlobalFunctionsService objGlobalFunctionsService;
 	clsIncomeHeadMasterModel objIncomeHeadMasterModel;
 
-	@Override
+	/*@Override
 	public clsIncomeHeadMasterModel funPrepareIncomeHeadModel(clsIncomeHeadMasterBean objIncomeMasterBean, String clientCode, String userCode) {
 		objIncomeHeadMasterModel = new clsIncomeHeadMasterModel();
 		clsGlobalFunctions objGlobal = new clsGlobalFunctions();
@@ -43,5 +43,34 @@ public class clsIncomeHeadMasterServiceImpl implements clsIncomeHeadMasterServic
 
 		return objIncomeHeadMasterModel;
 	}
+*/
+	
 
+@Override
+	public clsIncomeHeadMasterModel funPrepareIncomeHeadModel(clsIncomeHeadMasterBean objIncomeMasterBean, String clientCode, String userCode) {
+		objIncomeHeadMasterModel = new clsIncomeHeadMasterModel();
+		clsGlobalFunctions objGlobal = new clsGlobalFunctions();
+		long lastNo = 0;
+
+		if (objIncomeMasterBean.getStrIncomeHeadCode().trim().length() == 0) {
+			lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tblincomehead", "IncomeHeadMaster", "strIncomeHeadCode", clientCode);
+			String incomeCode = "IH" + String.format("%06d", lastNo);
+
+			objIncomeHeadMasterModel.setStrIncomeHeadCode(incomeCode);
+			objIncomeHeadMasterModel.setStrUserCreated(userCode);
+			objIncomeHeadMasterModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+		} else {
+			objIncomeHeadMasterModel.setStrIncomeHeadCode(objIncomeMasterBean.getStrIncomeHeadCode());
+
+		}
+		objIncomeHeadMasterModel.setStrIncomeHeadDesc(objIncomeMasterBean.getStrIncomeHeadDesc());
+		objIncomeHeadMasterModel.setStrDeptCode(objIncomeMasterBean.getStrDeptCode());
+		objIncomeHeadMasterModel.setStrAccountCode(objIncomeMasterBean.getStrAccountCode());
+
+		objIncomeHeadMasterModel.setStrUserEdited(userCode);
+		objIncomeHeadMasterModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+		objIncomeHeadMasterModel.setStrClientCode(clientCode);
+		objIncomeHeadMasterModel.setDblRate(objIncomeMasterBean.getDblRate());
+		return objIncomeHeadMasterModel;
+	}
 }

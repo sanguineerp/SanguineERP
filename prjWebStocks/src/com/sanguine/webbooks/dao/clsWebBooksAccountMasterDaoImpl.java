@@ -46,7 +46,7 @@ public class clsWebBooksAccountMasterDaoImpl implements clsWebBooksAccountMaster
 
 	@Override
 	public String funGetMaxAccountNo(String subGroupCode, String clientCode, String propertyCode) {
-		Query sqlNextAccountNo = webBooksSessionFactory.getCurrentSession().createSQLQuery("select ifnull(max(strAccountCode),CONCAT('" + subGroupCode + "','-01-','00')) " + "from  tblacmaster " + "where strSubGroupCode='" + subGroupCode + "' and strClientCode='" + clientCode + "' ");
+		Query sqlNextAccountNo = webBooksSessionFactory.getCurrentSession().createSQLQuery("select ifnull(max(strAccountCode),CONCAT('" + subGroupCode + "','-001-','00')) " + "from  tblacmaster " + "where strSubGroupCode='" + subGroupCode + "' and strClientCode='" + clientCode + "' ");
 
 		return sqlNextAccountNo.list().get(0).toString();
 	}

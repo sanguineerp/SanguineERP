@@ -595,8 +595,10 @@ public class clsProductMasterController {
 			} else {
 				objModel = objProductMasterService.funGetObject(prodCode, clientCode);
 			}
-
-			objModel.setDblCostRM(dblreOrderPrice);
+			if(dblreOrderPrice!=0){
+				objModel.setDblCostRM(dblreOrderPrice);	
+			}
+			
 		}
 
 		if (null == objModel) {

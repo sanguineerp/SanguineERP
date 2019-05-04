@@ -31,7 +31,7 @@
 	<br />
 	<br />
 
-	<s:form name="ChartOfAccountReport" method="GET" action="rptChartOfAccountReport.html" target="_blank">
+	<s:form name="ChartOfAccountReport" method="GET" action="rptBalanceSheet.html" target="_blank">
 
 		<p align="center">
 				<input type="submit" value="View Report"  class="form_button" />

@@ -82,6 +82,9 @@
 			      var st = strIncomeHeadDesc.replace(/\s{2,}/g, ' ');
 			      $('#txtIncomeHeadDesc').val(st);
 			});
+			
+			
+			
 		});
 		
 		
@@ -285,7 +288,14 @@
 				{
 					 alert('Enter Income Head Description ');
 					 flg=false;
+				}		
+				
+				else if($('#dblRate').val()=='')
+				{
+					 alert('Enter Rate ');
+					 flg=false;
 				}				
+				
 				
 				return flg;
 			}
@@ -332,6 +342,12 @@
 				<td width="40%"><s:input id="txtIncomeHeadDesc" path="strIncomeHeadDesc" cssClass="longTextBox" /></td>				
 			    <td colspan="1"></td>
 			</tr>
+			<tr>
+			    <td width="20%"><label>Rate</label></td>
+				<td width="40%"><s:input id="dblRate" path="dblRate" cssClass="longTextBox" /></td>				
+			    <td colspan="1"></td>
+			</tr>
+			
 		</table>
 		</div>
 						<!--General Tab End  -->
@@ -345,7 +361,7 @@
 						<tr>
 						    <td><label>Account Code</label></td>
 						    <td><s:input id="txtAccountCode" path="strAccountCode" readonly="true" ondblclick="funHelp('accountCode')" cssClass="searchTextBox"/></td>
-						    <td colspan="2"><s:input id="txtAccountName" path="" readonly="true" cssClass="longTextBox"  style="width: 316px"/></td>			        			        						    			    		        			  
+						    <td colspan="2"><s:input id="txtAccountName" path="dblRate" readonly="true" cssClass="longTextBox"  style="width: 316px"/></td>			        			        						    			    		        			  
 						</tr>
 				</table>
 			</div>

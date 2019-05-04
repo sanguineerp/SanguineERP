@@ -87,6 +87,7 @@
 	        	{
 	        		$("#strIncomeHead").val(response.strIncomeHeadCode);
 	        		$("#lblIncomeHeadName").text(response.strIncomeHeadDesc);
+	        		$("#dblRate").val(response.dblRate);
 	        	}
 			},
 			error: function(jqXHR, exception) 
@@ -172,7 +173,8 @@
 		var incomeHeadCode=$("#strIncomeHead").val();
 		var incomeHeadName=$("#lblIncomeHeadName").text();
 		var amount=$("#dblIncomeHeadAmt").val();
-		
+		var quantity = $("#dblQuantity").val();
+		var rate = $("#dblRate").val();
 		var flag=false;
 		flag=funChechDuplicate(incomeHeadCode);
 		if(flag)
@@ -184,7 +186,7 @@
 			var table=document.getElementById("tblIncomeHeadDtl");
 			var rowCount=table.rows.length;
 			var row=table.insertRow();
-			
+			amount = quantity * rate
 	 	    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width:80%;\" name=\"listIncomeHeadBeans["+(rowCount)+"].strIncomeHeadCode\" id=\"strIncomeHeadCode."+(rowCount)+"\" value='"+incomeHeadCode+"' >";
 	 	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width:70%;\" name=\"listIncomeHeadBeans["+(rowCount)+"].strIncomeHeadDesc\" id=\"strIncomeHeadDesc."+(rowCount)+"\" value='"+incomeHeadName+"' >";
 	        row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-right: 5px;width:50%;text-align: right;\" name=\"listIncomeHeadBeans["+(rowCount)+"].dblAmount\" id=\"dblAmount."+(rowCount)+"\"  value='"+amount+"' >";
@@ -195,6 +197,9 @@
 			
 			$("#strIncomeHead").val('');
 			$("#dblIncomeHeadAmt").val('');
+			
+			$("#dblQuantity").val('');
+			$("#dblRate").val('');
 		}
 	}
 	
@@ -297,6 +302,17 @@
 		window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 		//window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
 	}
+	
+	function funUpdateAmt() {
+		
+		var quantity = $("#dblQuantity").val();
+		var rate = $("#dblRate").val();
+		var amt = quantity * rate;
+		$("#dblIncomeHeadAmt").val(amt);
+		
+		
+		
+	}
 </script>
 
 </head>
@@ -326,12 +342,31 @@
 			    <td><label>Income Head</label></td>
 			    <td><s:input id="strIncomeHead" path=""  readonly="true"  ondblclick="funHelp('incomeHead')" cssClass="searchTextBox"/></td>
 			    <td><label id="lblIncomeHeadName"></label></td>
+			    
+			    <td width="20%"><label>Rate</label></td>
+				<td width="20%"><s:input id="dblRate" path="" cssClass="longTextBox" /></td>
 			</tr>
+			
+			
+			<tr>
+			    <td><label>Quantity</label></td>
+			    <td><s:input id="dblQuantity" path=""   class="decimal-places-amt numberField" value="1" placeholder="Qauntity" onkeypress="funUpdateAmt()" /></td>
+			    
+			    
+			    
+			      				
+			    
+			</tr>
+			
 			
 			<tr>
 			    <td><label>Amount</label></td>
 			    <td><s:input id="dblIncomeHeadAmt" path=""   class="decimal-places-amt numberField" value="0" placeholder="amt"  /></td>
 			    <td><input type="button" value="Add"  class="smallButton" onclick='return funAddRow()'/></td>
+			    
+			    
+			      				
+			    
 			</tr>
 			
 		</table>

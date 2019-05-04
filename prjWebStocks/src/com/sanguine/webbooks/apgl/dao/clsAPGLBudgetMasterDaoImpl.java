@@ -14,16 +14,14 @@ public class clsAPGLBudgetMasterDaoImpl implements clsAPGLBudgetMasterDao {
 	@Autowired
 	private SessionFactory webBooksSessionFactory;
 
-	public List funGetBudgetTableData(String strMonth, String strYear, String strClientCode) {
-		// String
-		// sql="select a.strAccountCode,a.strAccountName,IFNULL(b.strMonth,''),IFNULL(b.strYear,''),IFNULL(b.dblBudgetAmt,0.0), IFNULL(b.intID,' ') from tblacmaster a "
-		// +" left outer join tblbudget b on a.strAccountCode=b.strAccCode and a.strClientCode=b.strClientCode and b.strMonth='"+strMonth+"' and "
-		// +" b.strYear='"+strYear+"' and a.strClientCode='"+strClientCode+"' and b.strClientCode='"+strClientCode+"'  order by b.strMonth,b.strMonth"
-		// ;
-		//
+	public List funGetBudgetTableData(String strYear, String strClientCode) {
 
-		String sql = "select a.strAccountCode,a.strAccountName,IFNULL(b.dblBudgetAmt,0.0), IFNULL(b.intID,' ') from tblacmaster a " + " left outer join tblbudget b on a.strAccountCode=b.strAccCode and a.strClientCode=b.strClientCode where b.strMonth='" + strMonth + "' and " + " b.strYear='" + strYear + "' and a.strClientCode='" + strClientCode + "' and b.strClientCode='" + strClientCode
-				+ "'  order by b.strMonth,b.strMonth";
+		String sql = " select a.strAccountCode,a.strAccountName,IFNULL(b.dblBudgetAmt,0.0), IFNULL(b.intID,' ') from tblacmaster a " + " left outer join tblbudget b on a.strAccountCode=b.strAccCode and a.strClientCode=b.strClientCode "
+				+ " where  ";
+				if(!strYear.isEmpty()){
+					sql+=" b.strYear='" + strYear + "' and ";
+				}
+				sql+= " a.strClientCode='" + strClientCode + "'";
 		List list = webBooksSessionFactory.getCurrentSession().createSQLQuery(sql).list();
 		return list;
 	}

@@ -16,8 +16,8 @@ public class clsAPGLBudgetMasterServiceImpl implements clsAPGLBudgetMasterServic
 	@Autowired
 	clsAPGLBudgetMasterDao objDao;
 
-	public List funGetBudgetTableData(String strMonth, String strYear, String strClientCode) {
-		return objDao.funGetBudgetTableData(strMonth, strYear, strClientCode);
+	public List funGetBudgetTableData(String strYear, String strClientCode) {
+		return objDao.funGetBudgetTableData(strYear, strClientCode);
 	}
 
 	public void funSaveBudgetTableData(clsAPGLBudgetModel objBudgetModel) {

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webpms.bean.clsPMSTaxMasterBean;
+import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
 import com.sanguine.webpms.model.clsPMSTaxMasterModel;
 import com.sanguine.webpms.model.clsPMSTaxMasterModel_ID;
 import com.sanguine.webpms.service.clsPMSTaxMasterService;
@@ -36,6 +37,9 @@ public class clsPMSTaxMasterController {
 
 	@Autowired
 	private clsGlobalFunctions objGlobal;
+	
+	@Autowired
+	private clsWebPMSDBUtilityDao objWebPMSUtility;
 
 	// Open PMSTaxMaster
 	@RequestMapping(value = "/frmPMSTaxMaster", method = RequestMethod.GET)
@@ -144,6 +148,31 @@ public class clsPMSTaxMasterController {
 	}
 
 	// Save or Update PMSTaxMaster
+	/*@RequestMapping(value = "/savePMSTaxMaster", method = RequestMethod.POST)
+	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsPMSTaxMasterBean objBean, BindingResult result, HttpServletRequest req) {
+		String urlHits = "1";
+		try {
+			urlHits = req.getParameter("saddr").toString();
+		} catch (NullPointerException e) {
+			urlHits = "1";
+		}
+		if (!result.hasErrors()) {
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String userCode = req.getSession().getAttribute("usercode").toString();
+			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+			
+			clsPMSTaxMasterModel objModel = funPrepareModel(objBean, userCode, clientCode, propertyCode);
+			objPMSTaxMasterService.funAddUpdatePMSTaxMaster(objModel);
+
+			req.getSession().setAttribute("success", true);
+			req.getSession().setAttribute("successMessage", "Tax Code : ".concat(objModel.getStrTaxCode()));
+
+			return new ModelAndView("redirect:/frmPMSTaxMaster.html?saddr=" + urlHits);
+		} else {
+			return new ModelAndView("redirect:/frmPMSTaxMaster.html?saddr=" + urlHits);
+		}
+	}*/
+	
 	@RequestMapping(value = "/savePMSTaxMaster", method = RequestMethod.POST)
 	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsPMSTaxMasterBean objBean, BindingResult result, HttpServletRequest req) {
 		String urlHits = "1";
@@ -156,9 +185,25 @@ public class clsPMSTaxMasterController {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+			
 			clsPMSTaxMasterModel objModel = funPrepareModel(objBean, userCode, clientCode, propertyCode);
-			objPMSTaxMasterService.funAddUpdatePMSTaxMaster(objModel);
-
+			
+			String delQuery = "delete from tbltaxmaster  where strDeptCode='"+objModel.getStrDeptCode()+"'";
+			objWebPMSUtility.funExecuteUpdate(delQuery, "sql");
+			
+			String sql1= "select a.strIncomeHeadCode from tblincomehead a where a.strDeptCode='"+objModel.getStrDeptCode()+"' ;";
+			List list  = objWebPMSUtility.funExecuteQuery(sql1, "sql");
+			for(int i=0;i<list.size();i++)
+			{
+				String incomHeadCode = list.get(i).toString();
+				objBean.setStrIncomeHeadCode(incomHeadCode);
+				objModel=funPrepareModel(objBean, userCode, clientCode, propertyCode);
+				objPMSTaxMasterService.funAddUpdatePMSTaxMaster(objModel);
+			}
+			
+			String sql = "UPDATE tbltaxmaster a set a.dblTaxValue='"+objModel.getDblTaxValue()+"' WHERE a.strDeptCode='"+objModel.getStrDeptCode()+"'";
+			objWebPMSUtility.funExecuteUpdate(sql, "sql");
+						
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Tax Code : ".concat(objModel.getStrTaxCode()));
 

@@ -3980,6 +3980,15 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/masters/frmACSubGroupMaster.jsp"></put-attribute>
 	</definition>
 	
+	<definition name="frmAccountBudgetMaster" extends="base.definition">
+		<put-attribute name="title" value="Budget Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/masters/frmAccountBudgetMaster.jsp"></put-attribute>
+	</definition>
+	<definition name="frmAccountBudgetMaster_1" extends="base.definition4">
+		<put-attribute name="title" value="Budget Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webbooks/masters/frmAccountBudgetMaster.jsp"></put-attribute>
+	</definition>
+	
 <!-- 	APGL Forms Entry Starts -->
 	
 	

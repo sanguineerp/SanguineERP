@@ -39,6 +39,12 @@ public class clsAPGLBudgetMasterController {
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
+		String strClientCode = request.getSession().getAttribute("clientCode").toString();
+		Map<Integer, String> mapFinancialYear = objGlobalFunctionsService.funGetFinancialYearList(strClientCode);
+		if (mapFinancialYear.isEmpty()) {
+			mapFinancialYear.put(0, "");
+		}
+		model.put("listFinancialYear", mapFinancialYear);
 		model.put("urlHits", urlHits);
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmAPGLBudgetMaster_1", "command", new clsAPGLBudgetBean());
@@ -55,10 +61,10 @@ public class clsAPGLBudgetMasterController {
 	@RequestMapping(value = "/fillBudgetTableData", method = RequestMethod.GET)
 	public @ResponseBody List funFillBudgetTableData(HttpServletRequest request) {
 
-		String strMonth = request.getParameter("month").toString();
+	//	String strMonth = request.getParameter("month").toString();
 		String strYear = request.getParameter("year").toString();
 		String strClientCode = request.getSession().getAttribute("clientCode").toString();
-		List listBudget = objAPGLBudgetMasterService.funGetBudgetTableData(strMonth, strYear, strClientCode);
+		List listBudget = objAPGLBudgetMasterService.funGetBudgetTableData(strYear, strClientCode);
 
 		return listBudget;
 	}
@@ -76,7 +82,7 @@ public class clsAPGLBudgetMasterController {
 				objBudgetModel.setStrAccCode(obj.getStrAccCode().toString());
 				objBudgetModel.setStrAccName(obj.getStrAccName().toString());
 				objBudgetModel.setDblBudgetAmt(obj.getDblBudgetAmt());
-				objBudgetModel.setStrMonth(budgetBean.getStrMonth().toString());
+				objBudgetModel.setStrMonth("");
 				objBudgetModel.setStrYear(budgetBean.getStrYear());
 				objBudgetModel.setStrClientCode(strClientCode);
 				objAPGLBudgetMasterService.funSaveBudgetTableData(objBudgetModel);
@@ -87,7 +93,7 @@ public class clsAPGLBudgetMasterController {
 				objBudgetModel.setStrAccCode(obj.getStrAccCode().toString());
 				objBudgetModel.setStrAccName(obj.getStrAccName().toString());
 				objBudgetModel.setDblBudgetAmt(obj.getDblBudgetAmt());
-				objBudgetModel.setStrMonth(budgetBean.getStrMonth().toString());
+				objBudgetModel.setStrMonth("");
 				objBudgetModel.setStrYear(budgetBean.getStrYear());
 				objBudgetModel.setStrClientCode(strClientCode);
 				objAPGLBudgetMasterService.funSaveBudgetTableData(objBudgetModel);

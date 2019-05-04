@@ -222,6 +222,8 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="strGrpCategory" class="java.lang.String"/>
+	<field name="strSubGroupName" class="java.lang.String"/>
+	<field name="strSubGroupCode" class="java.lang.String"/>
 	<group name="Group1">
 		<groupExpression><![CDATA[$F{strGroupCode}]]></groupExpression>
 		<groupHeader>
@@ -276,6 +278,39 @@
 				</line>
 			</band>
 		</groupFooter>
+	</group>
+	<group name="subGroup">
+		<groupExpression><![CDATA[$F{strSubGroupCode}]]></groupExpression>
+		<groupHeader>
+			<band height="17">
+				<staticText>
+					<reportElement x="20" y="0" width="78" height="15" uuid="bc3f6dd2-82af-40a6-9b1e-a3578151eb96">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SubGroup Code]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="108" y="1" width="51" height="15" forecolor="#0BB361" uuid="d8239c73-358c-4308-8f7c-4c8f0834c19c"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{strSubGroupCode}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="159" y="0" width="68" height="16" uuid="18caac3d-5a67-42e8-8603-1eb0298ac060"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[SubGroup Name]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="232" y="0" width="142" height="16" forecolor="#0BB361" uuid="7b4b9567-9079-4b27-b781-9eb06fbbb8f6"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{strSubGroupName}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
 	</group>
 	<background>
 		<band splitType="Stretch"/>
@@ -385,7 +420,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="16" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
 				<reportElement x="3" y="2" width="75" height="13" uuid="6ed26462-2b01-4d27-bb48-15f6c799f824"/>
 				<textElement>

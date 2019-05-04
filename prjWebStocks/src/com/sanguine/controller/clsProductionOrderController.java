@@ -942,11 +942,12 @@ public class clsProductionOrderController {
 			objSetup = new clsPropertySetupModel();
 		}
 		String suppName = "";
+		String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
 
 		String reportName = servletContext.getRealPath("/WEB-INF/reports/webcrm/rptCustomerWiseLocationWiseSOReport.jrxml");
 		String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
-		String propNameSql = "select a.strPropertyName  from dbwebmms.tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
+		String propNameSql = "select a.strPropertyName  from "+webStockDB+".tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
 		List listPropName = objGlobalFunctionsService.funGetDataList(propNameSql, "sql");
 		String propName = "";
 		if (listPropName.size() > 0) {
@@ -1028,6 +1029,8 @@ public class clsProductionOrderController {
 		String companyName = req.getSession().getAttribute("companyName").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
+
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 		if (objSetup == null) {
 			objSetup = new clsPropertySetupModel();
@@ -1036,7 +1039,7 @@ public class clsProductionOrderController {
 		String reportName = servletContext.getRealPath("/WEB-INF/reports/webcrm/rptCategoryWiseSalesOrderReport.jrxml");
 		String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
-		String propNameSql = "select a.strPropertyName  from dbwebmms.tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
+		String propNameSql = "select a.strPropertyName  from "+webStockDB+".tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
 		List listPropName = objGlobalFunctionsService.funGetDataList(propNameSql, "sql");
 		String propName = "";
 		if (listPropName.size() > 0) {
@@ -1352,11 +1355,12 @@ public class clsProductionOrderController {
 			objSetup = new clsPropertySetupModel();
 		}
 		String suppName = "";
+		String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
 
 		String reportName = servletContext.getRealPath("/WEB-INF/reports/webcrm/rptLocationwiseCategorywiseSOReport.jrxml");
 		String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
-		String propNameSql = "select a.strPropertyName  from dbwebmms.tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
+		String propNameSql = "select a.strPropertyName  from "+webStockDB+".tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
 		List listPropName = objGlobalFunctionsService.funGetDataList(propNameSql, "sql");
 		String propName = "";
 		if (listPropName.size() > 0) {

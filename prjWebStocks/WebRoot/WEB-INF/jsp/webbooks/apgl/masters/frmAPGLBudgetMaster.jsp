@@ -12,7 +12,7 @@
 	/*On form Load It Reset form :Priyanka 25 april 2017*/
 	$(function() {
 
-		var start = 1980;
+		/* var start = 1980;
 		var endYear = new Date().getFullYear();
 		var options = "";
 		for (var year = endYear; year >= start; year--) {
@@ -31,21 +31,21 @@
 			monthOption += "<option>" +monthNames[i]+ "</option>";
 		}
 		document.getElementById("cmbMonth").innerHTML = monthOption;
-		
-		funFillTableData(endMonth, endYear);
+ */
+ 
+		funFillTableData('');
 
 	});
 
 	function funOnClickProceed() {
-		var month = $("#cmbMonth").val;
-		var year = $("#cmbYear").val;
-		funFillTableData(month, year)
+		//var month = $("#cmbMonth").val;
+		var year = $("#cmbYear").val();
+		funFillTableData(year)
 	}
-	function funFillTableData(month, year) {
+	function funFillTableData(year) {
 
 		var searchUrl = "";
-		searchUrl = getContextPath() + "/fillBudgetTableData.html?month="
-				+ month + "&year=" + year;
+		searchUrl = getContextPath() + "/fillBudgetTableData.html?year=" + year;
 
 		$.ajax({
 			type : "GET",
@@ -53,7 +53,12 @@
 			dataType : "json",
 			async : false,
 			success : function(response) {
-				funFillAddRow(response,month, year)
+				if(response.length>0){
+					funFillAddRow(response,year)	
+				}else{
+					funFillTableData('');
+				}
+				
 
 			},
 			error : function(jqXHR, exception) {
@@ -76,10 +81,10 @@
 		});
 	}
 
-	function funFillAddRow(data,month, year) {
+	function funFillAddRow(data,year) {
 
 		
-		$("#cmbMonth").val(month);
+		//$("#cmbMonth").val(month);
 		$("#cmbYear").val(year);
 		
 	
@@ -134,26 +139,8 @@
 					<td>
 						<%--<s:input type="text" id="txtYear" class="calenderTextBox" path="Year" required="required" /> --%>
 
-						<s:select id="cmbYear" path="strYear" class="BoxW124px"></s:select>
+						<s:select id="cmbYear" path="strYear" items="${listFinancialYear}" class="BoxW124px"></s:select>
 					</td>
-					<td>Select Month</td>
-					<td><s:select id="cmbMonth" path="strMonth" class="BoxW124px">
-<!-- 							<option value="1">January</option> -->
-<!-- 							<option value="2">February</option> -->
-<!-- 							<option value="3">March</option> -->
-<!-- 							<option value="4">April</option> -->
-<!-- 							<option value="5">May</option> -->
-<!-- 							<option value="6">June</option> -->
-<!-- 							<option value="7">July</option> -->
-<!-- 							<option value="8">August</option> -->
-<!-- 							<option value="9">September</option> -->
-<!-- 							<option value="10">October</option> -->
-<!-- 							<option value="11">November</option> -->
-<!-- 							<option value="12">December</option> -->
-							
-				
-						</s:select></td>
-
 					<td><input id="btnAdd" type="button" class="smallButton"
 						value="Proceed"; onclick="funOnClickProceed()"></input></td>
 				</tr>

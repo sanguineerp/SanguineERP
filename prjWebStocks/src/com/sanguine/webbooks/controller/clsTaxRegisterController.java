@@ -309,7 +309,7 @@ public class clsTaxRegisterController
 			sbSql.append(" group by c.strTaxCode ");
 			*/
 			sbSql.append(" select c.strTaxDesc, SUM(b.strTaxableAmt), SUM(b.strTaxAmt)  "
-			 + " from sanguine_webmms.tblgrnhd a,sanguine_webmms.tblgrntaxdtl b,sanguine_webmms.tbltaxhd c  "
+			 + " from "+webStockDB+".tblgrnhd a,"+webStockDB+".tblgrntaxdtl b,"+webStockDB+".tbltaxhd c  "
 			 + " where a.strGRNCode=b.strGRNCode and a.strClientCode=b.strClientCode and b.strTaxCode=c.strTaxCode  "
 			 + " and b.strClientCode=c.strClientCode and DATE(a.dtGRNDate) between '"+fromDate+"' and '"+toDate+"' AND a.strClientCode='"+clientCode+"' "
 			 + " group by c.strTaxCode;");
@@ -395,7 +395,7 @@ public class clsTaxRegisterController
 			
 			
 			sbSql.append("SELECT b.strGRNCode, DATE_FORMAT(DATE(c.dtGRNDate),'%d-%m-%Y') AS dtGRNDate,a.strTaxDesc,b.strTaxableAmt,b.strTaxAmt,c.strUserCreated"
-					+ " FROM sanguine_webmms.tbltaxhd a,sanguine_webmms.tblgrntaxdtl b,sanguine_webmms.tblgrnhd c"
+					+ " FROM "+webStockDB+".tbltaxhd a,"+webStockDB+".tblgrntaxdtl b,"+webStockDB+".tblgrnhd c"
 					+ " WHERE a.strTaxCode=b.strTaxCode AND b.strGRNCode=c.strGRNCode "
 					+ " AND DATE(c.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' "
 					+ " AND c.strClientCode='" + clientCode + "' AND a.strTaxOnSP='Purchase'");

@@ -694,7 +694,8 @@ public class clsStkTransferController
 			JRDesignQuery newQuery = new JRDesignQuery();
 			newQuery.setText(sql);
 			jd.setQuery(newQuery);
-			String sql2 = "select a.strSTCode,a.strProdCode,b.strProdName,a.dblQty,a.dblWeight,a.dblPrice,a.strRemark " + " from tblstocktransferdtl a,tblproductmaster b " + " where a.strProdCode=b.strProdCode and a.strSTCode='" + stCode + "' and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' ";
+			//String sql2 = "select a.strSTCode,a.strProdCode,b.strProdName,a.dblQty,a.dblWeight,a.dblPrice,a.strRemark " + " from tblstocktransferdtl a,tblproductmaster b " + " where a.strProdCode=b.strProdCode and a.strSTCode='" + stCode + "' and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' ";
+			String sql2 = "select a.strSTCode,a.strProdCode,b.strProdName,a.dblQty,a.dblWeight,(b.dblCostRM*a.dblQty) as costRM,a.strRemark " + " from tblstocktransferdtl a,tblproductmaster b " + " where a.strProdCode=b.strProdCode and a.strSTCode='" + stCode + "' and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' ";
 
 			JRDesignQuery subQuery = new JRDesignQuery();
 			subQuery.setText(sql2);
@@ -917,7 +918,7 @@ public class clsStkTransferController
 	private String funGenrateJVforSalesReturnPropertyWiseSupplier(clsStkTransferHdModel objModel, List<clsStkTransferDtlModel> listDtlModel, String str, String clientCode, String userCode, String propCode, HttpServletRequest req)
 	{
 		JSONObject jObjJVData = new JSONObject();
-
+		String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
 		JSONArray jArrJVdtl = new JSONArray();
 		JSONArray jArrJVDebtordtl = new JSONArray();
 		String jvCode = "";
@@ -1035,7 +1036,7 @@ public class clsStkTransferController
 			// jvdtl entry end
 
 			// jvDebtor detail entry start
-			String sql = "  select a.strSTCode,a.dblTotalAmt,b.strDebtorCode,b.strPName,date(a.dtSTDate), " + "  a.strNarration ,date(a.dtSTDate),a.strNo " + " from dbwebmms.tblstocktransferhd a,dbwebmms.tblpartymaster b  " + "  where a.strFromLocCode =b.strLocCode  " + "   and a.strSTCode='" + objModel.getStrSTCode() + "' and a.strClientCode='" + clientCode + "'   ";
+			String sql = "  select a.strSTCode,a.dblTotalAmt,b.strDebtorCode,b.strPName,date(a.dtSTDate), " + "  a.strNarration ,date(a.dtSTDate),a.strNo " + " from "+webStockDB+".tblstocktransferhd a,"+webStockDB+".tblpartymaster b  " + "  where a.strFromLocCode =b.strLocCode  " + "   and a.strSTCode='" + objModel.getStrSTCode() + "' and a.strClientCode='" + clientCode + "'   ";
 			List listTax = objGlobalFunctionsService.funGetList(sql, "sql");
 			for (int i = 0; i < listTax.size(); i++)
 			{
@@ -1076,6 +1077,8 @@ public class clsStkTransferController
 	private String funGenrateJVforSalesReturnPropertyWiseCustomer(clsStkTransferHdModel objModel, List<clsStkTransferDtlModel> listDtlModel, String str, String clientCode, String userCode, String propCode, HttpServletRequest req)
 	{
 		JSONObject jObjJVData = new JSONObject();
+
+		String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
 
 		JSONArray jArrJVdtl = new JSONArray();
 		JSONArray jArrJVDebtordtl = new JSONArray();
@@ -1194,7 +1197,7 @@ public class clsStkTransferController
 			// jvdtl entry end
 
 			// jvDebtor detail entry start
-			String sql = "  select a.strSTCode,a.dblTotalAmt,b.strDebtorCode,b.strPName,date(a.dtSTDate), " + "  a.strNarration ,date(a.dtSTDate),a.strNo " + " from dbwebmms.tblstocktransferhd a,dbwebmms.tblpartymaster b  " + "  where a.strToLocCode =b.strLocCode  " + "   and a.strSTCode='" + objModel.getStrSTCode() + "' and a.strClientCode='" + clientCode + "'   ";
+			String sql = "  select a.strSTCode,a.dblTotalAmt,b.strDebtorCode,b.strPName,date(a.dtSTDate), " + "  a.strNarration ,date(a.dtSTDate),a.strNo " + " from "+webStockDB+".tblstocktransferhd a,"+webStockDB+".tblpartymaster b  " + "  where a.strToLocCode =b.strLocCode  " + "   and a.strSTCode='" + objModel.getStrSTCode() + "' and a.strClientCode='" + clientCode + "'   ";
 			List listTax = objGlobalFunctionsService.funGetList(sql, "sql");
 			for (int i = 0; i < listTax.size(); i++)
 			{

@@ -201,12 +201,12 @@ public class clsBankBookController {
 						String sqlQuery1="";
 						if(prodArr[2].toString().equalsIgnoreCase("Payment"))
 						{
-							sqlQuery1 = "select ifnull(b.strPName,'') from tblpaymenthd a left outer join sanguine_webmms.tblpartymaster b on a.strSancCode=b.strDebtorCode "
+							sqlQuery1 = "select ifnull(b.strPName,'') from tblpaymenthd a left outer join "+webStockDB+".tblpartymaster b on a.strSancCode=b.strDebtorCode "
 								+" where a.strVouchNo='"+prodArr[1].toString()+"'; ";
 						}
 						else
 						{
-							sqlQuery1="select ifnull(b.strPName,'') from tblreceipthd a left outer join sanguine_webmms.tblpartymaster b on a.strDebtorCode=b.strDebtorCode\n" + 
+							sqlQuery1="select ifnull(b.strPName,'') from tblreceipthd a left outer join "+webStockDB+".tblpartymaster b on a.strDebtorCode=b.strDebtorCode\n" + 
 									"where a.strVouchNo='"+prodArr[1].toString()+"';";
 						}
 						List list = objGlobalFunctionsService.funGetDataList(sqlQuery1, "sql");
@@ -258,12 +258,12 @@ public class clsBankBookController {
 					String sqlQuery1="";
 					if(prodArr[2].toString().equalsIgnoreCase("Payment"))
 					{
-						sqlQuery1 = "select ifnull(b.strPName,'') from tblpaymenthd a left outer join sanguine_webmms.tblpartymaster b on a.strSancCode=b.strDebtorCode "
+						sqlQuery1 = "select ifnull(b.strPName,'') from tblpaymenthd a left outer join "+webStockDB+".tblpartymaster b on a.strSancCode=b.strDebtorCode "
 							+" where a.strVouchNo='"+prodArr[1].toString()+"'; ";
 					}
 					else
 					{
-						sqlQuery1="select ifnull(b.strPName,'') from tblreceipthd a left outer join sanguine_webmms.tblpartymaster b on a.strSancCode=b.strDebtorCode\r\n" + 
+						sqlQuery1="select ifnull(b.strPName,'') from tblreceipthd a left outer join "+webStockDB+".tblpartymaster b on a.strSancCode=b.strDebtorCode\r\n" + 
 								"where a.strVouchNo='"+prodArr[1].toString()+"';";
 					}
 					List list = objGlobalFunctionsService.funGetDataList(sqlQuery1, "sql");

@@ -156,12 +156,15 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 
 	public Long funGetCount(String tableName, String columnName) {
 		Long lastNo = new Long(0);
+		String module=req.getSession().getAttribute("selectedModuleName").toString();
 		if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("1-WebStocks")) {
 			sessionFactory1 = sessionFactory;
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("2-WebExcise")) {
 			sessionFactory1 = exciseSessionFactory;
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			sessionFactory1 = sessionFactory;
+		} else if (module.equalsIgnoreCase("5-WebBookAR") || module.equalsIgnoreCase("8-WebBookAPGL") || module.equalsIgnoreCase("5-WebBook")) {
+			sessionFactory1 = webBooksSessionFactory;
 		}
 		try {
 			@SuppressWarnings("rawtypes")

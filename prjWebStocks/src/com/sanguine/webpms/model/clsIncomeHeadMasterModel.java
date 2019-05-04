@@ -36,6 +36,14 @@ public class clsIncomeHeadMasterModel {
 	@Column(name = "strAccountCode", columnDefinition = "VARCHAR(20) NOT NULL default ''")
 	private String strAccountCode;
 
+
+//ALTER TABLE `tblincomehead`
+	//ADD COLUMN `dblRateAmt` DECIMAL(18,4) NOT NULL AFTER `strAccountCode`;
+
+
+	@Column(name = "dblRateAmt" , columnDefinition = " DECIMAL(18,4) NOT NULL")
+	private double dblRate;
+	
 	public String getStrIncomeHeadCode() {
 		return strIncomeHeadCode;
 	}
@@ -107,6 +115,15 @@ public class clsIncomeHeadMasterModel {
 	public void setStrAccountCode(String strAccountCode) {
 		this.strAccountCode = (String) setDefaultValue(strAccountCode, "NA");
 	}
+
+	public void setDblRate(double dblRate) {
+		this.dblRate = (double)setDefaultValue(dblRate, 0.00);
+	}
+
+	public double getDblRate() {
+		return dblRate;
+	}
+	
 
 	// Function to Set Default Values
 	private Object setDefaultValue(Object value, Object defaultValue) {
