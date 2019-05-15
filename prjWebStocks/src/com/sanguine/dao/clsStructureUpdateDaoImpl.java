@@ -2457,6 +2457,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql=" ALTER TABLE `tblbudget` CHANGE COLUMN `strAccCode` `strAccCode` VARCHAR(20) NOT NULL FIRST;";
 		funExecuteWebBooksQuery(sql);
 		
+		sql="ALTER TABLE `tblbudget` DROP PRIMARY KEY, ADD PRIMARY KEY (`intID`, `strClientCode`, `strAccCode`);";
+		funExecuteWebBooksQuery(sql);
+		
+		
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
 				+ " ('frmSundryCreditorBill', 'Sundry Creditor Bill', 'Transaction', '1', 'T', '1', '1', '12', 'default.png', '5', '1', '1', '1', 'NO', '1', 'frmSundryCreditorBill.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmCreditorsOutStandingReport', 'Creditors Out Standing Report', 'Reports', '6', 'R', '6', '6', '1', 'default.png', '5', '1', '1', '1', 'NO', 'NO', 'frmCreditorsOutStandingReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ,"

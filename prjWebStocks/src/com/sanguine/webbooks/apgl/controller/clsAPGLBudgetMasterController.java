@@ -1,7 +1,9 @@
 package com.sanguine.webbooks.apgl.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webbooks.apgl.bean.clsAPGLBudgetBean;
 import com.sanguine.webbooks.apgl.model.clsAPGLBudgetModel;
+import com.sanguine.webbooks.apgl.model.clsAPGLBudgetModel_ID;
 import com.sanguine.webbooks.apgl.service.clsAPGLBudgetMasterService;
 import com.sanguine.webbooks.apgl.bean.clsBudgetDtlBean;
 
@@ -39,12 +42,18 @@ public class clsAPGLBudgetMasterController {
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
+		List<String> listFinancialYear=new ArrayList<String>();
 		String strClientCode = request.getSession().getAttribute("clientCode").toString();
 		Map<Integer, String> mapFinancialYear = objGlobalFunctionsService.funGetFinancialYearList(strClientCode);
 		if (mapFinancialYear.isEmpty()) {
-			mapFinancialYear.put(0, "");
+			listFinancialYear.add("2019-2020");
+		}else{
+			for(Entry<Integer, String> entry : mapFinancialYear.entrySet()){
+				listFinancialYear.add(entry.getValue());
+			}
+			
 		}
-		model.put("listFinancialYear", mapFinancialYear);
+		model.put("listFinancialYear", listFinancialYear);
 		model.put("urlHits", urlHits);
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmAPGLBudgetMaster_1", "command", new clsAPGLBudgetBean());
@@ -77,6 +86,9 @@ public class clsAPGLBudgetMasterController {
 
 		clsAPGLBudgetModel objBudgetModel = new clsAPGLBudgetModel();
 		for (clsBudgetDtlBean obj : list) {
+			if(obj.getStrAccCode().toString().equalsIgnoreCase("Bonus")){
+				System.out.println(obj.getStrAccCode().toString());
+			}
 			if (!(obj.getIntId() == null || obj.getIntId() == ' ')) {
 				objBudgetModel.setIntId(Long.parseLong(obj.getIntId().toString()));
 				objBudgetModel.setStrAccCode(obj.getStrAccCode().toString());
@@ -90,6 +102,7 @@ public class clsAPGLBudgetMasterController {
 
 				long lastNo = objGlobalFunctionsService.funGetCount("tblbudget", "intId");
 				objBudgetModel.setIntId(lastNo);
+				//objBudgetModel=new clsAPGLBudgetModel(new clsAPGLBudgetModel_ID(Long.parseLong(obj.getIntId().toString()), strClientCode,obj.getStrAccCode().toString()));
 				objBudgetModel.setStrAccCode(obj.getStrAccCode().toString());
 				objBudgetModel.setStrAccName(obj.getStrAccName().toString());
 				objBudgetModel.setDblBudgetAmt(obj.getDblBudgetAmt());

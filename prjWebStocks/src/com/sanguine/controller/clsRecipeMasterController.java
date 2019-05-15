@@ -472,8 +472,10 @@ public class clsRecipeMasterController {
 //						bomAmt+=(amt*reqdQty11);
 						if(rateFrom.equals("Last Purchase Rate")){
 							List listBomRate=funGetBOMLastPurchaseRate(prodCode1, clientCode);
-							bomrate+=Double.parseDouble(listBomRate.get(0).toString());
-							bomAmt=bomAmt+(Double.parseDouble(listBomRate.get(1).toString())*reqdQty11);
+							if(listBomRate.size()>0){
+								bomrate+=Double.parseDouble(listBomRate.get(0).toString());
+								bomAmt=bomAmt+(Double.parseDouble(listBomRate.get(1).toString())*reqdQty11);	
+							}
 						}else{
 							List listBom=funGetBOMRate(prodCode1, clientCode);	
 							double rate=Double.parseDouble(listBom.get(0).toString());

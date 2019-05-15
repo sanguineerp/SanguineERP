@@ -613,8 +613,16 @@
 			</line>
 		</band>
 	</pageFooter>
+	<lastPageFooter>
+		<band height="16">
+			<staticText>
+				<reportElement x="0" y="0" width="297" height="13" uuid="1bbb3007-5394-47ff-8010-8d531a95e449"/>
+				<text><![CDATA[Note-  (B) Amount is taken from Budget Master Not Actual.]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
 	<summary>
-		<band height="86" splitType="Stretch">
+		<band height="78" splitType="Stretch">
 			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
 				<reportElement x="357" y="33" width="120" height="17" forecolor="#323292" uuid="9e0c3d77-d13e-40ec-bf99-81f0986c56af">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>

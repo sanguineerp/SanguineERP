@@ -22,6 +22,9 @@ public class clsAPGLBudgetMasterDaoImpl implements clsAPGLBudgetMasterDao {
 					sql+=" b.strYear='" + strYear + "' and ";
 				}
 				sql+= " a.strClientCode='" + strClientCode + "'";
+				if(!strYear.isEmpty()){
+					sql+=" and b.strClientCode=a.strClientCode";
+				}
 		List list = webBooksSessionFactory.getCurrentSession().createSQLQuery(sql).list();
 		return list;
 	}

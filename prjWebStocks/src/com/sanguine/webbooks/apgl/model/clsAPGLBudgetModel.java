@@ -29,10 +29,11 @@ public class clsAPGLBudgetModel implements Serializable {
 	public clsAPGLBudgetModel(clsAPGLBudgetModel_ID objModelID) {
 		intId = objModelID.getIntId();
 		strClientCode = objModelID.getStrClientCode();
+		strAccCode=objModelID.getStrAccCode();
 	}
 
 	@Id
-	@AttributeOverrides({ @AttributeOverride(name = "intId", column = @Column(name = "intId")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })
+	@AttributeOverrides({ @AttributeOverride(name = "intId", column = @Column(name = "intId")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")), @AttributeOverride(name = "strAccCode", column = @Column(name = "strAccCode")) })
 	@Column
 	// @GeneratedValue(strategy=GenerationType.AUTO)
 	private Long intId;
@@ -110,7 +111,6 @@ public class clsAPGLBudgetModel implements Serializable {
 
 	public void setIntId(long intId) {
 		this.intId = (long) setDefaultValue(intId, "");
-		;
 	}
 
 	// Function to Set Default Values

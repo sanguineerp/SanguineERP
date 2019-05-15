@@ -17,12 +17,17 @@ public class clsAPGLBudgetModel_ID implements Serializable {
 	@Column(name = "intId")
 	private long intId;
 
+	@Column(name="strAccCode")
+	private String strAccCode;
+	
+	
 	public clsAPGLBudgetModel_ID() {
 	}
 
-	public clsAPGLBudgetModel_ID(long intId, String strClientCode) {
+	public clsAPGLBudgetModel_ID(long intId, String strClientCode,String strAccCode) {
 		this.intId = intId;
 		this.strClientCode = strClientCode;
+		this.strAccCode=strAccCode;
 	}
 
 	// Setter-Getter Methods
@@ -57,6 +62,14 @@ public class clsAPGLBudgetModel_ID implements Serializable {
 
 	public void setIntId(long intId) {
 		this.intId = intId;
+	}
+
+	public String getStrAccCode() {
+		return strAccCode;
+	}
+
+	public void setStrAccCode(String strAccCode) {
+		this.strAccCode = strAccCode;
 	}
 
 }

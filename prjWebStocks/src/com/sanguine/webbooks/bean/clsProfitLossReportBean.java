@@ -24,6 +24,7 @@ public class clsProfitLossReportBean {
 	
 	private String strDocType;
 	
+	private String strAccountCode;
 	
 	
 	
@@ -108,6 +109,14 @@ public class clsProfitLossReportBean {
 
 	public void setStrDocType(String strDocType) {
 		this.strDocType = strDocType;
+	}
+
+	public String getStrAccountCode() {
+		return strAccountCode;
+	}
+
+	public void setStrAccountCode(String strAccountCode) {
+		this.strAccountCode = strAccountCode;
 	}
 
 }

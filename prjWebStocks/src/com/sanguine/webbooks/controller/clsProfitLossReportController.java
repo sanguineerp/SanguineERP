@@ -9,7 +9,9 @@ import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -452,6 +454,7 @@ public class clsProfitLossReportController {
 	      String companyName = req.getSession().getAttribute("companyName").toString();
 	      String userCode = req.getSession().getAttribute("usercode").toString();
 	      String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+	      String financialYear= req.getSession().getAttribute("financialYear").toString();
 	      clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 	      if (objSetup == null) {
 	        objSetup = new clsPropertySetupModel();
@@ -459,6 +462,14 @@ public class clsProfitLossReportController {
 	      
 	      String fromDate = objBean.getDteFromDate();
 	      String toDate = objBean.getDteToDate();
+	      
+	      SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+	      Date dtFrm=sdf.parse(fromDate);
+	      Date dtTo=sdf.parse(toDate);
+	      int diffInDays = (int) ((dtFrm.getTime() - dtTo.getTime()) / (1000 * 60 * 60 * 24));
+	      
+	      diffInDays=diffInDays==0?1:diffInDays;
+	      diffInDays=diffInDays<0?diffInDays*-1:diffInDays;
 	      
 	      String fd = fromDate.split("-")[0];
 	      String fm = fromDate.split("-")[1];
@@ -513,12 +524,20 @@ public class clsProfitLossReportController {
 
 
 	        clsProfitLossReportBean objProfitLoss = new clsProfitLossReportBean();
+	        objProfitLoss.setStrAccountCode(entry.getKey());
 	        objProfitLoss.setStrAccountName(((clsProfitLossReportBean)entry.getValue()).getStrAccountName());
 	        objProfitLoss.setDblAmt(((clsProfitLossReportBean)entry.getValue()).getDblAmt());
 	        totalExpense = totalExpense.add(((clsProfitLossReportBean)entry.getValue()).getDblAmt());
 	        
-	        if(objProfitLoss.getDblAmt().compareTo(new BigDecimal(0))==1){
-	        	dataListExtraExpense.add(objProfitLoss);	
+	    	dataListExtraExpense.add(objProfitLoss);	
+	    	
+	        if(objProfitLoss.getDblAmt().compareTo(new BigDecimal(0))==0){
+	        	BigDecimal BudgetAmt=new BigDecimal(funGetAccountBalanceFromBudget(objProfitLoss.getStrAccountCode(),dteFromDate, dteToDate, clientCode,financialYear,diffInDays));
+	        	objProfitLoss.setDblAmt(BudgetAmt);
+	        	if(BudgetAmt.compareTo(new BigDecimal(0))!=0){
+	        		objProfitLoss.setStrAccountName(objProfitLoss.getStrAccountName()+"       (B)");	
+	        	}
+	        	
 	        }
 	        
 	      }
@@ -636,6 +655,24 @@ public class clsProfitLossReportController {
 	    }
 	  }
 
+	private double funGetAccountBalanceFromBudget(String strAccountCode,String dteFromDate,String  dteToDate,String clientCode,String year, int diffInDays){
+		double budgetAmt=0;
+		try{
+			
+			String sql=" select ifnull(a.dblBudgetAmt,1)*"+diffInDays+"/365 from tblbudget a where a.strAccCode='"+strAccountCode+"' "
+					+ " and a.strClientCode='"+clientCode+"' and a.strYear='"+year+"'  ";
+
+			List listBudget = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+			if (listBudget != null && listBudget.size() > 0)
+			{
+				budgetAmt=Double.parseDouble(listBudget.get(0).toString());
+			}
+			
+		}catch(Exception w){
+			w.printStackTrace();
+		}
+		return budgetAmt;
+	}
 	
 	
 	 public JSONObject funPOSTMethodUrlJosnObjectData(String strUrl, JSONObject objRows) {

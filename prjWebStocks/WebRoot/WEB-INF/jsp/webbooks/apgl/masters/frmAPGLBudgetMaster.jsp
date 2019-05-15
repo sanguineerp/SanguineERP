@@ -38,12 +38,14 @@
 	});
 
 	function funOnClickProceed() {
-		//var month = $("#cmbMonth").val;
-		var year = $("#cmbYear").val();
-		funFillTableData(year)
+		 	
+		var t = document.getElementById("cmbYear");
+		var year = t.options[t.selectedIndex].text;
+		funFillTableData(year);
 	}
 	function funFillTableData(year) {
 
+		funRemoveRows();
 		var searchUrl = "";
 		searchUrl = getContextPath() + "/fillBudgetTableData.html?year=" + year;
 
@@ -55,8 +57,6 @@
 			success : function(response) {
 				if(response.length>0){
 					funFillAddRow(response,year)	
-				}else{
-					funFillTableData('');
 				}
 				
 
@@ -81,6 +81,15 @@
 		});
 	}
 
+	function funRemoveRows() {
+		var table = document.getElementById("tblBudget");
+		var rowCount = table.rows.length;
+		while (rowCount > 0) {
+			table.deleteRow(0);
+			rowCount--;
+		}
+	}
+	
 	function funFillAddRow(data,year) {
 
 		
@@ -98,12 +107,12 @@
 			rowData = data[cnt];
 // 			"<input type=\"text\"  readonly=\"readonly\" style=\"text-align: right;width:100%\" name=\"listclsProductionOrderDtlModel[" + (rowCount) + "].dblUnitPrice\" id=\"dblUnitPrice."	+ (rowCount)+ "\" value="+ dblUnitPrice+ " class=\"decimal-places-amt inputText-Auto\">";
 
-			row.insertCell(0).innerHTML = "<input readonly=\"readonly\" class=\"Box \" size=\"15%\" name=\"listBudgetDtlModel["+ (rowCount)+ "].strAccCode\" id=\"strAccCode."+ (rowCount)+ "\" value='" + rowData[0] + "'>";
+			row.insertCell(0).innerHTML = "<input readonly=\"readonly\" class=\"Box \" size=\"35%\" name=\"listBudgetDtlModel["+ (rowCount)+ "].strAccCode\" id=\"strAccCode."+ (rowCount)+ "\" value='" + rowData[0] + "'>";
 			row.insertCell(1).innerHTML = "<input readonly=\"readonly\" class=\"Box \" size=\"50%\" name=\"listBudgetDtlModel["+ (rowCount)+ "].strAccName\" id=\"strAccName."+ (rowCount)+ "\" value='" + rowData[1] + "'>";
 			
 			row.insertCell(2).innerHTML = "<input type=\"text\" style=\"text-align: right;width:25%\"size=\"15%\"name=\"listBudgetDtlModel["+ (rowCount)+ "].dblBudgetAmt\" id=\"dblBudgetAmt."+ (rowCount)+ "\" value='" + rowData[2] + "'>";
 		
-			row.insertCell(3).innerHTML = "<input  class=\"Box \" size=\"15%\"name=\"listBudgetDtlModel["+ (rowCount)+ "].intId\" id=\"intId."+ (rowCount)+ "\" value='" + rowData[3] + "'>";
+			row.insertCell(3).innerHTML = "<input type=\"hidden\" size=\"0%\"name=\"listBudgetDtlModel["+ (rowCount)+ "].intId\" id=\"intId."+ (rowCount)+ "\" value='" + rowData[3] + "'>";
 			rowCount++;
 		}
        
@@ -113,6 +122,13 @@
 	 */
 	function funResetFields() {
 		location.reload(true);
+	}
+	
+	function funValidate(){
+		if($("#cmbYear").val()==null ||$("#cmbYear").val()=='' ){
+			alert("Please Select Year");
+			return false;	
+		}
 	}
 </script>
 </head>
@@ -157,10 +173,10 @@
 				style="width: 100%; border: #0F0; table-layout: fixed; text-align: center"
 				class="transTablex col7-center">
 				<tr>
-					<td style="width: 10%;">Account Code</td>
-					<td style="width: 20%;">Account Name</td>
-					<td style="width: 20%;">Amount</td>
-					<td style="width: 20%;">ID</td>
+					<td style="width: 12%;">Account Code</td>
+					<td style="width: 28%;">Account Name</td>
+					<td style="width: 20%;">Yearly Amount</td>
+				 	<td style="width: 0%;"></td>
 
 				</tr>
 			</table>
@@ -170,10 +186,10 @@
 					style="width: 100%; height: 550px; border: #0F0; table-layout: fixed; overflow: scroll"
 					class="transTablex col8-center">
 					<tbody>
-					<col style="width: 10%">
-					<col style="width: 20%">
-					<col style="width: 20%">
-					<col style="width: 20%">
+					<col style="width: 12%">
+					<col style="width: 28%">
+					<col style="width: 18%">
+					<col style="width: 0%">
 
 					</tbody>
 				</table>
@@ -183,10 +199,11 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funValidate();" />
 			<input type="reset" value="Reset" class="form_button"
 				onclick="funResetFields()" />
 		</p>
+		
 	</s:form>
 
 

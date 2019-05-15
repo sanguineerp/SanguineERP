@@ -3930,7 +3930,7 @@ public class clsReportsController {
 				if (!bomCode.equals("") || !bomCode.isEmpty()) {
 					sql = sql + " p.strBOMCode='" + bomCode + "' and ";
 				}
-				sql = sql + "  p.strBOMCode=q.strBOMCode " + " and q.strChildCode = r.strProdCode and p.strParentCode=d.strProdCode" + " and p.strClientCode='" + clientCode + "' and p.strClientCode=q.strClientCode" + " and q.strClientCode=r.strClientCode  )) as eachProdPer " + " from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + " where  "
+				sql = sql + "  p.strBOMCode=q.strBOMCode " + " and q.strChildCode = r.strProdCode and p.strParentCode=d.strProdCode" + " and p.strClientCode='" + clientCode + "' and p.strClientCode=q.strClientCode" + " and q.strClientCode=r.strClientCode  )) as eachProdPer, c.strProdType " + " from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + " where  "
 						+ " a.strBOMCode=b.strBOMCode " + " and b.strChildCode = c.strProdCode and a.strParentCode=d.strProdCode  " + " and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode " + " and b.strClientCode=c.strClientCode  ";
 
 				if (!bomCode.equals("") || !bomCode.isEmpty()) {
@@ -3952,32 +3952,32 @@ public class clsReportsController {
 			{
 				objRecipeCostingbean = new clsRecipeCostingBean();
 				obj = (Object[]) listTemp.get(cnt);
-				if(!obj[13].toString().equalsIgnoreCase("Semi Finished"))
-				{
-					objRecipeCostingbean.setStrParentName(obj[0].toString());
-					objRecipeCostingbean.setStrRecipeName(obj[1].toString());
-					objRecipeCostingbean.setDblListPrice(Double.parseDouble(obj[2].toString()));
-					objRecipeCostingbean.setStrChildCode(obj[3].toString());
-					objRecipeCostingbean.setStrProdName(obj[4].toString());
-					objRecipeCostingbean.setStrUOM(obj[5].toString());
-					objRecipeCostingbean.setDblInitialWt(Double.parseDouble(obj[6].toString()));
-					objRecipeCostingbean.setDblYldPer(Double.parseDouble(obj[7].toString()));
-					objRecipeCostingbean.setDblLossper(Double.parseDouble(obj[8].toString()));
-					objRecipeCostingbean.setDblFinalWt(Double.parseDouble(obj[9].toString()));
-					objRecipeCostingbean.setDblRate(Double.parseDouble(obj[10].toString()));
-					objRecipeCostingbean.setDblRecipeCost(Double.parseDouble(obj[11].toString()));
-					objRecipeCostingbean.setDblEachProdPe(Double.parseDouble(obj[12].toString()));
-					objRecipeCostingbean.setStrBOMType(obj[13].toString());
 				
-					listJasp.add(objRecipeCostingbean);
-				}
-				if(obj[13].toString().equalsIgnoreCase("Semi Finished"))
-				{
-					flgSemiFinished=true;	
+				objRecipeCostingbean.setStrParentName(obj[0].toString());
+				objRecipeCostingbean.setStrRecipeName(obj[1].toString());
+				objRecipeCostingbean.setDblListPrice(Double.parseDouble(obj[2].toString()));
+				objRecipeCostingbean.setStrChildCode(obj[3].toString());
+				objRecipeCostingbean.setStrProdName(obj[4].toString());
+				objRecipeCostingbean.setStrUOM(obj[5].toString());
+				objRecipeCostingbean.setDblInitialWt(Double.parseDouble(obj[6].toString()));
+				objRecipeCostingbean.setDblYldPer(Double.parseDouble(obj[7].toString()));
+				objRecipeCostingbean.setDblLossper(Double.parseDouble(obj[8].toString()));
+				objRecipeCostingbean.setDblFinalWt(Double.parseDouble(obj[9].toString()));
+				objRecipeCostingbean.setDblRate(Double.parseDouble(obj[10].toString()));
+				objRecipeCostingbean.setDblRecipeCost(Double.parseDouble(obj[11].toString()));
+				objRecipeCostingbean.setDblEachProdPe(Double.parseDouble(obj[12].toString()));
+				objRecipeCostingbean.setStrBOMType(obj[13].toString());
+			
+				
+				
+				if(obj[13].toString().equalsIgnoreCase("Semi Finished") || obj[13].toString().equalsIgnoreCase("Produced"))
+				{	
 					strParentCode=obj[3].toString();
-					finalwt = obj[9].toString();
-					funGetChildProduct(obj,clientCode,bomCode,listJasp,strParentCode,flgSemiFinished,finalwt);
+					finalwt = obj[6].toString();
+					double dblRecipeCost=funGetChildProduct(obj[13].toString(),clientCode,bomCode,strParentCode,finalwt,0);
+					objRecipeCostingbean.setDblRecipeCost(dblRecipeCost);
 				}
+				listJasp.add(objRecipeCostingbean);
 			}
 			/*if(flgSemiFinished)
 			{
@@ -4041,24 +4041,22 @@ public class clsReportsController {
 	}
 
 
-private void funGetChildProduct(Object[] obj, String clientCode, String bomCode, List listJasp,String strParentCode,boolean flgSemiFinished, String finalwt) 
+private double funGetChildProduct(String bomType, String clientCode, String bomCode,String parentCode, String finalwt,double dblRecipeCost) 
 {
-	String bomType = obj[13].toString();
-	if(bomType.equalsIgnoreCase("Semi Finished"));
+	
+	if(bomType.equalsIgnoreCase("Semi Finished")  || bomType.equalsIgnoreCase("Produced"));
 	{
-		
-		String parentCode = obj[3].toString();
-		if(flgSemiFinished)
+		/*if(flgSemiFinished)
 		{
-			parentCode = strParentCode;
-		}
+			 strParentCode;
+		}*/
 		List listChild = funSemiProduct(parentCode,clientCode,bomCode,finalwt);
 		clsRecipeCostingBean objRecipeCostingbean1;
 		for(int k = 0;k<listChild.size();k++)
 		{
 			objRecipeCostingbean1 = new clsRecipeCostingBean();
 			Object[] objChild = (Object[]) listChild.get(k);
-			objRecipeCostingbean1.setStrChildCode(objChild[0].toString());
+			/*objRecipeCostingbean1.setStrChildCode(objChild[0].toString());
 			objRecipeCostingbean1.setStrParentName(objChild[1].toString());
 			objRecipeCostingbean1.setStrProdName(objChild[2].toString());
 			objRecipeCostingbean1.setDblListPrice(Double.parseDouble(objChild[3].toString()));
@@ -4071,19 +4069,31 @@ private void funGetChildProduct(Object[] obj, String clientCode, String bomCode,
 			objRecipeCostingbean1.setDblRecipeCost(Double.parseDouble(objChild[10].toString()));
 			objRecipeCostingbean1.setDblEachProdPe(Double.parseDouble(objChild[11].toString()));
 			objRecipeCostingbean1.setStrBOMType(objChild[12].toString());
-			listJasp.add(objRecipeCostingbean1);
 			
+			listJasp.add(objRecipeCostingbean1);
+			*/
 			parentCode = objChild[0].toString();
 			bomType = objChild[12].toString();
+			dblRecipeCost+=Double.parseDouble(objChild[10].toString());
+			
+			if(objChild[12].toString().equalsIgnoreCase("Semi Finished") || objChild[12].toString().equalsIgnoreCase("Produced")){
+				//flgSemiFinished=true;	
+				finalwt = objChild[5].toString()+"*"+finalwt;
+				dblRecipeCost+=funGetChildProduct(objChild[12].toString(),clientCode,objChild[13].toString(),parentCode,finalwt,Double.parseDouble(objChild[10].toString()));
+//funGetChildProduct(String bomType, String clientCode, String bomCode, List listJasp,String parentCode,boolean flgSemiFinished, String finalwt,double dblRecipeCost)			
+			}
 		}
 		
 	}
+	return dblRecipeCost;
 }
 
 private List funSemiProduct(String parentCode,String clientCode,String bomCode, String finalwt) {
 		
 		List listTemp = new ArrayList<String>();
-		String sql = "select b.strChildCode,a.strParentCode,c.strProdName,c.dblListPrice ,c.strUOM,(b.dblQty/c.dblRecipeConversion) AS InitialWt,c.dblYieldPer,(100-c.dblYieldPer) AS lossPer,(c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100) AS finalWT, c.dblCostRM AS Rate,((b.dblQty/c.dblRecipeConversion*'"+finalwt+"')*c.dblCostRM) AS RecipeCost ,IFNULL(((c.dblYieldPer*c.dblCostRM/100)*100/(SELECT SUM((r.dblYieldPer*r.dblCostRM/100))FROM tblbommasterhd p,tblbommasterdtl q, tblproductmaster r WHERE p.strParentCode='"+parentCode+"' AND p.strBOMCode=q.strBOMCode AND q.strChildCode = r.strProdCode AND p.strParentCode=r.strProdCode AND p.strClientCode='"+clientCode+"' AND p.strClientCode=q.strClientCode AND q.strClientCode=r.strClientCode)),0) AS eachProdPer,c.strProdType from  tblbommasterhd a,tblbommasterdtl b,tblproductmaster c where a.strBOMCode=b.strBOMCode and b.strChildCode=c.strProdCode and a.strParentCode='"+parentCode+"';";
+		String sql = "select b.strChildCode,a.strParentCode,c.strProdName,c.dblListPrice ,c.strUOM,(b.dblQty/c.dblRecipeConversion) AS InitialWt,c.dblYieldPer,(100-c.dblYieldPer) AS lossPer,(c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100) AS finalWT, c.dblCostRM AS Rate,((b.dblQty/c.dblRecipeConversion*"+finalwt+")*c.dblCostRM) AS RecipeCost ,IFNULL(((c.dblYieldPer*c.dblCostRM/100)*100/(SELECT SUM((r.dblYieldPer*r.dblCostRM/100))FROM tblbommasterhd p,tblbommasterdtl q, tblproductmaster r WHERE p.strParentCode='"+parentCode+"' AND p.strBOMCode=q.strBOMCode AND q.strChildCode = r.strProdCode AND p.strParentCode=r.strProdCode AND p.strClientCode='"+clientCode+"' AND p.strClientCode=q.strClientCode AND q.strClientCode=r.strClientCode)),0) AS eachProdPer,"
+				+ " c.strProdType,a.strBOMCode"
+				+ " from  tblbommasterhd a,tblbommasterdtl b,tblproductmaster c where a.strBOMCode=b.strBOMCode and b.strChildCode=c.strProdCode and a.strParentCode='"+parentCode+"';";
 		listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
 		
 		return listTemp;
