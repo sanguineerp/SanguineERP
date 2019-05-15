@@ -15,8 +15,16 @@
 
 <script type="text/javascript">
 	var fieldName;
+	var acBrandrow;
 	$(document).ready(function() {
 
+		funTaxLinkUpData('Tax');
+		funDepartmentLinkUpData('Department');
+		funSettlementLinkUpData('Settlement');
+		funRoomTypeLinkUpData('Room Type');
+		funPackageLinkUpData('Package');
+		
+		
 		$(".tab_content").hide();
 		$(".tab_content:first").show();
 
@@ -28,6 +36,21 @@
 			var activeTab = $(this).attr("data-state");
 			$("#" + activeTab).fadeIn();
 		});
+		
+		
+		$(".tab_content1").hide();
+		$(".tab_content1:first").show();
+		
+		$("ul.tabs1 li").click(function() {
+			$("ul.tabs1 li").removeClass("active");
+			$(this).addClass("active");
+			$(".tab_content1").hide();
+
+			var activeTab = $(this).attr("data-state");
+			$("#" + activeTab).fadeIn();
+		});
+		
+		
 		
 	});
 	
@@ -102,12 +125,8 @@
 		/* 
 		$('#tmeCheckInTime').timepicker('setTime', new Date());
 		$('#tmeCheckOutTime').timepicker('setTime', new Date());*/
-		
-	}); 
-	
-	
-	
 
+	}); 
 	/**
 	* Success Message After Saving Record
 	**/
@@ -320,7 +339,489 @@
 			
 		}
 		
-	
+		function funRoomTypeLinkUpData(code)
+		{
+			var searchUrl="";
+			var property=$('#strPropertyCode').val();
+			searchUrl=getContextPath()+"/loadPMSLinkUpData.html?strDoc="+code;
+			$.ajax
+			({
+		        type: "POST",
+		        url: searchUrl,
+			    dataType: "json",
+			    success: function(response)
+			    {
+			    	//funDeleteTableAllRowsOfParticulorTable(code);
+			    	$.each(response, function(i,item)
+							{
+					    		//var arr = jQuery.makeArray( response[i] );
+					    		funAddRowRoomTypeLinkUpData(item);
+					    		
+							}); 
+			    },
+			    error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+		        }
+		    });
+		}
+		
+		function funPackageLinkUpData(code)
+		{
+			var searchUrl="";
+			var property=$('#strPropertyCode').val();
+			searchUrl=getContextPath()+"/loadPMSLinkUpData.html?strDoc="+code;
+			$.ajax
+			({
+		        type: "POST",
+		        url: searchUrl,
+			    dataType: "json",
+			    success: function(response)
+			    {
+			    	//funDeleteTableAllRowsOfParticulorTable(code);
+			    	$.each(response, function(i,item)
+							{
+					    		//var arr = jQuery.makeArray( response[i] );
+					    		funAddRowPackageLinkUpData(item);
+					    		
+							}); 
+			    },
+			    error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+		        }
+		    });
+		}
+		
+		function funSettlementLinkUpData(code)
+		{
+			var searchUrl="";
+			var property=$('#strPropertyCode').val();
+			searchUrl=getContextPath()+"/loadPMSLinkUpData.html?strDoc="+code;
+			$.ajax
+			({
+		        type: "POST",
+		        url: searchUrl,
+			    dataType: "json",
+			    success: function(response)
+			    {
+			    	//funDeleteTableAllRowsOfParticulorTable(code);
+			    	$.each(response, function(i,item)
+							{
+					    		//var arr = jQuery.makeArray( response[i] );
+					    		funAddRowSettlementLinkUpData(item);
+					    		
+							}); 
+			    },
+			    error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+		        }
+		    });
+		}
+		
+		function funTaxLinkUpData(code)
+		{
+			var searchUrl="";
+			var property=$('#strPropertyCode').val();
+			searchUrl=getContextPath()+"/loadPMSLinkUpData.html?strDoc="+code;
+			$.ajax
+			({
+		        type: "POST",
+		        url: searchUrl,
+			    dataType: "json",
+			    success: function(response)
+			    {
+			    	//funDeleteTableAllRowsOfParticulorTable(code);
+			    	$.each(response, function(i,item)
+							{
+					    		//var arr = jQuery.makeArray( response[i] );
+					    		funAddRowTaxLinkUpData(item);
+					    		
+							}); 
+			    },
+			    error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+		        }
+		    });
+		}
+		
+		function funDepartmentLinkUpData(code)
+		{
+			var searchUrl="";
+			var property=$('#strPropertyCode').val();
+			searchUrl=getContextPath()+"/loadPMSLinkUpData.html?strDoc="+code;
+			$.ajax
+			({
+		        type: "POST",
+		        url: searchUrl,
+			    dataType: "json",
+			    success: function(response)
+			    {
+			    	//funDeleteTableAllRowsOfParticulorTable(code);
+			    	$.each(response, function(i,item)
+							{
+					    		//var arr = jQuery.makeArray( response[i] );
+					    		funAddRowDeptLinkUpData(item);
+					    		
+							}); 
+			    },
+			    error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+		        }
+		    });
+		}
+		
+		
+		
+		function funDeleteTableAllRowsOfParticulorTable(tableName)
+		{
+			switch(tableName)
+			{
+				case "Department" :
+				{
+					$("#tbl"+tableName+ " tr").remove();
+					break;
+				}
+				case "Tax" :
+				{
+					$("#tbl"+tableName+ " tr").remove();
+					break;
+				}
+				
+				case "Room Type" :
+				{
+					$("#tbl"+tableName+ " tr").remove();
+					break;
+				}
+				case "Package" :
+				{
+					$("#tbl"+tableName+ " tr").remove();
+					break;
+				}
+							
+				case "Settlement" :
+				{
+					$("#tbl"+tableName+ " tr").remove();
+					break;
+				}
+				
+				
+			}
+		}
+		
+		function funAddRowDeptLinkUpData(rowData)
+		{
+			$('#hidLinkup').val("");
+			$('#hidLinkup').val("DeptLinkup");
+			var table = document.getElementById("tblDepartment");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    var strMasterCode = rowData.strMasterCode;
+	    	var strMasterName = rowData.strMasterName;
+	    	var strAcCode = rowData.strAccountCode;
+	    	var strAcName = rowData.strMasterDesc;
+    		if(strAcCode==null && strAcName == null)
+   			{
+   				strAcCode = "";
+   				strAcName = "";
+			}
+    		else
+   			{
+    			strAcCode =	rowData.strAccountCode;
+				strAcName = rowData.strMasterDesc;
+   			}
+			row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listDeptLinkUp["+(rowCount)+"].strMasterCode\"  id=\"txtMasterCode."+(rowCount)+"\" value='"+strMasterCode+"' />";
+		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listDeptLinkUp["+(rowCount)+"].strMasterName\"  id=\"txtMasterName."+(rowCount)+"\" value='"+strMasterName+"' />";
+		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"searchTextBox\"  name=\"listDeptLinkUp["+(rowCount)+"].strAccountCode\"   id=\"txtSettlement."+(rowCount)+"\" value='"+strAcCode+"' ondblclick=\"funHelp1("+(rowCount)+",'Dept-Service')\" />";
+		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  name=\"listDeptLinkUp["+(rowCount)+"].strMasterDesc\"   id=\"txtSettlementName."+(rowCount)+"\" value='"+strAcName+"' />";
+	 	}
+		
+		function funAddRowPackageLinkUpData(rowData)
+		{
+			$('#hidLinkup').val("");
+			$('#hidLinkup').val("Package");
+			var table = document.getElementById("tblPackage");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    var strTaxCode = rowData.strMasterCode;
+	    	var strDesc = rowData.strMasterName;
+	    	var strAcCode = rowData.strAccountCode;
+	    	var strAcName = rowData.strMasterDesc;
+    		if(strAcCode==null && strAcName == null)
+   			{
+   				strAcCode = "";
+   				strAcName = "";
+			}
+    		else
+   			{
+    			strAcCode =	rowData.strAccountCode;
+				strAcName = rowData.strMasterDesc;
+   			}
+		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listTaxLinkUp["+(rowCount)+"].strMasterCode\"  id=\"txtTaxCode."+(rowCount)+"\" value='"+strTaxCode+"' />";
+		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listTaxLinkUp["+(rowCount)+"].strMasterName\"  id=\"txtTaxDesc."+(rowCount)+"\" value='"+strDesc+"' />";
+		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"searchTextBox\"  name=\"listTaxLinkUp["+(rowCount)+"].strAccountCode\"   id=\"txtTaxAcCode."+(rowCount)+"\" value='"+strAcCode+"' ondblclick=\"funHelp1("+(rowCount)+",'Package-Service')\" />";
+		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  name=\"listTaxLinkUp["+(rowCount)+"].strMasterDesc\"   id=\"txtTaxAcName."+(rowCount)+"\" value='"+strAcName+"' />";
+	 	}
+		
+		
+		function funAddRowRoomTypeLinkUpData(rowData)
+		{
+			$('#hidLinkup').val("");
+			$('#hidLinkup').val("RoomType");
+			var table = document.getElementById("tblrmType");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    var strTaxCode = rowData.strMasterCode;
+	    	var strDesc = rowData.strMasterName;
+	    	var strAcCode = rowData.strAccountCode;
+	    	var strAcName = rowData.strMasterDesc;
+    		if(strAcCode==null && strAcName == null)
+   			{
+   				strAcCode = "";
+   				strAcName = "";
+			}
+    		else
+   			{
+    			strAcCode =	rowData.strAccountCode;
+				strAcName = rowData.strMasterDesc;
+   			}
+			
+		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listTaxLinkUp["+(rowCount)+"].strMasterCode\"  id=\"txtTaxCode."+(rowCount)+"\" value='"+strTaxCode+"' />";
+		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listTaxLinkUp["+(rowCount)+"].strMasterName\"  id=\"txtTaxDesc."+(rowCount)+"\" value='"+strDesc+"' />";
+		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"searchTextBox\"  name=\"listTaxLinkUp["+(rowCount)+"].strAccountCode\"   id=\"txtTaxAcCode."+(rowCount)+"\" value='"+strAcCode+"' ondblclick=\"funHelp1("+(rowCount)+",'RoomType-Service')\" />";
+		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  name=\"listTaxLinkUp["+(rowCount)+"].strMasterDesc\"   id=\"txtTaxAcName."+(rowCount)+"\" value='"+strAcName+"' />";
+	 	}
+		
+		
+		function funAddRowSettlementLinkUpData(rowData)
+		{
+			$('#hidLinkup').val("");
+			$('#hidLinkup').val("SettlementLinkup");
+			var table = document.getElementById("tblSettlement");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    var strTaxCode = rowData.strMasterCode;
+	    	var strDesc = rowData.strMasterName;
+	    	var strAcCode = rowData.strAccountCode;
+	    	var strAcName = rowData.strMasterDesc;
+    		if(strAcCode==null && strAcName == null)
+   			{
+   				strAcCode = "";
+   				strAcName = "";
+			}
+    		else
+   			{
+    			strAcCode =	rowData.strAccountCode;
+				strAcName = rowData.strMasterDesc;
+   			}
+			
+		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listTaxLinkUp["+(rowCount)+"].strMasterCode\"  id=\"txtTaxCode."+(rowCount)+"\" value='"+strTaxCode+"' />";
+		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listTaxLinkUp["+(rowCount)+"].strMasterName\"  id=\"txtTaxDesc."+(rowCount)+"\" value='"+strDesc+"' />";
+		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"searchTextBox\"  name=\"listTaxLinkUp["+(rowCount)+"].strAccountCode\"   id=\"txtTaxAcCode."+(rowCount)+"\" value='"+strAcCode+"' ondblclick=\"funHelp1("+(rowCount)+",'Settlement-Service')\" />";
+		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  name=\"listTaxLinkUp["+(rowCount)+"].strMasterDesc\"   id=\"txtTaxAcName."+(rowCount)+"\" value='"+strAcName+"' />";
+	 	}
+		
+		function funAddRowTaxLinkUpData(rowData)
+		{
+			$('#hidLinkup').val("");
+			$('#hidLinkup').val("taxLinkup");
+			var table = document.getElementById("tblTax");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    var strTaxCode = rowData.strMasterCode;
+	    	var strDesc = rowData.strMasterName;
+	    	var strAcCode = rowData.strAccountCode;
+	    	var strAcName = rowData.strMasterDesc;
+    		if(strAcCode==null && strAcName == null)
+   			{
+   				strAcCode = "";
+   				strAcName = "";
+			}
+    		else
+   			{
+    			strAcCode =	rowData.strAccountCode;
+				strAcName = rowData.strMasterDesc;
+   			}
+		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listTaxLinkUp["+(rowCount)+"].strMasterCode\"  id=\"txtTaxCode."+(rowCount)+"\" value='"+strTaxCode+"' />";
+		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" name=\"listTaxLinkUp["+(rowCount)+"].strMasterName\"  id=\"txtTaxDesc."+(rowCount)+"\" value='"+strDesc+"' />";
+		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"searchTextBox\"  name=\"listTaxLinkUp["+(rowCount)+"].strAccountCode\"   id=\"txtTaxAcCode."+(rowCount)+"\" value='"+strAcCode+"' ondblclick=\"funHelp1("+(rowCount)+",'Tax-Service')\" />";
+		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  name=\"listTaxLinkUp["+(rowCount)+"].strMasterDesc\"   id=\"txtTaxAcName."+(rowCount)+"\" value='"+strAcName+"' />";
+	 	}
+		
+		function funHelp1(row,transactionName)
+		{
+			acBrandrow=row;
+			fieldName = transactionName;
+			
+			if(transactionName=='SubGroup' || transactionName=='Supplier')
+			{
+				transactionName='AccountMasterGLOnlyWeb-Service';
+			}
+			 if(transactionName=='Excess' || transactionName=='Shortage')
+			{ //
+				transactionName='LocationWeb-Service';
+			} 
+			
+			window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;top=500,left=500")
+		}
+		
+		function funSetData(code){
+
+		switch(fieldName){
+				
+			case 'Dept-Service' : 
+				funSetDept(code);
+				break;
+		        
+			case 'Tax-Service':
+		    	funSetTax(acBrandrow,code);
+		        break; 
+		        
+			case 'Settlement-Service':
+		    	funSetSettlement(acBrandrow,code);
+		        break;      
+		        
+			case 'Package-Service':
+		    	funSetPackage(acBrandrow,code);
+		        break;    
+		        
+			case 'RoomType-Service':
+		    	funSetRoomType(acBrandrow,code);
+		        break;  
+		        
+			
+		}
+	}
+		
+		function funSetDept(acBrandrow,code)
+		{
+			$.ajax({
+				type : "GET",
+				url : getContextPath()+ "/loadCRMTaxLinkupDataFormWebService.html?strDocCode=" + code,
+				dataType : "json",
+				success : function(response){
+					document.getElementById("txtSettlement."+acBrandrow).value=response.strAccountCode;
+					document.getElementById("txtSettlementName."+acBrandrow).value=response.strAccountName;
+				},
+				error: function(jqXHR, exception) {
+				            if (jqXHR.status === 0) {
+				                alert('Not connect.n Verify Network.');
+				            } else if (jqXHR.status == 404) {
+				                alert('Requested page not found. [404]');
+				            } else if (jqXHR.status == 500) {
+				                alert('Internal Server Error [500].');
+				            } else if (exception === 'parsererror') {
+				                alert('Requested JSON parse failed.');
+				            } else if (exception === 'timeout') {
+				                alert('Time out error.');
+				            } else if (exception === 'abort') {
+				                alert('Ajax request aborted.');
+				            } else {
+				                alert('Uncaught Error.n' + jqXHR.responseText);
+				            }
+				}
+			});
+		}
+		
+		
+		function funSetTax(acBrandrow,code)
+		{
+			$.ajax({
+				type : "GET",
+				url : getContextPath()+ "/loadTaxLinkupDataFormWebService.html?strDocCode=" + code,
+				dataType : "json",
+				success : function(response){
+					document.getElementById("txtTaxAcCode."+acBrandrow).value=response.strAccountCode;
+					document.getElementById("txtTaxAcName."+acBrandrow).value=response.strAccountName;
+				},
+				error: function(jqXHR, exception) {
+					if (jqXHR.status === 0) {
+				    	alert('Not connect.n Verify Network.');
+				    } else if (jqXHR.status == 404) {
+				    	alert('Requested page not found. [404]');
+				    } else if (jqXHR.status == 500) {
+				    	alert('Internal Server Error [500].');
+				    } else if (exception === 'parsererror') {
+				    	alert('Requested JSON parse failed.');
+				    } else if (exception === 'timeout') {
+				    	alert('Time out error.');
+				    } else if (exception === 'abort') {
+				    	alert('Ajax request aborted.');
+					} else {
+				    	alert('Uncaught Error.n' + jqXHR.responseText);
+					}
+		   		}
+			});
+		}
+		
 </script>
 
 </head>
@@ -349,13 +850,14 @@
 				
 				<tr>
 					<td>
-						<div id="tab_container" style="height: 800px">
-							<ul class="tabs">
+					
+					<div id="tab_container" style="height: 800px">
+								<ul class="tabs">
 								<li data-state="tab1">General</li>
 								
 								<li data-state="tab2">SMS Setup</li>
 								
-								<li data-state="tab3">Limit</li>
+								<li data-state="tab3">Linkup</li>
 
 							</ul>
 							<div id="tab1" class="tab_content" style="height: 800px">
@@ -374,6 +876,21 @@
 							    <td><label>GST No</label></td>
 							    <td><s:input path="strGSTNo"  id="txtGSTNo"  value="${GSTNo}" cssClass="longTextBox" style="width: 190px" /></td>								    						    		        			
 							</tr>
+							
+							<br /><br />
+							
+									
+									<tr>
+										 <td style="width: 10%;"><label>Total Numbers of Room</label></td>
+									     <td style="width: 5%;"><input type="text" class="numeric" id="txtNoOfRooms" Class="longTextBox" value="${listOfRoom}"/>
+									     </td>	
+									     <td style="width: 10%;"><label>Room Limit</label></td>
+									     <td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtRoomLimit" path="strRoomLimit" cssClass="longTextBox"/></td>	
+									</tr>
+									
+								
+							
+							
 						</table>
 							</div>
 						
@@ -470,24 +987,152 @@
 							</div>
 							
 							<div id="tab3" class="tab_content" style="height: 890px">
+					<br/><br/>
 					
-							<br><br>
-								<table class="masterTable">
-									
-									<tr>
-										 <td style="width: 10%;"><label>Total Numbers of Room</label></td>
-									     <td style="width: 5%;"><input type="text" class="numeric" id="txtNoOfRooms" Class="longTextBox" value="${listOfRoom}"/>
-									     </td>	
-									     <td style="width: 10%;"><label>Room Limit</label></td>
-									     <td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtRoomLimit" path="strRoomLimit" cssClass="longTextBox"/></td>	
-									</tr>
-									
-								</table>
+					<div id="tab_container1" class="masterTable"  style="height: 535px">
+							<ul class="tabs1">
+							<li  class="active" data-state="divSubGroup"  style="width: 10%;padding-left: 55px;">Department</li>
 							
+							<li data-state="divTax" style="width: 10%; padding-left: 55px">Tax</li>
+							
+							<li data-state="divSupplier" style="width: 10%; padding-left: 55px">Room Type</li>
+							
+							<li data-state="divDiscount" style="width: 10%; padding-left: 55px">Package</li>
+				
+							<li data-state="divRoundOff" style="width: 10%; padding-left: 55px">Settlement</li>
+						 </ul>
+						
+					&nbsp;&nbsp;
+							
+							<div id="divSubGroup" class="tab_content1" style="height: 500px;margin-top: 20px;">
+							<table
+								style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+								<tr bgcolor="#72BEFC">
+									<td style="width:10%;">Department Code</td>
+									<td style="width:10%;">Department Code</td>
+									<td style="width:20%;">Account Code</td>
+									<td style="width:20%;">Account Name</td>
+								</tr>
+							</table>
+							
+							<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+									<table id="tblDepartment"
+									style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+									class="transTablex col8-center">
+									<tbody>
+									<col style="width:10%">
+									<col style="width:10%">					
+									<col style="width:20%">
+									<col style="width:20%">
+									</tbody>
+								</table>
+							</div>
+							</div>
+							<div id="divTax" class="tab_content1" style="height: 500px;margin-top: 20px;">
+							<table
+								style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+								<tr bgcolor="#72BEFC">
+									<td style="width:10%;">Tax Code</td>
+									<td style="width:10%;">Tax Name</td>
+									<td style="width:20%;">Account Code</td>
+									<td style="width:20%;">Account Name</td>
+								</tr>
+							</table>
+							
+							<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+									<table id="tblTax"
+									style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+									class="transTablex col8-center">
+									<tbody>
+									<col style="width:10%">
+									<col style="width:10%">					
+									<col style="width:20%">
+									<col style="width:20%">
+									</tbody>
+								</table>
+							</div>
+							</div>
+							
+							<div id="divSupplier" class="tab_content1" style="height: 500px;margin-top: 20px;">
+							<table
+								style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+								<tr bgcolor="#72BEFC">
+									<td style="width:10%;">Room Code</td>
+									<td style="width:10%;">Room Desc</td>
+									<td style="width:20%;">Account Code</td>
+									<td style="width:20%;">Account Name</td>
+								</tr>
+							</table>
+							
+							<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+									<table id="tblrmType"
+									style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+									class="transTablex col8-center">
+									<tbody>
+									<col style="width:10%">
+									<col style="width:10%">					
+									<col style="width:20%">
+									<col style="width:20%">
+									</tbody>
+								</table>
+							</div>
+							</div>
+							
+
+							<div id="divDiscount" class="tab_content1" style="height: 500px;margin-top: 20px;">
+							<table
+								style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+								<tr bgcolor="#72BEFC">
+									<td style="width:10%;">Package Code</td>
+									<td style="width:10%;">Package Desc</td>
+									<td style="width:20%;">Account Code</td>
+									<td style="width:20%;">Account Name</td>
+								</tr>
+							</table>
+							
+							<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+									<table id="tblPackage"
+									style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+									class="transTablex col8-center">
+									<tbody>
+									<col style="width:10%">
+									<col style="width:10%">					
+									<col style="width:20%">
+									<col style="width:20%">
+									</tbody>
+								</table>
+							</div>
+							</div>
+							
+							<div id="divRoundOff" class="tab_content1" style="height: 500px;margin-top: 20px;">
+							<table
+								style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+								<tr bgcolor="#72BEFC">
+									<td style="width:10%;">Settlement Code</td>
+									<td style="width:10%;">Settlement Desc</td>
+									<td style="width:20%;">Account Code</td>
+									<td style="width:20%;">Account Name</td>
+								</tr>
+							</table>
+							
+							<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+									<table id="tblSettlement"
+									style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+									class="transTablex col8-center">
+									<tbody>
+									<col style="width:10%">
+									<col style="width:10%">					
+									<col style="width:20%">
+									<col style="width:20%">
+									</tbody>
+								</table>
+							</div>
+							</div>
+													
+						</div>
 							
 							
 							</div>
-
 						</div>
 					</td>
 				</tr>

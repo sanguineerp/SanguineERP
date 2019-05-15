@@ -187,6 +187,7 @@ public class clsPMSTaxMasterController {
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 			
 			clsPMSTaxMasterModel objModel = funPrepareModel(objBean, userCode, clientCode, propertyCode);
+			String sql;
 			
 			String delQuery = "delete from tbltaxmaster  where strDeptCode='"+objModel.getStrDeptCode()+"'";
 			objWebPMSUtility.funExecuteUpdate(delQuery, "sql");
@@ -200,8 +201,14 @@ public class clsPMSTaxMasterController {
 				objModel=funPrepareModel(objBean, userCode, clientCode, propertyCode);
 				objPMSTaxMasterService.funAddUpdatePMSTaxMaster(objModel);
 			}
-			
-			String sql = "UPDATE tbltaxmaster a set a.dblTaxValue='"+objModel.getDblTaxValue()+"' WHERE a.strDeptCode='"+objModel.getStrDeptCode()+"'";
+			if(objModel.getStrDeptCode()=="")
+			{
+				 sql = "UPDATE tbltaxmaster a set a.dblTaxValue='"+objModel.getDblTaxValue()+"' WHERE a.strIncomeHeadCode='"+objModel.getStrIncomeHeadCode()+"'";
+			}
+			else
+			{
+				 sql = "UPDATE tbltaxmaster a set a.dblTaxValue='"+objModel.getDblTaxValue()+"' WHERE a.strDeptCode='"+objModel.getStrDeptCode()+"'";
+			}
 			objWebPMSUtility.funExecuteUpdate(sql, "sql");
 						
 			req.getSession().setAttribute("success", true);

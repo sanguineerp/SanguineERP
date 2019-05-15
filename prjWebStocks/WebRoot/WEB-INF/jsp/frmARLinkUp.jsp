@@ -975,7 +975,7 @@
 		    dataType: "json",
 		    success: function(response)
 		    {
-		    	funDeleteTableAllRowsOfParticulorTable(code);
+		    	//funDeleteTableAllRowsOfParticulorTable(code);
 		    	$.each(response, function(i,item)
 				{
 		    		funAddRowLocationLinkUpData(item);

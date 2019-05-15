@@ -317,6 +317,19 @@ function funSetGuestCode(code)
 		 return returnVal;
 	}
 	
+	
+	function funOpenExportImport()			
+		{
+			var transactionformName="frmGuestMaster";
+			//var guestCode=$('#txtGuestCode').val();
+			
+			
+		//	response=window.showModalDialog("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+			response=window.open("frmExcelExportImport.html?formname="+transactionformName,"dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+	        
+			
+		}
+	
 
 
 </script>
@@ -332,9 +345,16 @@ function funSetGuestCode(code)
 	<table class="masterTable">
 		
 		   <tr>
-				<th align="right" colspan="6"><a id="baseUrl"
+				<!-- <th align="right" colspan="6"><a id="baseUrl"
 					href="#"> Attach Documents</a>&nbsp; &nbsp; &nbsp;
-						&nbsp;</th>
+						&nbsp;</th> -->
+						 
+ 					<th align="right" colspan="6" ><a onclick="funOpenExportImport()"
+					href="javascript:void(0);">Export/Import</a>&nbsp; &nbsp; &nbsp;
+					&nbsp;<a id="baseUrl" href="#"> Attach Documents</a>&nbsp; &nbsp;
+					&nbsp; &nbsp;</th>
+					
+						
 			</tr>
 			
 			

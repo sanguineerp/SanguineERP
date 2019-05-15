@@ -28,6 +28,7 @@ import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsPropertyMasterService;
+import com.sanguine.webpms.bean.clsCheckInBean;
 import com.sanguine.webpms.bean.clsCheckOutBean;
 import com.sanguine.webpms.bean.clsCheckOutRoomDtlBean;
 import com.sanguine.webpms.model.clsBillDtlModel;
@@ -412,6 +413,32 @@ public class clsCheckOutController {
 					}
 				}
 			}
+			
+		}
+	}
+	
+	@RequestMapping(value = "/frmCheckOut1", method = RequestMethod.GET)
+	public ModelAndView funOpenForm1(Map<String, Object> model, HttpServletRequest request) {
+		String urlHits = "1";
+		String checkout = request.getParameter("docCode").toString();
+
+		try {
+			urlHits = request.getParameter("saddr").toString();
+
+		} catch (NullPointerException e) {
+			urlHits = "1";
+		}
+
+		model.put("urlHits", urlHits);
+
+		request.getSession().setAttribute("checkOutNo", checkout);
+
+		if ("2".equalsIgnoreCase(urlHits)) {
+			return new ModelAndView("frmCheckOut_1", "command", new clsCheckOutBean());
+		} else if ("1".equalsIgnoreCase(urlHits)) {
+			return new ModelAndView("frmCheckOut", "command", new clsCheckOutBean());
+		} else {
+			return null;
 		}
 	}
 

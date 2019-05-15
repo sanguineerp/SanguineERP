@@ -245,13 +245,13 @@
 				  </td>
 				  <td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
 		          <td colspan="4" align="left"> <label> Date</label> &nbsp;&nbsp;
-		          <s:input id="txtFromDate" required="required"
-							path="strFromDate" pattern="\d{1,2}-\d{1,2}-\d{4}"
-							cssClass="calenderTextBox" /> &nbsp;&nbsp;&nbsp;&nbsp;
+		          <s:input type="text" id="txtFromDate" required="true"
+							path="strFromDate"
+							class="calenderTextBox" /> &nbsp;&nbsp;&nbsp;&nbsp;
 				  <label>To Date</label> &nbsp;&nbsp;
-		          <s:input id="txtToDate" required="required"
-							path="strToDate" pattern="\d{1,2}-\d{1,2}-\d{4}"
-							cssClass="calenderTextBox" /> &nbsp;&nbsp;&nbsp;&nbsp;
+		          <s:input type="text" id="txtToDate" required="true"
+							path="strToDate" 
+							class="calenderTextBox" /> &nbsp;&nbsp;&nbsp;&nbsp;
 				 <s:input type="button" id="btnShow" value="Show" path="strShow"  class="form_button" onclick="funShowRecord()"/>
 				 &emsp;&ensp;&emsp;&ensp;
 				 </td> 

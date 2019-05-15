@@ -3391,8 +3391,8 @@ public class clsGlobalFunctions {
 			objACMaster.setStrAccountCode(obj[0].toString());
 			objACMaster.setStrAccountName(obj[1].toString());
 		} else {
-			objACMaster.setStrAccountCode("Invalid Code");
-			objACMaster.setStrAccountName("Invalid ");
+			//objACMaster.setStrAccountCode("Invalid Code");
+			//objACMaster.setStrAccountName("Invalid ");
 		}
 		return objACMaster;
 	}

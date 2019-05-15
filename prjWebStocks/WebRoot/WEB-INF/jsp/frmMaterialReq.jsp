@@ -15,7 +15,11 @@
  	
  	var selectedIndex;
  	 var misditable;
- 	/**
+ 	var ReceivedconversionUOM=""; 
+ 	var issuedconversionUOM="";
+	var recipeconversionUOM="";
+	var ConversionValue=0;
+	var fieldName,listRow=0;/**
 	 * Ready Function for Ajax Waiting
 	 */
 	$(document).ready(function() {
@@ -594,14 +598,19 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 		/**
 		 * Filling product data in grid
 		 */
-		function funfillProdRow(strProdCode,strPosItemCode,strProdName,dblQty,dblUnitPrice,dblTotalPrice,strRemarks,strUOM)
+		function funfillProdRow(strProdCode,strProdName,strUOM,dblQty,dblUnitPrice,strRemarks)
 		{	   
 		    var table = document.getElementById("tblProdDet");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
+		    var
 		    dblQty=  parseFloat(dblQty).toFixed(parseInt(maxQuantityDecimalPlaceLimit));
-		    dblUnitPrice = parseFloat(dblUnitPrice).toFixed(parseInt(maxAmountDecimalPlaceLimit));
-		    dblTotalPrice = parseFloat(dblTotalPrice).toFixed(parseInt(maxAmountDecimalPlaceLimit));
+		    var dblTotalPrice = dblUnitPrice*dblQty;
+		    if(strRemarks==null)
+		    	{
+		    	strRemarks = "";
+		    	}
+		  //= parseFloat(dblTotalPrice).toFixed(parseInt(maxAmountDecimalPlaceLimit));
 		    //alert(dblTotalPrice);
 		    selectedIndex = rowCount;
  			row.insertCell(0).innerHTML= "<input class=\"Box\" size=\"10%\" name=\"listReqDtl["+(rowCount)+"].strProdCode\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";
@@ -1299,6 +1308,179 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 		      });
 	}
 	
+	
+	/**
+	 * Open Export/Import Excel 
+	 **/
+	function funOpenExportImport()			
+	{
+		var transactionformName="frmMaterialReq";
+		var locCode=$('#txtLocBy').val();
+		var dtPhydate=$("#txtReqDate").val();
+		
+	//	response=window.showModalDialog("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+		response=window.open("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode+"&dtPhydate="+dtPhydate,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+        
+		
+		var timer = setInterval(function ()
+			    {
+				if(response.closed)
+					{
+						if (response.returnValue != null)
+						{
+							funRemoveProductRows();
+							var count=0;
+							var retValue =response.returnValue;
+							dtReqDate=$("#txtReqDate").val();
+							$.each(retValue, function(i,item)
+				               { 
+								count=i;
+									funfillProdRow(retValue[i].strProdCode,retValue[i].strProdName,retValue[i].strUOM,retValue[i].dblQty,retValue[i].dblUnitPrice,retValue[i].strRemarks);                 
+									$('#hidDocCode').val(retValue[i].strDocCode);
+									$('#hidDocType').val(retValue[i].strDocType);
+				               
+				               });
+							listRow=count+1;
+		
+						}
+						clearInterval(timer);
+					}
+			    }, 500);
+		
+		
+		
+	}
+	
+	
+	/**
+	 * Reset textfield
+	 */
+	function funResetProductFields()
+	{
+		$("#txtProdCode").val('');
+	    document.getElementById("lblProdName").innerHTML='';
+	    $("#txtCostRM").val('');
+	    $("#txtWtUnit").val('');
+	    $("#txtStock").val('');
+	    $("#txtQuantity").val('');
+	    $("#spStockUOM").text('');
+	}
+	/**
+	 * Get conversion Ratio form product master
+	 */
+	 function fungetConversionUOM(code)
+		{
+			var searchUrl="";
+			var ProductData;
+			searchUrl=getContextPath()+"/loadProductMasterData.html?prodCode="+code;
+			$.ajax
+			({
+		        type: "GET",
+		        url: searchUrl,
+			    dataType: "json",
+			    async: false,
+			    success: function(response)
+			    {
+			    	ProductData=response;
+			    },
+			    error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+		    });
+			return ProductData;
+		}
+	
+	 /**
+		 * Filling Grid
+		 */
+		function funFillFromExcelData(strProdCode,strProdName,dblCostPUnit,dblWeight,dblStock,dblQty,Displyqty,LooseQty,ReceivedconversionUOM,recipeconversionUOM,ConversionValue, dblActualRate) 
+		{	
+		    var prodCode = strProdCode;
+		    var prodName = strProdName;
+		    var unitPrice = dblCostPUnit;
+		    unitPrice=parseFloat(unitPrice).toFixed(maxAmountDecimalPlaceLimit);
+		    var wtunit = dblWeight;
+		    dblActualRate=parseFloat(dblActualRate).toFixed(maxAmountDecimalPlaceLimit);
+		    
+		     
+		    wtunit=parseFloat(wtunit).toFixed(maxAmountDecimalPlaceLimit);
+		    var currentStkQty = dblStock;
+		    var phyStkQty = dblQty;
+		    phyStkQty=parseFloat(phyStkQty).toFixed(maxQuantityDecimalPlaceLimit);
+		    var variance=phyStkQty-currentStkQty;
+		    variance=parseFloat(variance).toFixed(maxQuantityDecimalPlaceLimit);
+		    var adjValue = unitPrice*variance;
+		    adjValue=parseFloat(adjValue).toFixed(maxQuantityDecimalPlaceLimit);
+		    
+		    var actualAdjValue = dblActualRate*variance;
+		    actualAdjValue=parseFloat(actualAdjValue).toFixed(maxQuantityDecimalPlaceLimit);
+		    
+		    var adjWeight = wtunit*variance;
+		    adjWeight=parseFloat(adjWeight).toFixed(maxQuantityDecimalPlaceLimit);		    
+		    var table = document.getElementById("tblProduct");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		  
+		    var DiscurrentStkQty=dblStock;
+		    DiscurrentStkQty=parseFloat(DiscurrentStkQty).toFixed(maxQuantityDecimalPlaceLimit);
+		    var tempStkQty=DiscurrentStkQty.split(".");
+		    DiscurrentStkQty=tempStkQty[0]+" "+ReceivedconversionUOM+"."+Math.round(parseFloat("0."+tempStkQty[1])*parseFloat(ConversionValue))+" "+recipeconversionUOM;
+		    
+		    var tempvariance=variance.split(".");
+		    var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+Math.round(parseFloat("0."+tempvariance[1])*parseFloat(ConversionValue))+" "+recipeconversionUOM;
+		   
+		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listStkPostDtl["+(rowCount)+"].strProdCode\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";
+		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"100%\" name=\"listStkPostDtl["+(rowCount)+"].strProdName\" id=\"lblProdName."+(rowCount)+"\" value='"+prodName+"'>";
+		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"4%\"  name=\"listStkPostDtl["+(rowCount)+"].dblPrice\" id=\"txtCostRM."+(rowCount)+"\" value="+unitPrice+">";
+		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  style=\"text-align: right;\" size=\"5%\" name=\"listStkPostDtl["+(rowCount)+"].dblWeight\" id=\"txtWtUnit."+(rowCount)+"\"  value="+wtunit+">";
+		    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"8%\"   id=\"txtDisplayStock."+(rowCount)+"\" value='"+DiscurrentStkQty+"'>";
+		    
+		    row.insertCell(5).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyQty\" size=\"9%\" style=\"text-align: right;\" id=\"txtDisplyQty."+(rowCount)+"\" value='"+Displyqty+"'/>";	
+		    row.insertCell(6).innerHTML= "<input class=\"decimal-places inputText-Auto\" type=\"text\" style=\"text-align: right;\" name=\"listStkPostDtl["+(rowCount)+"].dblLooseQty\" id=\"txtLooseQty."+(rowCount)+"\"  value='"+LooseQty+"'onblur=\"funUpdatePrice(this);\" />";	
+		   
+		    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"7%\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyVariance\"  id=\"txtDisplayVariance."+(rowCount)+"\" value='"+DisplayVariance+"'>";	
+		    row.insertCell(8).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"6%\"  name=\"listStkPostDtl["+(rowCount)+"].dblAdjWt\" id=\"lblAdjWeight."+(rowCount)+"\" value="+adjWeight+">";
+		    row.insertCell(9).innerHTML= "<input readonly=\"readonly\" class=\"Box totalValueCell\" style=\"text-align: right;\" size=\"8%\"  name=\"listStkPostDtl["+(rowCount)+"].dblAdjValue\" id=\"lblAdjValue."+(rowCount)+"\"  value="+adjValue+">";	
+		    row.insertCell(10).innerHTML= "<input readonly=\"readonly\" class=\"Box totalActualValueCell\" style=\"text-align: right;\" size=\"8%\"  name=\"listStkPostDtl["+(rowCount)+"].dblActualValue\" id=\"lblActualAdjValue."+(rowCount)+"\"  value="+actualAdjValue+">";
+		    row.insertCell(11).innerHTML= "<input type=\"button\" value = \"Delete\" class=\"deletebutton\" onClick=\"Javacsript:funDeleteRow(this)\">";
+		    row.insertCell(12).innerHTML= "<input type=\"hidden\"  class=\"decimal-places inputText-Auto\" size=\"6%\" name=\"listStkPostDtl["+(rowCount)+"].dblActualRate\" id=\"txtActualRate."+(rowCount)+"\" value="+dblActualRate+" >";
+		    row.insertCell(13).innerHTML= "<input type=\"hidden\" required = \"required\"  class=\"decimal-places inputText-Auto\" size=\"6%\" name=\"listStkPostDtl["+(rowCount)+"].dblPStock\" id=\"txtQuantity."+(rowCount)+"\" value="+phyStkQty+" >";
+		    row.insertCell(14).innerHTML= "<input type=\"hidden\" name=\"listStkPostDtl["+(rowCount)+"].dblVariance\" id=\"lblVariance."+(rowCount)+"\" value="+variance+">";	
+		    row.insertCell(15).innerHTML= "<input type=\"hidden\" name=\"listStkPostDtl["+(rowCount)+"].dblCStock\" id=\"txtStock."+(rowCount)+"\" value="+currentStkQty+">";
+		    funApplyNumberValidation();
+		    return false;
+		}
+	 
+	 
+		
+		function funFillStockDetail(strItemName,dteDate,dblCompStk,dblPhyStk,dblVariance)
+		{
+			var table = document.getElementById("tblPhysicalStock");
+			var rowCount = table.rows.length;
+			var row = table.insertRow(rowCount);
+
+		      row.insertCell(0).innerHTML= "<input type=\"hidden\" class=\"Box \" size=\"1%\" id=\"txtItemName."+(rowCount)+"\" value='"+strItemName+"' onclick=\"funGetSelectedRowIndex(this)\"/>";
+		      row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box \" size=\"25%\" id=\"txtDate."+(rowCount)+"\" value='"+dteDate+"' onclick=\"funGetSelectedRowIndex(this)\"/>";
+		      row.insertCell(2).innerHTML= "<input  readonly=\"readonly\" class=\"Box \" size=\"25%\" id=\"txtCompStk."+(rowCount)+"\" value='"+dblCompStk+"' onclick=\"funGetSelectedRowIndex(this)\"/>";
+		      row.insertCell(3).innerHTML= "<input  readonly=\"readonly\" class=\"Box \" size=\"25%\" id=\"txtPhyStk."+(rowCount)+"\" value='"+dblPhyStk+"' onclick=\"funGetSelectedRowIndex(this)\"/>";
+		      row.insertCell(4).innerHTML= "<input  readonly=\"readonly\" class=\"Box \" size=\"24%\" id=\"txtVariance."+(rowCount)+"\" value='"+dblVariance+"' onclick=\"funGetSelectedRowIndex(this)\"/>";
+
+		}
+	
 // 	function funGetKeyCode(event,controller) {
 // 	    var key = event.keyCode;
 	    
@@ -1331,7 +1513,11 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 				<th align="right"><a onclick="funOpenAutoGeneratedReq();"
 					href="javascript:void(0);">Auto Generate</a>&nbsp; &nbsp; &nbsp;
 					&nbsp;<a id="baseUrl" href="#">Attatch
-						Documents</a>&nbsp; &nbsp; &nbsp; &nbsp;</th>
+						Documents</a>&nbsp; &nbsp; &nbsp; &nbsp;
+						<a onclick="funOpenExportImport()"
+					href="javascript:void(0);">Export/Import</a>&nbsp; &nbsp; &nbsp;
+						
+						</th>
 				<%-- <td align="right"><span> <a id="baseUrl" href="attachDoc.html?ReqCode="> Attatch Documents </a> </span></td> --%>
 			</tr>
 		</table>

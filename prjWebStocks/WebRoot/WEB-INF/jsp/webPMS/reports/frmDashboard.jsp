@@ -18,7 +18,7 @@
 		<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>  
         <script type="text/javascript">
         
-        $(function() 
+<%--         $(function() 
         {		
         	var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
         	
@@ -27,7 +27,7 @@
 			//$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
 			//$("#txtToDate" ).datepicker('setDate', 'today');
 			
-        }); 
+        });  --%>
         
          $(document).ready(function () 
          {    
@@ -37,14 +37,8 @@
         	 $("#txtFromDate").datepicker({
       		   dateFormat : 'dd-mm-yy'
       		});
-      	//	$("#txtFromDate").datepicker('setDate', new Date("04-01-"+date.getFullYear()));
       		$("#txtFromDate").datepicker('setDate', pmsDate);
       		
-      		/*$("#txtToDate").datepicker({
-      			dateFormat : 'dd-mm-yy'
-      		});
-      		$("#txtToDate").datepicker('setDate', 'today');
-			*/
       		funShowRecord();
         	
         });
@@ -392,8 +386,8 @@
 				  <td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
 		          <td colspan="4" align="left"> <label> Date</label> &nbsp;&nbsp;
 		          <s:input id="txtFromDate" required="required"
-							path="strFromDate" pattern="\d{1,2}-\d{1,2}-\d{4}"
-							cssClass="calenderTextBox" /> &nbsp;&nbsp;&nbsp;&nbsp;
+							path="strFromDate"
+							class="calenderTextBox" /> &nbsp;&nbsp;&nbsp;&nbsp;
 				 <s:input type="button" id="btnShow" value="Show" path="strShow"  class="form_button" onclick="funShowRecord()"/>
 				 &emsp;&ensp;&emsp;&ensp;
 				 </td> 

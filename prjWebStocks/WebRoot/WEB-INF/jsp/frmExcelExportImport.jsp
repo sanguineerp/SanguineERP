@@ -24,6 +24,7 @@
  var transactionformName="";
  var LocCode="";
  var dtPhydate='';
+ var supplierCode='';
  
     //Get Project Path
 	function getContextPath() 
@@ -55,8 +56,45 @@
 				break;
 			case "frmPOSSalesSheet":
 				window.location.href=getContextPath()+"/POSSalesExcelExport.html?locCode="+LocCode;
-				break;	
+				break;
 				
+			case "frmMaterialReq":
+				var gCode=$("#txtGroupCode").val();
+				var sgCode=$("#txtSubGroupCode").val();
+				var prodWiseStock=$("#cmbProdStock").val();
+				
+					window.location.href=getContextPath()+"/MaterialReqExport.html?locCode="+LocCode+"&gCode="+gCode+"&sgCode="+sgCode+"&strTransDate="+dtPhydate+"&strUOM=RecUOM&prodWiseStock="+prodWiseStock;	
+				break;
+				
+			case "frmPurchaseIndent":
+				var gCode=$("#txtGroupCode").val();
+				var sgCode=$("#txtSubGroupCode").val();
+				var prodWiseStock=$("#cmbProdStock").val();
+				
+					window.location.href=getContextPath()+"/PurchaseIndentExport.html?locCode="+LocCode+"&gCode="+gCode+"&sgCode="+sgCode+"&strTransDate="+dtPhydate+"&strUOM=RecUOM&prodWiseStock="+prodWiseStock;	
+				break;
+				
+			case "frmPurchaseOrder":
+				var gCode=$("#txtGroupCode").val();
+				var sgCode=$("#txtSubGroupCode").val();
+				var prodWiseStock=$("#cmbProdStock").val();
+				
+					window.location.href=getContextPath()+"/PurchaseOrderExport.html?suppCode="+supplierCode+"&gCode="+gCode+"&sgCode="+sgCode+"&strTransDate="+dtPhydate+"&strUOM=RecUOM&prodWiseStock="+prodWiseStock;	
+				break;
+				
+				
+			case "frmMIS":
+				var gCode=$("#txtGroupCode").val();
+				var sgCode=$("#txtSubGroupCode").val();
+				var prodWiseStock=$("#cmbProdStock").val();
+				
+					window.location.href=getContextPath()+"/MISExport.html?locCode="+LocCode+"&gCode="+gCode+"&sgCode="+sgCode+"&strTransDate="+dtPhydate+"&strUOM=RecUOM&prodWiseStock="+prodWiseStock;	
+				break;
+				
+			case "frmGuestMaster" :
+				window.location.href=getContextPath()+"/GuestMasterExport.html";	
+				break;
+			
 		}
 	}
 
@@ -161,6 +199,24 @@
 			{
 				LocCode='<%=request.getParameter("locCode") %>'
 			}
+		if(transactionformName=="frmPurchaseIndent")
+		{
+			LocCode='<%=request.getParameter("strLocCode") %>'
+		}
+		
+		if(transactionformName=="frmMaterialReq")
+		{
+			LocCode='<%=request.getParameter("strLocCode") %>'
+		}
+		if(transactionformName=="frmPurchaseOrder")
+		{
+			supplierCode='<%=request.getParameter("strSuppCode") %>'
+		}
+		
+		if(transactionformName=="frmMIS")
+		{
+			LocCode='<%=request.getParameter("strLocCode") %>'
+		}
 		
 		
 	}

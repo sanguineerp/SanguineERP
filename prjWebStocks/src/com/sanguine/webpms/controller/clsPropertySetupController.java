@@ -1,10 +1,12 @@
 package com.sanguine.webpms.controller;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +15,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.model.clsLinkUpHdModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webpms.bean.clsPropertySetupBean;
+import com.sanguine.webpms.model.clsLinkupModel;
 import com.sanguine.webpms.model.clsPropertySetupHdModel;
 import com.sanguine.webpms.service.clsPropertySetupService;
 
@@ -110,6 +115,293 @@ public class clsPropertySetupController {
 		}
 	}
 
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/loadPMSLinkUpData", method = RequestMethod.POST)
+	public @ResponseBody List funLoadLinkupData(@RequestParam("strDoc") String strDoc, HttpServletRequest request, HttpServletResponse response) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+
+		String urlHits = "1";
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
+		// urlHits=request.getParameter("saddr").toString();
+		String sql = "";
+		if (strDoc.equals("Tax")) 
+		{
+			sql = "SELECT a.strTaxCode,a.strTaxDesc,ifnull(b.strAccountCode,''),ifnull(b.strMasterDesc,'') FROM tbltaxmaster a,tbllinkup b where a.strTaxCode=b.strMasterCode and  a.strClientCode = '"+clientCode+"'";
+			
+		} 
+		else if (strDoc.equals("Settlement")) 
+		{
+			sql = " select a.strSettlementCode,a.strSettlementDesc from tblsettlementmaster a where a.strClientCode = '"+clientCode+"' ";
+			
+			
+		} 
+		else if (strDoc.equals("Department")) 
+		{
+			sql = " select a.strDeptCode,a.strDeptDesc from tbldepartmentmaster a where a.strClientCode = '"+clientCode+"' ";
+			
+		} 
+		else if (strDoc.equals("Room Type")) 
+		{
+			sql = " select a.strRoomCode,a.strRoomDesc from tblroom a where a.strClientCode = '"+clientCode+"' ";
+			
+		} 
+		else if (strDoc.equals("Package")) 
+		{
+			sql = " SELECT a.strPackageCode,a.strPackageName,b.strMasterCode,b.strMasterDesc FROM tblpackagemasterhd a,tbllinkup b WHERE a.strPackageCode=b.strMasterCode AND a.strClientCode = '"+clientCode+"' ";
+			
+		} 
+		
+
+		ArrayList list = (ArrayList) objGlobalFunctionsService.funGetDataList(sql, "sql");
+		List listARLinkUp = new ArrayList<clsLinkUpHdModel>();
+
+		if (strDoc.equals("Department")) {
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				clsLinkupModel objModel = new clsLinkupModel();
+				Object[] arrObj = (Object[]) list.get(cnt);
+				objModel.setStrMasterCode(arrObj[0].toString());
+				objModel.setStrMasterName(arrObj[1].toString());
+				/*objModel.setStrAccountCode(arrObj[2].toString());
+				objModel.setStrMasterDesc(arrObj[3].toString());
+				*/listARLinkUp.add(objModel);
+			}
+		} else if (strDoc.equals("Settlement")) {
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				clsLinkupModel objModel = new clsLinkupModel();
+				Object[] arrObj = (Object[]) list.get(cnt);
+				objModel.setStrMasterCode(arrObj[0].toString());
+				objModel.setStrMasterName(arrObj[1].toString());
+				/*objModel.setStrAccountCode(arrObj[2].toString());
+				objModel.setStrMasterDesc(arrObj[3].toString());
+			*/	listARLinkUp.add(objModel);
+			}
+		} else if (strDoc.equals("Tax")) {
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				clsLinkupModel objModel = new clsLinkupModel();
+				Object[] arrObj = (Object[]) list.get(cnt);
+				objModel.setStrMasterCode(arrObj[0].toString());
+				objModel.setStrMasterName(arrObj[1].toString());
+				objModel.setStrAccountCode(arrObj[2].toString());
+				objModel.setStrMasterDesc(arrObj[3].toString());
+				listARLinkUp.add(objModel);
+			}
+		} else if (strDoc.equals("Room Type")) {
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				clsLinkupModel objModel = new clsLinkupModel();
+				Object[] arrObj = (Object[]) list.get(cnt);
+				objModel.setStrMasterCode(arrObj[0].toString());
+				objModel.setStrMasterName(arrObj[1].toString());
+				listARLinkUp.add(objModel);
+			}
+		} else if (strDoc.equals("Package")) {
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				clsLinkupModel objModel = new clsLinkupModel();
+				Object[] arrObj = (Object[]) list.get(cnt);
+				objModel.setStrMasterCode(arrObj[0].toString());
+				objModel.setStrMasterName(arrObj[1].toString());
+				objModel.setStrMasterDesc(arrObj[2].toString());
+				objModel.setStrAccountCode(arrObj[3].toString());
+				listARLinkUp.add(objModel);
+			}
+		} else if (strDoc.equals("Discount")) {
+			if (list.size() > 0) {
+				for (int cnt = 0; cnt < list.size(); cnt++) {
+					clsLinkUpHdModel objModel = new clsLinkUpHdModel();
+					Object[] arrObj = (Object[]) list.get(cnt);
+					objModel.setStrMasterCode("PURDISC");
+					objModel.setStrMasterName("Purchase Discount");
+					objModel.setStrMasterDesc(arrObj[2].toString());
+					objModel.setStrAccountCode(arrObj[3].toString());
+					objModel.setStrExSuppCode(arrObj[4].toString());
+					objModel.setStrExSuppName(arrObj[5].toString());
+					listARLinkUp.add(objModel);
+				}
+			} else {
+				clsLinkUpHdModel objModel = new clsLinkUpHdModel();
+				objModel.setStrMasterCode("PURDISC");
+				objModel.setStrMasterName("Purchase Discount");
+				objModel.setStrMasterDesc("");
+				objModel.setStrAccountCode("");
+				objModel.setStrExSuppCode("");
+				objModel.setStrExSuppName("");
+				listARLinkUp.add(objModel);
+			}
+		} else if (strDoc.equals("RoundOff")) {
+			if (list.size() > 0) {
+				for (int cnt = 0; cnt < list.size(); cnt++) {
+					clsLinkUpHdModel objModel = new clsLinkUpHdModel();
+					Object[] arrObj = (Object[]) list.get(cnt);
+					objModel.setStrMasterCode("PURROUNDOFF");
+					objModel.setStrMasterName("Purchase RoundOff");
+					objModel.setStrMasterDesc(arrObj[2].toString());
+					objModel.setStrAccountCode(arrObj[3].toString());
+					objModel.setStrExSuppCode(arrObj[4].toString());
+					objModel.setStrExSuppName(arrObj[5].toString());
+					listARLinkUp.add(objModel);
+				}
+			} else {
+				clsLinkUpHdModel objModel = new clsLinkUpHdModel();
+				objModel.setStrMasterCode("PURROUNDOFF");
+				objModel.setStrMasterName("Purchase RoundOff");
+				objModel.setStrMasterDesc("");
+				objModel.setStrAccountCode("");
+				objModel.setStrExSuppCode("");
+				objModel.setStrExSuppName("");
+				listARLinkUp.add(objModel);
+			}
+		} else if (strDoc.equals("ExtraCharge")) {
+			if (list.size() > 0) {
+				for (int cnt = 0; cnt < list.size(); cnt++) {
+					clsLinkUpHdModel objModel = new clsLinkUpHdModel();
+					Object[] arrObj = (Object[]) list.get(cnt);
+					objModel.setStrMasterCode("PUREXTARACHARGES");
+					objModel.setStrMasterName("Purchase Extra Charges");
+					objModel.setStrMasterDesc(arrObj[2].toString());
+					objModel.setStrAccountCode(arrObj[3].toString());
+					objModel.setStrExSuppCode(arrObj[4].toString());
+					objModel.setStrExSuppName(arrObj[5].toString());
+					listARLinkUp.add(objModel);
+				}
+			} else {
+				clsLinkUpHdModel objModel = new clsLinkUpHdModel();
+				objModel.setStrMasterCode("PUREXTARACHARGES");
+				objModel.setStrMasterName("Purchase Extra Charges");
+				objModel.setStrMasterDesc("");
+				objModel.setStrAccountCode("");
+				objModel.setStrExSuppCode("");
+				objModel.setStrExSuppName("");
+				listARLinkUp.add(objModel);
+			}
+		}
+		else if (strDoc.equals("OtherCharge")) {
+			if(list.size()>0){
+			String charge="FreightInsuranceOther ChargeFOBTAXPAYABLE";
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				clsLinkUpHdModel objModel = new clsLinkUpHdModel();
+				Object[] arrObj = (Object[]) list.get(cnt);
+				if(arrObj[0].toString().equals("Freight")){
+					objModel.setStrMasterCode("Freight");
+					objModel.setStrMasterName("Freight");
+					charge=charge.replaceAll("Freight","");
+				}else if(arrObj[0].toString().equals("Insurance")){
+					objModel.setStrMasterCode("Insurance");
+					objModel.setStrMasterName("Insurance");
+					charge=charge.replaceAll("Insurance","");
+				}else if(arrObj[0].toString().equals("Other Charge")){
+					objModel.setStrMasterCode("Other Charge");
+					objModel.setStrMasterName("Other Charge");
+					charge=charge.replaceAll("Other Charge","");
+				}else if(arrObj[0].toString().equals("FOB")){
+					objModel.setStrMasterCode("FOB");
+					objModel.setStrMasterName("FOB");
+					charge=charge.replaceAll("FOB","");
+				}else if(arrObj[0].toString().equals("TAXPAYABLE")){
+					objModel.setStrMasterCode("TAXPAYABLE");
+					objModel.setStrMasterName("TAXPAYABLE");
+					charge=charge.replaceAll("TAXPAYABLE","");
+				}
+				
+				objModel.setStrAccountCode(arrObj[3].toString());
+				objModel.setStrMasterDesc(arrObj[2].toString());
+				
+				listARLinkUp.add(objModel);
+			}
+		 	clsLinkUpHdModel objModel = null;
+			 
+			for(int cnt =list.size();cnt<5;cnt++){
+				//Object[] arrObj = (Object[]) list.get(cnt);
+				objModel = new clsLinkUpHdModel();
+				if(charge.contains("Freight")){
+					objModel.setStrMasterCode("Freight");
+					objModel.setStrMasterName("Freight");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+					charge=charge.replaceAll("Freight","");
+			
+				}else if(charge.contains("Insurance")){
+					objModel.setStrMasterCode("Insurance");
+					objModel.setStrMasterName("Insurance");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+					charge=charge.replaceAll("Insurance","");
+				}else if(charge.contains("Other Charge")){
+					objModel.setStrMasterCode("Other Charge");
+					objModel.setStrMasterName("Other Charge");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+					charge=charge.replaceAll("Other Charge","");
+				}else if(charge.contains("FOB")){
+					objModel.setStrMasterCode("FOB");
+					objModel.setStrMasterName("FOB");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+					charge=charge.replaceAll("FOB","");
+				}else if(charge.equals("TAXPAYABLE")){
+					objModel.setStrMasterCode("TAXPAYABLE");
+					objModel.setStrMasterName("TAXPAYABLE");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+					charge=charge.replaceAll("TAXPAYABLE","");
+				}
+				listARLinkUp.add(objModel);
+			}
+		}
+		else{
+			clsLinkUpHdModel objModel = null;
+			for(int cnt =0;cnt<5;cnt++){
+				objModel = new clsLinkUpHdModel();
+				if(cnt==0){
+					objModel.setStrMasterCode("Freight");
+					objModel.setStrMasterName("Freight");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+			
+				}else if(cnt==1){
+					objModel.setStrMasterCode("Insurance");
+					objModel.setStrMasterName("Insurance");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+				}else if(cnt==2){
+					objModel.setStrMasterCode("Other Charge");
+					objModel.setStrMasterName("Other Charge");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+				}else if(cnt==3){
+					objModel.setStrMasterCode("FOB");
+					objModel.setStrMasterName("FOB");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+				}else if(cnt==4){
+					objModel.setStrMasterCode("TAXPAYABLE");
+					objModel.setStrMasterName("TAXPAYABLE");
+					objModel.setStrAccountCode("");
+					objModel.setStrMasterDesc("");
+				}
+					listARLinkUp.add(objModel);
+				}
+			}
+		}
+		else if (strDoc.equals("Location")) 
+		{
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				clsLinkUpHdModel objModel = new clsLinkUpHdModel();
+				Object[] arrObj = (Object[]) list.get(cnt);
+				objModel.setStrMasterCode(arrObj[0].toString());
+				objModel.setStrMasterName(arrObj[1].toString());
+				objModel.setStrMasterDesc(arrObj[2].toString());
+				objModel.setStrAccountCode(arrObj[3].toString());
+				objModel.setStrWebBookAccCode(arrObj[4].toString());
+				objModel.setStrWebBookAccName(arrObj[5].toString());
+				listARLinkUp.add(objModel);
+			}
+		}
+		return listARLinkUp;
+	}
+	
+	
+	
+	
 	// Convert bean to model function
 	private clsPropertySetupHdModel funPrepareModel(clsPropertySetupBean objBean, String userCode, String clientCode) {
 		clsPropertySetupHdModel objPropertySetupModel = new clsPropertySetupHdModel();

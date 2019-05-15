@@ -455,8 +455,12 @@
 		   						  break;
 			case 'rgb(128, 128, 128)'://GREY-->CHECKED-OUT
 									  
-				
-									  break;
+				 code=obj.value;
+				  code=code.split(',')[2].trim();
+				  url=getContextPath()+"/frmCheckOut1.html?docCode="+code
+				  window.open(url);
+									  
+				  break;
 									  
 									  
 			case 'rgb(255, 255, 0)'://YELLOW-->WAITING
