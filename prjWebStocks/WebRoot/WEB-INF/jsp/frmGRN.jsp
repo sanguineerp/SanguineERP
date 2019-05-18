@@ -204,6 +204,7 @@
 		    }
 		    else
 		    {
+		    	/* row.insertCell(16).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strIssueLocation\" required = \"required\" class=\"Box IssueLocCode\" size=\"9%\"  id=\"txtIssueLocation."+(rowCount)+"\" onblur=\"funCheckIssueLocation(this)\" value='"+strIssueLocation+"' ><input type=button   onclick=funHelp1("+(rowCount)+",'IssueLoc1') value=...>"; */
 				row.insertCell(16).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strIssueLocation\" readonly=\"readonly\" class=\"Box IssueLocCode\" size=\"9%\"  id=\"txtIssueLocation."+(rowCount)+"\" value='"+strIssueLocation+"' >";
 	        	row.insertCell(17).innerHTML= "<input name=\"listGRNDtl["+(rowCount)+"].strIsueLocName\" readonly=\"readonly\" class=\"Box\" size=\"40%\"  id=\"txtIsueLocName."+(rowCount)+"\" value='"+strIsueLocName+"' >";
 		    }
