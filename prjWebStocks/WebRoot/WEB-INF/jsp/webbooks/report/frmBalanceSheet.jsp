@@ -38,7 +38,7 @@
 	<br />
 	<br />
 
-	<s:form name="frmBalanceSheet" method="GET" action="rptBalanceSheet1.html" target="_blank">
+	<s:form name="frmBalanceSheet" method="GET" action="rptBalanceSheet2.html" target="_blank">
 		<div>
 			<table class="transTable">
 			    <tr>
@@ -55,12 +55,12 @@
 				    		
 				    	</s:select></td>
 				</tr>
-<!-- 				<tr> -->
-<!-- 					<td><label>Currency </label></td> -->
-<%-- 					<td><s:select id="cmbCurrency" items="${currencyList}" path="strCurrency" cssClass="BoxW124px"> --%>
-<%-- 						</s:select></td> --%>
-<!-- 					<td colspan="2"></td> -->
-<!-- 				</tr> -->
+				<%-- <tr>
+					<td><label>Currency </label></td>
+					<td><s:select id="cmbCurrency" items="${currencyList}" path="strCurrency" cssClass="BoxW124px">
+						</s:select></td>
+					<td colspan="2"></td>
+				</tr> --%>
 			</table>
 		</div>
 		<br />

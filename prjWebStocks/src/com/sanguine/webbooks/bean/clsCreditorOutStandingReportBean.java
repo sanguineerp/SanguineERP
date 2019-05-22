@@ -66,6 +66,7 @@ public class clsCreditorOutStandingReportBean
 	
 	private double dblOpCrAmt;
 	
+	private String strNarration;
 	
 	
 
@@ -397,6 +398,14 @@ public class clsCreditorOutStandingReportBean
 
 	public void setDblOpCrAmt(double dblOpCrAmt) {
 		this.dblOpCrAmt = dblOpCrAmt;
+	}
+
+	public String getStrNarration() {
+		return strNarration;
+	}
+
+	public void setStrNarration(String strNarration) {
+		this.strNarration = strNarration;
 	}
 	
 	

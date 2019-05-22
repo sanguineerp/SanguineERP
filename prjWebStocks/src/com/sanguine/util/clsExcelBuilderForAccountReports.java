@@ -69,10 +69,18 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 		Font font3 = workbook.createFont();
 		font3.setFontName("Arial");
 		style3.setFillForegroundColor(HSSFColor.YELLOW.index);
-		style3.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style3.setFillPattern(CellStyle.ALIGN_FILL);
+		//style3.setBorderBottom(arg0);
 		font3.setColor(HSSFColor.BLACK.index);
-		style3.setFont(font3);*/
+		style3.setFont(font3);
 		
+		CellStyle style4 = workbook.createCellStyle();
+		Font font4 = workbook.createFont();
+		font4.setFontName("Arial");
+		style4.setFillForegroundColor(HSSFColor.YELLOW.index);
+		style4.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		font4.setColor(HSSFColor.BLACK.index);
+		style4.setFont(font4);*/
 		// create header row
 		
 		int excelRowCount=4;
@@ -178,9 +186,10 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 				if(!rowData.equals("ASSET")){ //Sub Group
 					if(rowData.contains("_")){
 						aRow.createCell(0).setCellValue(rowData.replace("_","  "));
-						//aRow.getCell(0).setCellStyle(style3);	
+							
 					}else{
 						aRow.createCell(0).setCellValue("      "+rowData);
+					//	aRow.getCell(0).setCellStyle(style3);
 					}
 				}
 			}
@@ -190,9 +199,10 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 					
 					if(rowData.contains("_")){ //sub Group 
 						aRow.createCell(1).setCellValue(rowData.replace("_","  "));
-						//aRow.getCell(1).setCellStyle(style3);	
+							
 					}else{
 						aRow.createCell(1).setCellValue("      "+rowData);
+					//	aRow.getCell(1).setCellStyle(style3);
 					}
 					
 				}

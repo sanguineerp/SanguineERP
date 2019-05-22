@@ -588,6 +588,7 @@ public class clsReceiptController {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String companyName = req.getSession().getAttribute("companyName").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
+			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 			//String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 //			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 //			if (objSetup == null) {
@@ -622,7 +623,7 @@ public class clsReceiptController {
 				currConversion = Double.parseDouble(arrObj[7].toString());
 			}
 			
-			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(strPropertyCode, clientCode);
+			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 			
 			clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(strCurrency, clientCode);
 				if (objCurrModel != null) {

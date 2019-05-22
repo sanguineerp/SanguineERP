@@ -105,7 +105,7 @@ public class clsGeneralLedgerController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/frmExportGeneralLedger", method = RequestMethod.GET)
 	private ModelAndView funExportLedger(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate
-		, @RequestParam(value = "tDate") String tDate,@RequestParam(value = "currency") String currency, HttpServletRequest req, HttpServletResponse resp) {
+		, @RequestParam(value = "tDate") String tDate,@RequestParam(value = "currency") String currency,@RequestParam(value="strShowNarration") boolean isShowNarration, HttpServletRequest req, HttpServletResponse resp) {
 
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
@@ -119,6 +119,10 @@ public class clsGeneralLedgerController {
 		List listLedger = new ArrayList();
 		listLedger.add("GeneralLedger_" + fromDate + "to" + toDate + "_" + userCode);
 		String[] ExcelHeader = { "Transaction Date", "Transaction Type", "Ref No", "Chq/BillNo", "Bill Date", "Dr", "Cr", "Balance" };
+		if(isShowNarration){
+			 ExcelHeader = new String[]{ "Transaction Date", "Transaction Type", "Ref No","Narration", "Chq/BillNo", "Bill Date", "Dr", "Cr", "Balance" };		
+		}
+		
 		listLedger.add(ExcelHeader);
 
 		double conversionRate=1;
@@ -134,7 +138,7 @@ public class clsGeneralLedgerController {
 			e.printStackTrace();
 		}
 		sbSql.setLength(0);
-		sbSql.append(" SELECT DATE_FORMAT(DATE(dteVochDate),'%d-%m-%Y'),strTransType,strVoucherNo,strChequeBillNo,DATE_FORMAT(DATE(dteBillDate),'%d-%m-%Y'),dblDebitAmt,dblCreditAmt,dblBalanceAmt " 
+		sbSql.append(" SELECT DATE_FORMAT(DATE(dteVochDate),'%d-%m-%Y'),strTransType,strVoucherNo,strChequeBillNo,DATE_FORMAT(DATE(dteBillDate),'%d-%m-%Y'),dblDebitAmt,dblCreditAmt,dblBalanceAmt,ifnull(strNarration,'') " 
 			+ " from tblledgersummary where strUserCode='" + userCode + "' and strPropertyCode='" + propertyCode + "' AND strClientCode='" + clientCode + "'  " + " order by dteVochDate, strTransTypeForOrderBy ");
 
 		
@@ -159,6 +163,9 @@ public class clsGeneralLedgerController {
 			listemp.add(obj[0]);
 			listemp.add(obj[1]);
 			listemp.add(obj[2]);
+			if(isShowNarration){
+				listemp.add(obj[8]);
+			}
 			listemp.add(obj[3]);
 			listemp.add(obj[4].toString());
 			

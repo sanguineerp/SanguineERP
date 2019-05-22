@@ -4089,7 +4089,7 @@ sbSql.setLength(0);
 */
 
 sbSql.append(" SELECT DATE(a.dteVouchDate) ,ifnull(c.strDebtorName,''),'JV'  ,ifnull(a.strSourceDocNo,'') , ifnull(DATE(a.dteVouchDate),DATE(a.dteVouchDate)) , " 
-		+ " b.dblDrAmt ,b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,b.strCrDr,'','1','" + userCode + "','" + propertyCode + "','" + clientCode + "',c.strDebtorName,a.strVouchNo "  
+		+ " b.dblDrAmt ,b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,b.strCrDr,ifnull(a.strNarration,''),'1','" + userCode + "','" + propertyCode + "','" + clientCode + "',c.strDebtorName,a.strVouchNo "  
 			+" FROM tbljvhd a ,tbljvdtl b left outer join tbljvdebtordtl c on b.strVouchNo=c.strVouchNo "  
 			+" and b.strAccountCode = c.strAccountCode and b.strCrDr = c.strCrDr "
 			+" WHERE a.strVouchNo=b.strVouchNo  AND DATE(a.dteVouchDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " 
@@ -4127,7 +4127,7 @@ if (listjv.size() > 0) {
 	}
 }
  sbSql.setLength(0);
-sbSql.append( " SELECT DATE(a.dteVouchDate) ,ifnull(c.strDebtorName,''),'Payment', a.strVouchNo,  DATE(a.dteChequeDate) ,b.dblDrAmt , b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,'Dr','','2','" + userCode + "','" + propertyCode + "','" + clientCode + "' " 
+sbSql.append( " SELECT DATE(a.dteVouchDate) ,ifnull(c.strDebtorName,''),'Payment', a.strVouchNo,  DATE(a.dteChequeDate) ,b.dblDrAmt , b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,'Dr',ifnull(a.strNarration,''),'2','" + userCode + "','" + propertyCode + "','" + clientCode + "' " 
 		+ " FROM tblpaymentdtl b,tblpaymenthd a left outer join tblpaymentdebtordtl c on a.strVouchNo=c.strVouchNo "
 		+ " WHERE a.strVouchNo=b.strVouchNo  "
 		+ " AND DATE(a.dteVouchDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND b.strAccountCode='" + acCode + "'  AND a.strPropertyCode=b.strPropertyCode " + " AND a.strPropertyCode='" + propertyCode + "' AND a.strClientCode='" + clientCode + "'  ");
@@ -4148,7 +4148,7 @@ if (listPay.size() > 0) {
 // receipt
  sbSql.setLength(0);
 	sbSql.append( "  SELECT DATE(a.dteVouchDate) ,ifnull(c.strDebtorName,''),'Recepit', a.strVouchNo, " + "DATE(a.dteChequeDate), "
-		+ " b.dblDrAmt , b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,b.strCrDr,'','3','" + userCode + "','" + propertyCode + "','" + clientCode + "' "
+		+ " b.dblDrAmt , b.dblCrAmt ,b.dblDrAmt - b.dblCrAmt ,b.strCrDr,ifnull(a.strNarration,''),'3','" + userCode + "','" + propertyCode + "','" + clientCode + "' "
 		+ " FROM tblreceiptdtl b,tblreceipthd a left outer join tblreceiptdebtordtl c on c.strVouchNo=a.strVouchNo"
 		+ "  WHERE a.strVouchNo=b.strVouchNo  " + " AND DATE(a.dteVouchDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' "
 		+ " and  b.strAccountCode='" + acCode + "'  " 

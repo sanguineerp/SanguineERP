@@ -79,12 +79,12 @@ function funHelp(transactionName)
 						cssClass="searchTextBox" /></td>
 																					
 			</tr>
-<!-- 								<tr> -->
-<!-- 									<td><label>Currency </label></td> -->
+								<tr>
+									<td><label>Currency </label></td>
 				
-<%-- 									<td><s:select id="cmbCurrency" items="${currencyList}" path="strCurrency" cssClass="BoxW124px"> --%>
-<%-- 										</s:select></td> --%>
-<!-- 								</tr> -->
+									<td><s:select id="cmbCurrency" items="${currencyList}" path="strCurrency" cssClass="BoxW124px">
+										</s:select></td>
+								</tr>
 			<tr>
 				<td><label>Report Type</label></td>
 				<td ><s:select id="cmbDocType" path="strDocType"

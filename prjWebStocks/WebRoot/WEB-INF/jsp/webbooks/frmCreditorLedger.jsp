@@ -111,17 +111,18 @@
 		var glName = $("#lblGLCode").text();
 		var creditorName = $("#lblFromDebtorName").text();
 		var propCode='<%=session.getAttribute("propertyCode").toString()%>';
+		var strShowNarration=document.getElementById("chkShowNarration").checked;
 		if(reportType=="EXCEL")
 		{
 			funGetCreditorLedgerDataBeforeExport(fromDate,toDate,glCode,creditorCode,propCode);
 		    window.location.href = getContextPath()
 				+ "/frmExportLedger.html?param1="
 				+ param1 + "&fDate=" + fromDate
-				+ "&tDate=" + toDate+"&currency="+currency;
+				+ "&tDate=" + toDate+"&currency="+currency+"&strShowNarration="+strShowNarration;
 		}
 		else
 		{
-			window.open(getContextPath()+"/rptCreditorReport.html?creditorCode="+creditorCode+"&fromDate="+fromDate+"&toDate="+toDate+"&ledgerName="+ledgerName+"&glCode="+glCode+"&glName="+glName+"&creditorName="+creditorName+"&currency="+currency,'_blank');
+			window.open(getContextPath()+"/rptCreditorReport.html?creditorCode="+creditorCode+"&fromDate="+fromDate+"&toDate="+toDate+"&ledgerName="+ledgerName+"&glCode="+glCode+"&glName="+glName+"&creditorName="+creditorName+"&currency="+currency+"&strShowNarration="+strShowNarration,'_blank');
 		}	
 	}
 	
@@ -154,6 +155,7 @@
 	
 	function funShowCreditorLedger(response,currValue)
 	{
+		var strShowNarration=document.getElementById("chkShowNarration").checked;
 		var table = document.getElementById("tblCreditorLedgerBill");
 		var rowCount = table.rows.length;
 	    var row = table.insertRow(rowCount);
@@ -161,11 +163,22 @@
 		row.insertCell(0).innerHTML= "<label>Transaction Date</label>";
 		row.insertCell(1).innerHTML= "<label>Transaction Type</label>";
 		row.insertCell(2).innerHTML= "<label>Ref No</label>";
-		row.insertCell(3).innerHTML= "<label>Chq/BillNo</label>";
-		row.insertCell(4).innerHTML= "<label>BillDate</label>";
-		row.insertCell(5).innerHTML= "<label>Dr</label>";
-		row.insertCell(6).innerHTML= "<label>Cr</label>";
-		row.insertCell(7).innerHTML= "<label>Bal</label>";
+		if(strShowNarration){
+			row.insertCell(3).innerHTML= "<label>Narration</label>";
+			row.insertCell(4).innerHTML= "<label>Chq/BillNo</label>";
+			row.insertCell(5).innerHTML= "<label>BillDate</label>";
+			row.insertCell(6).innerHTML= "<label>Dr</label>";
+			row.insertCell(7).innerHTML= "<label>Cr</label>";
+			row.insertCell(8).innerHTML= "<label>Bal</label>";
+				
+		}else{
+			row.insertCell(3).innerHTML= "<label>Chq/BillNo</label>";
+			row.insertCell(4).innerHTML= "<label>BillDate</label>";
+			row.insertCell(5).innerHTML= "<label>Dr</label>";
+			row.insertCell(6).innerHTML= "<label>Cr</label>";
+			row.insertCell(7).innerHTML= "<label>Bal</label>";
+			
+		}
 		
 		rowCount=rowCount+1;
 		//var records = [];
@@ -204,37 +217,77 @@
 				row1.insertCell(0).innerHTML= "<label>"+vochDate+"</label>";
 				row1.insertCell(1).innerHTML= "<label>"+item.strTransType+"</label>";
 				row1.insertCell(2).innerHTML= "<a id=\"urlDocCode\" href=\"openSlipLedger.html?docCode="+item.strVoucherNo+","+item.strTransType+"\" target=\"_blank\" >"+item.strVoucherNo+"</a>";
-				if(transType=="GRN"){
-					row1.insertCell(3).innerHTML= "<a id=\"urlBillCode\" href=\"openRptGrnSlip.html?rptGRNCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
-				}else if(transType=="Payment"){
-					row1.insertCell(3).innerHTML= "<a id=\"urlBillCode\" href=\"openRptPaymentReport.html?docCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
-				}else if(transType=="Receipt"){
-					row1.insertCell(3).innerHTML= "<a id=\"urlBillCode\" href=\"openRptReciptReport.html?docCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
-				}else if(transType=="PurReturn"){
-					row1.insertCell(3).innerHTML= "<a id=\"urlBillCode\" href=\"openRptPRSlip.html?rptPRCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
-				}else if(transType=="JV"){
-					row1.insertCell(3).innerHTML= "<a id=\"urlDocCode\" href=\"openSlipLedger.html?docCode="+item.strChequeBillNo+","+item.strTransType+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
-				}else{
-					row1.insertCell(3).innerHTML= "<label>"+item.strChequeBillNo+"</label>";
-				}
-				
-				row1.insertCell(4).innerHTML= "<label>"+dteBillDate+"</label>";
+				if(strShowNarration){
+					row1.insertCell(3).innerHTML= "<label>"+item.strNarration+"</label>";
+					if(transType=="GRN"){
+						row1.insertCell(4).innerHTML= "<a id=\"urlBillCode\" href=\"openRptGrnSlip.html?rptGRNCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else if(transType=="Payment"){
+						row1.insertCell(4).innerHTML= "<a id=\"urlBillCode\" href=\"openRptPaymentReport.html?docCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else if(transType=="Receipt"){
+						row1.insertCell(4).innerHTML= "<a id=\"urlBillCode\" href=\"openRptReciptReport.html?docCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else if(transType=="PurReturn"){
+						row1.insertCell(4).innerHTML= "<a id=\"urlBillCode\" href=\"openRptPRSlip.html?rptPRCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else if(transType=="JV"){
+						row1.insertCell(4).innerHTML= "<a id=\"urlDocCode\" href=\"openSlipLedger.html?docCode="+item.strChequeBillNo+","+item.strTransType+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else{
+						row1.insertCell(4).innerHTML= "<label>"+item.strChequeBillNo+"</label>";
+					}
+					
+					row1.insertCell(5).innerHTML= "<label>"+dteBillDate+"</label>";
 
-						
-				if(item.dblDebitAmt<0){
-				row1.insertCell(5).innerHTML= "<label>("+(item.dblDebitAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)*(-1)+")</label>";
-				}else{
-					row1.insertCell(5).innerHTML= "<label>"+(item.dblDebitAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
+							
+					if(item.dblDebitAmt<0){
+					row1.insertCell(6).innerHTML= "<label>("+(item.dblDebitAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)*(-1)+")</label>";
+					}else{
+						row1.insertCell(6).innerHTML= "<label>"+(item.dblDebitAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
+					}
+					if(item.dblCreditAmt<0){
+						row1.insertCell(7).innerHTML= "<label>("+(item.dblCreditAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)*(-1)+")</label>";
+					}else{
+						row1.insertCell(7).innerHTML= "<label>"+(item.dblCreditAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
+					}
+					if(bal<0){
+					row1.insertCell(8).innerHTML= "<label>("+(bal*(-1)).toFixed(maxQuantityDecimalPlaceLimit)+")</label>";
+					}else{
+						row1.insertCell(8).innerHTML= "<label>"+bal.toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
+					}
+	
+					
 				}
-				if(item.dblCreditAmt<0){
-					row1.insertCell(6).innerHTML= "<label>("+(item.dblCreditAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)*(-1)+")</label>";
-				}else{
-					row1.insertCell(6).innerHTML= "<label>"+(item.dblCreditAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
-				}
-				if(bal<0){
-				row1.insertCell(7).innerHTML= "<label>("+(bal*(-1)).toFixed(maxQuantityDecimalPlaceLimit)+")</label>";
-				}else{
-					row1.insertCell(7).innerHTML= "<label>"+bal.toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
+				else{
+					if(transType=="GRN"){
+						row1.insertCell(3).innerHTML= "<a id=\"urlBillCode\" href=\"openRptGrnSlip.html?rptGRNCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else if(transType=="Payment"){
+						row1.insertCell(3).innerHTML= "<a id=\"urlBillCode\" href=\"openRptPaymentReport.html?docCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else if(transType=="Receipt"){
+						row1.insertCell(3).innerHTML= "<a id=\"urlBillCode\" href=\"openRptReciptReport.html?docCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else if(transType=="PurReturn"){
+						row1.insertCell(3).innerHTML= "<a id=\"urlBillCode\" href=\"openRptPRSlip.html?rptPRCode="+strDocNo+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else if(transType=="JV"){
+						row1.insertCell(3).innerHTML= "<a id=\"urlDocCode\" href=\"openSlipLedger.html?docCode="+item.strChequeBillNo+","+item.strTransType+"\" target=\"_blank\" >"+item.strChequeBillNo+"</a>";	
+					}else{
+						row1.insertCell(3).innerHTML= "<label>"+item.strChequeBillNo+"</label>";
+					}
+					
+					row1.insertCell(4).innerHTML= "<label>"+dteBillDate+"</label>";
+
+							
+					if(item.dblDebitAmt<0){
+					row1.insertCell(5).innerHTML= "<label>("+(item.dblDebitAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)*(-1)+")</label>";
+					}else{
+						row1.insertCell(5).innerHTML= "<label>"+(item.dblDebitAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
+					}
+					if(item.dblCreditAmt<0){
+						row1.insertCell(6).innerHTML= "<label>("+(item.dblCreditAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)*(-1)+")</label>";
+					}else{
+						row1.insertCell(6).innerHTML= "<label>"+(item.dblCreditAmt/currValue).toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
+					}
+					if(bal<0){
+					row1.insertCell(7).innerHTML= "<label>("+(bal*(-1)).toFixed(maxQuantityDecimalPlaceLimit)+")</label>";
+					}else{
+						row1.insertCell(7).innerHTML= "<label>"+bal.toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
+					}
+
 				}
 				rowCount=rowCount+1;
 				
@@ -250,18 +303,35 @@
 			row2.insertCell(0).innerHTML= "";
 			row2.insertCell(1).innerHTML= "";
 			row2.insertCell(2).innerHTML= "";
-			row2.insertCell(3).innerHTML= "";
-			row2.insertCell(4).innerHTML= "Total";
-			row2.insertCell(5).innerHTML= "<label>"+ parseFloat(dr).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
-			row2.insertCell(6).innerHTML=  "<label>"+ parseFloat(cr).toFixed(maxQuantityDecimalPlaceLimit)+ "</label>";
-			if(bal<0)
-			{
-			  bal=(bal)*(-1);
-			  row2.insertCell(7).innerHTML = "<label>("+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + ")</label>";
-			
+			if(strShowNarration){
+				row2.insertCell(3).innerHTML= "";
+				row2.insertCell(4).innerHTML= "";
+				row2.insertCell(5).innerHTML= "Total";
+				row2.insertCell(6).innerHTML= "<label>"+ parseFloat(dr).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+				row2.insertCell(7).innerHTML=  "<label>"+ parseFloat(cr).toFixed(maxQuantityDecimalPlaceLimit)+ "</label>";
+				if(bal<0)
+				{
+				  bal=(bal)*(-1);
+				  row2.insertCell(8).innerHTML = "<label>("+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + ")</label>";
+				
+				}else{
+					row2.insertCell(8).innerHTML = "<label>"+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+				}	
 			}else{
-				row2.insertCell(7).innerHTML = "<label>"+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+				row2.insertCell(3).innerHTML= "";
+				row2.insertCell(4).innerHTML= "Total";
+				row2.insertCell(5).innerHTML= "<label>"+ parseFloat(dr).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+				row2.insertCell(6).innerHTML=  "<label>"+ parseFloat(cr).toFixed(maxQuantityDecimalPlaceLimit)+ "</label>";
+				if(bal<0)
+				{
+				  bal=(bal)*(-1);
+				  row2.insertCell(7).innerHTML = "<label>("+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + ")</label>";
+				
+				}else{
+					row2.insertCell(7).innerHTML = "<label>"+ parseFloat(bal).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+				}
 			}
+			
 		}
 		
 		var table = document.getElementById("tblCreditorLedgerBillTot");
@@ -912,6 +982,12 @@
 					</s:select>
 				</td>
 				<td colspan="1"></td>
+			</tr>
+			<tr>
+			<td colspan ="2"></td>
+			<td colspan ="3">
+			<input type="checkbox" id="chkShowNarration" /> Show Narration
+			</td>
 			</tr>
 			
 			<tr>

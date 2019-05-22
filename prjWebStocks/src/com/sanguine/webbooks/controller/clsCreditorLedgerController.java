@@ -195,7 +195,8 @@ public class clsCreditorLedgerController {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/frmExportLedger", method = RequestMethod.GET)
-	private ModelAndView funExportLedger(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, HttpServletRequest req, HttpServletResponse resp) {
+	private ModelAndView funExportLedger(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate,
+			@RequestParam(value="strShowNarration") boolean isShowNarration,HttpServletRequest req, HttpServletResponse resp) {
 
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
@@ -218,9 +219,12 @@ public class clsCreditorLedgerController {
 		List listLedger = new ArrayList();
 		listLedger.add("Ledger_" + fromDate + "to" + toDate + "_" + userCode);
 		String[] ExcelHeader = { "Transaction Date", "Transaction Type", "Ref No", "Chq/BillNo", "Bill Date", "Dr", "Cr", "Balance" };
+		if(isShowNarration){
+			ExcelHeader =new String[] { "Transaction Date", "Transaction Type", "Ref No", "Narration","Chq/BillNo", "Bill Date", "Dr", "Cr", "Balance" };
+		}
 		listLedger.add(ExcelHeader);
 
-		String sql = " SELECT DATE_FORMAT(DATE(dteVochDate),'%d-%m-%Y'),strTransType,strVoucherNo,strChequeBillNo,DATE_FORMAT(DATE(dteBillDate),'%d-%m-%Y'),dblDebitAmt,dblCreditAmt,dblBalanceAmt " + " from tblledgersummary where strUserCode='" + userCode + "' and strPropertyCode='" + propertyCode + "' AND strClientCode='" + clientCode + "'  " + " order by dteVochDate, strTransTypeForOrderBy ";
+		String sql = " SELECT DATE_FORMAT(DATE(dteVochDate),'%d-%m-%Y'),strTransType,strVoucherNo,strChequeBillNo,DATE_FORMAT(DATE(dteBillDate),'%d-%m-%Y'),dblDebitAmt,dblCreditAmt,dblBalanceAmt,ifnull(strNarration,'') " + " from tblledgersummary where strUserCode='" + userCode + "' and strPropertyCode='" + propertyCode + "' AND strClientCode='" + clientCode + "'  " + " order by dteVochDate, strTransTypeForOrderBy ";
 
 		double debit = 0.00;
 		double credit = 0.00;
@@ -238,6 +242,9 @@ public class clsCreditorLedgerController {
 			listemp.add(obj[0]);
 			listemp.add(obj[1]);
 			listemp.add(obj[2]);
+			if(isShowNarration){
+				listemp.add(obj[8]);
+			}
 			listemp.add(obj[3]);
 			listemp.add(obj[4]);
 			if(Double.parseDouble(obj[5].toString())< 0){
@@ -409,6 +416,7 @@ public class clsCreditorLedgerController {
 		String glCode =req.getParameter("glCode").toString();
 		String glName =req.getParameter("glName").toString();
 		String creditorName =req.getParameter("creditorName").toString();
+		boolean isShowNarration =Boolean.parseBoolean(req.getParameter("strShowNarration"));
 		
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 		if (objSetup == null) {
@@ -427,7 +435,7 @@ public class clsCreditorLedgerController {
 		String dteFromDate = fy + "-" + fm + "-" + fd;
 		String dteToDate = ty + "-" + tm + "-" + td;
 		ArrayList fieldList = new ArrayList();
-		String sql = " SELECT DATE_FORMAT(DATE(dteVochDate),'%d-%m-%Y'),strTransType,strVoucherNo,strChequeBillNo,DATE_FORMAT(DATE(dteBillDate),'%d-%m-%Y'),dblDebitAmt/" + currValue + ",dblCreditAmt/" + currValue + ",dblBalanceAmt/" + currValue + " " + " from tblledgersummary where strUserCode='" + userCode + "' and strPropertyCode='" + propertyCode + "' AND strClientCode='" + clientCode + "'  " + " order by dteVochDate, strTransTypeForOrderBy ";
+		String sql = " SELECT DATE_FORMAT(DATE(dteVochDate),'%d-%m-%Y'),strTransType,strVoucherNo,strChequeBillNo,DATE_FORMAT(DATE(dteBillDate),'%d-%m-%Y'),dblDebitAmt/" + currValue + ",dblCreditAmt/" + currValue + ",dblBalanceAmt/" + currValue + ",ifnull(strNarration,'') from tblledgersummary where strUserCode='" + userCode + "' and strPropertyCode='" + propertyCode + "' AND strClientCode='" + clientCode + "'  " + " order by dteVochDate, strTransTypeForOrderBy ";
 		List listDtl = objGlobalFunctionsService.funGetDataList(sql, "sql");
 
 		
@@ -452,6 +460,10 @@ public class clsCreditorLedgerController {
 					objBeanData.setDblCrAmt(Double.parseDouble(obj[6].toString()));
 					prevBal = Double.parseDouble(obj[5].toString())-Double.parseDouble(obj[6].toString());
 					objBeanData.setDblBalAmt(prevBal);
+					objBeanData.setStrNarration("");
+					if(isShowNarration){
+						objBeanData.setStrNarration(obj[8].toString());	
+					}
 					
 				}
 				else
@@ -473,7 +485,10 @@ public class clsCreditorLedgerController {
 					balanceAmt = balanceAmt  + Double.parseDouble(obj[5].toString()) - Double.parseDouble(obj[6].toString());
 					}
 					objBeanData.setDblBalAmt(balanceAmt);
-					
+					objBeanData.setStrNarration("");
+					if(isShowNarration){
+						objBeanData.setStrNarration(obj[8].toString());	
+					}
 				}
 				fieldList.add(objBeanData);
 			}

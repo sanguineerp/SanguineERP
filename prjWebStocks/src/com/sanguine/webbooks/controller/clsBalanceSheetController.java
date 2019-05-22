@@ -835,7 +835,7 @@ public class clsBalanceSheetController {
 						}
 					}
 					
-					if(entry.getKey().equals("LIABILITY") || entry.getKey().equals("INDIRECT EXPENSE") || entry.getKey().equals("SUNDRY CREDITOR"))
+					if(entry.getKey().equals("LIABILITY") || entry.getKey().equals("INDIRECT EXPENSE") || entry.getKey().equals("SUNDRY CREDITOR")|| entry.getKey().equals("EXPENSE") )
 					{
 						List<String> listLiabilityGroups=new ArrayList<String>();
 						for(Map.Entry<String, Double> entryLiability:entry.getValue().entrySet())
