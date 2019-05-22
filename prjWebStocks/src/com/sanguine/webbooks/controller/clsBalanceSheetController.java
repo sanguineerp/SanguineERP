@@ -1244,6 +1244,7 @@ public class clsBalanceSheetController {
 						}else if(strGroupCat.equalsIgnoreCase("EXPENSE")){
 							strGroupCat="LIABILITY";
 						}
+						
 						hmGrpSubGrpAcc.put(strGroupCat+"-"+strGroupCode+"_"+strGroupName+"!"+strSubGroupCode+"_"+strSubGroupName, hmSubGrpUnderSbGrpAcc);
 					}
 				}
