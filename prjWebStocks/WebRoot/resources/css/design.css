@@ -577,6 +577,69 @@ ul.tabs li.active {
 }
 
 
+ul.tabs1 {
+	margin: 0;
+	padding: 0;
+	
+	list-style: none;
+	
+}
+
+ul.tabs1 li {
+	float: left;
+	margin: 0;
+	cursor: pointer;
+	padding: 4px 4px;
+	height:16px;
+	line-height: 16px;
+	border: 1px solid #6DA9DB;
+	border-left: none;
+	
+	background: #52A4D4;
+	overflow: hidden;
+	position: relative;
+	color: #fff;
+	border-right: 1px solid #555;
+	font-size:12px;
+	font-weight: bold;
+}
+
+
+ul.tabs1 li.active {
+	background: -moz-linear-gradient(center top, #0F5495, #73ADDD) repeat
+		scroll 0 0 #f18d05;
+	border: 1px solid #0F5495;
+	border-radius: 0 0px;
+	box-shadow: 0 1px 0 rgba(90, 52, 139, 0.16), 0 1px 0 #0F5495 inset;
+	color: #fff;
+	transition: all 0.9s ease 0s;
+}
+
+.tab_container1 {
+	border: 1px solid #999999;
+	border-top: none;
+	clear: both;
+	float: left;
+	width: 100%;
+	background: #FFFFFF;
+}
+
+.tab_content1 {
+	padding: 1px;
+	/* font-size: 1.2em; */
+	display: none;
+}
+
+#tab_container1 {
+	width: 100%;
+	margin: 1;
+	
+	height: 360px;
+	overflow: auto;
+	float: right;
+	
+}
+
 
 /***************************
 ****************************

@@ -715,29 +715,29 @@
 		/**
 		 * filling purchase order data in grid
 		 */
-		function funfillProdRow(strProdCode,strProdName,strUOM,strSuppCode,SupplierName,dblOrdQty,dblWeight,dblTotalWeight,dblPrice,dblDiscount,dblAmount,strRemarks,PICode,strUpdate)
-		{
-			var table = document.getElementById("tblProdDet");
-		    var rowCount = table.rows.length;
-		    var row = table.insertRow(rowCount);		    
-		    row.insertCell(0).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"8%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
-		    row.insertCell(1).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"27%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";
-		    row.insertCell(2).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"2%\" id=\"txtUOM."+(rowCount)+"\" value='"+strUOM+"'/>";		   
-		    row.insertCell(3).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strSuppCode\"  required =\"required\" class=\"Box SCode\" size=\"5%\" id=\"txtSuppCode."+(rowCount)+"\" value='"+strSuppCode+"' onblur=\"funCheckSupplier(this)\"/>";
-		    row.insertCell(4).innerHTML= "<input id=btnSup"+rowCount+" type=button   onclick=funHelp1("+(rowCount)+",'suppcode1') value=...>";        
-		    row.insertCell(5).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strSuppName\"  readonly=\"readonly\" class=\"Box SName\" size=\"10%\" id=\"txtSuppName."+(rowCount)+"\" value='"+SupplierName+"'/>";
-		    row.insertCell(6).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblOrdQty\"  step=\"any\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto QtyCell\" id=\"txtOrdQty."+(rowCount)+"\" value="+dblOrdQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
-		    row.insertCell(7).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblWeight\"  step=\"any\" required = \"required\" style=\"decimal-places text-align: right;\" class=\"decimal-places inputText-Auto\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
-		    row.insertCell(8).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblTotalWeight\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"3.9%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
-		    row.insertCell(9).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblPrice\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto price\" id=\"txtPrice."+(rowCount)+"\" value="+dblPrice+" onblur=\"Javacsript:funUpdatePrice(this)\">";
-		    row.insertCell(10).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblDiscount\"  step=\"any\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto txtDisc\" id=\"txtDiscount."+(rowCount)+"\" value="+dblDiscount+" onblur=\"Javacsript:funCalDiscountItemWise(this)\">";	    
-		    row.insertCell(11).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblAmount\" readonly=\"readonly\" class=\"Box1 totalValueCell\" size=\"5%\" id=\"txtAmount."+(rowCount)+"\" value="+dblAmount.toFixed(maxAmountDecimalPlaceLimit)+" >";
-		    row.insertCell(12).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strRemarks\" size=\"15%\" id=\"txtRemarks."+(rowCount)+"\"  value='"+strRemarks+"' >";
-		 	row.insertCell(13).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strPICode\" readonly=\"readonly\" class=\"Box\" size=\"8%\" id=\"txtPICode."+(rowCount)+"\" value='"+PICode+"' >";
-		    row.insertCell(14).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strUpdate\" readonly=\"readonly\" class=\"Box\" size=\"3%\" id=\"txtUpdate."+(rowCount)+"\" value="+strUpdate+" >";
-		    row.insertCell(15).innerHTML= '<input  class="deletebutton" value = "Delete" onClick="Javascript:funDeleteRow(this)">';		
-		    funApplyNumberValidation();
-		}
+		 function funfillProdRow(strProdCode,strProdName,strUOM,strSuppCode,SupplierName,dblOrdQty,dblWeight,dblTotalWeight,dblPrice,dblDiscount,dblAmount,strRemarks,PICode,strUpdate)
+			{
+				var table = document.getElementById("tblProdDet");
+			    var rowCount = table.rows.length;
+			    var row = table.insertRow(rowCount);		    
+			    row.insertCell(0).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"8%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
+			    row.insertCell(1).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"27%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";
+			    row.insertCell(2).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"2%\" id=\"txtUOM."+(rowCount)+"\" value='"+strUOM+"'/>";		   
+			    row.insertCell(3).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strSuppCode\"  required =\"required\" class=\"Box SCode\" size=\"5%\" id=\"txtSuppCode."+(rowCount)+"\" value='"+strSuppCode+"' onblur=\"funCheckSupplier(this)\"/>";
+			    row.insertCell(4).innerHTML= "<input id=btnSup"+rowCount+" type=button   onclick=funHelp1("+(rowCount)+",'suppcode1') value=...>";        
+			    row.insertCell(5).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strSuppName\"  readonly=\"readonly\" class=\"Box SName\" size=\"10%\" id=\"txtSuppName."+(rowCount)+"\" value='"+SupplierName+"'/>";
+			    row.insertCell(6).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblOrdQty\"  step=\"any\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto QtyCell\" id=\"txtOrdQty."+(rowCount)+"\" value="+dblOrdQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+			    row.insertCell(7).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblWeight\"  step=\"any\" required = \"required\" style=\"decimal-places text-align: right;\" class=\"decimal-places inputText-Auto\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
+			    row.insertCell(8).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblTotalWeight\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"3.9%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
+			    row.insertCell(9).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblPrice\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto price\" id=\"txtPrice."+(rowCount)+"\" value="+dblPrice+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+			    row.insertCell(10).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblDiscount\"  step=\"any\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto txtDisc\" id=\"txtDiscount."+(rowCount)+"\" value="+dblDiscount+" onblur=\"Javacsript:funCalDiscountItemWise(this)\">";	    
+			    row.insertCell(11).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblAmount\" readonly=\"readonly\" class=\"Box1 totalValueCell\" size=\"5%\" id=\"txtAmount."+(rowCount)+"\" value="+dblAmount.toFixed(maxAmountDecimalPlaceLimit)+" >";
+			    row.insertCell(12).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strRemarks\" size=\"15%\" id=\"txtRemarks."+(rowCount)+"\"  value='"+strRemarks+"' >";
+			 	row.insertCell(13).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strPICode\" readonly=\"readonly\" class=\"Box\" size=\"8%\" id=\"txtPICode."+(rowCount)+"\" value='"+PICode+"' >";
+			    row.insertCell(14).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strUpdate\" readonly=\"readonly\" class=\"Box\" size=\"3%\" id=\"txtUpdate."+(rowCount)+"\" value="+strUpdate+" >";
+			    row.insertCell(15).innerHTML= '<input  class="deletebutton" value = "Delete" onClick="Javascript:funDeleteRow(this)">';		
+			    funApplyNumberValidation();
+			}
 		
 		function funGetTC(response)
 		{
@@ -2238,7 +2238,78 @@
 		var cmbCurrency=$("#cmbCurrency").val();
 		var currValue=funGetCurrencyCode(cmbCurrency);
 		$("#txtDblConversion").val(currValue);
-	}	
+	}
+	
+	function funOpenExportImport()			
+	{
+		var transactionformName="frmPurchaseOrder";
+		/* var locCode=$('#strLocCode').val(); */
+		var dtPhydate=$("#txtPODate").val();
+		var suppCode=$("#txtSuppCode").val();
+		
+		
+		
+		response=window.open("frmExcelExportImport.html?formname="+transactionformName+"&strSuppCode="+suppCode+"&dtPIDate="+dtPhydate,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+		
+		var timer = setInterval(function ()
+			    {
+				if(response.closed)
+					{
+						if (response.returnValue != null)
+						{
+							funRemoveProductRows();
+							var count=0;
+							var retValue =response.returnValue;
+							dtReqDate=$("#txtReqDate").val();
+							$.each(retValue, function(i,item)
+				               { 
+								count=i;
+								funfillProdRowExcel(retValue[i].strProdCode,retValue[i].strProdName,retValue[i].strUOM,
+										retValue[i].strSuppCode,retValue[i].strSuppName,retValue[i].dblOrdQty,retValue[i].dblWeight,
+										retValue[i].dblTotalWt,retValue[i].dblPrice,retValue[i].dblDiscount,retValue[i].dblAmount,
+										retValue[i].strRemarks,retValue[i].strPICode,retValue[i].strUpdate);                 
+									$('#hidDocCode').val(retValue[i].strDocCode);
+									$('#hidDocType').val(retValue[i].strDocType);
+				               
+				               });
+							listRow=count+1;
+		
+						}
+						clearInterval(timer);
+					}
+			    }, 500);
+					        	
+	}
+	
+	function funfillProdRowExcel(strProdCode,strProdName,strUOM,strSuppCode,SupplierName,dblOrdQty,dblWeight,dblTotalWeight,dblPrice,dblDiscount,dblAmount,strRemarks,PICode,strUpdate)
+	{
+		var table = document.getElementById("tblProdDet");
+	    var rowCount = table.rows.length;
+	    var row = table.insertRow(rowCount);
+	    var dblTotalAmount = dblOrdQty * dblAmount;
+	    strRemarks = "";
+	    gSuppName=$("#lblSupplierName").text();
+	    PICode = "";
+	    strUpdate = "N";
+	    row.insertCell(0).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"8%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
+	    row.insertCell(1).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"27%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";
+	    row.insertCell(2).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"2%\" id=\"txtUOM."+(rowCount)+"\" value='"+strUOM+"'/>";		   
+	    row.insertCell(3).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strSuppCode\"  required =\"required\" class=\"Box SCode\" size=\"5%\" id=\"txtSuppCode."+(rowCount)+"\" value='"+strSuppCode+"' onblur=\"funCheckSupplier(this)\"/>";
+	    row.insertCell(4).innerHTML= "<input id=btnSup"+rowCount+" type=button   onclick=funHelp1("+(rowCount)+",'suppcode1') value=...>";        
+	    row.insertCell(5).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strSuppName\"  readonly=\"readonly\" class=\"Box SName\" size=\"10%\" id=\"txtSuppName."+(rowCount)+"\" value='"+gSuppName+"'/>";
+	    row.insertCell(6).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblOrdQty\"  step=\"any\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto QtyCell\" id=\"txtOrdQty."+(rowCount)+"\" value="+dblOrdQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+	    row.insertCell(7).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblWeight\"  step=\"any\" required = \"required\" style=\"decimal-places text-align: right;\" class=\"decimal-places inputText-Auto\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
+	    row.insertCell(8).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblTotalWeight\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"3.9%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
+	    row.insertCell(9).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblPrice\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto price\" id=\"txtPrice."+(rowCount)+"\" value="+dblAmount+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+	    row.insertCell(10).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblDiscount\"  step=\"any\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto txtDisc\" id=\"txtDiscount."+(rowCount)+"\" value="+dblDiscount+" onblur=\"Javacsript:funCalDiscountItemWise(this)\">";	    
+	    row.insertCell(11).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].dblAmount\" readonly=\"readonly\" class=\"Box1 totalValueCell\" size=\"5%\" id=\"txtAmount."+(rowCount)+"\" value="+dblTotalAmount.toFixed(maxAmountDecimalPlaceLimit)+" >";
+	    row.insertCell(12).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strRemarks\" size=\"15%\" id=\"txtRemarks."+(rowCount)+"\"  value='"+strRemarks+"' >";
+	 	row.insertCell(13).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strPICode\" readonly=\"readonly\" class=\"Box\" size=\"8%\" id=\"txtPICode."+(rowCount)+"\" value='"+PICode+"' >";
+	    row.insertCell(14).innerHTML= "<input name=\"listPODtlModel["+(rowCount)+"].strUpdate\" readonly=\"readonly\" class=\"Box\" size=\"3%\" id=\"txtUpdate."+(rowCount)+"\" value="+strUpdate+" >";
+	    row.insertCell(15).innerHTML= '<input  class="deletebutton" value = "Delete" onClick="Javascript:funDeleteRow(this)">';		
+	    funApplyNumberValidation();
+	}
+	
 	
 	
 </script>
@@ -2271,12 +2342,16 @@
 							<table class="transTable">
 								<tr>
 								
-								<th align="right" colspan="6" ><a id="AutoUrl" href="#">
+								<th align="right" colspan="5" ><a id="AutoUrl" href="#">
 											Auto Generate </a></th>
 									<th align="right" ><a id="baseUrl" href="#">
 											Attach Documents </a></th>
 											 <th  ><a id="EmailUrl" href="#">
-											Send Mail</a></th> 
+											Send Mail</a>
+											<a onclick="funOpenExportImport()"
+											href="javascript:void(0);">Export/Import</a>&nbsp; &nbsp; &nbsp;
+											&nbsp;
+											</th> 
 								</tr>
 
 								<tr>

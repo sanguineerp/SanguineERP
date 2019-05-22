@@ -10,6 +10,13 @@
 <title>Purchase Indent</title>
 
 <script type="text/javascript">
+
+
+var fieldName,listRow=0;
+var ReceivedconversionUOM="";
+var issuedconversionUOM="";
+var recipeconversionUOM="";
+var ConversionValue=0;
 /**
  * Ready Function for Ajax Waiting and reset form
  */
@@ -95,12 +102,14 @@ $(document).ready(function(){
 		/**
 		 * Filling Record in grid
 		 */
-		function funfillProdRow(strProdCode,strProdName,dblOrdQty,strPurpose,dtReqDate,dblAvailStock,Minimumlevel,strAgainst,dblUnitPrice,dblAmount)
+		function funfillProdRow(strProdCode,strProdName,dblOrdQty,dblUnitPrice,strPurpose,dtReqDate,dblAvailStock,Minimumlevel,strAgainst)
 		{	
 			dblOrdQty=parseFloat(dblOrdQty).toFixed(maxQuantityDecimalPlaceLimit);
 		    var table = document.getElementById("tblProdDet");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
+		    var dblTotAmt = dblUnitPrice*dblOrdQty;
+		    var strInStock=funGetProductStock(strProdCode);
 		    if(strAgainst==null)
 		    	{
 		    	strAgainst="";
@@ -109,13 +118,14 @@ $(document).ready(function(){
 		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"55%\" name=\"listPurchaseIndentDtlModel["+(rowCount)+"].strProdName\" id=\"strProdName."+(rowCount)+"\" value='"+strProdName+"' />";
 		    row.insertCell(2).innerHTML= "<input type=\"text\" required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto\" name=\"listPurchaseIndentDtlModel["+(rowCount)+"].dblQty\" id=\"txtProdQty."+(rowCount)+"\" value="+dblOrdQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
 		    row.insertCell(3).innerHTML= "<input type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto Box\"  name=\"listPurchaseIndentDtlModel["+(rowCount)+"].dblRate\" id=\"txtRate."+(rowCount)+"\" value='"+parseFloat(dblUnitPrice).toFixed(maxAmountDecimalPlaceLimit)+"'/>";
-		    row.insertCell(4).innerHTML= "<input type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto Box totalValueCell\"  name=\"listPurchaseIndentDtlModel["+(rowCount)+"].dblAmount\" id=\"txtAmount."+(rowCount)+"\" value='"+parseFloat(dblAmount).toFixed(maxAmountDecimalPlaceLimit)+"'/>";
+		    row.insertCell(4).innerHTML= "<input type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto Box totalValueCell\"  name=\"listPurchaseIndentDtlModel["+(rowCount)+"].dblAmount\" id=\"txtAmount."+(rowCount)+"\" value='"+parseFloat(dblTotAmt).toFixed(maxAmountDecimalPlaceLimit)+"'/>";
 		    row.insertCell(5).innerHTML= "<input size=\"15%\" name=\"listPurchaseIndentDtlModel["+(rowCount)+"].strPurpose\" id=\"strPurpose."+(rowCount)+"\" value="+strPurpose+" >";
 		    row.insertCell(6).innerHTML= "<input type=\"text\" size=\"8%\"  required = \"required\"  class=\"datePicker calenderTextBox\" name=\"listPurchaseIndentDtlModel["+(rowCount)+"].dtReqDate\" id=\"dtReqDate."+(rowCount)+"\" value='"+dtReqDate+"' />";		   		    
-		    row.insertCell(7).innerHTML= "<input readonly=\"readonly\"  style=\"text-align: right;\" class=\"Box\" size=\"7%\" name=\"listPurchaseIndentDtlModel["+(rowCount)+"].strInStock\" id=\"strInStock."+(rowCount)+"\" value='"+dblAvailStock+"'/>";		    
+		    row.insertCell(7).innerHTML= "<input readonly=\"readonly\"  style=\"text-align: right;\" class=\"Box\" size=\"7%\" name=\"listPurchaseIndentDtlModel["+(rowCount)+"].strInStock\" id=\"strInStock."+(rowCount)+"\" value='"+strInStock+"'/>";		    
 		    row.insertCell(8).innerHTML= "<input readonly=\"readonly\"  style=\"text-align: right;\" class=\"Box\" size=\"4%\" name=\"listPurchaseIndentDtlModel["+(rowCount)+"].dblMinLevel\" id=\"dblReOrderQty."+(rowCount)+"\" value='"+Minimumlevel+"' />";
 		    row.insertCell(9).innerHTML= "<input size=\"6%\" name=\"listPurchaseIndentDtlModel["+(rowCount)+"].strAgainst\" id=\"strAgainst."+(rowCount)+"\" value='"+strAgainst+"' />";		    
 		    row.insertCell(10).innerHTML= '<input size=\"8%\" type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRow(this)">';
+		    
 		    funApplyDatePicker();
 		    funApplyNumberValidation();
 		    funCalculateTotal();
@@ -776,7 +786,95 @@ $(document).ready(function(){
 	    	btnAdd_onclick();
 	    }
 	}
+	function funOpenExportImport()			
+	{
+		var transactionformName="frmPurchaseIndent";
+		var locCode=$('#strLocCode').val();
+		var dtPhydate=$("#dtPIDate").val();
+		
+		response=window.open("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode+"&dtPIDate="+dtPhydate,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+		
+		var timer = setInterval(function ()
+			    {
+				if(response.closed)
+					{
+						if (response.returnValue != null)
+						{
+							funRemoveProductRows();
+							var count=0;
+							var retValue =response.returnValue;
+							dtReqDate=$("#txtReqDate").val();
+							$.each(retValue, function(i,item)
+				               { 
+								count=i;
+									funfillProdRow(retValue[i].strProdCode,retValue[i].strProdName,retValue[i].dblQty,retValue[i].dblAmount,"",dtReqDate,"",retValue[i].dblMinLevel);                 
+									$('#hidDocCode').val(retValue[i].strDocCode);
+									$('#hidDocType').val(retValue[i].strDocType);
+				               
+				               });
+							listRow=count+1;
+		
+						}
+						clearInterval(timer);
+					}
+			    }, 500);
+					        	
+	}
+	function funResetProdFields()
+	{ 
+	     	
+			$("#strPICode").val("");		
+			$("#txtProdCode").val("");		
+			$("#spProdName").text("");		
+			$("#txtProdQty").val("");		
+			$("#txtMinlvl").text("");		
+			$("#txtPurpose").val("");
+		    $('#dtPIDate').datepicker({ dateFormat: 'dd-mm-yy' });
+		    $('#dtPIDate').datepicker('setDate', 'today');
+		    $("#txtReqDate").datepicker({ dateFormat: 'dd-mm-yy' });
+		   $('#txtReqDate').datepicker('setDate', 'today');	
+		   $("#cbClosePI").removeAttr("checked");
+		   
+		  
+		   
+	 
+    }
+	/**
+	 * Get stock for product 
+	 */
 	
+	
+	/**
+	 * Get conversion Ratio form product master
+	 */
+	
+	
+	 /**
+		 * Filling Grid
+		 */
+		
+		/**
+		 * Calculating Subtotal
+		 */
+		function funCalSubTotal()
+	    {
+			funApplyNumberValidation();
+	        var dblQtyTot=0;		        
+	        var subtot=0;
+	        var actTotal=0;
+	        $('#tblProduct tr').each(function() {
+			    var totalvalue = $(this).find(".totalValueCell").val();
+			    subtot = parseFloat(subtot + parseFloat(totalvalue));
+			    var totalActvalue = $(this).find(".totalActualValueCell").val();
+			    actTotal = parseFloat(actTotal + parseFloat(totalActvalue));
+			  
+			 });	
+	        
+	        
+			$("#txtSubTotal").val(parseFloat(subtot).toFixed(parseInt(maxAmountDecimalPlaceLimit)));  
+			//$("#txtTotalActualAmount").val(parseFloat(actTotal).toFixed(parseInt(maxAmountDecimalPlaceLimit))); 
+			
+	    }
 
 </script>
 
@@ -790,7 +888,9 @@ $(document).ready(function(){
 		<table class="transTable">
 			<tr >
 			 <th align="right" colspan="10"> <a onclick="funHelpAutoGeneratedPI();" href="javascript:void(0);">Auto Generate</a>&nbsp; &nbsp;| &nbsp;  &nbsp;
-			 <a id="baseUrl" href="#">Attach Documents</a>&nbsp; &nbsp; &nbsp;  &nbsp;</th>			   
+			 <a id="baseUrl" href="#">Attach Documents</a>&nbsp; &nbsp; &nbsp;  &nbsp;<a onclick="funOpenExportImport()"
+					href="javascript:void(0);">Export/Import</a>&nbsp; &nbsp; &nbsp;
+					&nbsp;</th>			   
 		    </tr>
 			<tr>
 				<td width="110px"><label>PI Code</label> </td>
@@ -888,6 +988,15 @@ $(document).ready(function(){
 						<td>
 							<input name="listPurchaseIndentDtlModel[${status.index}].dblQty" value="${pi.dblQty}" />
 						</td>
+						
+						<td>
+							<input name="listPurchaseIndentDtlModel[${status.index}].dblQty" value="${pi.dblQty}" />
+						</td>
+						
+						<td>
+							<input name="listPurchaseIndentDtlModel[${status.index}].dblQty" value="${pi.dblQty}" />
+						</td>
+						
 						<td><input
 							name="listPurchaseIndentDtlModel[${status.index}].strPurpose"
 							value="${pi.strPurpose}" /></td>

@@ -25,11 +25,18 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ibm.icu.text.SimpleDateFormat;
+import com.sanguine.crm.model.clsPartyMasterModel;
+import com.sanguine.crm.service.clsPartyMasterService;
 import com.sanguine.model.clsGroupMasterModel;
+import com.sanguine.model.clsMISDtlModel;
 import com.sanguine.model.clsOpeningStkDtl;
 import com.sanguine.model.clsPOSSalesDtlModel;
+import com.sanguine.model.clsProdSuppMasterModel;
 import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
+import com.sanguine.model.clsPurchaseIndentDtlModel;
+import com.sanguine.model.clsPurchaseOrderDtlModel;
+import com.sanguine.model.clsRequisitionDtlModel;
 import com.sanguine.model.clsStkPostingDtlModel;
 import com.sanguine.model.clsSubGroupMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
@@ -38,13 +45,20 @@ import com.sanguine.service.clsPOSLinkUpService;
 import com.sanguine.service.clsProductMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsSubGroupMasterService;
+import com.sanguine.webpms.bean.clsGuestMasterBean;
+import com.sanguine.webpms.dao.clsGuestMasterDao;
+import com.sanguine.webpms.model.clsGuestMasterHdModel;
+import com.sanguine.webpms.service.clsGuestMasterService;
 
 @Controller
 public class clsExcelExportImportController {
 
 	@Autowired
 	private clsProductMasterService objProductMasterService;
-
+	
+	@Autowired
+	private clsPartyMasterService objPartyMaster;
+	
 	@Autowired
 	private clsSubGroupMasterService objSubGroupMasterService;
 
@@ -65,6 +79,12 @@ public class clsExcelExportImportController {
 	
 	@Autowired
 	private clsGlobalFunctions objGlobalFunctions;
+	
+	@Autowired
+	private clsGuestMasterDao objGuestMasterDao;
+	
+	@Autowired
+	private clsGuestMasterService  objGuestMasterService;
 
 	final static Logger logger = Logger.getLogger(clsExcelExportImportController.class);
 
@@ -313,6 +333,393 @@ public class clsExcelExportImportController {
 		return new ModelAndView("excelView", "stocklist", ExportList);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/MaterialReqExport", method = RequestMethod.GET)
+	public ModelAndView funMaterialReqExcelExport(HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		// String
+		// locCode=request.getSession().getAttribute("locationCode").toString();
+		
+		String locCode = request.getParameter("locCode");
+		String sgCode = request.getParameter("sgCode");
+		String gCode = request.getParameter("gCode");
+		String prodWiseStock = request.getParameter("prodWiseStock");
+		
+		String header ="";
+		if(prodWiseStock.equals("Yes"))
+		{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Stock,Qty,UOM";
+		}else{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Qty,UOM";
+		}
+				
+		List ExportList = new ArrayList();
+		String[] ExcelHeader = header.split(",");
+		ExportList.add(ExcelHeader);
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+		String hql = "";
+		if (objSetup.getStrShowAllProdToAllLoc() == null || objSetup.getStrShowAllProdToAllLoc() == "N") {
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";
+		} else {
+			if (!locCode.equals("") || !locCode.isEmpty()) {
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
+			if (!sgCode.equals("") || !sgCode.isEmpty()) 
+			{
+				hql += "and a.strSGCode='"+sgCode+"'";
+			}
+			
+			if (!gCode.equals("") || !gCode.isEmpty()) 
+			{
+				hql += "and b.strGCode='"+gCode+"'";
+			}
+			}else{
+				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
+				if (!sgCode.equals("") || !sgCode.isEmpty()) 
+				{
+					hql += "and a.strSGCode='"+sgCode+"'";
+				}
+				
+				if (!gCode.equals("") || !gCode.isEmpty()) 
+				{
+					hql += "and b.strGCode='"+gCode+"'";
+				}
+			}
+		
+		}
+		
+
+		List list = objGlobalFunctionsService.funGetList(hql, "hql");
+		List MaterialReq = new ArrayList();
+		for (int i = 0; i < list.size(); i++) {
+
+			Object[] ob = (Object[]) list.get(i);
+			clsProductMasterModel prodModel = (clsProductMasterModel) ob[0];
+			clsSubGroupMasterModel subGroupModel = (clsSubGroupMasterModel) ob[1];
+			clsGroupMasterModel groupModel = (clsGroupMasterModel) ob[2];
+			List DataList = new ArrayList<>();
+			
+			if(prodWiseStock.equals("Yes")){
+			double stock=objGlobalFunctions.funGetStockForProductRecUOM(prodModel.getStrProdCode(),request);
+			if(stock>0)
+			{
+			DataList.add(groupModel.getStrGName());
+			DataList.add(subGroupModel.getStrSGName());
+			DataList.add(prodModel.getStrProdCode());
+			DataList.add(prodModel.getStrProdName());
+			
+			DataList.add(stock);
+			
+			DataList.add("");
+			DataList.add(prodModel.getStrUOM());
+			MaterialReq.add(DataList);
+			}
+			}else{
+				DataList.add(groupModel.getStrGName());
+				DataList.add(subGroupModel.getStrSGName());
+				DataList.add(prodModel.getStrProdCode());
+				DataList.add(prodModel.getStrProdName());
+				DataList.add("");
+				DataList.add(prodModel.getStrUOM());
+				MaterialReq.add(DataList);
+			}
+		}
+		ExportList.add(MaterialReq);
+
+		return new ModelAndView("excelView", "stocklist", ExportList);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/PurchaseIndentExport", method = RequestMethod.GET)
+	public ModelAndView funPurchaseIndentExcelExport(HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		// String
+		// locCode=request.getSession().getAttribute("locationCode").toString();
+		
+		String locCode = request.getParameter("locCode");
+		String sgCode = request.getParameter("sgCode");
+		String gCode = request.getParameter("gCode");
+		String prodWiseStock = request.getParameter("prodWiseStock");
+		
+		String header ="";
+		if(prodWiseStock.equals("Yes"))
+		{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Stock,Qty,UOM";
+		}else{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Qty,UOM";
+		}
+				
+		List ExportList = new ArrayList();
+		String[] ExcelHeader = header.split(",");
+		ExportList.add(ExcelHeader);
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+		String hql = "";
+		if (objSetup.getStrShowAllProdToAllLoc() == null || objSetup.getStrShowAllProdToAllLoc() == "N") {
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";
+		} else {
+			if (!locCode.equals("") || !locCode.isEmpty()) {
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
+			if (!sgCode.equals("") || !sgCode.isEmpty()) 
+			{
+				hql += "and a.strSGCode='"+sgCode+"'";
+			}
+			
+			if (!gCode.equals("") || !gCode.isEmpty()) 
+			{
+				hql += "and b.strGCode='"+gCode+"'";
+			}
+			}else{
+				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
+				if (!sgCode.equals("") || !sgCode.isEmpty()) 
+				{
+					hql += "and a.strSGCode='"+sgCode+"'";
+				}
+				
+				if (!gCode.equals("") || !gCode.isEmpty()) 
+				{
+					hql += "and b.strGCode='"+gCode+"'";
+				}
+			}
+		
+		}
+		
+
+		List list = objGlobalFunctionsService.funGetList(hql, "hql");
+		List PhyStkPstlist = new ArrayList();
+		for (int i = 0; i < list.size(); i++) {
+
+			Object[] ob = (Object[]) list.get(i);
+			clsProductMasterModel prodModel = (clsProductMasterModel) ob[0];
+			clsSubGroupMasterModel subGroupModel = (clsSubGroupMasterModel) ob[1];
+			clsGroupMasterModel groupModel = (clsGroupMasterModel) ob[2];
+			List DataList = new ArrayList<>();
+			
+			if(prodWiseStock.equals("Yes")){
+			double stock=objGlobalFunctions.funGetStockForProductRecUOM(prodModel.getStrProdCode(),request);
+			if(stock>0)
+			{
+			DataList.add(groupModel.getStrGName());
+			DataList.add(subGroupModel.getStrSGName());
+			DataList.add(prodModel.getStrProdCode());
+			DataList.add(prodModel.getStrProdName());
+			
+			DataList.add(stock);
+			
+			DataList.add("");
+			DataList.add(prodModel.getStrUOM());
+			PhyStkPstlist.add(DataList);
+			}
+			}else{
+				DataList.add(groupModel.getStrGName());
+				DataList.add(subGroupModel.getStrSGName());
+				DataList.add(prodModel.getStrProdCode());
+				DataList.add(prodModel.getStrProdName());
+				DataList.add("");
+				DataList.add(prodModel.getStrUOM());
+				PhyStkPstlist.add(DataList);
+			}
+		}
+		ExportList.add(PhyStkPstlist);
+
+		return new ModelAndView("excelView", "stocklist", ExportList);
+	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/MISExport", method = RequestMethod.GET)
+	public ModelAndView funMISExcelExport(HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		// String
+		// locCode=request.getSession().getAttribute("locationCode").toString();
+		
+		String locCode = request.getParameter("locCode");
+		String sgCode = request.getParameter("sgCode");
+		String gCode = request.getParameter("gCode");
+		String prodWiseStock = request.getParameter("prodWiseStock");
+		
+		String header ="";
+		if(prodWiseStock.equals("Yes"))
+		{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Stock,Qty,UOM";
+		}else{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Qty,UOM";
+		}
+				
+		List ExportList = new ArrayList();
+		String[] ExcelHeader = header.split(",");
+		ExportList.add(ExcelHeader);
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+		String hql = "";
+		if (objSetup.getStrShowAllProdToAllLoc() == null || objSetup.getStrShowAllProdToAllLoc() == "N") {
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";
+		} else {
+			if (!locCode.equals("") || !locCode.isEmpty()) {
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
+			if (!sgCode.equals("") || !sgCode.isEmpty()) 
+			{
+				hql += "and a.strSGCode='"+sgCode+"'";
+			}
+			
+			if (!gCode.equals("") || !gCode.isEmpty()) 
+			{
+				hql += "and b.strGCode='"+gCode+"'";
+			}
+			}else{
+				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
+				if (!sgCode.equals("") || !sgCode.isEmpty()) 
+				{
+					hql += "and a.strSGCode='"+sgCode+"'";
+				}
+				
+				if (!gCode.equals("") || !gCode.isEmpty()) 
+				{
+					hql += "and b.strGCode='"+gCode+"'";
+				}
+			}
+		
+		}
+		
+
+		List list = objGlobalFunctionsService.funGetList(hql, "hql");
+		List MISStk = new ArrayList();
+		for (int i = 0; i < list.size(); i++) {
+
+			Object[] ob = (Object[]) list.get(i);
+			clsProductMasterModel prodModel = (clsProductMasterModel) ob[0];
+			clsSubGroupMasterModel subGroupModel = (clsSubGroupMasterModel) ob[1];
+			clsGroupMasterModel groupModel = (clsGroupMasterModel) ob[2];
+			List DataList = new ArrayList<>();
+			
+			if(prodWiseStock.equals("Yes")){
+			double stock=objGlobalFunctions.funGetStockForProductRecUOM(prodModel.getStrProdCode(),request);
+			if(stock>0)
+			{
+			DataList.add(groupModel.getStrGName());
+			DataList.add(subGroupModel.getStrSGName());
+			DataList.add(prodModel.getStrProdCode());
+			DataList.add(prodModel.getStrProdName());
+			
+			DataList.add(stock);
+			
+			DataList.add("");
+			DataList.add(prodModel.getStrUOM());
+			MISStk.add(DataList);
+			}
+			}else{
+				DataList.add(groupModel.getStrGName());
+				DataList.add(subGroupModel.getStrSGName());
+				DataList.add(prodModel.getStrProdCode());
+				DataList.add(prodModel.getStrProdName());
+				DataList.add("");
+				DataList.add(prodModel.getStrUOM());
+				MISStk.add(DataList);
+			}
+		}
+		ExportList.add(MISStk);
+
+		return new ModelAndView("excelView", "stocklist", ExportList);
+	}
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/PurchaseOrderExport", method = RequestMethod.GET)
+	public ModelAndView funPurchaseOrderExcelExport(HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		// String
+		// locCode=request.getSession().getAttribute("locationCode").toString();
+		
+		String suppCode = request.getParameter("suppCode");
+		String sgCode = request.getParameter("sgCode");
+		String gCode = request.getParameter("gCode");
+		String prodWiseStock = request.getParameter("prodWiseStock");
+		
+		String header ="";
+		if(prodWiseStock.equals("Yes"))
+		{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Stock,Qty,UOM";
+		}else{
+			header="Group Name, SubGroupName,ProductCode,ProductName,Qty,UOM";
+		}
+				
+		List ExportList = new ArrayList();
+		String[] ExcelHeader = header.split(",");
+		ExportList.add(ExcelHeader);
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+		String hql = "";
+		if (objSetup.getStrShowAllProdToAllLoc() == null || objSetup.getStrShowAllProdToAllLoc() == "N") {
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProdSuppMasterModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strSuppCode='" + suppCode + "' ";
+		} else {
+			if (!suppCode.equals("") || !suppCode.isEmpty()) {
+			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
+			if (!sgCode.equals("") || !sgCode.isEmpty()) 
+			{
+				hql += "and a.strSGCode='"+sgCode+"'";
+			}
+			
+			if (!gCode.equals("") || !gCode.isEmpty()) 
+			{
+				hql += "and b.strGCode='"+gCode+"'";
+			}
+			}else{
+				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProdSuppMasterModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strSuppCode='" + suppCode + "' ";	
+				if (!sgCode.equals("") || !sgCode.isEmpty()) 
+				{
+					hql += "and a.strSGCode='"+sgCode+"'";
+				}
+				
+				if (!gCode.equals("") || !gCode.isEmpty()) 
+				{
+					hql += "and b.strGCode='"+gCode+"'";
+				}
+			}
+		
+		}
+		
+
+		List list = objGlobalFunctionsService.funGetList(hql, "hql");
+		List PhyStkPstlist = new ArrayList();
+		for (int i = 0; i < list.size(); i++) {
+
+			Object[] ob = (Object[]) list.get(i);
+			clsProductMasterModel prodModel = (clsProductMasterModel) ob[0];
+			clsSubGroupMasterModel subGroupModel = (clsSubGroupMasterModel) ob[1];
+			clsGroupMasterModel groupModel = (clsGroupMasterModel) ob[2];
+			List DataList = new ArrayList<>();
+			
+			if(prodWiseStock.equals("Yes")){
+			double stock=objGlobalFunctions.funGetStockForProductRecUOM(prodModel.getStrProdCode(),request);
+			if(stock>0)
+			{
+			DataList.add(groupModel.getStrGName());
+			DataList.add(subGroupModel.getStrSGName());
+			DataList.add(prodModel.getStrProdCode());
+			DataList.add(prodModel.getStrProdName());
+			
+			DataList.add(stock);
+			
+			DataList.add("");
+			DataList.add(prodModel.getStrUOM());
+			PhyStkPstlist.add(DataList);
+			}
+			}else{
+				DataList.add(groupModel.getStrGName());
+				DataList.add(subGroupModel.getStrSGName());
+				DataList.add(prodModel.getStrProdCode());
+				DataList.add(prodModel.getStrProdName());
+				DataList.add("");
+				DataList.add(prodModel.getStrUOM());
+				PhyStkPstlist.add(DataList);
+			}
+		}
+		ExportList.add(PhyStkPstlist);
+
+		return new ModelAndView("excelView", "stocklist", ExportList);
+	}
+	
+	
 	/**
 	 * Only Import
 	 * 
@@ -354,7 +761,27 @@ public class clsExcelExportImportController {
 			case "frmSalesOrder":
 				list = funLoadPOSSalesData(worksheet, request);
 				break;
+				
+			case "frmMaterialReq":
+				list = funMaterialReq(worksheet, request);
+				break;
+				
+			case "frmPurchaseIndent":
+				list = funPI(worksheet, request);
+				break;
+				
+			case "frmPurchaseOrder":
+				list = funPO(worksheet, request);
+				break;
+				
+			case "frmMIS":
+				list = funMIS(worksheet, request);
+				break;
 
+			case "frmGuestMaster":
+				list = funGuestList(worksheet, request);
+				break;		
+				
 			}
 		} catch (Exception e) {
 			logger.error(e);
@@ -508,7 +935,220 @@ public class clsExcelExportImportController {
 		}
 		return listPhyStklist;
 	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List funPI(HSSFSheet worksheet, HttpServletRequest request) {
+		List listPhyStklist = new ArrayList<>();
+		int RowCount = 0;
+		String prodCode = "";
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		
+		//String prodStock=request.getParameter("prodStock");
+		try {
+			int i = 1;
+			while (i <= worksheet.getLastRowNum()) {
+				// Creates an object for the Candidate Model
+				clsPurchaseIndentDtlModel PhyStkDtl = new clsPurchaseIndentDtlModel();
+				// Creates an object representing a single row in excel
+				HSSFRow row = worksheet.getRow(i++);
+				// Sets the Read data to the model class
+				RowCount = row.getRowNum();
+				prodCode = row.getCell(2).getStringCellValue();
+				Cell c = row.getCell(4);
+				if (c != null && c.getCellType() != 1) {
+					if (row.getCell(4).getNumericCellValue() >= 0) {
+						PhyStkDtl.setStrProdCode(row.getCell(2).getStringCellValue());
+						String prodName = "";
+						if (row.getCell(3).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+							prodName = String.valueOf(row.getCell(3).getNumericCellValue());
+						} else {
+							prodName = row.getCell(3).getRichStringCellValue().toString();
+						}
 
+						PhyStkDtl.setStrProdName(prodName);
+						
+							PhyStkDtl.setStrDocType(row.getCell(5).toString());
+						
+							PhyStkDtl.setDblQty(row.getCell(4).getNumericCellValue());
+						
+						clsProductMasterModel Prodmodel = objProductMasterService.funGetObject(prodCode, clientCode);
+						PhyStkDtl.setDblAmount(Prodmodel.getDblCostRM());
+						
+						//PhyStkDtl.setdb(Prodmodel.getDblWeight());
+
+						List ProdList = objGRNController.funLatestGRNProductRate(prodCode, request);
+
+						
+
+						// PhyStkDtl.setDblCStock(objGlobalFunctions.funGetCurrentStockForProduct(prodCode,
+						// objMISHd.getStrLocFrom(), clientCode,
+						// userCode,startDate,objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd")));
+						// Sends the model object to service layer for
+						// validation,
+						// data processing and then to persist
+						listPhyStklist.add(PhyStkDtl);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			List list = new ArrayList<>();
+			list.add("Invalid Excel File");
+			list.add("Invalid Entry In Row No." + RowCount + " and Product Code " + prodCode + " ");
+			return list;
+		}
+		return listPhyStklist;
+	}
+
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List funMIS(HSSFSheet worksheet, HttpServletRequest request) {
+		List listPhyStklist = new ArrayList<>();
+		int RowCount = 0;
+		String prodCode = "";
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		
+		//String prodStock=request.getParameter("prodStock");
+		try {
+			int i = 1;
+			while (i <= worksheet.getLastRowNum()) {
+				// Creates an object for the Candidate Model
+				clsMISDtlModel misDtl = new clsMISDtlModel();
+				// Creates an object representing a single row in excel
+				HSSFRow row = worksheet.getRow(i++);
+				// Sets the Read data to the model class
+				RowCount = row.getRowNum();
+				prodCode = row.getCell(2).getStringCellValue();
+				Cell c = row.getCell(4);
+				if (c != null && c.getCellType() != 1) {
+					if (row.getCell(4).getNumericCellValue() >= 0) {
+						misDtl.setStrProdCode(row.getCell(2).getStringCellValue());
+						String prodName = "";
+						if (row.getCell(3).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+							prodName = String.valueOf(row.getCell(3).getNumericCellValue());
+						} else {
+							prodName = row.getCell(3).getRichStringCellValue().toString();
+						}
+
+						misDtl.setStrProdName(prodName);
+						
+						misDtl.setStrUOM(row.getCell(5).toString());
+						
+						misDtl.setDblQty(row.getCell(4).getNumericCellValue());
+						
+						clsProductMasterModel Prodmodel = objProductMasterService.funGetObject(prodCode, clientCode);
+						misDtl.setDblUnitPrice(Prodmodel.getDblCostRM());
+						
+						misDtl.setDblStock(Prodmodel.getDblStock());
+						misDtl.setStrRemarks(Prodmodel.getStrRemark());
+						List ProdList = objGRNController.funLatestGRNProductRate(prodCode, request);
+
+						
+
+						// PhyStkDtl.setDblCStock(objGlobalFunctions.funGetCurrentStockForProduct(prodCode,
+						// objMISHd.getStrLocFrom(), clientCode,
+						// userCode,startDate,objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd")));
+						// Sends the model object to service layer for
+						// validation,
+						// data processing and then to persist
+						listPhyStklist.add(misDtl);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			List list = new ArrayList<>();
+			list.add("Invalid Excel File");
+			list.add("Invalid Entry In Row No." + RowCount + " and Product Code " + prodCode + " ");
+			return list;
+		}
+		return listPhyStklist;
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List funPO(HSSFSheet worksheet, HttpServletRequest request) {
+		List listPhyStklist = new ArrayList<>();
+		int RowCount = 0;
+		String prodCode = "";
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		
+		//String prodStock=request.getParameter("prodStock");
+		try {
+			int i = 1;
+			while (i <= worksheet.getLastRowNum()) {
+				// Creates an object for the Candidate Model
+				clsPurchaseOrderDtlModel objPODtlModel = new clsPurchaseOrderDtlModel();
+				// Creates an object representing a single row in excel
+				HSSFRow row = worksheet.getRow(i++);
+				// Sets the Read data to the model class
+				RowCount = row.getRowNum();
+				prodCode = row.getCell(2).getStringCellValue();
+				Cell c = row.getCell(4);
+				if (c != null && c.getCellType() != 1) {
+					if (row.getCell(4).getNumericCellValue() >= 0) {
+						objPODtlModel.setStrProdCode(row.getCell(2).getStringCellValue());
+						String prodName = "";
+						if (row.getCell(3).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+							prodName = String.valueOf(row.getCell(3).getNumericCellValue());
+						} else {
+							prodName = row.getCell(3).getRichStringCellValue().toString();
+						}
+
+						objPODtlModel.setStrProdName(prodName);
+						
+						//objPODtlModel.setstr(row.getCell(5).toString());
+						
+						objPODtlModel.setDblOrdQty(row.getCell(4).getNumericCellValue());
+						
+						clsProductMasterModel Prodmodel = objProductMasterService.funGetObject(prodCode, clientCode);
+						clsProdSuppMasterModel Prodmodel1 = objProductMasterService.funGetProdSupp(prodCode, clientCode);
+						
+						
+						objPODtlModel.setDblAmount(Prodmodel.getDblCostRM());
+						objPODtlModel.setStrUOM(Prodmodel.getStrUOM());
+						//objPODtlModel.setStrSuppCode(Prodmodel.getstrsu);
+						objPODtlModel.setDblWeight(Prodmodel.getDblWeight());
+						//objPODtlModel.setDblPrice(Prodmodel.getDblUnitPrice());
+						objPODtlModel.setStrSuppCode(Prodmodel1.getStrSuppCode());
+						objPODtlModel.setStrSuppName(Prodmodel1.getStrSuppName());
+						
+						objPODtlModel.setStrRemarks(Prodmodel.getStrRemark());
+						objPODtlModel.setDblWeight(Prodmodel.getDblWeight());
+						
+						
+						List ProdList = objGRNController.funLatestGRNProductRate(prodCode, request);
+
+						
+
+						// PhyStkDtl.setDblCStock(objGlobalFunctions.funGetCurrentStockForProduct(prodCode,
+						// objMISHd.getStrLocFrom(), clientCode,
+						// userCode,startDate,objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd")));
+						// Sends the model object to service layer for
+						// validation,
+						// data processing and then to persist
+						listPhyStklist.add(objPODtlModel);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			List list = new ArrayList<>();
+			list.add("Invalid Excel File");
+			list.add("Invalid Entry In Row No." + RowCount + " and Product Code " + prodCode + " ");
+			return list;
+		}
+		return listPhyStklist;
+	}
+
+	
 	/**
 	 * Location Master Reorder Level Import
 	 * 
@@ -661,8 +1301,202 @@ public class clsExcelExportImportController {
 		return listPOSSalelist;
 	}
 
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List funMaterialReq(HSSFSheet worksheet, HttpServletRequest request) {
+		List listMaterial = new ArrayList<>();
+		int RowCount = 0;
+		String prodCode = "";
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		
+		//String prodStock=request.getParameter("prodStock");
+		try {
+			int i = 1;
+			while (i <= worksheet.getLastRowNum()) {
+				// Creates an object for the Candidate Model
+				clsRequisitionDtlModel PhyStkDtl = new clsRequisitionDtlModel();
+				// Creates an object representing a single row in excel
+				HSSFRow row = worksheet.getRow(i++);
+				// Sets the Read data to the model class
+				RowCount = row.getRowNum();
+				prodCode = row.getCell(2).getStringCellValue();
+				Cell c = row.getCell(4);
+				if (c != null && c.getCellType() != 1) {
+					if (row.getCell(4).getNumericCellValue() >= 0) {
+						PhyStkDtl.setStrProdCode(row.getCell(2).getStringCellValue());
+						String prodName = "";
+						if (row.getCell(3).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+							prodName = String.valueOf(row.getCell(3).getNumericCellValue());
+						} else {
+							prodName = row.getCell(3).getRichStringCellValue().toString();
+						}
+
+						PhyStkDtl.setStrProdName(prodName);
+						
+							PhyStkDtl.setStrUOM(row.getCell(5).toString());
+						
+							PhyStkDtl.setDblQty(row.getCell(4).getNumericCellValue());
+						
+						clsProductMasterModel Prodmodel = objProductMasterService.funGetObject(prodCode, clientCode);
+						PhyStkDtl.setDblUnitPrice(Prodmodel.getDblCostRM());
+						PhyStkDtl.setStrUOM(Prodmodel.getStrUOM());
+						
+						//PhyStkDtl.setdb(Prodmodel.getDblWeight());
+
+						List ProdList = objGRNController.funLatestGRNProductRate(prodCode, request);
+
+						
+
+						// PhyStkDtl.setDblCStock(objGlobalFunctions.funGetCurrentStockForProduct(prodCode,
+						// objMISHd.getStrLocFrom(), clientCode,
+						// userCode,startDate,objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd")));
+						// Sends the model object to service layer for
+						// validation,
+						// data processing and then to persist
+						listMaterial.add(PhyStkDtl);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			List list = new ArrayList<>();
+			list.add("Invalid Excel File");
+			list.add("Invalid Entry In Row No." + RowCount + " and Product Code " + prodCode + " ");
+			return list;
+		}
+		return listMaterial;
+	}
+
+	
 	/*
 	 * End WebStock Import
 	 */
+	
+	/*PMS Import*/
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/GuestMasterExport", method = RequestMethod.GET)
+	public ModelAndView funPMSGuestExcelExport(HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		
+		//String LocCode = "";
+		List list = new ArrayList<>();
+		List AllGuestlist= new ArrayList();
+		List DataGuestList=null;
+		clsGuestMasterBean objBean=null;
+		String header = "Guest Code,GuestPrefix,Gender,First Name,Middle Name,Last Name,DOB,Email Id,Mobile No,Adress,City,Country,Pan No,UID";
+		List ExportList = new ArrayList();
+		String[] ExcelHeader = header.split(",");
+		ExportList.add(ExcelHeader);
+		try{
+		String sql="select a.strGuestCode,a.strGuestPrefix,a.strGender,a.strFirstName,a.strMiddleName,a.strLastName,"
+				+ " a.dteDOB,a.strEmailId,a.lngMobileNo,a.strAddress,a.strCity,a.strCountry,a.strPANNo,a.strUIDNo  "
+				+ " from tblguestmaster a where a.strClientCode='"+clientCode+"';";
+	            
+		list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		if(!list.isEmpty())
+	   {
+			for (int i = 0; i < list.size(); i++)
+			{
+	             Object[] obj = (Object[]) list.get(i);
+	             DataGuestList=new ArrayList<>();
+	             DataGuestList.add(obj[0].toString());
+	             DataGuestList.add(obj[1].toString());
+	             DataGuestList.add(obj[2].toString());
+	             DataGuestList.add(obj[3].toString());
+	             DataGuestList.add(obj[4].toString());
+	             DataGuestList.add(obj[5].toString());
+	             DataGuestList.add(objGlobalFunctions.funGetDate("yyyy-MM-dd", obj[6].toString()));
+	             DataGuestList.add(obj[7].toString());
+	             DataGuestList.add(obj[8].toString());
+	             DataGuestList.add(obj[9].toString());
+	             DataGuestList.add(obj[10].toString());
+	             DataGuestList.add(obj[11].toString());
+	             DataGuestList.add(obj[12].toString());
+	             DataGuestList.add(obj[13].toString());
+	             AllGuestlist.add(DataGuestList);
+			}
+		}
+		//
+		
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			}
+		ExportList.add(AllGuestlist);
+		
+		return new ModelAndView("excelView", "stocklist", ExportList);
+	}
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List funGuestList(HSSFSheet worksheet, HttpServletRequest request) {
+		List listGuestlist = new ArrayList<>();
+		int RowCount = 0;
+		//String prodCode = "";
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String userCode = request.getSession().getAttribute("usercode").toString();
+		
+		//String prodStock=request.getParameter("prodStock");
+		try {
+			int i = 1;
+			while (i <= worksheet.getLastRowNum()) {
+				// Creates an object representing a single row in excel
+				
+				
+				HSSFRow row = worksheet.getRow(i++);
+				// Sets the Read data to the model class
+				RowCount = row.getRowNum();
+				// Creates an object for the Candidate Model
+				clsGuestMasterBean objGuest= new clsGuestMasterBean();
+				objGuest.setStrGuestCode(funCheckIfNullExcelData(row.getCell(0),"",row.getCell(0)));
+				objGuest.setStrGuestPrefix(funCheckIfNullExcelData(row.getCell(1),"",row.getCell(1)));
+				objGuest.setStrGender(funCheckIfNullExcelData(row.getCell(2),"",row.getCell(2)));
+				objGuest.setStrFirstName(funCheckIfNullExcelData(row.getCell(3),"",row.getCell(3)));
+				objGuest.setStrMiddleName(funCheckIfNullExcelData(row.getCell(4),"",row.getCell(4)));
+				objGuest.setStrLastName(funCheckIfNullExcelData(row.getCell(5),"",row.getCell(5)));
+			    objGuest.setDteDOB(funCheckIfNullExcelData(row.getCell(6),"",row.getCell(6)));
+				objGuest.setStrEmailId(funCheckIfNullExcelData(row.getCell(7),"",row.getCell(8)));
+				objGuest.setIntMobileNo((long)(row.getCell(8).getNumericCellValue()));
+				objGuest.setStrAddress(funCheckIfNullExcelData(row.getCell(9),"",row.getCell(9)));
+				objGuest.setStrCity(funCheckIfNullExcelData(row.getCell(10),"",row.getCell(10)));
+				objGuest.setStrCountry(funCheckIfNullExcelData(row.getCell(11),"",row.getCell(11)));
+				objGuest.setStrPANNo(funCheckIfNullExcelData(row.getCell(12),"",row.getCell(12)));
+				objGuest.setStrUIDNo(funCheckIfNullExcelData(row.getCell(13),"",row.getCell(13)));
+
+					
+				
+				
+				listGuestlist.add(objGuest);
+				clsGuestMasterHdModel objGuestMasterModel = objGuestMasterService.funPrepareGuestModel(objGuest,clientCode,userCode);
+				
+				
+				objGuestMasterDao.funAddUpdateGuestMaster(objGuestMasterModel);
+
+				
+				
+			}
+
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			List list = new ArrayList<>();
+			list.add("Invalid Excel File");
+			//list.add("Invalid Entry In Row No." + RowCount + " and Product Code " + prodCode + " ");
+			return list;
+		}
+		return listGuestlist;
+	}
+
+private String funCheckIfNullExcelData(Cell input,String defaultValue,Cell assignedValue )
+{
+	String op = "notnull";
+	if (null == input) {
+		op = defaultValue;
+	} else {
+		op = assignedValue.toString();
+	}
+	return op;
+}
 }

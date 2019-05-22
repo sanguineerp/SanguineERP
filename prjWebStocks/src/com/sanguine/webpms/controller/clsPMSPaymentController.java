@@ -126,7 +126,12 @@ public class clsPMSPaymentController {
 		listAgainst.add("Folio-No");
 		listAgainst.add("Bill");
 		model.put("listAgainst", listAgainst);
+		
+		List<String> listSettlement = new ArrayList<>();
+		listSettlement.add("Part Settlement");
+		listSettlement.add("Full Settlement");
 
+		model.put("listSettlement", listSettlement);
 		try {
 			urlHits = request.getParameter("saddr").toString();
 		} catch (NullPointerException e) {
@@ -609,8 +614,8 @@ public class clsPMSPaymentController {
 					objPaymentReciptBean.setStrRoomType(strRoomType);
 					objPaymentReciptBean.setDteArrivalDate(dteArrivalDate);
 					objPaymentReciptBean.setDteDepartureDate(dteDepartureDate);
-					objPaymentReciptBean.setStrFirstName(strFirstName);
-					objPaymentReciptBean.setStrMiddleName(strMiddleName);
+					objPaymentReciptBean.setStrFirstName(strFirstName+" ");
+					objPaymentReciptBean.setStrMiddleName(strMiddleName+" ");
 					objPaymentReciptBean.setStrLastName(strLastName);
 					objPaymentReciptBean.setStrSettlementDesc(strSettlementDesc);
 					objPaymentReciptBean.setDblPaidAmt(dblPaidAmt);
@@ -689,8 +694,8 @@ public class clsPMSPaymentController {
 					objPaymentReciptBean.setStrRoomType(strRoomType);
 					objPaymentReciptBean.setDteArrivalDate(dteArrivalDate);
 					objPaymentReciptBean.setDteDepartureDate(dteDepartureDate);
-					objPaymentReciptBean.setStrFirstName(strFirstName);
-					objPaymentReciptBean.setStrMiddleName(strMiddleName);
+					objPaymentReciptBean.setStrFirstName(strFirstName+" ");
+					objPaymentReciptBean.setStrMiddleName(strMiddleName+" ");
 					objPaymentReciptBean.setStrLastName(strLastName);
 					objPaymentReciptBean.setStrSettlementDesc(strSettlementDesc);
 					objPaymentReciptBean.setDblPaidAmt(dblPaidAmt);
@@ -710,7 +715,9 @@ public class clsPMSPaymentController {
 
 				for (int i = 0; i < listOfPayment.size(); i++) {
 					Object PaymentData[] = (Object[]) listOfPayment.get(i);
-
+					
+					String strCGS;
+					String strSGST;
 					String strReceiptNo = PaymentData[0].toString();
 					String intNoOfAdults = PaymentData[1].toString();
 					String intNoOfChild = PaymentData[2].toString();
@@ -736,8 +743,8 @@ public class clsPMSPaymentController {
 					objPaymentReciptBean.setStrRoomType(strRoomType);
 					objPaymentReciptBean.setDteArrivalDate(dteArrivalDate);
 					objPaymentReciptBean.setDteDepartureDate(dteDepartureDate);
-					objPaymentReciptBean.setStrFirstName(strFirstName);
-					objPaymentReciptBean.setStrMiddleName(strMiddleName);
+					objPaymentReciptBean.setStrFirstName(strFirstName+" ");
+					objPaymentReciptBean.setStrMiddleName(strMiddleName+" ");
 					objPaymentReciptBean.setStrLastName(strLastName);
 					objPaymentReciptBean.setStrSettlementDesc(strSettlementDesc);
 					objPaymentReciptBean.setDblPaidAmt(dblPaidAmt);

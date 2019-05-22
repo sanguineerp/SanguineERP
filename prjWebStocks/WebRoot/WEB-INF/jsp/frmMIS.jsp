@@ -537,7 +537,9 @@
 	        	$.each(response, function(i,item)
 	       	    	 {
 	        			count=i;
-	       	    	    funfillProdRow(response[i].strProdCode,response[i].strProdName,response[i].strUOM,response[i].dblQty,response[i].dblUnitPrice,response[i].strRemarks,strReqcode,response[i].dblStock);
+	       	    	    funfillProdRow(response[i].strProdCode,response[i].strProdName,
+	       	    	    		response[i].strUOM,response[i].dblQty,response[i].dblUnitPrice,
+	       	    	    		response[i].strRemarks,strReqcode,response[i].dblStock);
 	       	    	                                           
 	       	    	 });
 	        	listRow=count+1;
@@ -637,7 +639,7 @@
 	    var row = table.insertRow(rowCount);
 	    var dblTotalPrice=dblQty*dblUnitPrice;
 	    dblTotalPrice=dblTotalPrice.toFixed(maxAmountDecimalPlaceLimit);
-	    var dblIssueQty=dblQty;
+	    var dblIssueQty="";
 	    if($("#txtMISCode").val()!="")
 	    	{
 	    		dblIssueQty="";
@@ -1478,6 +1480,44 @@
 		    	btnAdd_onclick();
 		    }
 		}
+		
+		function funOpenExportImport()			
+		{
+			var transactionformName="frmMIS";
+			var locCode=$('#txtLocFrom').val();
+			var dtPhydate=$("#txtMISDate").val();
+			var strReqcode=$("#txtReqCode").val();
+			
+			response=window.open("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode+"&dtPIDate="+dtPhydate,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+			
+			var timer = setInterval(function ()
+				    {
+					if(response.closed)
+						{
+							if (response.returnValue != null)
+							{
+								funRemoveProductRows();
+								var count=0;
+								var retValue =response.returnValue;
+								$.each(retValue, function(i,item)
+					               { 
+									count=i;
+									funfillProdRow(retValue[i].strProdCode,retValue[i].strProdName,
+											retValue[i].strUOM,retValue[i].dblQty,retValue[i].dblUnitPrice,
+											retValue[i].strRemarks,strReqcode,retValue[i].dblStock);                 
+										$('#hidDocCode').val(retValue[i].strDocCode);
+										$('#hidDocType').val(retValue[i].strDocType);
+					               
+					               });
+								listRow=count+1;
+			
+							}
+							clearInterval(timer);
+						}
+				    }, 500);
+						        	
+		}
+		
 
 		
 </script>
@@ -1494,7 +1534,11 @@
 			<tr>
 
 				<th align="right"><a id="baseUrl" href="#">
-						Attach Documents</a>&nbsp; &nbsp; &nbsp; &nbsp;</th>
+						Attach Documents</a>&nbsp; &nbsp; &nbsp; &nbsp;
+						<a onclick="funOpenExportImport()"
+					href="javascript:void(0);">Export/Import</a>&nbsp; &nbsp; &nbsp;
+					&nbsp;
+						</th>
 			</tr>
 		</table>
 

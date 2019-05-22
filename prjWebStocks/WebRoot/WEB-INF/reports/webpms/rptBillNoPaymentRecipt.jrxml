@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
-<!-- 2016-04-08T16:31:54 -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
@@ -77,7 +76,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Bill Recipt]]></text>
+				<text><![CDATA[Bill Receipt]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -88,7 +87,7 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="235" splitType="Stretch">
+		<band height="206" splitType="Stretch">
 			<textField>
 				<reportElement x="94" y="22" width="164" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
@@ -238,7 +237,7 @@
 				<text><![CDATA[Receipt Date       :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="99" y="118" width="364" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement x="99" y="118" width="221" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -307,6 +306,20 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{strBillNo}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="340" y="118" width="97" height="14" uuid="0641225c-969a-4fb0-8074-2ac6d4ecbb70"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CGST                 :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="140" width="97" height="14" uuid="cb8fcfb7-7f8c-46fb-b35f-e959d8cfe71b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SGST                  :]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<pageFooter>

@@ -2128,7 +2128,7 @@
 				</tr>
 			</table>
 			<div style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 400px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
-				<table id="tblRommRate" style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll" class="transTablex col3-center">
+				<table id="tblRommRate" style="width: 100%; border: #0F0; overflow: scroll" class="transTablex col3-center">
 					<tbody>
 						<!-- col1   -->
 						<col width="100%">
@@ -2146,6 +2146,9 @@
 				</table>
 			</div>			
 	
+	</div>
+	<div style="margin:auto;">
+	<label>Total</label>
 	</div>
 	</div>
 	

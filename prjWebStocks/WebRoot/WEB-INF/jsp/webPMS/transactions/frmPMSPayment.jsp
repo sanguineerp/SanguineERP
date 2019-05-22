@@ -461,6 +461,16 @@
 			<td><label id="lblBalnceAmount" readonly="readonly"></label></td>
 			
 		</tr>
+		
+		
+			<<tr>
+			<td>Settlement Type</td>
+			
+			<td>
+				<s:select id="cmbAgainst" items="${listSettlement}" name="cmbSettlementType"  cssClass="BoxW124px" path=""></s:select>
+			</td>
+		    </tr>
+		   
 						
 		<tr>
 			<td width="15%"><label>Settlement Code</label></td>

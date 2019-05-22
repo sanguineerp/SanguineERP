@@ -1909,14 +1909,14 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/frmSupplierWisePurchaseGRNVarianceReport.jsp"></put-attribute>
 	</definition> 
 	
-		<definition name="frmStockReq" extends="base.definition">
+		<!-- <definition name="frmStockReq" extends="base.definition">
 		<put-attribute name="title" value="Stock Requisition"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/jsp/frmStockReq.jsp"></put-attribute>
-	</definition>
-	<definition name="frmStockReq_1" extends="base.definition4">
+	</definition> -->
+	<!-- <definition name="frmStockReq_1" extends="base.definition4">
 		<put-attribute name="title" value="Stock Requisition"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/jsp/frmStockReq.jsp"></put-attribute>
-	</definition>
+	</definition> -->
 	
 		<definition name="frmStockReqSlip" extends="base.definition">
 		<put-attribute name="title" value="Stock Requisition Slip"></put-attribute>
