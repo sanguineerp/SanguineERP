@@ -1410,8 +1410,8 @@ $(document).ready(function()
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
 		    
-		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  size=\"10%\"  id=\"txtBatchCode."+(rowCount)+"\" value='"+BatchCode+"'>";
-		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  style=\"text-align: left\"size=\"80%\" id=\"txtManuBatchCode."+(rowCount)+"\" value='"+ManuBatchCode+"'>";
+		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  size=\"15%\"  id=\"txtBatchCode."+(rowCount)+"\" value='"+BatchCode+"'>";
+		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  style=\"text-align: left\"size=\"87%\" id=\"txtManuBatchCode."+(rowCount)+"\" value='"+ManuBatchCode+"'>";
 		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  size=\"14%\" id=\"txtGRNCode."+(rowCount)+"\" value="+GRNCode+">";
 		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;width:77%\" size=\"80%\" id=\"txtPendQty."+(rowCount)+"\" value="+parseFloat(penQty).toFixed(maxQuantityDecimalPlaceLimit)+">";
 		    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  size=\"7%\" id=\"txtExpDate."+(rowCount)+"\" value="+ExpiryDate+">";

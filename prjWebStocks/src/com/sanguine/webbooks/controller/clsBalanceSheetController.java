@@ -1086,95 +1086,148 @@ public class clsBalanceSheetController {
 			
 		}
 		
-		
-		
-		
 		private void funCalculateBalanceSheetListAccountCode(String catType, String hdTableName, String dtlTableName, String fromDate, String toDate
-				, int cnt, String clientCode, StringBuilder sbSql, Map<String,clsIncomeStmtReportBean> hmIncomeStatement,List<String> list,String propCode)
+				, int cnt, String clientCode, StringBuilder sbSql, Map<String,clsIncomeStmtReportBean> hmIncomeStatement,List<String> listAccounts,String propCode)
 		{
-//			sbSql.setLength(0);
-//			sbSql.append("select a.strType, a.strGroupCode,b.strGroupName,d.strCrDr,sum(d.dblCrAmt) as Sale,sum(d.dblDrAmt) as Purchase,a.strAccountName,a.strAccountCode "
-//					+ "from tblacmaster a,tblacgroupmaster b,"+hdTableName+" c,"+dtlTableName+" d "
-//					+ "where a.strGroupCode=b.strGroupCode "
-//					+ "and a.strAccountCode=d.strAccountCode "
-//					+ "and c.strVouchNo=d.strVouchNo "
-//					+ "and b.strCategory='"+catType+"' "
-//					+ "and a.strType='GL Code' "
-//					+ "and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"' "
-//					+ "group by a.strAccountCode order by b.strCategory,a.strGroupCode ; ");
-			
 			StringBuilder sbOp=new StringBuilder(); 		
-			
-//			for(String acc:list)
-//			{
-			sbSql.setLength(0);
-			sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),IFNULL(SUM(d.dblCrAmt),0) AS Sale, IFNULL(SUM(d.dblDrAmt),0) AS Purchase,a.strAccountName,a.strAccountCode, "
-					+" b.strCategory from tblsubgroupmaster sb, tblacgroupmaster b,tblacmaster a "
-					+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
-					+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"'  and a.strPropertyCode='"+propCode+"' "
-					+" where a.strSubGroupCode=sb.strSubGroupCode"
-					+ " and sb.strGroupCode=b.strGroupCode "
-//					+" and a.strAccountCode='"+acc+"' "
-					+ "and b.strCategory='"+catType+"' "
-//					+" and a.strType='GL Code'  "
-					+" group by a.strAccountCode  "
-					+" ORDER BY b.strGroupName ");
-			
-			List listJV = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
-			if (listJV != null && listJV.size() > 0)
-			{
-				for(int cn=0;cn<listJV.size();cn++)
+
+			if(listAccounts!=null && listAccounts.size()>0){
+				for(String acc:listAccounts)
 				{
-					Object[] objArr = (Object[]) listJV.get(cn);
-					System.out.println(objArr[2].toString());
-					String groupCategory = objArr[1].toString();
-					String groupName = objArr[2].toString();
-					BigDecimal creditAmount = BigDecimal.valueOf(Double.parseDouble(objArr[4].toString()));
-					BigDecimal debitAmount = BigDecimal.valueOf(Double.parseDouble(objArr[5].toString()));
-	
+					acc=acc.trim().split(" ")[0];
+					sbSql.setLength(0);
+					sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),IFNULL(SUM(d.dblCrAmt),0) AS Sale, IFNULL(SUM(d.dblDrAmt),0) AS Purchase,a.strAccountName,a.strAccountCode, "
+							+" b.strCategory from tblsubgroupmaster sb, tblacgroupmaster b,tblacmaster a "
+							+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
+							+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"'  and a.strPropertyCode='"+propCode+"' "
+							+" where a.strSubGroupCode=sb.strSubGroupCode"
+							+ " and sb.strGroupCode=b.strGroupCode "
+							+" and a.strAccountCode='"+acc+"' "
+							+" group by a.strAccountCode  "
+							+" ORDER BY b.strGroupName ");
 					
-					
-					BigDecimal totalAmt=debitAmount.subtract(creditAmount);
-					
-					String accountCode=objArr[7].toString();
-					clsIncomeStmtReportBean objBean = new clsIncomeStmtReportBean();
-					
-					if(hmIncomeStatement.containsKey(accountCode))
+					List listJV = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
+					if (listJV != null && listJV.size() > 0)
 					{
-						objBean=hmIncomeStatement.get(accountCode);
-						objBean.setDblValue(objBean.getDblValue().add(totalAmt));
-					}
-					else
-					{
-						objBean.setStrGroupCategory(groupCategory);
-						objBean.setStrGroupName(groupName);
-						
-						objBean.setStrAccountName(objArr[6].toString());
-						objBean.setStrAccountCode(objArr[7].toString());
-						
-						BigDecimal opAmt=new BigDecimal(0);
-						if(cnt==1)
+						for(int cn=0;cn<listJV.size();cn++)
 						{
-						sbOp.setLength(0);
-						
-						sbOp.append(" select IF(a.strCrDr='Dr',a.intOpeningBal,0) dblDebitAmt, IF(a.strCrDr='Cr',a.intOpeningBal,0) dblCreditAmt, (IF(a.strCrDr='Dr',a.intOpeningBal,0) - IF(a.strCrDr='Cr',a.intOpeningBal,0)) dblBalanceAmt  from tblacmaster a where a.strAccountCode='"+objArr[7].toString()+"' "
-					     +" and a.strClientCode='"+clientCode+"' ");
-						List listOP = objGlobalFunctionsService.funGetListModuleWise(sbOp.toString(), "sql");
-					    if(listOP.size()>0)
-					    {
-					    	Object obj[]=(Object[])listOP.get(0);
-					    	opAmt=BigDecimal.valueOf( Double.parseDouble(obj[2].toString()));
-					    }
+							Object[] objArr = (Object[]) listJV.get(cn);
+							System.out.println(objArr[2].toString());
+							String groupCategory = objArr[1].toString();
+							String groupName = objArr[2].toString();
+							BigDecimal creditAmount = BigDecimal.valueOf(Double.parseDouble(objArr[4].toString()));
+							BigDecimal debitAmount = BigDecimal.valueOf(Double.parseDouble(objArr[5].toString()));
+			
+							
+							
+							BigDecimal totalAmt=debitAmount.subtract(creditAmount);
+							
+							String accountCode=objArr[7].toString();
+							clsIncomeStmtReportBean objBean = new clsIncomeStmtReportBean();
+							
+							if(hmIncomeStatement.containsKey(accountCode))
+							{
+								objBean=hmIncomeStatement.get(accountCode);
+								objBean.setDblValue(objBean.getDblValue().add(totalAmt));
+							}
+							else
+							{
+								objBean.setStrGroupCategory(groupCategory);
+								objBean.setStrGroupName(groupName);
+								
+								objBean.setStrAccountName(objArr[6].toString());
+								objBean.setStrAccountCode(objArr[7].toString());
+								
+								BigDecimal opAmt=new BigDecimal(0);
+								if(cnt==1)
+								{
+								sbOp.setLength(0);
+								
+								sbOp.append(" select IF(a.strCrDr='Dr',a.intOpeningBal,0) dblDebitAmt, IF(a.strCrDr='Cr',a.intOpeningBal,0) dblCreditAmt, (IF(a.strCrDr='Dr',a.intOpeningBal,0) - IF(a.strCrDr='Cr',a.intOpeningBal,0)) dblBalanceAmt  from tblacmaster a where a.strAccountCode='"+objArr[7].toString()+"' "
+							     +" and a.strClientCode='"+clientCode+"' ");
+								List listOP = objGlobalFunctionsService.funGetListModuleWise(sbOp.toString(), "sql");
+							    if(listOP.size()>0)
+							    {
+							    	Object obj[]=(Object[])listOP.get(0);
+							    	opAmt=BigDecimal.valueOf( Double.parseDouble(obj[2].toString()));
+							    }
+								}
+							    objBean.setDblValue(opAmt.add(totalAmt));
+							}
+							objBean.setStrCategory(catType);
+							hmIncomeStatement.put(accountCode, objBean);
 						}
-					    objBean.setDblValue(opAmt.add(totalAmt));
 					}
-					objBean.setStrCategory(catType);
-					hmIncomeStatement.put(accountCode, objBean);
+
+					
 				}
+			}else{
+				sbSql.setLength(0);
+				sbSql.append("select a.strType,b.strGroupCode,b.strGroupName,ifnull(d.strCrDr,''),IFNULL(SUM(d.dblCrAmt),0) AS Sale, IFNULL(SUM(d.dblDrAmt),0) AS Purchase,a.strAccountName,a.strAccountCode, "
+						+" b.strCategory from tblsubgroupmaster sb, tblacgroupmaster b,tblacmaster a "
+						+" left outer join "+dtlTableName+" d on  a.strAccountCode=d.strAccountCode " 
+						+" left outer join "+hdTableName+"  c on c.strVouchNo=d.strVouchNo   and date(c.dteVouchDate) between '" + fromDate + "' and '" + toDate + "' and c.strClientCode='"+clientCode+"'  and a.strPropertyCode='"+propCode+"' "
+						+" where a.strSubGroupCode=sb.strSubGroupCode"
+						+ " and sb.strGroupCode=b.strGroupCode "
+						+ "and b.strCategory='"+catType+"' "
+						+" group by a.strAccountCode  "
+						+" ORDER BY b.strGroupName ");
+				
+				List listJV = objGlobalFunctionsService.funGetListModuleWise(sbSql.toString(), "sql");
+				if (listJV != null && listJV.size() > 0)
+				{
+					for(int cn=0;cn<listJV.size();cn++)
+					{
+						Object[] objArr = (Object[]) listJV.get(cn);
+						System.out.println(objArr[2].toString());
+						String groupCategory = objArr[1].toString();
+						String groupName = objArr[2].toString();
+						BigDecimal creditAmount = BigDecimal.valueOf(Double.parseDouble(objArr[4].toString()));
+						BigDecimal debitAmount = BigDecimal.valueOf(Double.parseDouble(objArr[5].toString()));
+		
+						
+						
+						BigDecimal totalAmt=debitAmount.subtract(creditAmount);
+						
+						String accountCode=objArr[7].toString();
+						clsIncomeStmtReportBean objBean = new clsIncomeStmtReportBean();
+						
+						if(hmIncomeStatement.containsKey(accountCode))
+						{
+							objBean=hmIncomeStatement.get(accountCode);
+							objBean.setDblValue(objBean.getDblValue().add(totalAmt));
+						}
+						else
+						{
+							objBean.setStrGroupCategory(groupCategory);
+							objBean.setStrGroupName(groupName);
+							
+							objBean.setStrAccountName(objArr[6].toString());
+							objBean.setStrAccountCode(objArr[7].toString());
+							
+							BigDecimal opAmt=new BigDecimal(0);
+							if(cnt==1)
+							{
+							sbOp.setLength(0);
+							
+							sbOp.append(" select IF(a.strCrDr='Dr',a.intOpeningBal,0) dblDebitAmt, IF(a.strCrDr='Cr',a.intOpeningBal,0) dblCreditAmt, (IF(a.strCrDr='Dr',a.intOpeningBal,0) - IF(a.strCrDr='Cr',a.intOpeningBal,0)) dblBalanceAmt  from tblacmaster a where a.strAccountCode='"+objArr[7].toString()+"' "
+						     +" and a.strClientCode='"+clientCode+"' ");
+							List listOP = objGlobalFunctionsService.funGetListModuleWise(sbOp.toString(), "sql");
+						    if(listOP.size()>0)
+						    {
+						    	Object obj[]=(Object[])listOP.get(0);
+						    	opAmt=BigDecimal.valueOf( Double.parseDouble(obj[2].toString()));
+						    }
+							}
+						    objBean.setDblValue(opAmt.add(totalAmt));
+						}
+						objBean.setStrCategory(catType);
+						hmIncomeStatement.put(accountCode, objBean);
+					}
+				}
+
 			}
 			
-			
-//			}
 		}
 		
 		
@@ -1238,20 +1291,20 @@ public class clsBalanceSheetController {
 						String strSubGroupCode=obj[0].toString();
 						String strSubGroupName=obj[1].toString();
 						String strGroupCat=obj[4].toString();
-						funGetUnderSubGroupList(strGroupCode,strSubGroupCode,strSubGroupName,hmSubGrpUnderSbGrpAcc );
-						if(strGroupCat.equalsIgnoreCase("INCOME")){
-							strGroupCat="ASSET";
-						}else if(strGroupCat.equalsIgnoreCase("EXPENSE")){
-							strGroupCat="LIABILITY";
+						if(strGroupCat.equalsIgnoreCase("ASSET") || strGroupCat.equalsIgnoreCase("LIABILITY") ){
+								funGetUnderSubGroupList(strGroupCode,strSubGroupCode,strSubGroupName,hmSubGrpUnderSbGrpAcc );
+								hmGrpSubGrpAcc.put(strGroupCat+"-"+strGroupCode+"_"+strGroupName+"!"+strSubGroupCode+"_"+strSubGroupName, hmSubGrpUnderSbGrpAcc);
 						}
+						/*strGroupCat="ASSET";
+					}else if(strGroupCat.equalsIgnoreCase("EXPENSE")){
+						strGroupCat="LIABILITY";*/
 						
-						hmGrpSubGrpAcc.put(strGroupCat+"-"+strGroupCode+"_"+strGroupName+"!"+strSubGroupCode+"_"+strSubGroupName, hmSubGrpUnderSbGrpAcc);
 					}
 				}
 			
-				System.out.println(hmGrpSubGrpAcc);
-				List<List<String>> listAssets=new ArrayList<List<String>>();
-				List<List<String>> listLiabilities=new ArrayList<List<String>>();
+				//System.out.println(hmGrpSubGrpAcc);
+				//List<List<String>> listAssets=new ArrayList<List<String>>();
+				//List<List<String>> listLiabilities=new ArrayList<List<String>>();
 				
 				
 				
@@ -1262,11 +1315,11 @@ public class clsBalanceSheetController {
 				listExcelData.add(listData1);	//1
 				
 				List listDates=new ArrayList();
-				listDates.add("From Date : "+fromDate);
-				listDates.add("To Date : "+toDate);
+				listDates.add("From Date : "+fromDate +"	   To Date : "+toDate);
+				listDates.add("");
 				listExcelData.add(listDates);	//2
 								
-				List listData=new ArrayList();
+				
 								
 				
 				List<List> listHeaders=new ArrayList<List>(); 
@@ -1288,15 +1341,142 @@ public class clsBalanceSheetController {
 				
 				
 				
-				listData.add(hmGrpSubGrpAcc);
 				
-				listData.add(listLiabilities);
+			//	listData.add(listLiabilities);
+				
+			
+				
+				
 				//listData.add(listTotals);
 			//	listData.add(listCapitals);
 				//listData.add(listCapitalTotals);
 								
-				listExcelData.add(listData);	//4
-		}
+				
+				
+/////////////////////////////////////////////////////////////////
+				
+			//	Map<String,Object> hmGrpSubGrpAcc=(Map) listData.get(0);
+				//List<List<String>> list1=new ArrayList<>(); 
+				List<String> listLiabilities=new ArrayList<>(); 
+				List<String> listAssets=new ArrayList<>(); 
+				int cnt=1;
+				for(String groupAcc:hmGrpSubGrpAcc.keySet()){
+					List accList=new ArrayList<>();
+					if(hmGrpSubGrpAcc.get(groupAcc) instanceof Map){
+						if(groupAcc.startsWith("LIABILITY")){//Checking category
+							listLiabilities.add("LIABILITY");
+							groupAcc=groupAcc.replace("LIABILITY-",""); //Removed category name
+							String[] arrGrpSubGrp=groupAcc.split("!"); // [0] =Group NAme, [1]= Subgroup Name
+							if(!listLiabilities.contains(arrGrpSubGrp[0])){
+								listLiabilities.add(arrGrpSubGrp[0]); //Grp Added	
+							}
+							listLiabilities.add(arrGrpSubGrp[1]); //Sub Grp Added
+							
+							//Get Sub Grp map 
+							Map<String,Object> mapSubGrpAcc=(Map) hmGrpSubGrpAcc.get("LIABILITY-"+groupAcc);
+							//Check SubGroupAccs
+							String strSubGrpMapKey[]=arrGrpSubGrp[1].toString().split("_");
+							List listSubGrpAcc=new ArrayList();
+							listSubGrpAcc=funCheckMapKey(mapSubGrpAcc,strSubGrpMapKey[0]+"!"+strSubGrpMapKey[1],listSubGrpAcc);// SubGrp code!name
+							if(listSubGrpAcc!=null){
+								listLiabilities.addAll(listSubGrpAcc); //All Accounts of Subgroup
+							}
+							if(listSubGrpAcc.size()==0 &&listSubGrpAcc!=null){
+								//check Under SubGroup
+								listSubGrpAcc=new ArrayList(); 
+								listSubGrpAcc=funIterateMap(mapSubGrpAcc,listSubGrpAcc);
+								listLiabilities.addAll(listSubGrpAcc);
+							}
+							
+						}else{
+							
+							//Checking category
+							listAssets.add("ASSET");
+							groupAcc=groupAcc.replace("ASSET-",""); //Removed category name
+							String[] arrGrpSubGrp=groupAcc.split("!"); // [0] =Group NAme, [1]= Subgroup Name
+							if(!listAssets.contains(arrGrpSubGrp[0])){
+								listAssets.add(arrGrpSubGrp[0]); //Grp Added	
+							}
+							listAssets.add(arrGrpSubGrp[1]); //Sub Grp Added
+							
+							//Get Sub Grp map 
+							Map<String,Object> mapSubGrpAcc=(Map) hmGrpSubGrpAcc.get("ASSET-"+groupAcc);
+							//Check SubGroupAccs
+							String strSubGrpMapKey[]=arrGrpSubGrp[1].toString().split("_");
+							List listSubGrpAcc=new ArrayList();
+							listSubGrpAcc=funCheckMapKey(mapSubGrpAcc,strSubGrpMapKey[0]+"!"+strSubGrpMapKey[1],listSubGrpAcc);// SubGrp code!name
+							if(listSubGrpAcc!=null){
+								listAssets.addAll(listSubGrpAcc); //All Accounts of Subgroup
+							}
+							if(listSubGrpAcc.size()==0 &&listSubGrpAcc!=null){
+								//check Under SubGroup
+								listSubGrpAcc=new ArrayList(); 
+								listSubGrpAcc=funIterateMap(mapSubGrpAcc,listSubGrpAcc);
+								listAssets.addAll(listSubGrpAcc);
+							}
+						}
+						
+					}
+
+				}
+				Map<String,clsIncomeStmtReportBean> hmSalesIncStmt = new HashMap<String,clsIncomeStmtReportBean>();
+	
+				// Sale JV
+				funCalculateBalanceSheetListAccountCode("ASSETS", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmSalesIncStmt,listAssets,propertyCode);
+				cnt++;
+				// Sale Receipt
+				funCalculateBalanceSheetListAccountCode("ASSETS", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmSalesIncStmt,listAssets,propertyCode);
+							
+				// Sale Payment
+				funCalculateBalanceSheetListAccountCode("ASSETS", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmSalesIncStmt,listAssets,propertyCode);	
+					
+				
+				Map<String,clsIncomeStmtReportBean> hmOtherExpensesIncStmt = new HashMap<String,clsIncomeStmtReportBean>();
+				
+				 cnt=1;
+				 
+					
+//					// LIABILITY JV
+						funCalculateBalanceSheetListAccountCode("LIABILITY", "tbljvhd", "tbljvdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listLiabilities,propertyCode);
+//							
+//					// LIABILITY 
+						funCalculateBalanceSheetListAccountCode("LIABILITY", "tblreceipthd", "tblreceiptdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listLiabilities,propertyCode);
+//								
+//					//LIABILITY	
+						funCalculateBalanceSheetListAccountCode("LIABILITY", "tblpaymenthd", "tblpaymentdtl", dteFromDate, dteToDate, cnt, clientCode, sbSql, hmOtherExpensesIncStmt,listLiabilities,propertyCode);
+								
+					// Calculate Gross Profit = Total Income (Sales) - Total Other Expenses (COG)	
+						
+					List<clsIncomeStmtReportBean> listOfBalancesheet = new ArrayList<clsIncomeStmtReportBean>();
+					
+					clsIncomeStmtReportBean obAssest;
+					for(int k=0;k<listAssets.size();k++){
+						String strAssets=listAssets.get(k);
+						
+						if(hmSalesIncStmt.containsKey(strAssets.trim().split(" ")[0])){
+							obAssest=hmSalesIncStmt.get(strAssets.trim().split(" ")[0]);	
+							strAssets=strAssets+"!"+obAssest.getDblValue();
+							listAssets.set(k,strAssets);
+						}
+						
+						
+					}
+					for(int k=0;k<listLiabilities.size();k++){
+						String strLiability=listLiabilities.get(k);
+						
+						if(hmOtherExpensesIncStmt.containsKey(strLiability.trim().split(" ")[0])){
+							obAssest=hmOtherExpensesIncStmt.get(strLiability.trim().split(" ")[0]);	
+							strLiability=strLiability+"!"+obAssest.getDblValue();
+							listLiabilities.set(k,strLiability);
+						}
+						
+					}
+					
+					List listData=new ArrayList();
+					listData.add(listLiabilities);
+					listData.add(listAssets);
+					listExcelData.add(listData);	//4
+			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
@@ -1374,4 +1554,33 @@ public class clsBalanceSheetController {
 	}
 	
 		
+	private List funIterateMap(Map<String,Object> map,List accList){
+		for(String groupAcc:map.keySet()){
+			if(map.get(groupAcc) instanceof Map){
+				Map map1=(Map)map.get(groupAcc);
+				accList.add(groupAcc);
+				accList=funIterateMap(map1,accList);
+			}else if(map.get(groupAcc) instanceof List){
+				accList.add(groupAcc);
+				accList=(List) map.get(groupAcc);
+			}	
+		}
+		
+		return accList;
+	}
+	
+	private List funCheckMapKey(Map<String,Object> mapSubGrp,String key,List AccList){
+		//List AccList=null;
+		if(mapSubGrp.containsKey(key)){
+			if(mapSubGrp.get(key) instanceof List){
+				AccList=(List)mapSubGrp.get(key);
+			}else if(mapSubGrp.get(key) instanceof Map){
+				AccList.add(key);
+				funCheckMapKey((Map<String,Object>)mapSubGrp.get(key),key,AccList);
+			}
+		}
+		return AccList;
+	}
+	
+
 }

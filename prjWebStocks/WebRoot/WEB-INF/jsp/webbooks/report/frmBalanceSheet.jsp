@@ -29,6 +29,27 @@
 		
 
 	});
+	
+	function funOnSubmitBtn(){
+		var clientCode=	'<%=session.getAttribute("clientCode").toString()%>';
+		
+		if($("#cmbDocType").val()=='PDF'){
+			document.frmBalanceSheet.action="rptBalanceSheet1.html";
+		}else{
+			if(clientCode=='261.001'){
+				document.frmBalanceSheet.action="rptBalanceSheet2.html";
+//				$("#formTag").attr("action", "rptBalanceSheet2.html");	
+			}else{
+				document.frmBalanceSheet.action="rptBalanceSheet1.html";
+				
+				//$("#formTag").attr("action", "rptBalanceSheet.html");
+			}
+		}
+				document.frmBalanceSheet.submit();  
+
+ 		/* document.frmVoidStock.action="voidStock.html?stkCode="+ stkCode;
+ 		document.frmVoidStock.submit(); */
+	}
 </script>
 <body>
 	<div id="formHeading">
@@ -38,7 +59,7 @@
 	<br />
 	<br />
 
-	<s:form name="frmBalanceSheet" method="GET" action="rptBalanceSheet2.html" target="_blank">
+	<s:form name="frmBalanceSheet" method="GET" action="" target="_blank">
 		<div>
 			<table class="transTable">
 			    <tr>
@@ -66,7 +87,7 @@
 		<br />
 	<br />
 		<p align="center">
-				<input type="submit" value="Submit"  class="form_button" />
+				<input type="submit" value="Submit"  class="form_button" onclick="funOnSubmitBtn()"/>
 				 <input type="button" value="Reset" class="form_button"  onclick="funResetFields()"/>
 			</p>
 	</s:form>

@@ -28,10 +28,13 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 		List listExcelData = (List) model.get("excelDataList");
 		
 		String reportName = (String) listExcelData.get(0);
+		
 		List listHeaderLevelInfo=(List)listExcelData.get(3);
 		List listdate = new ArrayList();
+		List listReportName= new ArrayList();
 		try {
 			listdate = (List) listExcelData.get(2);
+			listReportName=(List)listExcelData.get(1);
 		} catch (Exception e) {
 			listdate = new ArrayList();
 		}
@@ -45,8 +48,10 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 	// create a new Excel sheet
 		HSSFSheet sheet = workbook.createSheet("Sheet");
 		sheet.setDefaultColumnWidth(80);
-
+		sheet.setColumnWidth(1, 5000);
+		sheet.setColumnWidth(3, 5000);
 	// create style for header cells
+		
 		CellStyle style = workbook.createCellStyle();
 		Font font = workbook.createFont();
 		font.setFontName("Arial");
@@ -55,6 +60,7 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 		style.setAlignment(CellStyle.ALIGN_CENTER);
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		font.setColor(HSSFColor.WHITE.index);
+		font.setFontHeight((short)(15*20));
 		style.setFont(font);
 
 		
@@ -64,6 +70,11 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 		font2.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		style2.setFont(font2);
 		
+		CellStyle style5 = workbook.createCellStyle();
+		Font font5 = workbook.createFont();
+		font5.setFontName("Arial");
+		style5.setAlignment(CellStyle.ALIGN_RIGHT);
+		style5.setFont(font5);
 		
 		/*CellStyle style3 = workbook.createCellStyle();
 		Font font3 = workbook.createFont();
@@ -83,18 +94,31 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 		style4.setFont(font4);*/
 		// create header row
 		
+		
 		int excelRowCount=4;
 		HSSFRow header = sheet.createRow(excelRowCount);
 		for (int rowCount = 0; rowCount < listHeaderLevelInfo.size(); rowCount++) {
 			header.createCell(rowCount).setCellValue(listHeaderLevelInfo.get(rowCount).toString());
 			header.getCell(rowCount).setCellStyle(style);
 		}
-
-		HSSFRow fittler = sheet.createRow(excelRowCount);
+		HSSFRow rptName = sheet.createRow(excelRowCount);
+		excelRowCount++;
+		if (listReportName!=null && listReportName.size()>0) {
+			rptName.createCell(0).setCellValue(listReportName.get(0).toString());
+			rptName.getCell(0).setCellStyle(style2);
+			
+			rptName = sheet.createRow(excelRowCount);
+			excelRowCount++;
+			rptName.createCell(0).setCellValue(listReportName.get(1).toString());
+			rptName.getCell(0).setCellStyle(style2);
+		}
+		
+		
+		HSSFRow date = sheet.createRow(excelRowCount);
 		excelRowCount++;
 		for (int rowfitter = 0; rowfitter < listdate.size(); rowfitter++) {
-			fittler.createCell(rowfitter).setCellValue(listdate.get(rowfitter).toString());
-			fittler.getCell(rowfitter).setCellStyle(style2);
+			date.createCell(rowfitter).setCellValue(listdate.get(rowfitter).toString());
+			date.getCell(rowfitter).setCellStyle(style2);
 		}
 				
 		for (int rowtitile = 0; rowtitile < 1; rowtitile++) {
@@ -107,75 +131,24 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 	// create data rows
 	// aRow is add Row
 		
-		Map<String,Object> hmGrpSubGrpAcc=(Map) listData.get(0);
-		List<List<String>> list1=new ArrayList<>(); 
-		List<String> listLiabilities=new ArrayList<>(); 
-		List<String> listAssets=new ArrayList<>(); 
-		for(String groupAcc:hmGrpSubGrpAcc.keySet()){
-			List accList=new ArrayList<>();
-			if(hmGrpSubGrpAcc.get(groupAcc) instanceof Map){
-				if(groupAcc.startsWith("LIABILITY")){//Checking category
-					listLiabilities.add("LIABILITY");
-					groupAcc=groupAcc.replace("LIABILITY-",""); //Removed category name
-					String[] arrGrpSubGrp=groupAcc.split("!"); // [0] =Group NAme, [1]= Subgroup Name
-					listLiabilities.add(arrGrpSubGrp[0]); //Grp Added
-					listLiabilities.add(arrGrpSubGrp[1]); //Sub Grp Added
-					
-					//Get Sub Grp map 
-					Map<String,Object> mapSubGrpAcc=(Map) hmGrpSubGrpAcc.get("LIABILITY-"+groupAcc);
-					//Check SubGroupAccs
-					String strSubGrpMapKey[]=arrGrpSubGrp[1].toString().split("_");
-					List listSubGrpAcc=new ArrayList();
-					listSubGrpAcc=funCheckMapKey(mapSubGrpAcc,strSubGrpMapKey[0]+"!"+strSubGrpMapKey[1],listSubGrpAcc);// SubGrp code!name
-					if(listSubGrpAcc!=null){
-						listLiabilities.addAll(listSubGrpAcc); //All Accounts of Subgroup
-					}
-					if(listSubGrpAcc.size()==0 &&listSubGrpAcc!=null){
-						//check Under SubGroup
-						listSubGrpAcc=new ArrayList(); 
-						listSubGrpAcc=funIterateMap(mapSubGrpAcc,listSubGrpAcc);
-						listLiabilities.addAll(listSubGrpAcc);
-					}
-					
-				}else{
-					
-					//Checking category
-					listAssets.add("ASSET");
-					groupAcc=groupAcc.replace("ASSET-",""); //Removed category name
-					String[] arrGrpSubGrp=groupAcc.split("!"); // [0] =Group NAme, [1]= Subgroup Name
-					listAssets.add(arrGrpSubGrp[0]); //Grp Added
-					listAssets.add(arrGrpSubGrp[1]); //Sub Grp Added
-					
-					//Get Sub Grp map 
-					Map<String,Object> mapSubGrpAcc=(Map) hmGrpSubGrpAcc.get("ASSET-"+groupAcc);
-					//Check SubGroupAccs
-					String strSubGrpMapKey[]=arrGrpSubGrp[1].toString().split("_");
-					List listSubGrpAcc=new ArrayList();
-					listSubGrpAcc=funCheckMapKey(mapSubGrpAcc,strSubGrpMapKey[0]+"!"+strSubGrpMapKey[1],listSubGrpAcc);// SubGrp code!name
-					if(listSubGrpAcc!=null){
-						listAssets.addAll(listSubGrpAcc); //All Accounts of Subgroup
-					}
-					if(listSubGrpAcc.size()==0 &&listSubGrpAcc!=null){
-						//check Under SubGroup
-						listSubGrpAcc=new ArrayList(); 
-						listSubGrpAcc=funIterateMap(mapSubGrpAcc,listSubGrpAcc);
-						listAssets.addAll(listSubGrpAcc);
-					}
-				}
-				
-			}
-
-		}
+		//Map<String,Object> hmGrpSubGrpAcc=(Map) listData.get(0);
 		
-		list1.add(listAssets);
-	//	list1.add(listLiabilities);
+		List<List<String>> list1=new ArrayList<>(); 
+		List<String> listLiabilities=(List)listData.get(0); 
+		List<String> listAssets=(List)listData.get(1); 
+		
 		excelRowCount++;
 		int maxListSize=(listAssets.size()>=listLiabilities.size())?listAssets.size():listLiabilities.size(); 
 		HSSFRow aRowHeader = sheet.createRow(excelRowCount);
 		aRowHeader.createCell(0).setCellValue("ASSET");
-		aRowHeader.createCell(1).setCellValue("LIABILITY");
+		aRowHeader.createCell(1).setCellValue("Balance");
+		aRowHeader.createCell(2).setCellValue("LIABILITY");
+		aRowHeader.createCell(3).setCellValue("Balance");
+		
 		aRowHeader.getCell(0).setCellStyle(style);
-		aRowHeader.getCell(1).setCellStyle(style);
+		aRowHeader.getCell(1).setCellStyle(style2);
+		aRowHeader.getCell(2).setCellStyle(style);
+		aRowHeader.getCell(3).setCellStyle(style2);
 		
 		excelRowCount++;
 		for(int rowCount = 0; rowCount <maxListSize; rowCount++ ){
@@ -186,9 +159,17 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 				if(!rowData.equals("ASSET")){ //Sub Group
 					if(rowData.contains("_")){
 						aRow.createCell(0).setCellValue(rowData.replace("_","  "));
-							
+						aRow.getCell(0).setCellStyle(style2);
 					}else{
-						aRow.createCell(0).setCellValue("      "+rowData);
+						if(rowData.contains("!")){
+							aRow.createCell(1).setCellValue(rowData.split("!")[1]);
+							aRow.createCell(0).setCellValue("      "+rowData.split("!")[0]);
+							aRow.getCell(1).setCellStyle(style5);
+						}else{
+							aRow.createCell(0).setCellValue("      "+rowData);	
+							
+						}
+						
 					//	aRow.getCell(0).setCellStyle(style3);
 					}
 				}
@@ -198,10 +179,19 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 				if(!rowData.equals("LIABILITY")){
 					
 					if(rowData.contains("_")){ //sub Group 
-						aRow.createCell(1).setCellValue(rowData.replace("_","  "));
+						aRow.createCell(2).setCellValue(rowData.replace("_","  "));
+						aRow.getCell(2).setCellStyle(style2);
 							
 					}else{
-						aRow.createCell(1).setCellValue("      "+rowData);
+						if(rowData.contains("!")){
+							aRow.createCell(3).setCellValue(rowData.split("!")[1]);
+							aRow.createCell(2).setCellValue("      "+rowData.split("!")[0]);
+							aRow.getCell(3).setCellStyle(style5);
+						}else{
+							aRow.createCell(2).setCellValue("      "+rowData);	
+							
+						}
+						
 					//	aRow.getCell(1).setCellStyle(style3);
 					}
 					
@@ -220,32 +210,4 @@ public class clsExcelBuilderForAccountReports extends AbstractExcelView {
 												// '-' and decimal.
 	}
 
-	private List funIterateMap(Map<String,Object> map,List accList){
-		for(String groupAcc:map.keySet()){
-			if(map.get(groupAcc) instanceof Map){
-				Map map1=(Map)map.get(groupAcc);
-				accList.add(groupAcc);
-				accList=funIterateMap(map1,accList);
-			}else if(map.get(groupAcc) instanceof List){
-				accList.add(groupAcc);
-				accList=(List) map.get(groupAcc);
-			}	
-		}
-		
-		return accList;
-	}
-	
-	private List funCheckMapKey(Map<String,Object> mapSubGrp,String key,List AccList){
-		//List AccList=null;
-		if(mapSubGrp.containsKey(key)){
-			if(mapSubGrp.get(key) instanceof List){
-				AccList=(List)mapSubGrp.get(key);
-			}else if(mapSubGrp.get(key) instanceof Map){
-				AccList.add(key);
-				funCheckMapKey((Map<String,Object>)mapSubGrp.get(key),key,AccList);
-			}
-		}
-		return AccList;
-	}
-	
 }
