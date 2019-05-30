@@ -587,7 +587,9 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 					$.each(response, function(i,item)
                     {		
 						count=i;
-						funfillProdRow(response[i].strProdCode,response[i].strPartNo,response[i].strProdName,response[i].dblQty,response[i].dblUnitPrice,response[i].dblTotalPrice,response[i].strRemarks,response[i].strUOM);
+						//		function funfillProdRow(strProdCode,strProdName,strUOM,dblQty,dblUnitPrice,strRemarks)
+
+						funfillProdRow(response[i].strProdCode,response[i].strProdName,response[i].strUOM,response[i].dblQty,response[i].dblUnitPrice,response[i].strRemarks);
                                                    
                     });
 			listRow=count+1;
@@ -1037,8 +1039,9 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 							        	 funRemoveProductRows();	
 							        	
 								    	$.each(response, function(i,item)
-										{		
-								    		 funfillProdRow(response[i].strProdCode,response[i].strPartNo,response[i].strProdName,response[i].dblOrderQty,response[i].dblPrice,response[i].dblOrderQty*response[i].dblPrice,"",response[i].strUOM);
+										{	
+								    	//	function funfillProdRow(strProdCode,strProdName,strUOM,dblQty,dblUnitPrice,strRemarks)
+								    		 funfillProdRow(response[i].strProdCode,response[i].strProdName,response[i].strUOM,response[i].dblOrderQty,response[i].dblPrice,"");
 										});  
 								    	listRow=count+1;
 							        	funCalSubTotal();
@@ -1236,8 +1239,7 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 			    {				    	
 			    	$.each(response, function(i,itemDtl)
 					{				    		
-			    		funfillProdRow(itemDtl[0],"",itemDtl[1],itemDtl[3],itemDtl[4],itemDtl[5],'',itemDtl[2]);
-						//funfillProdRow(strProdCode,strPosItemCode,strProdName,dblQty,dblUnitPrice,dblTotalPrice,strRemarks,strUOM)
+			    		funfillProdRow(itemDtl[0],itemDtl[1],itemDtl[2],itemDtl[3],itemDtl[4],'');
 						
 					});
 			    },

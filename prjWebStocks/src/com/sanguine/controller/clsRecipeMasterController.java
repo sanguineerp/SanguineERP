@@ -67,6 +67,9 @@ public class clsRecipeMasterController {
 	@Autowired 
 	private  clsWhatIfAnalysisController objWhatIfAnalysisController;
 	
+	@Autowired 
+	private clsReportsController objReportsController;
+	
 //	double dblAmt=0.0;
 //	double dblRate=0.0;
 //	double bomrate =0.0;
@@ -406,7 +409,8 @@ public class clsRecipeMasterController {
 					+ "ifnull(cp.strProdName,'')  as childProductName,ifnull(cp.strRecipeUOM,'') as childUOM, d.dblQty,ifnull(cp.dblCostRM/cp.dblRecipeConversion,0) as  price, "
 					+ "IFNULL(pr.strprocessname,'') as strprocessname,ifnull(cl.strlocname,'') as childLocation  ,"
 					+ "date(h.dtCreatedDate) as dtCreatedDate,date(h.dtValidFrom) as dtValidFrom," 
-					+ "date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,ifnull((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty,0) as value,d.dblQty "
+					+ "date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,ifnull((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty,0) as value,d.dblQty"
+					+ ",ifnull((d.dblQty/cp.dblRecipeConversion),0) AS InitialWt, ifnull(cp.strProdType,'') "
 					+ "from tblbommasterhd  h inner join tblbommasterdtl AS d ON h.strBOMCode = d.strBOMCode and d.strClientCode='" + clientCode + "' " 
 					+ "left outer join tblproductmaster   p ON h.strParentCode = p.strProdCode and p.strClientCode='" + clientCode + "' " + "left outer join tblproductmaster AS cp ON d.strChildCode = cp.strProdCode and cp.strClientCode='" + clientCode + "' "
 					+ "left outer join tbllocationmaster  lp ON lp.strLocCode = p.strLocCode and lp.strClientCode='" + clientCode + "' " + "left outer join tbllocationmaster AS cl ON cl.strLocCode = cp.strLocCode and cl.strClientCode='" + clientCode + "' "
@@ -431,6 +435,7 @@ public class clsRecipeMasterController {
 			
 			List<clsRecipeMasterBean> listDtlBean=new ArrayList<clsRecipeMasterBean>(); 
 			List listChildRate = objGlobalFunctionsService.funGetList(sqlDtlQuery, "sql");
+			String strParentCode="",finalwt="";
 			if(listChildRate.size()>0)
 			{
 				for(int i=0;i<listChildRate.size();i++)
@@ -442,8 +447,8 @@ public class clsRecipeMasterController {
 					if(rateFrom.equals("Last Purchase Rate")){
 						List listRate =funGetBOMLastPurchaseRate(obj[7].toString(), clientCode);
 						if(listRate.size()>0){
-						bomrate=Double.parseDouble(listRate.get(0).toString());
-						bomAmt=bomrate*Double.parseDouble(obj[19].toString());
+							bomrate=Double.parseDouble(listRate.get(0).toString());
+							bomAmt=bomrate*Double.parseDouble(obj[19].toString());
 					    }
 					}
 					clsRecipeMasterBean objBean=new clsRecipeMasterBean();
@@ -454,38 +459,48 @@ public class clsRecipeMasterController {
 					objBean.setDblQty(Double.parseDouble(obj[10].toString()));
 					objBean.setStrUOM(obj[9].toString());
 					objBean.setStrLocation(obj[13].toString());
-					List<String> listChildNodes11 = new ArrayList<String>();
-					funGetBOMNodes(obj[7].toString(), 0,Double.parseDouble(obj[10].toString()), listChildNodes11);
+					
+					if(obj[21].toString().equalsIgnoreCase("Semi Finished") || obj[21].toString().equalsIgnoreCase("Produced")){
+						
+						strParentCode=obj[7].toString();
+						finalwt = obj[20].toString();
+						double dblRecipeCost=objReportsController.funGetChildProduct(obj[21].toString(),clientCode,obj[0].toString(),strParentCode,finalwt,0);
+						bomAmt=dblRecipeCost;
+					}
+					
+					/*funGetBOMNodes(obj[7].toString(), 0,Double.parseDouble(obj[10].toString()), listChildNodes11);
 					if(listChildNodes11.size()>0)
 					{
 						bomrate=0.0;
 						bomAmt=0.0;
-					for(String prodCode11:listChildNodes11)
-					{
+						for(String prodCode11:listChildNodes11)
+						{
+							
+	//						String temp11 = (String) listChildNodes11.get(cnt);
+							String prodCode1 = prodCode11.split(",")[0];
+							double reqdQty11 = Double.parseDouble(prodCode11.split(",")[1]);
+	//						bomrate=funGetBOMRate(prodCode1, clientCode);	
 						
-//						String temp11 = (String) listChildNodes11.get(cnt);
-						String prodCode1 = prodCode11.split(",")[0];
-						double reqdQty11 = Double.parseDouble(prodCode11.split(",")[1]);
-//						bomrate=funGetBOMRate(prodCode1, clientCode);	
-					
-						
-//						bomAmt+=(amt*reqdQty11);
-						if(rateFrom.equals("Last Purchase Rate")){
-							List listBomRate=funGetBOMLastPurchaseRate(prodCode1, clientCode);
-							if(listBomRate.size()>0){
-								bomrate+=Double.parseDouble(listBomRate.get(0).toString());
-								bomAmt=bomAmt+(Double.parseDouble(listBomRate.get(1).toString())*reqdQty11);	
+							
+	//						bomAmt+=(amt*reqdQty11);
+							if(rateFrom.equals("Last Purchase Rate")){
+								List listBomRate=funGetBOMLastPurchaseRate(prodCode1, clientCode);
+								if(listBomRate.size()>0){
+									bomrate+=Double.parseDouble(listBomRate.get(0).toString());
+									bomAmt=bomAmt+(Double.parseDouble(listBomRate.get(1).toString())*reqdQty11);	
+								}
+							}else{
+								List listBom=funGetBOMRate(prodCode1, clientCode);	
+								double rate=Double.parseDouble(listBom.get(0).toString());
+								double amt=Double.parseDouble(listBom.get(1).toString());
+								bomrate+=amt;
+								bomAmt=bomAmt+(rate*reqdQty11);
 							}
-						}else{
-							List listBom=funGetBOMRate(prodCode1, clientCode);	
-							double rate=Double.parseDouble(listBom.get(0).toString());
-							double amt=Double.parseDouble(listBom.get(1).toString());
-							bomrate+=amt;
-							bomAmt=bomAmt+(rate*reqdQty11);
+							
 						}
-						
-					}
-					}
+					}*/
+					
+					
 					objBean.setDblAmount(bomAmt);
 					objBean.setDblPrice(bomrate);
 					objBean.setDtValidFrom(obj[15].toString());

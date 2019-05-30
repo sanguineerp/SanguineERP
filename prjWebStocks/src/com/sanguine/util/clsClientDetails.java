@@ -144,7 +144,7 @@ public class clsClientDetails {
 			hmClientDtl.put("172.001", clsClientDetails.createClientDetails("172.001", "DIOS HOTEL LLP", dFormat.parse("2017-05-25"), dFormat.parse("2018-08-25"))); // one
  			hmClientDtl.put("173.002", clsClientDetails.createClientDetails("173.002", "Le Flamington", dFormat.parse("2018-12-15"), dFormat.parse("2019-12-24")));
 			hmClientDtl.put("174.001", clsClientDetails.createClientDetails("174.001", "KRD Eateries Pvt Ltd", dFormat.parse("2017-06-06"), dFormat.parse("2017-10-31"))); // krimsons
-			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "COPPER STORY PRIVATE LIMITED", dFormat.parse("2017-06-06"), dFormat.parse("2019-05-29")));//Renewed on 06-02-2019 for 15 days till 20-02-2019 //renewed licence and rename TJS to Copper story privated limited till 01-02-2019 //renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
+			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "COPPER STORY PRIVATE LIMITED", dFormat.parse("2017-06-06"), dFormat.parse("2019-06-12")));//Renewed on 06-02-2019 for 15 days till 20-02-2019 //renewed licence and rename TJS to Copper story privated limited till 01-02-2019 //renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
 			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2019-06-08")));
 			hmClientDtl.put("181.001", clsClientDetails.createClientDetails("181.001", "RMV COMMUNICATION PVT LTD", dFormat.parse("2017-06-20"), dFormat.parse("2017-07-20")));
 			hmClientDtl.put("184.001", clsClientDetails.createClientDetails("184.001", "BALAJI TRADERS PVT LTD", dFormat.parse("2017-07-03"), dFormat.parse("2018-01-07")));
@@ -200,6 +200,9 @@ public class clsClientDetails {
 			hmClientDtl.put("296.001", clsClientDetails.createClientDetails("296.001", "ISKCON", dFormat.parse("2019-02-08"), dFormat.parse("2020-02-08")));//(Gujrat)//released on 08-02-2019 for 1 year till 08-02-2020 for 3 SPOS ,10 APOS,No WebStocks,No SMS Pack,No Bill Deletion.", "Mr. Rajesh ", "9619378249", "rajesh.sha19@gmail.com", "No Bill Deletion","santesting"));	    
 			hmClientDtl.put("302.001", clsClientDetails.createClientDetails("302.001", "MOSHING CUPPA", dFormat.parse("2019-03-07"), dFormat.parse("2019-04-15"))); // released on 07-03-2019 for 1 month till 07-04-2019
 			hmClientDtl.put("312.001", clsClientDetails.createClientDetails("312.001", "Reddy's Fine Dine Restaurant", dFormat.parse("2019-05-08"), dFormat.parse("2019-06-10"))); // released on 2019-05-08 for 1 month till 2019-06-10
+			hmClientDtl.put("315.001", clsClientDetails.createClientDetails("315.001", "KUTTING FUSION HOSPITALITY LLP", dFormat.parse("2019-05-25"), dFormat.parse("2019-06-25"))); // renewed on 25-05-2019 for 1 month till 25-06-2019
+			hmClientDtl.put("316.001", clsClientDetails.createClientDetails("316.001", "MRP HOSPITALITY", dFormat.parse("2019-05-25"), dFormat.parse("2019-06-25"))); // renewed on 25-05-2019 for 1 month till 25-06-2019
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();

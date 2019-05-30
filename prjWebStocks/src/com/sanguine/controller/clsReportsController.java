@@ -3907,7 +3907,7 @@ public class clsReportsController {
 				}
 
 			}*/
-			//VinayakB
+			
 			if (!(yieldCalculation == null)) {
 
 				sql = " select a.strParentCode,d.strProdName as RecipeName, c.dblListPrice,b.strChildCode,c.strProdName as ProdName,c.strUOM," + " (b.dblQty/c.dblRecipeConversion) as InitialWt,c.dblYieldPer,(100-c.dblYieldPer) as lossPer,(c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100) as finalWT ," + " c.dblCostRM as Rate,((b.dblQty/c.dblRecipeConversion)*c.dblCostRM) as RecipeCost,"
@@ -4017,7 +4017,7 @@ public class clsReportsController {
 					exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
 					exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
 					exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-					resp.setHeader("Content-Disposition", "inline;filename=rptPurchaseRegisterReport.pdf");
+					resp.setHeader("Content-Disposition", "inline;filename=rptRecipeCostingReport.pdf");
 					exporter.exportReport();
 					servletOutputStream.flush();
 					servletOutputStream.close();
@@ -4041,37 +4041,18 @@ public class clsReportsController {
 	}
 
 
-private double funGetChildProduct(String bomType, String clientCode, String bomCode,String parentCode, String finalwt,double dblRecipeCost) 
+public double funGetChildProduct(String bomType, String clientCode, String bomCode,String parentCode, String finalwt,double dblRecipeCost) 
 {
 	
 	if(bomType.equalsIgnoreCase("Semi Finished")  || bomType.equalsIgnoreCase("Produced"));
 	{
-		/*if(flgSemiFinished)
-		{
-			 strParentCode;
-		}*/
+		
 		List listChild = funSemiProduct(parentCode,clientCode,bomCode,finalwt);
 		clsRecipeCostingBean objRecipeCostingbean1;
 		for(int k = 0;k<listChild.size();k++)
 		{
 			objRecipeCostingbean1 = new clsRecipeCostingBean();
 			Object[] objChild = (Object[]) listChild.get(k);
-			/*objRecipeCostingbean1.setStrChildCode(objChild[0].toString());
-			objRecipeCostingbean1.setStrParentName(objChild[1].toString());
-			objRecipeCostingbean1.setStrProdName(objChild[2].toString());
-			objRecipeCostingbean1.setDblListPrice(Double.parseDouble(objChild[3].toString()));
-			objRecipeCostingbean1.setStrUOM(objChild[4].toString());
-			objRecipeCostingbean1.setDblInitialWt(Double.parseDouble(objChild[5].toString()));
-			objRecipeCostingbean1.setDblYldPer(Double.parseDouble(objChild[6].toString()));
-			objRecipeCostingbean1.setDblLossper(Double.parseDouble(objChild[7].toString()));
-			objRecipeCostingbean1.setDblFinalWt(Double.parseDouble(objChild[8].toString()));
-			objRecipeCostingbean1.setDblRate(Double.parseDouble(objChild[9].toString()));
-			objRecipeCostingbean1.setDblRecipeCost(Double.parseDouble(objChild[10].toString()));
-			objRecipeCostingbean1.setDblEachProdPe(Double.parseDouble(objChild[11].toString()));
-			objRecipeCostingbean1.setStrBOMType(objChild[12].toString());
-			
-			listJasp.add(objRecipeCostingbean1);
-			*/
 			parentCode = objChild[0].toString();
 			bomType = objChild[12].toString();
 			dblRecipeCost+=Double.parseDouble(objChild[10].toString());
@@ -4080,7 +4061,7 @@ private double funGetChildProduct(String bomType, String clientCode, String bomC
 				//flgSemiFinished=true;	
 				finalwt = objChild[5].toString()+"*"+finalwt;
 				dblRecipeCost+=funGetChildProduct(objChild[12].toString(),clientCode,objChild[13].toString(),parentCode,finalwt,Double.parseDouble(objChild[10].toString()));
-//funGetChildProduct(String bomType, String clientCode, String bomCode, List listJasp,String parentCode,boolean flgSemiFinished, String finalwt,double dblRecipeCost)			
+			
 			}
 		}
 		
@@ -4088,18 +4069,13 @@ private double funGetChildProduct(String bomType, String clientCode, String bomC
 	return dblRecipeCost;
 }
 
-private List funSemiProduct(String parentCode,String clientCode,String bomCode, String finalwt) {
-		
+	private List funSemiProduct(String parentCode,String clientCode,String bomCode, String finalwt) {
 		List listTemp = new ArrayList<String>();
 		String sql = "select b.strChildCode,a.strParentCode,c.strProdName,c.dblListPrice ,c.strUOM,(b.dblQty/c.dblRecipeConversion) AS InitialWt,c.dblYieldPer,(100-c.dblYieldPer) AS lossPer,(c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100) AS finalWT, c.dblCostRM AS Rate,((b.dblQty/c.dblRecipeConversion*"+finalwt+")*c.dblCostRM) AS RecipeCost ,IFNULL(((c.dblYieldPer*c.dblCostRM/100)*100/(SELECT SUM((r.dblYieldPer*r.dblCostRM/100))FROM tblbommasterhd p,tblbommasterdtl q, tblproductmaster r WHERE p.strParentCode='"+parentCode+"' AND p.strBOMCode=q.strBOMCode AND q.strChildCode = r.strProdCode AND p.strParentCode=r.strProdCode AND p.strClientCode='"+clientCode+"' AND p.strClientCode=q.strClientCode AND q.strClientCode=r.strClientCode)),0) AS eachProdPer,"
 				+ " c.strProdType,a.strBOMCode"
 				+ " from  tblbommasterhd a,tblbommasterdtl b,tblproductmaster c where a.strBOMCode=b.strBOMCode and b.strChildCode=c.strProdCode and a.strParentCode='"+parentCode+"';";
 		listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
-		
 		return listTemp;
-
-		
-		
 	}
 
 

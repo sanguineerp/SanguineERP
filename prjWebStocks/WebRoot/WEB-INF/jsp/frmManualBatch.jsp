@@ -464,13 +464,13 @@
 							<c:forEach items="${BatchList}" var="MISBatch" varStatus="status">
 
 								<tr>
-									<td style="width: 18%; height: 18px;" align="left"><input readonly="readonly" class="Box" size="5%" id="txtProdCode.${status.index}" name="listBatchDtl[${status.index}].strProdCode" value="${MISBatch.strProdCode}" /></td>
+									<td style="width: 7%; height: 18px;" align="left"><input readonly="readonly" class="Box" size="5%" id="txtProdCode.${status.index}" name="listBatchDtl[${status.index}].strProdCode" value="${MISBatch.strProdCode}" /></td>
 									<td style="width: 30%; height: 18px;" align="left"><input readonly="readonly" class="Box" size="33%" name="listBatchDtl[${status.index}].strProdName" value="${MISBatch.strProdName}"/></td>
 									<td style="width: 8%; height: 18px;" align="Right"><input style="text-align: right;" required="required" size="6%" id="txtQty.${status.index}"  name="listBatchDtl[${status.index}].dblQty" value="${MISBatch.dblQty}" onblur="Javacsript:funCheckIssueQty(this)" /></td>
 									<td style="width: 8%; height: 18px;" align="Right"><input readonly="readonly" style="text-align: right;" class="Box" id="txtBatchQty.${status.index}" size="6%"  value="0" /></td>
 									<td style="width: 8%; height: 18px;" align="Right"><input readonly="readonly" style="text-align: right;" name="listBatchDtl[${status.index}].dblPendingQty" class="Box" id="txtBalQty.${status.index}" size="6%"  value="0" /></td>
 									<td style="width: 13%; height: 18px;" align="left"><input readonly="readonly" required="required" class="Box" id="txtExpiryDate.${status.index}" size="10%" name="listBatchDtl[${status.index}].dtExpiryDate" value=""/></td>
-									<td style="width: 18%; height: 18px;" align="left"><input readonly="readonly" required="required" size="13%" id="txtBatchCode.${status.index}" name="listBatchDtl[${status.index}].strBatchCode" value="" ondblclick="funHelp('Batch',${status.index})"/></td>
+									<td style="width: 13%; height: 18px;" align="left"><input readonly="readonly" required="required" size="13%" id="txtBatchCode.${status.index}" name="listBatchDtl[${status.index}].strBatchCode" value="" ondblclick="funHelp('Batch',${status.index})"/></td>
 									<td style="width: 20%; height: 18px;" align="left"><input readonly="readonly" class="Box" size="14%" id="txtManuBatchCode.${status.index}" name="listBatchDtl[${status.index}].strManuBatchCode" value="" /></td>
 									  
 								</tr>
