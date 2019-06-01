@@ -217,8 +217,8 @@ public class clsProductionController {
 		objPDHd.setStrLocCode(PDBean.getStrLocCode());
 		objPDHd.setDtPDDate(objGlobal.funGetDate("yyyy-MM-dd", PDBean.getDtPDDate()));
 		objPDHd.setStrUserModified(userCode);
-		objPDHd.setStrWOCode(PDBean.getStrWOCode());
-		objPDHd.setStrNarration(PDBean.getStrNarration());
+		objPDHd.setStrWOCode(objGlobal.funIfNull( PDBean.getStrWOCode(), "",  PDBean.getStrWOCode()));
+		objPDHd.setStrNarration(objGlobal.funIfNull( PDBean.getStrNarration(), "",  PDBean.getStrNarration()));
 		objPDHd.setDtLastModified(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 
 		return objPDHd;

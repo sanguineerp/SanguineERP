@@ -64,6 +64,9 @@ public class clsWebBooksAccountMasterBean {
 
 	private String strPrevCrDr;
 	
+	private String strEmployeeName;
+
+	
 
 	// Setter-Getter Methods
 
@@ -315,6 +318,14 @@ public class clsWebBooksAccountMasterBean {
 
 	public void setStrSubGroupName(String strSubGroupName) {
 		this.strSubGroupName = strSubGroupName;
+	}
+
+	public String getStrEmployeeName() {
+		return strEmployeeName;
+	}
+
+	public void setStrEmployeeName(String strEmployeeName) {
+		this.strEmployeeName = strEmployeeName;
 	}
 	
 	

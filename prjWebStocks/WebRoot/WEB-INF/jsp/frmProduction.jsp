@@ -574,13 +574,13 @@
 				$("#txtPDDate").focus();
 				return false;
 			}
-			
-			if($('#txtWOCode').val() == ''){
-				alert('Please Select Work Order Code');
-				$("#txtWOCode").focus();
-				return false;
+			if(! $("#chkDirectWorkOrder").is(':checked')){
+				if($('#txtWOCode').val() == ''){
+					alert('Please Select Work Order Code');
+					$("#txtWOCode").focus();
+					return false;
+				}
 			}
-			
 			if(rowCount == 0){
 				alert('Please Add Products');
 				return false;
@@ -677,7 +677,7 @@
 						cssClass="searchTextBox" type="text"></s:input></td>
 				<td><label id="spLocName" class="namelabel"></label></td>
 				<td width="120px"><label>Work Order Code</label></td>
-				<td><s:input id="txtWOCode" path="strWOCode" required="required"
+				<td><s:input id="txtWOCode" path="strWOCode" 
 						value="${command.strWOCode}"
 						ondblclick="return funHelp('WorkOrder');" cssClass="searchTextBox"
 						cssStyle="width:40%" type="text" ></s:input></td>
@@ -696,6 +696,7 @@
 
 				<td width="100px" align="center"><label> Process </label></td>
 				<td colspan="2"><s:select id="cmbProcess" items="${strProcess}" path="" onchange="" class="BoxW124px"></s:select>
+				
 <!-- 				<option value="Assamble">Assamble</option> -->
 <!--  				 <option value="Reparing">Reparing</option> -->
 				</td>
@@ -705,8 +706,11 @@
 				<td><input id="txtPrice" type="text"
 					class="decimal-places-amt numberField"></input></td>
 				<td><label>Wt/Unit:</label></td>
-				<td colspan="4"><input id="txtWt" ondblclick="" type="text"
+				<td colspan="2"><input id="txtWt" ondblclick="" type="text"
 					class="decimal-places numberField"></input></td>
+				<td colspan="2">
+				<label>Direct </label> <input type="Checkbox" id="chkDirectWorkOrder"/>
+				</td>
 
 			</tr>
 			<tr>

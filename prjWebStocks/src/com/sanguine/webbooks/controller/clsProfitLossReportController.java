@@ -501,13 +501,16 @@ public class clsProfitLossReportController {
 	      jObjJVData.put("strClientCode", clientCode);
 	      
 	      JSONObject jObj = funPOSTMethodUrlJosnObjectData("http://localhost:8080/prjSanguineWebService/WebBooksIntegration/funGetPOSData", jObjJVData);
-	      
-	      Double dblTotalSale = Double.valueOf(Double.parseDouble(jObj.get("TotalSale").toString()));
-	      Double dblTotalPurchase = Double.valueOf(Double.parseDouble(jObj.get("TotalPurchase").toString()));
+	      double dblTotalSale=0,dblTotalPurchase=0;
+	      if(jObj!=null){
+	    	  dblTotalSale = Double.valueOf(Double.parseDouble(jObj.get("TotalSale").toString()));
+		      dblTotalPurchase = Double.valueOf(Double.parseDouble(jObj.get("TotalPurchase").toString()));
+		        
+	      }
 	      clsProfitLossReportBean objPL = new clsProfitLossReportBean();
 	      
-	      objPL.setDblPurAmt(dblTotalPurchase.doubleValue());
-	      objPL.setDblSaleAmt(dblTotalSale.doubleValue());
+	      objPL.setDblPurAmt(dblTotalPurchase);
+	      objPL.setDblSaleAmt(dblTotalSale);
 	      listProduct.add(objPL);
 	      
 	      Map<String, clsProfitLossReportBean> hmSalesIncStmt = new HashMap();
