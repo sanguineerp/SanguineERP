@@ -306,20 +306,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{strBillNo}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="340" y="118" width="97" height="14" uuid="0641225c-969a-4fb0-8074-2ac6d4ecbb70"/>
-				<textElement verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[CGST                 :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="340" y="140" width="97" height="14" uuid="cb8fcfb7-7f8c-46fb-b35f-e959d8cfe71b"/>
-				<textElement verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SGST                  :]]></text>
-			</staticText>
 		</band>
 	</detail>
 	<pageFooter>

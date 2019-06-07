@@ -45,6 +45,24 @@ public class clsPropertySetupHdModel implements Serializable {
 	@Column(name = "strGSTNo")
 	private String strGSTNo;
 	
+	@Column(name = "strBankAcName")
+	private String strBankAcName;
+	
+	@Column(name = "strBankAcNumber")
+	private String strBankAcNumber;
+	
+	@Column(name = "strBankIFSC")
+	private String strBankIFSC;
+	
+	@Column(name = "strBranchName")
+	private String stBranchName;
+	
+	@Column(name = "strPanNo")
+	private String strPanNo;
+	
+	@Column(name = "strHSCCode")
+	private String strHscCode;
+	
 	
 	
 
@@ -179,6 +197,54 @@ public class clsPropertySetupHdModel implements Serializable {
 
 	public void setStrRoomLimit(String strRoomLimit) {
 		this.strRoomLimit = (String) setDefaultValue(strRoomLimit, "");
+	}
+
+	public String getStrBankAcName() {
+		return strBankAcName;
+	}
+
+	public void setStrBankAcName(String strBankAcName) {
+		this.strBankAcName = strBankAcName;
+	}
+
+	public String getStrBankAcNumber() {
+		return strBankAcNumber;
+	}
+
+	public void setStrBankAcNumber(String strBankAcNumber) {
+		this.strBankAcNumber = strBankAcNumber;
+	}
+
+	public String getStrBankIFSC() {
+		return strBankIFSC;
+	}
+
+	public void setStrBankIFSC(String strBankIFSC) {
+		this.strBankIFSC = strBankIFSC;
+	}
+
+	public String getStBranchName() {
+		return stBranchName;
+	}
+
+	public void setStBranchName(String stBranchName) {
+		this.stBranchName = stBranchName;
+	}
+
+	public String getStrPanNo() {
+		return strPanNo;
+	}
+
+	public void setStrPanNo(String strPanNo) {
+		this.strPanNo = strPanNo;
+	}
+
+	public String getStrHscCode() {
+		return strHscCode;
+	}
+
+	public void setStrHscCode(String strHscCode) {
+		this.strHscCode = strHscCode;
 	}
 
 	

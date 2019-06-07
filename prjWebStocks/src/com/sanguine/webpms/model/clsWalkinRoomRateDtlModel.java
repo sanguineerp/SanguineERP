@@ -15,6 +15,8 @@ public class clsWalkinRoomRateDtlModel {
 	private String dtDate;
 
 	private double dblRoomRate;
+	
+	private double dblDiscount;
 
 
 
@@ -40,6 +42,14 @@ public class clsWalkinRoomRateDtlModel {
 
 	public void setStrRoomType(String strRoomType) {
 		this.strRoomType = strRoomType;
+	}
+
+	public double getDblDiscount() {
+		return dblDiscount;
+	}
+
+	public void setDblDiscount(double dblDiscount) {
+		this.dblDiscount = dblDiscount;
 	}
 	
 	

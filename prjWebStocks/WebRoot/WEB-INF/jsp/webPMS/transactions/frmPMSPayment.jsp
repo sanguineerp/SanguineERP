@@ -68,10 +68,50 @@
 				
 			case 'receiptNo':
 				funSetReceiptData(code);
-				break;	
+				break;
+				
+			case 'guestCode' : 
+				funSetGuestCode(code);
+				break;
 		}
 	}
 
+	function funSetGuestCode(code){
+		
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadGuestCode.html?guestCode=" + code,
+			dataType : "json",
+			success : function(response){ 
+				funSetGuestInfo(response);
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+	}
+	
+	function funSetGuestInfo(obj)
+	{
+		$("#txtCreditName").val(obj.strGuestCode);
+		$("#txtCredit").val(obj.strFirstName);
+	
+	}
+	
 	
 	function funSetReceiptData(code){
 
@@ -384,6 +424,16 @@
 				 flg=false;
 			}
 		}
+		
+		if(settlementType=="Credit")
+		{
+			if($("#txtCreditName").val().trim().length==0)
+			{
+				alert("Please Enter Credit Name !!");
+				 flg=false;
+			}
+		}
+		
 		if(parseFloat($("#lblBalnceAmount").text())>='0.0')
 		{
 			if($("#txtReceiptAmt").val()=='0'||$("#txtReceiptAmt").val()=='0.0' )
@@ -395,7 +445,7 @@
 			{
 				
 
-				alert("Amount should not be greatet than balance amount"); 
+				alert("Amount should not be greatest than balance amount"); 
 				 flg=false;
 			}
 		}
@@ -407,6 +457,14 @@
 		
 		
 		return flg;
+	}
+	
+function funCreateNewGuest(){
+		
+		window.open("frmGuestMaster.html", "myhelp", "scrollbars=1,width=500,height=350");
+<%-- 		var GuestDetails='<%=session.getAttribute("GuestDetails").toString()%>'; --%>
+// 		var guest=GuestDetails.split("#");
+		
 	}
 	
 	
@@ -456,20 +514,20 @@
 		<tr>
 			<td><label>Amount</label></td>
 			
-			<td><s:input colspan="3" type="number" style="text-align: right;width: 118px;" id="txtReceiptAmt" path="dblReceiptAmt" cssClass="longTextBox" /></td>
+			<td><s:input colspan="3" style="text-align: right;width: 118px;" id="txtReceiptAmt" path="dblReceiptAmt" cssClass="longTextBox" /></td>
 			<td><label>Balance Amount</label></td>
 			<td><label id="lblBalnceAmount" readonly="readonly"></label></td>
 			
 		</tr>
 		
 		
-			<<tr>
+			<%-- <tr>
 			<td>Settlement Type</td>
 			
 			<td>
 				<s:select id="cmbAgainst" items="${listSettlement}" name="cmbSettlementType"  cssClass="BoxW124px" path=""></s:select>
 			</td>
-		    </tr>
+		    </tr> --%>
 		   
 						
 		<tr>
@@ -477,6 +535,7 @@
 			
 			<td>
 				<s:input colspan="3" type="text" id="txtSettlementCode" path="strSettlementCode" cssClass="searchTextBox" ondblclick="funHelp('settlementCode');"/>
+				<%-- onselect="funSelect();" --%>
 			</td>
 				  
 			<td><label>Settlement Desc</label></td>
@@ -485,8 +544,8 @@
 		</tr>
 			
 		<tr>
-			<td><label>Card No</label></td>
 			
+			<td id="lblCardOrCheck"><label>Card No</label></td>
 			<td><s:input colspan="3" type="text" id="txtCardNo" path="strCardNo" cssClass="longTextBox" /></td>
 			
 			<td><label>Expiry Date</label></td>
@@ -498,6 +557,21 @@
 			<td><label>Remark</label></td>
 			    
 			<td><s:input colspan="3" type="text" id="txtRemarks" path="strRemarks" cssClass="longTextBox" /></td>
+			<td colspan="3"></td>
+		</tr>
+		
+		<tr>
+			<td>Credit Name</td>
+		
+			<td>
+				<s:input id="txtCreditName" path="strCustomerCode" readonly="readonly" ondblclick="funHelp('guestCode');" class="searchTextBox"></s:input>
+			</td>
+			<td>
+			<s:input id="txtCredit"  path="" readonly="true" cssClass="longTextBox" ></s:input>
+			</td>
+			<td>
+					<input type="Button" value="New Guest" onclick="return funCreateNewGuest()" class="form_button" />
+					</td>
 			<td colspan="3"></td>
 		</tr>
 		

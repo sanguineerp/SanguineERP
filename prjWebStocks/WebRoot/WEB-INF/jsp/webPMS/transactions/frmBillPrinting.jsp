@@ -20,8 +20,6 @@
 		else
 		{
 			flag=true;
-			
-		
 			var fromDate=$("#dteFromDate").val();
 			var toDate=$("#dteToDate").val();
 			
@@ -37,12 +35,38 @@
 // 			$("#dteToDate").val(ty+"-"+tm+"-"+td);
 			
 			var billNo=$("#strBillNo").val();
-// 			var fromDate=$("#dteFromDate").val;
-// 			var toDate=$("#dteToDate").val();
 			var against=$("#cmbType").val();
+			var checkedBill=$("#hidData").val();
+			
+			/***************** */
+			var strSelectBill="";
+			$('input[name="billData"]:checked').each(function() {
+				 if(strSelectBill.length>0)
+				 {
+					 strSelectBill=strSelectBill +","+ this.value;
+				 }
+				 else
+				 {
+					 strSelectBill=this.value;
+					// strSelectBill="'"+this.value+"'";
+				 }
+				 
+			});
+			if(strSelectBill=="")
+			{
+			 	alert("Please Select Folio ");
+			 	return false;
+			}
+			$("#hidData").val(strSelectBill);
+				
+			
+			
+			
+			
+			
 			if(against=='Bill')
 			{
-				window.open(getContextPath()+"/rptBillPrinting.html?fromDate="+fromDate+"&toDate="+toDate+"&billNo="+billNo+"");
+				window.open(getContextPath()+"/rptBillPrinting.html?fromDate="+fromDate+"&toDate="+toDate+"&billNo="+billNo+"&strSelectBill="+strSelectBill+"");
 			}else{
 			window.open(getContextPath()+"/rptBillPrintingForCheckIn.html?fromDate="+fromDate+"&toDate="+toDate+"&checkInNo="+billNo+"&against="+against+ "");
 		    }	
@@ -54,6 +78,7 @@
 	function funSetBillNo(billNo)
 	{
 		$("#strBillNo").val(billNo);
+		funLoadBillData(billNo);
 	}	
 	
 	/**
@@ -116,6 +141,11 @@
 			dateFormat : 'dd-mm-yy'
 		});
 		$("#dteToDate").datepicker('setDate', pmsDate);
+		
+		$("#chkBill").click(function ()
+		{
+		    $(".suppCheckBoxClass").prop('checked', $(this).prop('checked'));
+		});
 	
 	});
 	
@@ -154,7 +184,70 @@
 		    
 		    window.open("searchform.html?formname="+transactionName+"&fromDate="+fromDate+"&toDate="+toDate+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 		}
+	}
+	
+	function funLoadBillData(code){
+		var searchUrl=getContextPath()+ "/loadBillDetails.html?strBillNo=" + code;;
+		$.ajax({
+			type :"GET",
+			url : searchUrl,
+			dataType : "json",
+			async: false,
+			success: function(response){
+				funRemoveRows();
+				$.each(response, function(i,item)
+				{
+					funFillBillTable(response[i].strFolioNo,response[i].strDocNo,response[i].strMenuHead,response[i].dblIncomeHeadPrice,response[i].strRevenueCode);
+				});
+				
+			},
+			error : function(jqXHR, exception)
+			{
+				if (jqXHR.status === 0) {
+					alert('Not connect.n Verify Network.');
+				} else if (jqXHR.status == 404) {
+					alert('Requested page not found. [404]');
+				} else if (jqXHR.status == 500) {
+					alert('Internal Server Error [500].');
+				} else if (exception === 'parsererror') {
+					alert('Requested JSON parse failed.');
+				} else if (exception === 'timeout') {
+					alert('Time out error.');
+				} else if (exception === 'abort') {
+					alert('Ajax request aborted.');
+				} else {
+					alert('Uncaught Error.n' + jqXHR.responseText);
+				}
+			}
+
+		});
+	}
+	
+	function funFillBillTable(strFolioNo,docNo,incomeHead,incomeHeadPrice,strRevenueCode){
+	 	var table = document.getElementById("tblBillDetails");
+	    var rowCount = table.rows.length;
+	    var row = table.insertRow(rowCount);
+
+	    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" style=\"text-align: left;width:100%\" name=\"listVoidBilldtl["+(rowCount)+"].strFolioNo\" id=\"strFolioNo."+(rowCount)+"\" value='"+strFolioNo+"' />";
+	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" style=\"text-align: left;width:100%\" name=\"listVoidBilldtl["+(rowCount)+"].strRevenueCode\" id=\"strRevenueCode."+(rowCount)+"\" value='"+strRevenueCode+"' />";
+	   	row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" style=\"text-align: left;width:100%\" name=\"listVoidBilldtl["+(rowCount)+"].strMenuHead\" id=\"strMenuHead."+(rowCount)+"\" value='"+incomeHead+"' />";
+	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" style=\"text-align: right;width:100%\" name=\"listVoidBilldtl["+(rowCount)+"].dblIncomeHeadPrice\" id=\"dblIncomeHeadPrice."+(rowCount)+"\" value='"+incomeHeadPrice+"' />";
+	    row.insertCell(4).innerHTML= "<input id=\"cbToLocSel."+(rowCount)+"\" type=\"checkbox\" name=\"billData\" unchecked=\"unchecked\" size=\"2%\" style=\"text-align: center;width:100%\" class=\"suppCheckBoxClass\"  value='"+incomeHead+"' />";
+	   // row.insertCell(0).innerHTML= "<input id=\"cbSuppSel."+(rowCount)+"\" name=\"Suppthemes\" type=\"checkbox\" class=\"SuppCheckBoxClass\"  checked=\"checked\" value='"+strSuppCode+"' />";
+	}
+	
+	function funRemoveRows()
+	{
+		var table = document.getElementById("tblBillDetails");
+		var rowCount = table.rows.length;
+		while(rowCount>0)
+		{
+			table.deleteRow(0);
+			rowCount--;
 		}
+	}
+	
+	
 </script>
 
 </head>
@@ -169,9 +262,8 @@
 
 	<s:form name="BillPrinting" method="GET" action="">
 
-		<table class="masterTable">
-	
-				<tr>
+		<table class="masterTable" style="width:90%;">
+			<tr>
 				<td><label>From Date</label></td>
 				<td><s:input type="text" id="dteFromDate" path="dteFromDate" required="true" class="calenderTextBox" /></td>
 				<td><label>To Date</label></td>
@@ -182,24 +274,47 @@
 				<td><label>Bill No.</label></td>
 				<td ><s:input id="strBillNo" path="strBillNo"  cssClass="searchTextBox" ondblclick="funHelp('billNo')"/></td>													
 				<td> Against</td>
-				<td> 	<select id="cmbType" class="BoxW124px">
-						   		<option value="Bill">Bill</option>
-						   		<option value="CheckIn">CheckIn</option>
-						   	</select></td>
+				<td><select id="cmbType" class="BoxW124px">
+				   		<option value="Bill">Bill</option>
+				   		<option value="CheckIn">CheckIn</option></select>
+				</td>
 			</tr>
-			
-			
-		
-			
-			
 		</table>
+		
+		<div class="dynamicTableContainer" style="width:90%;height: 300px;margin-top:10px;">
+				<table style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+					<tr bgcolor="#72BEFC">
+					
+						<td style="width:8%;">Folio</td>
+						<td style="width:7.5%;">Revenue Code</td>
+						<td style="width:14%;">Income Head</td>
+						<td style="width:9%; text-align: center;">Total</td>
+						<td style="width:3%;">Select <input type="checkbox" id="chkBill" /></td>
+					</tr>
+				</table>
+		
+			<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+				<table id="tblBillDetails"
+					style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
+					class="transTablex col8-center">
+					<tbody>
+						<col style="width: 8.5%;">
+						<col style="width: 8%;">
+						<col style="width: 15%;">
+						<col style="width: 9%;">
+						<col style="width: 3%;">
+					</tbody>
+				</table>
+			</div>
+		</div>
 					
 		<br />
 		<br />
 		<p align="center">
 			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funValidateFields()" />
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
-		</p>						
+		</p>
+		<s:input type="hidden" id="hidData" path="strSelectBill" ></s:input>				
 	</s:form>
 </body>
 </html>

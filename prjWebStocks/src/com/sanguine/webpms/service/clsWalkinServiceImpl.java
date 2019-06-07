@@ -120,6 +120,7 @@ public class clsWalkinServiceImpl implements clsWalkinService {
 		for (clsWalkinRoomRateDtlModel objRommDtlBean : objWalkinBean.getListWalkinRoomRateDtl()) {
 		
 			String date=objRommDtlBean.getDtDate();
+			objRommDtlBean.setDblDiscount(objWalkinBean.getDblDiscountPercent());
 			if(date.split("-")[0].toString().length()<3)
 			{	
 			 objRommDtlBean.setDtDate(objGlobal.funGetDate("yyyy-MM-dd",date));
@@ -184,29 +185,57 @@ public class clsWalkinServiceImpl implements clsWalkinService {
 		 * objModel.setStrGuestCode(objGuestMasterModel.getStrGuestCode());
 		 * objGuestMasterDao.funAddUpdateGuestMaster(objGuestMasterModel);
 		 */
-
+/*
+		//GST NO
+		clsGuestMasterBean objGuestMaster=null;
+		for(clsWalkinDtlBean obj:objWalkinBean.getListWalkinDetailsBean())
+		{
+			objGuestMaster = new clsGuestMasterBean();
+			objGuestMaster.setStrGuestCode(obj.getStrGuestCode());
+		}
+		String sql = "select a.strGSTNo from tblguestmaster a where a.strGuestCode = '"+objGuestMaster.getStrGuestCode()+"'";
+		String strGSTNo="";
+		List listGuestMaster = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		for (int cnt = 0; cnt < listGuestMaster.size(); cnt++) {
 		
+			strGSTNo = (String) listGuestMaster.get(0);
+		}
+		*/
 		
 		// Insert or update Walkin Details Data
 		List<clsWalkinDtl> listWalkinDtlModel = new ArrayList<clsWalkinDtl>();
 		for (clsWalkinDtlBean objWalkinDetails : objWalkinBean.getListWalkinDetailsBean()) {
 			if (null != objWalkinDetails.getStrGuestCode())
 			{
-				// Fill Guest Master Details
-				clsGuestMasterBean objGuestMasterBean = new clsGuestMasterBean();
-				objGuestMasterBean.setStrGuestCode(objWalkinDetails.getStrGuestCode());
-				objGuestMasterBean.setStrGuestPrefix("");
-				objGuestMasterBean.setStrFirstName(objWalkinDetails.getStrGuestFirstName());
-				objGuestMasterBean.setStrMiddleName(objWalkinDetails.getStrGuestMiddleName());
-				objGuestMasterBean.setStrLastName(objWalkinDetails.getStrGuestLastName());
-				objGuestMasterBean.setIntFaxNo(0);
-				objGuestMasterBean.setIntPinCode(0);
-				objGuestMasterBean.setDteDOB("01-01-1900");
-				objGuestMasterBean.setIntMobileNo(objWalkinDetails.getLngMobileNo());
-				objGuestMasterBean.setStrAddress(objWalkinDetails.getStrAddress());
-				clsGuestMasterHdModel objGuestMasterModel = objGuestMasterService.funPrepareGuestModel(objGuestMasterBean, clientCode, userCode);
-				objGuestMasterDao.funAddUpdateGuestMaster(objGuestMasterModel);
+				clsGuestMasterHdModel objGuestMasterModel =null;
+				List listGuestData = objGuestMasterDao.funGetGuestMaster(objWalkinDetails.getStrGuestCode(), clientCode);
+				if(listGuestData!=null && listGuestData.size()>0){
+					objGuestMasterModel = (clsGuestMasterHdModel) listGuestData.get(0);
+					objGuestMasterModel.setStrFirstName(objWalkinDetails.getStrGuestFirstName());
+					objGuestMasterModel.setStrMiddleName(objWalkinDetails.getStrGuestMiddleName());
+					objGuestMasterModel.setStrLastName(objWalkinDetails.getStrGuestLastName());
+					
+					objGuestMasterDao.funAddUpdateGuestMaster(objGuestMasterModel);
+				}else{
+					clsGuestMasterBean objGuestMasterBean = new clsGuestMasterBean();
+					objGuestMasterBean.setStrGuestCode(objWalkinDetails.getStrGuestCode());
+					objGuestMasterBean.setStrGuestPrefix("");
+					objGuestMasterBean.setStrFirstName(objWalkinDetails.getStrGuestFirstName());
+					objGuestMasterBean.setStrMiddleName(objWalkinDetails.getStrGuestMiddleName());
+					objGuestMasterBean.setStrLastName(objWalkinDetails.getStrGuestLastName());
+					objGuestMasterBean.setIntFaxNo(0);
+					objGuestMasterBean.setIntPinCode(0);
+					objGuestMasterBean.setDteDOB("01-01-1900");
+					objGuestMasterBean.setIntMobileNo(objWalkinDetails.getLngMobileNo());
+					objGuestMasterBean.setStrAddress(objWalkinDetails.getStrAddress());
+					objGuestMasterModel = objGuestMasterService.funPrepareGuestModel(objGuestMasterBean, clientCode, userCode);
+					
+					objGuestMasterDao.funAddUpdateGuestMaster(objGuestMasterModel);
 
+				}
+				
+				// Fill Guest Master Details
+				
 				clsWalkinDtl objWalkinDtlModel = new clsWalkinDtl();
 				objWalkinDtlModel.setStrGuestCode(objGuestMasterModel.getStrGuestCode());
 				objWalkinDtlModel.setStrRoomNo(objWalkinDetails.getStrRoomNo());

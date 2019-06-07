@@ -246,6 +246,9 @@ public class clsBillDiscountController {
 			objModel.setDteBillDate(objGlobal.funGetDate("yyyy-MM-dd", objBean.getDteBillDate()));
 			objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+			objModel.setStrReasonCode(objGlobal.funIfNull(objBean.getStrReason(), "", objBean.getStrReason())  );
+			objModel.setStrReasonName(objGlobal.funIfNull(objBean.getStrRemark(), "", objBean.getStrRemark()));
+			objModel.setStrRemark(objGlobal.funIfNull(objBean.getStrRemark(), "", objBean.getStrRemark()));
 		}
 
 		return objModel;

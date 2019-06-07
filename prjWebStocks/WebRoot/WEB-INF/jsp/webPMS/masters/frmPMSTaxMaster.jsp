@@ -8,9 +8,6 @@
 <title></title>
 <script type="text/javascript">
 	var fieldName;
-	
-	
-	
 	//Initialize tab Index or which tab is Active
 	$(document).ready(function() 
 	{		
@@ -204,6 +201,10 @@
 	        		$("#strTaxCode").val(response.strTaxCode);
 	        		$("#strTaxDesc").val(response.strTaxDesc);
 	        		$("#txtDeptCode").val(response.strDeptCode);
+	        		
+	        		$("#fromRate").val(response.dblFromRate);
+	        		$("#toRate").val(response.dblToRate);
+	        		
 	        		if(response.strDeptCode!="NA" || response.strDeptCode=='')
 	        			{
 	        				funSetDepartment(response.strDeptCode);
@@ -463,6 +464,41 @@
 		window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 		//window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
 	}
+	
+	function funPercentOrRs()
+	{
+		var per = "%";
+		var amt = "rs";
+		if($("#strTaxType").val()=="Percentage")
+			{
+			$("#sign").val(per)
+			}
+		else
+			{
+			$("#sign").val(amt)
+			}
+	}
+	
+	function funOnChange(select)
+	{
+		if(select.value == 'Department')
+		{
+			document.getElementById('txtDeptCode').style.display = 'block';
+			document.getElementById('txtIncomeHeadCode').style.display = 'none';
+		}
+		else if(select.value == 'Income Head')
+		{
+			document.getElementById('txtIncomeHeadCode').style.display = 'block';
+			document.getElementById('txtDeptCode').style.display = 'none';
+		}
+		else if(select.value == 'Room Night')
+		{
+			document.getElementById('txtIncomeHeadCode').style.display = 'none';
+			document.getElementById('txtDeptCode').style.display = 'none';
+		}
+		
+	}
+	 
 </script>
 
 </head>
@@ -494,32 +530,55 @@
 			    <td colspan="3"><s:input id="strTaxDesc" path="strTaxDesc" required="true" cssClass="longTextBox"  style="width: 316px"/></td>			    		        			   
 			</tr>
 			<tr>
-				<td><label>Department</label></td>
-				<td colspan="3" >
-					<s:input id="txtDeptCode" path="strDeptCode"  ondblclick=" funHelp('deptCode') " cssClass="searchTextBox"/>
+				<td><label>Tax On</label></td>
+				<td>
+					<s:select id="cmbTaxOnType" path="strTaxOnType"  onclick = "funOnChange(this)" cssClass="BoxW124px" ><!-- onchange="funOnChange();" -->
+						<option value="Room Night" selected>Room Night</option>
+						<option value="Income Head">Income Head</option>
+						<option value="Department">Department</option>
+						
+					</s:select>
+				<td colspan="1" >
+					<s:input id="txtDeptCode"  path="strDeptCode" style="display:none;" ondblclick=" funHelp('deptCode') " cssClass="searchTextBox" />
 				</td>
-				<td><label id="lblDeptDesc"></label></td>
+				<td colspan="2"><label id="lblDeptDesc"></label></td>
 			</tr>
+			
 			<tr>
-				<td><label>Income Head</label></td>
-				<td colspan="3" >
-					<s:input id="txtIncomeHeadCode" path="strIncomeHeadCode"  ondblclick=" funHelp('incomeHead') " cssClass="searchTextBox"/>
+				<td></td>
+				<td colspan="2" >
+					<s:input id="txtIncomeHeadCode" style = "display:none;" path="strIncomeHeadCode"  ondblclick=" funHelp('incomeHead') " cssClass="searchTextBox"/>
 				</td>
 				<td><label id="lblIncomeHead"></label></td>
 			</tr>
+			
 			<tr>
+				<td><label>Value Slab</label></td>
+				<td >
+					<s:input  cssClass="longTextBox" style="text-align:right; width: 64%;" id="fromRate" path="dblFromRate" placeholder="fromRate" required="true"/>
+				</td>
+				
+				<td >
+					<s:input  cssClass="longTextBox" style="text-align:right; width: 64%;" id="toRate" path="dblToRate"  placeholder="toRate" required="true"/>
+				</td>
+				<td></td>
+			</tr>
+			
+			   
+			
+			
+			<tr>
+				<td><label>Calculate On</label></td>
+				<td><s:select id="strTaxType" path="strTaxType" items="${listTaxType}" required="true" cssClass="BoxW124px" onclick =' funPercentOrRs() '></s:select></td>
+				<td><s:input  id="dblTaxValue" path="dblTaxValue" required="true" cssClass="decimal-places numberField" /></td>
+				<td><s:input  cssClass="longTextBox" style="width: 10%;" id="sign" readonly="true" path=""/></td>
+				</tr>
+				<tr>
 				<td><label>Tax Type</label></td>
-				<td><s:select id="strTaxType" path="strTaxType" items="${listTaxType}" required="true" cssClass="BoxW124px"></s:select></td>
-				<td colspan="2"><s:select id="" path="" items="${listTaxType2}"  cssClass="BoxW124px"></s:select></td>
+				<td colspan="3"><s:select id="" path="" items="${listTaxType2}"  cssClass="BoxW124px"></s:select></td>
+			
 			</tr>
 			<tr>
-				<td><label>Percentage / Amount</label></td>
-				<td>
-					<s:select id="cmbTaxOnType" path="strTaxOnType"  cssClass="BoxW124px">
-						<option value="Room Night" selected>Room Night</option>
-						<option value="Income Head">Income Head</option>
-					</s:select>				
-				<td colspan="2"><s:input  id="dblTaxValue" path="dblTaxValue" required="true" cssClass="decimal-places numberField" /></td>
 			</tr>
 			<tr>
 				<td><label>Tax On</label></td>
@@ -554,8 +613,6 @@
 		</table>
 		</div>
 		<!--General Tab End  -->
-						
-						
 			<!-- Linkedup Details Tab Start -->
 			<div id="tab2" class="tab_content" style="height: 400px">
 			<br> 
@@ -564,7 +621,7 @@
 						<tr>
 						    <td><label>Account Code</label></td>
 						    <td><s:input id="txtAccountCode" path="strAccountCode" readonly="true" ondblclick="funHelp('accountCode')" cssClass="searchTextBox"/></td>
-						    <td colspan="2"><s:input id="txtAccountName" path="" readonly="true" cssClass="longTextBox"  style="width: 316px"/></td>			        			        						    			    		        			  
+						    <td colspan="3"><s:input id="txtAccountName" path="" readonly="true" cssClass="longTextBox"  style="width: 316px"/></td>			        			        						    			    		        			  
 						</tr>
 				</table>
 			</div>

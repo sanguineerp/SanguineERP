@@ -27,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.controller.clsGlobalFunctions;
@@ -35,10 +36,18 @@ import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.webpms.bean.clsBillPrintingBean;
 import com.sanguine.webpms.bean.clsFolioPrintingBean;
+import com.sanguine.webpms.bean.clsGuestMasterBean;
+import com.sanguine.webpms.bean.clsVoidBillBean;
+import com.sanguine.webpms.dao.clsGuestMasterDao;
 import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
+import com.sanguine.webpms.model.clsGuestMasterHdModel;
 import com.sanguine.webpms.model.clsPropertySetupHdModel;
+import com.sanguine.webpms.model.clsWalkinDtl;
+import com.sanguine.webpms.model.clsWalkinHdModel;
+import com.sanguine.webpms.model.clsWalkinRoomRateDtlModel;
 import com.sanguine.webpms.service.clsFolioService;
 import com.sanguine.webpms.service.clsPropertySetupService;
+import com.sanguine.webpms.service.clsWalkinServiceImpl;
 
 @Controller
 public class clsBillPrintingController {
@@ -59,13 +68,16 @@ public class clsBillPrintingController {
 
 	@Autowired
 	private clsWebPMSDBUtilityDao objWebPMSUtility;
-	
+
 	@Autowired
 	private clsPropertySetupService objPropertySetupService;
+	
+	
 
 	// Open Folio Printing
 	@RequestMapping(value = "/frmBillPrinting", method = RequestMethod.GET)
-	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
+	public ModelAndView funOpenForm(Map<String, Object> model,
+			HttpServletRequest request) {
 		String urlHits = "1";
 		try {
 			urlHits = request.getParameter("saddr").toString();
@@ -74,9 +86,11 @@ public class clsBillPrintingController {
 		}
 		model.put("urlHits", urlHits);
 		if ("2".equalsIgnoreCase(urlHits)) {
-			return new ModelAndView("frmBillPrinting_1", "command", new clsBillPrintingBean());
+			return new ModelAndView("frmBillPrinting_1", "command",
+					new clsBillPrintingBean());
 		} else if ("1".equalsIgnoreCase(urlHits)) {
-			return new ModelAndView("frmBillPrinting", "command", new clsBillPrintingBean());
+			return new ModelAndView("frmBillPrinting", "command",
+					new clsBillPrintingBean());
 		} else {
 			return null;
 		}
@@ -84,29 +98,46 @@ public class clsBillPrintingController {
 
 	// Save folio posting
 	@RequestMapping(value = "/rptBillPrinting", method = RequestMethod.GET)
-	public void funGenerateBillPrintingReport(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate, @RequestParam("billNo") String billNo, HttpServletRequest req, HttpServletResponse resp) {
+	public void funGenerateBillPrintingReport(
+			@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate,
+			@RequestParam("billNo") String billNo,@RequestParam("strSelectBill") String strSelectBill, HttpServletRequest req,
+			HttpServletResponse resp) {
 		try {
 			boolean flgBillRecord = false;
 			String registrationNo = "";
 			String reservationNo = "";
 			double balance = 0.0;
-			String GSTNo="",companyName="";
+			String GSTNo = "", companyName = "";
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+			String temp[] = strSelectBill.split(",");
+			String billNames = "";
+			for (int i = 0; i < temp.length; i++) {
+				if (billNames.length()>=0) {
+					billNames+="'"+temp[i]+"',";
+				}
+			}
 			
-			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode); //mms property setup
+			clsPropertySetupModel objSetup = objSetupMasterService
+					.funGetObjectPropertySetup(propertyCode, clientCode); // mms
+																			// property
+																			// setup
 			if (objSetup == null) {
 				objSetup = new clsPropertySetupModel();
 			}
-			
-			String reportName = servletContext.getRealPath("/WEB-INF/reports/webpms/rptBillPrinting.jrxml");
-			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+
+			String reportName = servletContext
+					.getRealPath("/WEB-INF/reports/webpms/rptBillPrinting.jrxml");
+			String imagePath = servletContext
+					.getRealPath("/resources/images/company_Logo.png");
 
 			List<clsBillPrintingBean> dataList = new ArrayList<clsBillPrintingBean>();
 			@SuppressWarnings("rawtypes")
 			HashMap reportParams = new HashMap();
-
+			Map<String,clsBillPrintingBean> hmTax=new HashMap<>();
+			Map<String,clsBillPrintingBean> hmParticulars=new HashMap<>();
 			// get all parameters
 			/*
 			 * String sqlParametersFromBill =
@@ -124,23 +155,42 @@ public class clsBillPrintingController {
 			 * + " where a.strBillNo='" + billNo + "' ";
 			 */
 
-			String sqlParametersFromBill = " SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo ,date(b.dteArrivalDate),b.tmeArrivalTime , " + " ifnull(date(b.dteDepartureDate),'NA'),ifnull(b.tmeDepartureTime,'NA')  , ifnull(d.strGuestPrefix,''), " + " ifnull(d.strFirstName,''),ifnull(d.strMiddleName,''),ifnull(d.strLastName,'') , "
-					+ " b.intNoOfAdults,b.intNoOfChild ,a.strBillNo ,IFNULL(d.strGuestCode,''),a.strGSTNo,a.strCompanyName"//17
-					+ " FROM tblbillhd a  " + " LEFT OUTER JOIN tblcheckinhd  b ON a.strReservationNo=b.strReservationNo " + " LEFT OUTER JOIN tblcheckindtl c ON b.strCheckInNo=c.strCheckInNo AND a.strRoomNo=c.strRoomNo  " + " LEFT OUTER JOIN tblguestmaster d ON c.strGuestCode=d.strGuestCode  "
-					+ " LEFT OUTER JOIN tblroom e ON e.strRoomCode=a.strRoomNo " + "where a.strBillNo='" + billNo + "'  ";
+			List<String> listCheckInNo = new ArrayList<>();
+			String checkInNo = "";
+			String sqlParametersFromBill = " SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo ,date(b.dteArrivalDate),b.tmeArrivalTime , "
+					+ " ifnull(date(b.dteDepartureDate),'NA'),ifnull(b.tmeDepartureTime,'NA')  , ifnull(d.strGuestPrefix,''), "
+					+ " ifnull(d.strFirstName,''),ifnull(d.strMiddleName,''),ifnull(d.strLastName,'') , "
+					+ " b.intNoOfAdults,b.intNoOfChild ,a.strBillNo ,IFNULL(d.strGuestCode,''),a.strGSTNo,a.strCompanyName,b.strCheckInNo"// 17
+					+ " FROM tblbillhd a  "
+					+ " LEFT OUTER JOIN tblcheckinhd  b ON a.strReservationNo=b.strReservationNo "
+					+ " LEFT OUTER JOIN tblcheckindtl c ON b.strCheckInNo=c.strCheckInNo AND a.strRoomNo=c.strRoomNo  "
+					+ " LEFT OUTER JOIN tblguestmaster d ON c.strGuestCode=d.strGuestCode  "
+					+ " LEFT OUTER JOIN tblroom e ON e.strRoomCode=a.strRoomNo "
+					+ "where a.strBillNo='"
+					+ billNo
+					+ "' order by d.strGuestCode desc ";
 
-			List listOfParametersFromBill = objFolioService.funGetParametersList(sqlParametersFromBill);
+			List listOfParametersFromBill = objFolioService
+					.funGetParametersList(sqlParametersFromBill);
 
 			if (listOfParametersFromBill.size() > 0) {
 				Object[] arr = (Object[]) listOfParametersFromBill.get(0);
 
+				// String guestcode =
+				// objGuestMaster.funAddUpdateGuestMaster(objGuestMasterModel);
 
-				String guestDtl=" select ifnull(d.strDefaultAddr,''),ifnull(d.strAddressLocal,''),ifnull(d.strCityLocal,''),ifnull(d.strStateLocal,''),ifnull(d.strCountryLocal,''),IFNULL(d.intPinCodeLocal,''),"//20
-						+ " ifnull(d.strAddrPermanent,''),ifnull(d.strCityPermanent,''),ifnull(d.strStatePermanent,''),ifnull(d.strCountryPermanent,''),IFNULL(d.intPinCodePermanent,''), "//25
-						+ " ifnull(d.strAddressOfc,''),ifnull(d.strCityOfc,''),ifnull(d.strStateOfc,''),ifnull(d.strCountryOfc,''),IFNULL(d.intPinCodeOfc,'')"
-						+ "from tblguestmaster d where d.strGuestCode='"+arr[15].toString()+"'";
+				String guestDtl = " select ifnull(d.strDefaultAddr,''),ifnull(d.strAddressLocal,''),ifnull(d.strCityLocal,''),ifnull(d.strStateLocal,''),ifnull(d.strCountryLocal,''),IFNULL(d.intPinCodeLocal,''),"// 20
+						+ " ifnull(d.strAddrPermanent,''),ifnull(d.strCityPermanent,''),ifnull(d.strStatePermanent,''),ifnull(d.strCountryPermanent,''),IFNULL(d.intPinCodePermanent,''), "// 25
+						+ " ifnull(d.strAddressOfc,''),ifnull(d.strCityOfc,''),ifnull(d.strStateOfc,''),ifnull(d.strCountryOfc,''),IFNULL(d.intPinCodeOfc,''),IFNULL(d.strGSTNo,'') "
+						+ "from tblguestmaster d where d.strGuestCode=  '"
+						+ arr[15].toString() + "'";
 				List listguest = objFolioService.funGetParametersList(guestDtl);
-				
+				// '"+arr[15].toString()+"'
+				String guestgstNO = "";
+				for (int i = 0; i < listguest.size(); i++) {
+					Object[] arGuest = (Object[]) listguest.get(i);
+					guestgstNO = arGuest[16].toString();
+				}
 				String folio = arr[0].toString();
 				String roomNo = arr[1].toString();
 				registrationNo = arr[2].toString();
@@ -155,57 +205,129 @@ public class clsBillPrintingController {
 				String gLastName = arr[11].toString();
 				String adults = arr[12].toString();
 				String childs = arr[13].toString();
-				if(!arr[16].toString().equals(""))
-				{
-					GSTNo=arr[16].toString();
+				checkInNo  = arr[18].toString();
+				listCheckInNo.add(checkInNo);
+				if (!arr[16].toString().equals("")) {
+					GSTNo = arr[16].toString();
 				}
-				if(!arr[17].toString().equals(""))
-				{
-					companyName=arr[17].toString();
+				if (!arr[17].toString().equals("")) {
+					companyName = arr[17].toString();
 				}
-				String guestAddr="";
-				if(listguest.size()>0){
+				String guestAddr = "";
+				String guestCompanyAddress = "";
+				if (listguest.size() > 0) {
 					Object[] arrGuest = (Object[]) listguest.get(0);
-					if(arrGuest[0].toString().equalsIgnoreCase("Permanent")){ //check default addr
-						guestAddr=arrGuest[6].toString()+","+arrGuest[7].toString()+","+arrGuest[8].toString()+","+arrGuest[9].toString()+","+arrGuest[10].toString();
-					}else if(arrGuest[0].toString().equalsIgnoreCase("Office")){
-						guestAddr=arrGuest[11].toString()+","+arrGuest[12].toString()+","+arrGuest[13].toString()+","+arrGuest[14].toString()+","+arrGuest[15].toString();
-					}else{ //Local
-						guestAddr=arrGuest[1].toString()+","+arrGuest[2].toString()+","+arrGuest[3].toString()+","+arrGuest[4].toString()+","+arrGuest[5].toString();
+					if (arrGuest[0].toString().equalsIgnoreCase("Permanent")) { // check
+																				// default
+																				// addr
+						guestAddr = arrGuest[6].toString() + ","
+								+ arrGuest[7].toString() + ","
+								+ arrGuest[8].toString() + ","
+								+ arrGuest[9].toString() + ","
+								+ arrGuest[10].toString();
+					} else if (arrGuest[0].toString()
+							.equalsIgnoreCase("Office")) {
+						guestAddr = arrGuest[11].toString() + ","
+								+ arrGuest[12].toString() + ","
+								+ arrGuest[13].toString() + ","
+								+ arrGuest[14].toString() + ","
+								+ arrGuest[15].toString();
+					} else { // Local
+						guestAddr = arrGuest[1].toString() + ","
+								+ arrGuest[2].toString() + ","
+								+ arrGuest[3].toString() + ","
+								+ arrGuest[4].toString() + ","
+								+ arrGuest[5].toString();
 					}
+					
+					guestCompanyAddress = arrGuest[11].toString() + ","
+							+ arrGuest[12].toString() + ","
+							+ arrGuest[13].toString() + ","
+							+ arrGuest[14].toString() + ","
+							+ arrGuest[15].toString();
 				}
 				
 				
+				
+				String remark="";
+				String sql="SELECT a.strRemark FROM tblbilldiscount a WHERE a.strBillNo = '"+billNo+"'";
+				List listremark = objFolioService.funGetParametersList(sql);
+				if(listremark!=null && listremark.size()>0){
+					remark=listremark.get(0).toString();
+				}
 				// String billNo = arr[14].toString();
 
+				clsPropertySetupHdModel objPropertySetupModel = objPropertySetupService.funGetPropertySetup(propertyCode, clientCode);
+//				String noOfRoom = objPropertySetupModel.getStrRoomLimit();.
+				
+				String hsnCode = objPropertySetupModel.getStrHscCode();
+				String panno = objPropertySetupModel.getStrPanNo();
+				String bankDtl = objPropertySetupModel.getStrBankAcName();
+				String bankAcNo = objPropertySetupModel.getStrBankAcNumber();
+				String bankIFSC = objPropertySetupModel.getStrBankIFSC();
+				String branchnName = objPropertySetupModel.getStBranchName();
+				reportParams.put("phsnCode", hsnCode);
+				reportParams.put("ppanno", panno);
+				reportParams.put("pbankDtl", bankDtl);
+				reportParams.put("pbankAcNo", bankAcNo);
+				reportParams.put("pbankIFSC", bankIFSC);
+				reportParams.put("pbranchnName", branchnName);
+				
+				
 				
 				reportParams.put("pCompanyName", companyName);
 				reportParams.put("pGSTNo", GSTNo);
-				reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
-				reportParams.put("pAddress2", objSetup.getStrState() + "," + objSetup.getStrCountry() + "," + objSetup.getStrPin());
+				reportParams.put("pAddress1", objSetup.getStrAdd1() + ","+ objSetup.getStrAdd2() + "," + objSetup.getStrCity());
+				reportParams.put("pAddress2",objSetup.getStrState() + ","+ objSetup.getStrCountry() + ","+ objSetup.getStrPin());
 				reportParams.put("pContactDetails", "");
 				reportParams.put("strImagePath", imagePath);
-				reportParams.put("pGuestName", gPrefix + " " + gFirstName + " " + gMiddleName + " " + gLastName);
+				reportParams.put("pGuestName", gPrefix + " " + gFirstName + " "+ gMiddleName + " " + gLastName);
 				reportParams.put("pFolioNo", folio);
 				reportParams.put("pRoomNo", roomNo);
 				reportParams.put("pRegistrationNo", registrationNo);
 				reportParams.put("pReservationNo", reservationNo);
-				reportParams.put("pArrivalDate", objGlobal.funGetDate("dd-MM-yyyy", arrivalDate));
+				reportParams.put("pArrivalDate",objGlobal.funGetDate("dd-MM-yyyy", arrivalDate));
 				reportParams.put("pArrivalTime", arrivalTime);
-				reportParams.put("pDepartureDate", objGlobal.funGetDate("dd-MM-yyyy", departureDate));
+				reportParams.put("pDepartureDate",objGlobal.funGetDate("dd-MM-yyyy", departureDate));
 				reportParams.put("pDepartureTime", departureTime);
 				reportParams.put("pAdult", adults);
 				reportParams.put("pChild", childs);
 				reportParams.put("pGuestAddress", guestAddr);
-				reportParams.put("pRemarks", "");
+				reportParams.put("pRemarks", remark);
 				reportParams.put("strUserCode", userCode);
 				reportParams.put("pBillNo", billNo);
+				reportParams.put("pGuestNo", guestgstNO);
+				reportParams.put("pGuestOfficeAddress", guestCompanyAddress);
 
+				
+					
+					reportParams.put("pGuestNo", guestgstNO);
+				
 				// get bill details
-				String sqlBillDtl = "SELECT date(b.dteDocDate),b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt " + " FROM tblbillhd a inner join tblbilldtl b ON a.strFolioNo=b.strFolioNo  and a.strBillNo=b.strBillNo " + " WHERE a.strBillNo='" + billNo + "' ";
+				String sqlBillDtl="";
+				if(!(billNames.length()>0))
+				{
+					sqlBillDtl = "SELECT DATE(b.dteDocDate),b.strDocNo,"
+							+ "b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,"
+							+ "b.dblBalanceAmt FROM tblbillhd a INNER JOIN tblbilldtl b "
+							+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo "
+							+ "WHERE a.strBillNo='"+billNo+"'"
+									+ "group by b.strPerticulars";
+				}
+				else
+				{
+					sqlBillDtl = "SELECT DATE(b.dteDocDate),b.strDocNo,"
+							+ "b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,"
+							+ "b.dblBalanceAmt FROM tblbillhd a INNER JOIN tblbilldtl b "
+							+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo AND b.strPerticulars IN("+billNames.substring(0, billNames.length()-1)+") "
+							+ "WHERE a.strBillNo='"+billNo+"'"
+									+ "group by b.strPerticulars";
+				}
+				
 				// + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '"
 				// + toDate + "' ";
 				List billDtlList = objFolioService.funGetParametersList(sqlBillDtl);
+			
 				for (int i = 0; i < billDtlList.size(); i++) {
 					Object[] folioArr = (Object[]) billDtlList.get(i);
 
@@ -217,15 +339,21 @@ public class clsBillPrintingController {
 
 						String docNo = folioArr[1].toString();
 						String particulars = folioArr[2].toString();
-						double debitAmount = Double.parseDouble(folioArr[3].toString());
-						double creditAmount = Double.parseDouble(folioArr[4].toString());
-						balance = balance + debitAmount - creditAmount;
 						
-//						String debitAmount = folioArr[3].toString();
-//						String creditAmount = folioArr[4].toString();
-//						String balance = folioArr[5].toString();
+						
+						
+						double debitAmount = Double.parseDouble(folioArr[3]
+								.toString());
+						double creditAmount = Double.parseDouble(folioArr[4]
+								.toString());
+						balance = balance + debitAmount - creditAmount;
 
-						billPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+						// String debitAmount = folioArr[3].toString();
+						// String creditAmount = folioArr[4].toString();
+						// String balance = folioArr[5].toString();
+
+						billPrintingBean.setDteDocDate(objGlobal.funGetDate(
+								"dd-MM-yyyy", (docDate)));
 						billPrintingBean.setStrDocNo(docNo);
 						billPrintingBean.setStrPerticulars(particulars);
 						billPrintingBean.setDblDebitAmt(debitAmount);
@@ -233,27 +361,60 @@ public class clsBillPrintingController {
 						billPrintingBean.setDblBalanceAmt(balance);
 
 						dataList.add(billPrintingBean);
-
-						sqlBillDtl = "SELECT date(a.dteDocDate),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblbilldtl a, tblbilltaxdtl b where a.strDocNo=b.strDocNo " + " AND a.strBillNo='" + billNo + "' and a.strDocNo='" + docNo + "' ";
+						/*    End */
+						
+						if(hmParticulars.containsKey(particulars))
+						{
+							clsBillPrintingBean bean=hmParticulars.get(particulars);
+							hmParticulars.put(particulars, bean);
+						}
+						else
+						{
+							hmParticulars.put(particulars,billPrintingBean);
+						}
+						
+						sqlBillDtl = "SELECT date(a.dteDocDate),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 "
+								+ " FROM tblbilldtl a, tblbilltaxdtl b where a.strDocNo=b.strDocNo "
+								+ " AND a.strBillNo='"
+								+ billNo
+								+ "' and a.strDocNo='" + docNo + "' ";
 						// + " and DATE(a.dteDocDate) BETWEEN '" + fromDate +
 						// "' AND '" + toDate + "' ";
-						List listBillTaxDtl = objWebPMSUtility.funExecuteQuery(sqlBillDtl, "sql");
+						List listBillTaxDtl = objWebPMSUtility.funExecuteQuery(
+								sqlBillDtl, "sql");
 						for (int cnt = 0; cnt < listBillTaxDtl.size(); cnt++) {
-							Object[] arrObjBillTaxDtl = (Object[]) listBillTaxDtl.get(cnt);
+							Object[] arrObjBillTaxDtl = (Object[]) listBillTaxDtl
+									.get(cnt);
 
 							billPrintingBean = new clsBillPrintingBean();
-							billPrintingBean.setDteDocDate(arrObjBillTaxDtl[0].toString());
-							billPrintingBean.setStrDocNo(arrObjBillTaxDtl[1].toString());
-							billPrintingBean.setStrPerticulars(arrObjBillTaxDtl[2].toString());
-							
-							double debitAmt = Double.parseDouble(arrObjBillTaxDtl[3].toString());
-							double creditAmt = Double.parseDouble(arrObjBillTaxDtl[4].toString());
+							billPrintingBean.setDteDocDate(arrObjBillTaxDtl[0]
+									.toString());
+							billPrintingBean.setStrDocNo(arrObjBillTaxDtl[1]
+									.toString());
+							billPrintingBean
+									.setStrPerticulars(arrObjBillTaxDtl[2]
+											.toString());
+
+							double debitAmt = Double
+									.parseDouble(arrObjBillTaxDtl[3].toString());
+							double creditAmt = Double
+									.parseDouble(arrObjBillTaxDtl[4].toString());
 							balance = balance + debitAmt - creditAmt;
-							
+
 							billPrintingBean.setDblDebitAmt(debitAmt);
 							billPrintingBean.setDblCreditAmt(creditAmt);
 							billPrintingBean.setDblBalanceAmt(balance);
 							dataList.add(billPrintingBean);
+							if(hmTax.containsKey(arrObjBillTaxDtl[2].toString())){
+								clsBillPrintingBean bean1= new clsBillPrintingBean();
+								bean1 =billPrintingBean;
+								clsBillPrintingBean bean=hmTax.get(arrObjBillTaxDtl[2].toString());
+								bean1.setDblBalanceAmt(bean.getDblBalanceAmt()+balance);
+								hmTax.put(arrObjBillTaxDtl[2].toString(), bean1);
+							}else{
+								hmTax.put(arrObjBillTaxDtl[2].toString(), billPrintingBean);	
+							}
+							
 						}
 					}
 				}
@@ -264,7 +425,12 @@ public class clsBillPrintingController {
 			if (flgBillRecord) {
 				// get payment details
 
-				String sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt " + " ,d.dblSettlementAmt as creditAmt,'0.00' as balance " + " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e " + " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode " + " and c.strReservationNo='" + reservationNo
+				String sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
+						+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
+						+ " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
+						+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
+						+ " and c.strReservationNo='"
+						+ reservationNo
 						+ "' and c.strAgainst='Reservation' ";
 
 				List paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
@@ -274,19 +440,20 @@ public class clsBillPrintingController {
 					String docDate = paymentArr[0].toString();
 					if (paymentArr[1] == null) {
 						continue;
-					} else {
+					} 
+					else 
+					{
 						clsBillPrintingBean folioPrintingBean = new clsBillPrintingBean();
 						String docNo = paymentArr[1].toString();
 						String particulars = paymentArr[2].toString();
 						double debitAmount = Double.parseDouble(paymentArr[3].toString());
-						double creditAmount = Double.parseDouble(paymentArr[4].toString());
+						double creditAmount = Double.parseDouble(paymentArr[4]
+								.toString());
 						balance = balance + debitAmount - creditAmount;
-						
-//						String debitAmount = paymentArr[3].toString();
-//						String creditAmount = paymentArr[4].toString();
-//						String balance = paymentArr[5].toString();
-
-						folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+						// String debitAmount = paymentArr[3].toString();
+						// String creditAmount = paymentArr[4].toString();
+						// String balance = paymentArr[5].toString();
+						folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate)));
 						folioPrintingBean.setStrDocNo(docNo);
 						folioPrintingBean.setStrPerticulars(particulars);
 						folioPrintingBean.setDblDebitAmt(debitAmount);
@@ -298,12 +465,19 @@ public class clsBillPrintingController {
 				}
 
 				if (!(paymentDtlList.size() > 0)) {
-					sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt " + " ,d.dblSettlementAmt as creditAmt,'0.00' as balance " + " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e " + " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode " + " and c.strRegistrationNo='" + registrationNo
+					sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
+							+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
+							+ " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
+							+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
+							+ " and c.strRegistrationNo='"
+							+ registrationNo
 							+ "' and c.strAgainst='Check-In' ";
 
-					List checkInReceiptDtl = objFolioService.funGetParametersList(sqlPaymentDtl);
+					List checkInReceiptDtl = objFolioService
+							.funGetParametersList(sqlPaymentDtl);
 					for (int i = 0; i < checkInReceiptDtl.size(); i++) {
-						Object[] paymentArr = (Object[]) checkInReceiptDtl.get(i);
+						Object[] paymentArr = (Object[]) checkInReceiptDtl
+								.get(i);
 
 						String docDate = paymentArr[0].toString();
 						if (paymentArr[1] == null) {
@@ -312,16 +486,19 @@ public class clsBillPrintingController {
 							clsBillPrintingBean folioPrintingBean = new clsBillPrintingBean();
 							String docNo = paymentArr[1].toString();
 							String particulars = paymentArr[2].toString();
-							
-							double debitAmount = Double.parseDouble(paymentArr[3].toString());
-							double creditAmount = Double.parseDouble(paymentArr[4].toString());
-							balance = balance + debitAmount - creditAmount;
-							
-//							String debitAmount = paymentArr[3].toString();
-//							String creditAmount = paymentArr[4].toString();
-//							String balance = paymentArr[5].toString();
 
-							folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+							double debitAmount = Double
+									.parseDouble(paymentArr[3].toString());
+							double creditAmount = Double
+									.parseDouble(paymentArr[4].toString());
+							balance = balance + debitAmount - creditAmount;
+
+							// String debitAmount = paymentArr[3].toString();
+							// String creditAmount = paymentArr[4].toString();
+							// String balance = paymentArr[5].toString();
+
+							folioPrintingBean.setDteDocDate(objGlobal
+									.funGetDate("dd-MM-yyyy", (docDate)));
 							folioPrintingBean.setStrDocNo(docNo);
 							folioPrintingBean.setStrPerticulars(particulars);
 							folioPrintingBean.setDblDebitAmt(debitAmount);
@@ -351,10 +528,16 @@ public class clsBillPrintingController {
 				 * toDate + "'"
 				 */
 
-				sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt " + " ,d.dblSettlementAmt as creditAmt,'0.00' as balance " + " FROM tblbillhd a,tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e " + " where a.strBillNo=c.strBillNo and c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode " + " and a.strBillNo='" + billNo
+				sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
+						+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
+						+ " FROM tblbillhd a,tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
+						+ " where a.strBillNo=c.strBillNo and c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
+						+ " and a.strBillNo='"
+						+ billNo
 						+ "' and c.strAgainst='Bill' ";
 
-				List billReceitDtl = objFolioService.funGetParametersList(sqlPaymentDtl);
+				List billReceitDtl = objFolioService
+						.funGetParametersList(sqlPaymentDtl);
 				for (int i = 0; i < billReceitDtl.size(); i++) {
 					Object[] paymentArr = (Object[]) billReceitDtl.get(i);
 
@@ -365,16 +548,19 @@ public class clsBillPrintingController {
 						clsBillPrintingBean folioPrintingBean = new clsBillPrintingBean();
 						String docNo = paymentArr[1].toString();
 						String particulars = paymentArr[2].toString();
-						
-						double debitAmount = Double.parseDouble(paymentArr[3].toString());
-						double creditAmount = Double.parseDouble(paymentArr[4].toString());
-						balance = balance + debitAmount - creditAmount;
-						
-//						String debitAmount = paymentArr[3].toString();
-//						String creditAmount = paymentArr[4].toString();
-//						String balance = paymentArr[5].toString();
 
-						folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+						double debitAmount = Double.parseDouble(paymentArr[3]
+								.toString());
+						double creditAmount = Double.parseDouble(paymentArr[4]
+								.toString());
+						balance = balance + debitAmount - creditAmount;
+
+						// String debitAmount = paymentArr[3].toString();
+						// String creditAmount = paymentArr[4].toString();
+						// String balance = paymentArr[5].toString();
+
+						folioPrintingBean.setDteDocDate(objGlobal.funGetDate(
+								"dd-MM-yyyy", (docDate)));
 						folioPrintingBean.setStrDocNo(docNo);
 						folioPrintingBean.setStrPerticulars(particulars);
 						folioPrintingBean.setDblDebitAmt(debitAmount);
@@ -385,9 +571,13 @@ public class clsBillPrintingController {
 					}
 				}
 
-				String sqlDisc = " select date(a.dteBillDate),'','Discount','0.00',a.dblDiscAmt,'0.00' from  tblbilldiscount a " + " WHERE a.strBillNo='" + billNo + "' and strClientCode='" + clientCode + "' ";
+				String sqlDisc = " select date(a.dteBillDate),'','Discount','0.00',a.dblDiscAmt,'0.00' from  tblbilldiscount a "
+						+ " WHERE a.strBillNo='"
+						+ billNo
+						+ "' and strClientCode='" + clientCode + "' ";
 
-				List billDiscList = objFolioService.funGetParametersList(sqlDisc);
+				List billDiscList = objFolioService
+						.funGetParametersList(sqlDisc);
 				for (int i = 0; i < billDiscList.size(); i++) {
 					Object[] billDicArr = (Object[]) billDiscList.get(i);
 
@@ -395,16 +585,19 @@ public class clsBillPrintingController {
 					String docDate = billDicArr[0].toString();
 					String docNo = billDicArr[1].toString();
 					String particulars = billDicArr[2].toString();
-					
-					double debitAmount = Double.parseDouble(billDicArr[3].toString());
-					double creditAmount = Double.parseDouble(billDicArr[4].toString());
-					balance = balance + debitAmount - creditAmount;
-					
-//					String debitAmount = billDicArr[3].toString();
-//					String creditAmount = billDicArr[4].toString();
-//					String balance = billDicArr[5].toString();
 
-					folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+					double debitAmount = Double.parseDouble(billDicArr[3]
+							.toString());
+					double creditAmount = Double.parseDouble(billDicArr[4]
+							.toString());
+					balance = balance + debitAmount - creditAmount;
+
+					// String debitAmount = billDicArr[3].toString();
+					// String creditAmount = billDicArr[4].toString();
+					// String balance = billDicArr[5].toString();
+
+					folioPrintingBean.setDteDocDate(objGlobal.funGetDate(
+							"dd-MM-yyyy", (docDate)));
 					folioPrintingBean.setStrDocNo(docNo);
 					folioPrintingBean.setStrPerticulars(particulars);
 					folioPrintingBean.setDblDebitAmt(debitAmount);
@@ -414,23 +607,81 @@ public class clsBillPrintingController {
 					dataList.add(folioPrintingBean);
 
 				}
+				
+				
+				String walkIn = "";
+				if(strSelectBill.contains("Room Tariff"))
+				{
+				String sqlWalkInNo = "select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+checkInNo+"'";
+				List listWalkIn = objFolioService.funGetParametersList(sqlWalkInNo);
+				for(int i = 0;i<listWalkIn.size();i++)
+				{
+					walkIn = listWalkIn.get(i).toString();
+				}
+				String walkInDiscount = "SELECT DATE(a.dtDate),'','Discount',a.dblRoomRate,"
+						+ "a.dblDiscount,'0.00' FROM tblwalkinroomratedtl a "
+						+ "WHERE a.strWalkinNo='"+walkIn+"' AND a.strClientCode='"+clientCode+"'";
+				List walkInBillDiscList = objFolioService.funGetParametersList(walkInDiscount);
+				for (int i = 0; i < walkInBillDiscList.size(); i++) {
+					Object[] billWalkDicArr = (Object[]) walkInBillDiscList.get(i);
+
+					clsBillPrintingBean folioPrintingBean = new clsBillPrintingBean();
+					String docDate = billWalkDicArr[0].toString();
+					String docNo = billWalkDicArr[1].toString();
+					String particulars = billWalkDicArr[2].toString();
+
+					double debitAmount = Double.parseDouble(billWalkDicArr[3]
+							.toString());
+					double creditAmount = Double.parseDouble(billWalkDicArr[4]
+							.toString());
+					if(creditAmount==0)
+					{
+					}
+					else
+					{
+					balance  = balance +  - (creditAmount/100)*debitAmount;
+
+					// String debitAmount = billDicArr[3].toString();
+					// String creditAmount = billDicArr[4].toString();
+					// String balance = billDicArr[5].toString();
+
+					folioPrintingBean.setDteDocDate(objGlobal.funGetDate(
+							"dd-MM-yyyy", (docDate)));
+					folioPrintingBean.setStrDocNo(docNo);
+					folioPrintingBean.setStrPerticulars(particulars);
+					folioPrintingBean.setDblDebitAmt(0.0);
+					folioPrintingBean.setDblCreditAmt(creditAmount);
+					folioPrintingBean.setDblBalanceAmt(balance);
+
+					dataList.add(folioPrintingBean);
+					}
+				}
+				}
+				
 
 			}
-
+			List<clsBillPrintingBean> listtax=new ArrayList<>();
+			if(hmTax.size()>0){
+				for(Map.Entry<String, clsBillPrintingBean> entry:hmTax.entrySet()){
+					listtax.add(entry.getValue());
+				}
+			}
+			reportParams.put("listtax", listtax);
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(dataList);
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
-			JasperPrint jp = JasperFillManager.fillReport(jr, reportParams, beanCollectionDataSource);
+			JasperPrint jp = JasperFillManager.fillReport(jr, reportParams,
+					beanCollectionDataSource);
 			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
 			if (jp != null) {
 				jprintlist.add(jp);
 				ServletOutputStream servletOutputStream = resp.getOutputStream();
 				JRExporter exporter = new JRPdfExporter();
 				resp.setContentType("application/pdf");
-				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
-				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
-				exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-				resp.setHeader("Content-Disposition", "inline;filename=Bill.pdf");
+				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST,jprintlist);
+				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM,servletOutputStream);
+				exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS,Boolean.TRUE);
+				resp.setHeader("Content-Disposition","inline;filename=Bill.pdf");
 				exporter.exportReport();
 				servletOutputStream.flush();
 				servletOutputStream.close();
@@ -441,16 +692,25 @@ public class clsBillPrintingController {
 	}
 
 	@RequestMapping(value = "/rptBillPrintingForCheckIn", method = RequestMethod.GET)
-	public void funGenerateBillPrintingReporForCheckIn(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate, @RequestParam("checkInNo") String checkInNo, @RequestParam("against") String against, HttpServletRequest req, HttpServletResponse resp) {
+	public void funGenerateBillPrintingReporForCheckIn(
+			@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate,
+			@RequestParam("checkInNo") String checkInNo,
+			@RequestParam("against") String against, HttpServletRequest req,
+			HttpServletResponse resp) {
 		try {
 			boolean flgBillRecord = false;
 			String registrationNo = "";
 			String reservationNo = "";
-			String GSTNo="",companyName="";
-			String clientCode = req.getSession().getAttribute("clientCode").toString();
-			String userCode = req.getSession().getAttribute("usercode").toString();
-			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
-			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+			String GSTNo = "", companyName = "";
+			String clientCode = req.getSession().getAttribute("clientCode")
+					.toString();
+			String userCode = req.getSession().getAttribute("usercode")
+					.toString();
+			String propertyCode = req.getSession().getAttribute("propertyCode")
+					.toString();
+			clsPropertySetupModel objSetup = objSetupMasterService
+					.funGetObjectPropertySetup(propertyCode, clientCode);
 			List billNo = new ArrayList();
 			String folio = "";
 			String roomNo = "";
@@ -458,8 +718,10 @@ public class clsBillPrintingController {
 			if (objSetup == null) {
 				objSetup = new clsPropertySetupModel();
 			}
-			String reportName = servletContext.getRealPath("/WEB-INF/reports/webpms/rptBillPrintingForCheckIn.jrxml");
-			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+			String reportName = servletContext
+					.getRealPath("/WEB-INF/reports/webpms/rptBillPrintingForCheckIn.jrxml");
+			String imagePath = servletContext
+					.getRealPath("/resources/images/company_Logo.png");
 
 			List<clsBillPrintingBean> dataList = new ArrayList<clsBillPrintingBean>();
 			@SuppressWarnings("rawtypes")
@@ -491,9 +753,12 @@ public class clsBillPrintingController {
 					+ " FROM tblbillhd a LEFT OUTER JOIN tblcheckinhd b ON a.strReservationNo=b.strReservationNo"
 					+ " LEFT OUTER JOIN tblcheckindtl c ON b.strCheckInNo=c.strCheckInNo AND a.strRoomNo=c.strRoomNo"
 					+ " LEFT OUTER JOIN tblguestmaster d ON c.strGuestCode=d.strGuestCode"
-					+ " WHERE a.strCheckInNo='"+checkInNo+"' AND c.strPayee='Y' ";
-			
-			List listOfParametersFromBill = objFolioService.funGetParametersList(sqlParametersFromBill);
+					+ " WHERE a.strCheckInNo='"
+					+ checkInNo
+					+ "' AND c.strPayee='Y' ";
+
+			List listOfParametersFromBill = objFolioService
+					.funGetParametersList(sqlParametersFromBill);
 
 			if (listOfParametersFromBill.size() > 0) {
 				Object[] arr = (Object[]) listOfParametersFromBill.get(0);
@@ -513,39 +778,53 @@ public class clsBillPrintingController {
 				String adults = arr[12].toString();
 				String childs = arr[13].toString();
 				// String billNo = arr[14].toString();
-				
-				String guestAddr="";
-				if(arr[15].toString().equalsIgnoreCase("Permanent")){ //check default addr
-					guestAddr=arr[21].toString()+","+arr[22].toString()+","+arr[23].toString()+","+arr[24].toString()+","+arr[25].toString();
-				}else if(arr[15].toString().equalsIgnoreCase("Office")){
-					guestAddr=arr[26].toString()+","+arr[27].toString()+","+arr[28].toString()+","+arr[29].toString()+","+arr[30].toString();
-				}else{ //Local
-					guestAddr=arr[16].toString()+","+arr[17].toString()+","+arr[18].toString()+","+arr[19].toString()+","+arr[20].toString();
+
+				String guestAddr = "";
+				if (arr[15].toString().equalsIgnoreCase("Permanent")) { // check
+																		// default
+																		// addr
+					guestAddr = arr[21].toString() + "," + arr[22].toString()
+							+ "," + arr[23].toString() + ","
+							+ arr[24].toString() + "," + arr[25].toString();
+				} else if (arr[15].toString().equalsIgnoreCase("Office")) {
+					guestAddr = arr[26].toString() + "," + arr[27].toString()
+							+ "," + arr[28].toString() + ","
+							+ arr[29].toString() + "," + arr[30].toString();
+				} else { // Local
+					guestAddr = arr[16].toString() + "," + arr[17].toString()
+							+ "," + arr[18].toString() + ","
+							+ arr[19].toString() + "," + arr[20].toString();
 				}
-				
-				if(!arr[15].toString().equals(""))
-				{
-					GSTNo=arr[31].toString();
+
+				if (!arr[15].toString().equals("")) {
+					GSTNo = arr[31].toString();
 				}
-				if(!arr[16].toString().equals(""))
-				{
-					companyName=arr[32].toString();
+				if (!arr[16].toString().equals("")) {
+					companyName = arr[32].toString();
 				}
 
 				reportParams.put("pCompanyName", companyName);
 				reportParams.put("pGSTNo", GSTNo);
-				reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
-				reportParams.put("pAddress2", objSetup.getStrState() + "," + objSetup.getStrCountry() + "," + objSetup.getStrPin());
+				reportParams.put("pAddress1", objSetup.getStrAdd1() + ","
+						+ objSetup.getStrAdd2() + "," + objSetup.getStrCity());
+				reportParams
+						.put("pAddress2",
+								objSetup.getStrState() + ","
+										+ objSetup.getStrCountry() + ","
+										+ objSetup.getStrPin());
 				reportParams.put("pContactDetails", "");
 				reportParams.put("strImagePath", imagePath);
-				reportParams.put("pGuestName", gPrefix + " " + gFirstName + " " + gMiddleName + " " + gLastName);
+				reportParams.put("pGuestName", gPrefix + " " + gFirstName + " "
+						+ gMiddleName + " " + gLastName);
 				// reportParams.put("pFolioNo", folio);
 				// reportParams.put("pRoomNo", roomNo);
 				reportParams.put("pRegistrationNo", registrationNo);
 				reportParams.put("pReservationNo", reservationNo);
-				reportParams.put("pArrivalDate", objGlobal.funGetDate("dd-MM-yyyy", arrivalDate));
+				reportParams.put("pArrivalDate",
+						objGlobal.funGetDate("dd-MM-yyyy", arrivalDate));
 				reportParams.put("pArrivalTime", arrivalTime);
-				reportParams.put("pDepartureDate", objGlobal.funGetDate("dd-MM-yyyy", departureDate));
+				reportParams.put("pDepartureDate",
+						objGlobal.funGetDate("dd-MM-yyyy", departureDate));
 				reportParams.put("pDepartureTime", departureTime);
 				reportParams.put("pAdult", adults);
 				reportParams.put("pChild", childs);
@@ -556,12 +835,17 @@ public class clsBillPrintingController {
 				reportParams.put("pBillNo", arr[14].toString());
 
 				// get bill details
-				String sqlBillDtl = "SELECT date(b.dteDocDate),b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt,a.strBillNo,c.strRoomDesc,a.strFolioNo" + " FROM tblbillhd a inner join tblbilldtl b ON a.strFolioNo=b.strFolioNo ,tblroom c " + " WHERE a.strCheckInNo='" + checkInNo + "' and a.strBillNo=b.strBillNo and a.strRoomNo=c.strRoomCode ORDER BY a.strBillNo";
+				String sqlBillDtl = "SELECT date(b.dteDocDate),b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt,a.strBillNo,c.strRoomDesc,a.strFolioNo"
+						+ " FROM tblbillhd a inner join tblbilldtl b ON a.strFolioNo=b.strFolioNo ,tblroom c "
+						+ " WHERE a.strCheckInNo='"
+						+ checkInNo
+						+ "' and a.strBillNo=b.strBillNo and a.strRoomNo=c.strRoomCode ORDER BY a.strBillNo";
 				//
 				// +
 				// "and a.dteBillDate between '"+fromDate+"' and '"+toDate+"' "
 
-				List billDtlList = objFolioService.funGetParametersList(sqlBillDtl);
+				List billDtlList = objFolioService
+						.funGetParametersList(sqlBillDtl);
 				for (int i = 0; i < billDtlList.size(); i++) {
 					Object[] folioArr = (Object[]) billDtlList.get(i);
 
@@ -586,29 +870,52 @@ public class clsBillPrintingController {
 							folio = folio + "," + folioArr[8].toString();
 						}
 
-						billPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+						billPrintingBean.setDteDocDate(objGlobal.funGetDate(
+								"dd-MM-yyyy", (docDate)));
 						billPrintingBean.setStrDocNo(docNo);
 						billPrintingBean.setStrPerticulars(strPerticulars);
-						billPrintingBean.setDblDebitAmt(Double.parseDouble(debitAmount));
-						billPrintingBean.setDblCreditAmt(Double.parseDouble(creditAmount));
-						billPrintingBean.setDblBalanceAmt(Double.parseDouble(balance));
+						billPrintingBean.setDblDebitAmt(Double
+								.parseDouble(debitAmount));
+						billPrintingBean.setDblCreditAmt(Double
+								.parseDouble(creditAmount));
+						billPrintingBean.setDblBalanceAmt(Double
+								.parseDouble(balance));
 
 						dataList.add(billPrintingBean);
 
-						sqlBillDtl = " SELECT date(a.dteDocDate),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblbilldtl a, tblbilltaxdtl b where a.strDocNo=b.strDocNo  " + " AND a.strBillNo='" + folioArr[6].toString() + "'  and a.strDocNo='" + docNo + "'  ";
+						sqlBillDtl = " SELECT date(a.dteDocDate),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 "
+								+ " FROM tblbilldtl a, tblbilltaxdtl b where a.strDocNo=b.strDocNo  "
+								+ " AND a.strBillNo='"
+								+ folioArr[6].toString()
+								+ "'  and a.strDocNo='" + docNo + "'  ";
 						// + " and DATE(a.dteDocDate) BETWEEN '" + fromDate +
 						// "' AND '" + toDate + "' ";
-						List listBillTaxDtl = objWebPMSUtility.funExecuteQuery(sqlBillDtl, "sql");
+						List listBillTaxDtl = objWebPMSUtility.funExecuteQuery(
+								sqlBillDtl, "sql");
 						for (int cnt = 0; cnt < listBillTaxDtl.size(); cnt++) {
-							Object[] arrObjBillTaxDtl = (Object[]) listBillTaxDtl.get(cnt);
+							Object[] arrObjBillTaxDtl = (Object[]) listBillTaxDtl
+									.get(cnt);
 
 							billPrintingBean = new clsBillPrintingBean();
-							billPrintingBean.setDteDocDate(arrObjBillTaxDtl[0].toString());
-							billPrintingBean.setStrDocNo(arrObjBillTaxDtl[1].toString());
-							billPrintingBean.setStrPerticulars(arrObjBillTaxDtl[2].toString());
-							billPrintingBean.setDblDebitAmt(Double.parseDouble(arrObjBillTaxDtl[3].toString()));
-							billPrintingBean.setDblCreditAmt(Double.parseDouble(arrObjBillTaxDtl[4].toString()));
-							billPrintingBean.setDblBalanceAmt(Double.parseDouble(arrObjBillTaxDtl[5].toString()));
+							billPrintingBean.setDteDocDate(arrObjBillTaxDtl[0]
+									.toString());
+							billPrintingBean.setStrDocNo(arrObjBillTaxDtl[1]
+									.toString());
+							billPrintingBean
+									.setStrPerticulars(arrObjBillTaxDtl[2]
+											.toString());
+							billPrintingBean
+									.setDblDebitAmt(Double
+											.parseDouble(arrObjBillTaxDtl[3]
+													.toString()));
+							billPrintingBean
+									.setDblCreditAmt(Double
+											.parseDouble(arrObjBillTaxDtl[4]
+													.toString()));
+							billPrintingBean
+									.setDblBalanceAmt(Double
+											.parseDouble(arrObjBillTaxDtl[5]
+													.toString()));
 							dataList.add(billPrintingBean);
 						}
 					}
@@ -620,10 +927,16 @@ public class clsBillPrintingController {
 			if (flgBillRecord) {
 				// get payment details
 
-				String sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt " + " ,d.dblSettlementAmt as creditAmt,'0.00' as balance " + " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e " + " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode " + " and c.strReservationNo='" + reservationNo
+				String sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
+						+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
+						+ " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
+						+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
+						+ " and c.strReservationNo='"
+						+ reservationNo
 						+ "' and c.strAgainst='Reservation' ";
 
-				List paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
+				List paymentDtlList = objFolioService
+						.funGetParametersList(sqlPaymentDtl);
 				for (int i = 0; i < paymentDtlList.size(); i++) {
 					Object[] paymentArr = (Object[]) paymentDtlList.get(i);
 
@@ -638,24 +951,35 @@ public class clsBillPrintingController {
 						String creditAmount = paymentArr[4].toString();
 						String balance = paymentArr[5].toString();
 
-						folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+						folioPrintingBean.setDteDocDate(objGlobal.funGetDate(
+								"dd-MM-yyyy", (docDate)));
 						folioPrintingBean.setStrDocNo(docNo);
 						folioPrintingBean.setStrPerticulars(particulars);
-						folioPrintingBean.setDblDebitAmt(Double.parseDouble(debitAmount));
-						folioPrintingBean.setDblCreditAmt(Double.parseDouble(creditAmount));
-						folioPrintingBean.setDblBalanceAmt(Double.parseDouble(balance));
+						folioPrintingBean.setDblDebitAmt(Double
+								.parseDouble(debitAmount));
+						folioPrintingBean.setDblCreditAmt(Double
+								.parseDouble(creditAmount));
+						folioPrintingBean.setDblBalanceAmt(Double
+								.parseDouble(balance));
 
 						dataList.add(folioPrintingBean);
 					}
 				}
 
 				if (!(paymentDtlList.size() > 0)) {
-					sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt " + " ,d.dblSettlementAmt as creditAmt,'0.00' as balance " + " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e " + " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode " + " and c.strRegistrationNo='" + registrationNo
+					sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
+							+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
+							+ " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
+							+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
+							+ " and c.strRegistrationNo='"
+							+ registrationNo
 							+ "' and c.strAgainst='Check-In' ";
 
-					List checkInReceiptDtl = objFolioService.funGetParametersList(sqlPaymentDtl);
+					List checkInReceiptDtl = objFolioService
+							.funGetParametersList(sqlPaymentDtl);
 					for (int i = 0; i < checkInReceiptDtl.size(); i++) {
-						Object[] paymentArr = (Object[]) checkInReceiptDtl.get(i);
+						Object[] paymentArr = (Object[]) checkInReceiptDtl
+								.get(i);
 
 						String docDate = paymentArr[0].toString();
 						if (paymentArr[1] == null) {
@@ -668,12 +992,16 @@ public class clsBillPrintingController {
 							String creditAmount = paymentArr[4].toString();
 							String balance = paymentArr[5].toString();
 
-							folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+							folioPrintingBean.setDteDocDate(objGlobal
+									.funGetDate("dd-MM-yyyy", (docDate)));
 							folioPrintingBean.setStrDocNo(docNo);
 							folioPrintingBean.setStrPerticulars(particulars);
-							folioPrintingBean.setDblDebitAmt(Double.parseDouble(debitAmount));
-							folioPrintingBean.setDblCreditAmt(Double.parseDouble(creditAmount));
-							folioPrintingBean.setDblBalanceAmt(Double.parseDouble(balance));
+							folioPrintingBean.setDblDebitAmt(Double
+									.parseDouble(debitAmount));
+							folioPrintingBean.setDblCreditAmt(Double
+									.parseDouble(creditAmount));
+							folioPrintingBean.setDblBalanceAmt(Double
+									.parseDouble(balance));
 
 							dataList.add(folioPrintingBean);
 						}
@@ -699,10 +1027,16 @@ public class clsBillPrintingController {
 				 */
 
 				for (int cnt = 0; cnt < billNo.size(); cnt++) {
-					sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt " + " ,d.dblSettlementAmt as creditAmt,'0.00' as balance " + " FROM tblbillhd a,tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e " + " where a.strBillNo=c.strBillNo and c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode " + " and a.strBillNo='"
-							+ billNo.get(cnt) + "' and c.strAgainst='Bill' ";
+					sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
+							+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
+							+ " FROM tblbillhd a,tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
+							+ " where a.strBillNo=c.strBillNo and c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
+							+ " and a.strBillNo='"
+							+ billNo.get(cnt)
+							+ "' and c.strAgainst='Bill' ";
 
-					List billReceitDtl = objFolioService.funGetParametersList(sqlPaymentDtl);
+					List billReceitDtl = objFolioService
+							.funGetParametersList(sqlPaymentDtl);
 					for (int i = 0; i < billReceitDtl.size(); i++) {
 						Object[] paymentArr = (Object[]) billReceitDtl.get(i);
 
@@ -717,20 +1051,28 @@ public class clsBillPrintingController {
 							String creditAmount = paymentArr[4].toString();
 							String balance = paymentArr[5].toString();
 
-							folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+							folioPrintingBean.setDteDocDate(objGlobal
+									.funGetDate("dd-MM-yyyy", (docDate)));
 							folioPrintingBean.setStrDocNo(docNo);
 							folioPrintingBean.setStrPerticulars(particulars);
-							folioPrintingBean.setDblDebitAmt(Double.parseDouble(debitAmount));
-							folioPrintingBean.setDblCreditAmt(Double.parseDouble(creditAmount));
-							folioPrintingBean.setDblBalanceAmt(Double.parseDouble(balance));
+							folioPrintingBean.setDblDebitAmt(Double
+									.parseDouble(debitAmount));
+							folioPrintingBean.setDblCreditAmt(Double
+									.parseDouble(creditAmount));
+							folioPrintingBean.setDblBalanceAmt(Double
+									.parseDouble(balance));
 
 							dataList.add(folioPrintingBean);
 						}
 					}
 
-					String sqlDisc = " select date(a.dteBillDate),'','Discount','0.00',a.dblDiscAmt,'0.00' from  tblbilldiscount a " + " WHERE a.strBillNo='" + billNo.get(cnt) + "' and strClientCode='" + clientCode + "' ";
+					String sqlDisc = " select date(a.dteBillDate),'','Discount','0.00',a.dblDiscAmt,'0.00' from  tblbilldiscount a "
+							+ " WHERE a.strBillNo='"
+							+ billNo.get(cnt)
+							+ "' and strClientCode='" + clientCode + "' ";
 
-					List billDiscList = objFolioService.funGetParametersList(sqlDisc);
+					List billDiscList = objFolioService
+							.funGetParametersList(sqlDisc);
 					for (int i = 0; i < billDiscList.size(); i++) {
 						Object[] billDicArr = (Object[]) billDiscList.get(i);
 
@@ -742,12 +1084,50 @@ public class clsBillPrintingController {
 						String creditAmount = billDicArr[4].toString();
 						String balance = billDicArr[5].toString();
 
-						folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate))); 
+						folioPrintingBean.setDteDocDate(objGlobal.funGetDate(
+								"dd-MM-yyyy", (docDate)));
 						folioPrintingBean.setStrDocNo(docNo);
 						folioPrintingBean.setStrPerticulars(particulars);
-						folioPrintingBean.setDblDebitAmt(Double.parseDouble(debitAmount));
-						folioPrintingBean.setDblCreditAmt(Double.parseDouble(creditAmount));
-						folioPrintingBean.setDblBalanceAmt(Double.parseDouble(balance));
+						folioPrintingBean.setDblDebitAmt(Double
+								.parseDouble(debitAmount));
+						folioPrintingBean.setDblCreditAmt(Double
+								.parseDouble(creditAmount));
+						folioPrintingBean.setDblBalanceAmt(Double
+								.parseDouble(balance));
+
+						dataList.add(folioPrintingBean);
+
+					}
+					
+					String walkInDiscount = "SELECT DATE(a.dtDate),'','Discount','0.00',"
+							+ "a.dblDiscount,'0.00' FROM tblwalkinroomratedtl a "
+							+ "WHERE a.strWalkinNo='01WKAF000001' AND a.strClientCode='"+clientCode+"'";
+					List walkInBillDiscList = objFolioService.funGetParametersList(walkInDiscount);
+					for (int i = 0; i < walkInBillDiscList.size(); i++) {
+						Object[] billWalkDicArr = (Object[]) walkInBillDiscList.get(i);
+
+						clsBillPrintingBean folioPrintingBean = new clsBillPrintingBean();
+						String docDate = billWalkDicArr[0].toString();
+						String docNo = billWalkDicArr[1].toString();
+						String particulars = billWalkDicArr[2].toString();
+
+						double debitAmount = Double.parseDouble(billWalkDicArr[3]
+								.toString());
+						double creditAmount = Double.parseDouble(billWalkDicArr[4]
+								.toString());
+						debitAmount = debitAmount + debitAmount - creditAmount;
+
+						// String debitAmount = billDicArr[3].toString();
+						// String creditAmount = billDicArr[4].toString();
+						// String balance = billDicArr[5].toString();
+
+						folioPrintingBean.setDteDocDate(objGlobal.funGetDate(
+								"dd-MM-yyyy", (docDate)));
+						folioPrintingBean.setStrDocNo(docNo);
+						folioPrintingBean.setStrPerticulars(particulars);
+						folioPrintingBean.setDblDebitAmt(debitAmount);
+						folioPrintingBean.setDblCreditAmt(creditAmount);
+						folioPrintingBean.setDblBalanceAmt(debitAmount);
 
 						dataList.add(folioPrintingBean);
 
@@ -759,20 +1139,28 @@ public class clsBillPrintingController {
 
 			reportParams.put("pFolioNo", folio.substring(1, folio.length()));
 			reportParams.put("pRoomNo", roomNo.substring(1, roomNo.length()));
-			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(dataList);
+			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
+					dataList);
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
-			JasperPrint jp = JasperFillManager.fillReport(jr, reportParams, beanCollectionDataSource);
+			JasperPrint jp = JasperFillManager.fillReport(jr, reportParams,
+					beanCollectionDataSource);
 			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
 			if (jp != null) {
 				jprintlist.add(jp);
-				ServletOutputStream servletOutputStream = resp.getOutputStream();
+				ServletOutputStream servletOutputStream = resp
+						.getOutputStream();
 				JRExporter exporter = new JRPdfExporter();
 				resp.setContentType("application/pdf");
-				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
-				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
-				exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-				resp.setHeader("Content-Disposition", "inline;filename=Bill.pdf");
+				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST,
+						jprintlist);
+				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM,
+						servletOutputStream);
+				exporter.setParameter(
+						JRPdfExporterParameter.IGNORE_PAGE_MARGINS,
+						Boolean.TRUE);
+				resp.setHeader("Content-Disposition",
+						"inline;filename=Bill.pdf");
 				exporter.exportReport();
 				servletOutputStream.flush();
 				servletOutputStream.close();
@@ -780,6 +1168,50 @@ public class clsBillPrintingController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@RequestMapping(value="/loadBillDetails",method=RequestMethod.GET)
+	public @ResponseBody List<clsVoidBillBean> funLoadVoidBill(@RequestParam("strBillNo")String strBillNo,HttpServletRequest req)
+	{
+		List<clsVoidBillBean> listVoidDtl=new ArrayList();
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String sql=" select a.strBillNo,a.strFolioNo,a.dteBillDate,a.dblGrandTotal ," //3
+				+ " ifnull(b.strPerticulars,''),ifnull(sum(b.dblDebitAmt),0),ifnull(sum(b.dblCreditAmt),0),ifnull(b.dblBalanceAmt,0),"
+				+ " c.strGuestCode,IFNULL(d.strFirstName,''),IFNULL(d.strLastName,''),e.strRoomDesc ,IFNULL(b.strDocNo,''),a.strRoomNo,IFNULL(b.strRevenueCode,'')"
+				+ " from tblbillhd a left outer join tblbilldtl b on a.strBillNo=b.strBillNo "
+				+ " left outer join tblcheckindtl c on a.strCheckInNo=c.strCheckInNo "
+				+ " left outer join tblguestmaster d on c.strGuestCode=d.strGuestCode "
+				+ " left outer join tblroom e on c.strRoomNo=e.strRoomCode "
+				+ " where a.strBillNo='"+strBillNo+"' and a.strRoomNo=e.strRoomCode "
+				+ " group by b.strDocNo;";
+		
+		List listBillDetails = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		if(null!=listBillDetails){
+			if(listBillDetails.size()>0){
+				clsVoidBillBean obVoidBean;
+				for(int i=0;i<listBillDetails.size();i++){
+					obVoidBean=new clsVoidBillBean();
+					
+					Object ob[]=(Object[]) listBillDetails.get(i);
+					obVoidBean.setStrBillNo(ob[0].toString());
+					obVoidBean.setStrFolioNo(ob[1].toString());
+					obVoidBean.setStrBilldate(ob[2].toString());
+					obVoidBean.setDblTotalAmt(Double.parseDouble(ob[3].toString()));
+					obVoidBean.setStrMenuHead(ob[4].toString());
+					obVoidBean.setDblIncomeHeadPrice(Double.parseDouble(ob[5].toString())-Double.parseDouble(ob[6].toString()));
+					obVoidBean.setStrGuestCode(ob[8].toString());
+					obVoidBean.setStrGuestName(ob[9].toString()+" "+ob[10].toString());
+					obVoidBean.setStrRoomNo(ob[13].toString());
+					obVoidBean.setStrDocNo(ob[12].toString());
+					obVoidBean.setStrRoomName(ob[11].toString());
+					obVoidBean.setStrRevenueCode(ob[14].toString());
+					
+					listVoidDtl.add(obVoidBean);
+				}
+			}
+		}
+		
+		return listVoidDtl;
 	}
 
 }

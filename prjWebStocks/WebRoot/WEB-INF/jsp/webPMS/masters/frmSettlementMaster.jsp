@@ -277,7 +277,7 @@
 				    	<option selected="selected" value="Cash">Cash</option>
 				    	<option value="Credit Card">Credit Card</option>
 				    	<option value="Credit">Credit</option>
-		         	</s:select>					
+				    	</s:select>					
 				</td>				
 			</tr>
 			

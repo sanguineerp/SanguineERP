@@ -76,14 +76,14 @@ public class clsFolioPostingController {
 	// Save folio posting
 	@RequestMapping(value = "/saveFolioPosting", method = RequestMethod.POST)
 	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsFolioDtlBean objBean, BindingResult result, HttpServletRequest req) {
-		String urlHits = "1";
+		/*String urlHits = "1";
 		try {
 			urlHits = req.getParameter("saddr").toString();
 		} catch (NullPointerException e) {
 			urlHits = "1";
-		}
+		}*/
 
-		if (!result.hasErrors()) {
+		/*if (!result.hasErrors()) {*/
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
@@ -114,15 +114,21 @@ public class clsFolioPostingController {
 				objFolioDtlModel.setDblBalanceAmt(0.00);
 				objFolioDtlModel.setStrRevenueType("Income Head");
 				objFolioDtlModel.setStrRevenueCode(listIncomeHeadBeans.get(ih).getStrIncomeHeadCode());
+				objFolioDtlModel.setDblQuantity(objBean.getDblQuantity());
 				listFolioDtlModels.add(objFolioDtlModel);
 
 				clsTaxProductDtl objTaxProductDtl = new clsTaxProductDtl();
 				objTaxProductDtl.setStrTaxProdCode(listIncomeHeadBeans.get(ih).getStrIncomeHeadCode());
 				objTaxProductDtl.setStrTaxProdName(listIncomeHeadBeans.get(ih).getStrIncomeHeadDesc());
 				objTaxProductDtl.setDblTaxProdAmt(listIncomeHeadBeans.get(ih).getDblAmount());
+				String sql = "select a.strDeptCode from tblincomehead a "
+						+ "where a.strIncomeHeadCode = '"+objTaxProductDtl.getStrTaxProdCode()+"' ";
+				List list = objGlobalFunctionsService.funGetDataList(sql, "sql");
+				String strDeptCode =  list.get(0).toString();
+				objTaxProductDtl.setStrDeptCode(strDeptCode);
 				List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
-				listTaxProdDtl.add(objTaxProductDtl);
-				Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Income Head");
+				listTaxProdDtl.add(objTaxProductDtl);   
+				Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Department");//Department
 
 				if (hmTaxCalDtl.size() > 0) {
 					List<clsTaxCalculation> listTaxCal = hmTaxCalDtl.get(listIncomeHeadBeans.get(ih).getStrIncomeHeadCode());
@@ -143,10 +149,11 @@ public class clsFolioPostingController {
 			objFolioService.funAddUpdateFolioHd(objFolioHdModel);
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Folio No. : ".concat(objFolioHdModel.getStrFolioNo()));
-
-			return new ModelAndView("redirect:/frmFolioPosting.html?saddr=" + urlHits);
-		} else {
-			return new ModelAndView("frmFolioPosting?saddr=" + urlHits);
+			req.getSession().setAttribute("AdvanceAmount", objFolioHdModel.getStrReservationNo());
+			
+			return new ModelAndView("redirect:/frmFolioPosting.html");
+		} /*else {
+			return new ModelAndView("frmFolioPosting.html");
 		}
-	}
+	}*/
 }

@@ -35,6 +35,8 @@ public class clsPMSPaymentBean {
 	private String strCardNo;
 
 	private String strClientCode;
+	
+	private String strCustomerCode;
 
 	private List<clsPMSPaymentReceiptDtlBean> listPaymentRecieptBean;
 
@@ -175,6 +177,14 @@ public class clsPMSPaymentBean {
 
 	public void setStrFlagOfAdvAmt(String strFlagOfAdvAmt) {
 		this.strFlagOfAdvAmt = strFlagOfAdvAmt;
+	}
+
+	public String getStrCustomerCode() {
+		return strCustomerCode;
+	}
+
+	public void setStrCustomerCode(String strCustomerCode) {
+		this.strCustomerCode = strCustomerCode;
 	}
 
 }

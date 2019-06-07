@@ -36,6 +36,9 @@ public class clsFolioDtlModel implements Serializable {
 
 	@Column(name = "strRevenueCode")
 	private String strRevenueCode;
+	
+	@Column(name = "dblQuantity",columnDefinition = "DECIMAL(18,4) NOT NULL default '0.0000'")
+	private double dblQuantity;
 
 	// Setter-Getter Methods
 	public String getDteDocDate() {
@@ -101,6 +104,14 @@ public class clsFolioDtlModel implements Serializable {
 	public void setStrRevenueCode(String strRevenueCode) {
 		this.strRevenueCode = strRevenueCode;
 	}
+	
+	public double getDblQuantity() {
+		return dblQuantity;
+	}
+
+	public void setDblQuantity(double dblQuantity) {
+		this.dblQuantity = dblQuantity;
+	}
 
 	// Function to Set Default Values
 	private Object setDefaultValue(Object value, Object defaultValue) {
@@ -116,5 +127,9 @@ public class clsFolioDtlModel implements Serializable {
 			return defaultValue;
 		}
 	}
+
+	
+
+	
 
 }

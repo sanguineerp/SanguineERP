@@ -61,7 +61,19 @@ public class clsBillDiscountHdModel implements Serializable {
 
 	@Column(name = "strClientCode")
 	private String strClientCode;
-
+/*
+	`strReasonCode` VARCHAR(20) NOT NULL DEFAULT '',
+	`strReasonName` VARCHAR(200) NOT NULL DEFAULT '',
+	`strRemark` */
+	@Column(name = "strReasonCode")
+	private String strReasonCode;
+	
+	@Column(name = "strReasonName")
+	private String strReasonName;
+	
+	@Column(name = "strRemark")
+	private String strRemark;
+	
 	// Setter-Getter Methods
 	public String getStrBillNo() {
 		return strBillNo;
@@ -172,6 +184,30 @@ public class clsBillDiscountHdModel implements Serializable {
 		} else {
 			return defaultValue;
 		}
+	}
+
+	public String getStrReasonCode() {
+		return strReasonCode;
+	}
+
+	public void setStrReasonCode(String strReasonCode) {
+		this.strReasonCode = strReasonCode;
+	}
+
+	public String getStrReasonName() {
+		return strReasonName;
+	}
+
+	public void setStrReasonName(String strReasonName) {
+		this.strReasonName = strReasonName;
+	}
+
+	public String getStrRemark() {
+		return strRemark;
+	}
+
+	public void setStrRemark(String strRemark) {
+		this.strRemark = strRemark;
 	}
 
 }

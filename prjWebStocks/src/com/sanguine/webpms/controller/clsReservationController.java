@@ -318,7 +318,7 @@ public class clsReservationController {
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
 			Map<Long, String> hmGuestMbWithCode = new HashMap<Long, String>();
 			List<clsReservationDetailsBean> listResDtlBean = objBean.getListReservationDetailsBean();
-
+			String strGSTNo = "";
 			for (clsReservationDetailsBean objResDtlBean : listResDtlBean) 
 			{
 				if (null != objResDtlBean.getStrGuestCode())
@@ -327,6 +327,13 @@ public class clsReservationController {
 					objGuestMasterBean.setStrGuestCode(objResDtlBean.getStrGuestCode());
 					objGuestMasterBean.setStrGuestPrefix("");
 					List listGuestData = objGuestMasterDao.funGetGuestMaster(objResDtlBean.getStrGuestCode(), clientCode);
+					for (int i=0;i<listGuestData.size();i++)
+					{
+						clsGuestMasterHdModel obj = (clsGuestMasterHdModel) listGuestData.get(0);
+						strGSTNo = obj.getStrGSTNo().toString();
+					}
+					
+					
 //					clsGuestMasterHdModel objGuestMasterModel1 = (clsGuestMasterHdModel) listGuestData.get(0);
 					//objGuestMasterModel.setDteDOB(objGlobal.funGetDate("dd-MM-yyyy", objGuestMasterModel.getDteDOB()));
 
@@ -353,11 +360,12 @@ public class clsReservationController {
 					
 					objGuestMasterBean.setIntMobileNo(objResDtlBean.getLngMobileNo());
 					objGuestMasterBean.setStrAddress(objResDtlBean.getStrAddress());
-
+					objGuestMasterBean.setStrGSTNo(strGSTNo);
 					///////
 					clsGuestMasterHdModel objGuestMasterModel = objGuestMasterService.funPrepareGuestModel(objGuestMasterBean, clientCode, userCode);
 					objGuestMasterDao.funAddUpdateGuestMaster(objGuestMasterModel);
 					hmGuestMbWithCode.put(objResDtlBean.getLngMobileNo(), objGuestMasterModel.getStrGuestCode());	
+					
 				}
 			}
 
@@ -829,6 +837,8 @@ public class clsReservationController {
 		{
 			clsRoomTypeMasterModel objRoomTypeMasterModel = (clsRoomTypeMasterModel) listRoomData.get(0);
 			roomRate=objRoomTypeMasterModel.getDblRoomTerrif();
+			//roomRate = funCalculateTax(roomRate);
+			
 			roomTypedesc=objRoomTypeMasterModel.getStrRoomTypeDesc();
 		}else{
 			roomRate=0.0;
@@ -868,6 +878,35 @@ public class clsReservationController {
 	}
 	
 	
+	private double funCalculateTax(double roomRate) {
+	
+		String sql = "select a.strTaxType,a.dblTaxValue from tbltaxmaster a where "
+				+ "a.dblFromRate <= '"+roomRate+"' and a.dblToRate>= '"+roomRate+"' ";
+		
+		List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		
+		String taxType = "";
+		double dblTax = 0;
+		
+		
+		for (int cnt = 0; cnt < list.size(); cnt++) 
+		{
+			Object[] arrObj = (Object[]) list.get(cnt);
+			taxType= arrObj[0].toString(); 
+			dblTax = Double.parseDouble(arrObj[1].toString());
+			if(taxType.equalsIgnoreCase("Percentage"))
+			{
+				roomRate = roomRate+(roomRate*dblTax)/100;
+			}
+			else
+			{
+				roomRate = roomRate+dblTax;
+			}
+		}
+		
+		return roomRate;
+	}
+
 	@RequestMapping(value = "/loadRoomDesc", method = RequestMethod.GET)
 	public @ResponseBody String funLoadRoomDesc(String roomNo, HttpServletRequest req) throws ParseException {
 		

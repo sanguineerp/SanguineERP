@@ -10,7 +10,7 @@
 <script type="text/javascript">
 
 	var fieldName,listRow=0;
-	
+	var totalTerrAmt = 0.0;
 	  $(document).ready(function(){
 		    
 		  $(".tab_content").hide();
@@ -584,6 +584,7 @@
 	        	else
 	        	{					        	    	        		
 	        		$("#lblRoomType").text(response.strRoomTypeDesc);
+	        		alert("Room Rate is "+response.dblRoomTerrif);
 	        	}
 			},
 			error : function(e){
@@ -624,6 +625,7 @@
 	        	{
 	        		$("#txtRoomNo").val(response.strRoomCode);
 	        		$("#lblRoomNo").text(response.strRoomDesc);
+	        		alert("Room Rate is "+response.strRoomDesc);
 	        		funSetRoomType(response.strRoomTypeCode);
 	        	}
 			},
@@ -875,6 +877,7 @@
 	 	     row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strRoomTypeDesc."+(rowCount)+"\" value='"+roomtypeDesc+"' />";
 	 	     row.insertCell(2).innerHTML= "<input type=\"text\" style=\"text-align:right;\"  name=\"listReservationRoomRateDtl["+(rowCount)+"].dblRoomRate\" id=\"dblRoomRate."+(rowCount)+"\" onblur =\"Javacsript:funCalculateTotals()\" value='"+list.dblRoomRate+"' >";
 	 	     row.insertCell(3).innerHTML= "<input type=\"hidden\" class=\"Box \" name=\"listReservationRoomRateDtl["+(rowCount)+"].strRoomType\" id=\"strRoomType."+(rowCount)+"\" value='"+list.strRoomType+"' >";
+	 	    
 	     }
 	}
 
@@ -1540,7 +1543,7 @@
 			//$("#dblIncomeHeadAmt").val('');
 		}
 	}
-	
+	var totalTarriff=0;
 	//check duplicate value
 	function funChechDuplicate(incomeHeadCode)
 	{
@@ -1581,7 +1584,7 @@
 		//$("#dblTotalAmt").text(totalAmt);
 		
 		//For tarrif
-		var totalTarriff=0;
+		
 		if(document.getElementById("tblRommRate").rows.length>0)
 		{
 			for(var i=0;i<document.getElementById("tblRommRate").rows.length;i++)
@@ -1706,6 +1709,9 @@
  	     row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"strTypeRoomDesc."+(rowCount)+"\" value='"+list[2]+"' />";
  	     row.insertCell(2).innerHTML= "<input type=\"text\"    style=\"text-align:right;\"  name=\"listReservationRoomRateDtl["+(rowCount)+"].dblRoomRate\" id=\"dblRoomRate."+(rowCount)+"\" onchange =\"Javacsript:funCalculateTotals()\" value='"+list[1]+"' >";
  	     row.insertCell(3).innerHTML= "<input type=\"hidden\" class=\"Box \"  name=\"listReservationRoomRateDtl["+(rowCount)+"].strRoomType\" id=\"strRoomType."+(rowCount)+"\" value='"+list[3]+"' >";
+ 	   
+ 	     totalTerrAmt =totalTerrAmt + list[1];
+ 	    $("#txtTotalAmt").val(totalTerrAmt);
 		}
 		 
 	}
@@ -2128,7 +2134,7 @@
 				</tr>
 			</table>
 			<div style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 400px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
-				<table id="tblRommRate" style="width: 100%; border: #0F0; overflow: scroll" class="transTablex col3-center">
+				<table id="tblRommRate" style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll" class="transTablex col3-center">
 					<tbody>
 						<!-- col1   -->
 						<col width="100%">
@@ -2146,9 +2152,11 @@
 				</table>
 			</div>			
 	
+	
 	</div>
-	<div style="margin:auto;">
+	<div style="margin:auto;width: 25%; float:right; margin-right:100px; ">
 	<label>Total</label>
+	<td><s:input id="txtTotalAmt" path=""  readonly="true" cssClass="shortTextBox"/></td>
 	</div>
 	</div>
 	

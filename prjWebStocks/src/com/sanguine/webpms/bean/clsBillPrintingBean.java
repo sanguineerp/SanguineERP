@@ -18,6 +18,11 @@ public class clsBillPrintingBean {
 	private String strRoomName;
 	private String strBillIncluded;
 	private String strGuestName;
+	private String strSelectBill;
+	
+	private String strTaxCode;
+	
+	
 	public String getStrGuestName() {
 		return strGuestName;
 	}
@@ -139,6 +144,22 @@ public class clsBillPrintingBean {
 
 	public void setStrBillNo(String strBillNo) {
 		this.strBillNo = strBillNo;
+	}
+
+	public String getStrTaxCode() {
+		return strTaxCode;
+	}
+
+	public void setStrTaxCode(String strTaxCode) {
+		this.strTaxCode = strTaxCode;
+	}
+
+	public String getStrSelectBill() {
+		return strSelectBill;
+	}
+
+	public void setStrSelectBill(String strSelectBill) {
+		this.strSelectBill = strSelectBill;
 	}
 
 }

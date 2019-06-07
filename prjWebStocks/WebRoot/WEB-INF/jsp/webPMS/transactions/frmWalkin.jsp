@@ -10,6 +10,7 @@
 
 	var fieldName,listRow=0;
 	var strDemo;	
+	var totalTerrAmt = 0.0;
 	
 //Initialize tab Index or which tab is Active
 	$(document).ready(function() 
@@ -916,7 +917,7 @@
 // Get Detail Info From detail fields and pass them to function to add into detail grid
 	function funGetDetailsRow() 
 	{
-		var roomNo ='';
+		var roomNo =$("#txtRoomNo").val().trim();
 		var roomDesc='';
 		var guestCode=$("#txtGuestCode").val().trim();
 		var guestFirstName=$("#txtGuestFirstName").val().trim();
@@ -1000,13 +1001,14 @@
 	   
 	    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"strExtraBedDesc."+(rowCount)+"\" value='"+extraBedDesc+"' />";
 	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"strRoomTypeDesc."+(rowCount)+"\" value='"+roomTypeDesc+"' />";	    
-	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strGuestFirstName\" id=\"strGuestFirstName."+(rowCount)+"\" value='"+guestFirstName+"' />";
-	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strGuestMiddleName\" id=\"strGuestMiddleName."+(rowCount)+"\" value='"+guestMiddleName+"' />";
-	    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strGuestLastName\" id=\"strGuestLastName."+(rowCount)+"\" value='"+guestLastName+"' />";
-	    row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listWalkinDetailsBean["+(rowCount)+"].lngMobileNo\" id=\"lngMobileNo."+(rowCount)+"\" value='"+mobileNo+"' />";
-	    row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"2%\" name=\"listWalkinDetailsBean["+(rowCount)+"].intNoOfAdults\" id=\"intNoOfAdults."+(rowCount)+"\" value='"+noOfAdults+"' />";
-	    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"2%\" name=\"listWalkinDetailsBean["+(rowCount)+"].intNoOfChild\" id=\"intNoOfChild."+(rowCount)+"\" value='"+noOfChild+"' />";
-	    row.insertCell(8).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"5%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strRemark\" id=\"strRemark."+(rowCount)+"\" value='"+remark+"' />";
+	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"strRoomTypeDesc."+(rowCount)+"\" value='"+roomNo+"' />";
+	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strGuestFirstName\" id=\"strGuestFirstName."+(rowCount)+"\" value='"+guestFirstName+"' />";
+	    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strGuestMiddleName\" id=\"strGuestMiddleName."+(rowCount)+"\" value='"+guestMiddleName+"' />";
+	    row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strGuestLastName\" id=\"strGuestLastName."+(rowCount)+"\" value='"+guestLastName+"' />";
+	    row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listWalkinDetailsBean["+(rowCount)+"].lngMobileNo\" id=\"lngMobileNo."+(rowCount)+"\" value='"+mobileNo+"' />";
+	    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"2%\" name=\"listWalkinDetailsBean["+(rowCount)+"].intNoOfAdults\" id=\"intNoOfAdults."+(rowCount)+"\" value='"+noOfAdults+"' />";
+	    row.insertCell(8).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"2%\" name=\"listWalkinDetailsBean["+(rowCount)+"].intNoOfChild\" id=\"intNoOfChild."+(rowCount)+"\" value='"+noOfChild+"' />";
+	    row.insertCell(9).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"5%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strRemark\" id=\"strRemark."+(rowCount)+"\" value='"+remark+"' />";
 	    
 	    row.insertCell(9).innerHTML= "<input type=\"button\" class=\"deletebutton\" size=\"5%\" value = \"Delete\" onClick=\"Javacsript:funDeleteRow(this)\"/>";
 	    row.insertCell(10).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"2%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strGuestCode\" id=\"strGuestCode."+(rowCount)+"\" value='"+guestCode+"' type='hidden' />";
@@ -1185,6 +1187,8 @@
 	 	        row.insertCell(2).innerHTML= "<input type=\"text\"    style=\"text-align:right;width:34%;\"  name=\"listWalkinRoomRateDtl["+(rowCount)+"].dblRoomRate\" id=\"dblRoomRate."+(rowCount)+"\" onchange =\"Javacsript:funCalculateTotals()\"  value='"+list[1]+"' >";
 	 	        row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-center: 5px;width:50%;\" name=\"listWalkinRoomRateDtl["+(rowCount)+"].strRoomType\" id=\"strRoomType."+(rowCount)+"\" value='"+list[3]+"' >";
 
+	 	       totalTerrAmt =totalTerrAmt + list[1];
+	 	 	    $("#txtTotalAmt").val(totalTerrAmt);
 		     }
 		}
 	 function CalculateDateDiff() {
@@ -1357,6 +1361,16 @@
 			return flg;
 		}	
 
+		function funCalculateDiscount()
+		{
+			
+				var discPer=$("#txtDiscount").val();
+				var grandTotCal=$("#txtTotalAmt").val()-($("#txtTotalAmt").val()*(discPer/100));
+				
+				$("#txtTotalAmt").val(grandTotCal);
+				alert(+discPer+' Percent Discount is applied');
+			
+		}
 	
 </script>
 
@@ -1462,9 +1476,9 @@
 				<td>
                   <input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" /></td>
 				<td><label id="lblRoomType"></label></td>
-<%-- 						<td><s:input type="text" id="txtRoomNo" name="txtRoomNo" ondblclick="funHelp('roomCode')" path="strRoomNo" cssClass="searchTextBox"/> --%>
-<!-- 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="lblRoomDesc"></label> -->
-<!-- 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id="lblRoomType"></label> -->
+					<td><s:input type="text" id="txtRoomNo" name="txtRoomNo" ondblclick="funHelp('roomCode')" path="strRoomNo" cssClass="searchTextBox"/> 
+							<label id="lblRoomDesc"></label> 
+						<label id="lblRoomType"></label> 
 						</td>
 						<td colspan="3"></td>
 					</tr>
@@ -1548,14 +1562,16 @@
 <!-- 						<td style="width:13%;">Room Desc</td> -->
 						<td style="width:13%;">Extra Bed</td>
 						<td style="width:13%;">Room Type</td>
+						<td style="width:13%;">Room No</td>
 						<td style="width:13%;">First Name</td>
 						<td style="width:13%;">Middle Name</td>
 						<td style="width:10%;">Last Name</td>
 						<td style="width:4%;">Mobile No</td>
-						<td style="width:1%;">Adults</td>
-						<td style="width:1%;">Child</td>
-						<td style="width:1%;">Remarks</td>
-						<td style="width:20%;">Delete</td>
+						<td style="width:5%;">Adults</td>
+						<td style="width:5%;">Child</td>
+						<td style="width:5%;">Remarks</td>
+						<td style="width:5%;">Delete</td>
+						
 					</tr>
 				</table>
 				
@@ -1565,15 +1581,16 @@
 						class="transTablex col8-center">
 						<tbody>					
 							
-							<col style="width:12%">
-							<col style="width:12%">
-							<col style="width:12%">
-							<col style="width:12%">
-							<col style="width:12%">
+							<col style="width:13%">
+							<col style="width:13%">
+							<col style="width:13%">
+							<col style="width:13%">
+							<col style="width:13%">
 							<col style="width:10%">
-							<col style="width:7%">
-							<col style="width:2%">
-							<col style="width:2%">
+							<col style="width:10%">
+							<col style="width:4%">
+							<col style="width:5%">
+							<col style="width:5%">
 							<col style="width:5%">
 							<col style="display:none;">
 						</tbody>
@@ -1815,15 +1832,15 @@
 			<table style="height: 28px; border: #0F0; width: 100%;font-size:11px; font-weight: bold;">
 				<tr bgcolor="#72BEFC" style="height: 24px;">
 					<!-- col1   -->
-					<td align="center" style="width: 30.6%">Date</td>
+					<td align="center" style="width: 35%">Date</td>
 					<!-- col1   -->
 					
 					<!-- col2   -->
-					<td align="center" style="width: 30.6%">room Type.</td>
+					<td align="center" style="width: 35%">room Type.</td>
 					<!-- col2   -->
 					
 					<!-- col3   -->
-					<td align="center" style="width: 30.6%">Rate.</td>
+					<td align="center" style="width: 35%">Rate.</td>
 					<!-- col3   -->
 					
 													
@@ -1853,6 +1870,16 @@
 			</div>			
 	
 	</div>
+	
+	<div style="margin:auto;width: 25%; float:right; margin-right:100px; ">
+	<label>Total</label>
+	<td><s:input id="txtTotalAmt" path=""  readonly="true" cssClass="shortTextBox"/></td>
+	</div>
+	<div style="margin:auto;width: 25%; float:right; margin-right:100px; ">
+	<label>Discount</label>
+	<td><s:input id="txtDiscount" step="0.01" path="dblDiscountPercent" style = "text-align:right;" onblur="funCalculateDiscount();" cssClass="BoxW124px" /></td>
+	</div>		
+				
 			
 			</div>
 			
@@ -1953,8 +1980,7 @@
 			
 					
 				</div>	
-						
-							
+					
 			
 		<br>
 		<br>

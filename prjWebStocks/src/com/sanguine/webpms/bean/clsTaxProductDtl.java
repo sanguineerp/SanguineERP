@@ -8,6 +8,9 @@ public class clsTaxProductDtl {
 
 	private double dblTaxProdAmt;
 
+	private String strDeptCode;
+	
+	
 	public String getStrTaxProdCode() {
 		return strTaxProdCode;
 	}
@@ -30,6 +33,14 @@ public class clsTaxProductDtl {
 
 	public void setDblTaxProdAmt(double dblTaxProdAmt) {
 		this.dblTaxProdAmt = dblTaxProdAmt;
+	}
+
+	public String getStrDeptCode() {
+		return strDeptCode;
+	}
+
+	public void setStrDeptCode(String strDeptCode) {
+		this.strDeptCode = strDeptCode;
 	}
 
 }

@@ -89,6 +89,12 @@ public class clsPMSTaxMasterModel implements Serializable {
 
 	@Column(name = "strAccountCode", columnDefinition = "VARCHAR(20) NOT NULL default ''")
 	private String strAccountCode;
+	
+	@Column(name = "dblFromRate",columnDefinition = "DECIMAL(18,4) NOT NULL default '0.0000'")
+	private double dblFromRate;
+	
+	@Column(name = "dblToRate",columnDefinition = "DECIMAL(18,4) NOT NULL default '0.0000'")
+	private double dblToRate;
 
 	// Setter-Getter Methods
 
@@ -273,6 +279,22 @@ public class clsPMSTaxMasterModel implements Serializable {
 		} else {
 			return defaultValue;
 		}
+	}
+
+	public double getDblFromRate() {
+		return dblFromRate;
+	}
+
+	public void setDblFromRate(double dblFromRate) {
+		this.dblFromRate = dblFromRate;
+	}
+
+	public double getDblToRate() {
+		return dblToRate;
+	}
+
+	public void setDblToRate(double dblToRate) {
+		this.dblToRate = dblToRate;
 	}
 
 }

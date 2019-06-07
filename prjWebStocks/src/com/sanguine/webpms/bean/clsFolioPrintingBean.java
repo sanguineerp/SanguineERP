@@ -13,7 +13,9 @@ public class clsFolioPrintingBean {
 	private double dblDebitAmt;
 	private double dblCreditAmt;
 	private double dblBalanceAmt;
-
+	private double dblQuantity;
+	
+	private boolean isTax;
 	// getters and setters
 	public String getStrFolioNo() {
 		return strFolioNo;
@@ -85,6 +87,22 @@ public class clsFolioPrintingBean {
 
 	public void setDblBalanceAmt(double dblBalanceAmt) {
 		this.dblBalanceAmt = dblBalanceAmt;
+	}
+
+	public double getDblQuantity() {
+		return dblQuantity;
+	}
+
+	public void setDblQuantity(double dblQuantity) {
+		this.dblQuantity = dblQuantity;
+	}
+
+	public boolean isTax() {
+		return isTax;
+	}
+
+	public void setTax(boolean isTax) {
+		this.isTax = isTax;
 	}
 
 }

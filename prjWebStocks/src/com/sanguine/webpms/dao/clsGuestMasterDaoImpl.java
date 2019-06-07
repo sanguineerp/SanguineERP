@@ -20,8 +20,8 @@ public class clsGuestMasterDaoImpl implements clsGuestMasterDao {
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void funAddUpdateGuestMaster(clsGuestMasterHdModel objGuestMasterModel) {
-		String sqlDelete = "delete from tblguestmaster where lngMobileNo='" + objGuestMasterModel.getLngMobileNo() + "' " + " and strClientCode='" + objGuestMasterModel.getStrClientCode() + "'";
-		webPMSSessionFactory.getCurrentSession().createSQLQuery(sqlDelete).executeUpdate();
+		//String sqlDelete = "delete from tblguestmaster where lngMobileNo='" + objGuestMasterModel.getLngMobileNo() + "' " + " and strClientCode='" + objGuestMasterModel.getStrClientCode() + "'";
+		//webPMSSessionFactory.getCurrentSession().createSQLQuery(sqlDelete).executeUpdate();
 		webPMSSessionFactory.getCurrentSession().saveOrUpdate(objGuestMasterModel);
 
 	}

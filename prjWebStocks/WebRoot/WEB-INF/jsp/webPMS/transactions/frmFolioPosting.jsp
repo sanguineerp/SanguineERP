@@ -195,11 +195,11 @@
 		//calculate totals
 			funCalculateTotals();
 			
-			$("#strIncomeHead").val('');
+			/* $("#strIncomeHead").val('');
 			$("#dblIncomeHeadAmt").val('');
 			
 			$("#dblQuantity").val('');
-			$("#dblRate").val('');
+			$("#dblRate").val(''); */
 		}
 	}
 	
@@ -269,6 +269,16 @@
 			if (test) {
 			%>
 				alert("Data Save successfully\n\n"+message);
+				<%-- var AdvAmount='';
+				var isOk=confirm("Do You Want to pay Advance Amount ?");
+				if(isOk)
+ 				{
+					var checkAgainst="Folio-No";
+					AdvAmount='<%=session.getAttribute("AdvanceAmount").toString()%>';
+	    			window.location.href=getContextPath()+"/frmPMSPaymentAdvanceAmount.html?AdvAmount="+AdvAmount ;
+	    			//session.removeAttribute("AdvanceAmount"); 
+	    			
+ 				}  --%>
 			<%
 			}
 		}%>
@@ -309,9 +319,6 @@
 		var rate = $("#dblRate").val();
 		var amt = quantity * rate;
 		$("#dblIncomeHeadAmt").val(amt);
-		
-		
-		
 	}
 </script>
 
@@ -350,11 +357,7 @@
 			
 			<tr>
 			    <td><label>Quantity</label></td>
-			    <td><s:input id="dblQuantity" path=""   class="decimal-places-amt numberField" value="1" placeholder="Qauntity" onkeypress="funUpdateAmt()" /></td>
-			    
-			    
-			    
-			      				
+			    <td><s:input id="dblQuantity" path="dblQuantity"   class="decimal-places-amt numberField" value="1" placeholder="Quantity" onkeypress="funUpdateAmt()" /></td>
 			    
 			</tr>
 			
@@ -363,10 +366,6 @@
 			    <td><label>Amount</label></td>
 			    <td><s:input id="dblIncomeHeadAmt" path=""   class="decimal-places-amt numberField" value="0" placeholder="amt"  /></td>
 			    <td><input type="button" value="Add"  class="smallButton" onclick='return funAddRow()'/></td>
-			    
-			    
-			      				
-			    
 			</tr>
 			
 		</table>

@@ -107,6 +107,8 @@ public class clsWalkinBean {
 
 	private String strTotalPackageAmt;
 	
+	private double dblDiscountPercent;
+	
 	private List<clsWalkinDtlBean> listWalkinDetailsBean;
 	
 	private List<clsWalkinRoomRateDtlModel> listWalkinRoomRateDtl = new ArrayList<clsWalkinRoomRateDtlModel>();
@@ -540,6 +542,14 @@ public class clsWalkinBean {
 
 	public void setStrTotalPackageAmt(String strTotalPackageAmt) {
 		this.strTotalPackageAmt = strTotalPackageAmt;
+	}
+
+	public double getDblDiscountPercent() {
+		return dblDiscountPercent;
+	}
+
+	public void setDblDiscountPercent(double dblDiscountPercent) {
+		this.dblDiscountPercent = dblDiscountPercent;
 	}
 	
 	

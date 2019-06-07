@@ -580,6 +580,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql = "ALTER TABLE `tblpropertysetup` ADD COLUMN `strSRSlipFormat` VARCHAR(30) NOT NULL AFTER `strPOSlipFormat`;";
 		funExecuteQuery(sql);
 		
+		sql = "ALTER TABLE `tblwalkinroomratedtl`	ADD COLUMN `dblDiscount` DECIMAL(18,4) NOT NULL DEFAULT '0.0' AFTER `strClientCode`;";
+		funExecuteQuery(sql);
 		sql = " select strMasterCode from tbllinkup ";
 		int i=funExecute(sql);
 		
@@ -2682,7 +2684,20 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "`dteChangeDate` DATETIME NOT NULL"
 				+ ")COLLATE='utf8_general_ci'ENGINE=InnoDB; ";
 		funExecutePMSQuery(sql);
+			
+		sql = 	"CREATE TABLE `tblposdayend` ("
+				+ "`strPOSCode` VARCHAR(10) NOT NULL,"
+				+ "`strPOSName` VARCHAR(50) NOT NULL,"
+				+ "`dteDayEndDate` DATETIME NOT NULL,"
+				+ "`strUserCreated` VARCHAR(10) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(10) NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,"
+				+ "`dteDateEdited` DATETIME NOT NULL,"
+				+ "`strStatus` VARCHAR(1) NOT NULL DEFAULT 'N',"
+				+ "`strClientCode` VARCHAR(10) NOT NULL"
+				+ ")COLLATE='utf8_general_ci' ENGINE=InnoDB; ";
 		
+		funExecutePMSQuery(sql);
 		
 		sql = " ALTER TABLE `tblroomcancelation` " + "	CHANGE COLUMN `strReservationNo` `strReservationNo` VARCHAR(12) NOT NULL FIRST;  ";
 
@@ -2841,11 +2856,38 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 
 		sql="ALTER TABLE `tblincomehead` ADD COLUMN `dblRateAmt` DECIMAL(18,4) NOT NULL AFTER `strAccountCode` ";
 		funExecutePMSQuery(sql);
-	
 		
+		sql =  "ALTER TABLE `tbltaxmaster`	ADD COLUMN `dblFromRate` DECIMAL(18,4) NOT NULL DEFAULT '0' AFTER `dblTaxValue`,"
+				+ "	ADD COLUMN `dblToRate` DECIMAL(18,4) NOT NULL DEFAULT '0' AFTER `dblFromRate`;";
 		
+		funExecutePMSQuery(sql);
 		
+		sql="ALTER TABLE `tblbilldiscount` "
+			+ "	ADD COLUMN `strReasonCode` VARCHAR(20) NOT NULL DEFAULT '' AFTER `strClientCode`,"
+			+ "	ADD COLUMN `strReasonName` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strReasonCode`,"
+			+ "	ADD COLUMN `strRemark` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strReasonName`;";
+		funExecutePMSQuery(sql);
 		
+		sql = "ALTER TABLE `tblreceiptdtl` 	ADD COLUMN `strCustomerCode` VARCHAR(10) NOT NULL AFTER `strClientCode`;";
+		funExecutePMSQuery(sql);
+		
+		sql = "ALTER TABLE `tblpropertysetup`	ADD COLUMN `strBankAcName` VARCHAR(100) NOT NULL DEFAULT '' AFTER `strCheckOutSMSContent`;";
+		funExecutePMSQuery(sql);
+		
+		sql = "ALTER TABLE `tblpropertysetup`	ADD COLUMN `strBankAcNumber` VARCHAR(100) NOT NULL DEFAULT '' AFTER `strBankAcName`;";
+		funExecutePMSQuery(sql);
+		
+		sql = "ALTER TABLE `tblpropertysetup`	ADD COLUMN `strBankIFSC` VARCHAR(100) NOT NULL DEFAULT '' AFTER `strBankAcNumber`;";
+		funExecutePMSQuery(sql);
+		
+		sql = "ALTER TABLE `tblpropertysetup`	ADD COLUMN `strBranchName` VARCHAR(100) NOT NULL DEFAULT '' AFTER `strBankIFSC`;";
+		funExecutePMSQuery(sql);
+		
+		sql = "ALTER TABLE `tblpropertysetup`	ADD COLUMN `strPanNo` VARCHAR(100) NOT NULL DEFAULT '' AFTER `strBranchName`;";
+		funExecutePMSQuery(sql);
+		
+		sql = "ALTER TABLE `tblpropertysetup`	ADD COLUMN `strHSCCode` VARCHAR(100) NOT NULL DEFAULT '' AFTER `strPanNo`;";
+		funExecutePMSQuery(sql);
 		
 		// For PMS Form Of Tree master Start///
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
@@ -2916,7 +2958,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		 		+ " ('frmChangedRoomTypeReport', 'Changed RoomType Report', 'Reports', 2, 'R', 2, 2, '1', 'default.png', '3', 1, '1', '1', 'NO', 'NO', 'frmChangedRoomTypeReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
 		 		+ " ('frmModifyBillReport', 'Modify Bill Report', 'Reports', 3, 'R', 11, 11, '5', 'default.png', '3', 5, '5', '5', 'NO', 'NO', 'frmModifyBillReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
 		 		+ " ('frmChangeRoomReport', 'Change Room Report', 'Reports', '3', 'R', '11', '11', '5', 'default.png', '3', '5', '5', '5', 'NO', 'NO','frmChangeRoomReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
-		 		+ " ('frmPMSSecurityShell', 'Security Shell', 'Master', 1, 'M', 8, 8, '1', 'default.png', '3', 3, '3', '3', 'NO', 'NO', 'frmPMSSecurityShell.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ";
+		 		+ " ('frmPMSSecurityShell', 'Security Shell', 'Master', 1, 'M', 8, 8, '1', 'default.png', '3', 3, '3', '3', 'NO', 'NO', 'frmPMSSecurityShell.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
+		 		+ " ('frmReceiptReport', 'Receipt Report', 'Reports', '3', 'R', '19', '19', '5', 'default.png', '3', '5', '5', '5', 'NO', 'NO', 'frmReceiptReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)";
 		
 		
 		funExecuteQuery(sql);

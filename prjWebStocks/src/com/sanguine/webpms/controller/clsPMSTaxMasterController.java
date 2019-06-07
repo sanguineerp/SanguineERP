@@ -148,7 +148,7 @@ public class clsPMSTaxMasterController {
 	}
 
 	// Save or Update PMSTaxMaster
-	/*@RequestMapping(value = "/savePMSTaxMaster", method = RequestMethod.POST)
+	@RequestMapping(value = "/savePMSTaxMaster", method = RequestMethod.POST)
 	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsPMSTaxMasterBean objBean, BindingResult result, HttpServletRequest req) {
 		String urlHits = "1";
 		try {
@@ -171,9 +171,9 @@ public class clsPMSTaxMasterController {
 		} else {
 			return new ModelAndView("redirect:/frmPMSTaxMaster.html?saddr=" + urlHits);
 		}
-	}*/
+	}
 	
-	@RequestMapping(value = "/savePMSTaxMaster", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/savePMSTaxMaster", method = RequestMethod.POST)
 	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsPMSTaxMasterBean objBean, BindingResult result, HttpServletRequest req) {
 		String urlHits = "1";
 		try {
@@ -187,7 +187,7 @@ public class clsPMSTaxMasterController {
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 			
 			clsPMSTaxMasterModel objModel = funPrepareModel(objBean, userCode, clientCode, propertyCode);
-			String sql;
+			String sql = null;
 			
 			String delQuery = "delete from tbltaxmaster  where strDeptCode='"+objModel.getStrDeptCode()+"'";
 			objWebPMSUtility.funExecuteUpdate(delQuery, "sql");
@@ -204,21 +204,23 @@ public class clsPMSTaxMasterController {
 			if(objModel.getStrDeptCode()=="")
 			{
 				 sql = "UPDATE tbltaxmaster a set a.dblTaxValue='"+objModel.getDblTaxValue()+"' WHERE a.strIncomeHeadCode='"+objModel.getStrIncomeHeadCode()+"'";
+				objPMSTaxMasterService.funAddUpdatePMSTaxMaster(objModel);
 			}
 			else
 			{
-				 sql = "UPDATE tbltaxmaster a set a.dblTaxValue='"+objModel.getDblTaxValue()+"' WHERE a.strDeptCode='"+objModel.getStrDeptCode()+"'";
+				 sql = "UPDATE tbltaxmaster a set a.dblTaxValue='"+objModel.getDblTaxValue()+"' WHERE a.strDeptCode='"+objModel.getStrDeptCode()+"' and a.strTaxCode = '"+objModel.getStrTaxCode()+"' ";
+				 objWebPMSUtility.funExecuteUpdate(sql, "sql");
 			}
-			objWebPMSUtility.funExecuteUpdate(sql, "sql");
-						
-			req.getSession().setAttribute("success", true);
+			
+						req.getSession().setAttribute("success", true);
+			
 			req.getSession().setAttribute("successMessage", "Tax Code : ".concat(objModel.getStrTaxCode()));
 
 			return new ModelAndView("redirect:/frmPMSTaxMaster.html?saddr=" + urlHits);
 		} else {
 			return new ModelAndView("redirect:/frmPMSTaxMaster.html?saddr=" + urlHits);
 		}
-	}
+	}*/
 
 	// Convert bean to model function
 	private clsPMSTaxMasterModel funPrepareModel(clsPMSTaxMasterBean objBean, String userCode, String clientCode, String propertyCode) {
@@ -249,6 +251,8 @@ public class clsPMSTaxMasterController {
 		objModel.setStrLocalOrForeigner(objBean.getStrLocalOrForeigner());
 		objModel.setDteValidFrom(objGlobal.funGetDate("yyyy-MM-dd", objBean.getDteValidFrom()));
 		objModel.setDteValidTo(objGlobal.funGetDate("yyyy-MM-dd", objBean.getDteValidTo()));
+		objModel.setDblFromRate(objBean.getDblFromRate());
+		objModel.setDblToRate(objBean.getDblToRate());
 
 		if (objBean.getStrTaxOnTaxCode() != null && objBean.getStrTaxOnTaxCode().trim().length() > 0) {
 			objModel.setStrTaxOnTaxCode(funGetCodeFromName("strTaxCode", "strTaxDesc", objBean.getStrTaxOnTaxCode(), "tbltaxmaster", clientCode));

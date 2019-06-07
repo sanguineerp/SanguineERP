@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2018-04-17T19:09:35 -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -51,6 +50,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 	<field name="dteDocDate" class="java.lang.String">
 		<fieldDescription><![CDATA[dteDocDate]]></fieldDescription>
 	</field>
+	<field name="dblQuantity" class="java.lang.Double"/>
 	<variable name="vDebitTotal" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{dblDebitAmt}]]></variableExpression>
 	</variable>
@@ -302,7 +302,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 		<band height="1" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="19" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<line>
 				<reportElement x="0" y="0" width="555" height="1" uuid="e18e9f7a-d80b-4aa5-b730-5a5416101055"/>
 			</line>
@@ -351,10 +351,17 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				</textElement>
 				<text><![CDATA[Balance]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="310" y="0" width="58" height="14" uuid="a85e32fb-adc6-4ed3-93df-31f5c1cb3d5f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="22" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<textField pattern="dd MMMMM yyyy">
 				<reportElement x="0" y="2" width="120" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
 				<textElement>
@@ -370,14 +377,14 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textFieldExpression><![CDATA[$F{strDocNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="206" y="2" width="148" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
+				<reportElement x="203" y="2" width="92" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{strPerticulars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="362" y="0" width="62" height="22" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
+				<reportElement x="363" y="0" width="62" height="22" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -396,6 +403,13 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblBalanceAmt}.doubleValue()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="296" y="0" width="62" height="22" uuid="94d9b10e-3f3b-49b9-8c9c-c1de52eb82b8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dblQuantity}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

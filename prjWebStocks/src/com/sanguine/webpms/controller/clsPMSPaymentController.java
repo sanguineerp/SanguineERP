@@ -662,7 +662,8 @@ public class clsPMSPaymentController {
 						+ " and c.strCheckInNo = e.strCheckInNo  and d.strRoomNo = e.strRoomNo " 
 						+ "  and d.strRoomNo = i.strRoomCode and i.strRoomTypeCode=j.strRoomTypeCode "
 						+ " and b.strSettlementCode=f.strSettlementCode and d.strGuestCode=h.strGuestCode " 
-						+ " and a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "' ";
+						+ " and a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "' "
+								+ " group by a.strReceiptNo ";
 
 				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
 
@@ -814,12 +815,16 @@ public class clsPMSPaymentController {
 					dblBalanceAmt=Double.parseDouble(listResevation.get(0).toString());
 				}
 			}
-			
 		}
 		if(AdvAmount.charAt(2)=='C'){
-			
+		/* String sqlCheckIn = "SELECT a.dblRoomTerrif FROM tblroomtypemaster a,tblcheckindtl  b "
+		 		+ "WHERE b.strCheckInNo = '"+AdvAmount+"' and a.strRoomTypeCode=b.strRoomType";
+		 List listResevation = objGlobalFunctionsService.funGetDataList(sqlCheckIn, "sql");
+		 if (listResevation.size()>0) 
+			{
+				dblBalanceAmt=Double.parseDouble(listResevation.get(0).toString());
+			}*/
 		}
-		
 		request.setAttribute("code", AdvAmount);
 		request.setAttribute("dblBalanceAmt", dblBalanceAmt);
 		try {
@@ -862,19 +867,14 @@ public class clsPMSPaymentController {
 					clsReservationDtlModel objDtl = listReservationmodel.get(i);
 					if (objDtl.getStrPayee().equals("Y")) {
 						strGuesCode = objDtl.getStrGuestCode();
-
 						List list = objGuestService.funGetGuestMaster(objDtl.getStrGuestCode(), clientCode);
 						clsGuestMasterHdModel objGuestModel = null;
 
 						if (list.size() > 0) {
 							objGuestModel = (clsGuestMasterHdModel) list.get(0);
-
 						}
-
 						String smsAPIUrl = objSetup.getStrSMSAPI();
-
 						String smsContent = objSetup.getStrAdvAmtSMSContent();
-
 						if (!smsAPIUrl.equals("")) {
 							if (smsContent.contains("%%CompanyName")) {
 								List<clsCompanyMasterModel> listCompanyModel = objPropertySetupService.funGetListCompanyMasterModel(clientCode);
@@ -884,15 +884,12 @@ public class clsPMSPaymentController {
 								clsPropertyMaster objProperty = objPropertyMasterService.funGetProperty(propCode, clientCode);
 								smsContent = smsContent.replace("%%PropertyName", objProperty.getPropertyName());
 							}
-
 							if (smsContent.contains("%%PaymentNo")) {
 								smsContent = smsContent.replace("%%RNo", paymentNo);
 							}
-
 							if (smsContent.contains("%%SettlementDesc")) {
 								smsContent = smsContent.replace("%%SettlementDesc", settleDesc);
 							}
-
 							if (smsContent.contains("%%GuestName")) {
 								smsContent = smsContent.replace("%%GuestName", objGuestModel.getStrFirstName() + " " + objGuestModel.getStrMiddleName() + " " + objGuestModel.getStrLastName());
 							}
@@ -950,24 +947,19 @@ public class clsPMSPaymentController {
 
 			List listcheckIn = objHdModel.getListCheckInDtl();
 			String smsAPIUrl = objSetup.getStrSMSAPI();
-
 			String smsContent = objSetup.getStrAdvAmtSMSContent();
-
 			if (listcheckIn.size() > 0) {
 				for (int i = 0; i < listcheckIn.size(); i++) {
 					clsCheckInDtl objDtl = (clsCheckInDtl) listcheckIn.get(i);
 					if (objDtl.getStrPayee().equals("Y")) {
-
 						List list1 = objGuestService.funGetGuestMaster(objDtl.getStrGuestCode(), clientCode);
 						clsGuestMasterHdModel objGuestModel = null;
 						if (list1.size() > 0) {
 							objGuestModel = (clsGuestMasterHdModel) list1.get(0);
-
 						}
 						if (smsContent.contains("%%GuestName")) {
 							smsContent = smsContent.replace("%%GuestName", objGuestModel.getStrFirstName() + " " + objGuestModel.getStrMiddleName() + " " + objGuestModel.getStrLastName());
 						}
-
 						if (smsContent.contains("%%CompanyName")) {
 							List<clsCompanyMasterModel> listCompanyModel = objPropertySetupService.funGetListCompanyMasterModel(clientCode);
 							smsContent = smsContent.replace("%%CompanyName", listCompanyModel.get(0).getStrCompanyName());
@@ -976,22 +968,18 @@ public class clsPMSPaymentController {
 							clsPropertyMaster objProperty = objPropertyMasterService.funGetProperty(propCode, clientCode);
 							smsContent = smsContent.replace("%%PropertyName", objProperty.getPropertyName());
 						}
-
 						if (smsContent.contains("%%PaymentNo")) {
 							smsContent = smsContent.replace("%%RNo", paymentNo);
 						}
-
 						if (smsContent.contains("%%SettlementDesc")) {
 							smsContent = smsContent.replace("%%SettlementDesc", settleDesc);
 						}
-
 						if (smsContent.contains("%%GuestName")) {
 							smsContent = smsContent.replace("%%GuestName", objGuestModel.getStrFirstName() + " " + objGuestModel.getStrMiddleName() + " " + objGuestModel.getStrLastName());
 						}
 						if (smsContent.contains("%%Amount")) {
 							smsContent = smsContent.replace("%%Amount", String.valueOf(modelData.getDblPaidAmt()));
 						}
-
 						if (smsContent.contains("%%RoomNo")) {
 							clsRoomMasterModel roomNo = objRoomMaster.funGetRoomMaster(objDtl.getStrRoomNo(), clientCode);
 							smsContent = smsContent.replace("%%RoomNo", roomNo.getStrRoomDesc());
@@ -1006,11 +994,9 @@ public class clsPMSPaymentController {
 							smsAPIUrl = smsAPIUrl.replace("MsgContent", smsContent);
 							smsAPIUrl = smsAPIUrl.replace(" ", "%20");
 						}
-
 						URL url;
 						HttpURLConnection uc = null;
 						StringBuilder output = new StringBuilder();
-
 						try {
 							url = new URL(smsAPIUrl);
 							uc = (HttpURLConnection) url.openConnection();

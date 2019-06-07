@@ -21,6 +21,8 @@ public class clsFolioDtlBean {
 	
 	private double dblDiscPer;
 
+	private double dblQuantity;
+	
 	private List<clsIncomeHeadMasterBean> listIncomeHeadBeans;
 
 	// getters and setters
@@ -94,6 +96,14 @@ public class clsFolioDtlBean {
 
 	public void setDblDiscPer(double dblDiscPer) {
 		this.dblDiscPer = dblDiscPer;
+	}
+
+	public double getDblQuantity() {
+		return dblQuantity;
+	}
+
+	public void setDblQuantity(double dblQuantity) {
+		this.dblQuantity = dblQuantity;
 	}
 
 }

@@ -27,7 +27,10 @@ public class clsPMSPaymentReceiptDtl implements Serializable {
 
 	@Column(name = "strRemarks")
 	private String strRemarks;
-
+	
+	@Column(name = "strCustomerCode")
+	private String strCustomerCode;
+	
 	// Function to Set Default Values
 	private Object setDefaultValue(Object value, Object defaultValue) {
 		if (value != null && (value instanceof String && value.toString().length() > 0)) {
@@ -82,5 +85,14 @@ public class clsPMSPaymentReceiptDtl implements Serializable {
 	public void setStrRemarks(String strRemarks) {
 		this.strRemarks = strRemarks;
 	}
+
+	public String getStrCustomerCode() {
+		return strCustomerCode;
+	}
+
+	public void setStrCustomerCode(String strCustomerCode) {
+		this.strCustomerCode = strCustomerCode;
+	}
+
 
 }

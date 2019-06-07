@@ -45,6 +45,11 @@ public class clsPMSTaxMasterBean {
 	private String strClientCode;
 
 	private String strAccountCode;
+	
+	private double dblFromRate;
+	
+	private double dblToRate;
+	
 
 	// Setter-Getter Methods
 	public long getIntGId() {
@@ -221,6 +226,22 @@ public class clsPMSTaxMasterBean {
 
 	public void setStrAccountCode(String strAccountCode) {
 		this.strAccountCode = strAccountCode;
+	}
+
+	public double getDblFromRate() {
+		return dblFromRate;
+	}
+
+	public void setDblFromRate(double dblFromRate) {
+		this.dblFromRate = dblFromRate;
+	}
+
+	public double getDblToRate() {
+		return dblToRate;
+	}
+
+	public void setDblToRate(double dblToRate) {
+		this.dblToRate = dblToRate;
 	}
 
 }

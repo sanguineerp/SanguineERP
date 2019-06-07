@@ -29,49 +29,94 @@ public class clsPMSUtilityFunctions {
 		Date dt = new Date();
 		String date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
 
-		String sql = "select strTaxCode,strTaxDesc,strIncomeHeadCode,strTaxType,dblTaxValue,strTaxOn " + " from tbltaxmaster where date(dteValidFrom) <='" + date + "' and date(dteValidTo)>='" + date + "' " + " and strTaxOnType ='" + taxOnType + "'";
+		String sql = "select strTaxCode,strTaxDesc,strIncomeHeadCode,strTaxType,dblTaxValue,strTaxOn,strDeptCode,dblFromRate,dblToRate from tbltaxmaster where date(dteValidFrom) <='" + date + "' and date(dteValidTo)>='" + date + "'"
+				+ " and strTaxOnType ='" + taxOnType + "'";
 		List listTaxDtl = objGlobalFunService.funGetListModuleWise(sql, "sql");
 
+		double tariffAmt = 0.0;
 		for (clsTaxProductDtl objTaxProdDtl : listTaxProdDtl) {
 			List<clsTaxCalculation> listTaxCalDtl = new ArrayList<clsTaxCalculation>();
 			for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
 				String taxCalType = "Forward";
 				Object[] arrObjTaxDtl = (Object[]) listTaxDtl.get(cnt);
-				if (taxOnType.equalsIgnoreCase("Income Head")) {
-					if (arrObjTaxDtl[2].toString().equals(objTaxProdDtl.getStrTaxProdCode())) {
+				tariffAmt = objTaxProdDtl.getDblTaxProdAmt();
+				if (taxOnType.equalsIgnoreCase("Income Head")) 
+				{
+					if (arrObjTaxDtl[2].toString().equals(objTaxProdDtl.getStrTaxProdCode())) 
+					{
 						clsTaxCalculation objTaxCal = new clsTaxCalculation();
 						double taxValue = Double.parseDouble(arrObjTaxDtl[4].toString());
-						if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check
-																						// for
-																						// Tax
-																						// Type
-																						// Per/Amt
+						// Check for Tax Type Per/Amt
+						if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage"))
 						{
 							double taxAmt = 0;
-							if (taxCalType.equals("Forward")) // Forward Tax
-																// Calculation
+							// Forward Tax Calculation
+							if (taxCalType.equals("Forward")) 
 							{
 								taxAmt = (objTaxProdDtl.getDblTaxProdAmt() * taxValue) / 100;
-							} else // Backward Tax Calculation
+							} 
+							else // Backward Tax Calculation
 							{
 								taxAmt = objTaxProdDtl.getDblTaxProdAmt() * 100 / (100 + taxValue);
 								taxAmt = objTaxProdDtl.getDblTaxProdAmt() - taxAmt;
 							}
-							if (taxAmt > 0) {
+							if (taxAmt > 0) 
+							{
 								objTaxCal.setStrTaxCode(arrObjTaxDtl[0].toString());
 								objTaxCal.setStrTaxDesc(arrObjTaxDtl[1].toString());
 								objTaxCal.setStrTaxType(taxCalType);
 								objTaxCal.setDblTaxableAmt(objTaxProdDtl.getDblTaxProdAmt());
 								objTaxCal.setDblTaxAmt(taxAmt);
-
 								listTaxCalDtl.add(objTaxCal);
 							}
-						} else {
+						} 
+						else {
 						}
 					}
-				} else {
+					
+				} 
+				else if(taxOnType.equalsIgnoreCase("Department")){
+					if(arrObjTaxDtl[6].toString().equals(objTaxProdDtl.getStrDeptCode()))  
+					{
+						clsTaxCalculation objTaxCal = new clsTaxCalculation();
+						double taxValue = Double.parseDouble(arrObjTaxDtl[4].toString());
+						// Check for Tax Type Per/Amt
+						if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage"))
+						{
+							double taxAmt = 0;
+							// Forward Tax Calculation
+							if (taxCalType.equals("Forward")) 
+							{
+								taxAmt = (objTaxProdDtl.getDblTaxProdAmt() * taxValue) / 100;
+							} 
+							else // Backward Tax Calculation
+							{
+								taxAmt = objTaxProdDtl.getDblTaxProdAmt() * 100 / (100 + taxValue);
+								taxAmt = objTaxProdDtl.getDblTaxProdAmt() - taxAmt;
+							}
+							if (taxAmt > 0) 
+							{
+								objTaxCal.setStrTaxCode(arrObjTaxDtl[0].toString());
+								objTaxCal.setStrTaxDesc(arrObjTaxDtl[1].toString());
+								objTaxCal.setStrTaxType(taxCalType);
+								objTaxCal.setDblTaxableAmt(objTaxProdDtl.getDblTaxProdAmt());
+								objTaxCal.setDblTaxAmt(taxAmt);
+								listTaxCalDtl.add(objTaxCal);
+							}
+						} 
+						else {
+						}
+					}
+				}
+					
+				
+				
+				else {
 					clsTaxCalculation objTaxCal = new clsTaxCalculation();
 					double taxValue = Double.parseDouble(arrObjTaxDtl[4].toString());
+					double fromRate = Double.parseDouble(arrObjTaxDtl[7].toString());
+					double toRate = Double.parseDouble(arrObjTaxDtl[8].toString());
+					if(fromRate<tariffAmt && tariffAmt<=toRate){
 					if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check
 																					// for
 																					// Tax
@@ -97,7 +142,10 @@ public class clsPMSUtilityFunctions {
 
 							listTaxCalDtl.add(objTaxCal);
 						}
-					} else {
+					}
+					}
+					
+					else {
 					}
 				}
 			}

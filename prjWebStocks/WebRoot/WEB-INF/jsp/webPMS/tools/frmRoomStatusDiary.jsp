@@ -435,7 +435,7 @@
 		}
 	}
 	
-	
+	var message = "";
 	function funOnClick(obj)
 	{
 		/* var resNo=obj.value;
@@ -478,7 +478,16 @@
 				  url=getContextPath()+"/frmReservation1.html?docCode="+code
 				  window.open(url);
 
-				  break;	  
+				  break;
+				  
+			case 'rgba(0, 0, 0, 0)'://GREEN-->CONFIRM
+				  code=obj.value;
+				  //code=code.split(',')[1].trim();
+				  alert("Proceed to \n\n"+message);
+				  url=getContextPath()+"/frmWalkin1.html?docCode="+code
+				  window.open(url);
+
+				  break;
 									  
 		}					
 	}
@@ -517,6 +526,8 @@
 			<table class="transTable">
 				<tr>
 					<td><s:input colspan="1" type="text" id="txtViewDate" path="dteViewDate" cssClass="calenderTextBox" /></td>
+					
+					
 				</tr>
 			</table>
 

@@ -305,7 +305,7 @@
 				</td>
 				<td>
     				<s:select id="cmbDiscountType" path="strDiscountType" cssClass="BoxW124px"
-    				onchange="funDiscountSelection();">
+    				><!-- onchange="funDiscountSelection();" -->
  					    <s:option value="Amount">Amount</s:option>
 				    	<s:option value="Per">Per</s:option>
 				   </s:select>
@@ -316,7 +316,7 @@
 					<label>Disc Amt</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="number" step="0.01"  path="dblDiscAmt"  id="txtDiscAmt" onblur="funCalculateDiscount();" cssClass="BoxW124px" />
+					<s:input colspan="3" type="number" step="0.01"  path="dblDiscAmt"  id="txtDiscAmt" style = "text-align:right;" onblur="funCalculateDiscount();" cssClass="BoxW124px" />
 				</td>
 			</tr>
 			<tr>
@@ -324,7 +324,7 @@
 					<label>Disc Per</label>
 				</td>
 				<td>
-					<s:input type="number" step="0.01"  path="dblDiscPer"  id="txtDiscPer" onblur="funCalculateDiscount();" cssClass="BoxW124px" />
+					<s:input type="number" step="0.01"  path="dblDiscPer"  id="txtDiscPer" style = "text-align:right;" onblur="funCalculateDiscount();" cssClass="BoxW124px" />
 				</td>
 			</tr>
 			<tr>
@@ -332,7 +332,7 @@
 					<label>Total</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="number" step="0.01" readonly="true"   path="dblTotal"  id="txtTotal" cssClass="BoxW124px" />
+					<s:input colspan="3" type="number" step="0.01" readonly="true"   path="dblTotal" style = "text-align:right;" id="txtTotal" cssClass="BoxW124px" />
 				</td>
 			</tr>
 			<tr>
@@ -340,7 +340,7 @@
 					<label>Grand Total</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="number" step="0.01" readonly="true"   path="dblGrandTotal"  id="txtGrandTotal" cssClass="BoxW124px" />
+					<s:input colspan="3" type="number" step="0.01" readonly="true"   path="dblGrandTotal" style = "text-align:right;" id="txtGrandTotal" cssClass="BoxW124px" />
 				</td>
 			</tr>
 			<tr>

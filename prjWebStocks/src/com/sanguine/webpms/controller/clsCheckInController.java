@@ -1,5 +1,17 @@
 package com.sanguine.webpms.controller;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -7,6 +19,7 @@ import com.sanguine.base.service.intfBaseService;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsPropertyMaster;
+import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
@@ -19,7 +32,6 @@ import com.sanguine.webpms.dao.clsExtraBedMasterDao;
 import com.sanguine.webpms.dao.clsGuestMasterDao;
 import com.sanguine.webpms.dao.clsWalkinDao;
 import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
-
 import com.sanguine.webpms.model.clsCheckInDtl;
 import com.sanguine.webpms.model.clsCheckInHdModel;
 import com.sanguine.webpms.model.clsExtraBedMasterModel;
@@ -47,6 +59,7 @@ import com.sanguine.webpms.service.clsWalkinService;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -65,7 +78,10 @@ import java.util.TreeMap;
 import org.springframework.validation.BindingResult;
 
 import javax.validation.Valid;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class clsCheckInController {
@@ -122,7 +138,11 @@ public class clsCheckInController {
 	@Autowired
 	private clsWalkinDao objWalkinDao;
 	
-	
+	@Autowired
+	private ServletContext servletContext;
+
+	@Autowired
+	private clsSetupMasterService objSetupMasterService;
 	
 	// Open CheckIn
 	@RequestMapping(value = "/frmCheckIn", method = RequestMethod.GET)
@@ -501,8 +521,9 @@ public class clsCheckInController {
 				List listWalkinData = objWalkinDao.funGetWalkinDataDtl(objBean.getStrAgainstDocNo(), clientCode);
 				clsWalkinHdModel objWalkinHdModel = (clsWalkinHdModel) listWalkinData.get(0);
 				List<clsWalkinRoomRateDtlModel> listRommRate = new ArrayList<clsWalkinRoomRateDtlModel>();
+				//listRommRate=objWalkinHdModel.getListWalkinRoomRateDtlModel();
 				if(null!=objBean.getListWalkinRoomRateDtl()){
-					for (clsWalkinRoomRateDtlModel objRommDtlBean : objBean.getListWalkinRoomRateDtl()) {
+					for (clsWalkinRoomRateDtlModel objRommDtlBean : objWalkinHdModel.getListWalkinRoomRateDtlModel()) {
 					
 						String date=objRommDtlBean.getDtDate();
 						if(date.split("-")[0].toString().length()<3)
@@ -619,7 +640,6 @@ public class clsCheckInController {
 					try {
 						objBaseService.funSaveForPMS(objPkgHdModel);
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -704,7 +724,6 @@ public class clsCheckInController {
 			
 			
 			
-			
 			funSendSMSCheckIn(objHdModel.getStrCheckInNo(), clientCode, propCode);
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Check In No : ".concat(objHdModel.getStrCheckInNo()));
@@ -715,6 +734,105 @@ public class clsCheckInController {
 		}
 	}
 
+	//check in slip
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/rptCheckInSlip", method = RequestMethod.GET)
+	public void funGeneratePaymentRecipt(@RequestParam("checkInNo") String reciptNo,  HttpServletRequest req, HttpServletResponse resp) {
+		try {
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String userCode = req.getSession().getAttribute("usercode").toString();
+			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+			String companyName = req.getSession().getAttribute("companyName").toString();
+			String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+			if (objSetup == null) {
+				objSetup = new clsPropertySetupModel();
+			}
+
+			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+			String userName = "";
+			String sqlUserName = "select strUserName from "+webStockDB+".tbluserhd where strUserCode='" + userCode + "' ";
+
+			List listOfUser = objGlobalFunctionsService.funGetDataList(sqlUserName, "sql");
+			if (listOfUser.size() > 0) {
+				// Object[] userData = (Object[]) listOfUser.get(0);
+				userName = listOfUser.get(0).toString();
+			}
+
+			HashMap reportParams = new HashMap();
+			
+			ArrayList datalist = new ArrayList();
+			String reportName = servletContext.getRealPath("/WEB-INF/reports/webpms/rptCheckInSlip.jrxml");
+			
+			String sql = "SELECT a.strCheckInNo,a.strGuestCode,a.strRoomNo,"
+					+ "a.strExtraBedCode,a.strRoomType,b.dblRoomTerrif,"
+					+ "ifnull(c.dblDiscount,0.0),d.intNoOfAdults,DATE_FORMAT(d.dteCheckInDate,'%d-%m-%Y'),e.strGSTNo,"
+					+ "e.strPANNo,d.tmeArrivalTime FROM tblcheckindtl a,tblroomtypemaster b,"
+					+ "tblwalkinroomratedtl c,tblcheckinhd d,"
+					+ "tblguestmaster e WHERE a.strRoomType=b.strRoomTypeCode "
+					+ "and c.strWalkinNo=d.strWalkInNo "
+					+ "and a.strGuestCode=e.strGuestCode "
+					+ "and d.strCheckInNo = '"+reciptNo+"'"
+					+ " group by d.strCheckInNo";
+			
+			List listCheckInsData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+			Object[] arrObjRoomData = (Object[]) listCheckInsData.get(0);
+			clsCheckInBean objCheckInBean = new clsCheckInBean();
+			objCheckInBean.setStrCheckInNo(arrObjRoomData[0].toString());
+			String guestCode = arrObjRoomData[1].toString();
+			objCheckInBean.setStrRoomNo(arrObjRoomData[2].toString());
+			objCheckInBean.setStrExtraBedCode(arrObjRoomData[3].toString());
+			String roomType = arrObjRoomData[4].toString();
+			double roomTarrif = Double.parseDouble(arrObjRoomData[5].toString());					
+			double discount  = Double.parseDouble(arrObjRoomData[6].toString());
+			objCheckInBean.setIntNoOfAdults(Integer.parseInt(arrObjRoomData[7].toString()));
+			objCheckInBean.setDteArrivalDate(arrObjRoomData[8].toString());
+			String gstNo = arrObjRoomData[9].toString();
+			String paNo = arrObjRoomData[10].toString();
+			objCheckInBean.setTmeArrivalTime(arrObjRoomData[11].toString());
+			
+			datalist.add(objCheckInBean);
+			
+			reportParams.put("pgstno", gstNo);
+			reportParams.put("ppanno", paNo);
+			reportParams.put("pguestCode", guestCode);
+			reportParams.put("proomType", roomType);
+			reportParams.put("proomTarrif", roomTarrif);
+			reportParams.put("pdiscount", discount);
+			reportParams.put("pCompanyName", companyName);
+			reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
+			reportParams.put("pAddress2", objSetup.getStrState() + "," + objSetup.getStrCountry() + "," + objSetup.getStrPin());
+			reportParams.put("pContactDetails", "");
+			reportParams.put("strImagePath", imagePath);
+			reportParams.put("userName", userName);
+			
+			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(datalist);
+			JasperDesign jd = JRXmlLoader.load(reportName);
+			JasperReport jr = JasperCompileManager.compileReport(jd);
+			JasperPrint jp = JasperFillManager.fillReport(jr, reportParams, beanCollectionDataSource);
+			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+			if (jp != null) {
+				jprintlist.add(jp);
+				ServletOutputStream servletOutputStream = resp.getOutputStream();
+				JRExporter exporter = new JRPdfExporter();
+				resp.setContentType("application/pdf");
+				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+				exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+				resp.setHeader("Content-Disposition", "inline;filename=PaymentRecipt.pdf");
+				exporter.exportReport();
+				servletOutputStream.flush();
+				servletOutputStream.close();
+			}
+			
+			
+		}
+		 catch (Exception e) {
+				e.printStackTrace();
+			}
+	}
+	
+	
 	// Convert bean to model function
 	public clsCheckInHdModel funPrepareHdModel(clsCheckInBean objBean, String userCode, String clientCode, HttpServletRequest req) {
 

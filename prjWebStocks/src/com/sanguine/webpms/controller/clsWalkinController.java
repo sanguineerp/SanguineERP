@@ -28,6 +28,7 @@ import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.webpms.bean.clsCheckInBean;
 import com.sanguine.webpms.bean.clsCheckInDetailsBean;
+import com.sanguine.webpms.bean.clsReservationBean;
 import com.sanguine.webpms.bean.clsWalkinBean;
 import com.sanguine.webpms.bean.clsWalkinDtlBean;
 import com.sanguine.webpms.dao.clsExtraBedMasterDao;
@@ -83,6 +84,37 @@ public class clsWalkinController {
 	private intfBaseService objBaseService;
 
 
+	
+	@RequestMapping(value = "/frmWalkin1", method = RequestMethod.GET)
+	public ModelAndView funOpenForm1(Map<String, Object> model, HttpServletRequest request) {
+		String urlHits = "1";
+		String walkin = request.getParameter("docCode").toString();
+		String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
+
+		try {
+			urlHits = request.getParameter("saddr").toString();
+
+		} catch (NullPointerException e) {
+			urlHits = "1";
+		}
+
+		List listOfProperty = objGlobalFunctionsService.funGetList("select strPropertyName from "+webStockDB+".tblpropertymaster");
+		model.put("listOfProperty", listOfProperty);
+
+		model.put("urlHits", urlHits);
+
+		request.getSession().setAttribute("ResNo", walkin);
+
+		if ("2".equalsIgnoreCase(urlHits)) {
+			return new ModelAndView("frmWalkin_1", "command", new clsWalkinBean());
+		} else if ("1".equalsIgnoreCase(urlHits)) {
+			return new ModelAndView("frmWalkin", "command", new clsWalkinBean());
+		} else {
+			return null;
+		}
+	}
+
+	
 	// Open Walkin
 	@RequestMapping(value = "/frmWalkin", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
@@ -339,6 +371,7 @@ public class clsWalkinController {
 				     insertSql+=",('"+objHdModel.getStrWalkinNo()+"','','' "
 				    		 + ",'"+packageCode+"','','"+objRommDtlBean.getDblRoomRate()+"' "
 								+ ",'RoomTariff','"+objRommDtlBean.getStrRoomType()+"','"+clientCode+"')";
+				     objRommDtlBean.setDblDiscount(objBean.getDblDiscountPercent());
 				}
 			    }
 				

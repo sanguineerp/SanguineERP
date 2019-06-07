@@ -242,7 +242,7 @@ public class clsTaxReportController {
 				listTaxSummary.add(objTaxDtlBean);
 			}
 
-			List listTaxWiseSummaryForFolio = objGlobalFunctionsService.funGetDataList("select c.strTaxDesc,sum(c.dblTaxAmt) " + "from tblfoliohd a left outer join tblfoliodtl b on a.strFolioNo=b.strFolioNo " + "left outer join tblfoliotaxdtl c on b.strDocNo=c.strDocNo and b.strFolioNo=c.strFolioNo " + "where date(b.dteDocDate) between '" + fromDate + "' and '" + toDate + "' "
+			List listTaxWiseSummaryForFolio = objGlobalFunctionsService.funGetDataList("select ifnull(c.strTaxDesc,''), ifnull(SUM(c.dblTaxAmt),'0.0') " + "from tblfoliohd a left outer join tblfoliodtl b on a.strFolioNo=b.strFolioNo " + "left outer join tblfoliotaxdtl c on b.strDocNo=c.strDocNo and b.strFolioNo=c.strFolioNo " + "where date(b.dteDocDate) between '" + fromDate + "' and '" + toDate + "' "
 					+ "group by c.strTaxCode ", "sql");//
 			for (int ts = 0; ts < listTaxWiseSummaryForFolio.size(); ts++) {
 				Object[] objTaxes = (Object[]) listTaxWiseSummaryForFolio.get(ts);

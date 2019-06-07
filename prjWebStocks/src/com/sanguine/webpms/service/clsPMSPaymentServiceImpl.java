@@ -146,6 +146,7 @@ public class clsPMSPaymentServiceImpl implements clsPMSPaymentService {
 		objPaymentReceiptDtlModel.setStrCardNo(objPaymentBean.getStrCardNo());
 		objPaymentReceiptDtlModel.setStrRemarks(objPaymentBean.getStrRemarks());
 		objPaymentReceiptDtlModel.setStrSettlementCode(objPaymentBean.getStrSettlementCode());
+		objPaymentReceiptDtlModel.setStrCustomerCode(objPaymentBean.getStrCustomerCode());
 		listPaymentReceiptDtlModel.add(objPaymentReceiptDtlModel);
 
 		objModel.setListPaymentRecieptDtlModel(listPaymentReceiptDtlModel);

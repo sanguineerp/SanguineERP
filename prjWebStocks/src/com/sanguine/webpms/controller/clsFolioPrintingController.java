@@ -101,7 +101,7 @@ public class clsFolioPrintingController {
 			@SuppressWarnings("rawtypes")
 			HashMap reportParams = new HashMap();
 
-			String sqlParametersFromFolio = "SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo " + " ,date(b.dteArrivalDate),b.tmeArrivalTime ,ifnull(date(b.dteDepartureDate),'NA'),ifnull(b.tmeDepartureTime,'NA')" + " ,d.strGuestPrefix,d.strFirstName,d.strMiddleName,d.strLastName ,b.intNoOfAdults,b.intNoOfChild,'NA' "
+			String sqlParametersFromFolio = "SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo " + " ,date(b.dteArrivalDate),b.tmeArrivalTime ,ifnull(date(b.dteDepartureDate),'NA'),ifnull(b.tmeDepartureTime,'NA')" + " ,d.strGuestPrefix,d.strFirstName,d.strMiddleName,d.strLastName ,b.intNoOfAdults,b.intNoOfChild,'NA',d.strGuestCode "
 					+ " FROM tblfoliohd a LEFT OUTER JOIN tblreservationhd b ON a.strReservationNo=b.strReservationNo " + " LEFT OUTER JOIN tblguestmaster d ON a.strGuestCode=d.strGuestCode " + " LEFT OUTER JOIN tblroom e ON a.strRoomNo=e.strRoomCode " + " where a.strFolioNo='" + folioNo + "' and a.strClientCode='" + clientCode + "'";
 
 			String sqlFolio = "select strReservationNo,strWalkInNo from tblfoliohd where strFolioNo='" + folioNo + "' and strClientCode='" + clientCode + "' ";
@@ -109,7 +109,7 @@ public class clsFolioPrintingController {
 			if (folioDtl.size() > 0) {
 				Object[] arrFolioDtl = (Object[]) folioDtl.get(0);
 				if (!arrFolioDtl[1].toString().isEmpty()) {
-					sqlParametersFromFolio = "SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo " + " ,date(b.dteWalkinDate),b.tmeWalkinTime ,ifnull(date(b.dteCheckOutDate),'NA'),ifnull(b.tmeCheckOutTime,'NA')" + " ,d.strGuestPrefix,d.strFirstName,d.strMiddleName,d.strLastName ,b.intNoOfAdults,b.intNoOfChild,'NA' "
+					sqlParametersFromFolio = "SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo " + " ,date(b.dteWalkinDate),b.tmeWalkinTime ,ifnull(date(b.dteCheckOutDate),'NA'),ifnull(b.tmeCheckOutTime,'NA')" + " ,d.strGuestPrefix,d.strFirstName,d.strMiddleName,d.strLastName ,b.intNoOfAdults,b.intNoOfChild,'NA',d.strGuestCode "
 							+ " FROM tblfoliohd a LEFT OUTER JOIN tblwalkinhd b ON a.strWalkinNo=b.strWalkinNo " + " LEFT OUTER JOIN tblguestmaster d ON a.strGuestCode=d.strGuestCode " + " LEFT OUTER JOIN tblroom e ON a.strRoomNo=e.strRoomCode " + " where a.strFolioNo='" + folioNo + "' and a.strClientCode='" + clientCode + "'";
 				}
 			}
@@ -135,6 +135,46 @@ public class clsFolioPrintingController {
 				String adults = arr[12].toString();
 				String childs = arr[13].toString();
 				String billNo = arr[14].toString();
+				String guestCode = arr[15].toString();
+				String guestAddr = "";
+				String sqlAddr	="SELECT IFNULL(d.strDefaultAddr,''), IFNULL(d.strAddressLocal,''), "
+						+ "IFNULL(d.strCityLocal,''), IFNULL(d.strStateLocal,''), "
+						+ "IFNULL(d.strCountryLocal,''), IFNULL(d.intPinCodeLocal,''), "
+						+ "IFNULL(d.strAddrPermanent,''), IFNULL(d.strCityPermanent,''), "
+						+ "IFNULL(d.strStatePermanent,''), IFNULL(d.strCountryPermanent,''), "
+						+ "IFNULL(d.intPinCodePermanent,''), IFNULL(d.strAddressOfc,''), "
+						+ "IFNULL(d.strCityOfc,''), IFNULL(d.strStateOfc,''), "
+						+ "IFNULL(d.strCountryOfc,''), IFNULL(d.intPinCodeOfc,''), "
+						+ "IFNULL(d.strGSTNo,'') FROM tblguestmaster d "
+						+ "WHERE d.strGuestCode= '"+guestCode+"'";
+				
+				List listguest = objFolioService.funGetParametersList(sqlAddr);
+				
+				if (listguest.size() > 0) {
+					Object[] arrGuest = (Object[]) listguest.get(0);
+					if (arrGuest[0].toString().equalsIgnoreCase("Permanent")) { // check
+																				// default
+																				// addr
+						guestAddr = arrGuest[6].toString() + ","
+								+ arrGuest[7].toString() + ","
+								+ arrGuest[8].toString() + ","
+								+ arrGuest[9].toString() + ","
+								+ arrGuest[10].toString();
+					} else if (arrGuest[0].toString()
+							.equalsIgnoreCase("Office")) {
+						guestAddr = arrGuest[11].toString() + ","
+								+ arrGuest[12].toString() + ","
+								+ arrGuest[13].toString() + ","
+								+ arrGuest[14].toString() + ","
+								+ arrGuest[15].toString();
+					} else { // Local
+						guestAddr = arrGuest[1].toString() + ","
+								+ arrGuest[2].toString() + ","
+								+ arrGuest[3].toString() + ","
+								+ arrGuest[4].toString() + ","
+								+ arrGuest[5].toString();
+					}
+				}
 
 				reportParams.put("pCompanyName", companyName);
 				reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
@@ -152,13 +192,13 @@ public class clsFolioPrintingController {
 				reportParams.put("pDepartureTime", departureTime);
 				reportParams.put("pAdult", adults);
 				reportParams.put("pChild", childs);
-				reportParams.put("pGuestAddress", "");
+				reportParams.put("pGuestAddress", guestAddr);
 				reportParams.put("pRemarks", "");
 				reportParams.put("strUserCode", userCode);
 				reportParams.put("pBillNo", billNo);
 
 				// get folio details
-				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%Y-%m-%d'),b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
+				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%Y-%m-%d'),b.strDocNo,b.strPerticulars,b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
 									+ " order by b.strRevenueType desc";
 				List folioDtlList = objFolioService.funGetParametersList(sqlFolioDtl);
 				for (int i = 0; i < folioDtlList.size(); i++) {
@@ -170,8 +210,8 @@ public class clsFolioPrintingController {
 						clsFolioPrintingBean folioPrintingBean = new clsFolioPrintingBean();
 						String docNo = folioArr[1].toString();
 						String particulars = folioArr[2].toString();
-						double debitAmount = Double.parseDouble(folioArr[3].toString());
-						double creditAmount = Double.parseDouble(folioArr[4].toString());
+						double debitAmount = Double.parseDouble(folioArr[4].toString());
+						double creditAmount = Double.parseDouble(folioArr[5].toString());
 						double balance = debitAmount - creditAmount;
 
 						folioPrintingBean.setDteDocDate(docDate);
@@ -180,11 +220,11 @@ public class clsFolioPrintingController {
 						folioPrintingBean.setDblDebitAmt(debitAmount);
 						folioPrintingBean.setDblCreditAmt(creditAmount);
 						folioPrintingBean.setDblBalanceAmt(balance);
-
+						folioPrintingBean.setDblQuantity(Double.parseDouble(folioArr[3].toString()));
 						dataList.add(folioPrintingBean);
 						
 
-						sqlFolioDtl = "SELECT a.dteDocDate,a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblfoliodtl a,tblfoliotaxdtl b where a.strDocNo=b.strDocNo " + " and DATE(a.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and a.strDocNo='" + docNo + "'";
+						sqlFolioDtl = "SELECT date(a.dteDocDate),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblfoliodtl a,tblfoliotaxdtl b where a.strDocNo=b.strDocNo " + " and DATE(a.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and a.strDocNo='" + docNo + "'";
 						List listFolioTaxDtl = objWebPMSUtility.funExecuteQuery(sqlFolioDtl, "sql");
 						for (int cnt = 0; cnt < listFolioTaxDtl.size(); cnt++) {
 							Object[] arrObjFolioTaxDtl = (Object[]) listFolioTaxDtl.get(cnt);
@@ -196,6 +236,7 @@ public class clsFolioPrintingController {
 							folioPrintingBean.setDblDebitAmt(Double.parseDouble(arrObjFolioTaxDtl[3].toString()));
 							folioPrintingBean.setDblCreditAmt(Double.parseDouble(arrObjFolioTaxDtl[4].toString()));
 							folioPrintingBean.setDblBalanceAmt(Double.parseDouble(arrObjFolioTaxDtl[3].toString()) - Double.parseDouble(arrObjFolioTaxDtl[4].toString()));
+							folioPrintingBean.setTax(true);
 							dataList.add(folioPrintingBean);
 						}
 					}
@@ -228,7 +269,7 @@ public class clsFolioPrintingController {
 				}
 				
 				// get payment details
-				String sqlPaymentDtl = "SELECT b.dteDocDate,c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt,d.dblSettlementAmt as creditAmt" + " ,'0.00' as balance " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " left outer join tblreceipthd c on a.strFolioNo=c.strFolioNo and a.strReservationNo=c.strReservationNo "
+				String sqlPaymentDtl = "SELECT date(b.dteDocDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt,d.dblSettlementAmt as creditAmt" + " ,'0.00' as balance " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " left outer join tblreceipthd c on a.strFolioNo=c.strFolioNo and a.strReservationNo=c.strReservationNo "
 						+ " left outer join tblreceiptdtl d on c.strReceiptNo=d.strReceiptNo " + " left outer join tblsettlementmaster e on d.strSettlementCode=e.strSettlementCode " + " WHERE DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' AND a.strFolioNo='" + folioNo + "' " + " group by a.strFolioNo ";
 				List paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
 				for (int i = 0; i < paymentDtlList.size(); i++) {
@@ -257,7 +298,15 @@ public class clsFolioPrintingController {
 					}
 				}
 			}
-
+			List<clsFolioPrintingBean> listTax=new ArrayList<>();
+			for(clsFolioPrintingBean folioPrintingBean :dataList){
+				if(folioPrintingBean.isTax()){
+					listTax.add(folioPrintingBean);
+					
+				}
+				
+			}
+			
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(dataList);
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JasperReport jr = JasperCompileManager.compileReport(jd);

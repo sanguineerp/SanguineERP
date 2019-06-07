@@ -111,7 +111,34 @@
 	}
 
 	
-	
+	var message='';
+	var retval="";
+	<%if (session.getAttribute("success") != null) 
+	{
+		if(session.getAttribute("successMessage") != null)
+		{%>
+			message='<%=session.getAttribute("successMessage").toString()%>';
+		    <%
+		    session.removeAttribute("successMessage");
+		}
+		boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
+		session.removeAttribute("success");
+		if (test) 
+		{
+			%> alert("Data Save successfully\n\n"+message);
+			var checkInNo='';
+			var isOk=confirm("Do You Want to CheckIn Slip ?");
+			if(isOk)
+				{
+				
+				checkInNo='<%=session.getAttribute("AdvanceAmount").toString()%>';
+				window.open("rptCheckInSlip.html?checkInNo="+checkInNo);
+    			//window.location.href=getContextPath()+"/rptCheckInSlip.html?checkInNo="+checkInNo ;
+    			session.removeAttribute("AdvanceAmount");
+    			
+				}<%
+		}
+	}%>
 	function funSetCheckInData(code){
 
 		$.ajax({

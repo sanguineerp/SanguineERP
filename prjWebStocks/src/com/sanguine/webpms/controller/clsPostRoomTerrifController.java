@@ -225,13 +225,17 @@ public class clsPostRoomTerrifController {
 		doc = objPMSUtility.funGenerateFolioDocForRoom("RoomFolio");
 		String docNo = "RM" + String.format("%06d", doc);
 		double roomTerrif = objBean.getDblRoomTerrif();
+		
 
 		clsTaxProductDtl objTaxProductDtl = new clsTaxProductDtl();
 		objTaxProductDtl.setStrTaxProdCode(objBean.getStrRoomNo());
 		objTaxProductDtl.setStrTaxProdName("");
 		objTaxProductDtl.setDblTaxProdAmt(roomTerrif);
+		// set department value here -- get department value from income head table 
+		String sql = "select a.strDeptCode from tblincomehead a where a.strIncomeHeadCode = '"+objTaxProductDtl.getStrTaxProdCode()+"'";
 		List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
 		listTaxProdDtl.add(objTaxProductDtl);
+		// 
 		Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Room Night");
 
 		List<clsFolioDtlModel> listFolioDtl = new ArrayList<clsFolioDtlModel>();
@@ -268,7 +272,7 @@ public class clsPostRoomTerrifController {
 			objFolioDtl.setDblCreditAmt(0);
 			if(objBean.getStrFolioType().equals("Room"))
 			{
-				objFolioDtl.setStrPerticulars("Room Revenue");
+				objFolioDtl.setStrPerticulars("Room Tariff");
 			}
 			else
 			{

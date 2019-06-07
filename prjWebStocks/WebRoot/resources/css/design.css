@@ -1111,6 +1111,17 @@ align detail table data to left
 	background-color: 	#C0E2FE;
 }
 
+.staticTableContainer {
+	width: 95%;
+	height: 200px;
+	border: 1px solid #000;
+	margin: auto;
+	border-color: #CCC;
+	overflow: hidden;
+	display:block;
+	overflow-style:auto;
+	background-color: 	#C0E2FE;
+}
 
 
 

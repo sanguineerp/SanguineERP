@@ -29,6 +29,14 @@ public class clsPropertySetupBean {
 	private String strRoomLimit;
 	
 	private String strGSTNo;
+	
+	private String strBankAcName;
+	private String strBankAcNumber;
+	private String strBankIFSC;
+	private String stBranchName;
+	private String strPanNo;
+	private String strHscCode;
+	
 
 	public String getStrGSTNo() {
 		return strGSTNo;
@@ -141,6 +149,54 @@ public class clsPropertySetupBean {
 
 	public void setStrRoomLimit(String strRoomLimit) {
 		this.strRoomLimit = strRoomLimit;
+	}
+
+	public String getStrBankAcName() {
+		return strBankAcName;
+	}
+
+	public void setStrBankAcName(String strBankAcName) {
+		this.strBankAcName = strBankAcName;
+	}
+
+	public String getStrBankAcNumber() {
+		return strBankAcNumber;
+	}
+
+	public void setStrBankAcNumber(String strBankAcNumber) {
+		this.strBankAcNumber = strBankAcNumber;
+	}
+
+	public String getStrBankIFSC() {
+		return strBankIFSC;
+	}
+
+	public void setStrBankIFSC(String strBankIFSC) {
+		this.strBankIFSC = strBankIFSC;
+	}
+
+	public String getStBranchName() {
+		return stBranchName;
+	}
+
+	public void setStBranchName(String stBranchName) {
+		this.stBranchName = stBranchName;
+	}
+
+	public String getStrPanNo() {
+		return strPanNo;
+	}
+
+	public void setStrPanNo(String strPanNo) {
+		this.strPanNo = strPanNo;
+	}
+
+	public String getStrHscCode() {
+		return strHscCode;
+	}
+
+	public void setStrHscCode(String strHscCode) {
+		this.strHscCode = strHscCode;
 	}
 
 	

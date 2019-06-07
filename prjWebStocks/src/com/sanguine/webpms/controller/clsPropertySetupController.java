@@ -428,6 +428,14 @@ public class clsPropertySetupController {
 			GSTNo=objBean.getStrGSTNo().toString();
 		}
 		objPropertySetupModel.setStrGSTNo(objBean.getStrGSTNo().toString());
+		objPropertySetupModel.setStrBankAcName(objBean.getStrBankAcName().toString());
+		objPropertySetupModel.setStrBankAcNumber(objBean.getStrBankAcNumber().toString());
+		objPropertySetupModel.setStrBankIFSC(objBean.getStrBankIFSC().toString());
+		objPropertySetupModel.setStBranchName(objBean.getStBranchName().toString());
+		objPropertySetupModel.setStrPanNo(objBean.getStrPanNo().toString());
+		objPropertySetupModel.setStrHscCode(objBean.getStrHscCode().toString());
+		
+		
 		return objPropertySetupModel;
 	}
 }
