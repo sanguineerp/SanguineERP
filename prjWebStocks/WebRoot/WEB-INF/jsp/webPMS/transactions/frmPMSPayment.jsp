@@ -343,8 +343,6 @@
 /**
 * Success Message After Saving Record
 **/
- 	$(document).ready(function()
-	{
 		var message='';
 		<%if (session.getAttribute("success") != null) 
 		{
@@ -371,7 +369,7 @@
 				}<%
 			}
 		}%>
-	});
+	
 	
  	/**
 	*   Attached document Link

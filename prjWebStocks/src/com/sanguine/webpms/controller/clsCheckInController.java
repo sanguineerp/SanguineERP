@@ -771,7 +771,7 @@ public class clsCheckInController {
 					+ "tblwalkinroomratedtl c,tblcheckinhd d,"
 					+ "tblguestmaster e WHERE a.strRoomType=b.strRoomTypeCode "
 					+ "and c.strWalkinNo=d.strWalkInNo "
-					+ "and a.strGuestCode=e.strGuestCode "
+					+ "and a.strGuestCode=e.strGuestCode AND a.strCheckInNo=d.strCheckInNo "
 					+ "and d.strCheckInNo = '"+reciptNo+"'"
 					+ " group by d.strCheckInNo";
 			

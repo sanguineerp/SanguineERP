@@ -113,6 +113,7 @@
 	
 	var message='';
 	var retval="";
+	var checkAgainst="";
 	<%if (session.getAttribute("success") != null) 
 	{
 		if(session.getAttribute("successMessage") != null)
@@ -126,17 +127,20 @@
 		if (test) 
 		{
 			%> alert("Data Save successfully\n\n"+message);
-			var checkInNo='';
-			var isOk=confirm("Do You Want to CheckIn Slip ?");
-			if(isOk)
-				{
-				
-				checkInNo='<%=session.getAttribute("AdvanceAmount").toString()%>';
-				window.open("rptCheckInSlip.html?checkInNo="+checkInNo);
-    			//window.location.href=getContextPath()+"/rptCheckInSlip.html?checkInNo="+checkInNo ;
-    			session.removeAttribute("AdvanceAmount");
-    			
-				}<%
+			var advAmount='';
+			var isCheckOk=confirm("Do You Want to Generate Check-In Slip ?"); 
+			var isAdvanceOk=confirm("Do You Want to pay Advance Amount ?"); 
+			
+			if(isCheckOk)
+			{
+				advAmount='<%=session.getAttribute("AdvanceAmount").toString()%>';
+				window.open(getContextPath() + "/rptCheckInSlip.html?checkInNo=" + advAmount,'_blank');
+			}
+			if(isAdvanceOk)
+			{
+				window.open(getContextPath()+"/frmPMSPaymentAdvanceAmount.html?AdvAmount="+advAmount);
+				session.removeAttribute("AdvanceAmount");
+			}<%	
 		}
 	}%>
 	function funSetCheckInData(code){
@@ -1102,45 +1106,6 @@
 			window.open("searchform.html?formname="+fieldName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 			//window.showModalDialog("searchform.html?formname="+fieldName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
 		}
-		
-	
-		$(document).ready(function()
-		{
-			var message='';
-			<%if (session.getAttribute("success") != null) 
-			{
-				if(session.getAttribute("successMessage") != null)
-				{%>
-					message='<%=session.getAttribute("successMessage").toString()%>';
-				<%
-				   	session.removeAttribute("successMessage");
-				}
-				boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
-				session.removeAttribute("success");
-				if (test) 
-				{
-					%>
-					alert("Data Save successfully\n\n"+message);
-					var AdvAmount='';
-// 					var isOk=confirm("Do You Want to pay Advance Amount ?");
-// 					if(isOk)
-// 						{
-// 						var checkAgainst="checkIN";
-<%-- 						AdvAmount='<%=session.getAttribute("AdvanceAmount").toString()%>'; --%>
-// // 						window.location.href=getContextPath()+"/frmPMSPaymentAdvanceAmount.html?AdvAmount="+AdvAmount ;
-// 		    			session.removeAttribute("AdvanceAmount");
-// //							session.removeAttribute("Against");
-					
-// 						}
-					
-					
-					<%
-				}
-			}%>
-			
-			
-		});
-		
 		
 		function funOnChange() {
 			if ($("#cmbAgainst").val() == "Reservation")

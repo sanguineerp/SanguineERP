@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
@@ -252,28 +252,28 @@
 				<text><![CDATA[Note:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="23" y="221" width="200" height="21" uuid="dd4c59c0-1dbd-4b5f-bfad-892b683cff11"/>
+				<reportElement x="23" y="221" width="227" height="21" uuid="dd4c59c0-1dbd-4b5f-bfad-892b683cff11"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[1. Advance paid is non-refundable]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="23" y="245" width="200" height="24" uuid="952f6f6e-986d-4ad4-a4cf-0efb9cb2f233"/>
+				<reportElement x="23" y="245" width="227" height="24" uuid="952f6f6e-986d-4ad4-a4cf-0efb9cb2f233"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[2. Issued subject to Nashik Jurisdiction]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="23" y="273" width="200" height="25" uuid="29587b0b-1ddd-45af-99aa-d651602f9772"/>
+				<reportElement x="23" y="273" width="217" height="25" uuid="29587b0b-1ddd-45af-99aa-d651602f9772"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[3. Above information read and accepted]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="497" y="31" width="45" height="20" uuid="f6f4ea79-e201-4238-aef3-746c26ffec51"/>
+				<reportElement x="497" y="31" width="55" height="20" uuid="f6f4ea79-e201-4238-aef3-746c26ffec51"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>

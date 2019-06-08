@@ -122,7 +122,7 @@ public class clsPMSPaymentController {
 
 		List<String> listAgainst = new ArrayList<>();
 		listAgainst.add("Reservation");
-		// listAgainst.add("Check-In");
+		//listAgainst.add("Check-In");
 		listAgainst.add("Folio-No");
 		listAgainst.add("Bill");
 		model.put("listAgainst", listAgainst);
@@ -709,9 +709,15 @@ public class clsPMSPaymentController {
 			} else {
 				reportName = servletContext.getRealPath("/WEB-INF/reports/webpms/rptCheckInPaymentRecipt.jrxml");
 
-				String sqlPayment = "select a.strReceiptNo,ifnull(c.intNoOfAdults,''),ifnull(c.intNoOfChild,''),a.strReservationNo ,c.strCheckInNo,ifnull(e.strRoomType,'') " + ",DATE_FORMAT(c.dteArrivalDate,'%d-%m-%Y'),DATE_FORMAT(c.dteDepartureDate,'%d-%m-%Y'),ifnull(f.strFirstName,''),ifnull(f.strMiddleName,'')"
-						+ ",ifnull(f.strLastName,''),ifnull(d.strSettlementDesc,''),a.dblPaidAmt,b.strRemarks,DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y') " + "from tblreceipthd a left outer join  tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo " + "left outer join tblcheckinhd c on a.strRegistrationNo=c.strRegistrationNo  "
-						+ "left outer join tblreservationdtl e on a.strReservationNo=e.strReservationNo " + "left outer join tblguestmaster f on e.strGuestCode=f.strGuestCode " + "left outer join  tblsettlementmaster d on b.strSettlementCode=d.strSettlementCode " + "where a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "'  ";
+				String sqlPayment = "SELECT a.strReceiptNo, IFNULL(c.intNoOfAdults,''), IFNULL(c.intNoOfChild,''),a.strReservationNo,c.strCheckInNo,"
+						+ " IFNULL(g.strRoomTypeDesc,''), DATE_FORMAT(c.dteArrivalDate,'%d-%m-%Y'), DATE_FORMAT(c.dteDepartureDate,'%d-%m-%Y'),"
+						+ " IFNULL(f.strFirstName,''), IFNULL(f.strMiddleName,''), IFNULL(f.strLastName,''), IFNULL(d.strSettlementDesc,''),a.dblPaidAmt,"
+						+ " b.strRemarks, DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y') FROM tblreceipthd a "
+						+ " LEFT OUTER JOIN tblreceiptdtl b ON a.strReceiptNo=b.strReceiptNo LEFT OUTER JOIN "
+						+ " tblcheckinhd c ON a.strRegistrationNo=c.strRegistrationNo LEFT OUTER JOIN "
+						+ " tblcheckindtl e ON a.strCheckInNo=e.strCheckInNo LEFT OUTER JOIN tblroomtypemaster g "
+						+ " ON g.strRoomTypeCode=e.strRoomType LEFT OUTER JOIN tblguestmaster f ON e.strGuestCode=f.strGuestCode"
+						+ " LEFT OUTER JOIN tblsettlementmaster d ON b.strSettlementCode=d.strSettlementCode WHERE a.strReceiptNo='"+reciptNo+"' AND a.strClientCode='"+clientCode+"'  ";
 				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
 
 				for (int i = 0; i < listOfPayment.size(); i++) {
@@ -788,10 +794,9 @@ public class clsPMSPaymentController {
 
 		List<String> listAgainst = new ArrayList<>();
 		listAgainst.add("Reservation");
-		// listAgainst.add("Check-In");
 		listAgainst.add("Folio-No");
 		listAgainst.add("Bill");
-		model.put("listAgainst", listAgainst);
+		
 		String AdvAmount = request.getParameter("AdvAmount").toString();
 		// String checkAgainst=request.getParameter("checkAgainst").toString();
 		double dblBalanceAmt=0.0;
@@ -817,13 +822,14 @@ public class clsPMSPaymentController {
 			}
 		}
 		if(AdvAmount.charAt(2)=='C'){
-		/* String sqlCheckIn = "SELECT a.dblRoomTerrif FROM tblroomtypemaster a,tblcheckindtl  b "
+		String sqlCheckIn = "SELECT a.dblRoomTerrif FROM tblroomtypemaster a,tblcheckindtl  b "
 		 		+ "WHERE b.strCheckInNo = '"+AdvAmount+"' and a.strRoomTypeCode=b.strRoomType";
 		 List listResevation = objGlobalFunctionsService.funGetDataList(sqlCheckIn, "sql");
 		 if (listResevation.size()>0) 
 			{
 				dblBalanceAmt=Double.parseDouble(listResevation.get(0).toString());
-			}*/
+			}
+		 listAgainst.add(0, "Check-In");
 		}
 		request.setAttribute("code", AdvAmount);
 		request.setAttribute("dblBalanceAmt", dblBalanceAmt);
@@ -833,6 +839,7 @@ public class clsPMSPaymentController {
 			urlHits = "1";
 		}
 		model.put("urlHits", urlHits);
+		model.put("listAgainst", listAgainst);
 
 		if (urlHits.equalsIgnoreCase("1")) {
 

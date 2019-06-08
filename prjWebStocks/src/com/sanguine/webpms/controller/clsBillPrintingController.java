@@ -109,6 +109,7 @@ public class clsBillPrintingController {
 			String reservationNo = "";
 			double balance = 0.0;
 			String GSTNo = "", companyName = "";
+			String folio="";
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
@@ -191,7 +192,7 @@ public class clsBillPrintingController {
 					Object[] arGuest = (Object[]) listguest.get(i);
 					guestgstNO = arGuest[16].toString();
 				}
-				String folio = arr[0].toString();
+				folio = arr[0].toString();
 				String roomNo = arr[1].toString();
 				registrationNo = arr[2].toString();
 				reservationNo = arr[3].toString();
@@ -428,10 +429,7 @@ public class clsBillPrintingController {
 				String sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
 						+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
 						+ " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
-						+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
-						+ " and c.strReservationNo='"
-						+ reservationNo
-						+ "' and c.strAgainst='Reservation' ";
+						+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode AND c.strFolioNo='"+folio+"' ";
 
 				List paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
 				for (int i = 0; i < paymentDtlList.size(); i++) {
