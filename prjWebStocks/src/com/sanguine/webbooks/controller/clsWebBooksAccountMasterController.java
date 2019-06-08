@@ -186,15 +186,57 @@ public class clsWebBooksAccountMasterController {
 
 	// Get Account Code And Name
 	@RequestMapping(value = "/loadAccontCodeAndName", method = RequestMethod.GET)
-	public @ResponseBody clsWebBooksAccountMasterModel funGetAccountCodeAndName(@RequestParam("accountCode") String accountCode, HttpServletRequest req) {
+	public @ResponseBody clsWebBooksAccountMasterBean funGetAccountCodeAndName(@RequestParam("accountCode") String accountCode, HttpServletRequest req) {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		clsWebBooksAccountMasterBean objAccBean=new clsWebBooksAccountMasterBean();
 		clsWebBooksAccountMasterModel objModel = objWebBooksAccountMasterService.funGetAccountCodeAndName(accountCode, clientCode);
 		if (null == objModel) {
 			objModel = new clsWebBooksAccountMasterModel();
 			objModel.setStrAccountCode("Invalid Code");
 		}
+		
+		if(objModel!=null){
+			objAccBean.setDteCreatedDate(objModel.getDteCreatedDate());
+			objAccBean.setStrAccountCode(objModel.getStrAccountCode());
+			objAccBean.setStrAccountName(objModel.getStrAccountName());
+			objAccBean.setStrBranch(objModel.getStrBranch());
+			objAccBean.setStrCashflowCode(objModel.getStrCashflowCode());
+			if(!(objModel.getIntMSGrpCode()!=null || objModel.getIntMSGrpCode().equalsIgnoreCase("NA"))){
+				objAccBean.setIntMSGrpCode(Long.parseLong(objGlobal.funIfNull(objModel.getIntMSGrpCode(), "0", objModel.getIntMSGrpCode()) ));	
+			}
+			objAccBean.setIntOpeningBal(objModel.getIntOpeningBal());	
+			objAccBean.setIntPrevYearBal(objModel.getIntPrevYearBal());
+			if(!(objModel.getIntPreYearGrpCode()!=null || objModel.getIntPreYearGrpCode().equalsIgnoreCase("NA"))){
+				objAccBean.setIntPreYearGrpCode(Long.parseLong(objGlobal.funIfNull(objModel.getIntPreYearGrpCode(), "0", objModel.getIntPreYearGrpCode()) ));	
+			}
+			
+			objAccBean.setStrChequeNo(objModel.getStrChequeNo());
+			objAccBean.setStrClientCode(objModel.getStrClientCode());
+			objAccBean.setStrCrDr(objModel.getStrCrDr());
+			objAccBean.setStrCreditor(objModel.getStrCreditor());
+			objAccBean.setStrDebtor(objModel.getStrDebtor());
+			objAccBean.setStrDeduction(objModel.getStrDeduction());
+			objAccBean.setStrDeptCode(objModel.getStrDeptCode());
+			objAccBean.setStrEmployee(objModel.getStrEmployee());
+			objAccBean.setStrEmployeeName(objModel.getStrEmployeeName());
+			objAccBean.setStrFBT(objModel.getStrFBT());
+			objAccBean.setStrOperational(objModel.getStrOperational());
+			objAccBean.setStrPrevCrDr(objModel.getStrPrevCrDr());
+			objAccBean.setStrPropertyCode(objModel.getStrPropertyCode());
+			objAccBean.setStrRRGRN(objModel.getStrRRGRN());
+			objAccBean.setStrSubGroupCode(objModel.getStrSubGroupCode());
+			objAccBean.setStrSubGroupName(objModel.getStrSubGroupName());
+			objAccBean.setStrTaxonPurchase(objModel.getStrTaxonPurchase());
+			objAccBean.setStrTaxonSales(objModel.getStrTaxonSales());
+			objAccBean.setStrType(objModel.getStrType());
+			objAccBean.setStrUserCreated(objModel.getStrUserCreated());
+			objAccBean.setStrUserModified(objModel.getStrUserModified());
+			objAccBean.setDteCreatedDate(objModel.getDteCreatedDate());
+			objAccBean.setDteLastModified(objModel.getDteLastModified());
+			//objAccBean.setIntGId(objModel.getIntGId());
+		}
 
-		return objModel;
+		return objAccBean;
 	}
 
 	// Save or Update WebBooksAccountMaster

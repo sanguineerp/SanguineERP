@@ -44,7 +44,7 @@ public class clsTaxHdModel extends clsBaseModel implements Serializable {
 	@CollectionOfElements(fetch = FetchType.EAGER)
 	@JoinTable(name = "tbltaxsettlement", joinColumns = { @JoinColumn(name = "strClientCode"), @JoinColumn(name = "strTaxCode") })
 	@Id
-	@AttributeOverrides({ @AttributeOverride(name = "strTaxCode", column = @Column(name = "strTaxCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })
+	@AttributeOverrides({ @AttributeOverride(name = "strTaxCode", column = @Column(name = "strTaxCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")),@AttributeOverride(name = "strSettlementCode", column = @Column(name = "strSettlementCode")) })
 	List<clsTaxSettlementMasterModel> listTaxSettlement = new ArrayList<clsTaxSettlementMasterModel>();
 
 	

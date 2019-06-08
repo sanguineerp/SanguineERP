@@ -161,6 +161,7 @@ public class clsTaxMasterController {
 			objModel = new clsTaxHdModel();
 			objModel.setStrTaxCode("Invalid Code");
 		} else {
+			
 			objModel.setDtValidFrom(objGlobal.funGetDate("yyyy/MM/dd", objModel.getDtValidFrom()));
 			objModel.setDtValidTo(objGlobal.funGetDate("yyyy/MM/dd", objModel.getDtValidTo()));
 		}

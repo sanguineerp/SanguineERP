@@ -10,7 +10,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.sanguine.model.clsSettlementMasterModel;
 import com.sanguine.model.clsTaxHdModel;
 import com.sanguine.model.clsTaxSettlementMasterModel;
 
@@ -38,6 +37,7 @@ public class clsTaxMasterDaoImpl implements clsTaxMasterDao {
 		return (List<clsTaxHdModel>) sessionFactory.getCurrentSession().createCriteria(clsTaxHdModel.class).list();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public clsTaxHdModel funGetObject(String code, String clientCode) {
 		// TODO Auto-generated method stub
@@ -76,50 +76,46 @@ public class clsTaxMasterDaoImpl implements clsTaxMasterDao {
 			return lastNo;
 		}
 	}
-
-	@SuppressWarnings("unchecked")
+	
+	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List funGetDtlList(String taxCode, String clientCode) {
 		Query query = sessionFactory.getCurrentSession().createQuery("from clsTaxHdModel");
-		@SuppressWarnings("rawtypes")
+		
 		List list = query.list();
 		return list;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List funGetTaxes(String taxCode, String clientCode) {
 		Query query = sessionFactory.getCurrentSession().createSQLQuery("select a.strTaxCode,a.strTaxDesc from tbltaxhd a " + " where a.strClientCode='" + clientCode + "' and a.strTaxCode<> '" + taxCode + "'");
-		@SuppressWarnings("rawtypes")
+		
 		List list = query.list();
 		return list;
 
 	}
-
+	@SuppressWarnings("rawtypes")
 	public List funGetSubGroupList(String clientCode) {
 		Query query = sessionFactory.getCurrentSession().createSQLQuery("select a.strSGCode,a.strSGName " + " from tblsubgroupmaster a where a.strClientCode='" + clientCode + "' ");
-		@SuppressWarnings("rawtypes")
+		
 		List list = query.list();
 		return list;
 
 	}
 
-
+	@SuppressWarnings("rawtypes")
 	public List funGetSettlementList(String clientCode) {
 		Query query = sessionFactory.getCurrentSession().createSQLQuery("select a.strSettlementCode,a.strSettlementDesc " + " from tblsettlementmaster a where a.strClientCode='" + clientCode + "' and a.strApplicable='true' ");
-		@SuppressWarnings("rawtypes")
 		List list = query.list();
 		return list;
 
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List funGetTaxSettlement( String taxCode) {
-		// String
-		// sql="select a.strBOMCode from tblbommasterhd a where a.strParentCode='"+strParentCode+"' and a.strClientCode='"+strClientCode+"'";
-
-//		String hql = "select a.strSettlementCode, b.strSettlementDesc,a.strApplicable from tbltaxsettlement a,tblsettlementmaster b " + "where  a.strTaxCode= :taxCode and a.strSettlementCode=b.strSettlementCode";
 		Query query = sessionFactory.getCurrentSession().createSQLQuery("select a.strSettlementCode, b.strSettlementDesc,a.strApplicable from tbltaxsettlement a,tblsettlementmaster b " + "where  a.strTaxCode= '"+taxCode+"' and a.strSettlementCode=b.strSettlementCode");
-//		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-//		
-//		query.setParameter("taxCode", taxCode);
+		
 		List list = query.list();
 		return list;
 	}

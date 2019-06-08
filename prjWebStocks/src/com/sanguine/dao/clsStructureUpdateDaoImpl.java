@@ -1017,13 +1017,26 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblbillpasshd` ADD COLUMN `strSettlementType` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strAuthLevel5` ";
 		funExecuteQuery(sql);
 		
-		
-		
 		sql="ALTER TABLE `tblpropertysetup` ADD COLUMN `strPOSTRoundOffAmtToWebBooks` VARCHAR(1) NOT NULL DEFAULT 'Y' AFTER `strRoundOffFinalAmtOnTransaction`";
 		funExecuteQuery(sql);
 		
 		sql="ALTER TABLE `tblstockadjustmentdtl` ADD COLUMN `strJVNo` VARCHAR(50) NOT NULL DEFAULT '' AFTER `dblParentQty`; ";
 		funExecuteQuery(sql);
+		
+
+		sql="ALTER TABLE `tbltaxsettlement` COLLATE='latin1_swedish_ci', DROP PRIMARY KEY, ADD PRIMARY KEY (`strClientCode`, `strTaxCode`, `strSettlementCode`);";
+		funExecuteQuery(sql);
+		
+		sql="ALTER TABLE `tbltaxsettlement` ALTER `strTaxCode` DROP DEFAULT, ALTER `strClientCode` DROP DEFAULT;";
+		funExecuteQuery(sql);
+		
+		sql="ALTER TABLE `tbltaxsettlement` "
+			+" CHANGE COLUMN `strSettlementCode` `strSettlementCode` VARCHAR(10) NOT NULL DEFAULT '' FIRST, "
+			+" CHANGE COLUMN `strTaxCode` `strTaxCode` VARCHAR(10) NOT NULL AFTER `strSettlementCode`, "
+			+" CHANGE COLUMN `strApplicable` `strApplicable` VARCHAR(10) NOT NULL DEFAULT 'No' AFTER `strTaxCode`, "
+			+" CHANGE COLUMN `strClientCode` `strClientCode` VARCHAR(10) NOT NULL AFTER `strApplicable`;";
+		funExecuteQuery(sql);
+		
 		
 		
 		/*----------------WebStock Forms only---------------------------*/

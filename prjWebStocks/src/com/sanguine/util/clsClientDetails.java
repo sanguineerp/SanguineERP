@@ -145,7 +145,7 @@ public class clsClientDetails {
  			hmClientDtl.put("173.002", clsClientDetails.createClientDetails("173.002", "Le Flamington", dFormat.parse("2018-12-15"), dFormat.parse("2019-12-24")));
 			hmClientDtl.put("174.001", clsClientDetails.createClientDetails("174.001", "KRD Eateries Pvt Ltd", dFormat.parse("2017-06-06"), dFormat.parse("2017-10-31"))); // krimsons
 			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "COPPER STORY PRIVATE LIMITED", dFormat.parse("2017-06-06"), dFormat.parse("2019-06-12")));//Renewed on 06-02-2019 for 15 days till 20-02-2019 //renewed licence and rename TJS to Copper story privated limited till 01-02-2019 //renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
-			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2019-06-08")));
+			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2019-06-24")));
 			hmClientDtl.put("181.001", clsClientDetails.createClientDetails("181.001", "RMV COMMUNICATION PVT LTD", dFormat.parse("2017-06-20"), dFormat.parse("2017-07-20")));
 			hmClientDtl.put("184.001", clsClientDetails.createClientDetails("184.001", "BALAJI TRADERS PVT LTD", dFormat.parse("2017-07-03"), dFormat.parse("2018-01-07")));
 			hmClientDtl.put("189.001", clsClientDetails.createClientDetails("189.001", "CLASSIC BANGLES", dFormat.parse("2017-08-31"), dFormat.parse("2018-08-10"))); // for demo
@@ -202,7 +202,8 @@ public class clsClientDetails {
 			hmClientDtl.put("312.001", clsClientDetails.createClientDetails("312.001", "Reddy's Fine Dine Restaurant", dFormat.parse("2019-05-08"), dFormat.parse("2019-06-10"))); // released on 2019-05-08 for 1 month till 2019-06-10
 			hmClientDtl.put("315.001", clsClientDetails.createClientDetails("315.001", "KUTTING FUSION HOSPITALITY LLP", dFormat.parse("2019-05-25"), dFormat.parse("2019-06-25"))); // renewed on 25-05-2019 for 1 month till 25-06-2019
 			hmClientDtl.put("316.001", clsClientDetails.createClientDetails("316.001", "MRP HOSPITALITY", dFormat.parse("2019-05-25"), dFormat.parse("2019-06-25"))); // renewed on 25-05-2019 for 1 month till 25-06-2019
-			
+			hmClientDtl.put("319.001", clsClientDetails.createClientDetails("319.001", "LAXMI FOODS", dFormat.parse("2019-06-04"), dFormat.parse("2019-07-04"))); // renewed on 04-06-2019 for 1 month till 04-07-2019
+			//
 			
 		} catch (Exception e) {
 			e.printStackTrace();
