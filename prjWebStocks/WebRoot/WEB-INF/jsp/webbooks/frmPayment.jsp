@@ -731,14 +731,14 @@ function funSetDebtorMasterData(debtorCode)
 			case "Cash":
 				break;
 				
-			case "Credit Card":
+			/* case "Credit Card":
 				if(chequeData=='')
 			 		{
 			 			alert('Fill Credit Card Number!!!');
 			 			$("#txtChequeNo").focus();
 			 			return;
 			 		}
-				break;
+				break; */
 
 			case "Cheque":
 				if(chequeData=='')
@@ -749,14 +749,14 @@ function funSetDebtorMasterData(debtorCode)
 		 		}
 				break;
 	
-			case "NEFT":
+			/* case "NEFT":
 				if(chequeData=='')
 		 		{
-		 			alert('Fill NEFT Number!!!');
+		 			//alert('Fill NEFT Number!!!');
 		 			$("#txtChequeNo").focus();
-		 			return;
+		 			return ();
 		 		}
-				break;
+				break; */
 		}
 		
 	    var debtorCode=$("#txtDebtorCode").val();
