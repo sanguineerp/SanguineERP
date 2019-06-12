@@ -240,7 +240,7 @@
 				funSetLocationTo(code);					
 			break;
 			
-			case 'productmasterStkable':
+			case 'productInUse':
 				funSetProduct(code);		
 			break;
 			 			
@@ -1587,8 +1587,9 @@
 		<table class="transTableMiddle">
 			<tr>
 				<td width="10%"><label>Product Code</label></td>
-				<td width="20%"><input id="txtProdCode" name="txtProdCode" ondblclick="funHelp('productmasterStkable')" class="searchTextBox" /></td>
-				
+				<!-- <td width="20%"><input id="txtProdCode" name="txtProdCode" ondblclick="funHelp('productmasterStkable')" class="searchTextBox" /></td> -->
+				<td width="20%"><input id="txtProdCode" name="txtProdCode" ondblclick="funHelp('productInUse')" class="searchTextBox" /></td>
+				<!-- productInUse -->
 				<td width="10%">Product Name</td>
 				<td width="65%"><span id="spProdName" class="namelabel" style="font-size: 12px;"></span></td>
 				</tr>

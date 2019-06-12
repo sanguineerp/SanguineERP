@@ -284,7 +284,7 @@
 				</graphicElement>
 			</line>
 			<textField pattern="dd-MM-yyyy">
-				<reportElement x="66" y="86" width="53" height="13" uuid="d839ec0c-4ece-4442-8d23-dc24268b2663"/>
+				<reportElement x="66" y="86" width="134" height="13" uuid="d839ec0c-4ece-4442-8d23-dc24268b2663"/>
 				<box leftPadding="1"/>
 				<textFieldExpression><![CDATA[$P{dteFromDate}]]></textFieldExpression>
 			</textField>
@@ -309,13 +309,13 @@
 				<text><![CDATA[To Date]]></text>
 			</staticText>
 			<textField pattern="dd-MM-yyyy">
-				<reportElement x="360" y="90" width="100" height="13" uuid="5119d366-56f1-4a9c-8ee6-49c390e52057">
+				<reportElement x="360" y="90" width="150" height="13" uuid="5119d366-56f1-4a9c-8ee6-49c390e52057">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$P{dteToDate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd-MM-yyyy">
-				<reportElement x="359" y="106" width="183" height="13" uuid="b83c7d08-e138-4fc7-b6ac-71ce4cd28699">
+			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy">
+				<reportElement x="359" y="106" width="193" height="13" uuid="b83c7d08-e138-4fc7-b6ac-71ce4cd28699">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$P{strACName}]]></textFieldExpression>
@@ -337,7 +337,7 @@
 				<text><![CDATA[Bank Code]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="66" y="107" width="95" height="13" uuid="1cfc9dcd-3bdf-4dec-a6c5-23b035a77e45">
+				<reportElement x="66" y="107" width="179" height="13" uuid="1cfc9dcd-3bdf-4dec-a6c5-23b035a77e45">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -355,7 +355,7 @@
 				<text><![CDATA[Currency]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="66" y="128" width="95" height="13" uuid="97a7cbf6-fb9f-48c1-9332-0b345237d3de">
+				<reportElement x="66" y="128" width="134" height="13" uuid="97a7cbf6-fb9f-48c1-9332-0b345237d3de">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>

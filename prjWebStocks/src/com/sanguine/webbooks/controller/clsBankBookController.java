@@ -138,14 +138,14 @@ public class clsBankBookController {
 					cal.add(Calendar.DATE, -1);
 					String newToDate = (cal.getTime().getYear() + 1900) + "-" + (cal.getTime().getMonth() + 1) + "-" + (cal.getTime().getDate());
                    String sql = " select '" + fromDate + "','Op','Opening' ,'" + fromDate + "','','0.00','0.00',IFNULL(sum(op),0.00),pname,conv2,currencyName from " 
-							+ " (SELECT a.strVouchNo, DATE_FORMAT(a.dteVouchDate,'%d-%m-%Y') vouchDate,sum(a.dblAmt) payment,0.00 receipt, IFNULL(a.strNarration,''),sum(a.dblAmt)-0.00 op,c.strPName as pname,"
+							+ " (SELECT a.strVouchNo, DATE_FORMAT(a.dteVouchDate,'%d-%m-%Y') vouchDate,sum(a.dblAmt) payment,0.00 receipt, IFNULL(a.strNarration,''),sum(a.dblAmt)-0.00 op,ifnull(c.strPName,'') as pname,"
 							+ " if((d.strCurrencyCode is null) or (d.strCurrencyCode ='NA' ) or (d.strCurrencyCode ='' ),"
 							+ " (select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster  where strCurrencyCode='"+currency+"') ,a.dblConversion) as conv2,ifnull(ifnull(d.strCurrencyName,(select strCurrencyName from "+webStockDB+".tblcurrencymaster where strCurrencyCode=a.strCurrency)),(SELECT strCurrencyName FROM "+webStockDB+".tblcurrencymaster WHERE strCurrencyCode='"+objSetup.getStrCurrencyCode()+"')) as currencyName " 
 							+ " FROM  tblpaymentdtl b,"+webStockDB+".tblpartymaster c, tblpaymenthd  a left outer join "+webStockDB+".tblcurrencymaster d on a.strCurrency=d.strCurrencyCode and a.strCurrency='"+currency+"'"
 							+ " WHERE a.strVouchNo=b.strVouchNo and b.strAccountCode='"+ objBean.getStrAccountCode() + "' "
 							+ " and  date(a.dteVouchDate) BETWEEN '" + startDate + "' and '" + newToDate + "' AND a.strClientCode='" + clientCode + "' AND a.strSancCode=c.strDebtorCode" 
 							+ " UNION all " 
-							+ " SELECT a.strVouchNo, DATE_FORMAT(a.dteVouchDate,'%d-%m-%Y') vouchDate,0.00 payment,sum(a.dblAmt) receipt, IFNULL(a.strNarration,''),0.00-sum(a.dblAmt) op,c.strPName AS pname,"
+							+ " SELECT a.strVouchNo, DATE_FORMAT(a.dteVouchDate,'%d-%m-%Y') vouchDate,0.00 payment,sum(a.dblAmt) receipt, IFNULL(a.strNarration,''),0.00-sum(a.dblAmt) op,ifnull(c.strPName,'') AS pname,"
 							+ " if((d.strCurrencyCode is null) or (d.strCurrencyCode ='NA' ) or (d.strCurrencyCode ='' ),"
 							+ " (select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster  where strCurrencyCode='"+currency+"') ,a.dblConversion) as conv2,ifnull(ifnull(d.strCurrencyName,(select strCurrencyName from "+webStockDB+".tblcurrencymaster where strCurrencyCode=a.strCurrency)),(SELECT strCurrencyName FROM "+webStockDB+".tblcurrencymaster WHERE strCurrencyCode='"+objSetup.getStrCurrencyCode()+"')) as currencyName  " 
 							+ " FROM tblreceiptdtl b,"+webStockDB+".tblpartymaster c, tblreceipthd  a left outer join "+webStockDB+".tblcurrencymaster d on a.strCurrency=d.strCurrencyCode and a.strCurrency='"+currency+"'"
@@ -218,8 +218,15 @@ public class clsBankBookController {
 						objProdBean.setDteBillDate("");
 						objProdBean.setStrBillNo(prodArr[6].toString());
 						objProdBean.setStrCurrency(prodArr[8].toString());
-						objProdBean.setDblCrAmt(Double.parseDouble(prodArr[4].toString()) / currValue);// Recipt Amount
-						objProdBean.setDblDrAmt(Double.parseDouble(prodArr[3].toString()) / currValue);// Payment Amount
+						if(prodArr[2].toString().equalsIgnoreCase("Payment")){
+							objProdBean.setDblCrAmt(0);// Recipt Amount
+							objProdBean.setDblDrAmt(Double.parseDouble(prodArr[3].toString()) / currValue);// Payment Amount
+							
+						}else{
+							objProdBean.setDblCrAmt(Double.parseDouble(prodArr[4].toString()) / currValue);// Recipt Amount
+							objProdBean.setDblDrAmt(0);// Payment Amount
+								
+						}
 						objProdBean.setDblBalAmt(Double.parseDouble(prodArr[5].toString()) / currValue);
 						objProdBean.setStrBillNo(prodArr[6].toString());
 						fieldList.add(objProdBean);
@@ -274,8 +281,16 @@ public class clsBankBookController {
 					objProdBean.setDteBillDate("");
 					objProdBean.setStrBillNo(prodArr[6].toString());
 					objProdBean.setStrCurrency(prodArr[8].toString());
-					objProdBean.setDblCrAmt(Double.parseDouble(prodArr[3].toString()) / currValue);// Recipt Amount
-					objProdBean.setDblDrAmt(Double.parseDouble(prodArr[4].toString()) / currValue);// Payment Amount
+					if(prodArr[2].toString().equalsIgnoreCase("Payment")){
+						objProdBean.setDblDrAmt(Double.parseDouble(prodArr[3].toString()) / currValue);// Payment Amount
+						objProdBean.setDblCrAmt(0);// Recipt Amount
+						
+					}else{
+						objProdBean.setDblCrAmt(Double.parseDouble(prodArr[4].toString()) / currValue);// Recipt Amount	
+						objProdBean.setDblDrAmt(0);// Payment Amount
+					}
+					
+					
 					objProdBean.setDblBalAmt(Double.parseDouble(prodArr[5].toString()) / currValue);
 					
 					fieldList.add(objProdBean);
