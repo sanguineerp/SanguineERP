@@ -236,6 +236,13 @@ public class clsPostRoomTerrifController {
 		List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
 		listTaxProdDtl.add(objTaxProductDtl);
 		// 
+		
+		String sqlDiscWalkIn = "select a.dblDiscount from tblwalkinroomratedtl a ,"
+				+ "tblfoliohd b where a.strWalkinNo=b.strWalkInNo and b.strFolioNo='"+folioNo+"'";
+		
+		List listDiscWalkIn = objGlobalFunctionsService.funGetListModuleWise(sqlDiscWalkIn, "sql");
+		objTaxProductDtl.setDblDiscountOnTariff(Double.parseDouble(listDiscWalkIn.get(0).toString()));
+		
 		Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Room Night");
 
 		List<clsFolioDtlModel> listFolioDtl = new ArrayList<clsFolioDtlModel>();

@@ -10,6 +10,8 @@ public class clsTaxProductDtl {
 
 	private String strDeptCode;
 	
+	private double dblDiscountOnTariff;
+	
 	
 	public String getStrTaxProdCode() {
 		return strTaxProdCode;
@@ -41,6 +43,14 @@ public class clsTaxProductDtl {
 
 	public void setStrDeptCode(String strDeptCode) {
 		this.strDeptCode = strDeptCode;
+	}
+
+	public double getDblDiscountOnTariff() {
+		return dblDiscountOnTariff;
+	}
+
+	public void setDblDiscountOnTariff(double dblDiscountOnTariff) {
+		this.dblDiscountOnTariff = dblDiscountOnTariff;
 	}
 
 }

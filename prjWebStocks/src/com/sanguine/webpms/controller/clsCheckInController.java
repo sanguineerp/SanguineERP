@@ -764,16 +764,14 @@ public class clsCheckInController {
 			ArrayList datalist = new ArrayList();
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/webpms/rptCheckInSlip.jrxml");
 			
-			String sql = "SELECT a.strCheckInNo,a.strGuestCode,a.strRoomNo,"
-					+ "a.strExtraBedCode,a.strRoomType,b.dblRoomTerrif,"
-					+ "ifnull(c.dblDiscount,0.0),d.intNoOfAdults,DATE_FORMAT(d.dteCheckInDate,'%d-%m-%Y'),e.strGSTNo,"
-					+ "e.strPANNo,d.tmeArrivalTime FROM tblcheckindtl a,tblroomtypemaster b,"
-					+ "tblwalkinroomratedtl c,tblcheckinhd d,"
-					+ "tblguestmaster e WHERE a.strRoomType=b.strRoomTypeCode "
-					+ "and c.strWalkinNo=d.strWalkInNo "
-					+ "and a.strGuestCode=e.strGuestCode AND a.strCheckInNo=d.strCheckInNo "
-					+ "and d.strCheckInNo = '"+reciptNo+"'"
-					+ " group by d.strCheckInNo";
+			String sql = "SELECT a.strCheckInNo,a.strGuestCode,f.strRoomDesc,a.strExtraBedCode,"
+					+ " b.strRoomTypeDesc,b.dblRoomTerrif, IFNULL(c.dblDiscount,0.0),d.intNoOfAdults,"
+					+ " DATE_FORMAT(d.dteCheckInDate,'%d-%m-%Y'),e.strGSTNo,e.strPANNo ,"
+					+ " d.tmeArrivalTime FROM tblcheckindtl a,tblroomtypemaster b,tblwalkinroomratedtl c,"
+					+ " tblcheckinhd d,tblguestmaster e,tblroom f WHERE a.strRoomType=b.strRoomTypeCode"
+					+ " AND c.strWalkinNo=d.strWalkInNo AND a.strGuestCode=e.strGuestCode "
+					+ " AND a.strCheckInNo=d.strCheckInNo AND d.strCheckInNo = '"+reciptNo+"' "
+					+ " AND a.strRoomNo=f.strRoomCode GROUP BY d.strCheckInNo ";
 			
 			List listCheckInsData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			Object[] arrObjRoomData = (Object[]) listCheckInsData.get(0);

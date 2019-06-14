@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hsqldb.lib.tar.TarReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -34,12 +35,14 @@ public class clsPMSUtilityFunctions {
 		List listTaxDtl = objGlobalFunService.funGetListModuleWise(sql, "sql");
 
 		double tariffAmt = 0.0;
+		String strTaxOn="";
 		for (clsTaxProductDtl objTaxProdDtl : listTaxProdDtl) {
 			List<clsTaxCalculation> listTaxCalDtl = new ArrayList<clsTaxCalculation>();
 			for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
 				String taxCalType = "Forward";
 				Object[] arrObjTaxDtl = (Object[]) listTaxDtl.get(cnt);
 				tariffAmt = objTaxProdDtl.getDblTaxProdAmt();
+				strTaxOn=arrObjTaxDtl[5].toString();
 				if (taxOnType.equalsIgnoreCase("Income Head")) 
 				{
 					if (arrObjTaxDtl[2].toString().equals(objTaxProdDtl.getStrTaxProdCode())) 
@@ -108,45 +111,89 @@ public class clsPMSUtilityFunctions {
 						}
 					}
 				}
-					
-				
-				
-				else {
+				else 
+				{
 					clsTaxCalculation objTaxCal = new clsTaxCalculation();
 					double taxValue = Double.parseDouble(arrObjTaxDtl[4].toString());
 					double fromRate = Double.parseDouble(arrObjTaxDtl[7].toString());
 					double toRate = Double.parseDouble(arrObjTaxDtl[8].toString());
-					if(fromRate<tariffAmt && tariffAmt<=toRate){
-					if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check
-																					// for
-																					// Tax
-																					// Type
-																					// Per/Amt
+					if(strTaxOn.equals("Gross Amount"))
 					{
-						double taxAmt = 0;
-						if (taxCalType.equals("Forward")) // Forward Tax
-															// Calculation
-						{
-							taxAmt = (objTaxProdDtl.getDblTaxProdAmt() * taxValue) / 100;
-						} else // Backward Tax Calculation
-						{
-							taxAmt = objTaxProdDtl.getDblTaxProdAmt() * 100 / (100 + taxValue);
-							taxAmt = objTaxProdDtl.getDblTaxProdAmt() - taxAmt;
-						}
-						if (taxAmt > 0) {
-							objTaxCal.setStrTaxCode(arrObjTaxDtl[0].toString());
-							objTaxCal.setStrTaxDesc(arrObjTaxDtl[1].toString());
-							objTaxCal.setStrTaxType(taxCalType);
-							objTaxCal.setDblTaxableAmt(objTaxProdDtl.getDblTaxProdAmt());
-							objTaxCal.setDblTaxAmt(taxAmt);
+						if(fromRate<tariffAmt && tariffAmt<=toRate){
+							if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check
+																							// for
+																							// Tax
+																							// Type
+																							// Per/Amt
+							{
+								double taxAmt = 0;
+								if (taxCalType.equals("Forward")) // Forward Tax
+																	// Calculation
+								{
+									taxAmt = (objTaxProdDtl.getDblTaxProdAmt() * taxValue) / 100;
+								} 
+								else // Backward Tax Calculation
+								{
+									taxAmt = objTaxProdDtl.getDblTaxProdAmt() * 100 / (100 + taxValue);
+									taxAmt = objTaxProdDtl.getDblTaxProdAmt() - taxAmt;
+								}
+								if (taxAmt > 0) {
+									objTaxCal.setStrTaxCode(arrObjTaxDtl[0].toString());
+									objTaxCal.setStrTaxDesc(arrObjTaxDtl[1].toString());
+									objTaxCal.setStrTaxType(taxCalType);
+									objTaxCal.setDblTaxableAmt(objTaxProdDtl.getDblTaxProdAmt());
+									objTaxCal.setDblTaxAmt(taxAmt);
 
-							listTaxCalDtl.add(objTaxCal);
+									listTaxCalDtl.add(objTaxCal);
+								}
+							}
+						}
+						else 
+						{
+							
 						}
 					}
+					else
+					{
+						
+						double tax = objTaxProdDtl.getDblDiscountOnTariff();
+						tariffAmt = tariffAmt-(tariffAmt*tax)/100;
+						if(fromRate<tariffAmt && tariffAmt<=toRate){
+							if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check
+																							// for
+																							// Tax
+																							// Type
+																							// Per/Amt
+							{
+								double taxAmt = 0;
+								if (taxCalType.equals("Forward")) // Forward Tax
+																	// Calculation
+								{
+									taxAmt = (tariffAmt * taxValue) / 100;
+								} 
+								else // Backward Tax Calculation
+								{
+									taxAmt = tariffAmt * 100 / (100 + taxValue);
+									taxAmt = tariffAmt - taxAmt;
+								}
+								if (taxAmt > 0) {
+									objTaxCal.setStrTaxCode(arrObjTaxDtl[0].toString());
+									objTaxCal.setStrTaxDesc(arrObjTaxDtl[1].toString());
+									objTaxCal.setStrTaxType(taxCalType);
+									objTaxCal.setDblTaxableAmt(objTaxProdDtl.getDblTaxProdAmt());
+									objTaxCal.setDblTaxAmt(taxAmt);
+
+									listTaxCalDtl.add(objTaxCal);
+								}
+							}
+						}
+						else 
+						{
+							
+						}
 					}
 					
-					else {
-					}
+					
 				}
 			}
 			if (listTaxCalDtl.size() > 0) {

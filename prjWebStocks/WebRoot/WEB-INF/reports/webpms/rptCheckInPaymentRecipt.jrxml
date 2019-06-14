@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
-<!-- 2016-04-08T16:34:11 -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
@@ -13,6 +12,7 @@
 	<parameter name="strImagePath" class="java.lang.String"/>
 	<parameter name="strUserCode" class="java.lang.String"/>
 	<parameter name="userName" class="java.lang.String"/>
+	<parameter name="pstrRoomDesc" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
@@ -77,7 +77,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Check In Recipt]]></text>
+				<text><![CDATA[Advance Receipt ]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -132,7 +132,7 @@
 				<text><![CDATA[Receipt No.         :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="76" width="94" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
+				<reportElement x="0" y="96" width="94" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -160,7 +160,7 @@
 				<text><![CDATA[Room Type          :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="98" y="95" width="161" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement x="98" y="115" width="161" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -188,14 +188,14 @@
 				<text><![CDATA[Amount                 :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="95" width="97" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
+				<reportElement x="1" y="115" width="97" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Payment Mode    :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="116" width="97" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
+				<reportElement x="2" y="136" width="97" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -238,7 +238,7 @@
 				<text><![CDATA[Receipt Date       :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="99" y="116" width="364" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement x="99" y="136" width="364" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -266,7 +266,7 @@
 				<textFieldExpression><![CDATA[$F{dteModifiedDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="94" y="76" width="218" height="14" uuid="eefc0840-a044-42ec-aed0-83cae4a7b98e"/>
+				<reportElement x="94" y="96" width="218" height="14" uuid="eefc0840-a044-42ec-aed0-83cae4a7b98e"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -306,6 +306,20 @@
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{strCheckInNo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="77" width="94" height="14" uuid="47e01d4d-ccab-4482-8ed1-c46f67b93659"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Room No          :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="94" y="77" width="164" height="14" uuid="c8485c6d-5c56-4f1b-b8eb-125b5085e675"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstrRoomDesc}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

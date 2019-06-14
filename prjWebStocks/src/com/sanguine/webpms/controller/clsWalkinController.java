@@ -100,11 +100,29 @@ public class clsWalkinController {
 
 		List listOfProperty = objGlobalFunctionsService.funGetList("select strPropertyName from "+webStockDB+".tblpropertymaster");
 		model.put("listOfProperty", listOfProperty);
-
+		
+		if(urlHits.equalsIgnoreCase("1"))
+		{
+			String roomNo = request.getParameter("roomNo").toString();
+			String sql="SELECT a.strRoomCode,b.strRoomTypeCode,b.strRoomTypeDesc FROM tblroom a,tblroomtypemaster b"
+					+ " WHERE a.strRoomTypeCode=b.strRoomTypeCode AND a.strRoomDesc='"+roomNo+"' ";
+			List listRoom=objGlobalFunctionsService.funGetListModuleWise(sql,"sql");
+			Object[] obj=(Object[])listRoom.get(0);
+			String roomCode=obj[0].toString();
+			String roomTypeCode=obj[1].toString();
+			String roomType=obj[2].toString();
+			request.getSession().setAttribute("RoomNo", roomNo);
+			request.getSession().setAttribute("RoomCode", roomCode);
+			request.getSession().setAttribute("RoomTypeCode", roomTypeCode);
+			request.getSession().setAttribute("RoomType", roomType);
+		}
+		
+		
 		model.put("urlHits", urlHits);
 
 		request.getSession().setAttribute("ResNo", walkin);
-
+		
+		
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmWalkin_1", "command", new clsWalkinBean());
 		} else if ("1".equalsIgnoreCase(urlHits)) {
@@ -162,6 +180,11 @@ public class clsWalkinController {
 			urlHits = "1";
 		}
 		model.put("urlHits", urlHits);
+		
+		request.getSession().setAttribute("RoomNo", "");
+		request.getSession().setAttribute("RoomCode", "");
+		request.getSession().setAttribute("RoomTypeCode", "");
+		request.getSession().setAttribute("RoomType", "");
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmWalkin_1", "command", new clsWalkinBean());

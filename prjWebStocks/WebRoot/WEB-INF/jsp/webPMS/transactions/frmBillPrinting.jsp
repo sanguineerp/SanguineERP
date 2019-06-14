@@ -232,7 +232,7 @@
 	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" style=\"text-align: left;width:100%\" name=\"listVoidBilldtl["+(rowCount)+"].strRevenueCode\" id=\"strRevenueCode."+(rowCount)+"\" value='"+strRevenueCode+"' />";
 	   	row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" style=\"text-align: left;width:100%\" name=\"listVoidBilldtl["+(rowCount)+"].strMenuHead\" id=\"strMenuHead."+(rowCount)+"\" value='"+incomeHead+"' />";
 	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" style=\"text-align: right;width:100%\" name=\"listVoidBilldtl["+(rowCount)+"].dblIncomeHeadPrice\" id=\"dblIncomeHeadPrice."+(rowCount)+"\" value='"+incomeHeadPrice+"' />";
-	    row.insertCell(4).innerHTML= "<input id=\"cbToLocSel."+(rowCount)+"\" type=\"checkbox\" name=\"billData\" unchecked=\"unchecked\" size=\"2%\" style=\"text-align: center;width:100%\" class=\"suppCheckBoxClass\"  value='"+incomeHead+"' />";
+	    row.insertCell(4).innerHTML= "<input id=\"cbToLocSel."+(rowCount)+"\" type=\"checkbox\" name=\"billData\" checked=\"checked\" size=\"2%\" style=\"text-align: center;width:100%\" class=\"suppCheckBoxClass\"  value='"+incomeHead+"' />";
 	   // row.insertCell(0).innerHTML= "<input id=\"cbSuppSel."+(rowCount)+"\" name=\"Suppthemes\" type=\"checkbox\" class=\"SuppCheckBoxClass\"  checked=\"checked\" value='"+strSuppCode+"' />";
 	}
 	

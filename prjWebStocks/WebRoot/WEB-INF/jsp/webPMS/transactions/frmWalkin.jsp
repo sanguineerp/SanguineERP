@@ -37,7 +37,41 @@
 		  var dte=pmsDate.split("-");
 		  $("#txtPMSDate").val(dte[2]+"-"+dte[1]+"-"+dte[0]);
 		  
-		  
+		  var roomNo='<%=session.getAttribute("RoomNo").toString()%>';
+		  var roomTypeDesc='<%=session.getAttribute("RoomType").toString()%>';
+		  <%-- var roomDate='<%=session.getAttribute("RoomDate").toString()%>'; --%>
+		  var roomType='<%=session.getAttribute("RoomTypeCode").toString()%>';
+		  var roomCode='<%=session.getAttribute("RoomCode").toString()%>';
+		 if(roomNo!='' && roomType!=''&& roomCode!='')
+		 {
+			 $("#lblRoomDesc").text(roomNo);
+			 $("#txtRoomTypeCode").val(roomType);
+			 $("#txtRoomNo").val(roomCode);
+			 $("#lblRoomType").text(roomTypeDesc);
+			 
+			 <%session.removeAttribute("RoomNo");
+			 	  session.removeAttribute("RoomTypeCode");
+			 	session.removeAttribute("RoomCode");
+			 	session.removeAttribute("RoomType");
+			 %>
+		 }
+		 else
+		 {
+			 $("#lblRoomDesc").text("");
+			 $("#txtRoomTypeCode").val(' ');
+			 $("#txtRoomNo").val(' ');
+			 $("#lblRoomType").text("");
+			 <%session.removeAttribute("RoomNo");
+			 	session.removeAttribute("RoomTypeCode");
+			 	session.removeAttribute("RoomCode");
+			 	session.removeAttribute("RoomType");
+			 %>
+		 }
+		 
+
+		 
+		 /*  $("#txtWalkinDate").datepicker({ dateFormat: 'dd-mm-yy' });
+		  $('#txtWalkinDate').datepicker('setDate',roomDate); */
 	});
 	
 	
@@ -59,13 +93,8 @@
 		$('#txtWalkinTime').timepicker('setTime', new Date());
 		$('#txtCheckOutTime').timepicker('setTime', new Date());
 		
-	
-		
-	
 		$("#txtWalkinDate").datepicker({ dateFormat: 'dd-mm-yy' });
-		$("#txtWalkinDate").datepicker('setDate', pmsDate);
-		
-	
+		$("#txtWalkinDate").datepicker('setDate', pmsDate); 
 		
 		$("#txtCheckOutDate").datepicker({ dateFormat: 'dd-mm-yy' });
 		$("#txtCheckOutDate").datepicker('setDate', pmsDate);

@@ -299,10 +299,17 @@ public class clsBillPrintingController {
 				reportParams.put("pBillNo", billNo);
 				reportParams.put("pGuestNo", guestgstNO);
 				reportParams.put("pGuestOfficeAddress", guestCompanyAddress);
-
+				reportParams.put("pGuestNo", guestgstNO);
 				
+				if(clientCode.equalsIgnoreCase("320.001"))
+				{
+					String strIssue = "Issued Subject to Nashik Jurisdiction";
+					String strAddr = "Mumbai Agra Road,Nashik-422009.Ph.+91253-2325000 E-mail:suryanasik@gmail.com";
 					
-					reportParams.put("pGuestNo", guestgstNO);
+					reportParams.put("pstrIssue", strIssue);
+					reportParams.put("pstrAddr", strAddr);
+				}
+				
 				
 				// get bill details
 				String sqlBillDtl="";
@@ -388,8 +395,9 @@ public class clsBillPrintingController {
 									.get(cnt);
 
 							billPrintingBean = new clsBillPrintingBean();
-							billPrintingBean.setDteDocDate(arrObjBillTaxDtl[0]
-									.toString());
+							billPrintingBean.setDteDocDate(objGlobal.funGetDate(
+									"dd-MM-yyyy", (arrObjBillTaxDtl[0]
+											.toString())));
 							billPrintingBean.setStrDocNo(arrObjBillTaxDtl[1]
 									.toString());
 							billPrintingBean
@@ -424,14 +432,19 @@ public class clsBillPrintingController {
 			}
 
 			if (flgBillRecord) {
+				
+				List paymentDtlList=new ArrayList<>();
+				String sqlPaymentDtl="";
 				// get payment details
 
-				String sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
+				if(strSelectBill.contains("Room Tariff"))
+				{
+				 sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,CONCAT('ADVANCE ',e.strSettlementDesc),'0.00' as debitAmt "
 						+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
 						+ " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
 						+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode AND c.strFolioNo='"+folio+"' ";
 
-				List paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
+				 paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
 				for (int i = 0; i < paymentDtlList.size(); i++) {
 					Object[] paymentArr = (Object[]) paymentDtlList.get(i);
 
@@ -461,7 +474,7 @@ public class clsBillPrintingController {
 						dataList.add(folioPrintingBean);
 					}
 				}
-
+				
 				if (!(paymentDtlList.size() > 0)) {
 					sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
 							+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
@@ -508,6 +521,7 @@ public class clsBillPrintingController {
 					}
 
 				}
+			}
 
 				/*
 				 * String sqlPaymentDtl =
@@ -526,7 +540,7 @@ public class clsBillPrintingController {
 				 * toDate + "'"
 				 */
 
-				sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
+				/*sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt "
 						+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
 						+ " FROM tblbillhd a,tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
 						+ " where a.strBillNo=c.strBillNo and c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
@@ -568,7 +582,7 @@ public class clsBillPrintingController {
 						dataList.add(folioPrintingBean);
 					}
 				}
-
+*/
 				String sqlDisc = " select date(a.dteBillDate),'','Discount','0.00',a.dblDiscAmt,'0.00' from  tblbilldiscount a "
 						+ " WHERE a.strBillNo='"
 						+ billNo

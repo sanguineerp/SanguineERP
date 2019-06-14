@@ -243,7 +243,7 @@ public class clsPMSPaymentController {
 				
 				String sqlAdvanceAmt="SELECT IFNULL(SUM(a.dblReceiptAmt),0)"
 						+ " FROM tblreceipthd a,tblreceiptdtl b WHERE a.strReceiptNo=b.strReceiptNo "
-						+ " AND a.strReservationNo='" + obj[6].toString() + "' and a.strAgainst='Reservation' ";
+						+ " AND a.strCheckInNo='"+obj[4].toString()+"' ";
 				
 				List listAdvanceAmt = objGlobalFunctionsService.funGetListModuleWise(sqlAdvanceAmt, "sql");
 				double advanceAmt=0.0;
@@ -709,15 +709,22 @@ public class clsPMSPaymentController {
 			} else {
 				reportName = servletContext.getRealPath("/WEB-INF/reports/webpms/rptCheckInPaymentRecipt.jrxml");
 
-				String sqlPayment = "SELECT a.strReceiptNo, IFNULL(c.intNoOfAdults,''), IFNULL(c.intNoOfChild,''),a.strReservationNo,c.strCheckInNo,"
-						+ " IFNULL(g.strRoomTypeDesc,''), DATE_FORMAT(c.dteArrivalDate,'%d-%m-%Y'), DATE_FORMAT(c.dteDepartureDate,'%d-%m-%Y'),"
-						+ " IFNULL(f.strFirstName,''), IFNULL(f.strMiddleName,''), IFNULL(f.strLastName,''), IFNULL(d.strSettlementDesc,''),a.dblPaidAmt,"
-						+ " b.strRemarks, DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y') FROM tblreceipthd a "
-						+ " LEFT OUTER JOIN tblreceiptdtl b ON a.strReceiptNo=b.strReceiptNo LEFT OUTER JOIN "
-						+ " tblcheckinhd c ON a.strRegistrationNo=c.strRegistrationNo LEFT OUTER JOIN "
-						+ " tblcheckindtl e ON a.strCheckInNo=e.strCheckInNo LEFT OUTER JOIN tblroomtypemaster g "
-						+ " ON g.strRoomTypeCode=e.strRoomType LEFT OUTER JOIN tblguestmaster f ON e.strGuestCode=f.strGuestCode"
-						+ " LEFT OUTER JOIN tblsettlementmaster d ON b.strSettlementCode=d.strSettlementCode WHERE a.strReceiptNo='"+reciptNo+"' AND a.strClientCode='"+clientCode+"'  ";
+				String sqlPayment = "SELECT a.strReceiptNo, IFNULL(c.intNoOfAdults,''), "
+						+ "IFNULL(c.intNoOfChild,''), a.strReservationNo,c.strCheckInNo, "
+						+ "IFNULL(g.strRoomTypeDesc,''),  DATE_FORMAT(c.dteArrivalDate,'%d-%m-%Y'), "
+						+ "DATE_FORMAT(c.dteDepartureDate,'%d-%m-%Y'),   IFNULL(f.strFirstName,''), "
+						+ "IFNULL(f.strMiddleName,''), IFNULL(f.strLastName,''),   "
+						+ "IFNULL(d.strSettlementDesc,''),a.dblPaidAmt, b.strRemarks, "
+						+ "DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y'),h.strRoomDesc "
+						+ "FROM tblreceipthd a "
+						+ "LEFT OUTER JOIN tblreceiptdtl b ON a.strReceiptNo=b.strReceiptNo "
+						+ "LEFT OUTER JOIN tblcheckinhd c ON a.strRegistrationNo=c.strRegistrationNo "
+						+ "LEFT OUTER JOIN tblcheckindtl e ON a.strCheckInNo=e.strCheckInNo "
+						+ "LEFT OUTER JOIN tblroomtypemaster g ON g.strRoomTypeCode=e.strRoomType "
+						+ "LEFT OUTER JOIN tblroom h ON e.strRoomNo=h.strRoomCode "
+						+ "LEFT OUTER JOIN tblguestmaster f ON e.strGuestCode=f.strGuestCode "
+						+ "LEFT OUTER JOIN tblsettlementmaster d ON b.strSettlementCode=d.strSettlementCode "
+						+ "WHERE a.strReceiptNo='"+reciptNo+"' AND a.strClientCode='"+clientCode+"'";
 				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
 
 				for (int i = 0; i < listOfPayment.size(); i++) {
@@ -741,7 +748,10 @@ public class clsPMSPaymentController {
 					String strRemarks = PaymentData[13].toString();
 					String dteReciptDate = PaymentData[14].toString();
 					String dteModifiedDate = PaymentData[14].toString();
-
+					String strRoomDesc = PaymentData[15].toString();
+					
+					reportParams.put("pstrRoomDesc", strRoomDesc);
+					
 					clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
 					objPaymentReciptBean.setStrReceiptNo(strReceiptNo);
 					objPaymentReciptBean.setIntNoOfAdults(intNoOfAdults);

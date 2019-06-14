@@ -479,15 +479,39 @@
 				  window.open(url);
 
 				  break;
-				  
+			
 			case 'rgba(0, 0, 0, 0)'://GREEN-->CONFIRM
 				  code=obj.value;
 				  //code=code.split(',')[1].trim();
-				  alert("Proceed to \n\n"+message);
-				  url=getContextPath()+"/frmWalkin1.html?docCode="+code
+				  // For Room Number
+				  var index=obj.parentNode.parentNode.rowIndex;
+				  var table1=document.getElementById("tblRoomInfo");
+				  var indexData=table1.rows[index];
+				  var roomNo=indexData.cells[0].childNodes[0].defaultValue;
+				  alert("Proceed to Walkin \n\n"+message);
+				  url=getContextPath()+"/frmWalkin1.html?docCode="+code+"&roomNo="+roomNo;
 				  window.open(url);
+				  
 
 				  break;
+				  
+			/* case 'rgba(0, 0, 0, 0)'://GREEN-->CONFIRM
+				  code=obj.value;
+				  //code=code.split(',')[1].trim();
+				  // For Room Number
+				  var index=obj.parentNode.parentNode.rowIndex;
+				  var table1=document.getElementById("tblRoomInfo");
+				  var indexData=table1.rows[index];
+				  var roomNo=indexData.cells[0].childNodes[0].defaultValue;
+				  // For Particular Date
+				  var table2=document.getElementById("tblDays");
+				  var indexDate=table2.rows[0];
+				  var roomDate=table2.rows[0].cells[index-1].childNodes[0].defaultValue
+				  alert("Proceed to \n\n"+message);
+				  url=getContextPath()+"/frmWalkin1.html?docCode="+code+"&roomNo="+roomNo+"&roomDate="+roomDate;
+				  window.open(url);
+
+				  break; */
 									  
 		}					
 	}
