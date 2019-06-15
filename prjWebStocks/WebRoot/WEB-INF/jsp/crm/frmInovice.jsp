@@ -1981,7 +1981,9 @@
 		 function funfillProdRow(strProdCode, strProdName, dblUnitPrice, dblAcceptQty,dblWeight, strSpCode,strCustCode,strSOCode
 					,prevUnitPrice,prevInvCode,disAmt,currValue) {
 
-			
+					if(currValue==0){
+						currValue=1;
+					}
 			    
 					var table = document.getElementById("tblProdDet");
 					var rowCount = table.rows.length;
