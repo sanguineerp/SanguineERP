@@ -234,7 +234,7 @@ public class clsPostRoomTerrifController {
 		// set department value here -- get department value from income head table 
 		String sql = "select a.strDeptCode from tblincomehead a where a.strIncomeHeadCode = '"+objTaxProductDtl.getStrTaxProdCode()+"'";
 		List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
-		listTaxProdDtl.add(objTaxProductDtl);
+		
 		// 
 		
 		String sqlDiscWalkIn = "select a.dblDiscount from tblwalkinroomratedtl a ,"
@@ -243,6 +243,15 @@ public class clsPostRoomTerrifController {
 		List listDiscWalkIn = objGlobalFunctionsService.funGetListModuleWise(sqlDiscWalkIn, "sql");
 		objTaxProductDtl.setDblDiscountOnTariff(Double.parseDouble(listDiscWalkIn.get(0).toString()));
 		
+		String sqlExtraBedAmt = "select a.dblChargePerBed from tblextrabed a where a.strExtraBedTypeCode = '"+extraBedCode+"'";
+		List listExtraBedAmt = objGlobalFunctionsService.funGetListModuleWise(sqlExtraBedAmt, "sql");
+		if(!extraBedCode.isEmpty())
+		{
+			double dblExtraBedAmt = Double.parseDouble(listExtraBedAmt.get(0).toString());
+			dblExtraBedAmt = dblExtraBedAmt + objTaxProductDtl.getDblTaxProdAmt();
+			objTaxProductDtl.setDblTaxProdAmt(dblExtraBedAmt);
+		}
+		listTaxProdDtl.add(objTaxProductDtl);
 		Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Room Night");
 
 		List<clsFolioDtlModel> listFolioDtl = new ArrayList<clsFolioDtlModel>();
@@ -327,7 +336,7 @@ public class clsPostRoomTerrifController {
 			objTaxProductDtl.setDblTaxProdAmt(objExtraBedMaster.getDblChargePerBed());
 			List<clsTaxProductDtl> listTaxProdDtlForExtraBed = new ArrayList<clsTaxProductDtl>();
 			listTaxProdDtlForExtraBed.add(objTaxProductDtl);
-			Map<String, List<clsTaxCalculation>> hmTaxCalDtlForExtraBed = objPMSUtility.funCalculatePMSTax(listTaxProdDtlForExtraBed, "Room Night");
+			/*Map<String, List<clsTaxCalculation>> hmTaxCalDtlForExtraBed = objPMSUtility.funCalculatePMSTax(listTaxProdDtlForExtraBed, "Room Night");
 			if(hmTaxCalDtlForExtraBed.containsKey(objExtraBedMaster.getStrExtraBedTypeCode())){
 			List<clsTaxCalculation> listTaxCalForExtraBed = hmTaxCalDtlForExtraBed.get(objExtraBedMaster.getStrExtraBedTypeCode());
 			for (clsTaxCalculation objTaxCal : listTaxCalForExtraBed) {
@@ -339,7 +348,7 @@ public class clsPostRoomTerrifController {
 				objFolioTaxDtl.setDblTaxAmt(objTaxCal.getDblTaxAmt());
 				listFolioTaxDtl.add(objFolioTaxDtl);
 			}
-		}
+		}*/
 		}
 		//objWebPMSUtility.funExecuteUpdate("delete from tblfoliodtl where strFolioNo='"+objFolioHd.getStrFolioNo()+"' and strRevenueType='Room' or strRevenueType='Package' and strClientCode='"+clientCode+"'", "sql");
 		objFolioHd.setListFolioDtlModel(listFolioDtl);

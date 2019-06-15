@@ -116,7 +116,7 @@ public class clsPMSPaymentServiceImpl implements clsPMSPaymentService {
 					folioNo = arrObj[3].toString();
 					billNo = objPaymentBean.getStrDocNo();
 					clsBillHdModel objBillHdModel = objBillService.funLoadBill(billNo, clientCode);
-					String sqlReceipt=" SELECT SUM(a.dblReceiptAmt) FROM tblreceipthd a WHERE a.strFolioNo='"+folioNo+"' ";
+					String sqlReceipt=" SELECT ifnull(SUM(a.dblReceiptAmt),0) FROM tblreceipthd a WHERE a.strFolioNo='"+folioNo+"' ";
 					List listReceipt = objGlobalFunctionsService.funGetListModuleWise(sqlReceipt, "sql");
 					if(listReceipt.size()>0)
 					{

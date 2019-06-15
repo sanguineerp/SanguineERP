@@ -313,7 +313,7 @@ public class clsBillPrintingController {
 				if(!(billNames.length()>0))
 				{
 					sqlBillDtl = "SELECT DATE(b.dteDocDate),b.strDocNo,"
-							+ "b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,"
+							+ "ifnull(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,"
 							+ "b.dblBalanceAmt FROM tblbillhd a INNER JOIN tblbilldtl b "
 							+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo "
 							+ "WHERE a.strBillNo='"+billNo+"'"
@@ -322,7 +322,7 @@ public class clsBillPrintingController {
 				else
 				{
 					sqlBillDtl = "SELECT DATE(b.dteDocDate),b.strDocNo,"
-							+ "b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,"
+							+ "ifnull(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,"
 							+ "b.dblBalanceAmt FROM tblbillhd a INNER JOIN tblbilldtl b "
 							+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo AND b.strPerticulars IN("+billNames.substring(0, billNames.length()-1)+") "
 							+ "WHERE a.strBillNo='"+billNo+"'"
@@ -360,7 +360,7 @@ public class clsBillPrintingController {
 						billPrintingBean.setDblBalanceAmt(balance);
 						double hmroomTariff = debitAmount; 
 						pSupportVoucher=balance;
-						if(strSelectBill.split(",")[1].equals("Room Tariff"))
+						if(particulars.equals("Room Tariff"))
 						{
 							if(hmroomTariff>0.0)
 							{

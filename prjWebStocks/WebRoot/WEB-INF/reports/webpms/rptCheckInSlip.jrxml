@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
@@ -116,7 +116,7 @@
 				<text><![CDATA[Room Type :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="340" y="6" width="70" height="20" uuid="3c5b743a-c036-4510-80e5-402becdcc0af"/>
+				<reportElement x="330" y="6" width="82" height="20" uuid="3c5b743a-c036-4510-80e5-402becdcc0af"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -144,7 +144,7 @@
 				<textFieldExpression><![CDATA[$P{pgstno}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="340" y="31" width="70" height="20" uuid="17ab3bf9-8e2e-4aa3-a050-63745da0ecc7"/>
+				<reportElement x="330" y="31" width="82" height="20" uuid="17ab3bf9-8e2e-4aa3-a050-63745da0ecc7"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -215,20 +215,6 @@
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{intNoOfAdults}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="22" y="152" width="70" height="19" uuid="72357e57-bea2-4e12-840c-42d5dc634543"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[GSTIN: ]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="107" y="153" width="71" height="19" uuid="e8b96322-6f06-41a4-9532-53a46fc75cf4"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{pgstno}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="107" y="175" width="71" height="16" uuid="ec6ca6b3-9cd5-45ca-b9c3-568fe5aa0e04"/>

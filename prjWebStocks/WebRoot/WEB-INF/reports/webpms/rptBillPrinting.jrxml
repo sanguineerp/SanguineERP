@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -82,9 +82,9 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 	<title>
 		<band height="259" splitType="Stretch">
 			<textField>
-				<reportElement x="183" y="10" width="314" height="20" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement x="233" y="10" width="314" height="20" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
-					<font size="11" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pCompanyName}]]></textFieldExpression>
 			</textField>
