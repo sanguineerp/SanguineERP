@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -37,6 +37,8 @@
 	<parameter name="pbranchnName" class="java.lang.String"/>
 	<parameter name="pstrIssue" class="java.lang.String"/>
 	<parameter name="pstrAddr" class="java.lang.String"/>
+	<parameter name="pHmRoomTariff" class="java.lang.Double"/>
+	<parameter name="pSupportVoucher" class="java.lang.Double"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT b.dteDocDate,b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt
 FROM tblfoliohd a
@@ -70,6 +72,9 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 	</variable>
 	<variable name="vBalanceTotal" class="java.lang.Double">
 		<variableExpression><![CDATA[$V{vDebitTotal}]]></variableExpression>
+	</variable>
+	<variable name="vGrandTotal" class="java.lang.Double">
+		<variableExpression><![CDATA[$P{pHmRoomTariff}+$P{pSupportVoucher}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -453,9 +458,6 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="109"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="132">
 			<staticText>
@@ -519,13 +521,13 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="106">
+		<band height="178">
 			<staticText>
 				<reportElement x="5" y="6" width="100" height="20" uuid="9b566579-3abf-4ebe-8683-cb0cecc3852c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Grand Total]]></text>
+				<text><![CDATA[Total]]></text>
 			</staticText>
 			<line>
 				<reportElement x="5" y="5" width="555" height="1" uuid="f3870b86-9a81-4e47-9b83-b545263b04af"/>
@@ -555,89 +557,122 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textFieldExpression><![CDATA[$F{dblBalanceAmt}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="122" y="39" width="188" height="15" uuid="b647f00d-6908-45a0-a872-b0acbc02c8ac"/>
+				<reportElement x="122" y="124" width="188" height="15" uuid="b647f00d-6908-45a0-a872-b0acbc02c8ac"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ppanno}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="122" y="58" width="188" height="15" uuid="70bd0f66-4dbb-40e1-8013-bff6e5ab9ec3"/>
+				<reportElement x="122" y="143" width="188" height="15" uuid="70bd0f66-4dbb-40e1-8013-bff6e5ab9ec3"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{phsnCode}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="122" y="78" width="188" height="15" uuid="6a05add8-51bc-4cb8-800c-ac34e368a10d"/>
+				<reportElement x="122" y="163" width="188" height="15" uuid="6a05add8-51bc-4cb8-800c-ac34e368a10d"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pbankDtl}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="7" y="39" width="74" height="14" uuid="6578c23c-3623-4505-a0ba-6d364caa709c"/>
+				<reportElement x="7" y="124" width="74" height="14" uuid="6578c23c-3623-4505-a0ba-6d364caa709c"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PAN NO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="8" y="58" width="96" height="14" uuid="20b49d91-2d9c-4fb3-8933-50a9dd48127e"/>
+				<reportElement x="8" y="143" width="96" height="14" uuid="20b49d91-2d9c-4fb3-8933-50a9dd48127e"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[HSN Code/SAC:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="78" width="86" height="14" uuid="afc8f24d-96ba-4056-bc39-e43874b49d8f"/>
+				<reportElement x="7" y="163" width="86" height="14" uuid="afc8f24d-96ba-4056-bc39-e43874b49d8f"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Bank Ac Name:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="325" y="39" width="90" height="14" uuid="bd9489f7-0294-4fb0-b546-ea37dd1a5ae3"/>
+				<reportElement x="325" y="124" width="90" height="14" uuid="bd9489f7-0294-4fb0-b546-ea37dd1a5ae3"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Bank Ac No:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="429" y="39" width="123" height="15" uuid="729575d9-8ea4-4d58-a211-6a0d38e82320"/>
+				<reportElement x="429" y="124" width="123" height="15" uuid="729575d9-8ea4-4d58-a211-6a0d38e82320"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pbankAcNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="429" y="57" width="123" height="15" uuid="3c70b03f-97f3-4a94-87a2-c9fec8c41233"/>
+				<reportElement x="429" y="142" width="123" height="15" uuid="3c70b03f-97f3-4a94-87a2-c9fec8c41233"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pbankIFSC}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="325" y="57" width="90" height="14" uuid="915f738f-5b29-49e0-bc31-845261cbff5c"/>
+				<reportElement x="325" y="142" width="90" height="14" uuid="915f738f-5b29-49e0-bc31-845261cbff5c"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Bank IFS Code:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="429" y="76" width="123" height="15" uuid="ae5a2548-fa5d-49f9-9cc9-f9aafc2941f3"/>
+				<reportElement x="429" y="161" width="123" height="15" uuid="ae5a2548-fa5d-49f9-9cc9-f9aafc2941f3"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pbranchnName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="325" y="76" width="90" height="14" uuid="fbe17f53-00c1-47c8-90ba-f4c5eeb79bd2"/>
+				<reportElement x="325" y="161" width="90" height="14" uuid="fbe17f53-00c1-47c8-90ba-f4c5eeb79bd2"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Branch Name:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="329" y="38" width="100" height="19" uuid="933dbb96-6a7a-47e7-8db1-c92cf65bd508"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Room Tariff         :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="309" y="57" width="120" height="19" uuid="c2e2b5c9-75f1-46e7-a860-d303946539da"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Supporting Voucher  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="329" y="76" width="100" height="19" uuid="7034af4a-68b6-4e17-ac1e-307db00d335e"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grand Total          :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="429" y="38" width="100" height="18" uuid="ed3c3b03-68b3-4857-a4f5-30cc42e29c67"/>
+				<textFieldExpression><![CDATA[$P{pHmRoomTariff}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="429" y="58" width="100" height="18" uuid="e02fbb87-fd71-4d56-8d99-09866490db05"/>
+				<textFieldExpression><![CDATA[$P{pSupportVoucher}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="429" y="77" width="100" height="18" uuid="dd8a0795-d39b-487f-b2a7-e98ff8c2a7f0"/>
+				<textFieldExpression><![CDATA[$V{vGrandTotal}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
