@@ -375,7 +375,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<text><![CDATA[Document Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="90" y="1" width="73" height="14" uuid="cd183d42-0457-457f-a039-fc8795d34891"/>
+				<reportElement x="80" y="1" width="80" height="14" uuid="cd183d42-0457-457f-a039-fc8795d34891"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -422,7 +422,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textFieldExpression><![CDATA[$F{dteDocDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="90" y="2" width="73" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
+				<reportElement x="80" y="2" width="80" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>

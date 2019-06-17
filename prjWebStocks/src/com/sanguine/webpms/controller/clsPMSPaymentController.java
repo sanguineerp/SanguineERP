@@ -255,12 +255,36 @@ public class clsPMSPaymentController {
 					}
 				}
 				
+				String sqlDiscount="SELECT b.dblDiscount,c.dblDebitAmt "
+						+ "FROM tblcheckinhd a, tblwalkinroomratedtl b,tblbilldtl c "
+						+ "WHERE a.strWalkInNo=b.strWalkinNo "
+						+ "AND a.strCheckInNo='"+obj[4].toString()+"' "
+						+ "AND   c.strBillNo = '"+docCode+"' "
+						+ "AND c.strPerticulars = 'Room Tariff'";
+				
+				List listDiscount = objGlobalFunctionsService.funGetListModuleWise(sqlDiscount, "sql");
+				double dblDiscount=0.0;
+				double terrifAmt = 0.0;
+				if(listDiscount!=null)
+				{
+					if(listDiscount.size()>0)
+					{
+						for(int j=0;j<listDiscount.size();j++)
+						{
+						Object[] objDiscount=(Object[])listDiscount.get(j);
+						dblDiscount=Double.parseDouble(objDiscount[0].toString());	
+						terrifAmt=Double.parseDouble(objDiscount[1].toString());	
+						dblDiscount = (terrifAmt*dblDiscount)/100;
+						}
+					}
+				}
+				
 				
 				objPaymentReciptBean.setStrGuestCode(obj[0].toString());
 				objPaymentReciptBean.setStrFirstName(obj[1].toString());
 				objPaymentReciptBean.setStrMiddleName(obj[2].toString());
 				objPaymentReciptBean.setStrLastName(obj[3].toString());
-				objPaymentReciptBean.setDblBalanceAmount(Double.parseDouble(obj[5].toString())-(reciptAmt+advanceAmt));
+				objPaymentReciptBean.setDblBalanceAmount(Double.parseDouble(obj[5].toString())-(reciptAmt+advanceAmt)-dblDiscount);
 				listGuestDataDtl.add(objPaymentReciptBean);
 				}
 			}

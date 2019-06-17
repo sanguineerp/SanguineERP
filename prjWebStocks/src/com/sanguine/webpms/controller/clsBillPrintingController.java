@@ -632,7 +632,7 @@ public class clsBillPrintingController {
 					{
 						walkIn = listWalkIn.get(i).toString();
 					}
-					String walkInDiscount = "SELECT DATE(a.dtDate),'','Discount',a.dblRoomRate,"
+					String walkInDiscount = "SELECT DATE(a.dtDate),'',Concat('Discount ',a.dblDiscount,'%' ),a.dblRoomRate,"
 							+ "a.dblDiscount,'0.00' FROM tblwalkinroomratedtl a "
 							+ "WHERE a.strWalkinNo='"+walkIn+"' AND a.strClientCode='"+clientCode+"'";
 					List walkInBillDiscList = objFolioService.funGetParametersList(walkInDiscount);
@@ -650,12 +650,14 @@ public class clsBillPrintingController {
 						}
 						else
 						{
+							
 							balance  = balance +  - (creditAmount/100)*debitAmount;
 		
+							creditAmount = debitAmount*creditAmount/100;
 							// String debitAmount = billDicArr[3].toString();
 							// String creditAmount = billDicArr[4].toString();
 							// String balance = billDicArr[5].toString();
-		
+							
 							folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate)));
 							folioPrintingBean.setStrDocNo(docNo);
 							folioPrintingBean.setStrPerticulars(particulars);
