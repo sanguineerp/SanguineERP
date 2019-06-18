@@ -39,6 +39,7 @@
 	<parameter name="pstrAddr" class="java.lang.String"/>
 	<parameter name="pHmRoomTariff" class="java.lang.Double"/>
 	<parameter name="pSupportVoucher" class="java.lang.Double"/>
+	<parameter name="isRoomTariff" class="java.lang.Boolean"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT b.dteDocDate,b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt
 FROM tblfoliohd a
@@ -82,9 +83,9 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 	<title>
 		<band height="259" splitType="Stretch">
 			<textField>
-				<reportElement x="233" y="10" width="314" height="20" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement x="183" y="10" width="314" height="20" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
-					<font size="14" isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pCompanyName}]]></textFieldExpression>
 			</textField>
@@ -375,7 +376,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<text><![CDATA[Document Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="80" y="1" width="80" height="14" uuid="cd183d42-0457-457f-a039-fc8795d34891"/>
+				<reportElement x="90" y="1" width="73" height="14" uuid="cd183d42-0457-457f-a039-fc8795d34891"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -422,7 +423,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textFieldExpression><![CDATA[$F{dteDocDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="80" y="2" width="80" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
+				<reportElement x="90" y="2" width="73" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
@@ -641,36 +642,51 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<text><![CDATA[Branch Name:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="329" y="38" width="100" height="19" uuid="933dbb96-6a7a-47e7-8db1-c92cf65bd508"/>
-				<textElement>
+				<reportElement x="374" y="38" width="100" height="19" uuid="933dbb96-6a7a-47e7-8db1-c92cf65bd508">
+					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Room Tariff         :]]></text>
+				<text><![CDATA[Room Total     :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="309" y="57" width="120" height="19" uuid="c2e2b5c9-75f1-46e7-a860-d303946539da"/>
-				<textElement>
+				<reportElement x="354" y="57" width="120" height="19" uuid="c2e2b5c9-75f1-46e7-a860-d303946539da">
+					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Supporting Voucher  :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="329" y="76" width="100" height="19" uuid="7034af4a-68b6-4e17-ac1e-307db00d335e"/>
-				<textElement>
+				<reportElement x="374" y="76" width="100" height="19" uuid="7034af4a-68b6-4e17-ac1e-307db00d335e">
+					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Grand Total          :]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="429" y="38" width="100" height="18" uuid="ed3c3b03-68b3-4857-a4f5-30cc42e29c67"/>
+			<textField pattern="#0.00">
+				<reportElement x="474" y="38" width="49" height="18" uuid="ed3c3b03-68b3-4857-a4f5-30cc42e29c67">
+					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$P{pHmRoomTariff}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="429" y="58" width="100" height="18" uuid="e02fbb87-fd71-4d56-8d99-09866490db05"/>
+			<textField pattern="#0.00">
+				<reportElement x="474" y="58" width="49" height="18" uuid="e02fbb87-fd71-4d56-8d99-09866490db05">
+					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$P{pSupportVoucher}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="429" y="77" width="100" height="18" uuid="dd8a0795-d39b-487f-b2a7-e98ff8c2a7f0"/>
+			<textField pattern="#0.00">
+				<reportElement x="474" y="77" width="49" height="18" uuid="dd8a0795-d39b-487f-b2a7-e98ff8c2a7f0">
+					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{vGrandTotal}]]></textFieldExpression>
 			</textField>
 		</band>

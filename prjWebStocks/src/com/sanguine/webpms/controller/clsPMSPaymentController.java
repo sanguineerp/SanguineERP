@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -279,12 +281,13 @@ public class clsPMSPaymentController {
 					}
 				}
 				
-				
+				NumberFormat formatter = new DecimalFormat("0.00");
+				double dblBal = Double.parseDouble(obj[5].toString())-(reciptAmt+advanceAmt)-dblDiscount;
 				objPaymentReciptBean.setStrGuestCode(obj[0].toString());
 				objPaymentReciptBean.setStrFirstName(obj[1].toString());
 				objPaymentReciptBean.setStrMiddleName(obj[2].toString());
 				objPaymentReciptBean.setStrLastName(obj[3].toString());
-				objPaymentReciptBean.setDblBalanceAmount(Double.parseDouble(obj[5].toString())-(reciptAmt+advanceAmt)-dblDiscount);
+				objPaymentReciptBean.setDblBalanceAmount(Double.parseDouble(formatter.format(dblBal)));
 				listGuestDataDtl.add(objPaymentReciptBean);
 				}
 			}
