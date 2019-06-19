@@ -792,7 +792,7 @@ public class clsCheckInController {
 			objCheckInBean.setStrRoomNo(arrObjRoomData[2].toString());
 			objCheckInBean.setStrExtraBedCode(arrObjRoomData[3].toString());
 			String roomType = arrObjRoomData[4].toString();
-			double roomTarrif = Double.parseDouble(arrObjRoomData[5].toString());					
+			double roomTarrifWithExtraBed = Double.parseDouble(arrObjRoomData[5].toString());					
 			double discount  = Double.parseDouble(arrObjRoomData[6].toString());
 			objCheckInBean.setIntNoOfAdults(Integer.parseInt(arrObjRoomData[7].toString()));
 			objCheckInBean.setDteArrivalDate(arrObjRoomData[8].toString());
@@ -802,7 +802,7 @@ public class clsCheckInController {
 			double dblExtraBedAmt = Double.parseDouble(arrObjRoomData[12].toString());
 			if(!objCheckInBean.getStrExtraBedCode().isEmpty())
 			{
-				roomTarrif = dblExtraBedAmt+roomTarrif;
+				roomTarrifWithExtraBed = dblExtraBedAmt+roomTarrifWithExtraBed;
 			}
 			String gFirstName = arrObjRoomData[13].toString();
 			String gMiddleName = arrObjRoomData[14].toString();
@@ -814,13 +814,16 @@ public class clsCheckInController {
 					+ arrObjRoomData[20].toString();
 			
 			
+			
+			double roomTarrif = Double.parseDouble(arrObjRoomData[5].toString());
+			
 			datalist.add(objCheckInBean);
 			
 			reportParams.put("pgstno", gstNo);
 			reportParams.put("ppanno", paNo);
 			reportParams.put("pguestCode", guestCode);
 			reportParams.put("proomType", roomType);
-			reportParams.put("proomTarrif", roomTarrif);
+			reportParams.put("proomTarrifWithExtBed", roomTarrifWithExtraBed);
 			reportParams.put("pdiscount", discount);
 			reportParams.put("pCompanyName", companyName);
 			reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
@@ -830,6 +833,7 @@ public class clsCheckInController {
 			reportParams.put("userName", userName);
 			reportParams.put("pGuestName", gFirstName + " "+ gMiddleName + " " + gLastName);
 			reportParams.put("pguestCompanyAddr", guestCompanyAddr);
+			reportParams.put("proomTarrif", roomTarrif);
 
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(datalist);
 			JasperDesign jd = JRXmlLoader.load(reportName);

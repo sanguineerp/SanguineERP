@@ -20,6 +20,7 @@
 	<parameter name="pdiscount" class="java.lang.Double"/>
 	<parameter name="pguestCompanyAddr" class="java.lang.String"/>
 	<parameter name="pGuestName" class="java.lang.String"/>
+	<parameter name="proomTarrifWithExtBed" class="java.lang.Double"/>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
@@ -30,7 +31,7 @@
 	<field name="intNoOfAdults" class="java.lang.Integer"/>
 	<field name="tmeArrivalTime" class="java.lang.String"/>
 	<variable name="perDayAmt" class="java.lang.Double">
-		<variableExpression><![CDATA[$P{proomTarrif}-($P{proomTarrif}*$P{pdiscount}/100)]]></variableExpression>
+		<variableExpression><![CDATA[$P{proomTarrifWithExtBed}-($P{proomTarrif}*$P{pdiscount}/100)]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -90,7 +91,7 @@
 	<detail>
 		<band height="326" splitType="Stretch">
 			<staticText>
-				<reportElement x="17" y="310" width="182" height="14" uuid="9801c5fe-f17a-4c06-ad83-f3734e18b509"/>
+				<reportElement x="7" y="310" width="182" height="14" uuid="9801c5fe-f17a-4c06-ad83-f3734e18b509"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
@@ -157,7 +158,7 @@
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{proomTarrif}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{proomTarrifWithExtBed}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="203" y="112" width="90" height="20" uuid="121929a5-ce1d-430e-acd9-ce2e5ac52730"/>
@@ -191,42 +192,42 @@
 				<textFieldExpression><![CDATA[$V{perDayAmt}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="21" y="61" width="84" height="20" uuid="f98cde0d-8f8b-4fda-8e51-120c21a7132b"/>
+				<reportElement x="11" y="61" width="84" height="20" uuid="f98cde0d-8f8b-4fda-8e51-120c21a7132b"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[No. of Person:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="116" y="62" width="71" height="20" uuid="44c46c15-c7f3-452f-838c-d540b3deba74"/>
+				<reportElement x="106" y="62" width="71" height="20" uuid="44c46c15-c7f3-452f-838c-d540b3deba74"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{intNoOfAdults}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="23" y="205" width="200" height="15" uuid="d2894ca3-e859-4c4a-bea9-68397e05def3"/>
+				<reportElement x="13" y="205" width="200" height="15" uuid="d2894ca3-e859-4c4a-bea9-68397e05def3"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Note:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="23" y="221" width="227" height="21" uuid="dd4c59c0-1dbd-4b5f-bfad-892b683cff11"/>
+				<reportElement x="13" y="221" width="227" height="21" uuid="dd4c59c0-1dbd-4b5f-bfad-892b683cff11"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[1. Advance paid is non-refundable]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="23" y="245" width="227" height="24" uuid="952f6f6e-986d-4ad4-a4cf-0efb9cb2f233"/>
+				<reportElement x="13" y="245" width="227" height="24" uuid="952f6f6e-986d-4ad4-a4cf-0efb9cb2f233"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[2. Issued subject to Nashik Jurisdiction]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="23" y="273" width="217" height="25" uuid="29587b0b-1ddd-45af-99aa-d651602f9772"/>
+				<reportElement x="13" y="273" width="217" height="25" uuid="29587b0b-1ddd-45af-99aa-d651602f9772"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
@@ -240,42 +241,42 @@
 				<textFieldExpression><![CDATA[$F{tmeArrivalTime}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="23" y="178" width="90" height="20" uuid="e3d9af64-dc2a-47d8-b4e8-5c029873492b"/>
+				<reportElement x="13" y="178" width="90" height="20" uuid="e3d9af64-dc2a-47d8-b4e8-5c029873492b"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Customer GST :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="113" y="178" width="176" height="20" uuid="bd1da632-82b9-4c98-813b-1ad39facc2f8"/>
+				<reportElement x="103" y="178" width="176" height="20" uuid="bd1da632-82b9-4c98-813b-1ad39facc2f8"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pgstno}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="20" y="33" width="81" height="20" uuid="9b801524-43b9-4fa1-8a81-d8a3a0415c4f"/>
+				<reportElement x="10" y="30" width="93" height="20" uuid="9b801524-43b9-4fa1-8a81-d8a3a0415c4f"/>
 				<textElement>
-					<font size="11"/>
+					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Comapany Addr]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="116" y="33" width="188" height="20" uuid="19bb0a9e-b50a-4f98-b1b5-a0646b0a5b87"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="106" y="30" width="186" height="20" uuid="19bb0a9e-b50a-4f98-b1b5-a0646b0a5b87"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pguestCompanyAddr}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="21" y="4" width="70" height="20" uuid="78ac5719-cfc4-4d73-a5df-8a9717a6a5df"/>
+				<reportElement x="11" y="4" width="70" height="20" uuid="78ac5719-cfc4-4d73-a5df-8a9717a6a5df"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Guest Name]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="117" y="4" width="106" height="20" uuid="a8ae9ed5-bf9a-49de-a70a-6bb601ae8571"/>
+				<reportElement x="107" y="4" width="106" height="20" uuid="a8ae9ed5-bf9a-49de-a70a-6bb601ae8571"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
