@@ -83,9 +83,9 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 	<title>
 		<band height="259" splitType="Stretch">
 			<textField>
-				<reportElement x="183" y="10" width="314" height="20" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
-				<textElement>
-					<font size="11" isBold="true"/>
+				<reportElement x="235" y="10" width="314" height="20" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<textElement textAlignment="Left">
+					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pCompanyName}]]></textFieldExpression>
 			</textField>

@@ -1301,6 +1301,12 @@
 				});
 			}	 
 		 
+		 function funRecalculateTarrifAmt()
+		 {
+			 funRemoveTariffRows();
+			 
+		 }
+		 
 		 
 		 
 </script>
@@ -1398,6 +1404,11 @@
 			<tr>
 			<td>NO POST Folio</td>
 			<td><s:checkbox id="txtNoPostFolio" path="strNoPostFolio" value="Y" />
+			
+			<td>
+			<input type="button" value="Re-Calculate" onclick="funRecalculateTarrifAmt()">
+			
+			</td>
 			</tr>
 		</table>
 		

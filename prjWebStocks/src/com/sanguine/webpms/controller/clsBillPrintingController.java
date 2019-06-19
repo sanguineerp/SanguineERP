@@ -403,10 +403,15 @@ public class clsBillPrintingController {
 							Object[] arrObjBillTaxDtl = (Object[]) listBillTaxDtl.get(cnt);
 							billPrintingBean = new clsBillPrintingBean();
 							billPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (arrObjBillTaxDtl[0].toString())));
+							if(arrObjBillTaxDtl[1].toString().startsWith("R"))
+							{
+								
+							
 							billPrintingBean.setStrDocNo(arrObjBillTaxDtl[1].toString());
 							billPrintingBean.setStrPerticulars(arrObjBillTaxDtl[2].toString());
 							double debitAmt = Double.parseDouble(arrObjBillTaxDtl[3].toString());
 							double creditAmt = Double.parseDouble(arrObjBillTaxDtl[4].toString());
+							
 							balance = balance + debitAmt - creditAmt;
 
 							billPrintingBean.setDblDebitAmt(debitAmt);
@@ -424,6 +429,7 @@ public class clsBillPrintingController {
 								hmTax.put(arrObjBillTaxDtl[2].toString(), billPrintingBean);	
 							}
 							
+						}
 						}
 					}
 				}

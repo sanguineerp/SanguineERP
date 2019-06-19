@@ -90,7 +90,7 @@ public class clsPostRoomTerrifController {
 			List listRoomCnt= objGlobalFunctionsService.funGetListModuleWise(sqlRoomCount, "sql");
 			BigInteger roomCnt=new BigInteger(listRoomCnt.get(0).toString());
 			
-			String sqlCheckTerrifBalanceAmt=" SELECT b.strFolioNo,b.dblDebitAmt,b.dblBalanceAmt,b.strRevenueType "
+			String sqlCheckTerrifBalanceAmt=" SELECT b.strFolioNo,sum(b.dblDebitAmt),sum(b.dblBalanceAmt),b.strRevenueType "
 					+ " FROM tblfoliohd a,tblfoliodtl b "
 					+ " WHERE a.strFolioNo=b.strFolioNo  and a.strRoomNo=b.strRevenueCode AND a.strCheckInNo='"+arrObjRoom[11].toString()+"' "
 					+ " and  (b.strRevenueType='Package' or b.strRevenueType='Room')  and a.strRoomNo='"+roomNo+"' "
@@ -330,12 +330,12 @@ public class clsPostRoomTerrifController {
 			objFolioDtl.setStrRevenueCode(objExtraBedMaster.getStrExtraBedTypeCode());
 			listFolioDtl.add(objFolioDtl);
 
-			objTaxProductDtl = new clsTaxProductDtl();
+			/*objTaxProductDtl = new clsTaxProductDtl();
 			objTaxProductDtl.setStrTaxProdCode(objExtraBedMaster.getStrExtraBedTypeCode());
 			objTaxProductDtl.setStrTaxProdName("");
 			objTaxProductDtl.setDblTaxProdAmt(objExtraBedMaster.getDblChargePerBed());
 			List<clsTaxProductDtl> listTaxProdDtlForExtraBed = new ArrayList<clsTaxProductDtl>();
-			listTaxProdDtlForExtraBed.add(objTaxProductDtl);
+			listTaxProdDtlForExtraBed.add(objTaxProductDtl);*/
 			/*Map<String, List<clsTaxCalculation>> hmTaxCalDtlForExtraBed = objPMSUtility.funCalculatePMSTax(listTaxProdDtlForExtraBed, "Room Night");
 			if(hmTaxCalDtlForExtraBed.containsKey(objExtraBedMaster.getStrExtraBedTypeCode())){
 			List<clsTaxCalculation> listTaxCalForExtraBed = hmTaxCalDtlForExtraBed.get(objExtraBedMaster.getStrExtraBedTypeCode());

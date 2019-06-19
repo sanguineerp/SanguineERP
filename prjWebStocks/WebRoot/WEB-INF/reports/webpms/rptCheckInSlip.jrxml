@@ -137,7 +137,7 @@
 				<textFieldExpression><![CDATA[$P{proomType}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="420" y="6" width="71" height="20" uuid="71abdf38-f7fc-4559-94d2-84e0e5db0c17"/>
+				<reportElement x="420" y="6" width="120" height="20" uuid="71abdf38-f7fc-4559-94d2-84e0e5db0c17"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
