@@ -309,7 +309,7 @@ $(document).ready(function()
 	  if(null!=pmsDate)
  	  {
 	 	  var dte=pmsDate.split("-");
-		  $("#txtPMSDate").val(dte[2]+"-"+dte[1]+"-"+dte[0]); 	
+		  $("#txtPMSDate").text(dte[0]+"-"+dte[1]+"-"+dte[2]); 	
 	  }
  });
 
@@ -321,7 +321,7 @@ $(document).ready(function()
 		<thead style="">
 			<tr>
 				<th style="width: 47%; text-align: left;font-weight: bold;font-size: 11px;text-transform: uppercase;padding-top: 5px;padding-bottom: 5px; FONT-FAMILY: trebuchet ms, Helvetica, sans-serif;">${companyName} &nbsp;-&nbsp; ${financialYear} &nbsp;-&nbsp; ${propertyName} &nbsp;-&nbsp; ${locationName}</th>
- 				 <th style="width: 34%; text-align: left;font-weight: bold;font-size: 11px;"><label>PMS Date</label></th> 
+ 				 <th style="width: 34%; text-align: left;font-weight: bold;font-size: 11px; text-transform: uppercase;padding-top: 5px;padding-bottom: 5px; FONT-FAMILY: trebuchet ms, Helvetica, sans-serif;">PMS Date&nbsp;-&nbsp;<label id="txtPMSDate"> </label></th> 
 				 
  				 <!-- <th style="width: 34%;"><label>PMS Date</label>&nbsp; &nbsp;<input id="txtPMSDate" style="width: 90px;font-weight: bold;" readonly="readonly" class="longTextBox"/></th> -->
 				 
