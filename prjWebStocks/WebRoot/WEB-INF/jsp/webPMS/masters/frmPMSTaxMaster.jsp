@@ -388,6 +388,8 @@
 		        	{
 		        		$("#txtDeptCode").val(response.strDeptCode);
 		        		$("#lblDeptDesc").text(response.strDeptDesc);
+		        		$("#lblIncomeHead").text('');
+		        		
 		        	}
 				},
 				error: function(jqXHR, exception) {
@@ -432,8 +434,11 @@
 				        	}
 				        	else
 				        	{
+				        		 
 				        		$("#txtIncomeHeadCode").text(response.strIncomeHeadCode);
 					        	$("#lblIncomeHead").text(response.strIncomeHeadDesc);
+					        	$("#lblDeptDesc").text('');
+					        	
 				        	}
 						},
 						error: function(jqXHR, exception) {

@@ -78,6 +78,7 @@ public class clsDepartmentMasterController {
 
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		List listDepData = objDeptMasterDao.funGetDepartmentMaster(deptCode, clientCode);
+		if(listDepData!=null&&listDepData.size()>0)
 		objDepartmentMasterModel = (clsDepartmentMasterModel) listDepData.get(0);
 
 		return objDepartmentMasterModel;

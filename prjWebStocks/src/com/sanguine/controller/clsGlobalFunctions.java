@@ -3383,18 +3383,22 @@ public class clsGlobalFunctions {
 	@RequestMapping(value = "/getAccountMasterDtl", method = RequestMethod.GET)
 	public @ResponseBody clsWebBooksAccountMasterBean funAccountMasterDtl(@RequestParam("accountCode") String accountCode, HttpServletRequest req) {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
-		List list = objGlobalFunctionsService.funGetWebBooksAccountDtl(accountCode, clientCode);
-
+		clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(clientCode);
 		clsWebBooksAccountMasterBean objACMaster = new clsWebBooksAccountMasterBean();
-		if (list.size() > 0) {
-			Object[] obj = (Object[]) list.get(0);
-			objACMaster.setStrAccountCode(obj[0].toString());
-			objACMaster.setStrAccountName(obj[1].toString());
-		} else {
-			//objACMaster.setStrAccountCode("Invalid Code");
-			//objACMaster.setStrAccountName("Invalid ");
+		if (objCompModel.getStrWebBookModule().equals("Yes")) {
+
+			List list = objGlobalFunctionsService.funGetWebBooksAccountDtl(accountCode, clientCode);
+			if (list.size() > 0) {
+				Object[] obj = (Object[]) list.get(0);
+				objACMaster.setStrAccountCode(obj[0].toString());
+				objACMaster.setStrAccountName(obj[1].toString());
+			} else {
+				//objACMaster.setStrAccountCode("Invalid Code");
+				//objACMaster.setStrAccountName("Invalid ");
+			}
+	
 		}
-		return objACMaster;
+				return objACMaster;
 	}
 
 	public JSONObject funGETMethodUrlJosnObjectData(String strUrl) {

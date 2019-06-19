@@ -2736,9 +2736,10 @@ public class clsSearchFormController {
 		}
 
 		case "roomCodeForFolio": {
-			columnNames = "a.strRoomCode,a.strRoomDesc,c.strRoomTypeDesc";
-			tableName = " from tblroom a,tblfoliohd b,tblroomtypemaster c " + " where a.strRoomCode=b.strRoomNo and a.strRoomTypeCode=c.strRoomTypeCode " + " and a.strClientCode='" + clientCode + "' ";
-			listColumnNames = "Code,Description,Room Type,Floor No,Bed Type,Funiture,Extra Bed";
+			columnNames = "a.strRoomCode,a.strRoomDesc,c.strRoomTypeDesc,d.strFirstName ";
+			tableName = " from tblroom a,tblfoliohd b,tblroomtypemaster c ,tblguestmaster d " + " where a.strRoomCode=b.strRoomNo and a.strRoomTypeCode=c.strRoomTypeCode"
+					+ " and b.strGuestCode=d.strGuestCode and a.strClientCode='" + clientCode + "' ";
+			listColumnNames = "Code,Description,Room Type,Guest ,Floor No,Bed Type,Funiture,Extra Bed";
 			idColumnName = "strRoomCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
 			searchFormTitle = "Room Master";
@@ -2757,11 +2758,12 @@ public class clsSearchFormController {
 		}
 
 		case "taxCode": {
-			columnNames = "strTaxCode,strTaxDesc";
-			tableName = "clsPMSTaxMasterModel where strClientCode='" + clientCode + "' ";
-			listColumnNames = "Tax Code,Tax Desc";
+			columnNames = "a.strTaxCode,a.strTaxDesc,a.strTaxOnType,a.dblTaxValue,b.strDeptDesc";
+			tableName = "from tbltaxmaster a,tbldepartmentmaster b where a.strDeptCode=b.strDeptCode and a.strClientCode='" + clientCode + "' ";
+			listColumnNames = "Tax Code,Tax Desc,Tax On Tax,Tax Value,Department";
 			idColumnName = "strTaxCode";
-			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			flgQuerySelection = true;
+			//criteria = getCriteriaQuery(columnNames, search_with, tableName);
 			searchFormTitle = "Tax Master";
 			break;
 		}

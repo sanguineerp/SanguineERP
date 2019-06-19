@@ -231,6 +231,7 @@ public class clsPostRoomTerrifController {
 		objTaxProductDtl.setStrTaxProdCode(objBean.getStrRoomNo());
 		objTaxProductDtl.setStrTaxProdName("");
 		objTaxProductDtl.setDblTaxProdAmt(roomTerrif);
+		objTaxProductDtl.setDblTotalExtraBedAmt(0);
 		// set department value here -- get department value from income head table 
 		String sql = "select a.strDeptCode from tblincomehead a where a.strIncomeHeadCode = '"+objTaxProductDtl.getStrTaxProdCode()+"'";
 		List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
@@ -241,15 +242,18 @@ public class clsPostRoomTerrifController {
 				+ "tblfoliohd b where a.strWalkinNo=b.strWalkInNo and b.strFolioNo='"+folioNo+"'";
 		
 		List listDiscWalkIn = objGlobalFunctionsService.funGetListModuleWise(sqlDiscWalkIn, "sql");
-		objTaxProductDtl.setDblDiscountOnTariff(Double.parseDouble(listDiscWalkIn.get(0).toString()));
+		if(listDiscWalkIn!=null &&listDiscWalkIn.size()>0){
+			objTaxProductDtl.setDblDiscountOnTariff(Double.parseDouble(listDiscWalkIn.get(0).toString()));	
+		}
+		
 		
 		String sqlExtraBedAmt = "select a.dblChargePerBed from tblextrabed a where a.strExtraBedTypeCode = '"+extraBedCode+"'";
 		List listExtraBedAmt = objGlobalFunctionsService.funGetListModuleWise(sqlExtraBedAmt, "sql");
 		if(!extraBedCode.isEmpty())
 		{
 			double dblExtraBedAmt = Double.parseDouble(listExtraBedAmt.get(0).toString());
-			dblExtraBedAmt = dblExtraBedAmt + objTaxProductDtl.getDblTaxProdAmt();
-			objTaxProductDtl.setDblTaxProdAmt(dblExtraBedAmt);
+			//dblExtraBedAmt = dblExtraBedAmt + objTaxProductDtl.getDblTaxProdAmt();
+			objTaxProductDtl.setDblTotalExtraBedAmt(dblExtraBedAmt);
 		}
 		listTaxProdDtl.add(objTaxProductDtl);
 		Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Room Night");
@@ -330,13 +334,14 @@ public class clsPostRoomTerrifController {
 			objFolioDtl.setStrRevenueCode(objExtraBedMaster.getStrExtraBedTypeCode());
 			listFolioDtl.add(objFolioDtl);
 
-			/*objTaxProductDtl = new clsTaxProductDtl();
+			objTaxProductDtl = new clsTaxProductDtl();
 			objTaxProductDtl.setStrTaxProdCode(objExtraBedMaster.getStrExtraBedTypeCode());
 			objTaxProductDtl.setStrTaxProdName("");
 			objTaxProductDtl.setDblTaxProdAmt(objExtraBedMaster.getDblChargePerBed());
+			
 			List<clsTaxProductDtl> listTaxProdDtlForExtraBed = new ArrayList<clsTaxProductDtl>();
-			listTaxProdDtlForExtraBed.add(objTaxProductDtl);*/
-			/*Map<String, List<clsTaxCalculation>> hmTaxCalDtlForExtraBed = objPMSUtility.funCalculatePMSTax(listTaxProdDtlForExtraBed, "Room Night");
+			listTaxProdDtlForExtraBed.add(objTaxProductDtl);
+			Map<String, List<clsTaxCalculation>> hmTaxCalDtlForExtraBed = objPMSUtility.funCalculatePMSTax(listTaxProdDtlForExtraBed, "Extra Bed");
 			if(hmTaxCalDtlForExtraBed.containsKey(objExtraBedMaster.getStrExtraBedTypeCode())){
 			List<clsTaxCalculation> listTaxCalForExtraBed = hmTaxCalDtlForExtraBed.get(objExtraBedMaster.getStrExtraBedTypeCode());
 			for (clsTaxCalculation objTaxCal : listTaxCalForExtraBed) {
@@ -348,7 +353,7 @@ public class clsPostRoomTerrifController {
 				objFolioTaxDtl.setDblTaxAmt(objTaxCal.getDblTaxAmt());
 				listFolioTaxDtl.add(objFolioTaxDtl);
 			}
-		}*/
+		}
 		}
 		//objWebPMSUtility.funExecuteUpdate("delete from tblfoliodtl where strFolioNo='"+objFolioHd.getStrFolioNo()+"' and strRevenueType='Room' or strRevenueType='Package' and strClientCode='"+clientCode+"'", "sql");
 		objFolioHd.setListFolioDtlModel(listFolioDtl);

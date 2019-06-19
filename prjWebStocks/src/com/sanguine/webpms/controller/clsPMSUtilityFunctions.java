@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hsqldb.lib.tar.TarReader;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -111,8 +111,82 @@ public class clsPMSUtilityFunctions {
 						}
 					}
 				}
+				else if(taxOnType.equalsIgnoreCase("Extra Bed")){
+					// Extra Bed Tax Calculation
+					clsTaxCalculation objTaxCal = new clsTaxCalculation();
+					double taxValue = Double.parseDouble(arrObjTaxDtl[4].toString());
+					double fromRate = Double.parseDouble(arrObjTaxDtl[7].toString());
+					double toRate = Double.parseDouble(arrObjTaxDtl[8].toString());
+					if(strTaxOn.equals("Gross Amount"))
+					{
+						if(fromRate<tariffAmt && tariffAmt<=toRate){
+							if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check for Tax Type Per/Amt
+							{
+								double taxAmt = 0;
+								if (taxCalType.equals("Forward")) // Forward Tax
+								{
+									taxAmt = (objTaxProdDtl.getDblTaxProdAmt() * taxValue) / 100;
+								} 
+								else // Backward Tax Calculation
+								{
+									taxAmt = objTaxProdDtl.getDblTaxProdAmt() * 100 / (100 + taxValue);
+									taxAmt = objTaxProdDtl.getDblTaxProdAmt() - taxAmt;
+								}
+								if (taxAmt > 0) {
+									objTaxCal.setStrTaxCode(arrObjTaxDtl[0].toString());
+									objTaxCal.setStrTaxDesc(arrObjTaxDtl[1].toString());
+									objTaxCal.setStrTaxType(taxCalType);
+									objTaxCal.setDblTaxableAmt(objTaxProdDtl.getDblTaxProdAmt());
+									objTaxCal.setDblTaxAmt(taxAmt);
+
+									listTaxCalDtl.add(objTaxCal);
+								}
+							}
+						}
+						else 
+						{
+							
+						}
+					}
+					else
+					{
+						//Discount
+						//tariffAmt = tariffAmt-(tariffAmt*discountPer)/100;
+						//double dblTarrifAndExtraBedAmtForSlabCheck=tariffAmt+ objTaxProdDtl.getDblTotalExtraBedAmt();
+						if(fromRate<tariffAmt&& tariffAmt<=toRate){
+							if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check  for Tax Type Per/Amt
+							{
+								double taxAmt = 0;
+								if (taxCalType.equals("Forward")) // Forward Tax
+																	// Calculation
+								{
+									taxAmt = (tariffAmt * taxValue) / 100;
+								} 
+								else // Backward Tax Calculation
+								{
+									taxAmt = tariffAmt * 100 / (100 + taxValue);
+									taxAmt = tariffAmt - taxAmt;
+								}
+								if (taxAmt > 0) {
+									objTaxCal.setStrTaxCode(arrObjTaxDtl[0].toString());
+									objTaxCal.setStrTaxDesc(arrObjTaxDtl[1].toString());
+									objTaxCal.setStrTaxType(taxCalType);
+									objTaxCal.setDblTaxableAmt(objTaxProdDtl.getDblTaxProdAmt());
+									objTaxCal.setDblTaxAmt(taxAmt);
+
+									listTaxCalDtl.add(objTaxCal);
+								}
+							}
+						}
+						else 
+						{
+							
+						}
+					}
+				
+				}
 				else 
-				{
+				{// room tariff
 					clsTaxCalculation objTaxCal = new clsTaxCalculation();
 					double taxValue = Double.parseDouble(arrObjTaxDtl[4].toString());
 					double fromRate = Double.parseDouble(arrObjTaxDtl[7].toString());
@@ -155,15 +229,12 @@ public class clsPMSUtilityFunctions {
 					}
 					else
 					{
-						
-						double tax = objTaxProdDtl.getDblDiscountOnTariff();
-						tariffAmt = tariffAmt-(tariffAmt*tax)/100;
-						if(fromRate<tariffAmt && tariffAmt<=toRate){
-							if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check
-																							// for
-																							// Tax
-																							// Type
-																							// Per/Amt
+						//Discount
+						double discountPer = objTaxProdDtl.getDblDiscountOnTariff();
+						tariffAmt = tariffAmt-(tariffAmt*discountPer)/100;
+						double dblTarrifAndExtraBedAmtForSlabCheck=tariffAmt+ objTaxProdDtl.getDblTotalExtraBedAmt();
+						if(fromRate<(dblTarrifAndExtraBedAmtForSlabCheck)&& (dblTarrifAndExtraBedAmtForSlabCheck)<=toRate){
+							if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check  for Tax Type Per/Amt
 							{
 								double taxAmt = 0;
 								if (taxCalType.equals("Forward")) // Forward Tax

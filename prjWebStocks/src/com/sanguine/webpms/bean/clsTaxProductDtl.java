@@ -12,6 +12,8 @@ public class clsTaxProductDtl {
 	
 	private double dblDiscountOnTariff;
 	
+	private double dblTotalExtraBedAmt;
+	
 	
 	public String getStrTaxProdCode() {
 		return strTaxProdCode;
@@ -51,6 +53,16 @@ public class clsTaxProductDtl {
 
 	public void setDblDiscountOnTariff(double dblDiscountOnTariff) {
 		this.dblDiscountOnTariff = dblDiscountOnTariff;
+	}
+
+
+
+	public double getDblTotalExtraBedAmt() {
+		return dblTotalExtraBedAmt;
+	}
+
+	public void setDblTotalExtraBedAmt(double dblTotalExtraBedAmt) {
+		this.dblTotalExtraBedAmt = dblTotalExtraBedAmt;
 	}
 
 }
