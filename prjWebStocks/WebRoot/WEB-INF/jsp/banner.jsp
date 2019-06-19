@@ -303,14 +303,14 @@ function funGetFormName(){
 }
 
 
-$(document).ready(function(){
-	    
-<%-- 	  var pmsDate='<%=session.getAttribute("PMSDate").toString()%>'; --%>
-// 	  if(null!=pmsDate)
-// 	  {
-// 	  var dte=pmsDate.split("-");
-// 	  $("#txtPMSDate").val(dte[2]+"-"+dte[1]+"-"+dte[0]);
-// 	}
+$(document).ready(function()
+{
+	var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
+	  if(null!=pmsDate)
+ 	  {
+	 	  var dte=pmsDate.split("-");
+		  $("#txtPMSDate").val(dte[2]+"-"+dte[1]+"-"+dte[0]); 	
+	  }
  });
 
 
@@ -321,9 +321,9 @@ $(document).ready(function(){
 		<thead style="">
 			<tr>
 				<th style="width: 47%; text-align: left;font-weight: bold;font-size: 11px;text-transform: uppercase;padding-top: 5px;padding-bottom: 5px; FONT-FAMILY: trebuchet ms, Helvetica, sans-serif;">${companyName} &nbsp;-&nbsp; ${financialYear} &nbsp;-&nbsp; ${propertyName} &nbsp;-&nbsp; ${locationName}</th>
- 				 <th style="width: 34%;"></th> 
+ 				 <th style="width: 34%; text-align: left;font-weight: bold;font-size: 11px;"><label>PMS Date</label></th> 
 				 
-<!-- 				 <th style="width: 34%;"><label>PMS Date</label>&nbsp; &nbsp;<input id="txtPMSDate" style="width: 90px;font-weight: bold;" readonly="readonly" class="longTextBox"/></th> -->
+ 				 <!-- <th style="width: 34%;"><label>PMS Date</label>&nbsp; &nbsp;<input id="txtPMSDate" style="width: 90px;font-weight: bold;" readonly="readonly" class="longTextBox"/></th> -->
 				 
 				 <th id="notification" style="width: 4%;font-weight: bold;font-size: 11px; padding-left: 23px;">
 					<div style=" background-color: #A33519; margin-left: 18px;margin-top: -5px; position: absolute;text-align: center;width: 15px;">

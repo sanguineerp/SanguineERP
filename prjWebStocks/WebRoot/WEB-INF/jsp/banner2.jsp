@@ -111,7 +111,7 @@ var NotificationCount="";
 		<thead style="">
 			<tr>
 				<th style="width: 47%; text-align: left;font-weight: bold;font-size: 11px;text-transform: uppercase;padding-top: 5px;padding-bottom: 5px; FONT-FAMILY: trebuchet ms, Helvetica, sans-serif;">${companyName} &nbsp;-&nbsp; ${financialYear} &nbsp;-&nbsp; ${propertyName} &nbsp;-&nbsp; ${locationName}</th>
-				 <th style="width: 34%;"></th>
+				 
 				 <th id="notification" style="width: 4%;font-weight: bold;font-size: 11px; padding-left: 23px;padding-bottom: 8px;">
 					<div style=" background-color: #A33519; margin-left: 18px;margin-top: -5px; position: absolute;text-align: center;width: 15px;">
 					<label id="lblNotifyCount"></label>

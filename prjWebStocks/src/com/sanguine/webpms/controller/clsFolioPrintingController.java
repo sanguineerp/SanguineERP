@@ -198,7 +198,7 @@ public class clsFolioPrintingController {
 				reportParams.put("pBillNo", billNo);
 
 				// get folio details
-				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%Y-%m-%d'),b.strDocNo,b.strPerticulars,b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
+				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
 									+ " order by b.strRevenueType desc";
 				List folioDtlList = objFolioService.funGetParametersList(sqlFolioDtl);
 				for (int i = 0; i < folioDtlList.size(); i++) {
@@ -242,7 +242,7 @@ public class clsFolioPrintingController {
 					}
 				}
 				
-				sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%Y-%m-%d'),b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt,b.strRevenueType" 
+				sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt,b.strRevenueType" 
 						+ " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " 
 						+ " WHERE DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " 
 						+ " AND a.strFolioNo='" + folioNo + "' and b.strRevenueType='Discount'";
