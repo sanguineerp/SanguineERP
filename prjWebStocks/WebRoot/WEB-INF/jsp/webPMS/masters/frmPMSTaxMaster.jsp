@@ -536,6 +536,7 @@
 						<option value="Room Night" selected>Room Night</option>
 						<option value="Income Head">Income Head</option>
 						<option value="Department">Department</option>
+						<option value="Extra Bed">Extra Bed</option>
 						
 					</s:select>
 				<td colspan="1" >

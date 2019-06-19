@@ -768,7 +768,8 @@ public class clsCheckInController {
 					+ "ifnull(a.strExtraBedCode,''), b.strRoomTypeDesc,"
 					+ "b.dblRoomTerrif, IFNULL(c.dblDiscount,0.0),d.intNoOfAdults,"
 					+ " DATE_FORMAT(d.dteCheckInDate,'%d-%m-%Y'),e.strGSTNo,"
-					+ "e.strPANNo, d.tmeArrivalTime,ifnull(g.dblChargePerBed,0) "
+					+ "e.strPANNo, d.tmeArrivalTime,ifnull(g.dblChargePerBed,0), "
+					+ "e.strFirstName,e.strMiddleName,e.strLastName"
 					+ "FROM tblroomtypemaster b,tblwalkinroomratedtl c, "
 					+ "tblcheckinhd d,tblguestmaster e,tblroom f, "
 					+ "tblcheckindtl a left outer join  tblextrabed g on "
@@ -800,6 +801,9 @@ public class clsCheckInController {
 			{
 				roomTarrif = dblExtraBedAmt+roomTarrif;
 			}
+			String gFirstName = arrObjRoomData[13].toString();
+			String gMiddleName = arrObjRoomData[14].toString();
+			String gLastName = arrObjRoomData[15].toString();
 			datalist.add(objCheckInBean);
 			
 			reportParams.put("pgstno", gstNo);
@@ -814,7 +818,8 @@ public class clsCheckInController {
 			reportParams.put("pContactDetails", "");
 			reportParams.put("strImagePath", imagePath);
 			reportParams.put("userName", userName);
-			
+			reportParams.put("pGuestName", gFirstName + " "+ gMiddleName + " " + gLastName);
+
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(datalist);
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
