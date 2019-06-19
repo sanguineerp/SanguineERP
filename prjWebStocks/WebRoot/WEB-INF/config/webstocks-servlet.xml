@@ -211,6 +211,7 @@
 			<value>com.sanguine.crm.model.clsSalesOrderTaxDtlModel</value>
 			<value>com.sanguine.crm.model.clsProFormaInvoiceHdModel</value>
 			<value>com.sanguine.crm.model.clsCategoryMasterModel</value>
+			<value>com.sanguine.crm.model.clsRegionMasterModel</value>
 			
 
 			</list>
