@@ -107,7 +107,7 @@ public class clsPostRoomTerrifController {
 						}
 						else
 						{
-							dblRoomRate=Double.valueOf(arrObjTerriff[2].toString());
+							dblRoomRate=Double.valueOf(arrObjTerriff[1].toString());
 						}	
 				 }	
 				 dblTotalAmt=dblRoomRate+dblPkgAmt;

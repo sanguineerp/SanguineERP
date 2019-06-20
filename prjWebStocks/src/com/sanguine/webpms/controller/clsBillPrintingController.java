@@ -325,8 +325,7 @@ public class clsBillPrintingController {
 							+ "IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,"
 							+ "b.dblBalanceAmt FROM tblbillhd a INNER JOIN tblbilldtl b "
 							+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo AND b.strPerticulars IN("+billNames.substring(0, billNames.length()-1)+") "
-							+ "WHERE a.strBillNo='"+billNo+"'"
-									+ "group by b.strPerticulars";
+							+ "WHERE a.strBillNo='"+billNo+"' ";
 				}
 				
 				// + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '"
