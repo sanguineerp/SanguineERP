@@ -224,7 +224,7 @@ public class clsFolioPrintingController {
 						dataList.add(folioPrintingBean);
 						
 
-						sqlFolioDtl = "SELECT date(a.dteDocDate),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblfoliodtl a,tblfoliotaxdtl b where a.strDocNo=b.strDocNo " + " and DATE(a.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and a.strDocNo='" + docNo + "'";
+						sqlFolioDtl = "SELECT DATE_FORMAT(date(a.dteDocDate),'%d-%m-%Y'),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblfoliodtl a,tblfoliotaxdtl b where a.strDocNo=b.strDocNo " + " and DATE(a.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and a.strDocNo='" + docNo + "'";
 						List listFolioTaxDtl = objWebPMSUtility.funExecuteQuery(sqlFolioDtl, "sql");
 						for (int cnt = 0; cnt < listFolioTaxDtl.size(); cnt++) {
 							Object[] arrObjFolioTaxDtl = (Object[]) listFolioTaxDtl.get(cnt);

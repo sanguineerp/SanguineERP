@@ -439,13 +439,13 @@
 				alert("Please Enter Amount");
 				 flg=false;
 			}
-			else if(parseFloat($("#txtReceiptAmt").val())>parseFloat($("#lblBalnceAmount").text()))
+			/* else if(parseFloat($("#txtReceiptAmt").val())>parseFloat($("#lblBalnceAmount").text()))
 			{
 				
 
 				alert("Amount should not be greatest than balance amount"); 
 				 flg=false;
-			}
+			} */
 		}
 		else
 		{

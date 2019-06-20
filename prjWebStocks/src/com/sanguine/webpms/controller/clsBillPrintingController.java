@@ -402,7 +402,7 @@ public class clsBillPrintingController {
 							Object[] arrObjBillTaxDtl = (Object[]) listBillTaxDtl.get(cnt);
 							billPrintingBean = new clsBillPrintingBean();
 							billPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (arrObjBillTaxDtl[0].toString())));
-							if(arrObjBillTaxDtl[1].toString().startsWith("R"))
+							if(arrObjBillTaxDtl[1].toString().startsWith("P"))
 							{
 							}	
 							else
@@ -423,7 +423,8 @@ public class clsBillPrintingController {
 								clsBillPrintingBean bean1= new clsBillPrintingBean();
 								bean1 =billPrintingBean;
 								clsBillPrintingBean bean=hmTax.get(arrObjBillTaxDtl[2].toString());
-								bean1.setDblBalanceAmt(bean.getDblBalanceAmt()+balance);
+								bean1.setDblBalanceAmt(balance);
+								/*bean1.setDblBalanceAmt(bean.getDblBalanceAmt()+balance);*/
 								hmTax.put(arrObjBillTaxDtl[2].toString(), bean1);
 							}else{
 								hmTax.put(arrObjBillTaxDtl[2].toString(), billPrintingBean);	
