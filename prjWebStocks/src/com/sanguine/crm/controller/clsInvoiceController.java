@@ -799,8 +799,8 @@ public class clsInvoiceController
 					}
 					else
 					{
-
-						if (true)
+						// No condition Checked
+						if (objInvItemDtl.getDblAssValue()==(objInvItemDtl.getDblUnitPrice() * objInvItemDtl.getDblQty()))
 						{
 							totalAmt += objInvItemDtl.getDblUnitPrice() * objInvItemDtl.getDblQty();
 						}
@@ -943,6 +943,8 @@ public class clsInvoiceController
 						objProdCustModel.setDteInstallation(arrObj[4].toString());
 						objProdCustModel.setIntWarrantyDays(Integer.parseInt(arrObj[5].toString()));
 						objProdCustModel.setDblStandingOrder(Double.parseDouble(arrObj[6].toString()));
+						objProdCustModel.setDblMargin(Double.parseDouble(arrObj[2].toString()));
+						
 					}else{
 						objProdCustModel.setDblAMCAmt(0.0);
 						objProdCustModel.setDteInstallation("1900-01-01 00:00:00");
@@ -3035,8 +3037,8 @@ public class clsInvoiceController
 			time = invTime[0] + "." + invTime[1];
 			Double dblTime = Double.parseDouble(time);
 			String timeInWords = obj.getNumberInWorld(dblTime);
-			String[] words = timeInWords.split("and");
-			String[] wordmin = words[1].split("paisa");
+			String[] words = timeInWords.split("And");
+			String[] wordmin = words[1].split("Paisa");
 			timeInWords = "Hours " + words[0] + "" + wordmin[0];
 			// grandTotal=subtotalInv+exciseTaxAmtTotal+totalVatTax;
 			DecimalFormat decformat = new DecimalFormat("#.##");
@@ -3524,8 +3526,8 @@ public class clsInvoiceController
 			time = invTime[0] + "." + invTime[1];
 			Double dblTime = Double.parseDouble(time);
 			String timeInWords = obj.getNumberInWorld(dblTime);
-			String[] words = timeInWords.split("and");
-			String[] wordmin = words[1].split("paisa");
+			String[] words = timeInWords.split("And");
+			String[] wordmin = words[1].split("Paisa");
 			timeInWords = "Hours " + words[0] + "" + wordmin[0];
 			// grandTotal=subtotalInv+exciseTaxAmtTotal+totalVatTax;
 			DecimalFormat decformat = new DecimalFormat("#.##");
@@ -4031,8 +4033,8 @@ public class clsInvoiceController
 			time = invTime[0] + "." + invTime[1];
 			Double dblTime = Double.parseDouble(time);
 			timeInWords = obj.getNumberInWorld(dblTime);
-			String[] words = timeInWords.split("and");
-			String[] wordmin = words[1].split("paisa");
+			String[] words = timeInWords.split("And");
+			String[] wordmin = words[1].split("Paisa");
 			timeInWords = "Hours " + words[0] + "" + wordmin[0];
 
 			String[] date = dteDCDate.split("-");
@@ -5541,8 +5543,8 @@ public class clsInvoiceController
 			time = invTime[0] + "." + invTime[1];
 			Double dblTime = Double.parseDouble(time);
 			String timeInWords = obj.getNumberInWorld(dblTime);
-			String[] words = timeInWords.split("and");
-			String[] wordmin = words[1].split("paisa");
+			String[] words = timeInWords.split("And");
+			String[] wordmin = words[1].split("Paisa");
 			timeInWords = "Hours " + words[0] + "" + wordmin[0];
 
 			String[] date = dteInvDate.split("-");
@@ -6369,7 +6371,7 @@ public void funCallReportInvoiceFormat7Report(@RequestParam("rptInvCode") String
 
 	String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
 			// + "c.dblCostRM,"
-			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblPrice,0.00) AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,f.strExciseChapter,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') ,ifNull(strCST,''),b.dblProdDiscAmount from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
+			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblBillRate,0.00) AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,f.strExciseChapter,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') ,ifNull(strCST,''),b.dblProdDiscAmount from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
 
 	String bAddress = "";
 	String bState = "";
@@ -6412,7 +6414,7 @@ public void funCallReportInvoiceFormat7Report(@RequestParam("rptInvCode") String
 			custGSTNo = obj[22].toString();
 			
 			double qty=Double.parseDouble(obj[2].toString());
-			double rate=Double.parseDouble(obj[3].toString());
+			double rate=Double.parseDouble(obj[5].toString());
 			double subTotal=qty*rate;
 			double discAmt=Double.parseDouble(obj[23].toString());								
 			double netTotal=subTotal-discAmt;

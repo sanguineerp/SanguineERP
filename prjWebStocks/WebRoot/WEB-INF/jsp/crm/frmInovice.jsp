@@ -329,7 +329,10 @@
 		     	  		var currValue=funGetCurrencyCode(currencyCode);
 		     	  		$("#txtDblCurrencyConv").val(currValue);
 						}
+						
 						funSetBalanceAmt();
+						
+						
 	        		}
 			},
 			error: function(jqXHR, exception) {

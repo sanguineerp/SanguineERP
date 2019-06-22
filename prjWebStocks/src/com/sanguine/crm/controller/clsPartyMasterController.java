@@ -387,8 +387,10 @@ public class clsPartyMasterController {
 				Date today = Calendar.getInstance().getTime();
 				DateFormat df = new SimpleDateFormat("HH:mm:ss");
 				String reportDate = df.format(today);
-				String[] dteInstalation=Obj.getDteInstallation().split("-");
-				Obj.setDteInstallation(dteInstalation[2]+"-"+dteInstalation[1]+"-"+dteInstalation[0]+" "+reportDate);
+				if(Obj.getDteInstallation()!=null){
+					String[] dteInstalation=Obj.getDteInstallation().split("-");
+					Obj.setDteInstallation(dteInstalation[2]+"-"+dteInstalation[1]+"-"+dteInstalation[0]+" "+reportDate);	
+				}
 				Obj.setStrDefault("");
 				Obj.setStrLeadTime("");
 				Obj.setStrSuppPartDesc("");
@@ -397,6 +399,9 @@ public class clsPartyMasterController {
 				Obj.setStrSuppUOM("");
 //				Obj.setDblLastCost(0);
 				Obj.setDblMaxQty(0);
+				if(Obj.getDteInstallation()==null){
+					Obj.setDteInstallation(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				}
 				
 //				if (Obj.getDblStandingOrder() != 0) {
 					

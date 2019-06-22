@@ -42,6 +42,27 @@
 			dateFormat : 'dd-mm-yy'
 		 });
 		$("#txtInstallationDate").datepicker('setDate', 'today');
+		
+		
+		var clientCode='<%=session.getAttribute("clientCode").toString()%>';
+		if(clientCode!='141.001') //sanguine 
+		{
+			  $("#lblLicenceAmt").text('Amount');
+			  $("#lblAMCAmt").css('visibility','hidden'); 
+			  //$("#txtAmount").css('visibility','hidden'); 
+			  
+			  $("#txtAMCAmount").css('visibility','hidden');
+			  
+			  $("#txtWarrInDays").css('visibility','hidden');
+			  $("#lblWarrInDays").css('visibility','hidden');
+			  $("#txtInstallationDate").css('visibility','hidden');
+			  $("#lblInstallationDate").css('visibility','hidden');
+			  // 
+			  // $("#divProductDetails").css('visibility','hidden');
+			   $('#divProductDetails').hide();
+			  
+		}
+		
 	});
 	
 	
@@ -434,14 +455,18 @@
 			      });
 			}
 		
-		
-		
 		function funAddRow() 
 	    {	
 			var strProdCode=$("#txtProdCode").val();
 		   	 if(funDuplicateProduct(strProdCode))
 			 {
-		   		funInsertProdRow();
+		   		var clientCode='<%=session.getAttribute("clientCode").toString()%>';
+		   		if(clientCode!='141.001')
+	   			{
+	   				funInsertProdRow1();			
+	   			}else{
+	   				funInsertProdRow();
+	   			}
 			 }
 	    }
 		
@@ -497,6 +522,47 @@
 		    return false;
 		}
 		 
+		function funInsertProdRow1()
+		{
+			
+			if(!funCheckNull($("#txtProdCode").val(),"Product Code"))
+			{
+				$("#txtProdCode").focus();
+				return false;
+			}
+			
+			if(!funValidateNumeric($("#txtAmount").val()))
+			{
+				$("#txtAmount").focus();
+				return false;
+			}
+			
+			if(!funValidateNumeric($("#txtMargin").val()))
+				{
+					$("#txtMargin").focus();
+					return false;
+				}
+			 
+			var prodCode = $("#txtProdCode").val();
+		    var amount = $("#txtAmount").val();
+		    var itemName = $("#lblProdName").text();
+		    var margin = $("#txtMargin").val();
+		    var standingOrder = $("#txtStandingOrder").val();
+		    var table = document.getElementById("tblProdDet1");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    rowCount=listRow;
+		    row.insertCell(0).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";		    
+		    row.insertCell(1).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\" value='"+itemName+"'/>";
+		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+standingOrder+">";
+		    row.insertCell(3).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+amount+">";
+		    row.insertCell(4).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+margin+">";
+		    row.insertCell(5).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
+		    funApplyNumberValidation();
+		    listRow++;
+		    return false;
+		}
+		
 		function funDeleteRow(obj)
 		{
 		    var index = obj.parentNode.parentNode.rowIndex;
@@ -599,7 +665,11 @@
 		
 		function funDuplicateProduct(strProdCode)
 		{
-		    var table = document.getElementById("tblProdDet");
+			var table = document.getElementById("tblProdDet1");
+			var clientCode='<%=session.getAttribute("clientCode").toString()%>';
+			if(clientCode=='141.001'){
+				table = document.getElementById("tblProdDet");
+			}
 		    var rowCount = table.rows.length;		   
 		    var flag=true;
 		    if(rowCount > 0)
@@ -632,6 +702,8 @@
 		var isOk=confirm("Do You Want to Select All Product ?");
 		if(isOk)
 		{
+			var clientCode='<%=session.getAttribute("clientCode").toString()%>';
+			
 			funRemoveAllRows();
 			var searchUrl="";
 			searchUrl=getContextPath()+"/loadAllProductData.html";
@@ -645,8 +717,12 @@
 				    	
 				    	$.each(response, function(i,item)
 						    	{
-				    		
-				    				funloadAllProductinGrid(response[i].strProdCode,response[i].strProdName,response[i].dblMRP,'0','1');
+									if(clientCode!='141.001'){
+				    					funloadAllProductinGrid1(response[i].strProdCode,response[i].strProdName,response[i].dblMRP,'0','1');	
+				    				}else{
+				    					funloadAllProductinGrid(response[i].strProdCode,response[i].strProdName,response[i].dblMRP,'0','1');	
+				    				}
+				    				
 						    	});
 		
 				    },
@@ -682,6 +758,13 @@
 			table.deleteRow(0);
 			rowCount--;
 		}
+		var table = document.getElementById("tblProdDet1");
+		var rowCount = table.rows.length;
+		while(rowCount>0)
+		{
+			table.deleteRow(0);
+			rowCount--;
+		}
 	}
 	
 		function funloadAllProductinGrid(prodCode,itemName,amount,margin,standingOrder,amcAmount,installationDate,warrInDays)
@@ -705,11 +788,26 @@
 		    return false;
 		}
 		
+		function funloadAllProductinGrid1(prodCode,itemName,amount,margin,standingOrder)
+		{	
+		    var table = document.getElementById("tblProdDet1");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    row.insertCell(0).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";		    
+		    row.insertCell(1).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\" value='"+itemName+"'/>";
+		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+standingOrder+">";
+		    row.insertCell(3).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+amount+">";
+		    row.insertCell(4).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+margin+">";
+		    row.insertCell(5).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
+		    funApplyNumberValidation();
+		    return false;
+		}
 		
 		
 		
 		function funPartyProdData(code)
 		{
+			var clientCode='<%=session.getAttribute("clientCode").toString()%>';
 			funRemoveProdRows();
 			var searchUrl="";
 			searchUrl=getContextPath()+"/loadPartyProdData.html?partyCode="+code;
@@ -724,7 +822,12 @@
 				    	$.each(response, function(i,item)
 						    	{
 				    				count=i;
-				    				funloadAllProductinGrid(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder,item.dblAMCAmt,item.dteInstallation,item.intWarrantyDays);
+				    				if(clientCode!='141.001'){
+				    					funloadAllProductinGrid1(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder);	
+				    				}else{
+				    					funloadAllProductinGrid(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder,item.dblAMCAmt,item.dteInstallation,item.intWarrantyDays);	
+				    				}
+				    				
 						    	});
 				    	listRow=count+1;
 	
@@ -758,6 +861,13 @@
 		function funRemoveAllRows()
 		{
 			var table = document.getElementById("tblProdDet");
+			var rowCount = table.rows.length;
+			while(rowCount>0)
+			{
+				table.deleteRow(0);
+				rowCount--;
+			}
+			var table = document.getElementById("tblProdDet1");
 			var rowCount = table.rows.length;
 			while(rowCount>0)
 			{
@@ -1274,14 +1384,14 @@
 								<td width="10%">Product Code:</td>
 								<td width="10%"><input id="txtProdCode" class="BoxW140px" style="width:90%" ondblclick="funHelp('productmaster')" ></input></td>
 								<td width="30%"><label id="lblProdName" class="namelabel"></label></td>
-								<td width="10%">Licence Amount:</td>
+								<td width="10%"><label id="lblLicenceAmt">Licence Amount:</label></td>
 						 		<td><input id="txtAmount" type="text" class="decimal-places-amt numberField"  style="width: 80px"></input></td>
-			    				<td width="10%">AMC Amount:</td>
+			    				<td width="10%"><label id="lblAMCAmt">AMC Amount:</label></td>
 			    				<td><s:input  id="txtAMCAmount"  path="" class="decimal-places-amt numberField"  style="width: 100px;" /></td>	
 				  				
-				  				<td width="10%">Installation Date:</td>				    
+				  				<td width="10%"><label id="lblInstallationDate">Installation Date:</label></td>				    
 				    			<td><s:input  id="txtInstallationDate"  path=""  cssClass="calenderTextBox" /></td>
-				    			<td width="10%">Warranty In Day's:</td>
+				    			<td width="10%"><label id="lblWarrInDays">Warranty In Day's:</label></td>
 				    			<td><s:input  id="txtWarrInDays"  path=""  cssClass="longTextBox" style="width: 100px;" /></td>
 								</tr>
 								<tr>
@@ -1290,7 +1400,7 @@
 								
 								<td width="10%">Margin:</td>
 								<td width="10%"><input id="txtMargin" type="text" class="decimal-places-amt numberField" style="width: 50px" ></input></td>
-								<td width="10%" ><input id="btnAdd" type="button" class="smallButton" value="Add" onclick="return funAddRow()"></input></td>
+								<td width="10%"><input id="btnAdd" type="button" class="smallButton" value="Add" onclick="return funAddRow()"></input></td>
 								<td width="10%" colspan="2"><input id="btnAllProd" type="button" class="smallButton" value="All Product" onclick="return funLoadAllProduct()"></input></td>
 							</tr>
 							
@@ -1314,7 +1424,7 @@
 								
 								
 								
-		<div class="dynamicTableContainer" style="height: 450px;">
+		<div class="dynamicTableContainer" style="height: 450px;" id="divProductDetails">
 			<table style="height: 30px; border: #0F0;width: 100%;font-size:11px;
 			font-weight: bold;">
 				<tr bgcolor="#72BEFC">
@@ -1349,12 +1459,38 @@
 				</table>
 			</div>
 		</div>
+		
 								
-								
-								
-								
-								
-								</div>
+		<div class="dynamicTableContainer" style="height: 450px;" id="divProductDetails1">
+			<table style="height: 10px; border: #0F0;width: 100%;font-size:11px;
+			font-weight: bold;">
+				<tr bgcolor="#72BEFC">
+									<td style="border: 1px white solid;width:10%"><label>Product Code</label></td>
+									<td style="border: 1px  white solid;width:50%"><label>Product Name</label></td>
+									<td style="border: 1px  white solid;width:10%"><label>Std Order Qty</label></td>
+									<td style="border: 1px  white solid;width:10%"><label>Amount</label></td>
+									<td style="border: 1px  white solid;width:10%"><label>Margin %</label></td>
+									<td style="border: 1px  white solid;width:10%"><label>Delete</label></td>
+				</tr>
+			</table>
+			<div
+				style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 410px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+					<table id="tblProdDet1"
+					style="width: 100%; height: 24px; border: #0F0; table-layout: fixed; overflow: scroll"
+					class="transTablex col11-center">
+					<tbody>
+					<col style="width:10%">					
+					<col style="width:50%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:10%">
+					
+					</tbody>
+				</table>
+			</div>
+		</div>
+</div>
 			
 			<div id="tab4" class="tab_content">
 						<table style="width: 80%;" class="transTablex col3-center">
