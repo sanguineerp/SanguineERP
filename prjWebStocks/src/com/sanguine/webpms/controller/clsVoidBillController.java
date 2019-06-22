@@ -469,6 +469,8 @@ public class clsVoidBillController {
 
 			HashMap reportParams = new HashMap();
 
+			double dblGrandTotal = 0.0;
+			
 			reportParams.put("pCompanyName", companyName);
 			reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
 			reportParams.put("pAddress2", objSetup.getStrState() + "," + objSetup.getStrCountry() + "," + objSetup.getStrPin());
@@ -496,6 +498,7 @@ public class clsVoidBillController {
 			List listOfPax = objGlobalFunctionsService.funGetDataList(sqlVoid, "sql");
 			ArrayList<clsVoidBillBean> fieldList = new ArrayList<clsVoidBillBean>();
 
+			
 			for (int i = 0; i < listOfPax.size(); i++) {
 				Object[] arr = (Object[]) listOfPax.get(i);
 				clsVoidBillBean objVoidBean = new clsVoidBillBean();
@@ -511,10 +514,11 @@ public class clsVoidBillController {
 				objVoidBean.setStrVoidType(arr[9].toString());
 				objVoidBean.setStrRoomName(arr[10].toString());
 				objVoidBean.setStrGuestName(arr[11].toString());
+				dblGrandTotal = dblGrandTotal + Double.parseDouble(arr[4].toString());
 				fieldList.add(objVoidBean);
 
 			}
-			
+			reportParams.put("pdblGrandTotal", dblGrandTotal);
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JasperReport jr = JasperCompileManager.compileReport(jd);

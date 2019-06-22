@@ -321,7 +321,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<text><![CDATA[GST NO               :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="437" y="230" width="100" height="14" uuid="41505283-3922-409d-9b1e-d5392a613883"/>
+				<reportElement x="437" y="230" width="115" height="14" uuid="41505283-3922-409d-9b1e-d5392a613883"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>

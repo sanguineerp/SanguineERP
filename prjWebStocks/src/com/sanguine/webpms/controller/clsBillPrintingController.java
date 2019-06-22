@@ -286,7 +286,6 @@ public class clsBillPrintingController {
 				reportParams.put("pReservationNo", reservationNo);
 				reportParams.put("pArrivalDate",objGlobal.funGetDate("dd-MM-yyyy", arrivalDate));
 				reportParams.put("pArrivalTime", arrivalTime);
-				reportParams.put("pDepartureDate",objGlobal.funGetDate("dd-MM-yyyy", departureDate));
 				reportParams.put("pDepartureTime", departureTime);
 				reportParams.put("pAdult", adults);
 				reportParams.put("pChild", childs);
@@ -432,6 +431,8 @@ public class clsBillPrintingController {
 							
 							}
 						}
+						reportParams.put("pDepartureDate",objGlobal.funGetDate("dd-MM-yyyy", docDate));
+
 					}
 				}
 

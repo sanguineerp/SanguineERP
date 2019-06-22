@@ -28,6 +28,8 @@ import com.sanguine.webpms.bean.clsCheckInDetailsBean;
 import com.sanguine.webpms.bean.clsFolioHdBean;
 import com.sanguine.webpms.bean.clsGuestMasterBean;
 import com.sanguine.webpms.bean.clsReservationDetailsBean;
+import com.sanguine.webpms.bean.clsTaxCalculation;
+import com.sanguine.webpms.bean.clsTaxProductDtl;
 import com.sanguine.webpms.dao.clsExtraBedMasterDao;
 import com.sanguine.webpms.dao.clsGuestMasterDao;
 import com.sanguine.webpms.dao.clsWalkinDao;
@@ -143,6 +145,8 @@ public class clsCheckInController {
 
 	@Autowired
 	private clsSetupMasterService objSetupMasterService;
+	
+	
 	
 	// Open CheckIn
 	@RequestMapping(value = "/frmCheckIn", method = RequestMethod.GET)
@@ -772,7 +776,7 @@ public class clsCheckInController {
 					+ "e.strFirstName,e.strMiddleName,e.strLastName, "
 					+ "IFNULL(e.strAddressOfc,''), IFNULL(e.strCityOfc,''), "
 					+ "IFNULL(e.strStateOfc,''), IFNULL(e.strCountryOfc,''), "
-					+ "IFNULL(e.intPinCodeOfc,'') "
+					+ "IFNULL(e.intPinCodeOfc,''),IFNULL(e.lngMobileNo,0) "
 					+ "FROM tblroomtypemaster b,tblwalkinroomratedtl c, "
 					+ "tblcheckinhd d,tblguestmaster e,tblroom f, "
 					+ "tblcheckindtl a left outer join  tblextrabed g on "
@@ -812,10 +816,14 @@ public class clsCheckInController {
 					+ arrObjRoomData[18].toString() + ","
 					+ arrObjRoomData[19].toString() + ","
 					+ arrObjRoomData[20].toString();
-			
+			String strMobileNo = arrObjRoomData[21].toString();
 			
 			
 			double roomTarrif = Double.parseDouble(arrObjRoomData[5].toString());
+			//List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
+			//Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Room Night");
+
+			
 			
 			datalist.add(objCheckInBean);
 			
@@ -834,6 +842,9 @@ public class clsCheckInController {
 			reportParams.put("pGuestName", gFirstName + " "+ gMiddleName + " " + gLastName);
 			reportParams.put("pguestCompanyAddr", guestCompanyAddr);
 			reportParams.put("proomTarrif", roomTarrif);
+			reportParams.put("pstrMobileNo", strMobileNo);
+
+			
 
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(datalist);
 			JasperDesign jd = JRXmlLoader.load(reportName);

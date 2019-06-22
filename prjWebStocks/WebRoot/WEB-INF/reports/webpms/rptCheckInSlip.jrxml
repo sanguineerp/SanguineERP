@@ -21,6 +21,7 @@
 	<parameter name="pguestCompanyAddr" class="java.lang.String"/>
 	<parameter name="pGuestName" class="java.lang.String"/>
 	<parameter name="proomTarrifWithExtBed" class="java.lang.Double"/>
+	<parameter name="pstrMobileNo" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
@@ -89,16 +90,16 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="326" splitType="Stretch">
+		<band height="408" splitType="Stretch">
 			<staticText>
-				<reportElement x="7" y="310" width="182" height="14" uuid="9801c5fe-f17a-4c06-ad83-f3734e18b509"/>
+				<reportElement x="7" y="360" width="182" height="14" uuid="9801c5fe-f17a-4c06-ad83-f3734e18b509"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Guest/Member Signature]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="412" y="312" width="137" height="14" uuid="1f2251c4-4b4f-4174-9a7b-ca3973a250b4"/>
+				<reportElement x="412" y="362" width="137" height="14" uuid="1f2251c4-4b4f-4174-9a7b-ca3973a250b4"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
@@ -147,87 +148,87 @@
 				<textFieldExpression><![CDATA[$F{dteArrivalDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="203" y="87" width="90" height="20" uuid="3094fa51-fb05-4374-99ff-a7f5f863db5f"/>
+				<reportElement x="203" y="137" width="90" height="20" uuid="3094fa51-fb05-4374-99ff-a7f5f863db5f"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Accomodation   :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="305" y="87" width="45" height="20" uuid="b5228cc2-1b7f-4390-aa11-582d46e6246e"/>
+				<reportElement x="305" y="137" width="45" height="20" uuid="b5228cc2-1b7f-4390-aa11-582d46e6246e"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{proomTarrifWithExtBed}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="203" y="112" width="90" height="20" uuid="121929a5-ce1d-430e-acd9-ce2e5ac52730"/>
+				<reportElement x="203" y="162" width="90" height="20" uuid="121929a5-ce1d-430e-acd9-ce2e5ac52730"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Discount %    :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="305" y="112" width="45" height="20" uuid="215d6053-35ba-43a1-b54d-6bf3cf439fdf"/>
+				<reportElement x="305" y="162" width="45" height="20" uuid="215d6053-35ba-43a1-b54d-6bf3cf439fdf"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pdiscount}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="172" y="140" width="208" height="1" uuid="4fef9bee-9a7a-413e-ba80-ebfaaa1100d4"/>
+				<reportElement x="172" y="190" width="208" height="1" uuid="4fef9bee-9a7a-413e-ba80-ebfaaa1100d4"/>
 			</line>
 			<staticText>
-				<reportElement x="179" y="146" width="113" height="20" uuid="06030064-6a02-4772-9db4-e066c4e6ae89"/>
+				<reportElement x="179" y="196" width="113" height="20" uuid="06030064-6a02-4772-9db4-e066c4e6ae89"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Amount Per Day    : ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="305" y="147" width="45" height="20" uuid="db6a95ac-7e6a-47a1-92cf-8e8725075932"/>
+				<reportElement x="305" y="197" width="45" height="20" uuid="db6a95ac-7e6a-47a1-92cf-8e8725075932"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{perDayAmt}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="61" width="84" height="20" uuid="f98cde0d-8f8b-4fda-8e51-120c21a7132b"/>
+				<reportElement x="11" y="71" width="84" height="20" uuid="f98cde0d-8f8b-4fda-8e51-120c21a7132b"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[No. of Person:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="106" y="62" width="71" height="20" uuid="44c46c15-c7f3-452f-838c-d540b3deba74"/>
+				<reportElement x="106" y="72" width="71" height="20" uuid="44c46c15-c7f3-452f-838c-d540b3deba74"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{intNoOfAdults}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="13" y="205" width="200" height="15" uuid="d2894ca3-e859-4c4a-bea9-68397e05def3"/>
+				<reportElement x="13" y="255" width="200" height="15" uuid="d2894ca3-e859-4c4a-bea9-68397e05def3"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Note:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="13" y="221" width="227" height="21" uuid="dd4c59c0-1dbd-4b5f-bfad-892b683cff11"/>
+				<reportElement x="13" y="271" width="227" height="21" uuid="dd4c59c0-1dbd-4b5f-bfad-892b683cff11"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[1. Advance paid is non-refundable]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="13" y="245" width="227" height="24" uuid="952f6f6e-986d-4ad4-a4cf-0efb9cb2f233"/>
+				<reportElement x="13" y="295" width="227" height="24" uuid="952f6f6e-986d-4ad4-a4cf-0efb9cb2f233"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[2. Issued subject to Nashik Jurisdiction]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="13" y="273" width="217" height="25" uuid="29587b0b-1ddd-45af-99aa-d651602f9772"/>
+				<reportElement x="13" y="323" width="217" height="25" uuid="29587b0b-1ddd-45af-99aa-d651602f9772"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
@@ -241,14 +242,14 @@
 				<textFieldExpression><![CDATA[$F{tmeArrivalTime}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="13" y="178" width="90" height="20" uuid="e3d9af64-dc2a-47d8-b4e8-5c029873492b"/>
+				<reportElement x="13" y="228" width="90" height="20" uuid="e3d9af64-dc2a-47d8-b4e8-5c029873492b"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Customer GST :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="103" y="178" width="176" height="20" uuid="bd1da632-82b9-4c98-813b-1ad39facc2f8"/>
+				<reportElement x="103" y="228" width="176" height="20" uuid="bd1da632-82b9-4c98-813b-1ad39facc2f8"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -259,7 +260,7 @@
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Comapany Addr]]></text>
+				<text><![CDATA[Comapany Addr  :]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="106" y="30" width="186" height="20" uuid="19bb0a9e-b50a-4f98-b1b5-a0646b0a5b87"/>
@@ -269,18 +270,32 @@
 				<textFieldExpression><![CDATA[$P{pguestCompanyAddr}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="4" width="70" height="20" uuid="78ac5719-cfc4-4d73-a5df-8a9717a6a5df"/>
+				<reportElement x="11" y="4" width="84" height="20" uuid="78ac5719-cfc4-4d73-a5df-8a9717a6a5df"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Guest Name]]></text>
+				<text><![CDATA[Guest Name   :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="107" y="4" width="106" height="20" uuid="a8ae9ed5-bf9a-49de-a70a-6bb601ae8571"/>
+				<reportElement x="107" y="4" width="213" height="20" uuid="a8ae9ed5-bf9a-49de-a70a-6bb601ae8571"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pGuestName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="96" width="84" height="20" uuid="8235a92b-b9f0-46de-a085-e95ac5dcdfe7"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Mobile.No  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="106" y="97" width="71" height="20" uuid="4f1bb140-361a-4e17-b3a5-2f7dacc5fcb5"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstrMobileNo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
