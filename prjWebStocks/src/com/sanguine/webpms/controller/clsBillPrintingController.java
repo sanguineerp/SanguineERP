@@ -182,15 +182,17 @@ public class clsBillPrintingController {
 
 				String guestDtl = " select ifnull(d.strDefaultAddr,''),ifnull(d.strAddressLocal,''),ifnull(d.strCityLocal,''),ifnull(d.strStateLocal,''),ifnull(d.strCountryLocal,''),IFNULL(d.intPinCodeLocal,''),"// 20
 						+ " ifnull(d.strAddrPermanent,''),ifnull(d.strCityPermanent,''),ifnull(d.strStatePermanent,''),ifnull(d.strCountryPermanent,''),IFNULL(d.intPinCodePermanent,''), "// 25
-						+ " ifnull(d.strAddressOfc,''),ifnull(d.strCityOfc,''),ifnull(d.strStateOfc,''),ifnull(d.strCountryOfc,''),IFNULL(d.intPinCodeOfc,''),IFNULL(d.strGSTNo,'') "
+						+ " ifnull(d.strAddressOfc,''),ifnull(d.strCityOfc,''),ifnull(d.strStateOfc,''),ifnull(d.strCountryOfc,''),IFNULL(d.intPinCodeOfc,''),IFNULL(d.strGSTNo,''),IFNULL(d.lngMobileNo,0) "
 						+ "from tblguestmaster d where d.strGuestCode=  '"
 						+ arr[15].toString() + "'";
 				List listguest = objFolioService.funGetParametersList(guestDtl);
 				// '"+arr[15].toString()+"'
 				String guestgstNO = "";
+				String strCustNo="";
 				for (int i = 0; i < listguest.size(); i++) {
 					Object[] arGuest = (Object[]) listguest.get(i);
 					guestgstNO = arGuest[16].toString();
+					strCustNo = arGuest[17].toString();
 				}
 				folio = arr[0].toString();
 				String roomNo = arr[1].toString();
@@ -207,6 +209,7 @@ public class clsBillPrintingController {
 				String adults = arr[12].toString();
 				String childs = arr[13].toString();
 				checkInNo  = arr[18].toString();
+				
 				listCheckInNo.add(checkInNo);
 				if (!arr[16].toString().equals("")) {
 					GSTNo = arr[16].toString();
@@ -296,6 +299,7 @@ public class clsBillPrintingController {
 				reportParams.put("pGuestNo", guestgstNO);
 				reportParams.put("pGuestOfficeAddress", guestCompanyAddress);
 				reportParams.put("pGuestNo", guestgstNO);
+				reportParams.put("pstrCustNo", strCustNo);
 				
 				if(clientCode.equalsIgnoreCase("320.001"))
 				{

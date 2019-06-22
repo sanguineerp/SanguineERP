@@ -72,6 +72,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,7 +147,9 @@ public class clsCheckInController {
 	@Autowired
 	private clsSetupMasterService objSetupMasterService;
 	
-	
+
+	@Autowired
+	private clsGlobalFunctionsService objGlobalFunService;
 	
 	// Open CheckIn
 	@RequestMapping(value = "/frmCheckIn", method = RequestMethod.GET)
@@ -823,7 +826,44 @@ public class clsCheckInController {
 			//List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
 			//Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Room Night");
 
+			Date dt = new Date();
+			String date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+
+			String sqlTax = "SELECT strTaxCode,strTaxDesc,strIncomeHeadCode,"
+					+ "strTaxType,dblTaxValue,strTaxOn,strDeptCode,dblFromRate,"
+					+ "dblToRate FROM tbltaxmaster WHERE DATE(dteValidFrom)<='"+date+"' "
+					+ "and  date(dteValidTo)>='"+date+"' and strTaxOnType = 'Room Night' ";
 			
+			List listTaxDtl = objGlobalFunService.funGetListModuleWise(sqlTax, "sql");
+			double finalTax = 0.0;
+			double tariffAmt = roomTarrifWithExtraBed;
+			String strTaxOn="";
+			for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
+				String taxCalType = "Forward";
+				Object[] arrObjTaxDtl = (Object[]) listTaxDtl.get(cnt);
+				double taxValue = Double.parseDouble(arrObjTaxDtl[4].toString());
+				double fromRate = Double.parseDouble(arrObjTaxDtl[7].toString());
+				double toRate = Double.parseDouble(arrObjTaxDtl[8].toString());
+				if(fromRate<(tariffAmt)&& (tariffAmt)<=toRate)
+				{
+					double taxAmt = 0;
+					if (taxCalType.equals("Forward")) // Forward Tax
+														// Calculation
+					{
+						taxAmt = (tariffAmt * taxValue) / 100;
+					} 
+					else // Backward Tax Calculation
+					{
+						taxAmt = tariffAmt * 100 / (100 + taxValue);
+						taxAmt = tariffAmt - taxAmt;
+					}
+					finalTax = finalTax+taxAmt;
+				}
+				else
+				{
+					
+				}
+			}
 			
 			datalist.add(objCheckInBean);
 			
@@ -843,7 +883,7 @@ public class clsCheckInController {
 			reportParams.put("pguestCompanyAddr", guestCompanyAddr);
 			reportParams.put("proomTarrif", roomTarrif);
 			reportParams.put("pstrMobileNo", strMobileNo);
-
+			reportParams.put("ptaxAmt", finalTax);
 			
 
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(datalist);

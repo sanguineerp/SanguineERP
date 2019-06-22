@@ -40,6 +40,7 @@
 	<parameter name="pHmRoomTariff" class="java.lang.Double"/>
 	<parameter name="pSupportVoucher" class="java.lang.Double"/>
 	<parameter name="isRoomTariff" class="java.lang.Boolean"/>
+	<parameter name="pstrCustNo" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT b.dteDocDate,b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt
 FROM tblfoliohd a
@@ -314,20 +315,6 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textFieldExpression><![CDATA[$P{pBillNo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="341" y="230" width="92" height="14" uuid="3b6ca154-c520-4974-a72f-19ace66b1642"/>
-				<textElement>
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[GST NO               :]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="437" y="230" width="115" height="14" uuid="41505283-3922-409d-9b1e-d5392a613883"/>
-				<textElement>
-					<font size="11"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{pGSTNo}]]></textFieldExpression>
-			</textField>
-			<staticText>
 				<reportElement x="341" y="98" width="94" height="14" uuid="5e3f1bbc-c1c3-4bb6-8579-3f0eda7ec399"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
@@ -354,6 +341,20 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pGuestOfficeAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="340" y="230" width="97" height="14" uuid="e8c6864d-9cc4-4546-bb68-f4047aa70bb9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mobile No   :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="438" y="230" width="115" height="14" uuid="a41c46ce-d44a-4b42-8184-1c0a2a391834"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pstrCustNo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -522,7 +523,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="178">
+		<band height="249">
 			<staticText>
 				<reportElement x="5" y="6" width="100" height="20" uuid="9b566579-3abf-4ebe-8683-cb0cecc3852c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -558,84 +559,84 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textFieldExpression><![CDATA[$F{dblBalanceAmt}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="122" y="124" width="188" height="15" uuid="b647f00d-6908-45a0-a872-b0acbc02c8ac"/>
+				<reportElement x="398" y="129" width="151" height="15" uuid="b647f00d-6908-45a0-a872-b0acbc02c8ac"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ppanno}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="122" y="143" width="188" height="15" uuid="70bd0f66-4dbb-40e1-8013-bff6e5ab9ec3"/>
+				<reportElement x="398" y="148" width="151" height="15" uuid="70bd0f66-4dbb-40e1-8013-bff6e5ab9ec3"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{phsnCode}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="122" y="163" width="188" height="15" uuid="6a05add8-51bc-4cb8-800c-ac34e368a10d"/>
+				<reportElement x="112" y="178" width="188" height="15" uuid="6a05add8-51bc-4cb8-800c-ac34e368a10d"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pbankDtl}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="7" y="124" width="74" height="14" uuid="6578c23c-3623-4505-a0ba-6d364caa709c"/>
+				<reportElement x="298" y="129" width="74" height="14" uuid="6578c23c-3623-4505-a0ba-6d364caa709c"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PAN NO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="8" y="143" width="96" height="14" uuid="20b49d91-2d9c-4fb3-8933-50a9dd48127e"/>
+				<reportElement x="299" y="148" width="96" height="14" uuid="20b49d91-2d9c-4fb3-8933-50a9dd48127e"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[HSN Code/SAC:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="163" width="86" height="14" uuid="afc8f24d-96ba-4056-bc39-e43874b49d8f"/>
+				<reportElement x="10" y="178" width="86" height="14" uuid="afc8f24d-96ba-4056-bc39-e43874b49d8f"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Bank Ac Name:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="325" y="124" width="90" height="14" uuid="bd9489f7-0294-4fb0-b546-ea37dd1a5ae3"/>
+				<reportElement x="9" y="124" width="90" height="14" uuid="bd9489f7-0294-4fb0-b546-ea37dd1a5ae3"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Bank Ac No:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="429" y="124" width="123" height="15" uuid="729575d9-8ea4-4d58-a211-6a0d38e82320"/>
+				<reportElement x="113" y="124" width="123" height="15" uuid="729575d9-8ea4-4d58-a211-6a0d38e82320"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pbankAcNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="429" y="142" width="123" height="15" uuid="3c70b03f-97f3-4a94-87a2-c9fec8c41233"/>
+				<reportElement x="113" y="142" width="123" height="15" uuid="3c70b03f-97f3-4a94-87a2-c9fec8c41233"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pbankIFSC}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="325" y="142" width="90" height="14" uuid="915f738f-5b29-49e0-bc31-845261cbff5c"/>
+				<reportElement x="9" y="142" width="90" height="14" uuid="915f738f-5b29-49e0-bc31-845261cbff5c"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Bank IFS Code:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="429" y="161" width="123" height="15" uuid="ae5a2548-fa5d-49f9-9cc9-f9aafc2941f3"/>
+				<reportElement x="113" y="161" width="123" height="15" uuid="ae5a2548-fa5d-49f9-9cc9-f9aafc2941f3"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pbranchnName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="325" y="161" width="90" height="14" uuid="fbe17f53-00c1-47c8-90ba-f4c5eeb79bd2"/>
+				<reportElement x="9" y="161" width="90" height="14" uuid="fbe17f53-00c1-47c8-90ba-f4c5eeb79bd2"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
@@ -688,6 +689,20 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				</reportElement>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{vGrandTotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="299" y="169" width="92" height="14" uuid="06e287bb-d13e-4b44-90bd-bf4c629029b5"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GST NO         :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="395" y="169" width="155" height="14" uuid="be057714-e0a3-4073-81de-eeededb52396"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pGSTNo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
