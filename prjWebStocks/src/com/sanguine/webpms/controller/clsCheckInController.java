@@ -836,7 +836,8 @@ public class clsCheckInController {
 			
 			List listTaxDtl = objGlobalFunService.funGetListModuleWise(sqlTax, "sql");
 			double finalTax = 0.0;
-			double tariffAmt = roomTarrifWithExtraBed;
+			double tariffAmt = roomTarrifWithExtraBed-((roomTarrifWithExtraBed*discount)/100);
+			double discAmt = ((roomTarrifWithExtraBed*discount)/100);
 			String strTaxOn="";
 			for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
 				String taxCalType = "Forward";
@@ -872,7 +873,7 @@ public class clsCheckInController {
 			reportParams.put("pguestCode", guestCode);
 			reportParams.put("proomType", roomType);
 			reportParams.put("proomTarrifWithExtBed", roomTarrifWithExtraBed);
-			reportParams.put("pdiscount", discount);
+			reportParams.put("pdiscount", discAmt);
 			reportParams.put("pCompanyName", companyName);
 			reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
 			reportParams.put("pAddress2", objSetup.getStrState() + "," + objSetup.getStrCountry() + "," + objSetup.getStrPin());

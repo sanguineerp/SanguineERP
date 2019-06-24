@@ -116,6 +116,7 @@ public class clsBillPrintingController {
 			String billNames = "";
 			double pSupportVoucher=0.0;
 			double pRoomTariff=0.0;
+			int count=0;
 			for (int i = 0; i < temp.length; i++) {
 				if (billNames.length()>=0) {
 					billNames+="'"+temp[i]+"',";
@@ -347,6 +348,10 @@ public class clsBillPrintingController {
 						clsBillPrintingBean billPrintingBean = new clsBillPrintingBean();
 						String docNo = folioArr[1].toString();
 						String particulars = folioArr[2].toString();
+						if(particulars.equalsIgnoreCase("Room Tariff"))
+						{
+							count++;
+						}
 						double debitAmount = Double.parseDouble(folioArr[3].toString());
 						double creditAmount = Double.parseDouble(folioArr[4].toString());
 						balance = balance + debitAmount - creditAmount;
@@ -663,6 +668,10 @@ public class clsBillPrintingController {
 						{
 							balance  = balance +  - (creditAmount/100)*debitAmount;
 							creditAmount = debitAmount*creditAmount/100;
+							if(count>0)
+							{
+								creditAmount = creditAmount*count;
+							}
 							// String debitAmount = billDicArr[3].toString();
 							// String creditAmount = billDicArr[4].toString();
 							// String balance = billDicArr[5].toString();

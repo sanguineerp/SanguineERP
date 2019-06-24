@@ -34,7 +34,7 @@
 	<field name="intNoOfAdults" class="java.lang.Integer"/>
 	<field name="tmeArrivalTime" class="java.lang.String"/>
 	<variable name="perDayAmt" class="java.lang.Double">
-		<variableExpression><![CDATA[$P{proomTarrifWithExtBed}-($P{proomTarrif}*$P{pdiscount}/100)]]></variableExpression>
+		<variableExpression><![CDATA[$P{proomTarrifWithExtBed}-$P{pdiscount}+$P{ptaxAmt}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -156,7 +156,7 @@
 				</textElement>
 				<text><![CDATA[Accomodation   :]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#0">
 				<reportElement x="305" y="137" width="45" height="20" uuid="b5228cc2-1b7f-4390-aa11-582d46e6246e"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
@@ -165,12 +165,12 @@
 			</textField>
 			<staticText>
 				<reportElement x="203" y="162" width="90" height="20" uuid="121929a5-ce1d-430e-acd9-ce2e5ac52730"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Left">
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Discount %    :]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#0">
 				<reportElement x="305" y="162" width="45" height="20" uuid="215d6053-35ba-43a1-b54d-6bf3cf439fdf"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
@@ -187,7 +187,7 @@
 				</textElement>
 				<text><![CDATA[Amount Per Day    : ]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#0">
 				<reportElement x="305" y="227" width="45" height="20" uuid="db6a95ac-7e6a-47a1-92cf-8e8725075932"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
@@ -306,20 +306,20 @@
 				</textElement>
 				<text><![CDATA[4. Taxes as Applicable]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="203" y="189" width="90" height="20" uuid="f400f10d-8c35-4274-a944-158046fb90e7"/>
-				<textElement>
-					<font size="11"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{pstrTaxDesc}]]></textFieldExpression>
-			</textField>
-			<textField>
+			<textField pattern="#0">
 				<reportElement x="305" y="189" width="45" height="20" uuid="61fa9fb7-505b-4e24-bc5a-f3682c3f22a4"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ptaxAmt}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="203" y="189" width="90" height="20" uuid="0b68c603-7cbb-499d-9ffa-470101319525"/>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Tax    :]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<pageFooter>
