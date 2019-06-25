@@ -387,7 +387,7 @@
 						$("#txtProdQty").focus();
 						//objModel.getStrProdType().equals("Produced")  ||objModel.getStrProdType().equals("Procured") || objModel.getStrProdType().equals("Semi Finished") 
 						if(unitPrice==0){
-							if(response.strProdType=='Produced' ||response.strProdType=='Procured' ||response.strProdType=='Semi Finished')
+							if(response.strProdType=='Produced' ||response.strProdType=='Semi Finished')
 							{
 							    var dblActualPrice= funGetProductActualPrice(response.strProdCode,response.strProdType,"1");
 							    $("#txtUnitPrice").val(dblActualPrice);

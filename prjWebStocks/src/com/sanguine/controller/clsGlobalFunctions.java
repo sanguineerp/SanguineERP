@@ -5414,7 +5414,53 @@ return 1;
 			
 			double dblActualProductCost=0;
 			String clientCode = request.getSession().getAttribute("clientCode").toString();
-			dblActualProductCost=  funGetChildProduct(strProdType,clientCode,"",prodCode,finalWeight,0);
+			
+			
+			
+			String sqlBom = "select a.strBOMCode from tblbommasterhd a where a.strParentCode='"+prodCode+"'";
+			List listTemp = objGlobalFunctionsService.funGetList(sqlBom, "sql");
+
+			if(listTemp!=null && listTemp.size()>0)
+			{
+			String bomCode = listTemp.get(0).toString();
+
+
+			String sql = " select a.strParentCode,d.strProdName as RecipeName, c.dblListPrice,b.strChildCode,c.strProdName as ProdName,c.strUOM," + " (b.dblQty/c.dblRecipeConversion) as InitialWt,c.dblYieldPer,(100-c.dblYieldPer) as lossPer,(c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100) as finalWT ," + " c.dblCostRM as Rate,((b.dblQty/c.dblRecipeConversion)*c.dblCostRM) as RecipeCost,"
+					+ " ((c.dblYieldPer*c.dblCostRM/100)*100/(select  sum((r.dblYieldPer*r.dblCostRM/100))" + " from tblbommasterhd p,tblbommasterdtl q, tblproductmaster r" + " where ";
+			if (!bomCode.equals("") || !bomCode.isEmpty()) {
+				sql = sql + " p.strBOMCode='" + bomCode + "' ";
+			}
+			sql = sql + " and p.strBOMCode=q.strBOMCode " + " and q.strChildCode = r.strProdCode and p.strParentCode=d.strProdCode" + " and p.strClientCode='" + clientCode + "' and p.strClientCode=q.strClientCode" + " and q.strClientCode=r.strClientCode  )) as eachProdPer , c.strProdType " + " from tblbommasterhd a,tblbommasterdtl b,tblproductmaster c ,tblproductmaster d " + " where  "
+					+ " a.strBOMCode=b.strBOMCode " + " and b.strChildCode = c.strProdCode and a.strParentCode=d.strProdCode  " + " and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode " + " and b.strClientCode=c.strClientCode  ";
+
+			if (!bomCode.equals("") || !bomCode.isEmpty()) {
+				sql = sql + " and  a.strBOMCode='" + bomCode + "' group by b.strChildCode  order by b.strChildCode ";
+			} else {
+				sql = sql + "   group by b.strChildCode  order by b.strChildCode ";
+			}
+			
+			
+			listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
+
+			if(listTemp!=null && listTemp.size()>0)
+			{
+				for(int cnt=0;cnt<listTemp.size();cnt++)
+				{
+					
+					Object[] obj = (Object[]) listTemp.get(cnt);
+					if(obj[13].toString().equalsIgnoreCase("Semi Finished") || obj[13].toString().equalsIgnoreCase("Produced"))
+					{	
+						String strParentCode=obj[3].toString();
+						String finalwt = obj[6].toString();
+						dblActualProductCost=funGetChildProduct(obj[13].toString(),clientCode,bomCode,strParentCode,finalwt,0);
+					}
+				}
+				
+			}
+			
+				//dblActualProductCost=  funGetChildProduct(strProdType,clientCode,listTemp.get(0).toString(),prodCode,finalWeight,0);	
+			}
+			
 			
 			return dblActualProductCost;
 		}
