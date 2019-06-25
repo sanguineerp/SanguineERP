@@ -28,6 +28,8 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jdk.nashorn.internal.ir.RuntimeNode.Request;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mysql.jdbc.Connection;
 import com.sanguine.base.service.intfBaseService;
 import com.sanguine.bean.clsProductTaxDtl;
+import com.sanguine.bean.clsRecipeCostingBean;
 import com.sanguine.bean.clsStockAdjustmentBean;
 import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsLinkUpHdModel;
@@ -5366,6 +5369,54 @@ return 1;
 		}
 		
 	}
+	
+	
+	public double funGetChildProduct(String bomType, String clientCode, String bomCode,String parentCode, String finalwt,double dblRecipeCost) 
+	{
+		
+		if(bomType.equalsIgnoreCase("Semi Finished")  || bomType.equalsIgnoreCase("Produced"));
+		{
+			
+			List listChild = funSemiProduct(parentCode,clientCode,bomCode,finalwt);
+			clsRecipeCostingBean objRecipeCostingbean1;
+			for(int k = 0;k<listChild.size();k++)
+			{
+				objRecipeCostingbean1 = new clsRecipeCostingBean();
+				Object[] objChild = (Object[]) listChild.get(k);
+				parentCode = objChild[0].toString();
+				bomType = objChild[12].toString();
+				dblRecipeCost+=Double.parseDouble(objChild[10].toString());
+				
+				if(objChild[12].toString().equalsIgnoreCase("Semi Finished") || objChild[12].toString().equalsIgnoreCase("Produced")){
+					//flgSemiFinished=true;	
+					finalwt = objChild[5].toString()+"*"+finalwt;
+					dblRecipeCost+=funGetChildProduct(objChild[12].toString(),clientCode,objChild[13].toString(),parentCode,finalwt,Double.parseDouble(objChild[10].toString()));
+				
+				}
+			}
+			
+		}
+		return dblRecipeCost;
+	}
 
+		private List funSemiProduct(String parentCode,String clientCode,String bomCode, String finalwt) {
+			List listTemp = new ArrayList<String>();
+			String sql = "select b.strChildCode,a.strParentCode,c.strProdName,c.dblListPrice ,c.strUOM,(b.dblQty/c.dblRecipeConversion) AS InitialWt,c.dblYieldPer,(100-c.dblYieldPer) AS lossPer,(c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100) AS finalWT, c.dblCostRM AS Rate,((b.dblQty/c.dblRecipeConversion*"+finalwt+")*c.dblCostRM) AS RecipeCost ,IFNULL(((c.dblYieldPer*c.dblCostRM/100)*100/(SELECT SUM((r.dblYieldPer*r.dblCostRM/100))FROM tblbommasterhd p,tblbommasterdtl q, tblproductmaster r WHERE p.strParentCode='"+parentCode+"' AND p.strBOMCode=q.strBOMCode AND q.strChildCode = r.strProdCode AND p.strParentCode=r.strProdCode AND p.strClientCode='"+clientCode+"' AND p.strClientCode=q.strClientCode AND q.strClientCode=r.strClientCode)),0) AS eachProdPer,"
+					+ " c.strProdType,a.strBOMCode"
+					+ " from  tblbommasterhd a,tblbommasterdtl b,tblproductmaster c where a.strBOMCode=b.strBOMCode and b.strChildCode=c.strProdCode and a.strParentCode='"+parentCode+"';";
+			listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
+			return listTemp;
+		}
+
+
+		@RequestMapping(value ="/getProductActualCosting",method=RequestMethod.GET)
+		public @ResponseBody double funGetProductActualCosting(@RequestParam("prodCode") String prodCode,@RequestParam("strProdType") String strProdType,@RequestParam("finalWeight") String finalWeight, HttpServletRequest request){
+			
+			double dblActualProductCost=0;
+			String clientCode = request.getSession().getAttribute("clientCode").toString();
+			dblActualProductCost=  funGetChildProduct(strProdType,clientCode,"",prodCode,finalWeight,0);
+			
+			return dblActualProductCost;
+		}
 
 }

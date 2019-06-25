@@ -3974,7 +3974,7 @@ public class clsReportsController {
 				{	
 					strParentCode=obj[3].toString();
 					finalwt = obj[6].toString();
-					double dblRecipeCost=funGetChildProduct(obj[13].toString(),clientCode,bomCode,strParentCode,finalwt,0);
+					double dblRecipeCost=objGlobalFunctions.funGetChildProduct(obj[13].toString(),clientCode,bomCode,strParentCode,finalwt,0);
 					objRecipeCostingbean.setDblRecipeCost(dblRecipeCost);
 				}
 				listJasp.add(objRecipeCostingbean);
@@ -4041,7 +4041,7 @@ public class clsReportsController {
 	}
 
 
-public double funGetChildProduct(String bomType, String clientCode, String bomCode,String parentCode, String finalwt,double dblRecipeCost) 
+/*public double funGetChildProduct(String bomType, String clientCode, String bomCode,String parentCode, String finalwt,double dblRecipeCost) 
 {
 	
 	if(bomType.equalsIgnoreCase("Semi Finished")  || bomType.equalsIgnoreCase("Produced"));
@@ -4077,7 +4077,7 @@ public double funGetChildProduct(String bomType, String clientCode, String bomCo
 		listTemp = objGlobalFunctionsService.funGetList(sql, "sql");
 		return listTemp;
 	}
-
+*/
 
 
 

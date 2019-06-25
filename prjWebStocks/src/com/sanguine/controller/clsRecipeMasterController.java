@@ -70,6 +70,9 @@ public class clsRecipeMasterController {
 	@Autowired 
 	private clsReportsController objReportsController;
 	
+	@Autowired
+	private clsGlobalFunctions objGlobalFun;
+	
 //	double dblAmt=0.0;
 //	double dblRate=0.0;
 //	double bomrate =0.0;
@@ -464,7 +467,7 @@ public class clsRecipeMasterController {
 						
 						strParentCode=obj[7].toString();
 						finalwt = obj[20].toString();
-						double dblRecipeCost=objReportsController.funGetChildProduct(obj[21].toString(),clientCode,obj[0].toString(),strParentCode,finalwt,0);
+						double dblRecipeCost=objGlobalFun.funGetChildProduct(obj[21].toString(),clientCode,obj[0].toString(),strParentCode,finalwt,0);
 						bomAmt=dblRecipeCost;
 					}
 					

@@ -385,6 +385,15 @@
 						$("#txtUnitPrice").val(unitPrice);
 						$("#hidExpDate").val(response.strExpDate);
 						$("#txtProdQty").focus();
+						//objModel.getStrProdType().equals("Produced")  ||objModel.getStrProdType().equals("Procured") || objModel.getStrProdType().equals("Semi Finished") 
+						if(unitPrice==0){
+							if(response.strProdType=='Produced' ||response.strProdType=='Procured' ||response.strProdType=='Semi Finished')
+							{
+							    var dblActualPrice= funGetProductActualPrice(response.strProdCode,response.strProdType,"1");
+							    $("#txtUnitPrice").val(dblActualPrice);
+							}	
+						}
+						
 			    	}
 			    },
 				error: function(e)
@@ -396,6 +405,41 @@
 			    }
 		      });
 	}
+	
+	function funGetProductActualPrice(strProdCode,strProdType,finalWeight)
+	{
+		var searchUrl=getContextPath()+"/getProductActualCosting.html?prodCode="+strProdCode+"&strProdType="+strProdType+"&finalWeight="+finalWeight;	
+		var dblProductActualPrice=0;
+		$.ajax({
+		        type: "GET",
+		        url: searchUrl,
+			    dataType: "json",
+			    async: false,
+			    success: function(response)
+			    {
+			    	dblProductActualPrice= response;
+			    },
+			    error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+		      });
+		return dblProductActualPrice;
+	}
+	
 	
 	/**
 	 * Get product stock passing value product code
@@ -437,6 +481,9 @@
 		      });
 		return Math.round(dblStock * 100) / 100;
 	}
+	
+	
+	
 	
 	/**
 	 * Get and set MIS Data

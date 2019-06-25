@@ -88,6 +88,7 @@ public class clsMISController {
 	@Autowired
 	private clsLocationMasterService objLocationMasterService;
 
+	
 	/**
 	 * Open MIS form
 	 * 
@@ -320,6 +321,15 @@ public class clsMISController {
 				// for Issue Qty Conversion /////
 				clsProductMasterModel objModel = objProductMasterService.funGetObject(Obj.getStrProdCode(), clientCode);
 				double issueConversion = objModel.getDblIssueConversion();
+				String finalWeight=String.valueOf(Obj.getDblQty() / issueConversion);
+				double dblActualProductCost= 0;
+				if(objModel.getStrProdType().equals("Produced")  ||objModel.getStrProdType().equals("Procured") || objModel.getStrProdType().equals("Semi Finished") ){
+					dblActualProductCost=  objGlobalFunctions.funGetChildProduct(objModel.getStrProdType(),clientCode,"",Obj.getStrProdCode(),finalWeight,0);
+				}
+				if(Obj.getDblUnitPrice()==0){
+					Obj.setDblUnitPrice(dblActualProductCost);
+					Obj.setDblTotalPrice(dblActualProductCost * (Obj.getDblQty() / issueConversion));
+				}
 				Obj.setDblQty(Obj.getDblQty() / issueConversion);
 				// /////////////
 			}
