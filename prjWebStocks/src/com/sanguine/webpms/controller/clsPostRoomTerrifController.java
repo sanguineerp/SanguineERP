@@ -85,6 +85,7 @@ public class clsPostRoomTerrifController {
 			double dblTotalAmt=0.0;
 			double dblRoomRate=0.0;
 			double dblPkgAmt=0.0;
+			dblRoomRate = Double.parseDouble(arrObjRoom[6].toString());
 			String sqlRoomCount=" select count(b.strRoomNo) from tblcheckinhd a,tblcheckindtl b"
 					+ " where a.strCheckInNo=b.strCheckInNo and a.strCheckInNo='"+arrObjRoom[11].toString()+"' ";
 			List listRoomCnt= objGlobalFunctionsService.funGetListModuleWise(sqlRoomCount, "sql");

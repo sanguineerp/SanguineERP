@@ -26,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import sun.nio.cs.ext.Big5;
+
+import com.ibm.icu.math.BigDecimal;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webpms.bean.clsRoomCancellationBean;
@@ -311,6 +314,18 @@ public class clsRoomChangeController {
 			
 			sql="update tblroom a set a.strStatus='Free' where a.strRoomCode='"+objBean.getStrRoomCode().split("#")[0]+"'";
 			objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
+			
+			sql = "select b.dblRoomTerrif from tblroomtypemaster b where b.strRoomTypeCode="
+					+ "(select a.strRoomTypeCode from  tblroom a where a.strRoomCode='"+objBean.getStrRoomDesc()+"')"; 
+			List listDataRate = objWebPMSUtility.funExecuteQuery(sql, "sql");
+			double newRate =Double.parseDouble(listDataRate.get(0).toString()); 
+					
+					
+			
+			sql = "update tblwalkinroomratedtl b set b.dblRoomRate='"+newRate+"' where b.strWalkinNo="
+					+ "(select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+prevCheckiInNo+"');";
+			objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
+			
 			
             req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Reservation No. : ".concat(objBean.getStrRoomCode().split("#")[0]));

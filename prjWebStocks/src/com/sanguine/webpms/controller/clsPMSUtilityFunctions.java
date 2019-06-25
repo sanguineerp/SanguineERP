@@ -233,7 +233,7 @@ public class clsPMSUtilityFunctions {
 						double discountPer = objTaxProdDtl.getDblDiscountOnTariff();
 						tariffAmt = tariffAmt-(tariffAmt*discountPer)/100;
 						double dblTarrifAndExtraBedAmtForSlabCheck=tariffAmt+ objTaxProdDtl.getDblTotalExtraBedAmt();
-						if(fromRate<(dblTarrifAndExtraBedAmtForSlabCheck)&& (dblTarrifAndExtraBedAmtForSlabCheck)<=toRate){
+						if(fromRate<(tariffAmt)&& (tariffAmt)<=toRate){
 							if (arrObjTaxDtl[3].toString().equalsIgnoreCase("Percentage")) // Check  for Tax Type Per/Amt
 							{
 								double taxAmt = 0;
