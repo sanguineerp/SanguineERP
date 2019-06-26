@@ -1721,9 +1721,11 @@
 		var table = document.getElementById("tblTax");
 		var rowCount = table.rows.length;
 		var subTotal=parseFloat($("#txtSubTotlAmt").val());
+		totalTaxableAmt=parseFloat(document.getElementById("txtTaxableAmt."+0).value);
 		for(var i=0;i<rowCount;i++)
 		{
-			totalTaxableAmt=parseFloat(document.getElementById("txtTaxableAmt."+i).value)+totalTaxableAmt;
+			
+			//totalTaxableAmt=parseFloat(document.getElementById("txtTaxableAmt."+i).value)+totalTaxableAmt;
 			totalTaxAmt=parseFloat(document.getElementById("txtTaxAmt."+i).value)+totalTaxAmt;
 		}
 		
