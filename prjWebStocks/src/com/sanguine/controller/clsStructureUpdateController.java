@@ -40,9 +40,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.bean.clsDeleteModuleListBean;
+import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsTreeMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSecurityShellService;
+import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsStructureUpdateService;
 import com.sanguine.util.clsClientDetails;
 import com.sanguine.util.clsDatabaseBackup;
@@ -61,7 +63,13 @@ public class clsStructureUpdateController {
 	
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	@Autowired
+	private clsSetupMasterService objSetupMasterService;
 
+
+	@Autowired
+	private clsGlobalFunctions objGlobalFun;
 	/**
 	 * Open Delete Module form
 	 * 
@@ -299,26 +307,74 @@ public class clsStructureUpdateController {
 			 String backupFilePathMail="";
 			String dbWebmms=new clsGlobalFunctions().funTrimDBNameFromURL(clsGlobalFunctions.conUrl);
 	        String dbWebbook=new clsGlobalFunctions().funTrimDBNameFromURL(clsGlobalFunctions.urlwebbooks);
+	        String dbWebPMS=new clsGlobalFunctions().funTrimDBNameFromURL(clsGlobalFunctions.urlwebpms);
 	        
+	        List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel(clientCode);
+	        clsCompanyMasterModel objCompanyMasterModel = null;
+			if (listClsCompanyMasterModel.size() > 0) {
+				objCompanyMasterModel = listClsCompanyMasterModel.get(0);
+				
+			}
+			 
+			Date dtCurrentDate = new Date();
+	        String date = dtCurrentDate.getDate() + "-" + (dtCurrentDate.getMonth() + 1) + "-" + (dtCurrentDate.getYear() + 1900);
+	        String time = dtCurrentDate.getHours() + "-" + dtCurrentDate.getMinutes();
+	        String bckupdate = date+ " " +time;
+	        String dteBackup=objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
 			clsDatabaseBackup obDB=new clsDatabaseBackup();
 			if(OS.equals("linux"))
 			{
 			  backupFilePathMail=obDB.funTakeBackUpDBForLinux(dbWebmms);
+			  String insertSql="insert into tbldatabasebckup values('"+dteBackup+"','"+clientCode+"','"+dbWebmms+"')";
+			  objGlobalFunctionsService.funExcuteQuery(insertSql);
+			  if(null!=objCompanyMasterModel){
+				  if(objCompanyMasterModel.getStrWebBookModule().equalsIgnoreCase("Yes")){
+					  backupFilePathMail=obDB.funTakeBackUpDBForLinux(dbWebbook);
+					  insertSql="insert into tbldatabasebckup values('"+dteBackup+"','"+clientCode+"','"+dbWebmms+"')";
+					  objGlobalFunctionsService.funExcuteQuery(insertSql);
+					  
+					}
+				  if(objCompanyMasterModel.getStrWebPMSModule().equalsIgnoreCase("Yes")){
+						  backupFilePathMail=obDB.funTakeBackUpDBForLinux(dbWebPMS);
+						  insertSql="insert into tbldatabasebckup values('"+dteBackup+"','"+clientCode+"','"+dbWebmms+"')";
+						  objGlobalFunctionsService.funExcuteQuery(insertSql);
+						  
+				  }  
+			  }
+			  
 			}else{
-				if(OS.contains("windows"))
-			backupFilePathMail=obDB.funTakeBackUpDB(dbWebmms);
+				if(OS.contains("windows")){
+					backupFilePathMail=obDB.funTakeBackUpDB(dbWebmms);
+					String insertSql="insert into tbldatabasebckup values('"+dteBackup+"','"+clientCode+"','"+dbWebmms+"')";
+					objGlobalFunctionsService.funExcuteQuery(insertSql);
+					  
+					if(null!=objCompanyMasterModel){
+						  if(objCompanyMasterModel.getStrWebBookModule().equalsIgnoreCase("Yes")){
+							  backupFilePathMail=obDB.funTakeBackUpDBForLinux(dbWebbook);
+							  insertSql="insert into tbldatabasebckup values('"+dteBackup+"','"+clientCode+"','"+dbWebmms+"')";
+							  objGlobalFunctionsService.funExcuteQuery(insertSql);
+							  
+							}
+						  if(objCompanyMasterModel.getStrWebPMSModule().equalsIgnoreCase("Yes")){
+								  backupFilePathMail=obDB.funTakeBackUpDBForLinux(dbWebPMS);
+								  insertSql="insert into tbldatabasebckup values('"+dteBackup+"','"+clientCode+"','"+dbWebmms+"')";
+								  objGlobalFunctionsService.funExcuteQuery(insertSql);
+								  
+						  }  
+					  }
+				}
+					
+				
 			}
 			
-			  Date dtCurrentDate = new Date();
-		        String date = dtCurrentDate.getDate() + "-" + (dtCurrentDate.getMonth() + 1) + "-" + (dtCurrentDate.getYear() + 1900);
-		        String time = dtCurrentDate.getHours() + "-" + dtCurrentDate.getMinutes();
-		        String bckupdate = date+ " " +time;
+			
 			funSendDBBackupToSanguineAuditiing( backupFilePathMail, OS,bckupdate,req);
-			new clsDatabaseBackup().funTakeBackUpDB(dbWebbook);
+			//new clsDatabaseBackup().funTakeBackUpDB(dbWebbook);
 		
 			System.out.print(OS);
 			
-			String insertSql="insert into tbldatabasebckup values('"+bckupdate+"','"+clientCode+"','"+dbWebmms+"')";
+			
+			 
 			
 		}catch(Exception e){
 			e.printStackTrace();
