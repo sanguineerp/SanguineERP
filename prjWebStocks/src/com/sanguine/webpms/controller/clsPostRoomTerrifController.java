@@ -91,7 +91,7 @@ public class clsPostRoomTerrifController {
 			List listRoomCnt= objGlobalFunctionsService.funGetListModuleWise(sqlRoomCount, "sql");
 			BigInteger roomCnt=new BigInteger(listRoomCnt.get(0).toString());
 			
-			String sqlCheckTerrifBalanceAmt=" SELECT b.strFolioNo,sum(b.dblDebitAmt),sum(b.dblBalanceAmt),b.strRevenueType "
+			String sqlCheckTerrifBalanceAmt=" SELECT b.strFolioNo,b.dblDebitAmt,b.dblBalanceAmt,b.strRevenueType "
 					+ " FROM tblfoliohd a,tblfoliodtl b "
 					+ " WHERE a.strFolioNo=b.strFolioNo  and a.strRoomNo=b.strRevenueCode AND a.strCheckInNo='"+arrObjRoom[11].toString()+"' "
 					+ " and  (b.strRevenueType='Package' or b.strRevenueType='Room')  and a.strRoomNo='"+roomNo+"' "

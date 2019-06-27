@@ -666,12 +666,13 @@ public class clsBillPrintingController {
 						}
 						else
 						{
-							balance  = balance +  - (creditAmount/100)*debitAmount;
+							/*balance  = balance +  - (creditAmount/100)*debitAmount;*/
 							creditAmount = debitAmount*creditAmount/100;
 							if(count>0)
 							{
 								creditAmount = creditAmount*count;
 							}
+							balance = balance - creditAmount;
 							// String debitAmount = billDicArr[3].toString();
 							// String creditAmount = billDicArr[4].toString();
 							// String balance = billDicArr[5].toString();
