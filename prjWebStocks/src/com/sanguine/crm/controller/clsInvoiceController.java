@@ -544,7 +544,7 @@ public class clsInvoiceController
 					{
 						prodRateForTaxCal = objInvDtl.getDblUnitPrice() * objInvDtl.getDblWeight() * dblCurrencyConv;
 					}*/
-					String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0";
+					String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0,"+objInvDtl.getDblWeight();
 					Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
 					System.out.println("Map Size= " + hmProdTaxDtl.size());
 
@@ -6371,7 +6371,7 @@ public void funCallReportInvoiceFormat7Report(@RequestParam("rptInvCode") String
 
 	String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
 			// + "c.dblCostRM,"
-			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblBillRate,0.00) AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,f.strExciseChapter,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') ,ifNull(strCST,''),b.dblProdDiscAmount from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
+			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblBillRate,0.00) AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,f.strExciseChapter,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') ,ifNull(strCST,''),b.dblProdDiscAmount,b.dblWeight from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
 
 	String bAddress = "";
 	String bState = "";
@@ -6395,6 +6395,10 @@ public void funCallReportInvoiceFormat7Report(@RequestParam("rptInvCode") String
 			objDtlBean.setStrProdNamemarthi(obj[1].toString());
 			objDtlBean.setDblQty(Double.parseDouble(obj[2].toString()));
 			objDtlBean.setDblCostRM(Double.parseDouble(obj[3].toString()));
+			if(Double.parseDouble(obj[24].toString())>0){
+				objDtlBean.setDblCostRM(Double.parseDouble(obj[3].toString())*Double.parseDouble(obj[24].toString()));
+			}
+			
 			objDtlBean.setDblMRP(Double.parseDouble(obj[4].toString()));
 			objDtlBean.setDblPrice(Double.parseDouble(obj[5].toString()));
 			InvDate = objGlobalFunctions.funGetDate("dd-MM-yyyy", obj[6].toString());
@@ -6436,21 +6440,21 @@ public void funCallReportInvoiceFormat7Report(@RequestParam("rptInvCode") String
 						objDtlBean.setDblCGSTPer(Double.parseDouble(objGST[1].toString()));
 						objDtlBean.setDblCGSTAmt(Double.parseDouble(objGST[2].toString()));
 						objDtlBean.setDblTaxableAmt(Double.parseDouble(objGST[4].toString()));
-						totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
+					//	totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
 					}
 					else if (objGST[3].toString().equalsIgnoreCase("SGST"))
 					{
 						objDtlBean.setDblSGSTPer(Double.parseDouble(objGST[1].toString()));
 						objDtlBean.setDblSGSTAmt(Double.parseDouble(objGST[2].toString()));
 						objDtlBean.setDblTaxableAmt(Double.parseDouble(objGST[4].toString()));
-						totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
+					//	totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
 					}
 					else
 					{
 						objDtlBean.setDblNonGSTTaxPer(Double.parseDouble(objGST[1].toString()));
 						objDtlBean.setDblNonGSTTaxAmt(Double.parseDouble(objGST[2].toString()));
 						objDtlBean.setDblTaxableAmt(Double.parseDouble(objGST[4].toString()));
-						totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
+					//	totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
 					}
 				}
 			}

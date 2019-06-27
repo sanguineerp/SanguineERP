@@ -23,6 +23,8 @@ public class clsProductTaxDtl {
 	private double dblMRP;
 
 	private double dblQty;
+	
+	private double dblWeight;
 
 	public String getStrProductCode() {
 		return strProductCode;
@@ -110,6 +112,14 @@ public class clsProductTaxDtl {
 
 	public void setDblDiscountAmt(double dblDiscountAmt) {
 		this.dblDiscountAmt = dblDiscountAmt;
+	}
+
+	public double getDblWeight() {
+		return dblWeight;
+	}
+
+	public void setDblWeight(double dblWeight) {
+		this.dblWeight = dblWeight;
 	}
 
 }

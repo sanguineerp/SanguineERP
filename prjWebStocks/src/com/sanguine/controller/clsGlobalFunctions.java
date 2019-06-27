@@ -2232,10 +2232,18 @@ public class clsGlobalFunctions {
 					double unitPrice = Double.parseDouble(sp1[1]);
 					double qty = Double.parseDouble(sp1[3]);
 					double discAmt = Double.parseDouble(sp1[4]);
+					double weight =0;
+					if(sp1.length>5){
+						weight=Double.parseDouble(sp1[5]);
+					}
+					
 					String sqlTaxIndicator = "select strProdCode,strTaxIndicator,dblMRP,strPickMRPForTaxCal,strExciseable " + " from tblproductmaster where strProdCode='" + productCode + "' and strClientCode='"+clientCode+"' ";
 					listTaxDtl = objGlobalFunctionsService.funGetList(sqlTaxIndicator, "sql");
 					for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
 						double taxableAmt = unitPrice * qty;
+						if(weight>0){
+							 taxableAmt = unitPrice * qty *weight;
+						}
 						Object[] arrObj = (Object[]) listTaxDtl.get(0);
 
 						clsProductTaxDtl objProdTaxDtl = new clsProductTaxDtl();
@@ -2263,6 +2271,7 @@ public class clsGlobalFunctions {
 							objProdTaxDtl.setDblDiscountAmt(discAmt);
 							objProdTaxDtl.setStrPickMRPForTaxCal(arrObj[3].toString());
 							objProdTaxDtl.setStrExcisable(arrObj[4].toString());
+							objProdTaxDtl.setDblWeight(weight);
 						}
 						hmProductTaxDtl.put(productCode, objProdTaxDtl);
 					}
@@ -2315,6 +2324,10 @@ public class clsGlobalFunctions {
 					String exciseable = arrObj[13].toString();
 					String totOnMRPItems = arrObj[14].toString();
 					double taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
+					if(entry.getValue().getDblWeight()>0){
+						taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty() *entry.getValue().getDblWeight();	
+					}
+					
 					double fixAmt = Double.parseDouble(arrObj[15].toString());
 					shortName = arrObj[16].toString();
 					// Code to calculate taxable amt.
@@ -2441,7 +2454,7 @@ public class clsGlobalFunctions {
 										taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
 										taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
 									} else {
-										taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+										taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
 										taxAmt = (taxPer / 100) * taxableAmt;
 									}
 								}
@@ -2465,6 +2478,7 @@ public class clsGlobalFunctions {
 								objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
 								objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
 								objTaxDtl.setStrTaxShorName(shortName);
+								objTaxDtl.setStrTaxType(arrObj[7].toString());
 							} else {
 								objTaxDtl.setTaxCode(taxCode);
 								objTaxDtl.setTaxName(taxDesc);
@@ -2472,6 +2486,7 @@ public class clsGlobalFunctions {
 								objTaxDtl.setTaxAmt(taxAmt);
 								objTaxDtl.setTaxPer(taxPer);
 								objTaxDtl.setStrTaxShorName(shortName);
+								objTaxDtl.setStrTaxType(arrObj[7].toString());
 							}
 							hmTaxCalDtl.put(taxCode, objTaxDtl);
 
@@ -2506,6 +2521,7 @@ public class clsGlobalFunctions {
 								objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
 								objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
 								objTaxDtl.setStrTaxShorName(shortName);
+								objTaxDtl.setStrTaxType(arrObj[7].toString());
 							} else {
 								objTaxDtl.setTaxCode(taxCode);
 								objTaxDtl.setTaxName(taxDesc);
@@ -2513,6 +2529,7 @@ public class clsGlobalFunctions {
 								objTaxDtl.setTaxAmt(taxAmt);
 								objTaxDtl.setTaxPer(taxPer);
 								objTaxDtl.setStrTaxShorName(shortName);
+								objTaxDtl.setStrTaxType(arrObj[7].toString());
 							}
 							hmTaxCalDtl.put(taxCode, objTaxDtl);
 
@@ -2522,6 +2539,7 @@ public class clsGlobalFunctions {
 							objTaxDtl.setTaxableAmt(taxableAmt);
 							objTaxDtl.setTaxAmt(taxAmt);
 							objTaxDtl.setTaxPer(taxPer);
+							objTaxDtl.setStrTaxType(arrObj[7].toString());
 							hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
 							hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
 						}
@@ -2679,6 +2697,7 @@ public class clsGlobalFunctions {
 										objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
 										objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
 										objTaxDtl.setStrTaxShorName(shortName);
+										objTaxDtl.setStrTaxType(arrObj[7].toString());
 									} else {
 										objTaxDtl.setTaxCode(taxCode);
 										objTaxDtl.setTaxName(taxDesc);
@@ -2686,6 +2705,7 @@ public class clsGlobalFunctions {
 										objTaxDtl.setTaxAmt(taxAmt);
 										objTaxDtl.setTaxPer(taxPer);
 										objTaxDtl.setStrTaxShorName(shortName);
+										objTaxDtl.setStrTaxType(arrObj[7].toString());
 									}
 									hmTaxCalDtl.put(taxCode, objTaxDtl);
 
@@ -2695,6 +2715,7 @@ public class clsGlobalFunctions {
 									objTaxDtl.setTaxableAmt(taxableAmt);
 									objTaxDtl.setTaxAmt(taxAmt);
 									objTaxDtl.setTaxPer(taxPer);
+									objTaxDtl.setStrTaxType(arrObj[7].toString());
 									hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
 									hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
 								} else {
@@ -2714,12 +2735,14 @@ public class clsGlobalFunctions {
 									if (taxRounded.equals("Y")) {
 										taxAmt = Math.rint(taxAmt);
 									}
+									
 									clsTaxDtl objTaxDtl = new clsTaxDtl();
 									if (hmTaxCalDtl.containsKey(taxCode)) {
 										objTaxDtl = hmTaxCalDtl.get(taxCode);
 										objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
 										objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
 										objTaxDtl.setStrTaxShorName(shortName);
+										objTaxDtl.setStrTaxType(arrObj[7].toString());
 									} else {
 										objTaxDtl.setTaxCode(taxCode);
 										objTaxDtl.setTaxName(taxDesc);
@@ -2727,6 +2750,7 @@ public class clsGlobalFunctions {
 										objTaxDtl.setTaxAmt(taxAmt);
 										objTaxDtl.setTaxPer(taxPer);
 										objTaxDtl.setStrTaxShorName(shortName);
+										objTaxDtl.setStrTaxType(arrObj[7].toString());
 									}
 									hmTaxCalDtl.put(taxCode, objTaxDtl);
 
@@ -2736,6 +2760,7 @@ public class clsGlobalFunctions {
 									objTaxDtl.setTaxableAmt(taxableAmt);
 									objTaxDtl.setTaxAmt(taxAmt);
 									objTaxDtl.setTaxPer(taxPer);
+									objTaxDtl.setStrTaxType(arrObj[7].toString());
 									hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
 									hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
 								}
@@ -2757,9 +2782,16 @@ public class clsGlobalFunctions {
 		hmProductTaxDtl1.clear();
 		for (Map.Entry<String, clsTaxDtl> entry : hmTaxCalDtl.entrySet()) {
 			// order-> taxable amt,Tax code,tax desc,tax type,tax per,tax amt
-
-			String taxDtl = entry.getValue().getTaxableAmt() + "#" + entry.getValue().getTaxCode() + "#" + entry.getValue().getTaxName() + "#NA" + "#" + entry.getValue().getTaxPer() + "#" + entry.getValue().getTaxAmt() + "#" + entry.getValue().getStrTaxShorName();
-			hmProductTaxDtl1.put(entry.getKey(), taxDtl);
+			String strTaxNoType="";
+			if(entry.getValue().getStrTaxType()!=null){
+				strTaxNoType=entry.getValue().getStrTaxType();
+			}
+			
+			String taxDtl = entry.getValue().getTaxableAmt() + "#" + entry.getValue().getTaxCode() + "#" + entry.getValue().getTaxName() + "#NA" + "#" + entry.getValue().getTaxPer() + "#" + entry.getValue().getTaxAmt() + "#" + entry.getValue().getStrTaxShorName()+"#"+strTaxNoType;
+			if(!strTaxNoType.equalsIgnoreCase("Backword")){
+				hmProductTaxDtl1.put(entry.getKey(), taxDtl);	
+			}
+			
 		}
 
 		return hmProductTaxDtl1;
@@ -3323,6 +3355,8 @@ public class clsGlobalFunctions {
 		private double taxPer;
 
 		private String strTaxShorName;
+		
+		private String strTaxType;
 
 		public String getTaxCode() {
 			return taxCode;
@@ -3378,6 +3412,14 @@ public class clsGlobalFunctions {
 
 		public void setStrTaxShorName(String strTaxShorName) {
 			this.strTaxShorName = strTaxShorName;
+		}
+
+		public String getStrTaxType() {
+			return strTaxType;
+		}
+
+		public void setStrTaxType(String strTaxType) {
+			this.strTaxType = strTaxType;
 		}
 
 	}
@@ -4421,6 +4463,7 @@ return 1;
 		sbSql.setLength(0);
 //		double conversionRate=0.0;
 		toDate=funGetDate("yyyy/MM/dd", toDate);
+		
 //		sbSql.append("select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster where strCurrencyCode='"+currency+"' and strClientCode='"+clientCode+"' ");
 //		try
 //		{
@@ -4433,89 +4476,96 @@ return 1;
 //			e.printStackTrace();
 //		}
 		
-		if(type.equalsIgnoreCase("Supplier"))
-		{
-			clsLinkUpHdModel objLinkCust = objLinkupService.funGetARLinkUp(custSuppCode, clientCode, propCode, "Supplier", "Purchase");
-			if(null!=objLinkCust)
+		clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(clientCode);
+		// objModel.setStrDebtorCode("");
+		if (objCompModel.getStrWebBookModule().equalsIgnoreCase("Yes")) {
+				
+			if(type.equalsIgnoreCase("Supplier"))
 			{
-			List<String>list=funGetDebotCreditorAccountDetails("Creditor",objLinkCust.getStrAccountCode(),clientCode,propCode);
-			detorCretditorCode=objLinkCust.getStrAccountCode();
-			if(list.size()>0){
-				accCode=list.get(0);
+				clsLinkUpHdModel objLinkCust = objLinkupService.funGetARLinkUp(custSuppCode, clientCode, propCode, "Supplier", "Purchase");
+				if(null!=objLinkCust)
+				{
+				List<String>list=funGetDebotCreditorAccountDetails("Creditor",objLinkCust.getStrAccountCode(),clientCode,propCode);
+				detorCretditorCode=objLinkCust.getStrAccountCode();
+				if(list.size()>0){
+					accCode=list.get(0);
+				}
+				}
+				funInvokeWebBookLedger( accCode,  detorCretditorCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Creditor", currency);
 			}
-			}
-			funInvokeWebBookLedger( accCode,  detorCretditorCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Creditor", currency);
-		}
-		else if(type.equalsIgnoreCase("Customer"))
-		{
-			clsLinkUpHdModel objLinkCust =  objLinkCust = objLinkupService.funGetARLinkUp(custSuppCode, clientCode, propCode,  "Customer", "Sale");
-			if(null!=objLinkCust)
+			else if(type.equalsIgnoreCase("Customer"))
 			{
-			List<String>list=funGetDebotCreditorAccountDetails("Debtor",objLinkCust.getStrAccountCode(),clientCode,propCode);
-			detorCretditorCode=objLinkCust.getStrAccountCode();
-			if(list.size()>0){
-				accCode=list.get(0);
+				clsLinkUpHdModel objLinkCust =  objLinkCust = objLinkupService.funGetARLinkUp(custSuppCode, clientCode, propCode,  "Customer", "Sale");
+				if(null!=objLinkCust)
+				{
+				List<String>list=funGetDebotCreditorAccountDetails("Debtor",objLinkCust.getStrAccountCode(),clientCode,propCode);
+				detorCretditorCode=objLinkCust.getStrAccountCode();
+				if(list.size()>0){
+					accCode=list.get(0);
+				}
+				}
+				funInvokeWebBookLedger( accCode,  detorCretditorCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Debtor", currency);
+			}else if(type.equalsIgnoreCase("Debtor"))
+			{
+				List<String>list=funGetDebotCreditorAccountDetails("Debtor",custSuppCode,clientCode,propCode);
+				detorCretditorCode=custSuppCode;
+				if(list.size()>0){
+					accCode=list.get(0);
+				}
+				funInvokeWebBookLedger( accCode,  detorCretditorCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Debtor", currency);
+			}else if(type.equalsIgnoreCase("Creditor")){
+				List<String>list=funGetDebotCreditorAccountDetails("Creditor",custSuppCode,clientCode,propCode);
+				detorCretditorCode=custSuppCode;
+				if(list.size()>0){
+					accCode=list.get(0);
+				}
+				funInvokeWebBookLedger( accCode,  detorCretditorCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Creditor", currency);
 			}
-			}
-			funInvokeWebBookLedger( accCode,  detorCretditorCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Debtor", currency);
-		}else if(type.equalsIgnoreCase("Debtor"))
-		{
-			List<String>list=funGetDebotCreditorAccountDetails("Debtor",custSuppCode,clientCode,propCode);
-			detorCretditorCode=custSuppCode;
-			if(list.size()>0){
-				accCode=list.get(0);
-			}
-			funInvokeWebBookLedger( accCode,  detorCretditorCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Debtor", currency);
-		}else if(type.equalsIgnoreCase("Creditor")){
-			List<String>list=funGetDebotCreditorAccountDetails("Creditor",custSuppCode,clientCode,propCode);
-			detorCretditorCode=custSuppCode;
-			if(list.size()>0){
-				accCode=list.get(0);
-			}
-			funInvokeWebBookLedger( accCode,  detorCretditorCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Creditor", currency);
-		}
-		else if(type.equalsIgnoreCase("Employee")){
-			sbSql.setLength(0);
-			sbSql.append(" select a.strAccountCode,a.strAccountName "
-					+ " from tblacmaster a "
-					+ " where a.strType='GL Code' and a.strEmployee='Yes' "
-					+ " and a.strClientCode='"+clientCode+"' and a.strPropertyCode='"+propCode+"' ");
+			else if(type.equalsIgnoreCase("Employee")){
+				sbSql.setLength(0);
+				sbSql.append(" select a.strAccountCode,a.strAccountName "
+						+ " from tblacmaster a "
+						+ " where a.strType='GL Code' and a.strEmployee='Yes' "
+						+ " and a.strClientCode='"+clientCode+"' and a.strPropertyCode='"+propCode+"' ");
+				
+				List listAccDtl = null;
+				try {
+					listAccDtl = objBaseService.funGetListModuleWise(sbSql, "sql", "WebStocks");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(listAccDtl.size()>0)
+				{
+					Object[] arrObj=(Object[])listAccDtl.get(0);
+					accCode=arrObj[0].toString();
+					
+				}
 			
-			List listAccDtl = null;
+				funInvokeWebBookLedger( accCode,  custSuppCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Employee", currency);
+			}
+			String hql = " select dblDebitAmt,dblCreditAmt from clsLedgerSummaryModel a where a.strUserCode='" + userCode + "' and a.strPropertyCode='" + propCode + "' and a.strClientCode='" + clientCode + "' order by a.dteVochDate, a.strTransTypeForOrderBy ";
+			sbSql.setLength(0);
+			sbSql=new StringBuilder(hql); 
+			List listBillLedger=new ArrayList();
 			try {
-				listAccDtl = objBaseService.funGetListModuleWise(sbSql, "sql", "WebStocks");
+				listBillLedger = objBaseService.funGetListModuleWise(sbSql, "hql", "WebBooks");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-			
-			if(listAccDtl.size()>0)
+			if(listBillLedger.size()>0 && null!=listBillLedger)
 			{
-				Object[] arrObj=(Object[])listAccDtl.get(0);
-				accCode=arrObj[0].toString();
-				
+				for(int i=0;i<listBillLedger.size();i++)
+				{
+				    Object[] obj=(Object[])listBillLedger.get(i);
+				    balanceAmt=balanceAmt+Double.parseDouble(obj[0].toString())-Double.parseDouble(obj[1].toString());
+				}
 			}
 		
-			funInvokeWebBookLedger( accCode,  custSuppCode,  startDate,  propCode,  startDate,  toDate,  clientCode,  userCode,  req,  resp,  "Employee", currency);
 		}
-		String hql = " select dblDebitAmt,dblCreditAmt from clsLedgerSummaryModel a where a.strUserCode='" + userCode + "' and a.strPropertyCode='" + propCode + "' and a.strClientCode='" + clientCode + "' order by a.dteVochDate, a.strTransTypeForOrderBy ";
-		sbSql.setLength(0);
-		sbSql=new StringBuilder(hql); 
-		List listBillLedger=new ArrayList();
-		try {
-			listBillLedger = objBaseService.funGetListModuleWise(sbSql, "hql", "WebBooks");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-		}
-
-		if(listBillLedger.size()>0 && null!=listBillLedger)
-		{
-			for(int i=0;i<listBillLedger.size();i++)
-			{
-			    Object[] obj=(Object[])listBillLedger.get(i);
-			    balanceAmt=balanceAmt+Double.parseDouble(obj[0].toString())-Double.parseDouble(obj[1].toString());
-			}
-		}
+		
+		
 		return balanceAmt;
 	}
 	

@@ -949,8 +949,11 @@
 	    var prevProdrice=$("#hidPreInvPrice").val();
         var unitprice=$("#hidUnitPrice").val();
        unitprice=parseFloat(unitprice).toFixed(maxQuantityDecimalPlaceLimit);
-	   var totalPrice=unitprice*dblQty;
-	   
+	  
+       var totalPrice=unitprice*dblQty;
+	   if(dblTotalWeight>0){
+		   totalPrice=unitprice*dblQty*dblWeight;
+	   }
 	   var disAmt=(prodDisPer*totalPrice)/100;
 	   var grandtotalPrice=totalPrice- disAmt;
 	   
@@ -1575,7 +1578,7 @@
 	    {
 	    	
 // 	    	var prodCode= $(this).find(".txtProdCode").val();
-	    	var prodCode=document.getElementById("txtProdCode."+cnt).value
+	    	var prodCode=document.getElementById("txtProdCode."+cnt).value;
 	    	var discAmt=0;
 	    	var suppCode=$("#txtCustCode").val();
          	var discPer=0;
@@ -1594,8 +1597,9 @@
 	    	var qty=parseFloat(document.getElementById("txtQty."+cnt).value);		    	
 	    	var unitPrice=parseFloat(document.getElementById("unitprice."+cnt).value);
 	    	var discAmt1=parseFloat(document.getElementById("txtDiscount").value);
-	    
-	    	prodCodeForTax=prodCodeForTax+"!"+prodCode+","+unitPrice+","+suppCode+","+qty+","+0;
+	    	var dblWeight=parseFloat(document.getElementById("dblTotalWeight."+cnt).value);
+	    	
+	    	prodCodeForTax=prodCodeForTax+"!"+prodCode+","+unitPrice+","+suppCode+","+qty+",0,"+dblWeight;
 	    }
 		
 	    prodCodeForTax=prodCodeForTax.substring(1,prodCodeForTax.length).trim();
@@ -1996,8 +2000,11 @@
 						
 					dblUnitPrice=parseFloat(dblUnitPrice).toFixed(maxAmountDecimalPlaceLimit);
 					dblWeight=parseFloat(dblWeight).toFixed(maxQuantityDecimalPlaceLimit);
-						
 					var dblTotalPrice = parseFloat(dblAcceptQty).toFixed(maxQuantityDecimalPlaceLimit) * dblUnitPrice;
+					if(dblWeight>0){
+						dblTotalPrice = parseFloat(dblAcceptQty).toFixed(maxQuantityDecimalPlaceLimit)* dblWeight* dblUnitPrice;
+					}	
+					
 					dblTotalPrice=parseFloat(dblTotalPrice).toFixed(maxAmountDecimalPlaceLimit);
 					var strProdType="";	
 						 
