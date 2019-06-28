@@ -828,7 +828,7 @@
 <body>
 
 	<div id="formHeading">
-	<label>PropertySetup</label>
+	<label>Property Setup</label>
 	</div>
 
 <br/>
@@ -890,26 +890,26 @@
 									
 									<tr>
 									<td style="width: 10%;"><label>Bank Ac Name</label></td>
-									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtbankAcName" path="strBankAcName" cssClass="longTextBox"/></td>
+									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtbankAcName" value="${bankAcName}" path="strBankAcName" cssClass="longTextBox"/></td>
 									
 									<td style="width: 10%;"><label>Bank Ac Number</label></td>
-									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtbankAcNum" path="strBankAcNumber" cssClass="longTextBox"/></td>
+									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtbankAcNum" value="${BankACNumber}" path="strBankAcNumber" cssClass="longTextBox"/></td>
 									
 									<td style="width: 10%;"><label>Bank IFS Code</label></td>
-									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtbankIFSC" path="strBankIFSC" cssClass="longTextBox"/></td>
+									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtbankIFSC" value="${BankIFSC}" path="strBankIFSC" cssClass="longTextBox"/></td>
 									
 									</tr>
 									
 									<tr>
 									<td style="width: 10%;"><label>Branch Name</label></td>
-									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtBranchName" path="stBranchName" cssClass="longTextBox"/></td>
+									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtBranchName" value="${BranchName}" path="stBranchName" cssClass="longTextBox"/></td>
 									
 									<td style="width: 10%;"><label>Pan Number</label></td>
-									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtPANNo" path="strPanNo" cssClass="longTextBox"/></td>
+									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtPANNo" value="${panNo}" path="strPanNo" cssClass="longTextBox"/></td>
 									
 									
 									<td style="width: 10%;"><label>HSN Code/SAC</label></td>
-									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtHSCCode" path="strHscCode" cssClass="longTextBox"/></td>
+									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtHSCCode" value="${HSCCode}" path="strHscCode" cssClass="longTextBox"/></td>
 									
 									</tr>
 									

@@ -63,10 +63,25 @@ public class clsPropertySetupController {
 			model.put("checkInTime", "00:01:00");
 			model.put("checkOutTime", "23:59:00");
 			model.put("GSTNo", "");
+			model.put("BankACNumber", "");
+			model.put("BankIFSC", "");
+			model.put("HSCCode", "");
+			model.put("panNo", "");
+			model.put("BranchName", "");
+			model.put("bankAcName", "");
 		} else {
 			model.put("checkInTime", objModel.getTmeCheckInTime());
 			model.put("checkOutTime", objModel.getTmeCheckOutTime());
 			model.put("GSTNo",objModel.getStrGSTNo());
+			model.put("BankACNumber", objModel.getStrBankAcNumber());
+			model.put("BankIFSC", objModel.getStrBankIFSC());
+			model.put("HSCCode", objModel.getStrHscCode());
+			model.put("panNo", objModel.getStrPanNo());
+			model.put("BranchName", objModel.getStBranchName());
+			model.put("bankAcName", objModel.getStrBankAcName());
+
+			
+
 		}
 		
 		String sql = "select count(1) from tblroom a where a.strClientCode='" + clientCode + "' ";

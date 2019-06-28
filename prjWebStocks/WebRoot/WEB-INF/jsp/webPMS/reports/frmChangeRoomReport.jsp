@@ -34,7 +34,7 @@
 			
 		
 			
-			window.open(getContextPath()+"/rptChangeRoom.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+" ");
+			window.open(getContextPath()+"/rptChangedRoomTypeReport.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+" ");
 		
 		return flag;
 	}

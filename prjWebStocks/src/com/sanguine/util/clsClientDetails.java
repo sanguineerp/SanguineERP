@@ -145,7 +145,7 @@ public class clsClientDetails {
  			hmClientDtl.put("173.002", clsClientDetails.createClientDetails("173.002", "Le Flamington", dFormat.parse("2018-12-15"), dFormat.parse("2019-12-24")));
 			hmClientDtl.put("174.001", clsClientDetails.createClientDetails("174.001", "KRD Eateries Pvt Ltd", dFormat.parse("2017-06-06"), dFormat.parse("2017-10-31"))); // krimsons
 			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "COPPER STORY PRIVATE LIMITED", dFormat.parse("2017-06-06"), dFormat.parse("2019-06-12")));//Renewed on 06-02-2019 for 15 days till 20-02-2019 //renewed licence and rename TJS to Copper story privated limited till 01-02-2019 //renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
-			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2019-07-09")));
+			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2020-06-25")));//renewd for 1 year on 27-06-2019 till 2020-06-25
 			hmClientDtl.put("181.001", clsClientDetails.createClientDetails("181.001", "RMV COMMUNICATION PVT LTD", dFormat.parse("2017-06-20"), dFormat.parse("2017-07-20")));
 			hmClientDtl.put("184.001", clsClientDetails.createClientDetails("184.001", "BALAJI TRADERS PVT LTD", dFormat.parse("2017-07-03"), dFormat.parse("2018-01-07")));
 			hmClientDtl.put("189.001", clsClientDetails.createClientDetails("189.001", "CLASSIC BANGLES", dFormat.parse("2017-08-31"), dFormat.parse("2018-08-10"))); // for demo
@@ -199,12 +199,14 @@ public class clsClientDetails {
 			hmClientDtl.put("294.001", clsClientDetails.createClientDetails("294.001", "SEERAN HOSPITALITY", dFormat.parse("2019-01-11"), dFormat.parse("2020-01-11")));//Renewed on 06-02-2019 for 1 year till 11-01-2020 //released for one month on 11-01-2019 to 11-02-2019 "Mr.Santosh ", "9820339701", "santosh.seeran@gmail.com"
 			hmClientDtl.put("296.001", clsClientDetails.createClientDetails("296.001", "ISKCON", dFormat.parse("2019-02-08"), dFormat.parse("2020-02-08")));//(Gujrat)//released on 08-02-2019 for 1 year till 08-02-2020 for 3 SPOS ,10 APOS,No WebStocks,No SMS Pack,No Bill Deletion.", "Mr. Rajesh ", "9619378249", "rajesh.sha19@gmail.com", "No Bill Deletion","santesting"));	    
 			hmClientDtl.put("302.001", clsClientDetails.createClientDetails("302.001", "MOSHING CUPPA", dFormat.parse("2019-03-07"), dFormat.parse("2019-04-15"))); // released on 07-03-2019 for 1 month till 07-04-2019
+			
 			hmClientDtl.put("312.001", clsClientDetails.createClientDetails("312.001", "Reddy's Fine Dine Restaurant", dFormat.parse("2019-05-08"), dFormat.parse("2019-06-10"))); // released on 2019-05-08 for 1 month till 2019-06-10
 			hmClientDtl.put("315.001", clsClientDetails.createClientDetails("315.001", "KUTTING FUSION HOSPITALITY LLP", dFormat.parse("2019-05-25"), dFormat.parse("2019-07-25"))); // renewed on 25-05-2019 for 1 month till 25-06-2019
 			hmClientDtl.put("316.001", clsClientDetails.createClientDetails("316.001", "MRP HOSPITALITY", dFormat.parse("2019-05-25"), dFormat.parse("2019-06-25"))); // renewed on 25-05-2019 for 1 month till 25-06-2019
 			hmClientDtl.put("318.001", clsClientDetails.createClientDetails("318.001", "EURISKA", dFormat.parse("2019-06-11"), dFormat.parse("2019-07-11"))); // renewed on 04-06-2019 for 1 month till 04-07-2019
 			hmClientDtl.put("319.001", clsClientDetails.createClientDetails("319.001", "LAXMI FOODS", dFormat.parse("2019-06-04"), dFormat.parse("2019-07-04"))); // Released on 04-06-2019 for 1 month till 04-07-2019
 			hmClientDtl.put("320.001", clsClientDetails.createClientDetails("320.001", "HOTEL SURYA", dFormat.parse("2019-06-13"), dFormat.parse("2019-07-15"))); // Released on 13-06-2019 for 1 month till 15-07-2019
+			hmClientDtl.put("304.001", clsClientDetails.createClientDetails("304.001", "PLUM HOSPITALITY LLP", dFormat.parse("2019-06-27"), dFormat.parse("2019-07-27"))); // released on 2019-06-27 for 1 month till 2019-07-27 for behive
 			//
 			
 		} catch (Exception e) {
