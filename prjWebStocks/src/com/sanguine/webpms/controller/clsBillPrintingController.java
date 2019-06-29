@@ -164,7 +164,7 @@ public class clsBillPrintingController {
 					+ " ifnull(d.strFirstName,''),ifnull(d.strMiddleName,''),ifnull(d.strLastName,'') , "
 					+ " b.intNoOfAdults,b.intNoOfChild ,a.strBillNo ,IFNULL(d.strGuestCode,''),a.strGSTNo,a.strCompanyName,b.strCheckInNo"// 17
 					+ " FROM tblbillhd a  "
-					+ " LEFT OUTER JOIN tblcheckinhd  b ON a.strReservationNo=b.strReservationNo "
+					+ " LEFT OUTER JOIN tblcheckinhd  b ON a.strCheckInNo=b.strCheckInNo "
 					+ " LEFT OUTER JOIN tblcheckindtl c ON b.strCheckInNo=c.strCheckInNo AND a.strRoomNo=c.strRoomNo  "
 					+ " LEFT OUTER JOIN tblguestmaster d ON c.strGuestCode=d.strGuestCode  "
 					+ " LEFT OUTER JOIN tblroom e ON e.strRoomCode=a.strRoomNo "
@@ -262,6 +262,11 @@ public class clsBillPrintingController {
 				}
 				// String billNo = arr[14].toString();
 
+				String sqlCheckOutTime = "select TIME_FORMAT(SUBSTR(a.dteDateEdited,11),'%h:%i %p') as Checkout_Time "
+						+ "from tblbillhd a where a.strBillNo='"+billNo+"'";
+				List listCheckOutTime = objFolioService.funGetParametersList(sqlCheckOutTime);
+				String chkOutTime=listCheckOutTime.get(0).toString();
+				
 				clsPropertySetupHdModel objPropertySetupModel = objPropertySetupService.funGetPropertySetup(propertyCode, clientCode);
 //				String noOfRoom = objPropertySetupModel.getStrRoomLimit();.
 				
@@ -290,7 +295,7 @@ public class clsBillPrintingController {
 				reportParams.put("pReservationNo", reservationNo);
 				reportParams.put("pArrivalDate",objGlobal.funGetDate("dd-MM-yyyy", arrivalDate));
 				reportParams.put("pArrivalTime", arrivalTime);
-				reportParams.put("pDepartureTime", departureTime);
+				reportParams.put("pDepartureTime", chkOutTime);
 				reportParams.put("pAdult", adults);
 				reportParams.put("pChild", childs);
 				reportParams.put("pGuestAddress", guestAddr);
