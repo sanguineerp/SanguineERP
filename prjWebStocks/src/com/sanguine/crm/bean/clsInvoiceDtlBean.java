@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+
 public class clsInvoiceDtlBean implements Serializable {
 
 	// Variable Declaration
@@ -92,6 +93,59 @@ public class clsInvoiceDtlBean implements Serializable {
 	private String strBarCode;
 
 	private double dblTaxableAmt;
+	
+	private String strSubGroupName;
+	
+	private double dblTotalAmt;
+	
+	private double dblIGSTPer;
+	
+	private double dblIGSTAmt;
+	
+	private double dblGSTPer;
+	
+	private double dblGSTAmt;
+
+	public double getDblTotalAmt() {
+		return dblTotalAmt;
+	}
+
+	public void setDblTotalAmt(double dblTotalAmt) {
+		this.dblTotalAmt = dblTotalAmt;
+	}
+    
+	
+	public double getDblIGSTPer() {
+		return dblIGSTPer;
+	}
+
+	public void setDblIGSTPer(double dblIGSTPer) {
+		this.dblIGSTPer = dblIGSTPer;
+	}
+
+	public double getDblIGSTAmt() {
+		return dblIGSTAmt;
+	}
+
+	public void setDblIGSTAmt(double dblIGSTAmt) {
+		this.dblIGSTAmt = dblIGSTAmt;
+	}
+
+	public double getDblGSTPer() {
+		return dblGSTPer;
+	}
+
+	public void setDblGSTPer(double dblGSTPer) {
+		this.dblGSTPer = dblGSTPer;
+	}
+
+	public double getDblGSTAmt() {
+		return dblGSTAmt;
+	}
+
+	public void setDblGSTAmt(double dblGSTAmt) {
+		this.dblGSTAmt = dblGSTAmt;
+	}
 
 	public double getDblNonGSTTaxPer() {
 		return dblNonGSTTaxPer;
@@ -334,6 +388,14 @@ public class clsInvoiceDtlBean implements Serializable {
 
 	public double getDblSGSTAmt() {
 		return dblSGSTAmt;
+	}
+
+	public String getStrSubGroupName() {
+		return strSubGroupName;
+	}
+
+	public void setStrSubGroupName(String strSubGroupName) {
+		this.strSubGroupName = strSubGroupName;
 	}
 
 	public void setDblSGSTAmt(double dblSGSTAmt) {

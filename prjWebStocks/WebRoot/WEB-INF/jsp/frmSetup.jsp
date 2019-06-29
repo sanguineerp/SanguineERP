@@ -1296,6 +1296,7 @@
 												<s:option value="Format 5">Format 5</s:option>
 												<s:option value="Format 6">Format 6</s:option>
 												<s:option value="Format 7">Format 7</s:option>
+												<s:option value="Format 8">Format 8</s:option>
 												
 											</s:select></td>
 									</tr>	

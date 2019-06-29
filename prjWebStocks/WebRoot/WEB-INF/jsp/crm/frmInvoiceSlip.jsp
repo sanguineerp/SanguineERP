@@ -88,6 +88,10 @@ function funHelp()
 			{
 				window.open(getContextPath()+"/rptInvoiceSlipFormat7Report.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
 			}
+			else if(invoiceformat=="Format 8")
+			{
+				window.open(getContextPath()+"/rptInvoiceSlipFormat8Report.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
+			}
 			else
 		    {
 		    	window.open(getContextPath()+"/openRptInvoiceRetailReport.html?rptInvCode="+code,'_blank');

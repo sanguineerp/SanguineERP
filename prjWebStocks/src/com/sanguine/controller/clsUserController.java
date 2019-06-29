@@ -564,9 +564,9 @@ public class clsUserController {
 				}
 
 			}
-			String currentDate=objGlobalFun.funGetCurrentDate("yyyy-mm-dd");;
+			String currentDate=objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
 			
-			String sqlDbBck="select a.strDbName,a.dteDbBckkUp from tbldatabasebckup a where date(a.dteDbBckkUp)='"+currentDate+"' ";
+			String sqlDbBck="select a.strDbName,a.dteDbBckkUp from tbldatabasebckup a where date(a.dteDbBckkUp)='"+currentDate.split(" ")[0]+"' ";
 			List listSqlBckUp=objGlobalService.funGetList(sqlDbBck);
 			if(listSqlBckUp==null){
 				objStructureUpdateController.takeDBBackUp(req);

@@ -443,9 +443,9 @@ public class clsStructureUpdateController {
 	    }
 	    String clientCode = req.getSession().getAttribute("clientCode").toString();
 	     clsClientDetails objClientDtl=clsClientDetails.hmClientDtl.get(clientCode);
-	    message.setSubject("DB Backup of '" +clientCode  + "' '" +objClientDtl.Client_Name + "' '" + bckupdate + "' " );
+	    message.setSubject("DB Backup of MMS '" +clientCode  + "' '" +objClientDtl.Client_Name + "' '" + bckupdate + "' " );
 
-	    String msgBody = "DB Backup of '" +clientCode  + "' '" +objClientDtl.Client_Name + "' '" + bckupdate + "' ";
+	    String msgBody = "DB Backup of MMS '" +clientCode  + "' '" +objClientDtl.Client_Name + "' '" + bckupdate + "' ";
 	    //message.setText(msgBody);
 
 	    // Create the message part 
