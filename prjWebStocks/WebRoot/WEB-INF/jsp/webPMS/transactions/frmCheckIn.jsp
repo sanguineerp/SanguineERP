@@ -9,6 +9,7 @@
 <script type="text/javascript">
 	
 	var fieldName,gridHelpRow;
+	
 
 	$(document).ready(function(){
 	    
@@ -114,6 +115,7 @@
 	var message='';
 	var retval="";
 	var checkAgainst="";
+	
 	<%if (session.getAttribute("success") != null) 
 	{
 		if(session.getAttribute("successMessage") != null)
@@ -127,22 +129,26 @@
 		if (test) 
 		{
 			%> alert("Data Save successfully\n\n"+message);
-			var advAmount='';
+			var checkInNo='';
+			var against='';
+			against='<%=session.getAttribute("against").toString()%>';
 			var isCheckOk=confirm("Do You Want to Generate Check-In Slip ?"); 
 			var isAdvanceOk=confirm("Do You Want to pay Advance Amount ?"); 
-			
 			if(isCheckOk)
 			{
-				advAmount='<%=session.getAttribute("AdvanceAmount").toString()%>';
-				window.open(getContextPath() + "/rptCheckInSlip.html?checkInNo=" + advAmount,'_blank');
+				checkInNo='<%=session.getAttribute("AdvanceAmount").toString()%>';
+				
+				window.open(getContextPath() + "/rptCheckInSlip.html?checkInNo=" +checkInNo+"&cmbAgainst="+against,'_blank');
 			}
 			if(isAdvanceOk)
 			{
 				window.open(getContextPath()+"/frmPMSPaymentAdvanceAmount.html?AdvAmount="+advAmount);
 				session.removeAttribute("AdvanceAmount");
+				
 			}<%	
 		}
 	}%>
+	
 	function funSetCheckInData(code){
 
 		$.ajax({
