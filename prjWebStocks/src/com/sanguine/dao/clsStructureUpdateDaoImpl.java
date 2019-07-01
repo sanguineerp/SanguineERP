@@ -1986,6 +1986,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblsettlementmaster` "
 		   +" ADD COLUMN `strInvSeriesChar` VARCHAR(20) NOT NULL DEFAULT '' AFTER `strUserModified`;" ;
 		funExecuteQuery(sql);
+		
+		sql="ALTER TABLE `tblsalesreturndtl` ADD COLUMN `dblUnitPrice` DECIMAL(18,2) NOT NULL DEFAULT '0.00' AFTER `intId`" ;
+		funExecuteQuery(sql);
+				
 
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
 				+ " ('frmInovice', 'Invoice', 'Sales', 2, 'T', 69, 10, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmInovice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"

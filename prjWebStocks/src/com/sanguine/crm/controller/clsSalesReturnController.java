@@ -230,8 +230,8 @@ public class clsSalesReturnController {
 							totalTaxablAmt = ojInvoiceTaxDtlModel.getStrTaxableAmt();
 							listSRTaxModel.add(ojInvoiceTaxDtlModel);
 						}
-						objHdModel.setDblTotalAmt(String.valueOf(totalTaxablAmt + totalTaxAmt));
-						objSalesReturnService.funAddUpdateSalesReturnHd(objHdModel);
+						//objHdModel.setDblTotalAmt(String.valueOf(totalTaxablAmt + totalTaxAmt));
+						//objSalesReturnService.funAddUpdateSalesReturnHd(objHdModel);
 					}
 					
 					req.getSession().setAttribute("success", true);
@@ -651,8 +651,11 @@ public class clsSalesReturnController {
 				}
 			}
 
-			String sql = " select b.strProdCode, c.strProdName, b.dblQty, b.dblPrice/" + currValue + " as dblPrice, (b.dblQty*b.dblPrice)/" + currValue + " as dblTotalAmt, b.strRemarks,a.dblTotalAmt/" + currValue + " as dblTotalAmt  from "+webStockDB+".tblsalesreturnhd a, "+webStockDB+".tblsalesreturndtl b, "+webStockDB+".tblproductmaster c "
-					+ " where a.strSRCode=b.strSRCode and b.strProdCode=c.strProdCode and a.strClientCode=b.strClientCode " + " and b.strClientCode=c.strClientCode and a.strClientCode='" + clientCode + "'  and a.strSRCode='" + objBean.getStrSRCode() + "' ";
+			String sql = " select b.strProdCode, c.strProdName, b.dblQty, b.dblUnitPrice/" + currValue + " as dblPrice, "
+					+ " (b.dblQty*b.dblPrice)/" + currValue + " as dblTotalAmt, b.strRemarks,a.dblTotalAmt/" + currValue + " as dblTotalAmt  "
+					+ "from "+webStockDB+".tblsalesreturnhd a, "+webStockDB+".tblsalesreturndtl b, "+webStockDB+".tblproductmaster c "
+					+ " where a.strSRCode=b.strSRCode and b.strProdCode=c.strProdCode and a.strClientCode=b.strClientCode " + " and "
+					+ " b.strClientCode=c.strClientCode and a.strClientCode='" + clientCode + "'  and a.strSRCode='" + objBean.getStrSRCode() + "' ";
 
 			// getting multi copy of small data in table in Detail thats why we
 			// add in subDataset
@@ -665,7 +668,10 @@ public class clsSalesReturnController {
 
 			if(!(clientCode.equals("226.001"))){
 				
-			String taxSummary = "select a.strTaxCode,a.strTaxDesc,a.strTaxableAmt/" + currValue + " as strTaxableAmt ,a.strTaxAmt/" + currValue + " as strTaxAmt,b.dblTotalAmt/" + currValue + " as dblTotalAmt from "+webStockDB+".tblsalesreturntaxdtl a ,"+webStockDB+".tblsalesreturnhd b " + "where a.strSRCode='" + srCode + "' and a.strClientCode='" + clientCode + "' and a.strSRCode=b.strSRCode ";
+			String taxSummary = "select a.strTaxCode,a.strTaxDesc,a.strTaxableAmt/" + currValue + " as strTaxableAmt ,a.strTaxAmt/" + currValue + " as strTaxAmt,"
+					+ " b.dblTotalAmt/" + currValue + " as dblTotalAmt "
+					+ "from "+webStockDB+".tblsalesreturntaxdtl a ,"+webStockDB+".tblsalesreturnhd b"
+				    + " where a.strSRCode='" + srCode + "' and a.strClientCode='" + clientCode + "' and a.strSRCode=b.strSRCode ";
 		
 			JRDesignQuery taxSummQuery = new JRDesignQuery();
 			taxSummQuery.setText(taxSummary);
@@ -1252,7 +1258,7 @@ public class clsSalesReturnController {
 			objBeanInvoice.setStrPktNo(obj[16].toString());
 			objBeanInvoice.setStrRemarks(obj[15].toString());
 			objBeanInvoice.setDblDisAmt(Double.parseDouble(obj[10].toString())/ currValue);
-			
+			objBeanInvoice.setDblAssValue(Double.parseDouble(obj[17].toString())/ currValue);
 			listInvDtlBean.add(objBeanInvoice);
 		}
 		

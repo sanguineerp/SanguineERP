@@ -39,6 +39,10 @@ public class clsSalesReturnDtlModel {
 
 	@Transient
 	private String strProdName;
+	
+	@Column(name="dblUnitPrice" ,nullable = false,columnDefinition = "DECIMAL(18,2) NOT NULL DEFAULT '0.00'")
+	private double dblUnitPrice;
+
 
 	// public long getIntId() {
 	// return intId;
@@ -110,6 +114,14 @@ public class clsSalesReturnDtlModel {
 
 	public void setStrRemarks(String strRemarks) {
 		this.strRemarks = strRemarks;
+	}
+	
+	public double getDblUnitPrice() {
+		return dblUnitPrice;
+	}
+
+	public void setDblUnitPrice(double dblUnitPrice) {
+		this.dblUnitPrice = dblUnitPrice;
 	}
 
 }

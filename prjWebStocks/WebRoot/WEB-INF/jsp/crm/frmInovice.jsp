@@ -1162,7 +1162,7 @@
 
 	    var disAmt=DCDtl.dblDisAmt;
 	    var unitprice="";
-	   
+	    var dblAssValue=DCDtl.dblAssValue;
 	    var CustCode=$("#txtCustCode").val();
 	    var SOCode=$("#txtSOCode").val();
 	    var precode="";
@@ -1182,6 +1182,9 @@
 		}
 	   
 	    var totalPrice=unitprice*dblQty;
+	    if(dblAssValue>0){
+	    	totalPrice=dblAssValue;	
+	    }
 	    var grandtotalPrice=totalPrice-disAmt;
 	    row.insertCell(0).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"7%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
 	    row.insertCell(1).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"35%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";

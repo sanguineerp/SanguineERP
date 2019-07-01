@@ -100,7 +100,7 @@ public class clsSalesReturnDaoImpl implements clsSalesReturnDao {
 		StringBuffer sbsql = new StringBuffer();
 		sbsql.append("SELECT c.strProdCode,a.strInvCode,a.dblQty, IFNULL(b.SRQty,0), a.dblQty - IFNULL(b.SRQty,0), a.dblUnitPrice, a.dblWeight,c.strUOM,c.strProdName,"
 				+ " IF(LENGTH(c.strExpDate)=0,'N',c.strExpDate),a.dblProdDiscAmount, IFNULL(c.strNonStockableItem,''),"
-				+ " IFNULL(p.dblCurrencyConv,1), IFNULL(p.strCurrencyCode,''),c.strProdType,a.strRemarks,a.strPktNo "
+				+ " IFNULL(p.dblCurrencyConv,1), IFNULL(p.strCurrencyCode,''),c.strProdType,a.strRemarks,a.strPktNo,a.dblAssValue "
 				+" FROM tblinvoicehd p, tblinvoicedtl a "
 				+" LEFT OUTER JOIN ( "
 				+" SELECT a.strDCCode AS INVCode, b.strProdCode, SUM(b.dblQty) AS SRQty "

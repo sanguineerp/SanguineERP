@@ -778,8 +778,8 @@ public class clsInvoiceController
 
 									if (dblAbtmt > 0)
 									{
-										totalAmt += (objInvItemDtl.getDblQty() * dblMrp) * dblAbtmt / 100;
-
+										//totalAmt += (objInvItemDtl.getDblQty() * dblMrp) * dblAbtmt / 100;
+										totalAmt += objInvItemDtl.getDblAssValue();
 										if (excisableTax.equalsIgnoreCase("Y") && excisable.equalsIgnoreCase("Y"))
 										{
 											totalExcisableAmt += objInvItemDtl.getDblAssValue();
@@ -1191,6 +1191,8 @@ public class clsInvoiceController
 				objBeanInvoice.setStrCustCode(obj.getStrCustCode());
 				objBeanInvoice.setStrSOCode(obj.getStrSOCode());
 				objBeanInvoice.setDblDisAmt(obj.getDblProdDiscAmount()/ currValue);
+				objBeanInvoice.setDblAssValue(obj.getDblAssValue());
+				
 				String sqlHd = "select b.dteInvDate,a.dblUnitPrice,b.strInvCode  from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode " + " and a.strCustCode='" + objBeanInv.getStrCustName() + "' and  b.dteInvDate=(SELECT MAX(b.dteInvDate) from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode  " + " and a.strCustCode='" + objBeanInv.getStrCustCode() + "')";
 
 				List listPrevInvData = objGlobalFunctionsService.funGetList(sqlHd, "sql");
@@ -3744,7 +3746,8 @@ public class clsInvoiceController
 			else
 			{
 				sqlProdMRP.setLength(0);
-				sqlProdMRP.append("select a.strProdcode,a.strProdName,a.strUOM,a.dblMRP, ifnull(b.strSuppCode,'') as strSuppCode," + " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,a.dblCostRM,ifnull(b.dblLastCost,0.0) " + " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' and b.strDefault='Y' " + " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where ");
+				/*sqlProdMRP.append("select a.strProdcode,a.strProdName,a.strUOM,a.dblMRP, ifnull(b.strSuppCode,'') as strSuppCode," + " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,a.dblCostRM,ifnull(b.dblLastCost,0.0) " + " from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' and b.strDefault='Y' " + " left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where ");
+				
 				if (prodCode.length() > 8)
 				{
 					sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
@@ -3754,6 +3757,20 @@ public class clsInvoiceController
 					sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
 				}
 				sqlProdMRP.append(" and a.strClientCode='" + clientCode + "'");
+*/				sqlProdMRP.append("select a.strProdcode,a.strProdName,a.strUOM,a.dblMRP, ifnull(b.strSuppCode,'') as strSuppCode," + " "
+						+ " ifnull(c.strPName,'') as strPName,a.strProdType,a.dblWeight,a.dblCostRM,ifnull(b.dblLastCost,0.0) " + " "
+						+ "from tblproductmaster a left outer join tblprodsuppmaster b on a.strProdCode=b.strProdCode and b.strClientCode='" + clientCode + "' "//AND b.strDefault='Y'
+						+ "left outer join tblpartymaster c on b.strSuppCode=c.strPCode and c.strClientCode='" + clientCode + "' " + " where ");
+				if (prodCode.length() > 8)
+				{
+					sqlProdMRP.append(" a.strBarCode='" + prodCode + "'  ");
+				}
+				else
+				{
+					sqlProdMRP.append(" a.strProdCode='" + prodCode + "'  ");
+				}
+				sqlProdMRP.append(" and a.strClientCode='" + clientCode + "' and  b.strSuppCode='"+suppCode+"'");
+				
 				list = objGlobalFunctionsService.funGetProductDataForTransaction(sqlProdMRP.toString(), prodCode, clientCode);
 
 			}
@@ -6687,7 +6704,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			+ " AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),"
 			+ " ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,c.strHSNCode,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),"
 			+ " IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') "
-			+ ", ifNull(strCST,''),b.dblProdDiscAmount,b.dblWeight,f.strSGName  "//26
+			+ ", ifNull(strCST,''),b.dblProdDiscAmount,if(b.dblWeight=0,1,b.dblWeight),f.strSGName  "//26
 			+ " from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  "
 			+ " on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + ""
 			+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + ""
@@ -6742,7 +6759,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			sState = obj[20].toString();
 			sPin = obj[21].toString();
 			custGSTNo = obj[22].toString();
-			
+			objDtlBean.setDblWeight(Double.parseDouble(obj[24].toString()));
 			double qty=Double.parseDouble(obj[2].toString());
 			double rate=Double.parseDouble(obj[5].toString());
 			double subTotal=qty*rate;
@@ -6795,7 +6812,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 		
 		String sqlGSTSummary="select a.strDocNo,sum(a.dblTaxableAmt),sum(a.dblValue),b.strHSNCode,c.strTaxDesc,c.dblPercent,c.dblAbatement,c.strShortName"
 				+ " from tblinvprodtaxdtl a,tblproductmaster b ,tbltaxhd c "
-				+ " where a.strProdCode=b.strProdCode  and a.strDocNo=c.strTaxCode and a.strInvCode='01IVBFA00006'"
+				+ " where a.strProdCode=b.strProdCode  and a.strDocNo=c.strTaxCode and a.strInvCode='" + InvCode + "' "
 				+ " group by b.strHSNCode,a.strDocNo";
 	    List listProdGST = objGlobalFunctionsService.funGetDataList(sqlGSTSummary, "sql");
       

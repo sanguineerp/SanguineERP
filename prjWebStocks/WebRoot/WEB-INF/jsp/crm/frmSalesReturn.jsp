@@ -660,8 +660,8 @@ function funHelp(transactionName)
 	    row.insertCell(2).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblQty\" type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto\" id=\"txtQty."+(rowCount)+"\" value="+dblQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
 	    row.insertCell(3).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblWeight\" type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
 	    row.insertCell(4).innerHTML= "<input name=\"\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"3.9%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
-	    row.insertCell(5).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblPrice\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"4.5%\" id=\"unitprice."+(rowCount)+"\"   value='"+unitprice+"'/>";
-	    row.insertCell(6).innerHTML= "<input name=\"\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" class=\"Box1 totalValueCell\" \size=\"4.5%\" id=\"totalPrice."+(rowCount)+"\"   value='"+totalPrice+"'/>";
+	    row.insertCell(5).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"4.5%\" id=\"unitprice."+(rowCount)+"\"   value='"+unitprice+"'/>";
+	    row.insertCell(6).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblPrice\" \"\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" class=\"Box1 totalValueCell\" \size=\"4.5%\" id=\"totalPrice."+(rowCount)+"\"   value='"+totalPrice+"'/>";
 	    row.insertCell(7).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].strRemarks\" size=\"10%\" id=\"txtRemarks."+(rowCount)+"\" value='"+strRemarks+"'/>";
 	 	row.insertCell(8).innerHTML= '<input  class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRow(this)">';		    
 	    
@@ -728,18 +728,21 @@ function funHelp(transactionName)
 	    var strRemarks=prductDtl.strRemarks;
 	    
 	    var totalPrice=unitprice*dblQty;
-	    
+	    var dblAssValue=prductDtl.dblAssValue;
+	    if(dblAssValue>0){
+	    	totalPrice=dblAssValue;	
+	    }
 	 	row.insertCell(0).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"8%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
 	    row.insertCell(1).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"27%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";
 	    row.insertCell(2).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblQty\" type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto\" id=\"txtQty."+(rowCount)+"\" value="+dblQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
 	    row.insertCell(3).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblWeight\" type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
 	    row.insertCell(4).innerHTML= "<input name=\"\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"3.9%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
-	    row.insertCell(5).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblPrice\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"7%\" id=\"unitprice."+(rowCount)+"\"   value='"+unitprice+"'/>";
-	    row.insertCell(6).innerHTML= "<input name=\"\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" class=\"Box1 totalValueCell\" \size=\"7%\" id=\"totalPrice."+(rowCount)+"\"   value='"+totalPrice+"'/>";
+	    row.insertCell(5).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" \size=\"7%\" id=\"unitprice."+(rowCount)+"\"   value='"+unitprice+"'/>";
+	    row.insertCell(6).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblPrice\" \"\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" class=\"Box1 totalValueCell\" \size=\"7%\" id=\"totalPrice."+(rowCount)+"\"   value='"+totalPrice+"'/>";
 	    row.insertCell(7).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].strRemarks\" size=\"10%\" id=\"txtRemarks."+(rowCount)+"\" value='"+strRemarks+"'/>";
 	 	row.insertCell(8).innerHTML= '<input  class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRow(this)">';		    
 	    
-	    
+	 	
 	 	 $("#txtProdCode").focus();
 		    funClearProduct();
 		    funCalculateTotalAmt();
@@ -881,7 +884,7 @@ function funHelp(transactionName)
 		   		}
 		   		
 		    	//unitprice=parseFloat((response[0][3])/parseFloat(currValue)).toFixed(maxQuantityDecimalPlaceLimit);
-		   		unitprice=parseFloat((response[0][10])/parseFloat(currValue)).toFixed(maxQuantityDecimalPlaceLimit);
+		   		unitprice=parseFloat((response[0][9])/parseFloat(currValue)).toFixed(maxQuantityDecimalPlaceLimit);
 		    	
 		    	
 		    },
@@ -1130,7 +1133,12 @@ function funHelp(transactionName)
 			totalTaxAmt=parseFloat(document.getElementById("txtTaxAmt."+i).value)+totalTaxAmt;
 		}
 		
+		
+		
 		totalTaxableAmt=totalTaxableAmt.toFixed(2);
+		
+		
+		
 		totalTaxAmt=totalTaxAmt.toFixed(2);
 		var grandTotal=parseFloat(totalTaxableAmt)+parseFloat(totalTaxAmt);
 		grandTotal=grandTotal.toFixed(2);

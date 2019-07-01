@@ -105,6 +105,8 @@ public class clsInvoiceDtlBean implements Serializable {
 	private double dblGSTPer;
 	
 	private double dblGSTAmt;
+	
+
 
 	public double getDblTotalAmt() {
 		return dblTotalAmt;
