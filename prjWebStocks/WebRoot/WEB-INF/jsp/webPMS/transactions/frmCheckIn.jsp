@@ -142,7 +142,7 @@
 			}
 			if(isAdvanceOk)
 			{
-				window.open(getContextPath()+"/frmPMSPaymentAdvanceAmount.html?AdvAmount="+advAmount);
+				window.open(getContextPath()+"/frmPMSPaymentAdvanceAmount.html?AdvAmount="+checkInNo);
 				session.removeAttribute("AdvanceAmount");
 				
 			}<%	

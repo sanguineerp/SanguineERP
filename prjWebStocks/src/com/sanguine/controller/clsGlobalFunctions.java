@@ -1034,7 +1034,8 @@ public class clsGlobalFunctions {
 
 		case "frmBillHd":
 			strDocLiteral = "B";
-			sql = "select ifnull(max(MID(a.strBillNo,6,6)),'' )as strBillNo " + " from tblbillhd a where MID(a.strBillNo,4,1) = '" + transYear + "' " + " and MID(a.strBillNo,5,1) = '" + transMonth + "' " + " and MID(a.strBillNo,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
+			sql = "SELECT IFNULL(MAX(MID(a.strBillNo,6,6)),'') AS strBillNo FROM tblbillhd a WHERE MID(a.strBillNo,4,1) = '"+transYear+"'  AND MID(a.strBillNo,1,2) = '"+propCode+"'  AND strClientCode='"+clientCode+"'";
+			
 			break;
 
 		case "frmPMSPayment":

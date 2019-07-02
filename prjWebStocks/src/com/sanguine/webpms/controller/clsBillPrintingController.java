@@ -445,7 +445,13 @@ public class clsBillPrintingController {
 							
 							}
 						}
-						reportParams.put("pDepartureDate",objGlobal.funGetDate("dd-MM-yyyy", docDate));
+						String sqlCheckOutDate = "SELECT Date(a.dteBillDate) as Date "
+								+ "FROM tblbillhd a WHERE a.strBillNo='"+billNo+"'";
+						List listCheckOutDate = objWebPMSUtility.funExecuteQuery(
+								sqlCheckOutDate, "sql");
+						
+						String strChkOutDate = listCheckOutDate.get(0).toString();
+						reportParams.put("pDepartureDate",objGlobal.funGetDate("dd-MM-yyyy", strChkOutDate));
 
 					}
 				}

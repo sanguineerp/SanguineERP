@@ -209,9 +209,9 @@
 					{
 						$.each(item, function(j,item1)
 						{
-					      day1+='               ,'+item1.strRoomNo+','+response.strCheckInNo;
+					      day1+=' '+item1.strRoomNo;
 					      //alert(item[i].strRoomNo);
-					      toolTipText1+="\n"+item1.strGuestName+"\n"+item1.strRoomNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
+					      toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
 						});
 					}
 				 });
@@ -233,9 +233,9 @@
 					{
 						$.each(item, function(j,item1)
 						{
-					      day1+='               ,'+item1.strRoomNo+','+response.strCheckInNo;
+					      day2+=' '+item1.strRoomNo;
 					      //alert(item[i].strRoomNo);
-					      toolTipText2+="\n"+item1.strGuestName+"\n"+item1.strRoomNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
+					      toolTipText2+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
 						});
 					}
 					
@@ -258,9 +258,9 @@
 					{
 						$.each(item, function(j,item1)
 						{
-					      day3+='               ,'+item1.strRoomNo+','+response.strCheckInNo;
+					      day3+=item1.strRoomNo;
 					      //alert(item[i].strRoomNo);
-					      toolTipText3+="\n"+item1.strGuestName+"\n"+item1.strRoomNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
+					      toolTipText3+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
 						});
 					}
 					
@@ -283,9 +283,9 @@
 					{
 						$.each(item, function(j,item1)
 						{
-					      day4+='               ,'+item1.strRoomNo+','+response.strCheckInNo;
+					      day4+=item1.strRoomNo;
 					      //alert(item[i].strRoomNo);
-					      toolTipText4+="\n"+item1.strGuestName+"\n"+item1.strRoomNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
+					      toolTipText4+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
 						});
 					}
 				 });
@@ -307,9 +307,9 @@
 					{
 						$.each(item, function(j,item1)
 						{
-					      day5+='               ,'+item1.strRoomNo+','+response.strCheckInNo;
+					      day5+=item1.strRoomNo;
 					      //alert(item[i].strRoomNo);
-					      toolTipText5+="\n"+item1.strGuestName+"\n"+item1.strRoomNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
+					      toolTipText5+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
 						});	
 					}
 				 });
@@ -331,9 +331,9 @@
 					{
 						$.each(item, function(j,item1)
 						{
-					      day6+='               ,'+item1.strRoomNo+','+response.strCheckInNo;
+					      day6+=item1.strRoomNo;
 					      //alert(item[i].strRoomNo);
-					      toolTipText6+="\n"+item1.strGuestName+"\n"+item1.strRoomNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
+					      toolTipText6+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
 						});
 					}
 					
@@ -356,9 +356,9 @@
 					{
 						$.each(item, function(j,item1)
 						{
-					      day7+='               ,'+item1.strRoomNo+','+response.strCheckInNo;
+					      day7+=item1.strRoomNo;
 					      //alert(item[i].strRoomNo);
-					      toolTipText7+="\n"+item1.strGuestName+"\n"+item1.strRoomNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
+					      toolTipText7+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate;
 						});
 					}
 				 });
