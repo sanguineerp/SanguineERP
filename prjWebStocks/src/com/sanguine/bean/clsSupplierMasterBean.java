@@ -2,6 +2,7 @@ package com.sanguine.bean;
 
 import java.util.List;
 
+import com.sanguine.model.clsPartyProductDtlModel;
 import com.sanguine.model.clsPartyTaxIndicatorDtlModel;
 
 public class clsSupplierMasterBean {
@@ -17,6 +18,7 @@ public class clsSupplierMasterBean {
 	private double dblCreditLimit, dblLatePercentage, dblRejectPercentage;
 	private String strIBANNo, strSwiftCode, strCategory, strExcisable, strPartyIndi, strDebtorCode;;
 	private List<clsPartyTaxIndicatorDtlModel> listclsPartyTaxIndicatorDtlModel;
+	private List<clsPartyProductDtlModel> listclsPartyProductDtlModel;
 	private String strGSTNo, strLocCode, strPropCode, strOperational, strLocName;
 	private String strComesaRegion;
 	private String strExternalCode, strCurrency;
@@ -588,5 +590,15 @@ public class clsSupplierMasterBean {
 	public void setStrComesaRegion(String strComesaRegion) {
 		this.strComesaRegion = strComesaRegion;
 	}
+
+	public List<clsPartyProductDtlModel> getListclsPartyProductDtlModel() {
+		return listclsPartyProductDtlModel;
+	}
+
+	public void setListclsPartyProductDtlModel(
+			List<clsPartyProductDtlModel> listclsPartyProductDtlModel) {
+		this.listclsPartyProductDtlModel = listclsPartyProductDtlModel;
+	}
+	
 
 }

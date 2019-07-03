@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -415,21 +415,21 @@ FROM dual]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{strIncomeHeadType}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#0.00">
 				<reportElement x="176" y="0" width="72" height="20" uuid="2fa397db-0718-4c1d-839c-e355840aff8c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblBookedAmt}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#0.00">
 				<reportElement x="332" y="0" width="68" height="20" uuid="16ec4e51-8a8a-458b-841c-f91dec929a99"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblUnBookedAmt}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#0.00">
 				<reportElement x="486" y="0" width="58" height="20" uuid="ec1841a7-b0b8-4bcc-a00a-1e66b06d36d0"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
@@ -459,7 +459,7 @@ FROM dual]]>
 					<jr:column width="110" uuid="7ab0e250-91f1-438d-9530-8af945bca1ce">
 						<jr:columnFooter height="30"/>
 						<jr:detailCell height="20">
-							<textField>
+							<textField pattern="#0.00">
 								<reportElement x="40" y="0" width="70" height="20" uuid="1250d27a-f24c-478b-8fbe-c1dcb97b56a7"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8"/>
@@ -471,7 +471,7 @@ FROM dual]]>
 					<jr:column width="150" uuid="38907d42-90d8-4e36-91c5-c4a3dbd7c6bc">
 						<jr:columnFooter height="30"/>
 						<jr:detailCell height="20">
-							<textField>
+							<textField pattern="#0.00">
 								<reportElement x="70" y="0" width="80" height="20" uuid="64876641-1d8d-4468-a71b-c9eb89f913c1"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8"/>
@@ -483,7 +483,7 @@ FROM dual]]>
 					<jr:column width="145" uuid="c8c0be83-a807-433e-a145-786c96c46d7f">
 						<jr:columnFooter height="30"/>
 						<jr:detailCell height="20">
-							<textField>
+							<textField pattern="#0.00">
 								<reportElement x="70" y="0" width="75" height="20" uuid="e94d335b-ff13-4e79-8fdf-a84df25a1399"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8"/>
@@ -494,29 +494,29 @@ FROM dual]]>
 					</jr:column>
 				</jr:table>
 			</componentElement>
-			<textField>
-				<reportElement x="180" y="60" width="68" height="20" uuid="84a2918a-3166-4c5a-b80d-5a1ff03ca56d"/>
+			<textField pattern="#0.00">
+				<reportElement positionType="Float" x="180" y="60" width="68" height="20" uuid="84a2918a-3166-4c5a-b80d-5a1ff03ca56d"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblBookedTotal}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="330" y="60" width="70" height="20" uuid="d79322da-d2b2-4c08-a328-20267ac30e48"/>
+			<textField pattern="#0.00">
+				<reportElement positionType="Float" x="330" y="60" width="70" height="20" uuid="d79322da-d2b2-4c08-a328-20267ac30e48"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblUnBookedTotal}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="480" y="60" width="65" height="20" uuid="f30508e7-ef60-4e1d-b0b0-6c0002e8cc08"/>
+			<textField pattern="#0.00">
+				<reportElement positionType="Float" x="480" y="60" width="65" height="20" uuid="f30508e7-ef60-4e1d-b0b0-6c0002e8cc08"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblTotalTotal}]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement mode="Transparent" x="178" y="60" width="377" height="20" uuid="e4e2e14b-5a0b-4403-8244-f18b08f087d6"/>
+				<reportElement positionType="Float" mode="Transparent" x="178" y="60" width="377" height="20" uuid="e4e2e14b-5a0b-4403-8244-f18b08f087d6"/>
 			</rectangle>
 		</band>
 	</detail>
@@ -537,21 +537,21 @@ FROM dual]]>
 				</textElement>
 				<text><![CDATA[Grand Totals]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#0.00">
 				<reportElement x="176" y="2" width="72" height="22" uuid="34f2212e-e927-4297-ac61-42115e15bfea"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{vbookedGT}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#0.00">
 				<reportElement x="330" y="4" width="72" height="22" uuid="cc52cdb7-cfb2-4957-b678-e45fa715ef06"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{vUnBookedGT}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#0.00">
 				<reportElement x="479" y="2" width="72" height="22" uuid="57181f78-4a1c-4b66-839e-f477bb925133"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>

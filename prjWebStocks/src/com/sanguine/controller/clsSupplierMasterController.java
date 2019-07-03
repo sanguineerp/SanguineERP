@@ -233,6 +233,18 @@ public class clsSupplierMasterController {
 
 		return arrList;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/loadSupplierProductDtl", method = RequestMethod.GET)
+	public @ResponseBody List funAssignFieldsForSupplierProductDtl(@RequestParam("partyCode") String PCode, HttpServletRequest req) {
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String sql = "SELECT b.strProdCode,b.strProdName,b.dblCostRM FROM tblpartymaster a,"
+				+ " tblproductmaster b,tblprodsuppmaster c WHERE a.strPCode=c.strSuppCode "
+				+ "AND b.strProdCode=c.strProdCode AND a.strPCode='"+PCode+"'";
+		List arrList = objGlobalFunctionsService.funGetList(sql, clientCode);
+
+		return arrList;
+	}
 
 	// Returns a single group master record by passing group code as primary
 	// key. Also generates next Group Code if transaction is for Save Master
