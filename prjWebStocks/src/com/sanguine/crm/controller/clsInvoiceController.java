@@ -519,6 +519,7 @@ public class clsInvoiceController
 					objInvProdTaxDtl.setStrDocNo("Margin");
 					objInvProdTaxDtl.setDblValue(marginAmt);
 					objInvProdTaxDtl.setDblTaxableAmt(0);
+					objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
 					listInvProdTaxDtl.add(objInvProdTaxDtl);
 
 					sqlQuery.setLength(0);
@@ -537,6 +538,7 @@ public class clsInvoiceController
 					objInvProdTaxDtl.setStrDocNo("Disc");
 					objInvProdTaxDtl.setDblValue(discAmt);
 					objInvProdTaxDtl.setDblTaxableAmt(0);
+					objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
 					listInvProdTaxDtl.add(objInvProdTaxDtl);
 
 					double prodRateForTaxCal = objInvDtl.getDblUnitPrice() * dblCurrencyConv;
@@ -608,6 +610,7 @@ public class clsInvoiceController
 						objInvProdTaxDtl.setStrDocNo(taxDtl.split("#")[1]);
 						objInvProdTaxDtl.setDblValue(taxAmt);
 						objInvProdTaxDtl.setDblTaxableAmt(taxableAmt);
+						objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
 						listInvProdTaxDtl.add(objInvProdTaxDtl);
 					}
 
@@ -6698,19 +6701,31 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 	String dcCode = "";
 	List listGSTSummary=new ArrayList();
 
+/*	String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
+			// + "c.dblCostRM,"
+			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblBillRate,0.00)"
+			+ " AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),"
+			+ " ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,c.strHSNCode,b.dblProdDiscAmount as discAmt,IFNULL(d.strBAdd1,''),"
+			+ " IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') "
+			+ ", ifNull(strCST,''),b.dblProdDiscAmount,if(b.dblWeight=0,1,b.dblWeight),f.strSGName  "//26
+			+ " from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  "
+			+ " on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + ""
+			+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + ""
+			+ " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
+*/
 	String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
 			// + "c.dblCostRM,"
 			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblBillRate,0.00)"
 			+ " AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),"
 			+ " ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,c.strHSNCode,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),"
 			+ " IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') "
-			+ ", ifNull(strCST,''),b.dblProdDiscAmount,if(b.dblWeight=0,1,b.dblWeight),f.strSGName  "//26
+			+ ", ifNull(strCST,''),b.dblProdDiscAmount,b.dblWeight,f.strSGName  "//26
 			+ " from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  "
 			+ " on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + ""
 			+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + ""
-			+ " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + ""
-			+ " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
-
+			+ " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  and b.dblWeight=g.dblWeight  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + ""
+			+ " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "'"
+			+ " order by f.strSGName,c.strProdName; ";
 	String bAddress = "";
 	String bState = "";
 	String bPin = "";
@@ -6769,7 +6784,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 
 			String sqlQuery = " select b.strTaxCode,b.dblPercent,a.dblValue,b.strShortName,a.dblTaxableAmt " + " "
 					+ " from tblinvprodtaxdtl a,tbltaxhd b " + ""
-					+ " where a.strDocNo=b.strTaxCode and a.strInvCode='" + InvCode + "' " + " and  a.strProdCode='" + obj[11].toString() + "' and a.strClientCode='" + clientCode + "'  ";
+					+ " where a.strDocNo=b.strTaxCode and a.strInvCode='" + InvCode + "' " + " and  a.strProdCode='" + obj[11].toString() + "' and a.strClientCode='" + clientCode + "'  and a.dblWeight='"+obj[24].toString()+"' ";
 
 			List listProdGST = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 
@@ -6823,8 +6838,8 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			{
 				Object[] objGST = (Object[]) listProdGST.get(j);
 				
-				if(mapGSTSummary.containsKey(objGST[3].toString())){
-					objDtlBean =mapGSTSummary.get(objGST[3].toString());
+				if(mapGSTSummary.containsKey(objGST[3].toString()+""+objGST[1].toString())){
+					objDtlBean =mapGSTSummary.get(objGST[3].toString()+""+objGST[1].toString());
 					objDtlBean.setDblGSTAmt(objDtlBean.getDblGSTAmt()+Double.parseDouble(objGST[2].toString()));
 					if (objGST[7].toString().equalsIgnoreCase("SGST"))
 					 {
@@ -6858,7 +6873,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 					 
 					// objDtlBean.setDblTotalAmt(Double.parseDouble(objGST[1].toString()));
 					 
-					 mapGSTSummary.put(objGST[3].toString(), objDtlBean);
+					 mapGSTSummary.put(objGST[3].toString()+""+objGST[1].toString(), objDtlBean);
 				}
 				 
 				 	 
@@ -6886,6 +6901,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 		}
 
 		clsNumberToWords obj1 = new clsNumberToWords();
+		//DecimalFormat decFormat = new DecimalFormat("#");
 		String totalInvoiceValueInWords = obj1.getNumberInWorld(totalInvoiceValue, shortName);
 
 		HashMap hm = new HashMap();

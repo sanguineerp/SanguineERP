@@ -39,6 +39,7 @@ import com.sanguine.crm.model.clsSalesRetrunTaxModel;
 import com.sanguine.crm.model.clsSalesReturnDtlModel;
 import com.sanguine.crm.model.clsSalesReturnHdModel;
 import com.sanguine.crm.model.clsSalesReturnHdModel_ID;
+import com.sanguine.crm.service.clsCRMSettlementMasterService;
 import com.sanguine.crm.service.clsInvoiceHdService;
 import com.sanguine.crm.service.clsSalesReturnService;
 import com.sanguine.model.clsAuditDtlModel;
@@ -106,6 +107,9 @@ public class clsSalesReturnController {
 	
 	@Autowired
 	private clsCurrencyMasterService objCurrencyMasterService;
+	
+	@Autowired
+	private clsCRMSettlementMasterService objSettlementService;
 
 	// Open Sales Return
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -134,6 +138,9 @@ public class clsSalesReturnController {
 		}
 		model.put("currencyList", hmCurrency);
 
+		Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
+		model.put("settlementList", settlementList);
+		
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmSalesReturn_1", "command", new clsSalesReturnBean());
 		} else if ("1".equalsIgnoreCase(urlHits)) {
@@ -191,11 +198,29 @@ public class clsSalesReturnController {
 					objSalesReturnService.funDeleteDtl(strSRCode, clientCode);
 					int intindex = 1;
 
+					double marginePer = 0;
+					double marginAmt = 0;
+					double billRate = 0,prodMRP=0;
+					StringBuilder sqlQuery = new StringBuilder();
 					for (clsSalesReturnDtlModel obSrDtl : listSRDtlModel) {
 						if (null != obSrDtl.getStrProdCode()) {
-							obSrDtl.setDblPrice(obSrDtl.getDblPrice() * currConversion);
+							obSrDtl.setDblUnitPrice(obSrDtl.getDblUnitPrice());
+							obSrDtl.setDblPrice(obSrDtl.getDblPrice());
 							obSrDtl.setStrSRCode(strSRCode);
 							obSrDtl.setStrClientCode(clientCode);
+							billRate=obSrDtl.getDblPrice() * currConversion;
+							prodMRP=obSrDtl.getDblPrice()* currConversion;
+							sqlQuery.setLength(0);
+							sqlQuery.append("select a.dblMargin,a.strProdCode,a.dblLastCost from tblprodsuppmaster a " + " where a.strSuppCode='" + objBean.getStrCustCode() + "' and a.strProdCode='" + obSrDtl.getStrProdCode() + "' " + " and a.strClientCode='" + clientCode + "' ");
+							List listProdMargin = objGlobalFunctionsService.funGetList(sqlQuery.toString(), "sql");
+							if (listProdMargin.size() > 0)
+							{
+								Object[] arrObjProdMargin = (Object[]) listProdMargin.get(0);
+								marginePer = Double.parseDouble(arrObjProdMargin[0].toString());
+								marginAmt = prodMRP * (marginePer / 100);
+								billRate = prodMRP - marginAmt;
+							}
+							obSrDtl.setDblPrice(billRate);
 							if (objHdModel.getStrAgainst().equalsIgnoreCase("Delivery Challan")) {
 								String sqlCloseDC = "update tbldeliverychallanhd set strCloseDC='Y'  where strDCCode='" + objBean.getStrDCCode() + "' and strClientCode='" + clientCode + "'";
 								objGlobalFunctionsService.funUpdateAllModule(sqlCloseDC, "sql");
@@ -230,8 +255,8 @@ public class clsSalesReturnController {
 							totalTaxablAmt = ojInvoiceTaxDtlModel.getStrTaxableAmt();
 							listSRTaxModel.add(ojInvoiceTaxDtlModel);
 						}
-						//objHdModel.setDblTotalAmt(String.valueOf(totalTaxablAmt + totalTaxAmt));
-						//objSalesReturnService.funAddUpdateSalesReturnHd(objHdModel);
+						objHdModel.setDblTotalAmt(String.valueOf(totalTaxablAmt + totalTaxAmt));
+						objSalesReturnService.funAddUpdateSalesReturnHd(objHdModel);
 					}
 					
 					req.getSession().setAttribute("success", true);

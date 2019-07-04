@@ -107,9 +107,9 @@
 							<%session.removeAttribute("rptInvCode");%>
 							<%session.removeAttribute("rptInvDate");%>
 							<%session.removeAttribute("rptDcCode");%>
-							var isOk=confirm("Do You Want to Generate Slip?");
-							var Ok=confirm("Do You Want to Generate Receipt?");
-							if(isOk){
+							//var isOk=confirm("Do You Want to Generate Slip?");
+							//var Ok=confirm("Do You Want to Generate Receipt?");
+							//if(isOk){
 								
 								if(invoiceformat=="Format 1")
 	 							{
@@ -150,9 +150,9 @@
 								    {
 								    	window.open(getContextPath()+"/openRptInvoiceRetailReport.html?rptInvCode="+code,'_blank');
 								    }
-								}
+								//}
 
-						}
+						         }
 							
 							/* 
 							if(Ok){
@@ -827,16 +827,16 @@
 			var clientCode='<%=session.getAttribute("clientCode").toString()%>';
 			if(clientCode!='226.001')
 			{
-			  	var isOk=confirm("Do You Want to Settle in Cash?");
-				if(isOk)
-				{
-					$('#cmbSettlement').val();
-					$('#cmbSettlement').val("S000001");
-				}else
-				{
-				    $('#cmbSettlement').val();
-					$('#cmbSettlement').val("S000002");
-				}
+			  	//var isOk=confirm("Do You Want to Settle in Cash?");
+				//if(isOk)
+				//{
+					//$('#cmbSettlement').val();
+					//$('#cmbSettlement').val("S000001");
+				//}else
+				//{
+				    //$('#cmbSettlement').val();
+					//$('#cmbSettlement').val("S000002");
+				//}
 			}
 	
 			return true;
@@ -904,19 +904,32 @@
 	    else
 	    {
 	    	var strProdCode=$("#hidProdCode").val();
-	    	if(funDuplicateProduct(strProdCode))
+	    	var dblWeight=$("#txtWeight").val();
+	    	if(funDuplicateProduct(strProdCode,dblWeight))
 	    	{
 	    		funAddProductRow();
 			}
 		}
 	}
 	
-	function funDuplicateProduct(strProdCode)
+	function funDuplicateProduct(strProdCode,dblWeight)
 	{
 	    var table = document.getElementById("tblProdDet");
 	    var rowCount = table.rows.length;		   
 	    var flag=true;
 	    if(rowCount > 0)
+
+	    for(var i=0;i<rowCount;i++)
+		{
+	    	if(strProdCode==document.getElementById("txtProdCode."+i).value && dblWeight==parseFloat(document.getElementById("txtWeight."+i).value))
+	        {
+	    		alert("Already added Product "+ strProdCode +" of Weight "+dblWeight+"Kg" );
+				flag=false;
+	        }		
+	    	
+		}
+			
+	    /* 	
 	    	{
 			    $('#tblProdDet tr').each(function()
 			    {
@@ -927,7 +940,7 @@
     				}
 				});
 			    
-	    	}
+	    	} */
 	    return flag;
 	}
 	
@@ -988,7 +1001,7 @@
 		    
 	 	 QtyTol+=parseFloat(dblQty);
 	 	$("#txtQtyTotl").val(QtyTol);
-	    $("#txtSubGroup").focus();
+	  //  $("#txtSubGroup").focus();
 	    funCalculateTotalAmt();
 	    funClearProduct();
 	   // funGetTotal();
@@ -1130,7 +1143,7 @@
 	 	row.insertCell(18).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdType\" id=\"txtProdTpye."+(rowCount)+"\" value='"+strProdType+"' type=\"hidden\"/>";
 	    
 	 	
-	 	$("#txtSubGroup").focus();
+	 	//$("#txtSubGroup").focus();
 		funClearProduct();
 		funCalculateTotalAmt();
 		
@@ -1209,7 +1222,7 @@
 	 	row.insertCell(18).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdType\" id=\"txtProdTpye."+(rowCount)+"\" value='"+strProdType+"' type=\"hidden\"/>";
 	    
 	 	
-	 	$("#txtSubGroup").focus();
+	 	//$("#txtSubGroup").focus();
 		funClearProduct();
 		funCalculateTotalAmt();
 		
@@ -2048,7 +2061,7 @@
 					row.insertCell(18).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdType\"  id=\"txtProdTpye."+(rowCount)+"\" value='"+strProdType+"' type=\"hidden\"/>";
 						 	
 					QtyTol+=parseFloat(dblAcceptQty);
-					$("#txtSubGroup").focus();
+					//$("#txtSubGroup").focus();
 					funCalculateTotalAmt();
 					funClearProduct();
 					
@@ -2313,7 +2326,7 @@ function funGetKeyCode(event,controller) {
 			          return false;
 			       	}else{
 				    	funAddProductRow();
-				    	$("#txtSubGroup").focus();
+				    	//$("#txtSubGroup").focus();
 		    }
 	    }
 	}

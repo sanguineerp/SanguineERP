@@ -196,7 +196,7 @@ public class clsSalesOrderHdDaoImpl implements clsSalesOrderHdDao {
 			+ " from tblsalesorderhd a,tblsalesorderdtl b,tblproductmaster c,tblpartymaster d " 
 			+ " where a.strSOCode=b.strSOCode and b.strProdCode=c.strProdCode and ( " + soCode + " ) " + "  and a.strCustCode=d.strPCode and a.strClientCode='"
 			+ clientCode + "' " + " and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "' " 
-			+ " group by a.strCustCode,b.strProdCode ";
+			+ " group by a.strCustCode,b.strProdCode,b.dblWeight ";
 
 		/*
 		 * String sql =

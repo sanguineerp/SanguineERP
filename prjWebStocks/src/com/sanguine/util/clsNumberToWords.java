@@ -148,8 +148,11 @@ public class clsNumberToWords {
 		 */
 		String NumberInWord = "";
 		NumberInWord += clsNumberToWords.convert(p1);
-		NumberInWord += " and ";
-		NumberInWord += clsNumberToWords.convert(p2);
+		if(!shortName.equals("INR")){
+			NumberInWord += " and ";
+			NumberInWord += clsNumberToWords.convert(p2);
+				
+		}
 		NumberInWord += " " + shortName + " Only ";
 		System.out.println("****** " + NumberInWord);
 

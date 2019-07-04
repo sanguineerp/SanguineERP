@@ -1990,7 +1990,20 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblsalesreturndtl` ADD COLUMN `dblUnitPrice` DECIMAL(18,2) NOT NULL DEFAULT '0.00' AFTER `intId`" ;
 		funExecuteQuery(sql);
 				
-
+		sql="ALTER TABLE `tblinvprodtaxdtl` ADD COLUMN `dblWeight` DECIMAL(18,2) NOT NULL DEFAULT '0' AFTER `dblTaxableAmt`;";
+		funExecuteQuery(sql);
+		
+		sql="ALTER TABLE `tblinvoicehd`"
+		+" CHANGE COLUMN `strSAdd1` `strSAdd1` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strDktNo`,"
+		+" CHANGE COLUMN `strSAdd2` `strSAdd2` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strSAdd1`;";
+		funExecuteQuery(sql);
+		
+		sql="ALTER TABLE `tbldeliverychallanhd` "
+				+" CHANGE COLUMN `strSAdd1` `strSAdd1` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strDktNo`, "
+				+" CHANGE COLUMN `strSAdd2` `strSAdd2` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strSAdd1`";
+		funExecuteQuery(sql);
+		
+		
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
 				+ " ('frmInovice', 'Invoice', 'Sales', 2, 'T', 69, 10, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmInovice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
 				+ " ('frmInvoiceSlip', 'Invoice Slip', 'Reports', 3, 'R', 61, 4, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmInvoiceSlip.html' , NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "

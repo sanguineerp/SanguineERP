@@ -337,7 +337,7 @@ public class clsUserController {
 					e.printStackTrace();
 				}
 			} else {
-				map.put("LicenceExpired", "1");
+				map.put("Please Check Client Details.", "1");
 				objMV = new ModelAndView("frmLogin", "command", new clsUserHdBean());
 			}
 

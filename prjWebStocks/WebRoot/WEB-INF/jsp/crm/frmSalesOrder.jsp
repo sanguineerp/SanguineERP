@@ -604,19 +604,33 @@
 	    else
 	    	{
 	    	 var strProdCode=$("#hidProdCode").val();
-	    	 if(funDuplicateProduct(strProdCode))
+	    	 var dblWeight=$("#txtWeight").val();
+	    	 if(funDuplicateProduct(strProdCode,dblWeight))
 	    		 {
 	    		 funAddProductRow();
 	    		 }
 	    	}
 	}
-	function funDuplicateProduct(strProdCode)
+	function funDuplicateProduct(strProdCode,dblWeight)
 	{
 	    var table = document.getElementById("tblProdDet");
 	    var rowCount = table.rows.length;		   
 	    var flag=true;
 	    if(rowCount > 0)
-	    	{
+	    {
+	    	for(var i=0;i<rowCount;i++)
+		 	{
+		 	    	if(strProdCode==document.getElementById("txtProdCode."+i).value && dblWeight==parseFloat(document.getElementById("txtWeight."+i).value))
+		 	        {
+		 	    		alert("Already added Product "+ strProdCode +" of Weight "+dblWeight+"Kg" );
+		 				flag=false;
+		 	        }		
+		 	    	
+		 	}
+	    
+	    }
+	    
+	    	/* {
 			    $('#tblProdDet tr').each(function()
 			    {
 				    if(strProdCode==$(this).find('input').val())// `this` is TR DOM element
@@ -626,7 +640,7 @@
     				}
 				});
 			    
-	    	}
+	    	} */
 	    return flag;
 	}
 	

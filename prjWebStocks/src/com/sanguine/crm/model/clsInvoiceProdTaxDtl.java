@@ -15,6 +15,9 @@ public class clsInvoiceProdTaxDtl implements Serializable {
 	private double dblValue;
 
 	private double dblTaxableAmt;
+	
+	private double dblWeight;
+	
 
 	public String getStrCustCode() {
 		return strCustCode;
@@ -54,6 +57,14 @@ public class clsInvoiceProdTaxDtl implements Serializable {
 
 	public void setDblTaxableAmt(double dblTaxableAmt) {
 		this.dblTaxableAmt = dblTaxableAmt;
+	}
+
+	public double getDblWeight() {
+		return dblWeight;
+	}
+
+	public void setDblWeight(double dblWeight) {
+		this.dblWeight = dblWeight;
 	}
 
 }
