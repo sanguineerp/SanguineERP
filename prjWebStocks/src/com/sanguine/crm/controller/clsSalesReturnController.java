@@ -208,8 +208,8 @@ public class clsSalesReturnController {
 							obSrDtl.setDblPrice(obSrDtl.getDblPrice());
 							obSrDtl.setStrSRCode(strSRCode);
 							obSrDtl.setStrClientCode(clientCode);
-							billRate=obSrDtl.getDblPrice() * currConversion;
-							prodMRP=obSrDtl.getDblPrice()* currConversion;
+							//billRate=obSrDtl.getDblPrice() * currConversion;
+							prodMRP=obSrDtl.getDblUnitPrice()* currConversion;
 							sqlQuery.setLength(0);
 							sqlQuery.append("select a.dblMargin,a.strProdCode,a.dblLastCost from tblprodsuppmaster a " + " where a.strSuppCode='" + objBean.getStrCustCode() + "' and a.strProdCode='" + obSrDtl.getStrProdCode() + "' " + " and a.strClientCode='" + clientCode + "' ");
 							List listProdMargin = objGlobalFunctionsService.funGetList(sqlQuery.toString(), "sql");
@@ -220,6 +220,7 @@ public class clsSalesReturnController {
 								marginAmt = prodMRP * (marginePer / 100);
 								billRate = prodMRP - marginAmt;
 							}
+							billRate=billRate*obSrDtl.getDblQty()*obSrDtl.getDblWeight();
 							obSrDtl.setDblPrice(billRate);
 							if (objHdModel.getStrAgainst().equalsIgnoreCase("Delivery Challan")) {
 								String sqlCloseDC = "update tbldeliverychallanhd set strCloseDC='Y'  where strDCCode='" + objBean.getStrDCCode() + "' and strClientCode='" + clientCode + "'";
@@ -631,7 +632,7 @@ public class clsSalesReturnController {
 			}
 			
 			String srCode = "", locationCode = "", locationName = "";
-			String againstName = "", custCode = "", custName = "", dcCode = "",currencyName="";
+			String againstName = "", custCode = "", custName = "", dcCode = "",currencyName="",salesReturnDate="",invoiceDate="";
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String companyName = req.getSession().getAttribute("companyName").toString();
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
@@ -649,7 +650,8 @@ public class clsSalesReturnController {
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 			String userCreated="";
 			String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
-			String sqlDS = " select a.strSRCode, b.strLocCode, b.strLocName, a.strAgainst, a.strDCCode, a.strCustCode, c.strPName,d.strCurrencyName,a.strCurrency,a.strUserCreated from "+webStockDB+".tblsalesreturnhd a, "+webStockDB+".tbllocationmaster b, "+webStockDB+".tblpartymaster c,"+webStockDB+".tblcurrencymaster d " + " where a.strLocCode=b.strLocCode and a.strClientCode=b.strClientCode " + " and a.strCustCode=c.strPCode and a.strCurrency=d.strCurrencyCode and a.strClientCode=b.strClientCode " + " and a.strClientCode='" + clientCode
+			String sqlDS = " select a.strSRCode, b.strLocCode, b.strLocName, a.strAgainst, a.strDCCode, a.strCustCode, c.strPName,d.strCurrencyName,a.strCurrency,a.strUserCreated,Date(a.dteSRDate) "
+					+ "from "+webStockDB+".tblsalesreturnhd a, "+webStockDB+".tbllocationmaster b, "+webStockDB+".tblpartymaster c,"+webStockDB+".tblcurrencymaster d " + " where a.strLocCode=b.strLocCode and a.strClientCode=b.strClientCode " + " and a.strCustCode=c.strPCode and a.strCurrency=d.strCurrencyCode and a.strClientCode=b.strClientCode " + " and a.strClientCode='" + clientCode
 					+ "' and a.strSRCode='" + objBean.getStrSRCode() + "' ";
 
 			List listds = objGlobalFunctionsService.funGetList(sqlDS, "sql");
@@ -669,41 +671,81 @@ public class clsSalesReturnController {
 					currencyName= obProdDtl[7].toString();
 					currencyCode= obProdDtl[8].toString();
 					userCreated= obProdDtl[9].toString();
+					salesReturnDate=obProdDtl[10].toString();
 					clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(currencyCode, clientCode);
 					if (objCurrModel != null) {
 						currValue = objCurrModel.getDblConvToBaseCurr();
 					}
 				}
 			}
+			
+		
+			String sqlInvoiceDate="select DATE(a.dteInvDate) from tblinvoicehd a where a.strInvCode='"+dcCode+"'";
+			List listInvoice = objGlobalFunctionsService.funGetList(sqlInvoiceDate, "sql");
 
-			String sql = " select b.strProdCode, c.strProdName, b.dblQty, b.dblUnitPrice/" + currValue + " as dblPrice, "
-					+ " (b.dblQty*b.dblPrice)/" + currValue + " as dblTotalAmt, b.strRemarks,a.dblTotalAmt/" + currValue + " as dblTotalAmt  "
-					+ "from "+webStockDB+".tblsalesreturnhd a, "+webStockDB+".tblsalesreturndtl b, "+webStockDB+".tblproductmaster c "
-					+ " where a.strSRCode=b.strSRCode and b.strProdCode=c.strProdCode and a.strClientCode=b.strClientCode " + " and "
-					+ " b.strClientCode=c.strClientCode and a.strClientCode='" + clientCode + "'  and a.strSRCode='" + objBean.getStrSRCode() + "' ";
+			if (listInvoice.size() > 0) {
 
-			// getting multi copy of small data in table in Detail thats why we
-			// add in subDataset
+				for (int i = 0; i < listInvoice.size(); i++) {
+					Object obProdInvoiceDtl = (Object) listInvoice.get(i);
+					invoiceDate=obProdInvoiceDtl.toString();
+				}
+			}	
+			String[] salesReturnDateFormat=salesReturnDate.split("-");
+			String year=salesReturnDateFormat[0];
+			String month=salesReturnDateFormat[1];
+			String date=salesReturnDateFormat[2];
+			salesReturnDate=date+"-"+month+"-"+year;
+			
+			if(!invoiceDate.isEmpty())
+			{
+				String[] salesInvoiceDateFormat=invoiceDate.split("-");
+				year=salesInvoiceDateFormat[0];
+				month=salesInvoiceDateFormat[1];
+				date=salesInvoiceDateFormat[2];
+				invoiceDate=date+"-"+month+"-"+year;
+			}
 			JasperDesign jd = JRXmlLoader.load(reportName);
-			JRDesignQuery subQuery = new JRDesignQuery();
-			subQuery.setText(sql);
-			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
-			JRDesignDataset subDataset = (JRDesignDataset) datasetMap.get("dsProddtl");
-			subDataset.setQuery(subQuery);
-
+			String taxSummary="";
 			if(!(clientCode.equals("226.001"))){
 				
-			String taxSummary = "select a.strTaxCode,a.strTaxDesc,a.strTaxableAmt/" + currValue + " as strTaxableAmt ,a.strTaxAmt/" + currValue + " as strTaxAmt,"
+			taxSummary = "select a.strTaxCode,a.strTaxDesc,a.strTaxableAmt/" + currValue + " as strTaxableAmt ,a.strTaxAmt/" + currValue + " as strTaxAmt,"
 					+ " b.dblTotalAmt/" + currValue + " as dblTotalAmt "
 					+ "from "+webStockDB+".tblsalesreturntaxdtl a ,"+webStockDB+".tblsalesreturnhd b"
 				    + " where a.strSRCode='" + srCode + "' and a.strClientCode='" + clientCode + "' and a.strSRCode=b.strSRCode ";
 		
 			JRDesignQuery taxSummQuery = new JRDesignQuery();
 			taxSummQuery.setText(taxSummary);
+			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
 			JRDesignDataset taxSumDataset = (JRDesignDataset) datasetMap.get("dsTaxSummary");
 			taxSumDataset.setQuery(taxSummQuery);
 			
 			}
+			List list = objGlobalFunctionsService.funGetList(taxSummary, "sql");
+            double dblTotalTax=0;
+			if (list.size() > 0) {
+
+				for (int i = 0; i < list.size(); i++) {
+					
+					Object[] obProdTax = (Object[]) list.get(i);
+					dblTotalTax=dblTotalTax+Double.parseDouble(obProdTax[3].toString());
+				}
+			}
+			
+			String sql = " select b.strProdCode, c.strProdName, b.dblQty, b.dblUnitPrice/" + currValue + " as dblPrice, "
+					+ " (b.dblPrice)/" + currValue + " as dblTotalAmt, b.strRemarks,a.dblTotalAmt/" + currValue + " as dblTotalAmt,(a.dblTotalAmt-"+dblTotalTax+") as dblSubTotal  "
+					+ "from "+webStockDB+".tblsalesreturnhd a, "+webStockDB+".tblsalesreturndtl b, "+webStockDB+".tblproductmaster c "
+					+ " where a.strSRCode=b.strSRCode and b.strProdCode=c.strProdCode and a.strClientCode=b.strClientCode " + " and "
+					+ " b.strClientCode=c.strClientCode and a.strClientCode='" + clientCode + "'  and a.strSRCode='" + objBean.getStrSRCode() + "' ";
+
+			// getting multi copy of small data in table in Detail thats why we
+			// add in subDataset
+			
+			JRDesignQuery subQuery = new JRDesignQuery();
+			subQuery.setText(sql);
+			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
+			JRDesignDataset subDataset = (JRDesignDataset) datasetMap.get("dsProddtl");
+			subDataset.setQuery(subQuery);
+		
 			
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			HashMap hm = new HashMap();
@@ -720,10 +762,12 @@ public class clsSalesReturnController {
 			hm.put("locationCode", locationCode);
 			hm.put("locationName", locationName);
 			hm.put("againstName", againstName);
-			hm.put("dcCode", dcCode);
+			hm.put("strInvoiceCode", dcCode);
 			hm.put("custCode", custCode);
 			hm.put("custName", custName);
 			hm.put("currencyName", currencyName);
+			hm.put("SRDate", salesReturnDate);
+			hm.put("InvoiceDate", invoiceDate);
 
 			JasperPrint p = JasperFillManager.fillReport(jr, hm, con);
 			if (type.trim().equalsIgnoreCase("pdf")) {

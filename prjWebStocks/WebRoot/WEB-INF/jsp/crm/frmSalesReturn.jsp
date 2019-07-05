@@ -607,6 +607,12 @@ function funHelp(transactionName)
 	
 	function btnAdd_onclick()
 	{
+		if($("#txtCustCode").val()=="")
+		{
+			alert("Please Select Customer");
+			$("#txtCustCode").focus();
+			return false;
+		}
 		
 		if($("#txtProdCode").val().length<=0)
 			{
@@ -623,7 +629,8 @@ function funHelp(transactionName)
 	    else
 	    	{
 	    	 var strProdCode=$("#txtProdCode").val();
-	    	 if(funDuplicateProduct(strProdCode))
+	    	 var dblWeight=$("#txtWeight").val();
+	    	 if(funDuplicateProduct(strProdCode,dblWeight))
 	    		 {
 	    		 funAddProductRow();
 	    		 }
@@ -705,7 +712,7 @@ function funHelp(transactionName)
 	    row.insertCell(6).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblPrice\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" class=\"Box1 totalValueCell\" \size=\"7%\" id=\"totalPrice."+(rowCount)+"\"   value='"+totalPrice+"'/>";
 	    row.insertCell(7).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].strRemarks\" size=\"10%\" id=\"txtRemarks."+(rowCount)+"\" value='"+strRemarks+"'/>";
 	 	row.insertCell(8).innerHTML= '<input  class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRow(this)">';		    
-	    
+	  
 	    
 	 	 $("#txtProdCode").focus();
 		    funClearProduct();
@@ -813,17 +820,17 @@ function funHelp(transactionName)
 	    parseFloat(dblQty).toFixed(maxQuantityDecimalPlaceLimit);
 	    var dblWeight=prductDtl.dblWeight;
 	    var dblTotalWeight=dblQty*dblWeight;
-	    unitprice=(prductDtl.dblPrice/currValue).toFixed(maxAmountDecimalPlaceLimit);
+	    //(prductDtl.dblPrice/currValue).toFixed(maxAmountDecimalPlaceLimit);
 	    
 	  
 	    var strRemarks=prductDtl.strRemarks;
 	    
 	    unitprice= funSeProductUnitPrice(strProdCode);
 	    
-	    var totalPrice=unitprice*dblQty;
-	    if(dblWeight>0){
-	    	totalPrice=(unitprice*dblQty*dblWeight).toFixed(maxAmountDecimalPlaceLimit);
-	    }
+	    var totalPrice=(prductDtl.dblPrice/currValue).toFixed(maxAmountDecimalPlaceLimit);
+	  //  if(dblWeight>0){
+	 //  	totalPrice=(unitprice*dblQty*dblWeight).toFixed(maxAmountDecimalPlaceLimit);
+	  ///  }
 	 	row.insertCell(0).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"8%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
 	    row.insertCell(1).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"27%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";
 	    row.insertCell(2).innerHTML= "<input name=\"listSalesReturn["+(rowCount)+"].dblQty\" type=\"text\"  required = \"required\" style=\"text-align: right;\" class=\"decimal-places inputText-Auto\" id=\"txtQty."+(rowCount)+"\" value="+dblQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
@@ -850,13 +857,25 @@ function funHelp(transactionName)
 	}
 	
 
-	function funDuplicateProduct(strProdCode)
+	function funDuplicateProduct(strProdCode,dblWeight)
 	{
 	    var table = document.getElementById("tblProdDet");
 	    var rowCount = table.rows.length;		   
 	    var flag=true;
 	    if(rowCount > 0)
-	    	{
+       {
+	    	  for(var i=0;i<rowCount;i++)
+	  		{
+	  	    	if(strProdCode==document.getElementById("txtProdCode."+i).value && dblWeight==parseFloat(document.getElementById("txtWeight."+i).value))
+	  	        {
+	  	    		alert("Already added Product "+ strProdCode +" of Weight "+dblWeight+"Kg" );
+	  				flag=false;
+	  	        }		
+	  	    	
+	  		}
+    	
+    	}
+	    	  /* {
 			    $('#tblProdDet tr').each(function()
 			    {
 				    if(strProdCode==$(this).find('input').val())// `this` is TR DOM element
@@ -866,7 +885,8 @@ function funHelp(transactionName)
     				}
 				});
 			    
-	    	}
+			    
+	    	}  */
 	    return flag;
 	}
 	function funSeProductUnitPrice(code)
@@ -1270,8 +1290,12 @@ function funHelp(transactionName)
 		funRemoveAllTaxRows();
 		var table = document.getElementById("tblProdDet");
 	    var rowCount = table.rows.length;
-	    for(var cnt=0;cnt<rowCount;cnt++)
-	    {
+	    //for(var cnt=0;cnt<rowCount;cnt++)
+	   // {
+	    $('#tblProdDet tr').each(function()
+		{	
+	    	var id=$(this).find('input');
+	    	var cnt= id[0].id.split('.')[1]
 	    	var prodCode=document.getElementById("txtProdCode."+cnt).value;
 	    	var custCode=$("#txtCustCode").val();
 	    	var discamt=$("#txtDiscAmt").val();
@@ -1289,7 +1313,7 @@ function funHelp(transactionName)
 	    	
 	    	prodCodeForTax=prodCodeForTax+"!"+prodCode+","+unitPrice+","+custCode+","+qty+","+discAmt1+","+dblWeight;
 	    	//alert(prodCodeForTax);
-	    }
+		});
 	    prodCodeForTax=prodCodeForTax.substring(1,prodCodeForTax.length).trim();
 	    var dteSR =$("#txtSRDate").val();
 	    var CIFAmt=0;
