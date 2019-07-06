@@ -900,8 +900,24 @@
 	
 	function funHelp(transactionName)
 	{	
-		fieldName=transactionName;
-		window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+		if(transactionName=="guestCode")
+		{
+			if($("#txtRoomNo").val()==" ")
+			{
+				alert("Please Select Room");
+			}
+			else
+			{
+				fieldName=transactionName;
+				window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+			}
+		}
+		else
+		{
+			fieldName=transactionName;
+			window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+		}
+		
 		//window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
 	}
 	
@@ -1355,6 +1371,13 @@
 					flg=false;
 				}
 				
+				 if($("#dblRoomRate").val()==" ")
+				{
+					alert('Please Enter Amount Greater than 0  !!!');
+					$("#dblRoomRate.0").focus();
+					flg=false;
+				} 
+				
 				var table = document.getElementById("tblwalkindtl");
 			    var rowCount = table.rows.length;
 				if(rowCount==0)
@@ -1505,6 +1528,10 @@
 				<td>
                   <input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" /></td>
 				<td><label id="lblRoomType"></label></td>
+				
+					
+					
+					
 					<td><s:input type="text" id="txtRoomNo" name="txtRoomNo" ondblclick="funHelp('roomCode')" path="strRoomNo" cssClass="searchTextBox"/> 
 							<label id="lblRoomDesc"></label> 
 						<label id="lblRoomType"></label> 

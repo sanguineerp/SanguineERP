@@ -315,16 +315,24 @@ public class clsRoomChangeController {
 			sql="update tblroom a set a.strStatus='Free' where a.strRoomCode='"+objBean.getStrRoomCode().split("#")[0]+"'";
 			objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
 			
-			sql = "select b.dblRoomTerrif from tblroomtypemaster b where b.strRoomTypeCode="
+			sql = "select b.dblRoomTerrif,b.strRoomTypeCode from tblroomtypemaster b where b.strRoomTypeCode="
 					+ "(select a.strRoomTypeCode from  tblroom a where a.strRoomCode='"+objBean.getStrRoomDesc()+"')"; 
 			List listDataRate = objWebPMSUtility.funExecuteQuery(sql, "sql");
-			double newRate =Double.parseDouble(listDataRate.get(0).toString()); 
+			double newRate=0.0;
+			String newRoomTypeCode="";
+			for (int cnt = 0; cnt < listDataRate.size(); cnt++) {
+				Object[] arrObjBillTaxDtl = (Object[]) listDataRate.get(cnt);
+				newRate =Double.parseDouble(arrObjBillTaxDtl[0].toString());
+				newRoomTypeCode =arrObjBillTaxDtl[1].toString();
+			}
+			
 					
 					
 			
-			sql = "update tblwalkinroomratedtl b set b.dblRoomRate='"+newRate+"' where b.strWalkinNo="
+			sql = "update tblwalkinroomratedtl b set b.dblRoomRate='"+newRate+"', b.strRoomType='"+newRoomTypeCode+"' where b.strWalkinNo="
 					+ "(select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+prevCheckiInNo+"');";
-			objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
+			objWebPMSUtility.funExecuteUpdate(sql, "sql");
+			
 			
 			
             req.getSession().setAttribute("success", true);
