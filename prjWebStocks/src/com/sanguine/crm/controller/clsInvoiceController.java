@@ -4175,7 +4175,14 @@ public class clsInvoiceController
 
 		String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
 				// + "c.dblCostRM,"
-				+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblPrice,0.00) AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,f.strExciseChapter,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') ,ifNull(strCST,''),b.dblProdDiscAmount from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
+				+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblPrice,0.00) AS dblPrice, "
+				+ "a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,"
+				+ "f.strExciseChapter,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,"
+				+ "IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') ,ifNull(strCST,''),b.dblProdDiscAmount "
+				+ "from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  on b.strProdCode=c.strProdCode "
+				+ " left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + " "
+				+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + " "
+				+ "where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
 
 		String bAddress = "";
 		String bState = "";
@@ -6719,13 +6726,13 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			+ " AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),"
 			+ " ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,c.strHSNCode,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),"
 			+ " IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') "
-			+ ", ifNull(strCST,''),b.dblProdDiscAmount,b.dblWeight,f.strSGName  "//26
+			+ ",IFNULL(d.strGSTNo,''),b.dblProdDiscAmount,b.dblWeight,f.strSGName,IFNULL(d.strEmail,''), IFNULL(d.strMobile,''),f.intSortingNo  "//29
 			+ " from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  "
 			+ " on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + ""
 			+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + ""
 			+ " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  and b.dblWeight=g.dblWeight  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + ""
 			+ " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "'"
-			+ " order by f.strSGName,c.strProdName; ";
+			+ " ORDER BY f.intSortingNo,f.strSGName,c.strProdName; ";
 	String bAddress = "";
 	String bState = "";
 	String bPin = "";
@@ -6733,6 +6740,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 	String sState = "";
 	String sPin = "";
 	String custGSTNo = "";
+	String custEmailID="",custMobileNo="";
 	double totalInvoiceValue = 0.0;
 	List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlProdDtl, "sql");
 	List<clsInvoiceDtlBean> dataList = new ArrayList<clsInvoiceDtlBean>();
@@ -6774,6 +6782,8 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			sState = obj[20].toString();
 			sPin = obj[21].toString();
 			custGSTNo = obj[22].toString();
+			custEmailID=obj[26].toString();
+			custMobileNo=obj[27].toString();
 			objDtlBean.setDblWeight(Double.parseDouble(obj[24].toString()));
 			double qty=Double.parseDouble(obj[2].toString());
 			double rate=Double.parseDouble(obj[5].toString());
@@ -6933,6 +6943,8 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 		hm.put("totalInvoiceValue", totalInvoiceValue);
 		hm.put("strGSTNo.", objSetup.getStrCST());
 		hm.put("custGSTNo", custGSTNo);
+		hm.put("custMobileNo", custMobileNo);
+		hm.put("custEmailID", custEmailID);
 		hm.put("listGSTSummary", listGSTSummary);
 
 		// ////////////

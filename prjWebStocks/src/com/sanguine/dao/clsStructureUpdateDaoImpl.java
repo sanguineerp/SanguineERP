@@ -2003,6 +2003,13 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+" CHANGE COLUMN `strSAdd2` `strSAdd2` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strSAdd1`";
 		funExecuteQuery(sql);
 		
+		sql="ALTER TABLE `tblsalesorderhd` "
+				+" CHANGE COLUMN `strBAdd1` `strBAdd1` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strPayMode`, "
+				+" CHANGE COLUMN `strBAdd2` `strBAdd2` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strBAdd1`, "
+				+" CHANGE COLUMN `strSAdd1` `strSAdd1` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strBPin`, "
+				+" CHANGE COLUMN `strSAdd2` `strSAdd2` VARCHAR(200) NOT NULL DEFAULT '' AFTER `strSAdd1`; ";
+		funExecuteQuery(sql);
+		
 		
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
 				+ " ('frmInovice', 'Invoice', 'Sales', 2, 'T', 69, 10, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmInovice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"

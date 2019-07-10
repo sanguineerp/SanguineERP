@@ -155,6 +155,8 @@
 	<parameter name="dbldeliveryCharges" class="java.lang.Double">
 		<defaultValueExpression><![CDATA[new Double("0.00")]]></defaultValueExpression>
 	</parameter>
+	<parameter name="custEmailID" class="java.lang.String"/>
+	<parameter name="custMobileNo" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select 1 from dual]]>
 	</queryString>
@@ -406,7 +408,7 @@
 				<textFieldExpression><![CDATA[$P{InvDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="141" width="159" height="14" uuid="5ef9cf34-1e6a-4391-9d35-3ac067da4e59">
+				<reportElement x="1" y="134" width="159" height="14" uuid="5ef9cf34-1e6a-4391-9d35-3ac067da4e59">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement>
@@ -415,7 +417,7 @@
 				<text><![CDATA[Details of Receiver (Billed to)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="282" y="141" width="225" height="14" uuid="60a51906-4ab0-460d-a533-fa86d790fa6d">
+				<reportElement x="282" y="134" width="225" height="14" uuid="60a51906-4ab0-460d-a533-fa86d790fa6d">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement>
@@ -424,49 +426,49 @@
 				<text><![CDATA[Details of Consignee (Shipped to)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3" y="158" width="35" height="18" uuid="f6db3477-7e7e-4dee-953d-4a88b4c55ec9"/>
+				<reportElement x="3" y="151" width="35" height="18" uuid="f6db3477-7e7e-4dee-953d-4a88b4c55ec9"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3" y="176" width="37" height="16" uuid="1b440a27-c228-413f-ac0d-64f5f532f331"/>
+				<reportElement x="3" y="169" width="37" height="16" uuid="1b440a27-c228-413f-ac0d-64f5f532f331"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Address]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="282" y="157" width="35" height="15" uuid="2f5b52cc-6c2e-4db6-b1c6-4ea0a87ee23a"/>
+				<reportElement x="282" y="150" width="35" height="15" uuid="2f5b52cc-6c2e-4db6-b1c6-4ea0a87ee23a"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="281" y="174" width="37" height="16" uuid="61432fcd-10bb-432f-88e4-dffc6a558d26"/>
+				<reportElement x="281" y="167" width="37" height="16" uuid="61432fcd-10bb-432f-88e4-dffc6a558d26"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Address]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="250" width="36" height="14" uuid="5ba27033-f84d-48e3-b8f1-c69019040f82"/>
+				<reportElement x="3" y="232" width="36" height="14" uuid="5ba27033-f84d-48e3-b8f1-c69019040f82"/>
 				<textElement>
 					<font fontName="Serif"/>
 				</textElement>
 				<text><![CDATA[GSTIN]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="280" y="247" width="36" height="14" uuid="e7f75d61-564c-4688-8ccf-1cff9715ca4f"/>
+				<reportElement x="281" y="230" width="36" height="14" uuid="e7f75d61-564c-4688-8ccf-1cff9715ca4f"/>
 				<textElement>
 					<font fontName="Serif"/>
 				</textElement>
 				<text><![CDATA[GSTIN]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="93" y="158" width="114" height="15" uuid="6b461474-b7e8-4610-8a6f-8011ff5d1f1a">
+				<reportElement x="93" y="151" width="114" height="15" uuid="6b461474-b7e8-4610-8a6f-8011ff5d1f1a">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -475,7 +477,7 @@
 				<textFieldExpression><![CDATA[$P{CustName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="93" y="175" width="114" height="15" uuid="6d7ab855-8725-4ed4-a720-ffcd4b48e274">
+				<reportElement x="93" y="168" width="114" height="15" uuid="6d7ab855-8725-4ed4-a720-ffcd4b48e274">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -484,7 +486,7 @@
 				<textFieldExpression><![CDATA[$P{bAddress}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="94" y="249" width="114" height="15" uuid="199cc4d2-d2a0-48b7-a739-7494c1076689">
+				<reportElement x="91" y="230" width="114" height="15" uuid="199cc4d2-d2a0-48b7-a739-7494c1076689">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -493,7 +495,7 @@
 				<textFieldExpression><![CDATA[$P{custGSTNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="360" y="157" width="170" height="15" uuid="df2cb202-49ca-474b-99fc-03c1537e6d7d">
+				<reportElement x="360" y="150" width="170" height="15" uuid="df2cb202-49ca-474b-99fc-03c1537e6d7d">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -502,7 +504,7 @@
 				<textFieldExpression><![CDATA[$P{CustName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="360" y="173" width="170" height="15" uuid="ae6f034c-c074-4325-be58-9c56ff512209">
+				<reportElement x="360" y="166" width="170" height="15" uuid="ae6f034c-c074-4325-be58-9c56ff512209">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -511,7 +513,7 @@
 				<textFieldExpression><![CDATA[$P{sAddress}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="361" y="248" width="170" height="15" uuid="a8b10ece-5b6c-433a-81b2-60ee27d2d5d5">
+				<reportElement x="360" y="228" width="170" height="15" uuid="a8b10ece-5b6c-433a-81b2-60ee27d2d5d5">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -520,21 +522,21 @@
 				<textFieldExpression><![CDATA[$P{custGSTNo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="4" y="192" width="37" height="16" uuid="bf3929d1-c8b2-4868-a2c6-f33ba8c53a37"/>
+				<reportElement x="3" y="185" width="37" height="16" uuid="bf3929d1-c8b2-4868-a2c6-f33ba8c53a37"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[State]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="281" y="190" width="37" height="16" uuid="be64d914-2e26-456f-88ef-6ead502b09c2"/>
+				<reportElement x="281" y="183" width="37" height="16" uuid="be64d914-2e26-456f-88ef-6ead502b09c2"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[State]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="93" y="192" width="114" height="15" uuid="9de8f958-26e7-46b5-b19d-273a9d72b281">
+				<reportElement x="93" y="184" width="114" height="15" uuid="9de8f958-26e7-46b5-b19d-273a9d72b281">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -543,7 +545,7 @@
 				<textFieldExpression><![CDATA[$P{bState}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="360" y="190" width="170" height="15" uuid="3ec9e817-1ba1-43c3-b354-5e2edd48cb99">
+				<reportElement x="360" y="182" width="170" height="15" uuid="3ec9e817-1ba1-43c3-b354-5e2edd48cb99">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -552,14 +554,14 @@
 				<textFieldExpression><![CDATA[$P{sState}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="3" y="209" width="57" height="16" uuid="f7663cea-6cd7-4b72-ac68-d970aa8994ec"/>
-				<textElement>
+				<reportElement x="3" y="201" width="57" height="16" uuid="f7663cea-6cd7-4b72-ac68-d970aa8994ec"/>
+				<textElement textAlignment="Right">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[StateCode]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="92" y="209" width="114" height="15" uuid="7f613624-e144-4590-a1fb-27c7347a1086">
+				<reportElement x="92" y="201" width="114" height="15" uuid="7f613624-e144-4590-a1fb-27c7347a1086">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -568,14 +570,14 @@
 				<textFieldExpression><![CDATA[$P{sPin}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="281" y="207" width="59" height="16" uuid="8d4ae0f6-9e56-40e1-a410-d3900a74ac5f"/>
+				<reportElement x="281" y="199" width="59" height="16" uuid="8d4ae0f6-9e56-40e1-a410-d3900a74ac5f"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[State Code]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="360" y="207" width="170" height="15" uuid="458d4f57-2e8c-4538-b58c-a7ac35734f26">
+				<reportElement x="360" y="199" width="170" height="15" uuid="458d4f57-2e8c-4538-b58c-a7ac35734f26">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -729,7 +731,7 @@
 				<text><![CDATA[Rate]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="497" y="290" width="30" height="13" isRemoveLineWhenBlank="true" uuid="703221b0-c577-43b1-9432-31d3a40e1d8a"/>
+				<reportElement x="497" y="289" width="30" height="13" isRemoveLineWhenBlank="true" uuid="703221b0-c577-43b1-9432-31d3a40e1d8a"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -813,6 +815,70 @@
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[WGT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="216" width="57" height="16" uuid="b77fb465-b02b-4cf1-8c7f-a4411fadf6c5"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Email ID]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="92" y="215" width="188" height="15" uuid="b95b62a1-ae7e-4f43-9308-29170da619c6">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{custEmailID}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="281" y="214" width="57" height="16" uuid="9736d4e2-8c24-4c81-9182-7663c08f1b64"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Email ID]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="360" y="213" width="192" height="15" uuid="11fced21-97b1-4213-87ed-14859132cc0d">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{custEmailID}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="247" width="65" height="14" uuid="afaf64ae-a80b-4cc9-ac36-d33e7190fba3"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Contact No:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="91" y="245" width="142" height="15" uuid="026e36f3-c7a4-4b7e-8293-3aff6ff56a23">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{custMobileNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="360" y="243" width="142" height="15" uuid="15a4d076-ed3e-4607-bfb5-80a227270b31">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{custMobileNo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="281" y="245" width="65" height="14" uuid="9997b8cc-784b-4cb3-b26a-0b5c5021e840"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Contact No:]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -976,7 +1042,7 @@
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="161" y="-16" width="1" height="30" uuid="3a819b04-95bf-4085-90b5-abeb08a4eba8">
+				<reportElement x="161" y="-16" width="1" height="30" isPrintInFirstWholeBand="true" uuid="3a819b04-95bf-4085-90b5-abeb08a4eba8">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
@@ -1431,18 +1497,24 @@
 						</jr:columnHeader>
 						<jr:columnFooter style="Table 1_CH" height="18" rowSpan="1">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="70" height="18" uuid="a1f4b51a-dc95-406b-b85a-3d03f91ea3d1"/>
+								<reportElement x="0" y="0" width="70" height="18" uuid="a1f4b51a-dc95-406b-b85a-3d03f91ea3d1">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{vTotalTaxableAmt}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="70" height="17" uuid="7bbe8adb-44b1-453e-bb65-df2bfbeee1b9"/>
+								<reportElement x="0" y="0" width="70" height="17" uuid="7bbe8adb-44b1-453e-bb65-df2bfbeee1b9">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph lineSpacingSize="1.0" rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblTaxableAmt}]]></textFieldExpression>
 							</textField>
@@ -1465,9 +1537,12 @@
 						<jr:columnFooter style="Table 1_CH" height="18" rowSpan="1"/>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="40" height="17" uuid="f923e129-cb14-4d04-8dcb-a38a0c88ee0e"/>
+								<reportElement x="0" y="0" width="40" height="17" uuid="f923e129-cb14-4d04-8dcb-a38a0c88ee0e">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblGSTPer}]]></textFieldExpression>
 							</textField>
@@ -1491,18 +1566,24 @@
 						</jr:columnHeader>
 						<jr:columnFooter style="Table 1_CH" height="18" rowSpan="1">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="51" height="18" uuid="59c80dc9-6aaf-4d13-9ed5-0b74dbc7dd91"/>
+								<reportElement x="0" y="0" width="51" height="18" uuid="59c80dc9-6aaf-4d13-9ed5-0b74dbc7dd91">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{totalGSTAmt}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="51" height="17" uuid="5f619667-1e2b-42bf-9564-28eac94284b3"/>
+								<reportElement x="0" y="0" width="51" height="17" uuid="5f619667-1e2b-42bf-9564-28eac94284b3">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblGSTAmt}]]></textFieldExpression>
 							</textField>
@@ -1525,9 +1606,12 @@
 						<jr:columnFooter style="Table 1_CH" height="18" rowSpan="1"/>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="40" height="17" uuid="8a244669-5898-48e5-bfc6-ec3f5a3cf716"/>
+								<reportElement x="0" y="0" width="40" height="17" uuid="8a244669-5898-48e5-bfc6-ec3f5a3cf716">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblCGSTPer}]]></textFieldExpression>
 							</textField>
@@ -1549,18 +1633,24 @@
 						</jr:columnHeader>
 						<jr:columnFooter style="Table 1_CH" height="18" rowSpan="1">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="51" height="18" uuid="34dcda4b-aeb8-40be-a3ef-7e3c7cc79b1b"/>
+								<reportElement x="0" y="0" width="51" height="18" uuid="34dcda4b-aeb8-40be-a3ef-7e3c7cc79b1b">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{vTotalCGSTAmt}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="51" height="17" uuid="279a54e9-c4c0-4700-af2d-f2ce279e02ab"/>
+								<reportElement x="0" y="0" width="51" height="17" uuid="279a54e9-c4c0-4700-af2d-f2ce279e02ab">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblCGSTAmt}]]></textFieldExpression>
 							</textField>
@@ -1583,9 +1673,12 @@
 						<jr:columnFooter style="Table 1_CH" height="18" rowSpan="1"/>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="40" height="17" uuid="19e7b16f-abd7-45b7-b545-7ece6ffee72c"/>
+								<reportElement x="0" y="0" width="40" height="17" uuid="19e7b16f-abd7-45b7-b545-7ece6ffee72c">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblSGSTPer}]]></textFieldExpression>
 							</textField>
@@ -1607,18 +1700,24 @@
 						</jr:columnHeader>
 						<jr:columnFooter style="Table 1_CH" height="18" rowSpan="1">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="61" height="18" uuid="e2263b09-bdb8-41d1-a98c-ce17a2603be1"/>
+								<reportElement x="0" y="0" width="61" height="18" uuid="e2263b09-bdb8-41d1-a98c-ce17a2603be1">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{vTotalSGSTAmt}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="61" height="17" uuid="9435293e-150c-48f2-b37a-3b9f596cd63a"/>
+								<reportElement x="0" y="0" width="61" height="17" uuid="9435293e-150c-48f2-b37a-3b9f596cd63a">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblSGSTAmt}]]></textFieldExpression>
 							</textField>
@@ -1641,9 +1740,12 @@
 						<jr:columnFooter style="Table 1_CH" height="18" rowSpan="1"/>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="40" height="17" uuid="2d9da8d9-fa3e-4d6e-98da-d616d977aca2"/>
+								<reportElement x="0" y="0" width="40" height="17" uuid="2d9da8d9-fa3e-4d6e-98da-d616d977aca2">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblIGSTPer}]]></textFieldExpression>
 							</textField>
@@ -1667,18 +1769,24 @@
 						</jr:columnHeader>
 						<jr:columnFooter style="Table 1_CH" height="18" rowSpan="1">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="50" height="18" uuid="adaa3aa8-2cfa-47a5-9639-9430da6eb71d"/>
+								<reportElement x="0" y="0" width="50" height="18" uuid="adaa3aa8-2cfa-47a5-9639-9430da6eb71d">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{totalIGSTAmt}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement x="0" y="0" width="50" height="17" forecolor="#000000" uuid="9873b394-1b8a-47c9-aebc-49f70132d948"/>
+								<reportElement x="0" y="0" width="50" height="17" forecolor="#000000" uuid="9873b394-1b8a-47c9-aebc-49f70132d948">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblIGSTAmt}]]></textFieldExpression>
 							</textField>
@@ -1702,18 +1810,23 @@
 							<textField pattern="#,##0.00#">
 								<reportElement x="0" y="0" width="57" height="18" isPrintWhenDetailOverflows="true" uuid="4e273270-2df2-4b11-abda-b8971fd7c309">
 									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{vTotalAmt}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table 1_TD" height="17">
 							<textField pattern="#,##0.00#">
-								<reportElement key="" x="0" y="0" width="57" height="17" uuid="ab25d251-41e2-48b7-858b-28641e2af70d"/>
+								<reportElement key="" x="0" y="0" width="57" height="17" uuid="ab25d251-41e2-48b7-858b-28641e2af70d">
+									<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+								</reportElement>
 								<textElement textAlignment="Right">
 									<font size="9" isBold="true"/>
+									<paragraph rightIndent="1"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblTotalAmt}]]></textFieldExpression>
 							</textField>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2016-09-27T18:10:53 -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptShopOrderList" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4b5a7da1-9f4d-48d9-bec1-a72556ad919c">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -185,6 +184,9 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 	<field name="strSOCode" class="java.lang.String"/>
 	<field name="strCustCode" class="java.lang.String"/>
 	<variable name="mainsubgroupTotal" class="java.lang.Double" calculation="Sum"/>
+	<variable name="page_Number" class="java.lang.Double" resetType="None" incrementType="Page" calculation="Sum">
+		<initialValueExpression><![CDATA[new Double("0")]]></initialValueExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -402,7 +404,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 					<datasetRun subDataset="dsOddOrder" uuid="d537264d-cec9-462c-9e8f-87b9680ff76a">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{objOdd})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:columnGroup width="272" uuid="5bedc731-a41b-4c5f-b071-98a4b3d333a4">
+					<jr:columnGroup width="269" uuid="5bedc731-a41b-4c5f-b071-98a4b3d333a4">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [4]"/>
 						<jr:groupHeader groupName="strPName">
 							<jr:cell style="table_TD" height="20" rowSpan="1">
@@ -449,7 +451,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 									<text><![CDATA[Sr No]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:tableFooter style="table 1_TH" height="20" rowSpan="1"/>
+							<jr:tableFooter style="table_TD" height="20" rowSpan="1"/>
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField>
 									<reportElement x="2" y="0" width="18" height="20" uuid="2937c4c6-394a-4c23-b680-c4b9097ec152"/>
@@ -471,7 +473,17 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 									<text><![CDATA[Product Name]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:tableFooter style="table 1_TH" height="20" rowSpan="1"/>
+							<jr:tableFooter style="table_TD" height="20" rowSpan="1">
+								<textField isStretchWithOverflow="true">
+									<reportElement x="0" y="0" width="157" height="20" uuid="e392a263-7844-450d-a98d-4fba03649283">
+										<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+									</reportElement>
+									<textElement textAlignment="Left">
+										<paragraph leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{strPName}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1">
 									<staticText>
@@ -493,7 +505,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="52" uuid="fca294e8-b631-4e8e-bc03-d10b2d65ab52">
+						<jr:column width="49" uuid="fca294e8-b631-4e8e-bc03-d10b2d65ab52">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
@@ -504,7 +516,12 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 									<text><![CDATA[Required Quantity]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:tableFooter style="table 1_TH" height="20" rowSpan="1"/>
+							<jr:tableFooter style="table_TD" height="20" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="49" height="20" uuid="27161084-fd0c-4ac0-bc75-700655bc707b"/>
+									<text><![CDATA[Page]]></text>
+								</staticText>
+							</jr:tableFooter>
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1">
 									<textField>
@@ -537,7 +554,13 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 									<text><![CDATA[Actual  Quantity]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:tableFooter style="table 1_TH" height="20" rowSpan="1"/>
+							<jr:tableFooter style="table_TD" height="20" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="43" height="20" uuid="b219d370-e82c-4301-bd94-34ece90662df"/>
+									<textElement textAlignment="Right"/>
+									<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1"/>
 							</jr:groupFooter>
@@ -551,10 +574,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 	<columnFooter>
 		<band height="2" splitType="Stretch"/>
 	</columnFooter>
-	<pageFooter>
-		<band height="3" splitType="Stretch"/>
-	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band splitType="Stretch"/>
 	</summary>
 </jasperReport>
