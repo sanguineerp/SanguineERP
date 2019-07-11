@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="s"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Floor Master</title>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 
 		/**
 		* Open Help
@@ -69,18 +69,17 @@
 		{
 			var message='';
 			<%if (session.getAttribute("success") != null) {
-				            if(session.getAttribute("successMessage") != null){%>
+				if (session.getAttribute("successMessage") != null) {%>
 				            message='<%=session.getAttribute("successMessage").toString()%>';
-				            <%
-				            session.removeAttribute("successMessage");
-				            }
-							boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
-							session.removeAttribute("success");
-							if (test) {
-							%>	
+				            <%session.removeAttribute("successMessage");
+				}
+				boolean test = ((Boolean) session.getAttribute("success"))
+						.booleanValue();
+				session.removeAttribute("success");
+				if (test) {%>	
 				alert("Data Save successfully\n\n"+message);
-			<%
-			}}%>
+			<%}
+			}%>
 
 		});
 	
@@ -98,10 +97,18 @@
 					}
 					return flg;
 				}
+		 
+				function isNumber(evt) {
+			        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+			        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+			            return false;
+
+			        return true;
+			    } 
 			
 		
 		
-	</script>	
+	</script>
 
 </head>
 <body>
@@ -109,39 +116,43 @@
 	<div id="formHeading">
 		<label>Floor Master</label>
 	</div>
-		<br/>
-		<br/>
-		<s:form name="Floor" method="GET" action="saveFloorMaster.html?" >
-	
-			<table class="masterTable">
+	<br />
+	<br />
+	<s:form name="Floor" method="GET" action="saveFloorMaster.html?">
 
-				<tr>
-			   		 <td><label>Floor Code</label></td>
-					 <td>
-					 <s:input id="txtFloorCode" type="text" path="strFloorCode" cssClass="searchTextBox" ondblclick="funHelp('floormaster')" /></td>				
-				</tr>
-			
-				<tr>
-				    <td><label>Floor Name</label></td>
-					<td><s:input id="txtFloorName" path="strFloorName" cssClass="longTextBox" /></td>				
-				</tr>
-			
-				<tr>
-					 <td><label>Amount</label></td>
-					 <td ><s:input id="txtFloorAmt" path="dblFloorAmt" cssClass="longTextBox" /></td>
-				</tr>
-			
-			</table>
-		
-		
-			<br />
-			<br />
-			
+		<table class="masterTable">
+
+			<tr>
+				<td><label>Floor Code</label></td>
+				<td><s:input id="txtFloorCode" type="text" path="strFloorCode"
+						cssClass="searchTextBox" ondblclick="funHelp('floormaster')" /></td>
+			</tr>
+
+			<tr>
+				<td><label>Floor Name</label></td>
+				<td><s:input id="txtFloorName" path="strFloorName"
+						cssClass="longTextBox" /></td>
+			</tr>
+
+			<tr>
+				<td><label>Amount</label></td>
+				<td><s:input id="txtFloorAmt" path="dblFloorAmt"
+						cssClass="longTextBox"
+						onkeypress="javascript:return isNumber(event)" /></td>
+			</tr>
+
+		</table>
+
+
+		<br />
+		<br />
+
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funCallFormAction('submit',this);" />
-            <input type="reset" value="Reset" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button"
+				onclick="return funCallFormAction('submit',this);" /> <input
+				type="reset" value="Reset" class="form_button" />
 		</p>
-		
+
 	</s:form>
 
 </body>

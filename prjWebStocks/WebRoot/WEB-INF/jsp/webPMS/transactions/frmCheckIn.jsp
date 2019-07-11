@@ -230,6 +230,16 @@
     		document.getElementById("txtNoPostFolio").checked=false;
     	}
 	    
+	    if(response.strComplimentry=='Y')
+    	{
+    		document.getElementById("txtComplimentry").checked=true;
+    	}
+    	else
+    	{
+    		document.getElementById("txtComplimentry").checked=false;
+    	}
+	    
+	    
 	    funRemoveProductRowsForIncomeHead();
 		funRemoveTariffRows();
 		funFillDtlGrid(response.listCheckInDetailsBean);
@@ -1402,7 +1412,10 @@
 			</tr> 
 			<tr>
 			<td>NO POST Folio</td>
-			<td><s:checkbox id="txtNoPostFolio" path="strNoPostFolio" value="Y" />
+			<td><s:checkbox id="txtNoPostFolio" path="strNoPostFolio" value="Yss" />
+			
+			<td>Complimentry</td>
+			<td><s:checkbox id="txtComplimentry" path="strComplimentry" value="Y" />
 			
 			
 			</tr>

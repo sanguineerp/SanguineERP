@@ -60,6 +60,8 @@ public class clsCheckInBean {
 	
 	private String strTotalPackageAmt;
 	
+	private String strComplimentry;
+	
 	private List<clsRoomPackageDtl> listRoomPackageDtl = new ArrayList<clsRoomPackageDtl>();
 	
 	private List<clsReservationRoomRateModelDtl> listReservationRoomRateDtl = new ArrayList<clsReservationRoomRateModelDtl>();
@@ -288,6 +290,14 @@ public class clsCheckInBean {
 
 	public void setListWalkinRoomRateDtl(List<clsWalkinRoomRateDtlModel> listWalkinRoomRateDtl) {
 		this.listWalkinRoomRateDtl = listWalkinRoomRateDtl;
+	}
+
+	public String getStrComplimentry() {
+		return strComplimentry;
+	}
+
+	public void setStrComplimentry(String strComplimentry) {
+		this.strComplimentry = strComplimentry;
 	}
 	
 	

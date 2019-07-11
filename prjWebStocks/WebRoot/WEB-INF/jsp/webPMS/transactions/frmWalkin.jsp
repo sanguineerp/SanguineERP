@@ -189,6 +189,10 @@
 			case "package":
 				funSetPackageNo(code);
 			break;
+			
+			case "roomByRoomType":
+				funSetRoomNo(code);
+			break;
 		}
 	}
 
@@ -921,6 +925,27 @@
 		//window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
 	}
 	
+	 
+	function funHelp1(transactionName,row)
+	{
+		gridHelpRow=row;
+		fieldName=transactionName;
+		var condition = $("#txtRoomTypeCode").val();
+		if(transactionName=="roomByRoomType" && condition!=" ")
+		{
+			window.open("searchform.html?formname="+fieldName+"&strRoomTypeCode="+condition+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+		
+		}
+		else
+		{
+			if(condition==" ")
+			{
+				alert("Please Select Room Type !!!");
+			}
+			//window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+		}
+	}
+	 
 	
 	//Function to Delete Selected Row From Grid
 	function funDeleteRow(obj)
@@ -1044,7 +1069,7 @@
 	    var row = table.insertRow(rowCount);
 	    rowCount=listRow;	  
 	   
-	    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"strExtraBedDesc."+(rowCount)+"\" value='"+extraBedDesc+"' />";
+	    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"13%\" id=\"strExtraBedDesc."+(rowCount)+"\" value='"+extraBedDesc+"' />";
 	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"strRoomTypeDesc."+(rowCount)+"\" value='"+roomTypeDesc+"' />";	    
 	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"strRoomTypeDesc."+(rowCount)+"\" value='"+roomNo+"' />";
 	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listWalkinDetailsBean["+(rowCount)+"].strGuestFirstName\" id=\"strGuestFirstName."+(rowCount)+"\" value='"+guestFirstName+"' />";
@@ -1532,7 +1557,7 @@
 					
 					
 					
-					<td><s:input type="text" id="txtRoomNo" name="txtRoomNo" ondblclick="funHelp('roomCode')" path="strRoomNo" cssClass="searchTextBox"/> 
+					<td><s:input type="text" id="txtRoomNo" name="txtRoomNo" ondblclick="funHelp1('roomByRoomType')" path="strRoomNo" cssClass="searchTextBox"/> 
 							<label id="lblRoomDesc"></label> 
 						<label id="lblRoomType"></label> 
 						</td>
@@ -1631,7 +1656,7 @@
 					</tr>
 				</table>
 				
-				<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+				<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
 					<table id="tblwalkindtl"
 						style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
 						class="transTablex col8-center">

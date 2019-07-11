@@ -147,6 +147,14 @@
 					
 						return flg;
 					}	
+		 
+					 function isNumber(evt) {
+					        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+					        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+					            return false;
+
+					        return true;
+					    }    
 		
 	
 </script>
@@ -182,7 +190,7 @@
 			
 			<tr>
 			    <td><label>Room Tariff</label></td>
-				<td><s:input id="txtRoomTerrif" path="dblRoomTerrif" cssClass="longTextBox" /></td>				
+				<td><s:input id="txtRoomTerrif" path="dblRoomTerrif" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)"/></td>				
 			</tr>
 			
 			

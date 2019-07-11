@@ -338,6 +338,7 @@ public class clsCheckInController {
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
  
 			
+			
 			if (objBean.getStrType().equalsIgnoreCase("Reservation")) {
 				Map<Long, String> hmGuestMbWithCode = new HashMap<Long, String>();
 				List<clsCheckInDetailsBean> listCheckInDtlBean = objBean.getListCheckInDetailsBean();
@@ -781,7 +782,7 @@ public class clsCheckInController {
 					+ "e.strFirstName,e.strMiddleName,e.strLastName, "
 					+ "IFNULL(e.strAddressOfc,''), IFNULL(e.strCityOfc,''), "
 					+ "IFNULL(e.strStateOfc,''), IFNULL(e.strCountryOfc,''), "
-					+ "IFNULL(e.intPinCodeOfc,''),IFNULL(e.lngMobileNo,0) "
+					+ "IFNULL(e.intPinCodeOfc,''),IFNULL(e.lngMobileNo,0),d.strComplimentry "
 					+ "FROM tblroomtypemaster b,tblwalkinroomratedtl c, "
 					+ "tblcheckinhd d,tblguestmaster e,tblroom f, "
 					+ "tblcheckindtl a left outer join  tblextrabed g on "
@@ -822,6 +823,7 @@ public class clsCheckInController {
 					+ arrObjRoomData[19].toString() + ","
 					+ arrObjRoomData[20].toString();
 			String strMobileNo = arrObjRoomData[21].toString();
+			String strComplimentry = arrObjRoomData[22].toString();
 			
 			
 			double roomTarrif = Double.parseDouble(arrObjRoomData[5].toString());
@@ -874,8 +876,8 @@ public class clsCheckInController {
 			reportParams.put("ppanno", paNo);
 			reportParams.put("pguestCode", guestCode);
 			reportParams.put("proomType", roomType);
-			reportParams.put("proomTarrifWithExtBed", roomTarrifWithExtraBed);
-			reportParams.put("pdiscount", discAmt);
+			
+			
 			reportParams.put("pCompanyName", companyName);
 			reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
 			reportParams.put("pAddress2", objSetup.getStrState() + "," + objSetup.getStrCountry() + "," + objSetup.getStrPin());
@@ -884,9 +886,26 @@ public class clsCheckInController {
 			reportParams.put("userName", userName);
 			reportParams.put("pGuestName", gFirstName + " "+ gMiddleName + " " + gLastName);
 			reportParams.put("pguestCompanyAddr", guestCompanyAddr);
-			reportParams.put("proomTarrif", roomTarrif);
+			
 			reportParams.put("pstrMobileNo", strMobileNo);
+			if(strComplimentry.equalsIgnoreCase("N"))
+			{
 			reportParams.put("ptaxAmt", finalTax);
+			reportParams.put("proomTarrif", roomTarrif);
+			reportParams.put("proomTarrifWithExtBed", roomTarrifWithExtraBed);
+			reportParams.put("pdiscount", discAmt);
+			}
+			else
+			{
+				finalTax=0.0;
+				roomTarrif=0.0;
+				discAmt = 0.0;
+				roomTarrifWithExtraBed=0.0;
+				reportParams.put("ptaxAmt", finalTax);
+				reportParams.put("proomTarrif", roomTarrif);
+				reportParams.put("proomTarrifWithExtBed", roomTarrifWithExtraBed);
+				reportParams.put("pdiscount", discAmt);
+			}
 			}
 			else
 			{
@@ -1074,6 +1093,7 @@ public class clsCheckInController {
 		} else {
 			objModel.setStrExtraBedCode("");
 		}
+		objModel.setStrComplimentry(objBean.getStrComplimentry());
 
 		objModel.setIntNoOfAdults(objBean.getIntNoOfAdults());
 		objModel.setIntNoOfChild(objBean.getIntNoOfChild());
@@ -1105,6 +1125,7 @@ public class clsCheckInController {
 		}
 		objModel.setListCheckInDtl(listCheckinDtlModel);
 		objModel.setStrNoPostFolio(objGlobal.funIfNull(objBean.getStrNoPostFolio(), "N", objBean.getStrNoPostFolio()));
+		objModel.setStrComplimentry(objGlobal.funIfNull(objBean.getStrNoPostFolio(), "N",objBean.getStrNoPostFolio()));
 		objModel.setStrRemarks("");
 		objModel.setStrReasonCode("");
 		

@@ -248,7 +248,13 @@ function funSetAccountCode(code){
 						return flg;
 					}
 		
-		
+					function isNumber(evt) {
+				        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+				        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+				            return false;
+
+				        return true;
+				    }  
 		
 		
 	
@@ -299,12 +305,12 @@ function funSetAccountCode(code){
 			
 			<tr>
 			    <td><label>No Of Beds</label></td>
-				<td><s:input id="txtNoOfBed" path="intNoBeds" cssClass="longTextBox" /></td>				
+				<td><s:input id="txtNoOfBed" path="intNoBeds" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)"/></td>				
 			</tr>
 			
 			<tr>
 			    <td><label>Charge Per Bedc</label></td>
-				<td><s:input id="txtChargePerBed" path="dblChargePerBed" cssClass="longTextBox" /></td>				
+				<td><s:input id="txtChargePerBed" path="dblChargePerBed" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" /></td>				
 			</tr>
 			
 			

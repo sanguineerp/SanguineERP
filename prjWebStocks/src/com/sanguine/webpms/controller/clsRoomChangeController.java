@@ -334,6 +334,8 @@ public class clsRoomChangeController {
 			objWebPMSUtility.funExecuteUpdate(sql, "sql");
 			
 			
+			sql = "update tblcheckindtl a set a.strRoomNo='"+objBean.getStrRoomDesc()+"'  where a.strCheckInNo='"+prevCheckiInNo+"'";
+			objWebPMSUtility.funExecuteUpdate(sql, "sql");
 			
             req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Reservation No. : ".concat(objBean.getStrRoomCode().split("#")[0]));

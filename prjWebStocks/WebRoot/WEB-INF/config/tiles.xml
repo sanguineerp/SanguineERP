@@ -4904,6 +4904,19 @@
 			<put-attribute name="title" value="Void Bill Report" />
 			<put-attribute name="body" value="/WEB-INF/jsp/webPMS/reports/frmVoidBillReport.jsp" />
 	</definition>
+	
+	
+	<definition name="frmPMSStructureUpdate" extends="base.definition">
+		<put-attribute name="title" value="Structure Update"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/webPMS/tools/frmPMSStructureUpdate.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="frmPMSStructureUpdate_1" extends="base.definition4">
+		<put-attribute name="title" value="Structure Update"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/webPMS/tools/frmPMSStructureUpdate.jsp"></put-attribute>
+	</definition>
   	
 <!-- 	End Of WebPMS Tiles Entry -->
 

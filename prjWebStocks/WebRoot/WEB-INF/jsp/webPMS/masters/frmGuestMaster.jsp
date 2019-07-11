@@ -196,7 +196,7 @@ function funSetGuestCode(code)
 		
 		if($('#txtFirstName').val().trim().length==0)
 		{
-			alert("Guest name should be empty!!");
+			alert("Guest name should not be empty!!");
 			flg=false;
 		}
 		else

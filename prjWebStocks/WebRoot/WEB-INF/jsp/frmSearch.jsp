@@ -140,7 +140,7 @@
 <br/>
 <div id="demo">
 
-<table class="display" id="example">
+<table class="display" id="example" >
 
 </table>
 </div>

@@ -162,7 +162,7 @@ public class clsBillPrintingController {
 			String sqlParametersFromBill = " SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo ,date(b.dteArrivalDate),b.tmeArrivalTime , "
 					+ " ifnull(date(b.dteDepartureDate),'NA'),ifnull(b.tmeDepartureTime,'NA')  , ifnull(d.strGuestPrefix,''), "
 					+ " ifnull(d.strFirstName,''),ifnull(d.strMiddleName,''),ifnull(d.strLastName,'') , "
-					+ " b.intNoOfAdults,b.intNoOfChild ,a.strBillNo ,IFNULL(d.strGuestCode,''),a.strGSTNo,a.strCompanyName,b.strCheckInNo"// 17
+					+ " b.intNoOfAdults,b.intNoOfChild ,a.strBillNo ,IFNULL(d.strGuestCode,''),a.strGSTNo,a.strCompanyName,b.strCheckInNo,c.strPayee"// 17
 					+ " FROM tblbillhd a  "
 					+ " LEFT OUTER JOIN tblcheckinhd  b ON a.strCheckInNo=b.strCheckInNo "
 					+ " LEFT OUTER JOIN tblcheckindtl c ON b.strCheckInNo=c.strCheckInNo AND a.strRoomNo=c.strRoomNo  "
@@ -170,7 +170,7 @@ public class clsBillPrintingController {
 					+ " LEFT OUTER JOIN tblroom e ON e.strRoomCode=a.strRoomNo "
 					+ "where a.strBillNo='"
 					+ billNo
-					+ "' order by d.strGuestCode desc ";
+					+ "' order by c.strPayee DESC ";
 
 			List listOfParametersFromBill = objFolioService
 					.funGetParametersList(sqlParametersFromBill);
@@ -204,6 +204,7 @@ public class clsBillPrintingController {
 				String departureDate = arr[6].toString();
 				String departureTime = arr[7].toString();
 				String gPrefix = arr[8].toString();
+				String strPayee = arr[19].toString();
 				String gFirstName = arr[9].toString();
 				String gMiddleName = arr[10].toString();
 				String gLastName = arr[11].toString();

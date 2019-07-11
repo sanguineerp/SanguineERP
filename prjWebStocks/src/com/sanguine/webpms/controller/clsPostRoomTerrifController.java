@@ -76,7 +76,7 @@ public class clsPostRoomTerrifController {
 				+ " FROM tblcheckinhd a left outer join tblroompackagedtl f on a.strCheckInNo=f.strCheckInNo and f.strRoomNo='',tblcheckindtl b,tblguestmaster c,tblroom d,tblroomtypemaster e"
 				+ " WHERE a.strCheckInNo=b.strCheckInNo AND b.strGuestCode=c.strGuestCode "
 				+ " AND b.strRoomNo=d.strRoomCode AND d.strRoomTypeCode=e.strRoomTypeCode AND b.strRoomNo='"+roomNo+"' "
-				+ " AND a.strCheckInNo NOT IN (SELECT strCheckInNo FROM tblbillhd WHERE strRoomNo='"+roomNo+"') ";
+				+ " AND a.strCheckInNo NOT IN (SELECT strCheckInNo FROM tblbillhd WHERE strRoomNo='"+roomNo+"' order by strCheckInNo desc) ";
 		
 		List listRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 		if(listRoomDtl.size()>0)
@@ -154,13 +154,17 @@ public class clsPostRoomTerrifController {
 			String propCode = req.getSession().getAttribute("propertyCode").toString();
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
 
-			String sql = "select strFolioNo,strExtraBedCode " + " from tblfoliohd " + " where strRoomNo='" + objBean.getStrRoomNo() + "' and strRegistrationNo='" + objBean.getStrRegistrationNo() + "' " + " and strClientCode='" + clientCode + "'";
+			String sql = "SELECT a.strFolioNo,a.strExtraBedCode,b.strComplimentry" + " FROM tblfoliohd a,tblcheckinhd b " + " WHERE a.strRoomNo='" + objBean.getStrRoomNo() + "' and a.strCheckInNo=b.strCheckInNo and  a.strRegistrationNo='" + objBean.getStrRegistrationNo() + "' " + " AND a.strClientCode='" + clientCode + "'";
 			List listFolio = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			Object[] arrObjFolioDtl = (Object[]) listFolio.get(0);
 
 			String folioNo = arrObjFolioDtl[0].toString();
 			String extraBedCode = arrObjFolioDtl[1].toString();
+			String strComplimentry = arrObjFolioDtl[2].toString();
 			String docNo="";
+			if(strComplimentry.equalsIgnoreCase("N"))
+			{
+			
 			double totalRoomTarrif=objBean.getDblRoomTerrif();
 			double totalPakageAmt=objBean.getDblPackageAmt();
 			double actualPostingAmt=objBean.getDblActualPostingAmt();
@@ -204,7 +208,7 @@ public class clsPostRoomTerrifController {
 					docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
 				}
 			}
-			
+			}
 			//String docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
 
 			req.getSession().setAttribute("success", true);

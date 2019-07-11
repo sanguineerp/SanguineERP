@@ -1206,10 +1206,10 @@
 	    
 	    row.insertCell(6).innerHTML= "<input type=\"hidden\"  name=\"listReservationDetailsBean["+(rowCount)+"].strGuestCode\" id=\"strGuestCode."+(rowCount)+"\" value='"+guestCode+"' />";
 	    row.insertCell(7).innerHTML= "<input type=\"hidden\" size=\"0%\" name=\"listReservationDetailsBean["+(rowCount)+"].strRoomNo\" id=\"strRoomNo."+(rowCount)+"\" value='' />";
-	    row.insertCell(8).innerHTML= "<input type=\"hidden\" size=\"0%\" name=\"listReservationDetailsBean["+(rowCount)+"].strExtraBedCode\" id=\"strExtraBedCode."+(rowCount)+"\" value='' />";
+	    row.insertCell(8).innerHTML= "<input type=\"hidden\" size=\"0%\" name=\"listReservationDetailsBean["+(rowCount)+"].strExtraBedCode\" id=\"strExtraBedCode."+(rowCount)+"\" value='"+extraBedCode+"' />";
 	    row.insertCell(9).innerHTML= "<input type=\"hidden\" size=\"0%\" name=\"listReservationDetailsBean["+(rowCount)+"].strAddress\" id=\"strAddress."+(rowCount)+"\" value='"+address+"' />";
 	    row.insertCell(10).innerHTML= "<input type=\"hidden\" size=\"0%\" id=\"strRoomDesc."+(rowCount)+"\" value='' />";
-	    row.insertCell(11).innerHTML= "<input type=\"hidden\"  size=\"0%\" id=\"strExtraBedDesc."+(rowCount)+"\" value='' />";
+	    row.insertCell(11).innerHTML= "<input type=\"hidden\"  size=\"0%\" id=\"strExtraBedDesc."+(rowCount)+"\" value='"+extraBedDesc+"' />";
 	    row.insertCell(12).innerHTML= "<input type=\"hidden\" size=\"0%\" name=\"listReservationDetailsBean["+(rowCount)+"].strRoomType\" id=\"strRoomType."+(rowCount)+"\" value='"+roomType+"' />";
 	    funResetDetailFields();
 	    

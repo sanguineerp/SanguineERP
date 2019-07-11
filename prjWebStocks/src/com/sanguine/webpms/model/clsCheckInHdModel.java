@@ -102,6 +102,9 @@ public class clsCheckInHdModel implements Serializable {
 	
 	@Column(name="strReasonCode")
 	private String strReasonCode;
+	
+	@Column(name="strComplimentry")
+	private String strComplimentry;
 
 	
 	public List<clsCheckInDtl> getListCheckInDtl() {
@@ -302,6 +305,14 @@ public class clsCheckInHdModel implements Serializable {
 
 	public void setStrReasonCode(String strReasonCode) {
 		this.strReasonCode = strReasonCode;
+	}
+
+	public String getStrComplimentry() {
+		return strComplimentry;
+	}
+
+	public void setStrComplimentry(String strComplimentry) {
+		this.strComplimentry = strComplimentry;
 	}
 
 	
