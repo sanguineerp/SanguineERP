@@ -209,6 +209,13 @@ public class clsPostRoomTerrifController {
 				}
 			}
 			}
+			else
+			{
+				double actualPostingAmt=0.0;
+				objBean.setStrFolioType("Room");
+				objBean.setDblRoomTerrif(actualPostingAmt);
+				docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+			}
 			//String docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
 
 			req.getSession().setAttribute("success", true);

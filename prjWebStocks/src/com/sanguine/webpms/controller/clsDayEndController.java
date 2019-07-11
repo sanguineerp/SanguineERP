@@ -117,11 +117,18 @@ public class clsDayEndController {
 					   + " from tblfoliohd a,tblroom b,tblroomtypemaster c " 
 					   + " where a.strRoomNo=b.strRoomCode and b.strRoomTypeCode=c.strRoomTypeCode";
 			*/
-			String sql= "SELECT a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode, IFNULL(a.strReservationNo,''), "
+			/*String sql= "SELECT a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode, IFNULL(a.strReservationNo,''), "
 					+ " IFNULL(a.strWalkInNo,''),c.strRoomTypeCode,ifnull(sum(d.dblIncomeHeadAmt),0)"
 					+ " FROM tblfoliohd a left outer join tblroompackagedtl d on a.strCheckInNo=d.strCheckInNo,tblroom b,tblroomtypemaster c "
 					+ " WHERE a.strRoomNo=b.strRoomCode AND b.strRoomTypeCode=c.strRoomTypeCode"
-					+ " group by a.strFolioNo";
+					+ " group by a.strFolioNo";*/
+			
+			String sql="SELECT a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode, IFNULL(a.strReservationNo,''), IFNULL(a.strWalkInNo,''),"
+					+ "c.strRoomTypeCode, IFNULL(SUM(d.dblIncomeHeadAmt),0),e.strComplimentry "
+					+ "FROM tblfoliohd a "
+					+ "LEFT OUTER JOIN tblroompackagedtl d ON a.strCheckInNo=d.strCheckInNo,tblroom b,tblroomtypemaster c,tblcheckinhd e "
+					+ "WHERE a.strRoomNo=b.strRoomCode AND b.strRoomTypeCode=c.strRoomTypeCode AND a.strCheckInNo=e.strCheckInNo "
+					+ "GROUP BY a.strFolioNo";
 			List listRoomInfo = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
              
 			for (int cnt = 0; cnt < listRoomInfo.size(); cnt++) 
@@ -132,50 +139,57 @@ public class clsDayEndController {
 				
 				if(!arrObjRoom[4].toString().equals(""))
 				{
-				 String sqlRoomRate=" select a.dblRoomRate from  tblreservationroomratedtl a "
-					        +" where a.strReservationNo='"+arrObjRoom[4].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+date+"' ";
-				 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
-				 if(listRoomRate.size()>0)
-				 {
-				 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
-				}
-				 
-				 else
-				 {
-					  sqlRoomRate=" select a.dblRoomRate from  tblreservationroomratedtl a "
-						        +" where a.strReservationNo='"+arrObjRoom[4].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' order by date(a.dtDate) desc ";
-					  listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+					 String sqlRoomRate=" select a.dblRoomRate from  tblreservationroomratedtl a "
+						        +" where a.strReservationNo='"+arrObjRoom[4].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+date+"' ";
+					 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
 					 if(listRoomRate.size()>0)
 					 {
-					 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
-					}
-				 }
+						 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
+					 }
+					 else
+					 {
+						  sqlRoomRate=" select a.dblRoomRate from  tblreservationroomratedtl a "
+							        +" where a.strReservationNo='"+arrObjRoom[4].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' order by date(a.dtDate) desc ";
+						  listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+						 if(listRoomRate.size()>0)
+						 {
+							 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
+						 }
+					 }
 				}
 				if(!arrObjRoom[5].toString().equals(""))
 				{
-				String sqlRoomRate=" select a.dblRoomRate from  tblwalkinroomratedtl a "
-					        +" where a.strWalkinNo='"+arrObjRoom[5].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+date+"' ";
-				 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
-				 if(listRoomRate.size()>0)
-				 {
-				 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
-				 }
-				 else
-				 {
-					sqlRoomRate=" select a.dblRoomRate from  tblwalkinroomratedtl a "
-						        +" where a.strWalkinNo='"+arrObjRoom[5].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"'  order by date(a.dtDate) desc ";
-					  listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+					String sqlRoomRate=" select a.dblRoomRate from  tblwalkinroomratedtl a "
+						        +" where a.strWalkinNo='"+arrObjRoom[5].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+date+"' ";
+					 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
 					 if(listRoomRate.size()>0)
 					 {
 					 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
 					 }
-				 }
+					 else
+					 {
+						sqlRoomRate=" select a.dblRoomRate from  tblwalkinroomratedtl a "
+							        +" where a.strWalkinNo='"+arrObjRoom[5].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"'  order by date(a.dtDate) desc ";
+						  listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+						 if(listRoomRate.size()>0)
+						 {
+						 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
+						 }
+					 }
 				}
 				objPostRoomTerrifBean = new clsPostRoomTerrifBean();
 				objPostRoomTerrifBean.setStrFolioNo(arrObjRoom[0].toString());
 				objPostRoomTerrifBean.setStrRoomNo(arrObjRoom[1].toString());
-				objPostRoomTerrifBean.setDblRoomTerrif(dblRoomRate);
-				objPostRoomTerrifBean.setDblOriginalPostingAmt(dblRoomRate);
+				if(arrObjRoom[8].toString().equals("Y"))
+				{
+					objPostRoomTerrifBean.setDblRoomTerrif(0.0);
+					objPostRoomTerrifBean.setDblOriginalPostingAmt(0.0);
+				}
+				else
+				{
+					objPostRoomTerrifBean.setDblRoomTerrif(dblRoomRate);
+					objPostRoomTerrifBean.setDblOriginalPostingAmt(dblRoomRate);
+				}
 				objPostRoomTerrifBean.setStrFolioType("Room");
 				String folioNo = arrObjRoom[0].toString();
 				String docNo = objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean, objGlobal.funGetDate("yyyy-MM-dd", PMSDate), arrObjRoom[3].toString());

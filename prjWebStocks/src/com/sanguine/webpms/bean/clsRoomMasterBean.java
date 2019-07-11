@@ -54,6 +54,8 @@ public class clsRoomMasterBean {
 	
 	private String strRemarks;
 	
+	private String strStatus;
+	
 	// Setter-Getter Methods
 	public long getIntGId() {
 		return intGId;
@@ -263,6 +265,14 @@ public class clsRoomMasterBean {
 
 	public void setStrRemarks(String strRemarks) {
 		this.strRemarks = strRemarks;
+	}
+
+	public String getStrStatus() {
+		return strStatus;
+	}
+
+	public void setStrStatus(String strStatus) {
+		this.strStatus = strStatus;
 	}
 
 	

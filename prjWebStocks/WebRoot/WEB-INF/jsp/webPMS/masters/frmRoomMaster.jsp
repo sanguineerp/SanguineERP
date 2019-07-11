@@ -65,7 +65,7 @@
 	        		$("#txtGuestAmenities").val(response.strGuestAmenities);
 	        		$("#txtInterConnectRooms").val(response.strInterConnectRooms);
 	        		$("#txtBathTypeCode").val(response.strBathTypeCode);
-	        		
+	        		$("#txtRoomStatus").val(response.strStatus);
 	        		if(response.strAccountCode!="" && response.strAccountCode!="NA" )
 	        			{
 	        				funSetAccountCode(response.strAccountCode);
@@ -390,7 +390,6 @@
 	}
 
 	
-	
 </script>
 
 </head>
@@ -485,6 +484,17 @@
 								<s:radiobutton id="rdbDeactiveYN" path="strDeactiveYN" value="Y" />Yes 
 								<s:radiobutton id="rdbDeactiveYN" path="strDeactiveYN" value="N" checked="checked" style="margin-left: 20px;" />No
 							</td>
+						</tr>
+						<tr>
+						
+						 <td><label>Room Status</label></td>
+						<%-- <td><s:input id="txtRoomStatus" path="strStatus"  cssClass="longTextBox" style="width: 190px"/></td> --%>
+						<td><s:select id="txtRoomStatus" path="strStatus" cssClass="BoxW124px" >
+					    <option selected="selected" value="Free">Free</option>
+				        <option value="Blocked">Blocked</option>
+				        <option value="Occupied">Occupied</option>
+				        </td>
+			         </s:select>
 						</tr>
 					</table>
 		</div>

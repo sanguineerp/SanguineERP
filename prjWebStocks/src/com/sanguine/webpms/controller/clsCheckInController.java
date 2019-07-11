@@ -876,8 +876,6 @@ public class clsCheckInController {
 			reportParams.put("ppanno", paNo);
 			reportParams.put("pguestCode", guestCode);
 			reportParams.put("proomType", roomType);
-			
-			
 			reportParams.put("pCompanyName", companyName);
 			reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
 			reportParams.put("pAddress2", objSetup.getStrState() + "," + objSetup.getStrCountry() + "," + objSetup.getStrPin());
@@ -886,7 +884,6 @@ public class clsCheckInController {
 			reportParams.put("userName", userName);
 			reportParams.put("pGuestName", gFirstName + " "+ gMiddleName + " " + gLastName);
 			reportParams.put("pguestCompanyAddr", guestCompanyAddr);
-			
 			reportParams.put("pstrMobileNo", strMobileNo);
 			if(strComplimentry.equalsIgnoreCase("N"))
 			{
@@ -917,7 +914,7 @@ public class clsCheckInController {
 						+ "e.strFirstName,e.strMiddleName,e.strLastName, "
 						+ "IFNULL(e.strAddressOfc,''), IFNULL(e.strCityOfc,''), "
 						+ "IFNULL(e.strStateOfc,''), IFNULL(e.strCountryOfc,''), "
-						+ "IFNULL(e.intPinCodeOfc,''), IFNULL(e.lngMobileNo,0) "
+						+ "IFNULL(e.intPinCodeOfc,''), IFNULL(e.lngMobileNo,0) ,d.strComplimentry "
 						+ "FROM tblroomtypemaster b , tblcheckinhd d,tblguestmaster e,"
 						+ "tblroom f, tblcheckindtl a "
 						+ "LEFT OUTER JOIN tblextrabed g ON g.strExtraBedTypeCode=a.strExtraBedCode "
@@ -954,6 +951,7 @@ public class clsCheckInController {
 						+ arrObjRoomData[18].toString() + ","
 						+ arrObjRoomData[19].toString();
 				String strMobileNo = arrObjRoomData[20].toString();
+				String strComplimentry = arrObjRoomData[21].toString();
 				
 				double roomTarrif = Double.parseDouble(arrObjRoomData[5].toString());
 				//List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
@@ -1006,8 +1004,6 @@ public class clsCheckInController {
 				reportParams.put("ppanno", paNo);
 				reportParams.put("pguestCode", guestCode);
 				reportParams.put("proomType", roomType);
-				reportParams.put("proomTarrifWithExtBed", roomTarrifWithExtraBed);
-				reportParams.put("pdiscount", discAmt);
 				reportParams.put("pCompanyName", companyName);
 				reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
 				reportParams.put("pAddress2", objSetup.getStrState() + "," + objSetup.getStrCountry() + "," + objSetup.getStrPin());
@@ -1016,9 +1012,25 @@ public class clsCheckInController {
 				reportParams.put("userName", userName);
 				reportParams.put("pGuestName", gFirstName + " "+ gMiddleName + " " + gLastName);
 				reportParams.put("pguestCompanyAddr", guestCompanyAddr);
-				reportParams.put("proomTarrif", roomTarrif);
-				reportParams.put("pstrMobileNo", strMobileNo);
+				reportParams.put("pstrMobileNo", strMobileNo);	
+				if(strComplimentry.equalsIgnoreCase("N"))
+				{
 				reportParams.put("ptaxAmt", finalTax);
+				reportParams.put("proomTarrif", roomTarrif);
+				reportParams.put("proomTarrifWithExtBed", roomTarrifWithExtraBed);
+				reportParams.put("pdiscount", discAmt);
+				}
+				else
+				{
+					finalTax=0.0;
+					roomTarrif=0.0;
+					discAmt = 0.0;
+					roomTarrifWithExtraBed=0.0;
+					reportParams.put("ptaxAmt", finalTax);
+					reportParams.put("proomTarrif", roomTarrif);
+					reportParams.put("proomTarrifWithExtBed", roomTarrifWithExtraBed);
+					reportParams.put("pdiscount", discAmt);
+				}
 			}
 
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(datalist);
@@ -1125,7 +1137,7 @@ public class clsCheckInController {
 		}
 		objModel.setListCheckInDtl(listCheckinDtlModel);
 		objModel.setStrNoPostFolio(objGlobal.funIfNull(objBean.getStrNoPostFolio(), "N", objBean.getStrNoPostFolio()));
-		objModel.setStrComplimentry(objGlobal.funIfNull(objBean.getStrNoPostFolio(), "N",objBean.getStrNoPostFolio()));
+		objModel.setStrComplimentry(objGlobal.funIfNull(objBean.getStrComplimentry(), "N",objBean.getStrComplimentry()));
 		objModel.setStrRemarks("");
 		objModel.setStrReasonCode("");
 		

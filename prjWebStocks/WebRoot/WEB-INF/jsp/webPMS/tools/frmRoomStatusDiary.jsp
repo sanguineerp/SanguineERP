@@ -181,6 +181,11 @@
 		{
 			color='Gray';
 		}
+		else if(roomStatus=='Blocked')
+		{
+			color='Olive';
+		}
+		
 		/*if(response.strReservationNo!=null)
 		{
 			//toolTipText=response.strReservationNo;
@@ -762,6 +767,8 @@
 					<td bgcolor="Green">Confirmed</td>
 					<td></td>
 					<td bgcolor="Gray">Checked Out</td>
+					<td></td>
+					<td bgcolor=Olive>Blocked</td>
 					<td></td>
 				</tr>
 			</table>
