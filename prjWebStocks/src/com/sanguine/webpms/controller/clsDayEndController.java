@@ -9,6 +9,7 @@ import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webpms.bean.clsDayEndBean;
 import com.sanguine.webpms.bean.clsPostRoomTerrifBean;
+import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
 import com.sanguine.webpms.model.clsDayEndHdModel;
 import com.sanguine.webpms.service.clsDayEndService;
 
@@ -45,6 +46,9 @@ public class clsDayEndController {
 
 	@Autowired
 	clsPostRoomTerrifController objPostRoomTerrif;
+	
+	@Autowired
+	private clsWebPMSDBUtilityDao objWebPMSUtility;
 
 	// Open DayEnd
 	@RequestMapping(value = "/frmDayEnd", method = RequestMethod.GET)
@@ -207,8 +211,10 @@ public class clsDayEndController {
 					docNo=objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean, objGlobal.funGetDate("yyyy-MM-dd", PMSDate), arrObjRoom[3].toString());	
 					listRoomTerrifDocNo.add(docNo);
 				}
+				
 			}
 
+			
 			double dayEndAmt = 0;
 			for (int cnt = 0; cnt < listRoomTerrifDocNo.size(); cnt++) {
 				sql = "select sum(dblDebitAmt) from tblfoliodtl " + " where strDocNo='" + listRoomTerrifDocNo.get(cnt) + "' group by strDocNo";
@@ -247,6 +253,8 @@ public class clsDayEndController {
 			objModel.setStrUserCode(userCode);
 			objDayEndService.funAddUpdateDayEndHd(objModel);
 
+			String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+newStartDate+"' where a.strClientCode='"+clientCode+"'  ";
+			objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql"); 
 			model= new ModelAndView("redirect:/frmModuleSelection.html");
 		}
 		return model;

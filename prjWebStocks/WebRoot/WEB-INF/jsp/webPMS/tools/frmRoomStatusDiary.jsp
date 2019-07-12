@@ -217,7 +217,7 @@
 						{
 						  //day1+=' '+item1.strRoomNo;
 					      var temp=day1.trim();
-					      var finalTemp=temp.indexOf(" ");
+					      var finalTemp=temp.indexOf("/");
 					      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 					      finalTemp=temp.substring(0,finalTemp);
 					      if(count==1)
@@ -497,16 +497,25 @@
 		}	
 		*/
 		
+		if(roomStatus!='Blocked')
+		{
+			
+	
 		var x1=row.insertCell(1);
-		x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
+		var dayTrim1=day1.trim();
+	    var dayValue1 = dayTrim1.substring(0,dayTrim1.length-1);
+		x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue1+"' onClick='funOnClick(this)' >";
 		if(day1!='')
 		{
 			x1.bgColor=color;
 			x1.title=toolTipText1;
 		}
 		
+		
 		var x2=row.insertCell(2);
-		x2.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+day2+"' onClick='funOnClick(this)' >";
+		var dayTrim2=day2.trim();
+	    var dayValue2 = dayTrim2.substring(0,dayTrim2.length-1);
+		x2.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue2+"' onClick='funOnClick(this)' >";
 		if(day2!='')
 		{
 			x2.bgColor=color;
@@ -514,7 +523,9 @@
 		}
 		
 		var x3=row.insertCell(3);
-		x3.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+day3+"' onClick='funOnClick(this)' >";
+		var dayTrim3=day3.trim();
+	    var dayValue3 = dayTrim3.substring(0,dayTrim3.length-1);
+		x3.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue3+"' onClick='funOnClick(this)' >";
 		if(day3!='')
 		{
 			x3.bgColor=color;
@@ -522,7 +533,9 @@
 		}
 		
 		var x4=row.insertCell(4);
-		x4.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+day4+"' onClick='funOnClick(this)' >";
+		var dayTrim4=day4.trim();
+	    var dayValue4 = dayTrim4.substring(0,dayTrim4.length-1);
+		x4.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue4+"' onClick='funOnClick(this)' >";
 		if(day4!='')
 		{
 			x4.bgColor=color;
@@ -530,28 +543,64 @@
 		}
 		
 		var x5=row.insertCell(5);
-		x5.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+day5+"' onClick='funOnClick(this)' >";
+		var dayTrim5=day5.trim();
+	    var dayValue5 = dayTrim5.substring(0,dayTrim5.length-1);
+		x5.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue5+"' onClick='funOnClick(this)' >";
 		if(day5!='')
 		{
 			x5.bgColor=color;
 			x5.title=toolTipText5;
 		}
-		
 		var x6=row.insertCell(6);
-		x6.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+day6+"' onClick='funOnClick(this)' >";
+		var dayTrim6=day6.trim();
+	    var dayValue6 = dayTrim6.substring(0,dayTrim6.length-1);
+		x6.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue6+"' onClick='funOnClick(this)' >";
+
 		if(day6!='')
 		{
 			x6.bgColor=color;
 			x6.title=toolTipText6;
 		}
-		
 		var x7=row.insertCell(7);
-		x7.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+day7+"' onClick='funOnClick(this)' >";
+		var dayTrim7=day7.trim();
+	    var dayValue7 = dayTrim7.substring(0,dayTrim7.length-1);
+		x7.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue7+"' onClick='funOnClick(this)' >";
 		if(day7!='')
 		{
 			x7.bgColor=color;
 			x7.title=toolTipText7;
 		}
+		}
+		else
+			{
+			var x1=row.insertCell(1);
+			x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
+			x1.bgColor=color;
+			
+			var x2=row.insertCell(1);
+			x2.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
+			x2.bgColor=color;
+			
+			var x3=row.insertCell(1);
+			x3.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
+			x3.bgColor=color;
+			
+			var x4=row.insertCell(1);
+			x4.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
+			x4.bgColor=color;
+			
+			var x5=row.insertCell(1);
+			x5.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
+			x5.bgColor=color;
+			
+			var x6=row.insertCell(1);
+			x6.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
+			x6.bgColor=color;
+			
+			var x7=row.insertCell(1);
+			x7.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
+			x7.bgColor=color;
+			}
 	}
 	
 	var message = "";

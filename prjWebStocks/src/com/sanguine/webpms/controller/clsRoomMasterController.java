@@ -125,7 +125,7 @@ public class clsRoomMasterController {
 		objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 		objModel.setStrUserEdited(userCode);
 		objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
-		objModel.setStrStatus(objBean.getStrStatus());
+		objModel.setStrStatus("Free");
 		objModel.setStrAccountCode(objBean.getStrAccountCode());
 		
 

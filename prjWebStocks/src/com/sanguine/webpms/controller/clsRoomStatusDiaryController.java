@@ -91,7 +91,7 @@ public class clsRoomStatusDiaryController {
 		String[] arrViewDate = viewDate.split("-");
 
 		List<clsRoomStatusDtlBean> listRoomStatusBeanDtl = new ArrayList<clsRoomStatusDtlBean>();
-		String sql = "select a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc " + " from tblroom a,tblroomtypemaster b " + " where a.strRoomTypeCode=b.strRoomTypeCode";
+		String sql = "select a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc ,a.strStatus " + " from tblroom a,tblroomtypemaster b " + " where a.strRoomTypeCode=b.strRoomTypeCode";
 		List listRoom = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 
 		for (int cnt1 = 0; cnt1 < listRoom.size(); cnt1++) {
@@ -104,6 +104,7 @@ public class clsRoomStatusDiaryController {
 			clsRoomStatusDtlBean objRoomStatusDtl = new clsRoomStatusDtlBean();
 			objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
 			objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
+			objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
 			TreeMap<Integer, List<clsGuestListReportBean>> mapGuestListPerDay=new TreeMap<>();
 			List<clsGuestListReportBean> listMainGuestDetailsBean=new ArrayList<>();
 		

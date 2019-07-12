@@ -4315,6 +4315,17 @@
 	  	</definition>
 	  	
 	  	
+	  		<definition name="frmBlockRoomMaster" extends="base.definition">
+		  	<put-attribute name="title" value="Block Room Master" /> 
+		  	<put-attribute name="body" value="/WEB-INF/jsp/webPMS/masters/frmBlockRoomMaster.jsp" />
+	  	</definition>	  	
+		<definition name="frmBlockRoomMaster_1" extends="base.definition4">
+	  		<put-attribute name="title" value="Block Room Master" /> 
+	  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/masters/frmBlockRoomMaster.jsp" /> 
+	  	</definition>
+	  	
+	  	
+	  	
 	 	<definition name="frmTaxGroupMaster" extends="base.definition">
 	  		<put-attribute name="title" value="Tax Group Master" /> 
 	  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/masters/frmTaxGroupMaster.jsp" /> 

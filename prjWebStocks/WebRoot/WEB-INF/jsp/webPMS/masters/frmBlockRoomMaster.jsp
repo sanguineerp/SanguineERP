@@ -31,6 +31,18 @@
 		$(document).ajaxComplete(function(){
 		   	$("#wait").css("display","none");
 		});
+		
+	var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
+		
+		$("#dteValidFrom").datepicker({
+			dateFormat : 'dd-mm-yy'
+		});
+		$("#dteValidFrom").datepicker('setDate', pmsDate);
+
+		$("#dteValidTo").datepicker({
+			dateFormat : 'dd-mm-yy'
+		});
+		$("#dteValidTo").datepicker('setDate', pmsDate);
 	});
 	
 	function funSetRoomMasterData(roomCode)
@@ -396,95 +408,66 @@
 <body>
 
 	<div id="formHeading">
-		<label>Room Master</label>
+		<label>Block Room Master</label>
 	</div>
 
 	<br />
 	<br />
 
-	<s:form name="RoomMaster" method="POST" action="saveRoomMaster.html">
+	<s:form name="BlockRoomMaster" method="POST"
+		action="saveBlockRoom.html">
 
 
 		<div id="tab_container" style="height: 405px">
-				<ul class="tabs">
-					<li data-state="tab1" style="width: 6%; padding-left: 2%;margin-left: 10%; " class="active" >General</li>
-					<li data-state="tab2" style="width: 8%; padding-left: 1%">LinkUp</li>
-				</ul>
-							
-				<!-- General Tab Start -->
-				<div id="tab1" class="tab_content" style="height: 400px">
-					<br> 
-					<br>					
-					<table class="masterTable">
-						<tr>
-						    <td><label>Room Code</label></td>
-						    <td><s:input id="txtRoomCode" path="strRoomCode"  ondblclick="funHelp('roomForMaster')" cssClass="searchTextBox"/></td>			        			        
-						    <td colspan="2"><s:input id="txtRoomDesc" path="strRoomDesc" required="true" cssClass="longTextBox"  style="width: 316px"/></td>			    		        			   
-						</tr>
-						
-						<tr>
-						    <td><label>Room Type</label></td>
-						    <td><s:input id="txtRoomType" path="strRoomType"  ondblclick="funHelp('roomType')" cssClass="searchTextBox"/></td>
-						    <td><label id="lblRoomType"></label></td>
-						    <td colspan="1"></td>
-						</tr>
-						
-						<tr>
-							<td><label>Floor Code</label></td>
-							<td><s:input id="txtFloorCode" type="text" path="strFloorCode" cssClass="searchTextBox" ondblclick="funHelp('floormaster')" />
-								<label id="lblFloorName"></label>
-							</td>
-						    <td><label>Bed Type</label></td>			    
-							<td><s:input id="txtBedType" path="strBedType"  cssClass="longTextBox" style="width: 190px"/></td>
-						
-						</tr>
-						
-						<tr>				
-							<td><label>Furniture</label></td>
-							<td><s:input id="txtFurniture" path="strFurniture"  cssClass="longTextBox" style="width: 190px"/></td>
-							<td><label>Upholstery</label></td>
-							<td><s:input id="txtUpholstery" path="strUpholstery"  cssClass="longTextBox" style="width: 190px"/></td>
-						</tr>
-						<tr>
-						    <td><label>Extra Bed</label></td>
-						    <td><s:input id="txtExtraBed" path="strExtraBed"  ondblclick="funHelp('extraBed')" cssClass="searchTextBox"/></td>
-							<td><label id="lblExtraBed"></label></td>
-						     <td colspan="1"></td>
-						</tr>
-						<tr>
-						    <td><label>Location</label></td>
-							<td><s:input id="txtLocation" path="strLocation"  cssClass="longTextBox" style="width: 190px"/></td>
-							
-							<td><label>Bath Type</label></td>
-							<td><s:input id="txtBathTypeCode" type="text" path="strBathTypeCode" cssClass="searchTextBox" ondblclick="funHelp('bathType')" />
-								<label id="lblBathTypeDesc"></label>
-							</td>
-						</tr>
-						
-						<tr>
-						    <td><label>Colour Scheme</label></td>
-							<td><s:input id="txtColourScheme" path="strColourScheme"  cssClass="longTextBox" style="width: 190px"/></td>
-							<td><label>Polish Type</label></td>
-							<td><s:input id="txtPolishType" path="strPolishType"  cssClass="longTextBox" style="width: 190px"/></td>
-						</tr>
-						<tr>
-						    <td><label>Guest Amenities</label></td>
-							<td><s:input id="txtGuestAmenities" path="strGuestAmenities"  cssClass="longTextBox" style="width: 190px"/></td>
-							<td><label>Interconnect Rooms</label></td>
-							<td><s:input id="txtInterConnectRooms" path="strInterConnectRooms"  cssClass="longTextBox" style="width: 190px"/></td>
-						</tr>
-						<tr>
-						    <td><label>Provision For Smoking</label></td>
-							<td>
-								<s:radiobutton id="rdbProvisionForSmokingYN" path="strProvisionForSmokingYN" value="Y"  />Yes 
-								<s:radiobutton id="rdbProvisionForSmokingYN" path="strProvisionForSmokingYN" value="N" checked="checked" style="margin-left: 20px;" />No
-							</td>
-							<td><label>Deactive</label></td>
-							<td>
-								<s:radiobutton id="rdbDeactiveYN" path="strDeactiveYN" value="Y" />Yes 
-								<s:radiobutton id="rdbDeactiveYN" path="strDeactiveYN" value="N" checked="checked" style="margin-left: 20px;" />No
-							</td>
-						</tr>
+			
+
+			<!-- General Tab Start -->
+			<div id="tab1" class="tab_content" style="height: 400px">
+				<br> <br>
+				<table class="masterTable">
+					<tr>
+						<td><label>Room Code</label></td>
+						<td><s:input id="txtRoomCode" path=""
+								ondblclick="funHelp('roomForMaster')" cssClass="searchTextBox" /></td>
+						<td colspan="2"><s:input id="txtRoomDesc" path=""
+								required="true" cssClass="longTextBox" style="width: 316px" /></td>
+					</tr>
+
+					<tr>
+						<td><label>Room Type</label></td>
+						<td><s:input id="txtRoomType" path=""
+								ondblclick="funHelp('roomType')" cssClass="searchTextBox" /></td>
+						<td><label id="lblRoomType"></label></td>
+						<td colspan="1"></td>
+					</tr>
+
+					<tr>
+			    <td><label>Valid From</label></td>	
+			    <td><s:input type="text" id="dteValidFrom" path="" required="true" class="calenderTextBox" /></td>
+			    <td><label>Valid To</label></td>	
+			    <td><s:input type="text" id="dteValidTo" path="" class="calenderTextBox" /></td>		    		  
+			</tr>
+
+					
+					<tr>
+						<td><label>Reason</label></td>
+						<td><s:input id="txtReason" path=""
+								cssClass="longTextBox" style="width: 190px" /></td>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+					
+					<tr>
+						<td><label>Remarks</label></td>
+						<td><s:textarea id="txtRemarks" path=""
+								cssClass="longTextBox"  /></td>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+
+					
 					<%-- 	<tr>
 						
 						 <td><label>Room Status</label></td>
@@ -496,30 +479,20 @@
 				        </td>
 			         </s:select>
 						</tr> --%>
-					</table>
-		</div>
-						<!--General Tab End  -->
-						
-						
-			<!-- Linkedup Details Tab Start -->
-			<div id="tab2" class="tab_content" style="height: 400px">
-			<br> 
-			<br>			
-				<table class="masterTable">
-						<tr>
-						    <td><label>Account Code</label></td>
-						    <td><s:input id="txtAccountCode" path="strAccountCode" readonly="true" ondblclick="funHelp('accountCode')" cssClass="searchTextBox"/></td>
-						    <td colspan="2"><s:input id="txtAccountName" path="" readonly="true" cssClass="longTextBox"  style="width: 316px"/></td>			        			        						    			    		        			  
-						</tr>
 				</table>
 			</div>
+			<!--General Tab End  -->
+
+
 			
+
 		</div>
 		<br />
 		<br />
 		<p align="center">
 			<input type="submit" value="Submit" tabindex="3" class="form_button" />
-			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()" />
+			<input type="reset" value="Reset" class="form_button"
+				onclick="funResetFields()" />
 		</p>
 
 	</s:form>
