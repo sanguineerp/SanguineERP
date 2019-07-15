@@ -408,7 +408,7 @@
 <body>
 
 	<div id="formHeading">
-		<label>Block Room Master</label>
+		<label>Block Room </label>
 	</div>
 
 	<br />
@@ -427,7 +427,7 @@
 				<table class="masterTable">
 					<tr>
 						<td><label>Room Code</label></td>
-						<td><s:input id="txtRoomCode" path=""
+						<td><s:input id="txtRoomCode" path="strRoomCode"
 								ondblclick="funHelp('roomForMaster')" cssClass="searchTextBox" /></td>
 						<td colspan="2"><s:input id="txtRoomDesc" path=""
 								required="true" cssClass="longTextBox" style="width: 316px" /></td>
@@ -435,7 +435,7 @@
 
 					<tr>
 						<td><label>Room Type</label></td>
-						<td><s:input id="txtRoomType" path=""
+						<td><s:input id="txtRoomType" path="strRoomType"
 								ondblclick="funHelp('roomType')" cssClass="searchTextBox" /></td>
 						<td><label id="lblRoomType"></label></td>
 						<td colspan="1"></td>
@@ -443,15 +443,15 @@
 
 					<tr>
 			    <td><label>Valid From</label></td>	
-			    <td><s:input type="text" id="dteValidFrom" path="" required="true" class="calenderTextBox" /></td>
+			    <td><s:input type="text" id="dteValidFrom" path="dteValidFrom" required="true" class="calenderTextBox" /></td>
 			    <td><label>Valid To</label></td>	
-			    <td><s:input type="text" id="dteValidTo" path="" class="calenderTextBox" /></td>		    		  
+			    <td><s:input type="text" id="dteValidTo" path="dteValidTo" class="calenderTextBox" /></td>		    		  
 			</tr>
 
 					
 					<tr>
 						<td><label>Reason</label></td>
-						<td><s:input id="txtReason" path=""
+						<td><s:input id="txtReason" path="strReason"
 								cssClass="longTextBox" style="width: 190px" /></td>
 						</td>
 						<td></td>
@@ -460,7 +460,7 @@
 					
 					<tr>
 						<td><label>Remarks</label></td>
-						<td><s:textarea id="txtRemarks" path=""
+						<td><s:textarea id="txtRemarks" path="strRemarks"
 								cssClass="longTextBox"  /></td>
 						</td>
 						<td></td>

@@ -88,6 +88,31 @@ public class clsDayEndController {
 		String[] newDate=PMSDate.split("-");
 		String date=newDate[2]+"-"+newDate[1]+"-"+newDate[0];
 		// Check POS Day End Table in PMS
+		
+		String sqlBlockedRoom = "select a.strRoomCode,DATE(a.dteValidTo) from tblblockroom a ";
+		List listOfBlockedRoom = objGlobalFunctionsService.funGetListModuleWise(sqlBlockedRoom, "sql");
+		{
+			if(listOfBlockedRoom.size()>0)
+			{
+				for(int i=0;i<listOfBlockedRoom.size();i++)
+				{
+					Object[] arrObjBlock = (Object[]) listOfBlockedRoom.get(i);
+					String roomCode = arrObjBlock[0].toString();
+					String dteValidTo = objGlobal.funGetDate("yyyy-MM-dd",arrObjBlock[1].toString());
+					if(PMSDate.equalsIgnoreCase(dteValidTo))
+					{
+						String sqlBlock = "UPDATE tblroom a SET a.strStatus='Free' WHERE a.strRoomCode='"+roomCode+"' AND a.strClientCode='"+clientCode+"'";
+						objWebPMSUtility.funExecuteUpdate(sqlBlock, "sql"); 
+						
+					}
+					
+				}
+			}
+			else
+			{
+				
+			}
+		}
 		sqlStart=" SELECT a.strPOSCode,a.strPOSName FROM tblposdayend a WHERE a.strStatus='N' AND DATE(a.dteDayEndDate)='"+date+"' AND a.strClientCode='"+clientCode+"' ";
 		List listOfPOS = objGlobalFunctionsService.funGetListModuleWise(sqlStart, "sql");
 		if(listOfPOS.size()>0)

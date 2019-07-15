@@ -23,7 +23,6 @@ public class clsBlockRoom_ID implements Serializable{
 
 
 	public clsBlockRoom_ID(String strRoomCode, String strClientCode) {
-		super();
 		this.strRoomCode = strRoomCode;
 		this.strClientCode = strClientCode;
 	}
@@ -51,36 +50,18 @@ public class clsBlockRoom_ID implements Serializable{
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((strClientCode == null) ? 0 : strClientCode.hashCode());
-		result = prime * result
-				+ ((strRoomCode == null) ? 0 : strRoomCode.hashCode());
-		return result;
+		return this.strRoomCode.hashCode() + this.strClientCode.hashCode();
 	}
 
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		clsBlockRoom_ID objModelId = (clsBlockRoom_ID) obj;
+		if (this.strRoomCode.equals(objModelId.getStrRoomCode()) && this.strClientCode.equals(objModelId.getStrClientCode())) {
 			return true;
-		if (obj == null)
+		} else {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		clsBlockRoom_ID other = (clsBlockRoom_ID) obj;
-		if (strClientCode == null) {
-			if (other.strClientCode != null)
-				return false;
-		} else if (!strClientCode.equals(other.strClientCode))
-			return false;
-		if (strRoomCode == null) {
-			if (other.strRoomCode != null)
-				return false;
-		} else if (!strRoomCode.equals(other.strRoomCode))
-			return false;
-		return true;
+		}
 	}
 
 	

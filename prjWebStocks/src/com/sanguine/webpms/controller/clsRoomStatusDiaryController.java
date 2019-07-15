@@ -689,6 +689,25 @@ public class clsRoomStatusDiaryController {
 			}
 			
 			objRoomStatusDtl.setMapGuestListPerDay(mapGuestListPerDay);
+			if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Blocked"))
+			{
+				String sqlBlock = "select a.strReason,a.strRemark from tblblockroom a where a.strClientCode='"+clientCode+"'";
+				List listBlockRoom = objGlobalFunctionsService.funGetListModuleWise(sqlBlock, "sql");
+				if (listBlockRoom.size() > 0) {
+					for(int i=0;i<listBlockRoom.size();i++)
+					{
+						Object[] arrObjBlockRoom = (Object[]) listBlockRoom.get(i);
+						String reason=arrObjBlockRoom[0].toString();
+						objRoomStatusDtl.setStrDay1(reason);
+						objRoomStatusDtl.setStrDay2(reason);
+						objRoomStatusDtl.setStrDay3(reason);
+						objRoomStatusDtl.setStrDay4(reason);
+						objRoomStatusDtl.setStrDay5(reason);
+						objRoomStatusDtl.setStrDay6(reason);
+						objRoomStatusDtl.setStrDay7(reason);
+					}
+				}
+			}
 			listRoomStatusBeanDtl.add(objRoomStatusDtl);
 		}
 

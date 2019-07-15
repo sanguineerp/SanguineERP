@@ -573,6 +573,7 @@
 					<value>com.sanguine.webpms.model.clsPackageMasterHdModel</value>
 					<value>com.sanguine.webpms.model.clsPackageMasterDtl</value>
 					<value>com.sanguine.webpms.model.clsVoidBillHdModel</value>
+					<value>com.sanguine.webpms.model.clsBlockRoomModel</value>
 					
 						
 				</list>
