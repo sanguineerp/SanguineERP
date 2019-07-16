@@ -221,6 +221,23 @@
 		//window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
 	}
 	
+	function funTaxOnTaxStateChange()
+	{
+		$("#chkExtraTimeCharges").val("Y");
+		if($("#chkExtraTimeCharges").val()=="Y")
+			{
+			 $("#txtExtraCharge").attr("visibility", "visible"); 
+			}
+	}
+	
+	function isNumber(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+            return false;
+
+        return true;
+    }
+	
 	
 </script>
 
@@ -260,6 +277,8 @@
 				<td style="width: 65px;"><label >Check Out</label></td>
 	 <td style="width: 65px;"><s:input type="text" id="dteCheckOutDate" path="dteCheckOutDate" value="${PMSDate}" required="true" disabled="true" class="calenderTextBox" cssStyle="color: black;"/></td>
 				<td><s:input type="text" id="tmeCheckOutTime" path="tmeCheckOutTime" value="${PMSDate}" readonly="true" disabled="true" cssClass="simpleTextBox"  style="width: 75px;border: 0px; color: black; "/></td>
+				<td><s:checkbox label="Extra Time Charges" id="chkExtraTimeCharges" path="" value="N" onclick=' funTaxOnTaxStateChange() '/></td>
+				<td><s:input colspan="3" type="text" id="txtExtraCharge"  path="" cssClass="longTextBox" onblur="fun1(this);" onkeypress="javascript:return isNumber(event)" /></td>
 			</tr>
 			<!-- 
 			<tr>

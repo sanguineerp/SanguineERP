@@ -1246,13 +1246,19 @@
 			        	}
 			        	else
 			        	{  
-			        		document.getElementById("strRoomNo."+gridHelpRow).value=response.strRoomCode;						
-			    			document.getElementById("strRoomDesc."+gridHelpRow).value=response.strRoomDesc;
-			    			document.getElementById("strRoomTypeDesc."+gridHelpRow).value=response.strRoomTypeDesc;						
-			    			document.getElementById("strRoomType."+gridHelpRow).value=response.strRoomTypeCode;
-			    			 $( "#tblCheckInDetails" ).load( "your-current-page.html #tblCheckInDetails" );
-			    		//	document.getElementById("strPayee."+gridHelpRow).value=response.strRoomDesc; 
-			    			  
+			        		if(response.strStatus=='Blocked')
+			        			{
+			        				alert("This room is blocked Please select Different Room");
+			        			}
+			        		else
+		        			{
+				        		document.getElementById("strRoomNo."+gridHelpRow).value=response.strRoomCode;						
+				    			document.getElementById("strRoomDesc."+gridHelpRow).value=response.strRoomDesc;
+				    			document.getElementById("strRoomTypeDesc."+gridHelpRow).value=response.strRoomTypeDesc;						
+				    			document.getElementById("strRoomType."+gridHelpRow).value=response.strRoomTypeCode;
+				    			 $( "#tblCheckInDetails" ).load( "your-current-page.html #tblCheckInDetails" );
+				    		//	document.getElementById("strPayee."+gridHelpRow).value=response.strRoomDesc; 
+				        	}
 			        	}
 					},
 					error : function(e){

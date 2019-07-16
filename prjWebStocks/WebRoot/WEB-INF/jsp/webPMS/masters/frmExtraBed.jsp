@@ -309,7 +309,7 @@ function funSetAccountCode(code){
 			</tr>
 			
 			<tr>
-			    <td><label>Charge Per Bedc</label></td>
+			    <td><label>Charge Per Bed</label></td>
 				<td><s:input id="txtChargePerBed" path="dblChargePerBed" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" /></td>				
 			</tr>
 			

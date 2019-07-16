@@ -250,9 +250,16 @@
 	        	}
 	        	else
 	        	{
+	        		if(response.strStatus=='Blocked')
+	        			{
+	        			alert('This room is Blocked Please Select Different Room');
+	        			}
+	        		else
+	        		{
 	        		$("#txtRoomNo").val(response.strRoomCode);
 	        		$("#lblRoomDesc").text(response.strRoomDesc);
 	        		funSetRoomType(response.strRoomTypeCode);
+	        		}
 	        	}
 			},
 			error : function(e){

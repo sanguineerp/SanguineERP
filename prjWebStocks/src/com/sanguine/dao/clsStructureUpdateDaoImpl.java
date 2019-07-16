@@ -2737,6 +2737,19 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecutePMSQuery(sql);
 		
+		sql = "CREATE TABLE `tblblockroom` ("
+				+ "`strRoomCode` VARCHAR(50) NOT NULL,"
+				+ "`strRoomType` VARCHAR(50) NOT NULL,"
+				+ "`dteValidFrom` DATE NOT NULL,"
+				+ "`dteValidTo` DATE NOT NULL,"
+				+ "`strReason` VARCHAR(200) NOT NULL,"
+				+ "`strRemark` VARCHAR(200) NOT NULL,"
+				+ "`strClientCode` VARCHAR(10) NOT NULL,"
+				+ "PRIMARY KEY (`strRoomCode`, `strClientCode`)"
+				+ ") COLLATE='utf8_general_ci' ENGINE=InnoDB;";
+		
+		funExecutePMSQuery(sql);
+		
 		sql = " ALTER TABLE `tblroomcancelation` " + "	CHANGE COLUMN `strReservationNo` `strReservationNo` VARCHAR(12) NOT NULL FIRST;  ";
 
 		funExecutePMSQuery(sql);
@@ -3000,11 +3013,19 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		 		+ " ('frmModifyBillReport', 'Modify Bill Report', 'Reports', 3, 'R', 11, 11, '5', 'default.png', '3', 5, '5', '5', 'NO', 'NO', 'frmModifyBillReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
 		 		+ " ('frmChangeRoomReport', 'Change Room Report', 'Reports', '3', 'R', '11', '11', '5', 'default.png', '3', '5', '5', '5', 'NO', 'NO','frmChangeRoomReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
 		 		+ " ('frmPMSSecurityShell', 'Security Shell', 'Master', 1, 'M', 8, 8, '1', 'default.png', '3', 3, '3', '3', 'NO', 'NO', 'frmPMSSecurityShell.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
-		 		+ " ('frmReceiptReport', 'Receipt Report', 'Reports', '3', 'R', '19', '19', '5', 'default.png', '3', '5', '5', '5', 'NO', 'NO', 'frmReceiptReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)";
+		 		+ " ('frmReceiptReport', 'Receipt Report', 'Reports', '3', 'R', '19', '19', '5', 'default.png', '3', '5', '5', '5', 'NO', 'NO', 'frmReceiptReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
+		 		
 		
 		
+		System.out.println(sql);
 		funExecuteQuery(sql);
 
+		
+		sql = "INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`,`strInvoice`,`strDeliverySchedule`,`strFormAccessYN`) VALUES "
+				+ "('frmBlockRoomMaster', 'Block Room', 'Transaction', '2', 'T', '16', '16', '1', 'default.png', '3', '2', '2', '2', 'NO', 'NO', 'frmBlockRoomMaster.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmPMSStructureUpdate', 'Structure Update', 'Tools', 1, 'L', 111, 111, '1', 'default.png', '3', 1, '1', '1', 'NO', 'NO', 'frmPMSStructureUpdate.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+		
+		funExecuteQuery(sql);
 		
 		sql = "UPDATE `tbltreemast` SET `strFormName`='frmPostRoomTariff', `strFormDesc`='Post Room Tariff' WHERE  `strFormName`='frmPostRoomTerrif' AND `strModule`='3';";
 		funExecuteQuery(sql);

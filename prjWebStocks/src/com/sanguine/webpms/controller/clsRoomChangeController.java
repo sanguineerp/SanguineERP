@@ -12,6 +12,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JOptionPane;
 import javax.validation.Valid;
 
 import org.hibernate.Query;
@@ -208,7 +209,7 @@ public class clsRoomChangeController {
 		
 			String sql = "SELECT a.strRoomCode,a.strRoomDesc,a.strStatus,a.strRoomTypeCode,b.strRoomTypeDesc "
 						+ " FROM tblroom a,tblroomtypemaster b "
-						+ " WHERE a.strRoomTypeCode=b.strRoomTypeCode and a.strStatus='Free' AND a.strClientCode='"+clientCode+"' order by b.strRoomTypeCode,a.strRoomDesc";
+						+ " WHERE a.strRoomTypeCode=b.strRoomTypeCode AND (a.strStatus='Free' or a.strStatus='Blocked') AND a.strClientCode='"+clientCode+"' order by b.strRoomTypeCode,a.strRoomDesc";
 
 			list = objWebPMSUtility.funExecuteQuery(sql, "sql");
 			
@@ -278,6 +279,15 @@ public class clsRoomChangeController {
 			}
 			
 
+			String sqlNewRoomStatus = "select a.strStatus from tblroom a where a.strRoomCode='"+objBean.getStrRoomDesc()+"'";
+			List listNewRoomStatus = objWebPMSUtility.funExecuteQuery(sqlNewRoomStatus, "sql");
+			String status=listNewRoomStatus.get(0).toString();
+			if(status.equalsIgnoreCase("Blocked"))
+			{
+				JOptionPane.showMessageDialog(null, "This Room is Blocked Please select Different Room");
+			}
+			else
+			{
 			//strRoomCode means Occupied roomNo and strRoomDesc means Free Room NO
 			String sql="update tblcheckindtl a set a.strRoomNo='"+objBean.getStrRoomDesc()+"' "
 						+ " where a.strRoomNo='"+objBean.getStrRoomCode().split("#")[0]+"'";
@@ -340,7 +350,7 @@ public class clsRoomChangeController {
             req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Reservation No. : ".concat(objBean.getStrRoomCode().split("#")[0]));
 			
-
+			}
 			return new ModelAndView("redirect:/frmChangeRoom.html");
 		} else {
 			return new ModelAndView("frmChangeRoom");

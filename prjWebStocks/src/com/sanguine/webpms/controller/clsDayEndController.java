@@ -153,7 +153,7 @@ public class clsDayEndController {
 					+ " group by a.strFolioNo";*/
 			
 			String sql="SELECT a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode, IFNULL(a.strReservationNo,''), IFNULL(a.strWalkInNo,''),"
-					+ "c.strRoomTypeCode, IFNULL(SUM(d.dblIncomeHeadAmt),0),e.strComplimentry "
+					+ "c.strRoomTypeCode, IFNULL(SUM(d.dblIncomeHeadAmt),0),ifnull(e.strComplimentry,'N') "
 					+ "FROM tblfoliohd a "
 					+ "LEFT OUTER JOIN tblroompackagedtl d ON a.strCheckInNo=d.strCheckInNo,tblroom b,tblroomtypemaster c,tblcheckinhd e "
 					+ "WHERE a.strRoomNo=b.strRoomCode AND b.strRoomTypeCode=c.strRoomTypeCode AND a.strCheckInNo=e.strCheckInNo "
