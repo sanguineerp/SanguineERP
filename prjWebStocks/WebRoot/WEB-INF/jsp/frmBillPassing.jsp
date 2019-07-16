@@ -45,19 +45,27 @@
 			
 			$("#btnAddGRN").click(function()
 			{
-				var strGRNCode =$("#txtGRNNo").val();
-				if(strGRNCode =='')
+				var strGRNCodeAll =$("#txtGRNNo").val();
+				if(strGRNCodeAll =='')
 			    {
 					alert("Please Enter GRN No");
 		    		$("#txtGRNNo").focus();
 		        	return false;
 				}
 				
-				if(funDuplicateGRN(strGRNCode))
-				{
-						funAddGRNRow();
-				}
+				var strGRNCodeArr=strGRNCodeAll.split(',');
+				$.each(strGRNCodeArr,function(i,strGRNCode){
 				
+					
+					funSetGRN(strGRNCode);
+					
+					if(funDuplicateGRN(strGRNCode))
+					{
+							funAddGRNRow();
+					}
+
+				});
+						
 			});
 			
 			$("#btnAddTax").click(function()
@@ -162,9 +170,9 @@
 			    	funSetBillPassing(code);
 			        break;
 			        
-			    case 'grnForBillBassing':
+			    /* case 'grnForBillBassing':
 			    	funSetGRN(code);
-			        break;
+			        break; */
 			        
 			    case 'taxmaster':
 			    	funSetTax(code);
@@ -392,11 +400,11 @@
 			var searchUrl="";
 			$("#txtGRNNo").val(code);
 			searchUrl=getContextPath()+"/loadGRNData.html?grnNo="+code;
-			//alert(searchUrl);
 			$.ajax({
 			        type: "GET",
 			        url: searchUrl,
 				    dataType: "json",
+				    async:false,
 				    success: function(response)
 				    {
 				    	if(response.strGRNCode!="Invalid Code")
@@ -635,12 +643,12 @@
 				   }
 			});
 			
-			$('#txtGRNNo').blur(function () {
+			/* $('#txtGRNNo').blur(function () {
 				var code=$("#txtGRNNo").val();
 				if (code.trim().length > 0 && code !="?" && code !="/"){					   
 					funSetGRN(code);
 				   }
-			});
+			}); */
 			
 			$('#txtTaxCode').blur(function () {
 				var code=$('#txtTaxCode').val();
@@ -702,7 +710,8 @@
 		function funDuplicateGRN(strGRNCode)
 		{
 		 var table = document.getElementById("tblGRN");
-		    var rowCount = table.rows.length;		   
+		    var rowCount = table.rows.length;	
+		  //  for()
 		    var flag=true;
 		    if(rowCount > 0)
 		    	{
@@ -718,6 +727,40 @@
 				    
 		    	}
 		    return flag;
+		}
+		
+		function funOpenGRN(transactionName)
+		{
+			fieldName = transactionName;
+			var strSuppCode=$("#txtSupplierCode").val();
+			//var strGRNCode = $("#txtGRNNo").val();
+			if(fieldName=='GRNCode' && strSuppCode!='')
+			{
+				
+			//	var retval=window.showModalDialog("frmPIforPO.html","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
+				var retval=window.open("frmGRNList.html?strSuppCode="+strSuppCode+"","","dialogHeight:950px;dialogWidth:600px;dialogLeft:400px;")
+			
+				var timer = setInterval(function ()
+			    {
+					if(retval.closed)
+					{
+						if (retval.returnValue != null)
+						{
+							strVal=retval.returnValue.split("#")
+							$("#txtGRNNo").val(strVal[0]);
+								
+							var GRNCodes=strVal[0].split(",");
+						    var html = '';
+							/* for(var cnt=0;cnt<GRNCodes.length;cnt++)
+							{
+						 		html += '<option value="' + GRNCodes[cnt] + '" >' + GRNCodes[cnt]+ '</option>';
+							}
+							$('#cmbPIDoc').html(html); */
+						}
+						clearInterval(timer);
+					}
+			    }, 500);
+			}
 		}
 		
 		
@@ -793,7 +836,8 @@
 								
 								<tr>
 									<td><label>GRN Code</label></td>
-									<td><input id="txtGRNNo" ondblclick="funHelp('grnForBillBassing');" class="searchTextBox"></td>
+									<td><input id="txtGRNNo" ondblclick="funOpenGRN('GRNCode')"  class="searchTextBox"></td> 
+									<!-- ondblclick="funHelp('grnForBillBassing');" -->
 									<td><label>Date</label></td>
 									<td ><label id="lblGRNDate"></label></td>
 									<td width="60px"><label>Challan No</label></td>

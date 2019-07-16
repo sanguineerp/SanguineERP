@@ -1075,6 +1075,15 @@
 	<columnFooter>
 		<band/>
 	</columnFooter>
+	<pageFooter>
+		<band height="31">
+			<textField>
+				<reportElement x="532" y="1" width="38" height="19" uuid="5588c545-86f6-4e58-8ce5-73ab2d74cd45"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page No : "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
 	<summary>
 		<band height="306" splitType="Stretch">
 			<staticText>

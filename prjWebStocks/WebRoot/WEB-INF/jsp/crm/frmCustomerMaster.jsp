@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%-- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
     
 	<%@taglib uri="http://www.springframework.org/tags/form" prefix="s"%>
 	<%@taglib uri="http://www.springframework.org/tags" prefix="sp"%>
@@ -6,12 +6,35 @@
 <!DOCTYPE html >
 <html>
 <head>
+<script type="text/javascript" src="<spring:url value="/resources/js/jQuery.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/jquery-ui.min.js"/>"></script>	
+	<script type="text/javascript" src="<spring:url value="/resources/js/validations.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/pagination.js"/>"></script>
+        <!-- Load data to paginate -->
+	<link rel="stylesheet" href="<spring:url value="/resources/css/pagination.css"/>" />
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+ --%>
+ <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="s"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="<spring:url value="/resources/js/jQuery.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/jquery-ui.min.js"/>"></script>	
+	<script type="text/javascript" src="<spring:url value="/resources/js/validations.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/pagination.js"/>"></script>
+        <!-- Load data to paginate -->
+	<link rel="stylesheet" href="<spring:url value="/resources/css/pagination.css"/>" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>CUSTOMER MASTER</title>
 <%-- <tab:tabConfig/> --%>
 
 <script type="text/javascript">
+var listProductData;
 	$(document).ready(function() {
 
 		$(".tab_content").hide();
@@ -500,7 +523,7 @@
 		    var installationDate = $("#txtInstallationDate").val();
 		    var warrInDays = $("#txtWarrInDays").val();
 		    
-		    var table = document.getElementById("tblProdDet");
+		    var table = document.getElementById("tblProdDet1");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
 // 		    rowCount=listRow;
@@ -548,7 +571,7 @@
 		    var itemName = $("#lblProdName").text();
 		    var margin = $("#txtMargin").val();
 		    var standingOrder = $("#txtStandingOrder").val();
-		    var table = document.getElementById("tblProdDet1");
+		    var table = document.getElementById("tblProdDetPg");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
 		    rowCount=listRow;
@@ -651,30 +674,29 @@
 			});
 		});
 		
-		function funApplyNumberValidation(){
-			$(".numeric").numeric();
+	/*//$(".numeric").numeric();
 			$(".integer").numeric(false, function() { alert("Integers only"); this.value = ""; this.focus(); });
 			$(".positive").numeric({ negative: false }, function() { alert("No negative values"); this.value = ""; this.focus(); });
 			$(".positive-integer").numeric({ decimal: false, negative: false }, function() { alert("Positive integers only"); this.value = ""; this.focus(); });
 		    $(".decimal-places").numeric({ decimalPlaces: maxQuantityDecimalPlaceLimit, negative: false });
 		    $(".decimal-places-amt").numeric({ decimalPlaces: maxAmountDecimalPlaceLimit, negative: false });
-		}
+		} */
 		
 		
 		
 		
 		function funDuplicateProduct(strProdCode)
 		{
-			var table = document.getElementById("tblProdDet1");
+			var table = document.getElementById("tblProdDetPg");
 			var clientCode='<%=session.getAttribute("clientCode").toString()%>';
 			if(clientCode=='141.001'){
-				table = document.getElementById("tblProdDet");
+				table = document.getElementById("tblProdDet1");
 			}
 		    var rowCount = table.rows.length;		   
 		    var flag=true;
 		    if(rowCount > 0)
 		    	{
-				    $('#tblProdDet tr').each(function()
+				    $('#tblProdDetPg tr').each(function()
 				    {
 					    if(strProdCode==$(this).find('input').val())// `this` is TR DOM element
 	    				{
@@ -689,13 +711,25 @@
 		
 		function funDeleteRowForProd(obj)
 		{
-		    var index = obj.parentNode.parentNode.rowIndex;
-		    var table = document.getElementById("tblProdDet");
-		    table.deleteRow(index);
+		    var clientCode='<%=session.getAttribute("clientCode").toString()%>';
+			if(clientCode=='141.001'){
+				 var index = obj.parentNode.parentNode.rowIndex;
+				    var table = document.getElementById("tblProdDet");
+				    table.deleteRow(index);
+				
+			}
+			else
+			{
+				 var index = obj.parentNode.parentNode.rowIndex;
+				 var table = document.getElementById("tblProdDetPg");
+				 table.deleteRow(index);
+				
+			}
+		   
 		}
 		
 		
-
+    var btnAllProduct="";
 	function  funLoadAllProduct()
 	{
 	
@@ -714,8 +748,28 @@
 				    dataType: "json",
 				    success: function(response)
 				    {
+				    	if(clientCode!='141.001'){
+				    		btnAllProduct="All Product";
+				    		//funRemoveProdRows();
+					    	//funRemoveProdRows();
+					    	listProductData=response;
+					    	showTable();
+				    	}
+				    	else
+				    	{
+				    		 $.each(response, function(i,item)
+								    	{
+						    				count=i;
+						    				//funloadAllProductinGrid(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder,item.dblAMCAmt,item.dteInstallation,item.intWarrantyDays);
+					    					funloadAllProductinGrid(response[i].strProdCode,response[i].strProdName,response[i].dblMRP,'0','1');	
+
+								    	});
+					    	listRow=count+1;
+				    		
+				        }
+
 				    	
-				    	$.each(response, function(i,item)
+				    /* 	$.each(response, function(i,item)
 						    	{
 									if(clientCode!='141.001'){
 				    					funloadAllProductinGrid1(response[i].strProdCode,response[i].strProdName,response[i].dblMRP,'0','1');	
@@ -724,7 +778,7 @@
 				    				}
 				    				
 						    	});
-		
+		 */
 				    },
 				    error: function(jqXHR, exception) {
 			            if (jqXHR.status === 0) {
@@ -751,13 +805,6 @@
 	
 	function funRemoveProdRows()
 	{
-		var table = document.getElementById("tblProdDet");
-		var rowCount = table.rows.length;
-		while(rowCount>0)
-		{
-			table.deleteRow(0);
-			rowCount--;
-		}
 		var table = document.getElementById("tblProdDet1");
 		var rowCount = table.rows.length;
 		while(rowCount>0)
@@ -765,11 +812,18 @@
 			table.deleteRow(0);
 			rowCount--;
 		}
+		/* var table = document.getElementById("tblProdDetPg");
+		var rowCount = table.rows.length;
+		while(rowCount>0)
+		{
+			table.deleteRow(0);
+			rowCount--;
+		} */
 	}
 	
 		function funloadAllProductinGrid(prodCode,itemName,amount,margin,standingOrder,amcAmount,installationDate,warrInDays)
 		{
-		    var table = document.getElementById("tblProdDet");
+		    var table = document.getElementById("tblProdDet1");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
 		    
@@ -788,7 +842,28 @@
 		    return false;
 		}
 		
-		function funloadAllProductinGrid1(prodCode,itemName,amount,margin,standingOrder)
+		
+		function showTable()
+		{
+			var optInit = getOptionsFromForm();
+		    $("#Pagination").pagination(listProductData.length, optInit);	
+		    //$("#divValueTotal").show();
+		    
+		}
+
+		var items_per_page = 15;
+		function getOptionsFromForm()
+		{
+		    var opt = {callback: pageselectCallback};
+			opt['items_per_page'] = items_per_page;
+			opt['num_display_entries'] = 15;
+			opt['num_edge_entries'] = 3;
+			opt['prev_text'] = "Prev";
+			opt['next_text'] = "Next";
+		    return opt;
+		} 
+		
+		/* function funloadAllProductinGrid1(prodCode,itemName,amount,margin,standingOrder)
 		{	
 		    var table = document.getElementById("tblProdDet1");
 		    var rowCount = table.rows.length;
@@ -801,9 +876,51 @@
 		    row.insertCell(5).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
 		    funApplyNumberValidation();
 		    return false;
-		}
+		} */
 		
+		   function pageselectCallback(page_index, jq)
+		{
+	    	var max_elem = Math.min((page_index+1) * items_per_page, listProductData.length);
+		    var newcontent="";
 		
+		    var rowCount=0;
+		   		    	
+			   	newcontent = '<table id="tblProdDetPg" class="transTablex" style="width: 100%;font-size:11px;font-weight: bold;">'
+			   	+'<tr bgcolor="#75c0ff">'
+			   	+'<td width="10px">Product Code</td><td width="22px">Product Name</td>'
+			   	+'<td width="2px">Std Order Qty</td><td width="23px">Amount</td><td width="20px">Margin %</td><td width="8px">Delete</td>'
+			   	+'</tr>';
+			   	
+			  
+			    for(var i=page_index*items_per_page;i<max_elem;i++)
+			    {
+			    
+					    
+
+						newcontent += '<tr><td>'+ "<input name=\"listclsProdSuppMasterModel["+(i)+"].strProdCode\" readonly=\"readonly\"   class=\"Box \" size=\"15%\"  id=\"txtProdCode."+(i)+"\" value='"+listProductData[i].strProdCode+"' ></td>";
+						newcontent += '<td>'+ "<input name=\"listclsProdSuppMasterModel["+(i)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\"  value='"+listProductData[i].strProdName+"' ></td> ";
+						if(btnAllProduct =="All Product")
+						{
+							newcontent += '<td>'+ "<input name=\"listclsProdSuppMasterModel["+(i)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+listProductData[i].dblListPrice+"></td>";
+							newcontent += '<td>'+ "<input name=\"listclsProdSuppMasterModel["+(i)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+listProductData[i].dblListPrice+" ></td>  ";
+							newcontent += '<td>'+ "<input name=\"listclsProdSuppMasterModel["+(i)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\"  value = '"+listProductData[i].dblListPrice+"' ></td>";
+							
+						}
+						else
+					    {
+							newcontent += '<td>'+ "<input name=\"listclsProdSuppMasterModel["+(i)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+listProductData[i].dblStandingOrder+"></td>";
+							newcontent += '<td>'+ "<input name=\"listclsProdSuppMasterModel["+(i)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+listProductData[i].dblLastCost+" ></td>  ";
+							newcontent += '<td>'+ "<input name=\"listclsProdSuppMasterModel["+(i)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\"  value = '"+listProductData[i].dblMargin+"' ></td>";
+							
+					    }		
+						newcontent += '<td>'+ '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">'+ '</td>'+'</tr>';
+
+						rowCount++;
+			    }
+					    newcontent += '</table>';
+					    $('#Searchresult').html(newcontent);
+					    return false;
+             }
 		
 		function funPartyProdData(code)
 		{
@@ -818,18 +935,26 @@
 				    dataType: "json",
 				    success: function(response)
 				    {
-				    	funRemoveProdRows();
-				    	$.each(response, function(i,item)
-						    	{
-				    				count=i;
-				    				if(clientCode!='141.001'){
-				    					funloadAllProductinGrid1(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder);	
-				    				}else{
-				    					funloadAllProductinGrid(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder,item.dblAMCAmt,item.dteInstallation,item.intWarrantyDays);	
-				    				}
-				    				
-						    	});
-				    	listRow=count+1;
+				    	if(clientCode!='141.001'){
+				    		funRemoveProdRows();
+					    	//funRemoveProdRows();
+					    	btnAllProduct="";
+					    	listProductData=response;
+					    	showTable();
+				    	}
+				    	else
+				    	{
+				    		 $.each(response, function(i,item)
+								    	{
+						    				count=i;
+						    				funloadAllProductinGrid(item.strProdCode,item.strProdName,item.dblLastCost,item.dblMargin,item.dblStandingOrder,item.dblAMCAmt,item.dteInstallation,item.intWarrantyDays);	
+								    	});
+					    	listRow=count+1;
+				    		
+				        }
+				    	
+						
+				    	
 	
 				    },
 				    error: function(jqXHR, exception) {
@@ -860,7 +985,7 @@
 		 */
 		function funRemoveAllRows()
 		{
-			var table = document.getElementById("tblProdDet");
+			var table = document.getElementById("tblProdDet1");
 			var rowCount = table.rows.length;
 			while(rowCount>0)
 			{
@@ -1401,7 +1526,7 @@
 								<td width="10%">Margin:</td>
 								<td width="10%"><input id="txtMargin" type="text" class="decimal-places-amt numberField" style="width: 50px" ></input></td>
 								<td width="10%"><input id="btnAdd" type="button" class="smallButton" value="Add" onclick="return funAddRow()"></input></td>
-								<td width="10%" colspan="2"><input id="btnAllProd" type="button" class="smallButton" value="All Product" onclick="return funLoadAllProduct()"></input></td>
+							    <td width="10%" colspan="2"><input id="btnAllProd" type="button" class="smallButton" value="All Product" onclick="return funLoadAllProduct()"></input></td> 
 							</tr>
 							
 							
@@ -1441,7 +1566,7 @@
 			</table>
 			<div
 				style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 410px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
-					<table id="tblProdDet"
+					<table id="tblProdDet1"
 					style="width: 100%; height: 24px; border: #0F0; table-layout: fixed; overflow: scroll"
 					class="transTablex col11-center">
 					<tbody>
@@ -1461,7 +1586,7 @@
 		</div>
 		
 								
-		<div class="dynamicTableContainer" style="height: 450px;" id="divProductDetails1">
+		<%-- <div class="dynamicTableContainer" style="height: 450px;" id="divProductDetails1">
 			<table style="height: 10px; border: #0F0;width: 100%;font-size:11px;
 			font-weight: bold;">
 				<tr bgcolor="#72BEFC">
@@ -1489,8 +1614,13 @@
 					</tbody>
 				</table>
 			</div>
+		</div> --%>
+			
+	<dl id="Searchresult" style="width: 95%; margin-left: 26px; overflow:auto;"></dl>
+		<div id="Pagination" class="pagination" style="width: 80%;margin-left: 26px;">
+		
 		</div>
-</div>
+		</div>
 			
 			<div id="tab4" class="tab_content">
 						<table style="width: 80%;" class="transTablex col3-center">
@@ -1587,8 +1717,8 @@
 		<s:input id="hidDebtorCode" type="hidden" path="strDebtorCode" />	
 	
 </s:form>
-<script type="text/javascript">
+<%-- <script type="text/javascript">
 		funApplyNumberValidation();
-	</script>
+	</script> --%>
 </body>
 </html>

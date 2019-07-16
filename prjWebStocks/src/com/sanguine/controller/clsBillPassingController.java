@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -309,4 +310,37 @@ public class clsBillPassingController {
 		objBillPassHdModel.setStrSettlementType(objGlobal.funIfNull(objBean.getStrSettlementType(), "", objBean.getStrSettlementType()));
 		return objBillPassHdModel;
 	}
+	
+	/**
+	 * Open Pending Purchase Indent for PO
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/frmGRNList", method = RequestMethod.GET)
+	public ModelAndView funOpenPIforPO() {
+		return new ModelAndView("frmGRNList");
+
+	}
+	
+	@RequestMapping(value="/loadGRNForBillPassing", method =RequestMethod.GET)
+	public @ResponseBody List funloadGRNForBillPassing(
+			@RequestParam("strSuppCode") String strSuppCode, HttpServletRequest request){
+	
+		List listGrnData=null;
+		try{
+			String sql="select a.strGRNCode,DATE_FORMAT(DATE(a.dtGRNDate),'%d-%m-%Y'),a.strBillNo,a.dblTotal,b.strLocName from tblgrnhd a ,tbllocationmaster b " 
+				+" where a.strLocCode=b.strLocCode and a.strSuppCode='"+strSuppCode+"'  "
+				+" and a.strGRNCode not in(select b.strGRNCode from tblbillpasshd a , tblbillpassdtl b " 
+				+" where a.strBillPassNo=b.strBillPassNo and  a.strSuppCode='"+strSuppCode+"'); ";
+			
+			listGrnData=objGlobalFunctionsService.funGetList(sql, "sql");
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		
+		return listGrnData; 
+	}
+	
 }

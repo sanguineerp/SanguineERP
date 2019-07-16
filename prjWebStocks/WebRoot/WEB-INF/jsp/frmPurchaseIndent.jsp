@@ -234,7 +234,8 @@ $(document).ready(function(){
 					$.each(response, function(i,item)
 	                {
 						count=i;
-						funfillProdRow(response[i].strProdCode,response[i].strProdName,response[i].dblQty,response[i].strPurpose,response[i].dtReqDate,response[i].strInStock,response[i].dblReOrderQty,response[i].strAgainst,response[i].dblRate,response[i].dblAmount);
+						funfillProdRow(response[i].strProdCode,response[i].strProdName,response[i].dblQty,response[i].dblRate,response[i].strPurpose,response[i].dtReqDate,response[i].strInStock,response[i].dblReOrderQty,response[i].strAgainst); //,response[i].dblAmount
+						//funfillProdRow(strProdCode,strProdName,dblOrdQty,dblUnitPrice,strPurpose,dtReqDate,dblAvailStock,Minimumlevel,strAgainst)
 	                });
 					listRow=count+1;
 					

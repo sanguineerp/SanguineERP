@@ -147,6 +147,9 @@ public class clsReportBean {
 	
 	private String strBillType;
 	
+	private String strSettlementName;
+	
+	
 	private List<clsFundFlowBean> listFundFlowBean = new ArrayList<clsFundFlowBean>();
 
 	public String getStrWeekDay() {
@@ -631,5 +634,12 @@ public class clsReportBean {
 		this.strBillType = strBillType;
 	}
 
-	
+	public String getStrSettlementName() {
+		return strSettlementName;
+	}
+
+	public void setStrSettlementName(String strSettlementName) {
+		this.strSettlementName = strSettlementName;
+	}
+
 }

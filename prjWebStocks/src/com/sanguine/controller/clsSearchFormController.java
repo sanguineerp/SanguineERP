@@ -4647,6 +4647,16 @@ public class clsSearchFormController {
 			searchFormTitle = "Bank Master";
 			break;
 		}
+
+		case "reason": {
+			columnNames = "strReasonCode,strReasonName";
+			tableName = "clsReasonMaster where strClientCode='" + clientCode + "' ";
+			listColumnNames = "Reason Code,Reason Name";
+			idColumnName = "strReasonCode";
+			searchFormTitle = "Reason Master";
+				break;
+		}
+		
 		
 		
 		}

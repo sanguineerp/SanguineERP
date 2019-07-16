@@ -510,14 +510,14 @@ public class clsUserController {
 		if (moduleMap.size() > 1) {
 			String currentDate=objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
 			
-			String sqlDbBck="select a.strDbName,a.dteDbBckkUp from tbldatabasebckup a where date(a.dteDbBckkUp)='"+currentDate.split(" ")[0]+"' ";
+			/*String sqlDbBck="select a.strDbName,a.dteDbBckkUp from tbldatabasebckup a where date(a.dteDbBckkUp)='"+currentDate.split(" ")[0]+"' ";
 			List listSqlBckUp=objGlobalService.funGetList(sqlDbBck);
 			if(listSqlBckUp==null){
 				objStructureUpdateController.takeDBBackUp(req);
 			}else if(!(listSqlBckUp.size()>0))
 			{
 				objStructureUpdateController.takeDBBackUp(req);		
-			}
+			}*/
 			
 			return new ModelAndView("redirect:/frmModuleSelection.html");
 		} else {
@@ -566,14 +566,14 @@ public class clsUserController {
 			}
 			String currentDate=objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
 			
-			String sqlDbBck="select a.strDbName,a.dteDbBckkUp from tbldatabasebckup a where date(a.dteDbBckkUp)='"+currentDate.split(" ")[0]+"' ";
-			List listSqlBckUp=objGlobalService.funGetList(sqlDbBck);
-			if(listSqlBckUp==null){
-				objStructureUpdateController.takeDBBackUp(req);
-			}else if(!(listSqlBckUp.size()>0))
-			{
-				objStructureUpdateController.takeDBBackUp(req);		
-			}
+//			String sqlDbBck="select a.strDbName,a.dteDbBckkUp from tbldatabasebckup a where date(a.dteDbBckkUp)='"+currentDate.split(" ")[0]+"' ";
+//			List listSqlBckUp=objGlobalService.funGetList(sqlDbBck);
+//			if(listSqlBckUp==null){
+//				objStructureUpdateController.takeDBBackUp(req);
+//			}else if(!(listSqlBckUp.size()>0))
+//			{
+//				objStructureUpdateController.takeDBBackUp(req);		
+//			}
 			
 			funSetModuleImage(req, selectedModuleName);
 			return new ModelAndView("redirect:/frmPropertySelection.html");

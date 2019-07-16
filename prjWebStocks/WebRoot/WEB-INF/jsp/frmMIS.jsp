@@ -108,10 +108,17 @@
 		 '<%session.removeAttribute("rptMISCode");%>'
 		
 		var isOk=confirm("Do You Want to Generate Slip?");
-		if(isOk){
+		if(isOk)
+		    {
 			//alert("/openRptMISSlip.html?rptMISCode="+code);
-		window.open(getContextPath()+"/openRptMISSlip.html?rptMISCode="+code,'_blank');
-		}
+		        window.open(getContextPath()+"/openRptMISSlip.html?rptMISCode="+code,'_blank');
+		    }
+		
+		 var isOk = confirm("Do You Want to Send Slip On Mail?");
+		    if (isOk) 
+		    {
+				window.open(getContextPath() + "/sendMISEmail.html?strMISCode=" + code);
+		    }
 		<%}%>
 		if(null!='<%=session.getAttribute("BatchList")%>')
 			{

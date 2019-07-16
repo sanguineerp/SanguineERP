@@ -497,6 +497,19 @@ public class clsPartyMasterController {
 			}
 		}
 		
+		String accCode="",accName="";
+		try{
+			StringBuilder hql=new StringBuilder("select strAccountCode,strAccountName from clsWebBooksAccountMasterModel where strClientCode='" + clientCode + "' and strDebtor='Yes' ");
+			List listAcc=objBaseService.funGetListModuleWise(hql, "hql", "WebBooks");
+			if(listAcc!=null && listAcc.size()>0){
+				Object[] ob=(Object[]) listAcc.get(0);
+				accCode=ob[0].toString();
+				accName=ob[1].toString();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		
 		/* setting main data */
 		objModel.setStrPrefix("");
@@ -592,8 +605,8 @@ public class clsPartyMasterController {
 		objModel.setDteDateCreated(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
 		objModel.setStrUserEdited(userCode);
 		objModel.setDteDateEdited(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
-		objModel.setStrAccountCode("");
-		objModel.setStrAccountName("");
+		objModel.setStrAccountCode(accCode);
+		objModel.setStrAccountName(accName);
 		objModel.setStrOperational(objBean.getStrOperational());
 		return objModel;
 	}

@@ -5227,6 +5227,12 @@ public class clsReportsController {
 			sqlQuery = sqlQuery + " and a.strSuppCode='" + objBean.getStrDocCode() + "' ";
 		}
 
+		if (null != objBean.getStrDocCode() && objBean.getStrDocCode().length() > 0 &&  !objBean.getStrSettlementName().equalsIgnoreCase("All"))
+		{
+			sqlQuery = sqlQuery + " and a.strPayMode='" + objBean.getStrSettlementName() + "' ";
+		}
+
+
 		String fromDate = objBean.getDteFromDate();
 		String toDate = objBean.getDteToDate();
 
@@ -5332,147 +5338,148 @@ public class clsReportsController {
 
 	}
 	
-	
-	
-	
-	@SuppressWarnings(
-			{ "unused", "unused", "unused", "unchecked" })
-			private void funCallPurchaseRegisterReport(clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
+	@SuppressWarnings({ "unused", "unused", "unused", "unchecked" })
+	private void funCallPurchaseRegisterReport(clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
+		{
+
+			Connection con = objGlobalFunctions.funGetConnection(req);
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String companyName = req.getSession().getAttribute("companyName").toString();
+			String userCode = req.getSession().getAttribute("usercode").toString();
+			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+			if (objSetup == null)
 			{
+				objSetup = new clsPropertySetupModel();
+			}
 
-				Connection con = objGlobalFunctions.funGetConnection(req);
-				String clientCode = req.getSession().getAttribute("clientCode").toString();
-				String companyName = req.getSession().getAttribute("companyName").toString();
-				String userCode = req.getSession().getAttribute("usercode").toString();
-				String propertyCode = req.getSession().getAttribute("propertyCode").toString();
-				clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
-				if (objSetup == null)
+			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseRegisterReport.jrxml");
+			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+
+			String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
+
+			String propNameSql = "select a.strPropertyName  from " + webStockDB + ".tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
+			List listPropName = objGlobalFunctionsService.funGetDataList(propNameSql, "sql");
+			String propName = "";
+			if (listPropName.size() > 0)
+			{
+				propName = listPropName.get(0).toString();
+			}
+
+			ArrayList fieldList = new ArrayList();
+
+			String sqlQuery = " select d.strPName,c.strProdName,b.dblQty,c.strUOM,b.dblUnitPrice,(b.dblQty*b.dblUnitPrice) as Amt,DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y') " + " from tblgrnhd a,tblgrndtl b,tblproductmaster c,tblpartymaster d where a.strGRNCode=b.strGRNCode " + " and a.strSuppCode=d.strPCode and b.strProdCode=c.strProdCode ";
+
+			if (null != objBean.getStrDocCode() && objBean.getStrDocCode().length() > 0)
+			{
+				sqlQuery = sqlQuery + " and a.strSuppCode='" + objBean.getStrDocCode() + "' ";
+			}
+
+			if (null != objBean.getStrDocCode() && objBean.getStrDocCode().length() > 0 &&  !objBean.getStrSettlementName().equalsIgnoreCase("All"))
+			{
+				sqlQuery = sqlQuery + " and a.strPayMode='" + objBean.getStrSettlementName() + "' ";
+			}
+			
+			String fromDate = objBean.getDteFromDate();
+			String toDate = objBean.getDteToDate();
+
+			String fd = fromDate.split("-")[0];
+			String fm = fromDate.split("-")[1];
+			String fy = fromDate.split("-")[2];
+
+			String td = toDate.split("-")[0];
+			String tm = toDate.split("-")[1];
+			String ty = toDate.split("-")[2];
+
+			String dteFromDate = fy + "-" + fm + "-" + fd;
+			String dteToDate = ty + "-" + tm + "-" + td;
+
+			sqlQuery = sqlQuery + " and date(a.dtGRNDate) between  '" + fromDate + "' and '" + toDate + "'" + " order by d.strPName,a.dtGRNDate ,c.strProdName  ";
+
+			List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
+
+			for (int j = 0; j < listProdDtl.size(); j++)
+			{
+				clsPurchaseRegisterReportBean objProdBean = new clsPurchaseRegisterReportBean();
+				Object[] prodArr = (Object[]) listProdDtl.get(j);
+
+				objProdBean.setStrPName(prodArr[0].toString());
+				objProdBean.setStrProdName(prodArr[1].toString());
+				objProdBean.setDblQty(Double.parseDouble(prodArr[2].toString()));
+				objProdBean.setStrUOM(prodArr[3].toString());
+				objProdBean.setDblUnitPrice(Double.parseDouble(prodArr[4].toString()));
+				objProdBean.setDblAmount(Double.parseDouble(prodArr[5].toString()));
+				objProdBean.setDtGRNDate(prodArr[6].toString());
+				fieldList.add(objProdBean);
+
+			}
+
+			HashMap hm = new HashMap();
+			hm.put("strCompanyName", companyName);
+			hm.put("strUserCode", userCode);
+			hm.put("strImagePath", imagePath);
+			hm.put("strAddr1", objSetup.getStrAdd1());
+			hm.put("strAddr2", objSetup.getStrAdd2());
+			hm.put("strCity", objSetup.getStrCity());
+			hm.put("strState", objSetup.getStrState());
+			hm.put("strCountry", objSetup.getStrCountry());
+			hm.put("strPin", objSetup.getStrPin());
+			hm.put("dteFromDate", objBean.getDteFromDate());
+			hm.put("dteToDate", objBean.getDteToDate());
+
+			try
+			{
+				JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);
+				JasperDesign jd = JRXmlLoader.load(reportName);
+				JasperReport jr = JasperCompileManager.compileReport(jd);
+				JasperPrint jp = JasperFillManager.fillReport(jr, hm, beanCollectionDataSource);
+				List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+				jprintlist.add(jp);
+				ServletOutputStream servletOutputStream = resp.getOutputStream();
+
+				if (jprintlist.size() > 0)
 				{
-					objSetup = new clsPropertySetupModel();
-				}
-
-				String reportName = servletContext.getRealPath("/WEB-INF/reports/rptPurchaseRegisterReport.jrxml");
-				String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
-
-				String webStockDB = req.getSession().getAttribute("WebStockDB").toString();
-
-				String propNameSql = "select a.strPropertyName  from " + webStockDB + ".tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
-				List listPropName = objGlobalFunctionsService.funGetDataList(propNameSql, "sql");
-				String propName = "";
-				if (listPropName.size() > 0)
-				{
-					propName = listPropName.get(0).toString();
-				}
-
-				ArrayList fieldList = new ArrayList();
-
-				String sqlQuery = " select d.strPName,c.strProdName,b.dblQty,c.strUOM,b.dblUnitPrice,(b.dblQty*b.dblUnitPrice) as Amt,DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y') " + " from tblgrnhd a,tblgrndtl b,tblproductmaster c,tblpartymaster d where a.strGRNCode=b.strGRNCode " + " and a.strSuppCode=d.strPCode and b.strProdCode=c.strProdCode ";
-
-				if (null != objBean.getStrDocCode() && objBean.getStrDocCode().length() > 0)
-				{
-					sqlQuery = sqlQuery + " and a.strSuppCode='" + objBean.getStrDocCode() + "' ";
-				}
-
-				String fromDate = objBean.getDteFromDate();
-				String toDate = objBean.getDteToDate();
-
-				String fd = fromDate.split("-")[0];
-				String fm = fromDate.split("-")[1];
-				String fy = fromDate.split("-")[2];
-
-				String td = toDate.split("-")[0];
-				String tm = toDate.split("-")[1];
-				String ty = toDate.split("-")[2];
-
-				String dteFromDate = fy + "-" + fm + "-" + fd;
-				String dteToDate = ty + "-" + tm + "-" + td;
-
-				sqlQuery = sqlQuery + " and date(a.dtGRNDate) between  '" + fromDate + "' and '" + toDate + "'" + " order by d.strPName,a.dtGRNDate ,c.strProdName  ";
-
-				List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
-
-				for (int j = 0; j < listProdDtl.size(); j++)
-				{
-					clsPurchaseRegisterReportBean objProdBean = new clsPurchaseRegisterReportBean();
-					Object[] prodArr = (Object[]) listProdDtl.get(j);
-
-					objProdBean.setStrPName(prodArr[0].toString());
-					objProdBean.setStrProdName(prodArr[1].toString());
-					objProdBean.setDblQty(Double.parseDouble(prodArr[2].toString()));
-					objProdBean.setStrUOM(prodArr[3].toString());
-					objProdBean.setDblUnitPrice(Double.parseDouble(prodArr[4].toString()));
-					objProdBean.setDblAmount(Double.parseDouble(prodArr[5].toString()));
-					objProdBean.setDtGRNDate(prodArr[6].toString());
-					fieldList.add(objProdBean);
-
-				}
-
-				HashMap hm = new HashMap();
-				hm.put("strCompanyName", companyName);
-				hm.put("strUserCode", userCode);
-				hm.put("strImagePath", imagePath);
-				hm.put("strAddr1", objSetup.getStrAdd1());
-				hm.put("strAddr2", objSetup.getStrAdd2());
-				hm.put("strCity", objSetup.getStrCity());
-				hm.put("strState", objSetup.getStrState());
-				hm.put("strCountry", objSetup.getStrCountry());
-				hm.put("strPin", objSetup.getStrPin());
-				hm.put("dteFromDate", objBean.getDteFromDate());
-				hm.put("dteToDate", objBean.getDteToDate());
-
-				try
-				{
-					JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);
-					JasperDesign jd = JRXmlLoader.load(reportName);
-					JasperReport jr = JasperCompileManager.compileReport(jd);
-					JasperPrint jp = JasperFillManager.fillReport(jr, hm, beanCollectionDataSource);
-					List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
-					jprintlist.add(jp);
-					ServletOutputStream servletOutputStream = resp.getOutputStream();
-
-					if (jprintlist.size() > 0)
+					if (objBean.getStrDocType().equals("PDF"))
 					{
-						if (objBean.getStrDocType().equals("PDF"))
-						{
-							JRExporter exporter = new JRPdfExporter();
-							resp.setContentType("application/pdf");
-							exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
-							exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
-							exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-							resp.setHeader("Content-Disposition", "inline;filename=rptPurchaseRegisterReport" + dteFromDate + "_To_" + dteToDate + "_" + userCode + ".pdf");
-							exporter.exportReport();
-							servletOutputStream.flush();
-							servletOutputStream.close();
-
-						}
-						else
-						{
-							JRExporter exporter = new JRXlsExporter();
-							resp.setContentType("application/xlsx");
-							exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
-							exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, servletOutputStream);
-							exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-							resp.setHeader("Content-Disposition", "inline;filename=rptPurchaseRegisterReport" + dteFromDate + "_To_" + dteToDate + "_" + userCode + ".xls");
-							exporter.exportReport();
-							servletOutputStream.flush();
-							servletOutputStream.close();
-						}
+						JRExporter exporter = new JRPdfExporter();
+						resp.setContentType("application/pdf");
+						exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+						exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+						exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+						resp.setHeader("Content-Disposition", "inline;filename=rptPurchaseRegisterReport" + dteFromDate + "_To_" + dteToDate + "_" + userCode + ".pdf");
+						exporter.exportReport();
+						servletOutputStream.flush();
+						servletOutputStream.close();
 
 					}
 					else
 					{
-						resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-						resp.getWriter().append("No Record Found");
-
+						JRExporter exporter = new JRXlsExporter();
+						resp.setContentType("application/xlsx");
+						exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
+						exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, servletOutputStream);
+						exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+						resp.setHeader("Content-Disposition", "inline;filename=rptPurchaseRegisterReport" + dteFromDate + "_To_" + dteToDate + "_" + userCode + ".xls");
+						exporter.exportReport();
+						servletOutputStream.flush();
+						servletOutputStream.close();
 					}
 
 				}
-				catch (Exception ex)
+				else
 				{
-					ex.printStackTrace();
+					resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					resp.getWriter().append("No Record Found");
+
 				}
 
 			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+
+		}
 	
 	@RequestMapping(value = "/frmMISLocationWiseCategoryWiseReport", method = RequestMethod.GET)
 	public ModelAndView frmOpenMISLocationWiseCategoryWiseReport(Map<String, Object> model, HttpServletRequest request) {

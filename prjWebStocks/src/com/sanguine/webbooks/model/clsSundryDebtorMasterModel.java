@@ -1203,7 +1203,7 @@ public class clsSundryDebtorMasterModel implements Serializable {
 	}
 
 	public void setStrOperational(String strOperational) {
-		this.strOperational = strOperational;
+		this.strOperational = (String) setDefaultValue(strOperational, ""); 
 	}
 	
 	public List<clsSundryDebtorMasterItemDetialModel> getListSundryDetorItemDetailModel() {

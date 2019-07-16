@@ -519,7 +519,7 @@
 	function funSetProduct(code)
 	{
 			var searchUrl="";
-			var supp="";
+			var supp=$("#txtCustCode").val();
 			searchUrl=getContextPath()+"/loadProductDataForTrans.html?prodCode="+code+"&suppCode="+supp;
 			$.ajax({
 			        type: "GET",

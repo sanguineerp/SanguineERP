@@ -144,6 +144,11 @@ $(document).ready(function()
 				 case'invoiceForDC':
 				    $('#txtCode').val(code);
 				    break;
+			        
+				 case'reason':
+				    $('#txtReaCode').val(code);
+				    break;
+  
 				    	
 				}
 			}
@@ -1653,8 +1658,8 @@ function funHelp1(){
 									<td><s:input id="txtTimeOut" path="strTimeInOut" type="text"
 											class="BoxW116px" /></td>
 									<td><label>Reason Code</label></td>
-									<td><s:input id="txtReaCode" path="strReaCode" type="text"
-											class="BoxW116px" /></td>
+									<td><s:input id="txtReaCode" path="strReaCode" required="required"
+											cssClass="searchTextBox" ondblclick="funHelp('reason')" /></td>
 								</tr>
 
 

@@ -39,6 +39,7 @@ import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsProductMasterService;
 import com.sanguine.service.clsSetupMasterService;
+import com.sanguine.util.clsReportBean;
 import com.sun.istack.ByteArrayDataSource;
 
 @Controller
@@ -60,6 +61,12 @@ public class clsSendEmailController
 
 	@Autowired
 	private clsPurchaseIndentHdController objPurchaseIndentHdController;
+	
+	@Autowired
+	private clsMISController objMISController;
+	
+	
+	
 
 	
 	/**
@@ -132,7 +139,7 @@ public class clsSendEmailController
         				helper.setTo(receipientsArr[i].toString());
         				helper.setSubject(subject);
         				helper.addAttachment("PO Slip.pdf", aAttachment);
-        				helper.setText(message, "text/html");
+        				helper.setText(message);
         				mailSender.send(helper.getMimeMessage());
                 	}                	
                 }
@@ -374,7 +381,7 @@ public class clsSendEmailController
     				helper.setTo(receipientsArr[i].toString());
     				helper.setSubject(subject);
     				helper.addAttachment("PI Slip.pdf", aAttachment);
-    				helper.setText(message, "text/html");
+    				helper.setText(message);
     				mailSender.send(helper.getMimeMessage());
                 }
 				
@@ -382,7 +389,7 @@ public class clsSendEmailController
 			}
 			else
 			{
-				strReturnValue = "Supplier has No Email Id";
+				strReturnValue = "USer has No Email Id";
 			}
 
 			return strReturnValue;
@@ -395,4 +402,81 @@ public class clsSendEmailController
 		}
 
 	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/sendMISEmail", method = RequestMethod.GET)
+	public @ResponseBody String doMISSendEmail(HttpServletRequest request,HttpServletResponse response) throws JRException
+	{
+		// takes input from e-mail form
+		try
+		{  
+			clsReportBean objReportBean=new clsReportBean();
+			
+			String strMISCode = request.getParameter("strMISCode");
+			String subject ="Material Issue Generated From "+request.getSession().getAttribute("locationName").toString();
+			String message = "Material Issue Slip";
+			String strReturnValue = "Email Send SuccessFully";
+
+			String clientCode = request.getSession().getAttribute("clientCode").toString();
+			String propertyCode = request.getSession().getAttribute("propertyCode").toString();
+			String userCode = request.getSession().getAttribute("usercode").toString();
+			// prints debug info
+
+			String sql = "SELECT CONCAT(c.strEmail,',',d.strEmail),a.dtMISDate,a.strLocFrom ,a.strLocTo"
+						+ " FROM tblmishd a,tbluserhd c,tblpropertysetup d "
+						+ " WHERE a.strMISCode='"+strMISCode+"' AND c.strUserCode='"+userCode+"' AND d.strPropertyCode='"+propertyCode+"';";
+			List list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list != null && !list.isEmpty())
+			{   
+				
+                Object[] arrObj=(Object[]) list.get(0);
+				String recipientAddress = arrObj[0].toString();
+				
+				objReportBean.setDtFromDate(arrObj[1].toString());
+				objReportBean.setDtToDate(arrObj[1].toString());
+				objReportBean.setStrFromLocCode(arrObj[2].toString());
+				objReportBean.setStrToLocCode(arrObj[3].toString());
+				String []receipientsArr = recipientAddress.split(",");
+				
+				
+				
+                for(int i=0;i<receipientsArr.length;i++)
+                {
+                	logger.info("To: " + receipientsArr[i].toString());
+    				logger.info("Subject: " + subject);
+    				logger.info("Message: " + message);
+    				JasperPrint p = objMISController.funCallRangePrintReport(strMISCode, response, request, objReportBean);// Calling
+    																			// Attachment
+    				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    				JasperExportManager.exportReportToPdfStream(p, baos);
+    				DataSource aAttachment = new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
+    				MimeMessageHelper helper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
+
+    				helper.setTo(receipientsArr[i].toString());
+    				helper.setSubject(subject);
+    				helper.addAttachment("MIS Slip.pdf", aAttachment);
+    				helper.setText(message);
+    				mailSender.send(helper.getMimeMessage());
+                }
+				
+
+			}
+			else
+			{
+				strReturnValue = "User has No Email Id";
+			}
+
+			return strReturnValue;
+		}
+		catch (javax.mail.MessagingException e)
+		{
+			e.printStackTrace();
+			logger.info(e);
+			return e.toString();
+		}
+
+	}
+	
+	
 }

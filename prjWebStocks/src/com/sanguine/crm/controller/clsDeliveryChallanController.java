@@ -461,7 +461,8 @@ public class clsDeliveryChallanController {
 			String strNarration = "";
 			String strCustPONo = "";
 			String dteCPODate = "";
-			
+			String StrNarration="",strPackNumber="",strSerialNo="";
+			String strDketNoofCourier="",StrMaterialSentOutBy="",strTimeOut="",strReasonCode="",strVechileNo="";
 			Connection con = objGlobalFunctions.funGetConnection(req);
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String companyName = req.getSession().getAttribute("companyName").toString();
@@ -474,7 +475,10 @@ public class clsDeliveryChallanController {
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptDeliveryChallanSlip.jrxml");
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
-			String sqlHd = "select a.strDCCode,a.dteDCDate,a.strSOCode,b.strPName,b.strSAdd1,b.strSAdd2,b.strSCity,b.strSPin,b.strSState,b.strSCountry , ifnull(c.strCustPONo,''),ifnull(date(c.dteCPODate),'')  " + "	from tbldeliverychallanhd a   " + " left outer join tblpartymaster b on a.strCustCode=b.strPCode " + " left outer join   tblsalesorderhd c on a.strSOCode=c.strSOCode "
+			String sqlHd = "select a.strDCCode,a.dteDCDate,a.strSOCode,b.strPName,b.strSAdd1,b.strSAdd2,b.strSCity,b.strSPin,b.strSState,b.strSCountry , ifnull(c.strCustPONo,''),"
+					+ " ifnull(date(c.dteCPODate),''),IFNULL(a.strNarration,''),IFNULL(a.strPackNo,''),IFNULL(a.strTimeInOut,''),IFNULL(a.strVehNo,''),IFNULL(a.strDktNo,''),"
+					+ " IFNULL(a.strSerialNo,''),IFNULL(a.strReaCode,''),IFNULL(a.strMInBy,'')  " + "	"
+					+ " from tbldeliverychallanhd a   " + " left outer join tblpartymaster b on a.strCustCode=b.strPCode " + " left outer join   tblsalesorderhd c on a.strSOCode=c.strSOCode "
 					+ " where a.strDCCode='" + DCCode + "' " + " and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode ";
 
 			List list = objGlobalFunctionsService.funGetList(sqlHd, "sql");
@@ -492,6 +496,14 @@ public class clsDeliveryChallanController {
 				strBCountry = arrObj[9].toString();
 				strCustPONo = arrObj[10].toString();
 				dteCPODate = arrObj[11].toString();
+				StrNarration= arrObj[12].toString();
+				strPackNumber= arrObj[13].toString();
+				strSerialNo= arrObj[17].toString();
+				strDketNoofCourier= arrObj[16].toString();
+				StrMaterialSentOutBy= arrObj[19].toString();
+				strTimeOut= arrObj[14].toString();
+				strReasonCode= arrObj[18].toString();
+				strVechileNo= arrObj[15].toString();
 
 			}
 
@@ -506,7 +518,15 @@ public class clsDeliveryChallanController {
 			JRDesignDataset subDataset = (JRDesignDataset) datasetMap.get("dsDCSlip");
 			subDataset.setQuery(subQuery);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
-
+			
+			String sqlReason = "select a.strReasonName from tblreasonmaster a where a.strReasonCode='"+strReasonCode+"'; ";
+            String strReasonName="";
+			List listReason = objGlobalFunctionsService.funGetList(sqlHd, "sql");
+			if (!list.isEmpty()) {
+				Object arrObj = (Object) list.get(0);
+				strReasonName=arrObj.toString();
+				
+			}
 			HashMap hm = new HashMap();
 			hm.put("strCompanyName", companyName);
 			hm.put("strUserCode", userCode);
@@ -532,6 +552,15 @@ public class clsDeliveryChallanController {
 			hm.put("strCustPONo", strCustPONo);
 			hm.put("dteCPODate", dteCPODate);
 			hm.put("strInvCode", strSOCode);
+			hm.put("strRemarks", StrNarration);
+			hm.put("packNumber", strPackNumber);
+			hm.put("serialNum", strSerialNo);
+			hm.put("CourierNum", strDketNoofCourier);
+			hm.put("MaterialSentOutBy", StrMaterialSentOutBy);
+			hm.put("TimeOut", strTimeOut);
+			hm.put("ReasonName", strReasonName);
+			hm.put("vehicleNum", strVechileNo);
+			
 			
 			JasperPrint p = JasperFillManager.fillReport(jr, hm, con);
 			if (type.trim().equalsIgnoreCase("pdf")) {

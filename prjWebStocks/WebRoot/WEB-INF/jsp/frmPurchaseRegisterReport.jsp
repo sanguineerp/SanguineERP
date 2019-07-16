@@ -130,8 +130,19 @@
 			<tr>				
 				<td><label>View Type</label>
 				</td>
-				<td colspan="6"><s:select id="cmbViewType" path="strReportView" items="${mapViewType}" cssClass="BoxW124px"/>				    	
-				</td>					
+				<td><s:select id="cmbViewType" path="strReportView" items="${mapViewType}" cssClass="BoxW124px"/>				    	
+				</td>	
+				
+				
+				<td><label>Settlement </label></td>
+					<td colspan="4">
+						<s:select id="cmbDocType" path="strSettlementName" cssClass="BoxW124px">
+				    		<s:option value="ALL">ALL</s:option>
+				    		<s:option value="CASH">CASH</s:option>
+				    		<s:option value="CREDIT">CREDIT</s:option>
+                        </s:select>
+                       
+                       </td>						
 			</tr>
 			
 			

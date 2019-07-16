@@ -1939,7 +1939,10 @@
 			value="/WEB-INF/jsp/frmBillPassingFlash.jsp"></put-attribute>
 	</definition>
 	
-
+	
+	<definition name="frmGRNList" extends="base.searchFormDefination">
+		<put-attribute name="body" value="/WEB-INF/jsp/frmGRNList.jsp"></put-attribute>
+	</definition>
 
 
 	<!-- 	End Of Webstock Tiles Entry -->
