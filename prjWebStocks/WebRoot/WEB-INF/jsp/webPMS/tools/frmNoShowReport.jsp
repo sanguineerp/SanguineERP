@@ -86,7 +86,7 @@
 				    {				    	
 				    	StkFlashData=response[0];
 				    	showTable();
-// 				    	funGetTotalValue(response[1]/currValue);
+ 				    	funGetTotalValue(response[1]/currValue);
 				    },
 				    error: function(jqXHR, exception) {
 			            if (jqXHR.status === 0) {
@@ -128,6 +128,7 @@
 		    return opt;
 		}
 		
+		var totAmt=0;
 		function pageselectCallback(page_index, jq)
 		{
 		    // Get number of elements per pagionation page from form
@@ -150,11 +151,11 @@
 			        newcontent += '<td>'+StkFlashData[i].strReservationNo+'</td>';
 			        newcontent += '<td>'+StkFlashData[i].strNoOfRooms+'</td>';
 			       newcontent += '<td align="right">'+parseFloat((StkFlashData[i].dblPayment/currValue)).toFixed(maxAmountDecimalPlaceLimit)+'</td>';
-				   
+			       totAmt=totAmt+StkFlashData[i].dblPayment/currValue;
 			      
 			    }
 		    
-		   
+			    $("#txtTotValue").val(totAmt);
 		    
 		    newcontent += '</table>';
 		    // Replace old content with new content

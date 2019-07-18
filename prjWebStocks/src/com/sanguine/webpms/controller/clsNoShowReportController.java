@@ -132,11 +132,11 @@ public class clsNoShowReportController {
 		
 		listExportDoc.add("NoShowFlash_" + fromDate + "to" + toDate + "_" + userCode);
 		
-			String[] ExcelHeader = { "Reservation No", "No Of Rooms", "Payment", "Guest Name" };
+			String[] ExcelHeader = { "Reservation No", "No Of Rooms", "Payment", "Guest Name","Reservation Date" };
 			listExportDoc.add(ExcelHeader);
 			double receiptTot=0.00;
 			List list = new ArrayList<>();
-			String sqlParametersNoShowList = "SELECT a.strReservationNo,a.dteArrivalDate, IFNULL(b.dblReceiptAmt,0),d.strGuestcode,c.strFirstName,c.strMiddleName,c.strLastName,a.strNoRoomsBooked "
+			String sqlParametersNoShowList = "SELECT a.strReservationNo,a.dteArrivalDate, IFNULL(b.dblReceiptAmt,0),d.strGuestcode,c.strFirstName,c.strMiddleName,c.strLastName,a.strNoRoomsBooked,a.dteReservationDate "
 						+ " FROM tblreservationhd a "
 						+ " LEFT OUTER "
 						+ " JOIN tblreceipthd b ON a.strReservationNo=b.strReservationNo,tblguestmaster c,tblreservationdtl d "
@@ -158,6 +158,7 @@ public class clsNoShowReportController {
 				DataList.add(Double.parseDouble(arr[2].toString()));
 				receiptTot = receiptTot + Double.parseDouble(arr[2].toString());
 				DataList.add(arr[4].toString()+" "+arr[5].toString()+" "+arr[6].toString());
+				DataList.add(objGlobal.funGetDate("dd-MM-yyyy",arr[8].toString()));
 				
 				list.add(DataList);
 			}

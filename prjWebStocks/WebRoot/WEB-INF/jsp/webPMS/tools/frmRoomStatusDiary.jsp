@@ -814,8 +814,8 @@
 					<td bgcolor="Yellow">Waiting</td>
 					<td></td>
 					<td bgcolor="Green">Confirmed</td>
-					<td></td>
-					<td bgcolor="Gray">Checked Out</td>
+					<!-- <td></td>
+					<td bgcolor="Gray">Checked Out</td> -->
 					<td></td>
 					<td bgcolor=Olive>Blocked</td>
 					<td></td>

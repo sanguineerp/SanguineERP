@@ -89,6 +89,16 @@ public class clsDayEndController {
 		String date=newDate[2]+"-"+newDate[1]+"-"+newDate[0];
 		// Check POS Day End Table in PMS
 		
+		String[] arrSpDate = objBean.getDtePMSDate().split("-");
+		// Date dtNextDate=new
+		// Date(Integer.parseInt(arrSpDate[2]),Integer.parseInt(arrSpDate[1]),Integer.parseInt(arrSpDate[0]));
+		Date dtNextDate = new Date(Integer.parseInt(arrSpDate[0]), Integer.parseInt(arrSpDate[1]), Integer.parseInt(arrSpDate[2]));
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(dtNextDate);
+		cal.add(Calendar.DATE, 1);
+		String newStartDate = cal.getTime().getYear() + "-" + (cal.getTime().getMonth()) + "-" + (cal.getTime().getDate());
+
+		
 		String sqlBlockedRoom = "select a.strRoomCode,DATE(a.dteValidTo) from tblblockroom a ";
 		List listOfBlockedRoom = objGlobalFunctionsService.funGetListModuleWise(sqlBlockedRoom, "sql");
 		{
@@ -152,6 +162,9 @@ public class clsDayEndController {
 					+ " WHERE a.strRoomNo=b.strRoomCode AND b.strRoomTypeCode=c.strRoomTypeCode"
 					+ " group by a.strFolioNo";*/
 			
+			
+			
+			
 			String sql="SELECT a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode, IFNULL(a.strReservationNo,''), IFNULL(a.strWalkInNo,''),"
 					+ "c.strRoomTypeCode, IFNULL(SUM(d.dblIncomeHeadAmt),0),ifnull(e.strComplimentry,'N') "
 					+ "FROM tblfoliohd a "
@@ -171,6 +184,11 @@ public class clsDayEndController {
 					 String sqlRoomRate=" select a.dblRoomRate from  tblreservationroomratedtl a "
 						        +" where a.strReservationNo='"+arrObjRoom[4].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+date+"' ";
 					 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+					 
+					 	String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+newStartDate+"' where a.strClientCode='"+clientCode+"' AND a.strReservationNo='"+arrObjRoom[4].toString()+"' ";
+						objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql"); 
+
+					 
 					 if(listRoomRate.size()>0)
 					 {
 						 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
@@ -191,6 +209,11 @@ public class clsDayEndController {
 					String sqlRoomRate=" select a.dblRoomRate from  tblwalkinroomratedtl a "
 						        +" where a.strWalkinNo='"+arrObjRoom[5].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+date+"' ";
 					 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+					 
+					 	String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+newStartDate+"' where a.strClientCode='"+clientCode+"' AND a.strWalkInNo='"+arrObjRoom[5].toString()+"' ";
+						objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql"); 
+
+					 
 					 if(listRoomRate.size()>0)
 					 {
 					 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
@@ -237,6 +260,9 @@ public class clsDayEndController {
 					listRoomTerrifDocNo.add(docNo);
 				}
 				
+				
+				
+			
 			}
 
 			
@@ -260,14 +286,6 @@ public class clsDayEndController {
 			objDayEndService.funAddUpdateDayEndHd(objHdModel);
 
 			// Insert row in tbldayendprocess for next date.
-			String[] arrSpDate = objBean.getDtePMSDate().split("-");
-			// Date dtNextDate=new
-			// Date(Integer.parseInt(arrSpDate[2]),Integer.parseInt(arrSpDate[1]),Integer.parseInt(arrSpDate[0]));
-			Date dtNextDate = new Date(Integer.parseInt(arrSpDate[0]), Integer.parseInt(arrSpDate[1]), Integer.parseInt(arrSpDate[2]));
-			GregorianCalendar cal = new GregorianCalendar();
-			cal.setTime(dtNextDate);
-			cal.add(Calendar.DATE, 1);
-			String newStartDate = cal.getTime().getYear() + "-" + (cal.getTime().getMonth()) + "-" + (cal.getTime().getDate());
 			clsDayEndHdModel objModel = new clsDayEndHdModel();
 			objModel.setStrClientCode(clientCode);
 			objModel.setStrPropertyCode(propCode);
@@ -278,8 +296,6 @@ public class clsDayEndController {
 			objModel.setStrUserCode(userCode);
 			objDayEndService.funAddUpdateDayEndHd(objModel);
 
-			String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+newStartDate+"' where a.strClientCode='"+clientCode+"'  ";
-			objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql"); 
 			model= new ModelAndView("redirect:/frmModuleSelection.html");
 		}
 		return model;

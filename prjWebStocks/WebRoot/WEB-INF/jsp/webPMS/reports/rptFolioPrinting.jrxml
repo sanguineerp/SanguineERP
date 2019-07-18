@@ -478,21 +478,21 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 			<line>
 				<reportElement x="0" y="41" width="555" height="1" uuid="8412c539-8fc4-4d06-93cb-fb22403c1cdc"/>
 			</line>
-			<textField>
+			<textField pattern="#0.00">
 				<reportElement x="343" y="20" width="62" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{vDebitTotal}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#0.00">
 				<reportElement x="421" y="21" width="59" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{vCreaditTotal}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#0.00">
 				<reportElement x="496" y="20" width="59" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>

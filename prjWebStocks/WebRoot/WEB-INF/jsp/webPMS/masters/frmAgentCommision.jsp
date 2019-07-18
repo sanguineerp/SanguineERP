@@ -23,7 +23,8 @@
 				});
 				$("#txtToDate").datepicker('setDate', pmsDate);
 
-				
+				$("#txtFromDate").val(pmsDate);
+				$("#txtToDate").val(pmsDate);
 			});
 
 	function funSetData(code){

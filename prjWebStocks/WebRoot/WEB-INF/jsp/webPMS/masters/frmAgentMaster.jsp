@@ -23,6 +23,8 @@
 		});
 		$("#txtToDate").datepicker('setDate', pmsDate);
 
+		$("#txtFromDate").val(pmsDate);
+		$("#txtToDate").val(pmsDate);
 		
 	});
 
@@ -143,6 +145,21 @@
 		}}%>
 
 	});
+	
+	 /**
+		 *  Check Validation Before Saving Record
+	**/
+	function funCallFormAction(actionName,object) 
+	{
+		var flg=true;
+		if($('#txtDescription').val()=='')
+		{
+			alert('Please Enter Description ');
+			flg=false;
+		}
+		return flg;
+	}
+	
 	
 </script>
 
@@ -288,7 +305,7 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funCallFormAction('submit',this);" />
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 

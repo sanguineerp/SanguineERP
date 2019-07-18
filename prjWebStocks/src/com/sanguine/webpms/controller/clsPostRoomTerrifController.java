@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.JOptionPane;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +163,15 @@ public class clsPostRoomTerrifController {
 			String extraBedCode = arrObjFolioDtl[1].toString();
 			String strComplimentry = arrObjFolioDtl[2].toString();
 			String docNo="";
+			
+			String sqlPostRommTariffCheck = "select a.strDocNo from tblfoliodtl a where a.strFolioNo='"+folioNo+"' and a.dteDocDate='"+PMSDate+"'";
+			List listPostRommTariffCheck  = objGlobalFunctionsService.funGetListModuleWise(sqlPostRommTariffCheck, "sql");
+			if(!listPostRommTariffCheck.isEmpty())
+			{
+				
+			}
+			else
+			{
 			if(strComplimentry.equalsIgnoreCase("N"))
 			{
 			
@@ -220,7 +230,7 @@ public class clsPostRoomTerrifController {
 
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Terrif Posted Successfully. " + docNo);
-
+			}
 			return new ModelAndView("redirect:/frmPostRoomTerrif.html");
 		} else {
 			return new ModelAndView("frmPostRoomTerrif");
