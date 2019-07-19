@@ -111,11 +111,25 @@
 	
 	$(document).ready(function(){
 		var message='';
+		var Warmessage='';
+		<%
+		if(session.getAttribute("WarningMsg") != null){%>
+	     Warmessage='<%=session.getAttribute("WarningMsg").toString()%>';
+	    <%
+	    	session.removeAttribute("WarningMsg");
+	    }%>	
+	    if(Warmessage!='')
+	    	{
+	    	alert(Warmessage);
+	    	}
+		
 		<%if (session.getAttribute("success") != null) {
+			
 			if(session.getAttribute("successMessage") != null){%>
 		    message='<%=session.getAttribute("successMessage").toString()%>';
 		    <%
 		    	session.removeAttribute("successMessage");
+		    
 		    }
 			boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
 			session.removeAttribute("success");

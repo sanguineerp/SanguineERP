@@ -49,7 +49,9 @@ public class clsGuestMasterServiceImpl implements clsGuestMasterService {
 		if (null == objGuestMasterBean.getDteDOB()) {
 			objGuestMasterModel.setDteDOB("1900-01-01");
 		} else {
+			
 			objGuestMasterModel.setDteDOB(objGlobal.funGetDate("yyyy-MM-dd", objGuestMasterBean.getDteDOB()));
+			
 		}
 
 		// objGuestMasterModel.setDteDOB(objGlobal.funIfNull(objGuestMasterBean.getDteDOB(),"1900-01-01",objGuestMasterBean.getDteDOB()));

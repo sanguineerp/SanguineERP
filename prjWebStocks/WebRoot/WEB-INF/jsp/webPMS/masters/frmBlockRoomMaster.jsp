@@ -283,7 +283,7 @@
 
 		switch (fieldName) 
 		{
-			case "roomForMaster":
+			case "roomByRoomType":
 				 funSetRoomMasterData(code);
 				 break;
 			
@@ -314,6 +314,26 @@
 		fieldName = transactionName;
 		window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 		//window.showModalDialog("searchform.html?formname=" + transactionName + "&searchText=", "","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
+	}
+	
+	function funHelp1(transactionName,row)
+	{
+		gridHelpRow=row;
+		var condition = $("#txtRoomType").val();
+		fieldName = transactionName;
+		if(transactionName=="roomByRoomType" && condition!="")
+			{
+				window.open("searchform.html?formname="+fieldName+"&strRoomTypeCode="+condition+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+		
+			}
+		else
+		{
+			if(condition=="")
+			{
+				alert("Please Select Room Type !!!");
+			}
+			//window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+		}
 	}
 	
 	function funSetFloorMaster(code)
@@ -400,6 +420,14 @@
 			        }
 		      });
 	}
+	
+		function funBtnSubmit(){
+		
+			if($("#txtReason").val()==''){
+				alert("Please Select Reaseon");
+				return false;
+			}
+		}
 
 	
 </script>
@@ -428,7 +456,7 @@
 					<tr>
 						<td><label>Room Code</label></td>
 						<td><s:input id="txtRoomCode" path="strRoomCode"
-								ondblclick="funHelp('roomForMaster')" cssClass="searchTextBox" /></td>
+								ondblclick="funHelp1('roomByRoomType')" cssClass="searchTextBox" /></td>
 						<td colspan="2"><s:input id="txtRoomDesc" path=""
 								required="true" cssClass="longTextBox" style="width: 316px" /></td>
 					</tr>
@@ -490,7 +518,7 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funBtnSubmit()"/>
 			<input type="reset" value="Reset" class="form_button"
 				onclick="funResetFields()" />
 		</p>

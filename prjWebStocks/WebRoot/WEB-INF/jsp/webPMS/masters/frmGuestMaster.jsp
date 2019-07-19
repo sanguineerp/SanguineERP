@@ -24,6 +24,7 @@ $(function()
 			var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
 			
 			$("#txtDOB").datepicker('setDate', pmsDate);
+			$("#txtDOB").val(pmsDate);
 			var d = new Date();
 			var year = d.getFullYear() - 0;
 			var date=pmsDate.split
@@ -225,7 +226,7 @@ function funSetGuestCode(code)
 						
 						 var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-					        if (reg.test($('#txtEmailId').val()) == false) 
+					        /* if (reg.test($('#txtEmailId').val()) == false) 
 					        {
 					            alert('Invalid Email Address');
 					            return false;
@@ -237,7 +238,7 @@ function funSetGuestCode(code)
 					        		 alert('DOB should not be empty!!');
 							         return false;
 					    		}
-					        }
+					        } */
 						if($("#txtPANNo").val()=="")
 						{}
 						else

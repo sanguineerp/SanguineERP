@@ -698,13 +698,13 @@ public class clsRoomStatusDiaryController {
 					{
 						Object[] arrObjBlockRoom = (Object[]) listBlockRoom.get(i);
 						String reason=arrObjBlockRoom[0].toString();
-						objRoomStatusDtl.setStrDay1(reason);
-						objRoomStatusDtl.setStrDay2(reason);
-						objRoomStatusDtl.setStrDay3(reason);
-						objRoomStatusDtl.setStrDay4(reason);
-						objRoomStatusDtl.setStrDay5(reason);
-						objRoomStatusDtl.setStrDay6(reason);
-						objRoomStatusDtl.setStrDay7(reason);
+						objRoomStatusDtl.setStrDay1("Blocked Room");
+						objRoomStatusDtl.setStrDay2("Blocked Room");
+						objRoomStatusDtl.setStrDay3("Blocked Room");
+						objRoomStatusDtl.setStrDay4("Blocked Room");
+						objRoomStatusDtl.setStrDay5("Blocked Room");
+						objRoomStatusDtl.setStrDay6("Blocked Room");
+						objRoomStatusDtl.setStrDay7("Blocked Room");
 					}
 				}
 			}

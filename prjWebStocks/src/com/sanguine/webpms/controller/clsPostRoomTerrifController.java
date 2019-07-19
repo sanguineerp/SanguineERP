@@ -168,7 +168,10 @@ public class clsPostRoomTerrifController {
 			List listPostRommTariffCheck  = objGlobalFunctionsService.funGetListModuleWise(sqlPostRommTariffCheck, "sql");
 			if(!listPostRommTariffCheck.isEmpty())
 			{
-				
+				req.getSession().setAttribute("WarningMsg", "Already Post room terrif is Done");
+
+				//JOptionPane.showMessageDialog(null, "Already Post room terrif is Done");
+				//JOptionPane.showMessageDialog(null,"ALERT MESSAGE","TITLE",JOptionPane.WARNING_MESSAGE);
 			}
 			else
 			{
@@ -224,6 +227,7 @@ public class clsPostRoomTerrifController {
 				double actualPostingAmt=0.0;
 				objBean.setStrFolioType("Room");
 				objBean.setDblRoomTerrif(actualPostingAmt);
+				extraBedCode="";
 				docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
 			}
 			//String docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);

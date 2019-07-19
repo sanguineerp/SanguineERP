@@ -213,6 +213,7 @@ public class clsGlobalFunctions {
 	}
 
 	public String funGetDate(String pattern, String date) {
+
 		String retDate = date;
 
 		if (pattern.equals("yyyy-MM-dd")) // From JSP to Database yyyy-MM-dd
@@ -222,7 +223,21 @@ public class clsGlobalFunctions {
 				date=date.split(" ")[0];
 			}
 			String[] spDate = date.split("-");
-			retDate = spDate[2] + "-" + spDate[1] + "-" + spDate[0];
+			if(spDate.length>0)
+			{
+				if(spDate[0].toString().equals("")){
+					
+				}
+				else
+				{
+					retDate = spDate[2] + "-" + spDate[1] + "-" + spDate[0];
+				}
+			}
+			else
+			{
+				
+			}
+			
 		} else if (pattern.equals("yyyy/MM/dd")) // From Database to JSP
 		{
 			String[] sp = date.split(" ");

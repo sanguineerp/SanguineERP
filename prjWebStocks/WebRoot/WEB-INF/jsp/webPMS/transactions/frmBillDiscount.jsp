@@ -176,14 +176,20 @@
 		if($("#cmbDiscountType").val()=="Amount"){
 			document.getElementById("txtDiscPer").readOnly = true; 
 			document.getElementById("txtDiscAmt").readOnly = false; 
-			$("#txtDiscPer").val("");
+			$("#txtDiscPer").val(0.0);
 			$("#txtGrandTotal").val($("#txtTotal").val());
+			document.getElementById('txtDiscAmt').style.display = 'block';
+			document.getElementById('txtDiscPer').style.display = 'none';
+			
 		}
 		if($("#cmbDiscountType").val()=="Per"){
 			document.getElementById("txtDiscAmt").readOnly = true;
 			document.getElementById("txtDiscPer").readOnly = false; 
-			$("#txtDiscAmt").val("");
+			$("#txtDiscAmt").val(0.0);
 			$("#txtGrandTotal").val($("#txtTotal").val());
+
+			document.getElementById('txtDiscPer').style.display = 'block';
+						document.getElementById('txtDiscAmt').style.display = 'none';
 		}
 	}
 	function funCalculateDiscount()
@@ -304,7 +310,7 @@
 					<label>Disc Type</label>
 				</td>
 				<td>
-    				<s:select id="cmbDiscountType" path="strDiscountType" cssClass="BoxW124px"
+    				<s:select id="cmbDiscountType" path="strDiscountType" cssClass="BoxW124px" onchange="funDiscountSelection();"
     				><!-- onchange="funDiscountSelection();" -->
  					    <s:option value="Amount">Amount</s:option>
 				    	<s:option value="Per">Per</s:option>

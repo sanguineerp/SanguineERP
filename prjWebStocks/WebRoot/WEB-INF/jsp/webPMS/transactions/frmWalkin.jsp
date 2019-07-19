@@ -1558,12 +1558,10 @@
 <!-- 						<td width="10%"><label>Room No</label></td> -->
 						<td width="10%"><label>Room Type</label></td>
 				<td>
-                  <input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" /></td>
-				<td><label id="lblRoomType"></label></td>
+                  <input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" />
+				<label id="lblRoomType"></label></td>
 				
-					
-					
-					
+				<td><label>Room No</label></td>
 					<td><s:input type="text" id="txtRoomNo" name="txtRoomNo" ondblclick="funHelp1('roomByRoomType')" path="strRoomNo" cssClass="searchTextBox"/> 
 							<label id="lblRoomDesc"></label> 
 						<label id="lblRoomType"></label> 

@@ -375,7 +375,7 @@ public class clsBillPrintingController {
 						double hmroomTariff = debitAmount; 
 						pSupportVoucher=balance;
 						
-						if(particulars.equals("Room Tariff"))
+						if(strSelectBill.contains("Room Tariff"))
 						{
 							if(hmroomTariff>0.0)
 							{
