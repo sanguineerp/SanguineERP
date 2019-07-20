@@ -337,6 +337,22 @@ public class clsCheckInController {
 			String startDate = req.getSession().getAttribute("startDate").toString();
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
  
+			String sqlFolioNo = "select a.strFolioNo from tblfoliohd a where a.strCheckInNo='"+objBean.getStrCheckInNo()+"'";
+			String strFolioNo="";
+			List listFolioNo  = objGlobalFunctionsService.funGetListModuleWise(sqlFolioNo, "sql");			
+			if(listFolioNo.size()>0)
+			{
+				strFolioNo = listFolioNo.get(0).toString();
+			}
+			
+			String sqlFolioNoDtl = "select a.strPerticulars from tblfoliodtl a where a.strFolioNo='"+strFolioNo+"'";
+			List listFolioNoDtl  = objGlobalFunctionsService.funGetListModuleWise(sqlFolioNoDtl, "sql");			
+			if(listFolioNoDtl.size()>0)
+			{
+				req.getSession().setAttribute("WarningMsg", "Folio has been posted Cant edit this checkin");
+			}
+			else
+			{
 			
 			
 			if (objBean.getStrType().equalsIgnoreCase("Reservation")) {
@@ -737,6 +753,7 @@ public class clsCheckInController {
 			req.getSession().setAttribute("successMessage", "Check In No : ".concat(objHdModel.getStrCheckInNo()));
 			req.getSession().setAttribute("AdvanceAmount", objHdModel.getStrCheckInNo());
 			req.getSession().setAttribute("against", objHdModel.getStrType());
+			}
 			return new ModelAndView("redirect:/frmCheckIn.html");
 		} else {
 			return new ModelAndView("frmCheckIn");

@@ -165,7 +165,7 @@
 
 		$.ajax({
 			type : "GET",
-			url : getContextPath()+ "/loadCheckInData.html?docCode=" + code,
+			url : getContextPath()+ "/loadExtraBedData.html?docCode=" + code,
 			dataType : "json",
 			success : function(response){ 
 				if(response.strCheckInNo!="Invalid")
@@ -232,26 +232,7 @@
 	    
 	    $("#txtPackageCode").val(response.strPackageCode);
 		$("#txtPackageName").val(response.strPackageName);
-	   
-	    if(response.strNoPostFolio=='Y')
-    	{
-    		document.getElementById("txtNoPostFolio").checked=true;
-    	}
-    	else
-    	{
-    		document.getElementById("txtNoPostFolio").checked=false;
-    	}
-	    
-	    if(response.strComplimentry=='Y')
-    	{
-    		document.getElementById("txtComplimentry").checked=true;
-    	}
-    	else
-    	{
-    		document.getElementById("txtComplimentry").checked=false;
-    	}
-	    
-	    
+	   	    
 	    funRemoveProductRowsForIncomeHead();
 		funRemoveTariffRows();
 		funFillDtlGrid(response.listCheckInDetailsBean);
@@ -1341,34 +1322,22 @@
 <body>
 
 	<div id="formHeading">
-	<label>CheckIn</label>
+	<label>Add Extra Bed</label>
 	</div>
 
 	<br/>
 	<br/>
 
-	<s:form name="frmCheckIn" method="POST" action="saveCheckIn.html">
+	<s:form name="frmAddExtraBed" method="POST" action="saveExtraBed.html">
 		<div id="tab_container" style="height: 900px">
-				<ul class="tabs">
-					<li data-state="tab1" style="width: 6%; padding-left: 2%; class="active" >Check In</li>
-					<li data-state="tab2" style="width: 8%; padding-left: 1%">Tariff</li>
-					<li data-state="tab3" style="width: 8%; padding-left: 1%">Package</li>
-					</ul>
+				
 							
 <!-- Check In Tab Start -->
 
 				<div id="tab1" class="tab_content" style="height: 800px">
 
 		<table class="transTable">
-			
-			<tr>
-				
-				<th align="right" colspan="4"><a id="baseUrl" href="#"> Attach Documents</a>&nbsp; &nbsp; &nbsp;&nbsp;</th>
-			    <th colspan="1">
-			</tr>
-			<tr>
-			<th colspan="6">
-			</tr>
+	
 			
 		
 			<tr>
@@ -1378,14 +1347,11 @@
 				<td>
 					<s:input  type="text" id="txtCheckInNo" path="strCheckInNo" cssClass="searchTextBox" ondblclick="funHelp('checkIn');"/>
 				</td>
+				
+				<td></td>
+				<td></td>
 							
-				<td>
-					<label>Registration No</label>
-				</td>
-				<td>
-					<s:input type="text" id="txtRegistrationNo" path="strRegistrationNo" cssClass="searchTextBox" ondblclick="funHelp('RegistrationNo');"/>
-				</td>
-			</tr>
+				</tr>
 			
 		 	<tr>
 				<td><label>Type</label></td>
@@ -1403,40 +1369,7 @@
 					<s:input  type="text" id="txtDocNo" path="strAgainstDocNo" cssClass="searchTextBox" ondblclick="funHelpAgainst();"/>
 				</td>
 			</tr>
-			
-			<tr>
-				<td><label>Arrival Date</label></td>
-				<td><s:input  type="text" id="txtArrivalDate" path="dteArrivalDate" cssClass="calenderTextBox" /></td>
-			
-				<td><label>Departure Date</label></td>
-				<td><s:input  type="text" id="txtDepartureDate" path="dteDepartureDate" cssClass="calenderTextBox" /></td>
-			</tr>
-		
-			<tr>
-				<td><label>Arrival Time</label></td>
-				<td><s:input  type="text" id="txtArrivalTime" path="tmeArrivalTime" cssClass="calenderTextBox" /></td>
-			
-				<td><label>Departure Time</label></td>
-				<td><s:input  type="text" id="txtDepartureTime" path="tmeDepartureTime" cssClass="calenderTextBox" /></td>
-			</tr>
-			
-			
-				
-			<tr>
-				<td ><label>#Adult</label></td>
-				<td><s:input id="txtNoOfAdults" value = '1' name="txtNoOfAdults" path="intNoOfAdults" type="number" min="0" step="1" class="longTextBox" style="width: 38%;text-align: right;"/></td>
-				<td><label>#Child</label></td>
-				<td><s:input id="txtNoOfChild" path="intNoOfChild" type="number" min="0" step="1" name="txtNoOfChild" class="longTextBox" style="width: 38%;text-align: right;"/></td>				
-			</tr> 
-			<tr>
-			<td>NO POST Folio</td>
-			<td><s:checkbox id="txtNoPostFolio" path="strNoPostFolio" value="Yss" />
-			
-			<td>Complimentry</td>
-			<td><s:checkbox id="txtComplimentry" path="strComplimentry" value="Y" />
-			
-			
-			</tr>
+	
 		</table>
 		
 		<br>
@@ -1503,7 +1436,7 @@
 		
 		<!-- Start of Tarif Tab -->
 
-	<div id="tab2" class="tab_content" style="height: 400px">
+	 <div id="tab2" class="tab_content" style="height: 400px">
 	<!-- Generate Dynamic Table   -->		
 	<br/><br/><br/>
 		<div class="dynamicTableContainer" style="height: 200px; width: 80%">
@@ -1635,7 +1568,7 @@
 					</tbody>
 				</table>
 			</div>		
-		</div>		
+		</div>	 
 	 
 	 </div>
 	 

@@ -76,7 +76,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 		<variableExpression><![CDATA[$V{vDebitTotal}]]></variableExpression>
 	</variable>
 	<variable name="vGrandTotal" class="java.lang.Double">
-		<variableExpression><![CDATA[$P{pHmRoomTariff}+$P{pSupportVoucher}]]></variableExpression>
+		<variableExpression><![CDATA[$P{pHmRoomTariff}+$F{dblBalanceAmt}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -609,16 +609,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<text><![CDATA[Room Total     :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="354" y="57" width="120" height="19" uuid="c2e2b5c9-75f1-46e7-a860-d303946539da">
-					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Supporting Voucher  :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="374" y="76" width="100" height="19" uuid="7034af4a-68b6-4e17-ac1e-307db00d335e">
+				<reportElement x="374" y="64" width="100" height="19" uuid="7034af4a-68b6-4e17-ac1e-307db00d335e">
 					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -634,14 +625,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textFieldExpression><![CDATA[$P{pHmRoomTariff}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#0">
-				<reportElement x="474" y="58" width="49" height="18" uuid="e02fbb87-fd71-4d56-8d99-09866490db05">
-					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$P{pSupportVoucher}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#0">
-				<reportElement x="474" y="77" width="49" height="18" uuid="dd8a0795-d39b-487f-b2a7-e98ff8c2a7f0">
+				<reportElement x="474" y="64" width="49" height="18" uuid="dd8a0795-d39b-487f-b2a7-e98ff8c2a7f0">
 					<printWhenExpression><![CDATA[$P{isRoomTariff}==false]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right"/>

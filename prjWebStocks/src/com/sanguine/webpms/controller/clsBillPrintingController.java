@@ -1276,7 +1276,7 @@ public class clsBillPrintingController {
 					+ "IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,"
 					+ "b.dblBalanceAmt FROM tblbillhd a INNER JOIN tblbilldtl b "
 					+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo "
-					+ "WHERE a.strBillNo='"+billNo+"' group by b.strPerticulars";
+					+ "WHERE a.strBillNo='"+billNo+"' and b.strPerticulars='Room Tariff' ";
 		List billDtlList = objFolioService.funGetParametersList(sqlBillDtl);
 		
 		for (int i = 0; i < billDtlList.size(); i++) {
@@ -1497,6 +1497,5 @@ public class clsBillPrintingController {
 		}
 		return pRoomTariff;
 	}	
-
 }
 

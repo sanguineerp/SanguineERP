@@ -21,7 +21,7 @@
 		{
 			flag=true;
 			
-			var fromDate=$("#dteFromDate").val();
+			/* var fromDate=$("#dteFromDate").val();
 			var toDate=$("#dteToDate").val();
 			
 			var fd=fromDate.split("-")[0];
@@ -33,11 +33,12 @@
 			var ty=toDate.split("-")[2];
 			
 			$("#dteFromDate").val(fy+"-"+fm+"-"+fd);
-			$("#dteToDate").val(ty+"-"+tm+"-"+td);
+			$("#dteToDate").val(ty+"-"+tm+"-"+td); */
 			
 			var folioNo=$("#strFolioNo").val();
 			
-			window.open(getContextPath()+"/rptFolioPrinting.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+"&folioNo="+folioNo+"");
+			window.open(getContextPath()+"/rptFolioPrinting.html?folioNo="+folioNo+"");
+			//fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+"&
 		}
 		
 		
@@ -148,12 +149,12 @@
 				<td><label>Folio No.</label></td>
 				<td colspan="3"><s:input id="strFolioNo" path="strFolioNo" readonly="true" cssClass="searchTextBox" ondblclick="funHelp('folioNo')"/></td>													
 			</tr>
-			<tr>
+			<%-- <tr>
 				<td><label>From Date</label></td>
 				<td><s:input type="text" id="dteFromDate" path="dteFromDate" required="true" class="calenderTextBox" /></td>
 				<td><label>To Date</label></td>
 				<td><s:input type="text" id="dteToDate" path="dteToDate" required="true" class="calenderTextBox" /></td>				
-			</tr>
+			</tr> --%>
 		</table>
 					
 		<br />

@@ -4359,6 +4359,15 @@
 	  	</definition>
 	  	
 	  	
+	  	<definition name="frmAddExtraBed" extends="base.definition">
+	  		<put-attribute name="title" value="Add Extra Bed" /> 
+	  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/transactions/frmAddExtraBed.jsp" /> 
+	  	</definition>	  	
+		<definition name="frmAddExtraBed_1" extends="base.definition4">
+	  		<put-attribute name="title" value="Add Extra Bed" /> 
+	  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/transactions/frmAddExtraBed.jsp" /> 
+	  	</definition>
+	  	
 	  	<definition name="frmCheckOut" extends="base.definition">
 	  		<put-attribute name="title" value="Check Out" /> 
 	  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/transactions/frmCheckOut.jsp" /> 

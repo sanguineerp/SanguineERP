@@ -160,6 +160,14 @@
 		return flg;
 	}
 	
+	 
+	function isNumber(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+            return false;
+
+        return true;
+    }  
 	
 </script>
 
@@ -273,7 +281,7 @@
 					<label>TelphoneNo</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" id="txtTelphoneNo" path="lngTelphoneNo" cssClass="longTextBox" />
+					<s:input colspan="3" type="text" id="txtTelphoneNo" path="lngTelphoneNo" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" />
 				</td>
 			</tr>
 			<tr>
@@ -281,7 +289,7 @@
 					<label>MobileNo</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" id="txtMobileNo" path="lngMobileNo" cssClass="longTextBox" />
+					<s:input colspan="3" type="text" id="txtMobileNo" path="lngMobileNo" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" />
 				</td>
 			</tr>
 			<tr>

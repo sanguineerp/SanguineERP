@@ -84,7 +84,7 @@ public class clsFolioPrintingController {
 
 	// Save folio posting
 	@RequestMapping(value = "/rptFolioPrinting", method = RequestMethod.GET)
-	public void funGenerateFolioPrintingReport(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate, @RequestParam("folioNo") String folioNo, HttpServletRequest req, HttpServletResponse resp) {
+	public void funGenerateFolioPrintingReport(@RequestParam("folioNo") String folioNo, HttpServletRequest req, HttpServletResponse resp) {
 		try {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
@@ -198,7 +198,7 @@ public class clsFolioPrintingController {
 				reportParams.put("pBillNo", billNo);
 
 				// get folio details
-				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
+				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
 									+ " order by b.strRevenueType desc";
 				List folioDtlList = objFolioService.funGetParametersList(sqlFolioDtl);
 				for (int i = 0; i < folioDtlList.size(); i++) {
@@ -224,7 +224,7 @@ public class clsFolioPrintingController {
 						dataList.add(folioPrintingBean);
 						
 
-						sqlFolioDtl = "SELECT DATE_FORMAT(date(a.dteDocDate),'%d-%m-%Y'),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblfoliodtl a,tblfoliotaxdtl b where a.strDocNo=b.strDocNo " + " and DATE(a.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strFolioNo='" + folioNo + "' and a.strDocNo='" + docNo + "'";
+						sqlFolioDtl = "SELECT DATE_FORMAT(date(a.dteDocDate),'%d-%m-%Y'),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblfoliodtl a,tblfoliotaxdtl b where a.strDocNo=b.strDocNo " + " and  a.strFolioNo='" + folioNo + "' and a.strDocNo='" + docNo + "'";
 						List listFolioTaxDtl = objWebPMSUtility.funExecuteQuery(sqlFolioDtl, "sql");
 						for (int cnt = 0; cnt < listFolioTaxDtl.size(); cnt++) {
 							Object[] arrObjFolioTaxDtl = (Object[]) listFolioTaxDtl.get(cnt);
@@ -244,8 +244,7 @@ public class clsFolioPrintingController {
 				
 				sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt,b.strRevenueType" 
 						+ " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " 
-						+ " WHERE DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " 
-						+ " AND a.strFolioNo='" + folioNo + "' and b.strRevenueType='Discount'";
+						+ " WHERE  a.strFolioNo='" + folioNo + "' and b.strRevenueType='Discount'";
 				folioDtlList = objFolioService.funGetParametersList(sqlFolioDtl);
 				if(folioDtlList.size()>0)
 				{
@@ -270,7 +269,7 @@ public class clsFolioPrintingController {
 				
 				// get payment details
 				String sqlPaymentDtl = "SELECT date(b.dteDocDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt,d.dblSettlementAmt as creditAmt" + " ,'0.00' as balance " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " left outer join tblreceipthd c on a.strFolioNo=c.strFolioNo and a.strReservationNo=c.strReservationNo "
-						+ " left outer join tblreceiptdtl d on c.strReceiptNo=d.strReceiptNo " + " left outer join tblsettlementmaster e on d.strSettlementCode=e.strSettlementCode " + " WHERE DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' AND a.strFolioNo='" + folioNo + "' " + " group by a.strFolioNo ";
+						+ " left outer join tblreceiptdtl d on c.strReceiptNo=d.strReceiptNo " + " left outer join tblsettlementmaster e on d.strSettlementCode=e.strSettlementCode " + " WHERE  a.strFolioNo='" + folioNo + "' " + " group by a.strFolioNo ";
 				List paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
 				for (int i = 0; i < paymentDtlList.size(); i++) {
 					Object[] paymentArr = (Object[]) paymentDtlList.get(i);
