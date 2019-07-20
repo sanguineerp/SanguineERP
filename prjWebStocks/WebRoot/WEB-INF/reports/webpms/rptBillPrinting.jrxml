@@ -216,10 +216,10 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pGuestName}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField>
 				<reportElement x="94" y="115" width="229" height="14" isPrintWhenDetailOverflows="true" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
-				<textElement>
-					<font size="9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pGuestAddress}]]></textFieldExpression>
 			</textField>
@@ -337,8 +337,8 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 			</staticText>
 			<textField>
 				<reportElement x="94" y="132" width="229" height="14" isPrintWhenDetailOverflows="true" uuid="d9061159-d488-43e1-9be7-9b181d8cd3b6"/>
-				<textElement markup="none">
-					<font size="9"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font size="10"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pGuestOfficeAddress}]]></textFieldExpression>

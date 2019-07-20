@@ -17,10 +17,13 @@ public class clsFolioDaoImpl implements clsFolioDao {
 	@Override
 	@Transactional(value = "WebPMSTransactionManager")
 	public void funAddUpdateFolioHd(clsFolioHdModel objHdModel) {
+		if(!objHdModel.getStrRegistrationNo().isEmpty()){
 		String deleteSql = "delete from tblfoliohd " + " where strCheckInNo='" + objHdModel.getStrCheckInNo() + "' and strRoomNo='" + objHdModel.getStrRoomNo() + "' " + " and strClientCode='" + objHdModel.getStrClientCode() + "' ";
 		webPMSSessionFactory.getCurrentSession().createSQLQuery(deleteSql).executeUpdate();
-
 		webPMSSessionFactory.getCurrentSession().saveOrUpdate(objHdModel);
+		}
+		
+		//webPMSSessionFactory.getCurrentSession().update(objHdModel);
 	}
 
 	@Override

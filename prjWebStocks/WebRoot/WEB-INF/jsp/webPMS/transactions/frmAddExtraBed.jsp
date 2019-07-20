@@ -141,23 +141,7 @@
 		if (test) 
 		{
 			%> alert("Data Save successfully\n\n"+message);
-			var checkInNo='';
-			var against='';
-			against='<%=session.getAttribute("against").toString()%>';
-			var isCheckOk=confirm("Do You Want to Generate Check-In Slip ?"); 
-			var isAdvanceOk=confirm("Do You Want to pay Advance Amount ?"); 
-			if(isCheckOk)
-			{
-				checkInNo='<%=session.getAttribute("AdvanceAmount").toString()%>';
-				
-				window.open(getContextPath() + "/rptCheckInSlip.html?checkInNo=" +checkInNo+"&cmbAgainst="+against,'_blank');
-			}
-			if(isAdvanceOk)
-			{
-				window.open(getContextPath()+"/frmPMSPaymentAdvanceAmount.html?AdvAmount="+checkInNo);
-				session.removeAttribute("AdvanceAmount");
-				
-			}<%	
+			<%	
 		}
 	}%>
 	

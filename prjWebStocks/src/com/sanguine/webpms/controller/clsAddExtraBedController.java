@@ -1,14 +1,23 @@
 package com.sanguine.webpms.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,11 +25,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.base.service.intfBaseService;
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.model.clsCompanyMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.webpms.bean.clsCheckInBean;
 import com.sanguine.webpms.bean.clsCheckInDetailsBean;
+import com.sanguine.webpms.bean.clsFolioHdBean;
 import com.sanguine.webpms.dao.clsExtraBedMasterDao;
 import com.sanguine.webpms.dao.clsGuestMasterDao;
 import com.sanguine.webpms.dao.clsWalkinDao;
@@ -28,9 +40,18 @@ import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
 import com.sanguine.webpms.model.clsCheckInDtl;
 import com.sanguine.webpms.model.clsCheckInHdModel;
 import com.sanguine.webpms.model.clsExtraBedMasterModel;
+import com.sanguine.webpms.model.clsFolioDtlModel;
+import com.sanguine.webpms.model.clsFolioHdModel;
+import com.sanguine.webpms.model.clsGuestMasterHdModel;
+import com.sanguine.webpms.model.clsPackageMasterDtl;
+import com.sanguine.webpms.model.clsPackageMasterHdModel;
+import com.sanguine.webpms.model.clsPropertySetupHdModel;
 import com.sanguine.webpms.model.clsReservationHdModel;
+import com.sanguine.webpms.model.clsReservationRoomRateModelDtl;
+import com.sanguine.webpms.model.clsRoomMasterModel;
 import com.sanguine.webpms.model.clsRoomPackageDtl;
 import com.sanguine.webpms.model.clsWalkinHdModel;
+import com.sanguine.webpms.model.clsWalkinRoomRateDtlModel;
 import com.sanguine.webpms.service.clsCheckInService;
 import com.sanguine.webpms.service.clsFolioService;
 import com.sanguine.webpms.service.clsGuestMasterService;
@@ -257,4 +278,45 @@ public class clsAddExtraBedController {
 		return objBean;
 	}
 
+	
+	@RequestMapping(value = "/saveExtraBed", method = RequestMethod.POST)
+	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsCheckInBean objBean, BindingResult result, HttpServletRequest req) {
+		if (!result.hasErrors()) {
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String userCode = req.getSession().getAttribute("usercode").toString();
+			String propCode = req.getSession().getAttribute("propertyCode").toString();
+			String startDate = req.getSession().getAttribute("startDate").toString();
+			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
+ 
+			
+			
+			String sqlFolioNo = "select a.strFolioNo from tblfoliohd a where a.strCheckInNo='"+objBean.getStrCheckInNo()+"'";
+			List listFolioData1 = objGlobalFunctionsService.funGetListModuleWise(sqlFolioNo, "sql");
+			if(listFolioData1.size()>0)
+			{
+				String folioNo = listFolioData1.get(0).toString();
+				List list = (List)objBean.getListCheckInDetailsBean();
+				for(int i=0;i<list.size();i++)
+				{
+					clsCheckInDetailsBean  obj=(clsCheckInDetailsBean )list.get(i);
+					String strExtraBed= obj.getStrExtraBedCode();
+					
+					String sqlAddExtraBed = "update tblfoliohd a set a.strExtraBedCode='"+strExtraBed+"'  where a.strFolioNo='"+folioNo+"' ";
+					
+					objWebPMSUtility.funExecuteUpdate(sqlAddExtraBed, "sql");
+				}
+				
+			
+			}
+			
+			
+			
+			req.getSession().setAttribute("success", true);
+			req.getSession().setAttribute("successMessage", "Check In No : ".concat(objBean.getStrCheckInNo()));
+			return new ModelAndView("redirect:/frmAddExtraBed.html");
+		} else {
+			return new ModelAndView("frmAddExtraBed");
+		}
+	}
+	
 }
