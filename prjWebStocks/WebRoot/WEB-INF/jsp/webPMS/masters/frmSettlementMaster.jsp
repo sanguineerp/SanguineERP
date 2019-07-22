@@ -277,6 +277,7 @@
 				    	<option selected="selected" value="Cash">Cash</option>
 				    	<option value="Credit Card">Credit Card</option>
 				    	<option value="Credit">Credit</option>
+				    	<option value="Complimentry">Complementary</option>
 				    	</s:select>					
 				</td>				
 			</tr>

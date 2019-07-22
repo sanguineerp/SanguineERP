@@ -453,6 +453,14 @@
 			<div id="tab1" class="tab_content" style="height: 400px">
 				<br> <br>
 				<table class="masterTable">
+				
+				<tr>
+						<td><label>Room Type</label></td>
+						<td><s:input id="txtRoomType" path="strRoomType"
+								ondblclick="funHelp('roomType')" cssClass="searchTextBox" /></td>
+						<td><label id="lblRoomType"></label></td>
+						<td colspan="1"></td>
+					</tr>
 					<tr>
 						<td><label>Room Code</label></td>
 						<td><s:input id="txtRoomCode" path="strRoomCode"
@@ -461,15 +469,7 @@
 								required="true" cssClass="longTextBox" style="width: 316px" /></td>
 					</tr>
 
-					<tr>
-						<td><label>Room Type</label></td>
-						<td><s:input id="txtRoomType" path="strRoomType"
-								ondblclick="funHelp('roomType')" cssClass="searchTextBox" /></td>
-						<td><label id="lblRoomType"></label></td>
-						<td colspan="1"></td>
-					</tr>
-
-					<tr>
+			<tr>
 			    <td><label>Valid From</label></td>	
 			    <td><s:input type="text" id="dteValidFrom" path="dteValidFrom" required="true" class="calenderTextBox" /></td>
 			    <td><label>Valid To</label></td>	

@@ -149,6 +149,15 @@
 		window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 		//window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
 	}
+	
+	
+	function isNumber(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+            return false;
+
+        return true;
+    }
 </script>
 
 </head>
@@ -172,11 +181,11 @@
 			
 			<tr>
 			    <td><label>Sub Total</label></td>
-			    <td><s:input id="txtSubTotal" path="dblDebitAmt"   class="decimal-places-amt numberField" value="0" placeholder="amt"  /></td>
+			    <td><s:input id="txtSubTotal" path="dblDebitAmt"   class="decimal-places-amt numberField" value="0" placeholder="amt" onkeypress="javascript:return isNumber(event)" /></td>
 			</tr>
 			<tr>
 			    <td><label>Discount %</label></td>
-			    <td><s:input id="txtDiscountPer" path="dblDiscPer"   class="decimal-places-amt numberField" value="0" placeholder="disc"  /></td>
+			    <td><s:input id="txtDiscountPer" path="dblDiscPer"   class="decimal-places-amt numberField" value="0" placeholder="disc" onkeypress="javascript:return isNumber(event)" /></td>
 			</tr>
 			
 		</table>

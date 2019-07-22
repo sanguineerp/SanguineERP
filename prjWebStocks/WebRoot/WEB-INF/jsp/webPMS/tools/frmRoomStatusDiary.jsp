@@ -576,30 +576,45 @@
 			var x1=row.insertCell(1);
 			x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x1.bgColor=color;
+			toolTipText1+=" \n"+response.strGuestName;
+			x1.title=toolTipText1;
+			
 			
 			var x2=row.insertCell(1);
 			x2.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x2.bgColor=color;
+			toolTipText2+=" \n"+response.strGuestName;
+			x2.title=toolTipText2;
 			
 			var x3=row.insertCell(1);
 			x3.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x3.bgColor=color;
+			toolTipText3+=" \n"+response.strGuestName;
+			x3.title=toolTipText3;
 			
 			var x4=row.insertCell(1);
 			x4.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x4.bgColor=color;
+			toolTipText4+=" \n"+response.strGuestName;
+			x4.title=toolTipText4;
 			
 			var x5=row.insertCell(1);
 			x5.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x5.bgColor=color;
+			toolTipText5+=" \n"+response.strGuestName;
+			x5.title=toolTipText5;
 			
 			var x6=row.insertCell(1);
 			x6.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x6.bgColor=color;
+			toolTipText6+=" \n"+response.strGuestName;
+			x6.title=toolTipText6;
 			
 			var x7=row.insertCell(1);
 			x7.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x7.bgColor=color;
+			toolTipText7+=" \n"+response.strGuestName;
+			x7.title=toolTipText7;
 			}
 	}
 	

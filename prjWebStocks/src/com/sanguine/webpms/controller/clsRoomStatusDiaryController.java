@@ -705,6 +705,7 @@ public class clsRoomStatusDiaryController {
 						objRoomStatusDtl.setStrDay5("Blocked Room");
 						objRoomStatusDtl.setStrDay6("Blocked Room");
 						objRoomStatusDtl.setStrDay7("Blocked Room");
+						objRoomStatusDtl.setStrGuestName(reason);
 					}
 				}
 			}

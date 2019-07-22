@@ -4918,6 +4918,16 @@
  	</definition>
  	
  	
+ 	<definition name="frmComplimentryReport" extends="base.definition">
+  		<put-attribute name="title" value="Complimentry Report" /> 
+  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/reports/frmComplimentryReport.jsp" />
+ 	</definition>	  	
+	<definition name="frmComplimentryReport_1" extends="base.definition4">
+ 		<put-attribute name="title" value="Complimentry Report" /> 
+ 		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/reports/frmComplimentryReport.jsp" /> 
+ 	</definition>
+ 	
+ 	
  	
  	<definition name="frmVoidBillReport" extends="base.definition">
 			<put-attribute name="title" value="Void Bill Report" />

@@ -34,7 +34,7 @@
 			
 		
 			
-			window.open(getContextPath()+"/rptReceipt.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+" ");
+			window.open(getContextPath()+"/rptComplimentryReport.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+" ");
 		
 		return flag;
 	}
@@ -64,9 +64,9 @@
 
 <body onload="funOnLoad();">
 	<div id="formHeading">
-		<label>Receipt Report </label>
+		<label>Complimentry Report </label>
 	</div>
-	<s:form name="frmCheckInList" method="GET" action="" >
+	<s:form name="frmComplimentryReport" method="GET" action="" >
 		
 	<table class="masterTable">
 		<br/><br/>
