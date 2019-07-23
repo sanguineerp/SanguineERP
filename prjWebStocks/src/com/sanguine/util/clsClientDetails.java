@@ -201,7 +201,7 @@ public class clsClientDetails {
 			hmClientDtl.put("302.001", clsClientDetails.createClientDetails("302.001", "MOSHING CUPPA", dFormat.parse("2019-03-07"), dFormat.parse("2019-04-15"))); // released on 07-03-2019 for 1 month till 07-04-2019
 			
 			hmClientDtl.put("312.001", clsClientDetails.createClientDetails("312.001", "Reddy's Fine Dine Restaurant", dFormat.parse("2019-05-08"), dFormat.parse("2019-06-10"))); // released on 2019-05-08 for 1 month till 2019-06-10
-			hmClientDtl.put("315.001", clsClientDetails.createClientDetails("315.001", "KUTTING FUSION HOSPITALITY LLP", dFormat.parse("2019-05-25"), dFormat.parse("2019-07-25"))); // renewed on 25-05-2019 for 1 month till 25-06-2019
+			hmClientDtl.put("315.001", clsClientDetails.createClientDetails("315.001", "KUTTING FUSION HOSPITALITY LLP", dFormat.parse("2019-05-25"), dFormat.parse("2019-08-08"))); // renewed on 25-05-2019 for 1 month till 25-06-2019
 			hmClientDtl.put("316.001", clsClientDetails.createClientDetails("316.001", "MRP HOSPITALITY", dFormat.parse("2019-05-25"), dFormat.parse("2019-07-25")));//renewed on 29-06-2019 for 1 month till 25-07-2019 // renewed on 25-05-2019 for 1 month till 25-06-2019
 			hmClientDtl.put("318.001", clsClientDetails.createClientDetails("318.001", "EURISKA", dFormat.parse("2019-06-11"), dFormat.parse("2020-06-11"))); // renewed on 04-06-2019 for 1 month till 04-07-2019
 			hmClientDtl.put("319.001", clsClientDetails.createClientDetails("319.001", "LAXMI FOODS", dFormat.parse("2019-06-04"), dFormat.parse("2019-08-04"))); // Released on 04-06-2019 for 2 month till 04-07-2019
