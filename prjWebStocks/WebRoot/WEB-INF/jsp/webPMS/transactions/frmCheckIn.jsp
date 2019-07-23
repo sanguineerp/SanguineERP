@@ -1430,7 +1430,7 @@
 			</tr> 
 			<tr>
 			<td>NO POST Folio</td>
-			<td><s:checkbox id="txtNoPostFolio" path="strNoPostFolio" value="Yss" />
+			<td><s:checkbox id="txtNoPostFolio" path="strNoPostFolio" value="Y" />
 			
 			<td>Complimentry</td>
 			<td><s:checkbox id="txtComplimentry" path="strComplimentry" value="Y" />

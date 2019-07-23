@@ -343,14 +343,15 @@ public class clsCheckInController {
 			if(listFolioNo.size()>0)
 			{
 				strFolioNo = listFolioNo.get(0).toString();
+				String sqlFolioNoDtl = "select a.strPerticulars from tblfoliodtl a where a.strFolioNo='"+strFolioNo+"'";
+				List listFolioNoDtl  = objGlobalFunctionsService.funGetListModuleWise(sqlFolioNoDtl, "sql");			
+				if(listFolioNoDtl.size()>0)
+				{
+					req.getSession().setAttribute("WarningMsg", "Folio has been posted Cant edit this checkin");
+				}
 			}
 			
-			String sqlFolioNoDtl = "select a.strPerticulars from tblfoliodtl a where a.strFolioNo='"+strFolioNo+"'";
-			List listFolioNoDtl  = objGlobalFunctionsService.funGetListModuleWise(sqlFolioNoDtl, "sql");			
-			if(listFolioNoDtl.size()>0)
-			{
-				req.getSession().setAttribute("WarningMsg", "Folio has been posted Cant edit this checkin");
-			}
+			
 			else
 			{
 			

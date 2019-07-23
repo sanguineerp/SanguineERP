@@ -220,26 +220,25 @@
 					      var finalTemp=temp.indexOf("/");
 					      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 					      finalTemp=temp.substring(0,finalTemp);
-					      if(count==1)
-			    		  {
-					    	  roomStatus="Checked Out"
-				    		  toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
-			    		  }
-					      else
-					      {
-				    	  	roomStatus="Occupied"
-					    	toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
-				    	  }
-				    	  count++;
-					      /* if(count>1)
+					      if(nextFinalTemp == "/")
 				    	  {
-					    	roomStatus="Checked Out"
-				    	  	toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  roomStatus="Occupied"
+							  toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 				    	  }
 					      else
 				    	  {
-					    	  toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
-				    	  } */
+					    	  if(count==1)
+				    		  {
+						    	  roomStatus="Checked Out"
+					    		  toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+				    		  }
+						      else
+						      {
+					    	  	roomStatus="Occupied"
+						    	toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+					    	  count++;
+				    	  }
 					      
 						});
 					}
@@ -266,20 +265,25 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
-						      if(count==1)
-				    		  {
-						    	  roomStatus="Checked Out"
-					    		  toolTipText2+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
-				    		  }
-						      else
-						      {
-					    	  	roomStatus="Occupied"
-						    	toolTipText2+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						      if(nextFinalTemp == "/")
+					    	  {
+						    	  roomStatus="Occupied"
+								  toolTipText2+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
-					    	  count++;
-					      /* day2+=' '+item1.strRoomNo;
-					      //alert(item[i].strRoomNo);
-					      toolTipText2+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate; */
+						      else
+					    	  {
+						    	  if(count==1)
+					    		  {
+							    	  roomStatus="Checked Out"
+						    		  toolTipText2+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    		  }
+							      else
+							      {
+						    	  	roomStatus="Occupied"
+							    	toolTipText2+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						    	  }
+						    	  count++;
+					    	  }
 						});
 					}
 					
@@ -306,20 +310,25 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
-						      if(count==1)
-				    		  {
-						    	  roomStatus="Checked Out"
-					    		  toolTipText3+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
-				    		  }
-						      else
-						      {
-					    	  	roomStatus="Occupied"
-						    	toolTipText3+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						      if(nextFinalTemp == "/")
+					    	  {
+						    	  roomStatus="Occupied"
+								  toolTipText3+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
-					    	  count++;
-					     /*  day3+=item1.strRoomNo;
-					      //alert(item[i].strRoomNo);
-					      toolTipText3+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate; */
+						      else
+					    	  {
+						    	  if(count==1)
+					    		  {
+							    	  roomStatus="Checked Out"
+						    		  toolTipText3+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    		  }
+							      else
+							      {
+						    	  	roomStatus="Occupied"
+							    	toolTipText3+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						    	  }
+						    	  count++;
+					    	  }
 						});
 					}
 					
@@ -346,20 +355,25 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
-						      if(count==1)
-				    		  {
-						    	  roomStatus="Checked Out"
-					    		  toolTipText4+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
-				    		  }
-						      else
-						      {
-					    	  	roomStatus="Occupied"
-						    	toolTipText4+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						      if(nextFinalTemp == "/")
+					    	  {
+						    	  roomStatus="Occupied"
+								  toolTipText4+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
-					    	  count++;
-					      /* day4+=item1.strRoomNo;
-					      //alert(item[i].strRoomNo);
-					      toolTipText4+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate; */
+						      else
+					    	  {
+						    	  if(count==1)
+					    		  {
+							    	  roomStatus="Checked Out"
+						    		  toolTipText4+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    		  }
+							      else
+							      {
+						    	  	roomStatus="Occupied"
+							    	toolTipText4+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						    	  }
+						    	  count++;
+					    	  }  
 						});
 					}
 				 });
@@ -385,20 +399,25 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
-						      if(count==1)
-				    		  {
-						    	  roomStatus="Checked Out"
-					    		  toolTipText5+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
-				    		  }
-						      else
-						      {
-					    	  	roomStatus="Occupied"
-						    	toolTipText5+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						      if(nextFinalTemp == "/")
+					    	  {
+						    	  roomStatus="Occupied"
+								  toolTipText5+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
-					    	  count++;
-					      /* day5+=item1.strRoomNo;
-					      //alert(item[i].strRoomNo);
-					      toolTipText5+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate; */
+						      else
+					    	  {
+						    	  if(count==1)
+					    		  {
+							    	  roomStatus="Checked Out"
+						    		  toolTipText5+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    		  }
+							      else
+							      {
+						    	  	roomStatus="Occupied"
+							    	toolTipText5+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						    	  }
+						    	  count++;
+					    	  }
 						});	
 					}
 				 });
@@ -424,20 +443,25 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
-						      if(count==1)
-				    		  {
-						    	  roomStatus="Checked Out"
-					    		  toolTipText6+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
-				    		  }
-						      else
-						      {
-					    	  	roomStatus="Occupied"
-						    	toolTipText6+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						      if(nextFinalTemp == "/")
+					    	  {
+						    	  roomStatus="Occupied"
+								  toolTipText6+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
-					    	  count++;
-					      /* day6+=item1.strRoomNo;
-					      //alert(item[i].strRoomNo);
-					      toolTipText6+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate; */
+						      else
+					    	  {
+						    	  if(count==1)
+					    		  {
+							    	  roomStatus="Checked Out"
+						    		  toolTipText6+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    		  }
+							      else
+							      {
+						    	  	roomStatus="Occupied"
+							    	toolTipText6+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						    	  }
+						    	  count++;
+					    	  }
 						});
 					}
 					
@@ -464,20 +488,25 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
-						      if(count==1)
-				    		  {
-						    	  roomStatus="Checked Out"
-					    		  toolTipText7+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
-				    		  }
-						      else
-						      {
-					    	  	roomStatus="Occupied"
-						    	toolTipText7+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						      if(nextFinalTemp == "/")
+					    	  {
+						    	  roomStatus="Occupied"
+								  toolTipText7+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
-					    	  count++;
-					     /*  day7+=item1.strRoomNo;
-					      //alert(item[i].strRoomNo);
-					      toolTipText7+="\n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate; */
+						      else
+					    	  {
+						    	  if(count==1)
+					    		  {
+							    	  roomStatus="Checked Out"
+						    		  toolTipText7+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    		  }
+							      else
+							      {
+						    	  	roomStatus="Occupied"
+							    	toolTipText7+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+						    	  }
+						    	  count++;
+					    	  }
 						});
 					}
 				 });
@@ -631,8 +660,8 @@
 		{
 			case 'rgb(255, 0, 0)'://RED-->CHECKED-IN-->OCCUPIED
 									  code=obj.value;
-									  code=code.split(',')[2].trim();
-									  url=getContextPath()+"/frmCheckIn1.html?docCode="+code
+									  //code=code.split(',')[2].trim();
+									  url=getContextPath()+"/frmCheckOut1.html?docCode="+code
 									  window.open(url);
 			
 		   						  break;
@@ -671,9 +700,20 @@
 				  var table1=document.getElementById("tblRoomInfo");
 				  var indexData=table1.rows[index];
 				  var roomNo=indexData.cells[0].childNodes[0].defaultValue;
-				  alert("Proceed to Walkin \n\n"+message);
-				  url=getContextPath()+"/frmWalkin1.html?docCode="+code+"&roomNo="+roomNo;
-				  window.open(url);
+				  var count=indexData.cells[1].cellIndex;
+				  
+				  if(obj.parentNode.cellIndex>1)
+					  {
+						  alert("Proceed to Reservation \n\n"+message);
+						  url=getContextPath()+"/frmReservation1.html?docCode="+code+"&roomNo="+roomNo;
+						  window.open(url);
+					  }
+				  else
+					  {
+						  alert("Proceed to Walkin \n\n"+message);
+						  url=getContextPath()+"/frmWalkin1.html?docCode="+code+"&roomNo="+roomNo;
+						  window.open(url);
+					  }
 				  
 
 				  break;

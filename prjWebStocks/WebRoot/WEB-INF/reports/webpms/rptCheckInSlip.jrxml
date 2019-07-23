@@ -216,25 +216,18 @@
 				<text><![CDATA[Note:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="13" y="321" width="227" height="21" uuid="dd4c59c0-1dbd-4b5f-bfad-892b683cff11"/>
+				<reportElement x="13" y="329" width="227" height="21" uuid="dd4c59c0-1dbd-4b5f-bfad-892b683cff11"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<text><![CDATA[1. Advance paid is non-refundable]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="13" y="345" width="227" height="24" uuid="952f6f6e-986d-4ad4-a4cf-0efb9cb2f233"/>
-				<textElement>
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[2. Issued subject to Nashik Jurisdiction]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="13" y="373" width="217" height="25" uuid="29587b0b-1ddd-45af-99aa-d651602f9772"/>
 				<textElement>
 					<font size="12" isBold="false"/>
 				</textElement>
-				<text><![CDATA[3. Above information read and accepted]]></text>
+				<text><![CDATA[2. Above information read and accepted]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="497" y="5" width="55" height="20" uuid="f6f4ea79-e201-4238-aef3-746c26ffec51"/>
@@ -299,13 +292,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pstrMobileNo}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="13" y="403" width="217" height="25" uuid="1229184b-7633-4b4c-b801-3b9a30438879"/>
-				<textElement>
-					<font size="12" isBold="false"/>
-				</textElement>
-				<text><![CDATA[4. Taxes as Applicable]]></text>
-			</staticText>
 			<textField pattern="#0">
 				<reportElement x="305" y="189" width="45" height="20" uuid="61fa9fb7-505b-4e24-bc5a-f3682c3f22a4"/>
 				<textElement textAlignment="Right">

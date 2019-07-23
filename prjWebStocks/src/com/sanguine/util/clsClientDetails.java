@@ -208,6 +208,7 @@ public class clsClientDetails {
 			hmClientDtl.put("320.001", clsClientDetails.createClientDetails("320.001", "HOTEL SURYA", dFormat.parse("2019-06-13"), dFormat.parse("2019-07-23"))); //Released on 16-06-2019 for 1 week till 23-07-2019// Released on 13-06-2019 for 1 month till 15-07-2019
 			hmClientDtl.put("304.001", clsClientDetails.createClientDetails("304.001", "PLUM HOSPITALITY LLP", dFormat.parse("2019-06-27"), dFormat.parse("2019-07-27"))); // released on 2019-06-27 for 1 month till 2019-07-27 for behive
 			hmClientDtl.put("322.001", clsClientDetails.createClientDetails("322.001", "BREWSMITH HOSPITALITY PVT LTD", dFormat.parse("2019-07-12"), dFormat.parse("2019-08-12"))); // Released on 12-07-2019 for 1 month till 12-08-2019
+			hmClientDtl.put("326.001", clsClientDetails.createClientDetails("326.001","HOTEL METRO PALACE",dFormat.parse("2019-07-23"),dFormat.parse("2019-08-23")));//Released on 23-07-2019 for 1 Monthtill 23-08-2019 for 1 SPOS ,0 APOS,WebStocks,No SMS Pack,No BillDeletion.", "Mr.Akshey", "7730497120", "Akshey93@gmail.com", "No BillDeletion","santesting"))
 			
 		} catch (Exception e) {
 			e.printStackTrace();

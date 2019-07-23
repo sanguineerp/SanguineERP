@@ -164,10 +164,11 @@ public class clsPostRoomTerrifController {
 			String strComplimentry = arrObjFolioDtl[2].toString();
 			String docNo="";
 			
-			String sqlPostRommTariffCheck = "select a.strDocNo from tblfoliodtl a where a.strFolioNo='"+folioNo+"' and a.dteDocDate='"+PMSDate+"'";
+			String sqlPostRommTariffCheck = "select a.strPerticulars from tblfoliodtl a where a.strFolioNo='"+folioNo+"' and a.dteDocDate='"+PMSDate+"'";
 			List listPostRommTariffCheck  = objGlobalFunctionsService.funGetListModuleWise(sqlPostRommTariffCheck, "sql");
 			if(!listPostRommTariffCheck.isEmpty())
 			{
+				
 				req.getSession().setAttribute("WarningMsg", "Already Post room terrif is Done");
 
 				//JOptionPane.showMessageDialog(null, "Already Post room terrif is Done");

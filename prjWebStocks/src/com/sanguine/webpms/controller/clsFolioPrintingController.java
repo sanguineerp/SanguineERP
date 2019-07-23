@@ -268,35 +268,39 @@ public class clsFolioPrintingController {
 				}
 				
 				// get payment details
-				String sqlPaymentDtl = "SELECT date(b.dteDocDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt,d.dblSettlementAmt as creditAmt" + " ,'0.00' as balance " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " left outer join tblreceipthd c on a.strFolioNo=c.strFolioNo and a.strReservationNo=c.strReservationNo "
+				String sqlPaymentDtl = "IFNULL(DATE(b.dteDocDate),''),ifnull(c.strReceiptNo,''),ifnull(e.strSettlementDesc,''),'0.00' AS debitAmt,ifnull(d.dblSettlementAmt,'') AS creditAmt,'0.00' AS balance" + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " left outer join tblreceipthd c on a.strFolioNo=c.strFolioNo and a.strReservationNo=c.strReservationNo "
 						+ " left outer join tblreceiptdtl d on c.strReceiptNo=d.strReceiptNo " + " left outer join tblsettlementmaster e on d.strSettlementCode=e.strSettlementCode " + " WHERE  a.strFolioNo='" + folioNo + "' " + " group by a.strFolioNo ";
 				List paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
-				for (int i = 0; i < paymentDtlList.size(); i++) {
-					Object[] paymentArr = (Object[]) paymentDtlList.get(i);
+				if(paymentDtlList!=null && paymentDtlList.size()>0){
+					
+					for (int i = 0; i < paymentDtlList.size(); i++) {
+						Object[] paymentArr = (Object[]) paymentDtlList.get(i);
 
-					String docDate = paymentArr[0].toString();
-					if (paymentArr[1] == null) {
-						continue;
-					} else {
-						clsFolioPrintingBean folioPrintingBean = new clsFolioPrintingBean();
+						String docDate = paymentArr[0].toString();
+						if (paymentArr[1] == null) {
+							continue;
+						} else {
+							clsFolioPrintingBean folioPrintingBean = new clsFolioPrintingBean();
 
-						String docNo = paymentArr[1].toString();
-						String particulars = paymentArr[2].toString();
-						double debitAmount = Double.parseDouble(paymentArr[3].toString());
-						double creditAmount = Double.parseDouble(paymentArr[4].toString());
-						double balance = debitAmount - creditAmount;
+							String docNo = paymentArr[1].toString();
+							String particulars = paymentArr[2].toString();
+							double debitAmount = Double.parseDouble(paymentArr[3].toString());
+							double creditAmount = Double.parseDouble(paymentArr[4].toString());
+							double balance = debitAmount - creditAmount;
 
-						folioPrintingBean.setDteDocDate(docDate);
-						folioPrintingBean.setStrDocNo(docNo);
-						folioPrintingBean.setStrPerticulars(particulars);
-						folioPrintingBean.setDblDebitAmt(debitAmount);
-						folioPrintingBean.setDblCreditAmt(creditAmount);
-						folioPrintingBean.setDblBalanceAmt(balance);
+							folioPrintingBean.setDteDocDate(docDate);
+							folioPrintingBean.setStrDocNo(docNo);
+							folioPrintingBean.setStrPerticulars(particulars);
+							folioPrintingBean.setDblDebitAmt(debitAmount);
+							folioPrintingBean.setDblCreditAmt(creditAmount);
+							folioPrintingBean.setDblBalanceAmt(balance);
 
-						dataList.add(folioPrintingBean);
+							dataList.add(folioPrintingBean);
+						}
 					}
+
 				}
-			}
+				}
 			List<clsFolioPrintingBean> listTax=new ArrayList<>();
 			for(clsFolioPrintingBean folioPrintingBean :dataList){
 				if(folioPrintingBean.isTax()){
