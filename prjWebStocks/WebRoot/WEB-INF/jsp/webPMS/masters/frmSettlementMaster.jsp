@@ -278,6 +278,8 @@
 				    	<option value="Credit Card">Credit Card</option>
 				    	<option value="Credit">Credit</option>
 				    	<option value="Complimentry">Complementary</option>
+				    	<option value="Online">Online</option>
+				    	<option value="Cheque">Cheque</option>
 				    	</s:select>					
 				</td>				
 			</tr>

@@ -169,72 +169,141 @@ public class clsPostRoomTerrifController {
 			if(!listPostRommTariffCheck.isEmpty())
 			{
 				
-				req.getSession().setAttribute("WarningMsg", "Already Post room terrif is Done");
-
+				
+					
+					if(listPostRommTariffCheck.toString().contains("Room Tariff"))
+					 {
+						 req.getSession().setAttribute("WarningMsg", "Already Post room terrif is Done"); 
+					 }
+					 else
+						{
+							if(strComplimentry.equalsIgnoreCase("N"))
+							{
+							
+								double totalRoomTarrif=objBean.getDblRoomTerrif();
+								double totalPakageAmt=objBean.getDblPackageAmt();
+								double actualPostingAmt=objBean.getDblActualPostingAmt();
+								String roomNo=objBean.getStrRoomNo();
+								if(actualPostingAmt>0)
+								{
+									if(totalPakageAmt>0 && totalPakageAmt<totalRoomTarrif)
+									{
+										if(actualPostingAmt>objBean.getDblPackageAmt())
+										{
+											objBean.setStrFolioType("Package");
+											objBean.setDblRoomTerrif(totalPakageAmt);
+											objBean.setDblOriginalPostingAmt(totalPakageAmt);
+											docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+											
+											if((actualPostingAmt-totalPakageAmt)>0)
+											{
+												objBean = new clsPostRoomTerrifBean();
+												objBean.setStrFolioType("Room");
+												objBean.setStrFolioNo(folioNo);
+												objBean.setStrRoomNo(roomNo);
+												objBean.setDblRoomTerrif(actualPostingAmt-totalPakageAmt);
+												objBean.setDblOriginalPostingAmt(totalRoomTarrif);
+												docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);		
+											}
+											
+										}
+										else
+										{
+											objBean.setStrFolioType("Package");
+											objBean.setDblRoomTerrif(totalPakageAmt-actualPostingAmt);
+											objBean.setDblOriginalPostingAmt(totalPakageAmt);
+											docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);	
+										}
+										
+									}
+									else
+									{
+										objBean.setStrFolioType("Room");
+										objBean.setDblRoomTerrif(actualPostingAmt);
+										docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+									}
+								}
+							}
+							else
+							{
+								double actualPostingAmt=0.0;
+								objBean.setStrFolioType("Room");
+								objBean.setDblRoomTerrif(actualPostingAmt);
+								extraBedCode="";
+								docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+							}
+							//String docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+					
+							req.getSession().setAttribute("success", true);
+							req.getSession().setAttribute("successMessage", "Terrif Posted Successfully. " + docNo);
+						
+					
+				}
+				 
 				//JOptionPane.showMessageDialog(null, "Already Post room terrif is Done");
 				//JOptionPane.showMessageDialog(null,"ALERT MESSAGE","TITLE",JOptionPane.WARNING_MESSAGE);
 			}
 			else
 			{
-			if(strComplimentry.equalsIgnoreCase("N"))
-			{
-			
-			double totalRoomTarrif=objBean.getDblRoomTerrif();
-			double totalPakageAmt=objBean.getDblPackageAmt();
-			double actualPostingAmt=objBean.getDblActualPostingAmt();
-			String roomNo=objBean.getStrRoomNo();
-			if(actualPostingAmt>0)
-			{
-				if(totalPakageAmt>0 && totalPakageAmt<totalRoomTarrif)
+				if(strComplimentry.equalsIgnoreCase("N"))
 				{
-					if(actualPostingAmt>objBean.getDblPackageAmt())
+				
+					double totalRoomTarrif=objBean.getDblRoomTerrif();
+					double totalPakageAmt=objBean.getDblPackageAmt();
+					double actualPostingAmt=objBean.getDblActualPostingAmt();
+					String roomNo=objBean.getStrRoomNo();
+					if(actualPostingAmt>0)
 					{
-						objBean.setStrFolioType("Package");
-						objBean.setDblRoomTerrif(totalPakageAmt);
-						objBean.setDblOriginalPostingAmt(totalPakageAmt);
-						docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
-						
-						if((actualPostingAmt-totalPakageAmt)>0)
+						if(totalPakageAmt>0 && totalPakageAmt<totalRoomTarrif)
 						{
-							objBean = new clsPostRoomTerrifBean();
-							objBean.setStrFolioType("Room");
-							objBean.setStrFolioNo(folioNo);
-							objBean.setStrRoomNo(roomNo);
-							objBean.setDblRoomTerrif(actualPostingAmt-totalPakageAmt);
-							objBean.setDblOriginalPostingAmt(totalRoomTarrif);
-							docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);		
+							if(actualPostingAmt>objBean.getDblPackageAmt())
+							{
+								objBean.setStrFolioType("Package");
+								objBean.setDblRoomTerrif(totalPakageAmt);
+								objBean.setDblOriginalPostingAmt(totalPakageAmt);
+								docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+								
+								if((actualPostingAmt-totalPakageAmt)>0)
+								{
+									objBean = new clsPostRoomTerrifBean();
+									objBean.setStrFolioType("Room");
+									objBean.setStrFolioNo(folioNo);
+									objBean.setStrRoomNo(roomNo);
+									objBean.setDblRoomTerrif(actualPostingAmt-totalPakageAmt);
+									objBean.setDblOriginalPostingAmt(totalRoomTarrif);
+									docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);		
+								}
+								
+							}
+							else
+							{
+								objBean.setStrFolioType("Package");
+								objBean.setDblRoomTerrif(totalPakageAmt-actualPostingAmt);
+								objBean.setDblOriginalPostingAmt(totalPakageAmt);
+								docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);	
+							}
+							
 						}
-						
+						else
+						{
+							objBean.setStrFolioType("Room");
+							objBean.setDblRoomTerrif(actualPostingAmt);
+							docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+						}
 					}
-					else
-					{
-						objBean.setStrFolioType("Package");
-						objBean.setDblRoomTerrif(totalPakageAmt-actualPostingAmt);
-						objBean.setDblOriginalPostingAmt(totalPakageAmt);
-						docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);	
-					}
-					
 				}
 				else
 				{
+					double actualPostingAmt=0.0;
 					objBean.setStrFolioType("Room");
 					objBean.setDblRoomTerrif(actualPostingAmt);
+					extraBedCode="";
 					docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
 				}
-			}
-			}
-			else
-			{
-				double actualPostingAmt=0.0;
-				objBean.setStrFolioType("Room");
-				objBean.setDblRoomTerrif(actualPostingAmt);
-				extraBedCode="";
-				docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
-			}
-			//String docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
-
-			req.getSession().setAttribute("success", true);
-			req.getSession().setAttribute("successMessage", "Terrif Posted Successfully. " + docNo);
+				//String docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+		
+				req.getSession().setAttribute("success", true);
+				req.getSession().setAttribute("successMessage", "Terrif Posted Successfully. " + docNo);
 			}
 			return new ModelAndView("redirect:/frmPostRoomTerrif.html");
 		} else {

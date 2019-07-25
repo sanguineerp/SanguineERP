@@ -145,10 +145,11 @@ function funExecuteReport()
 		var billNo=document.getElementById(""+obj.id+"").innerHTML;
 		var dteFromDate=document.getElementById("dteFromDate").value;
 		var dteToDate=document.getElementById("dteToDate").value;
+		var strSelectBill="";
 		var against='Bill';
 		if(against=='Bill')
 		{
-			window.open(getContextPath()+"/rptBillPrinting.html?fromDate="+dteFromDate+"&toDate="+dteToDate+"&billNo="+billNo+"");
+			window.open(getContextPath()+"/rptBillPrinting.html?fromDate="+dteFromDate+"&toDate="+dteToDate+"&billNo="+billNo+"&strSelectBill="+strSelectBill+"");
 		}else{
 			window.open(getContextPath()+"/rptBillPrintingForCheckIn.html?fromDate="+dteFromDate+"&toDate="+dteToDate+"&checkInNo="+billNo+"&against="+against+ "");
 	    } 
@@ -215,6 +216,7 @@ function funExecuteReport()
 			<div id="wait" style="display:none;width:60px;height:60px;border:0px solid black;position:absolute;top:60%;left:55%;padding:2px;">
 				<img src="../${pageContext.request.contextPath}/resources/images/ajax-loader-light.gif" width="60px" height="60px" />
 			</div>
+			<%-- <s:input type="hidden" id="hidData" path="strSelectBill" ></s:input> --%>
 			</s:form>
 			
 			

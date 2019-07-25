@@ -93,13 +93,13 @@ public class clsComplimentryReportController {
 		
 		
 		String sql = "SELECT d.strRoomDesc,Date(a.dteArrivalDate), DATE(a.dteDepartureDate),"
-				+ "c.strFirstName,c.strMiddleName,c.strLastName,e.dblRoomTerrif ,a.strCheckInNo "
+				+ "c.strFirstName,c.strMiddleName,c.strLastName,e.dblRoomTerrif ,a.strCheckInNo,f.strReasonDesc,a.strRemarks "
 				+ "FROM tblcheckinhd a,tblcheckindtl b,tblguestmaster c,tblroom d,"
-				+ "tblroomtypemaster e "
+				+ "tblroomtypemaster e,tblreasonmaster f "
 				+ "WHERE a.strCheckInNo=b.strCheckInNo and b.strGuestCode=c.strGuestCode "
 				+ "and b.strRoomNo=d.strRoomCode and b.strRoomTYpe=e.strRoomTypeCode "
 				+ "and a.strComplimentry='Y' and Date(a.dteCheckInDate) between '"+fromDate+"' and '"+toDate+"' "
-				+ "and a.strClientCode='"+clientCode+"'";
+				+ "and a.strClientCode='"+clientCode+"' AND a.strReasonCode=f.strReasonCode";
 		
 		
 		List listComplimentry = objGlobalFunctionsService.funGetDataList(sql, "sql");
@@ -115,6 +115,8 @@ public class clsComplimentryReportController {
 			objBean.setStrGuestName(obj[3].toString()+" "+obj[4].toString()+" "+obj[5].toString());
 			objBean.setDblTarrifAmt(Double.parseDouble(obj[6].toString()));
 			objBean.setStrCheckInNo(obj[7].toString());
+			objBean.setStrReason(obj[8].toString());
+			objBean.setStrRemarks(obj[9].toString());
 			
 			dataList.add(objBean);
 		}

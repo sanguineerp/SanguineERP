@@ -95,11 +95,11 @@
 				<textFieldExpression><![CDATA[$F{strReservationNo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="259" y="4" width="25" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
+				<reportElement x="341" y="101" width="35" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Adult]]></text>
+				<text><![CDATA[Adult :]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="436" y="60" width="116" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
@@ -116,11 +116,11 @@
 				<textFieldExpression><![CDATA[$P{userName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="259" y="23" width="27" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
+				<reportElement x="341" y="120" width="35" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Child       :]]></text>
+				<text><![CDATA[Child :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="4" width="94" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
@@ -193,7 +193,7 @@
 				<text><![CDATA[Payment Mode    :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="121" width="97" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
+				<reportElement x="0" y="120" width="97" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -221,11 +221,11 @@
 				<text><![CDATA[Modified Date      :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="284" y="4" width="28" height="14" uuid="d3596401-6292-46e1-8c79-431215b2f6d0"/>
+				<reportElement x="381" y="101" width="28" height="14" uuid="d3596401-6292-46e1-8c79-431215b2f6d0"/>
 				<textFieldExpression><![CDATA[$F{intNoOfAdults}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="286" y="23" width="26" height="14" uuid="d3596401-6292-46e1-8c79-431215b2f6d0"/>
+				<reportElement x="383" y="120" width="26" height="14" uuid="d3596401-6292-46e1-8c79-431215b2f6d0"/>
 				<textFieldExpression><![CDATA[$F{intNoOfChild}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -235,8 +235,8 @@
 				</textElement>
 				<text><![CDATA[Receipt Date       :]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="99" y="121" width="364" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="98" y="120" width="240" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>

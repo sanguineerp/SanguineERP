@@ -472,7 +472,7 @@ public class clsBillPrintingController {
 					 sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,CONCAT('ADVANCE ',e.strSettlementDesc),'0.00' as debitAmt "
 							+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
 							+ " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
-							+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode AND c.strFolioNo='"+folio+"' ";
+							+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode AND c.strFolioNo='"+folio+"' and d.strClientCode='"+clientCode+"'";
 	
 					 paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
 					 for (int i = 0; i < paymentDtlList.size(); i++) {

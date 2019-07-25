@@ -349,6 +349,410 @@ public class clsCheckInController {
 				{
 					req.getSession().setAttribute("WarningMsg", "Folio has been posted Cant edit this checkin");
 				}
+				
+				else
+				{
+				
+				
+				if (objBean.getStrType().equalsIgnoreCase("Reservation")) {
+					Map<Long, String> hmGuestMbWithCode = new HashMap<Long, String>();
+					List<clsCheckInDetailsBean> listCheckInDtlBean = objBean.getListCheckInDetailsBean();
+	                for (clsCheckInDetailsBean objCheckInDtlBean : listCheckInDtlBean) {
+						/*clsGuestMasterBean objGuestMasterBean = new clsGuestMasterBean();
+						objGuestMasterBean.setStrGuestCode(objCheckInDtlBean.getStrGuestCode());
+						objGuestMasterBean.setStrGuestPrefix("");
+						String[] arrSpGuest = objCheckInDtlBean.getStrGuestName().split(" ");
+						objGuestMasterBean.setStrFirstName(arrSpGuest[0]);
+						if(arrSpGuest.length>1){
+							objGuestMasterBean.setStrMiddleName(arrSpGuest[1]);
+							if(arrSpGuest.length==2){
+							objGuestMasterBean.setStrLastName(arrSpGuest[2]);
+							}
+							}
+						objGuestMasterBean.setIntFaxNo(0);
+						objGuestMasterBean.setIntPinCode(0);
+						objGuestMasterBean.setDteDOB("01-01-1900");
+						objGuestMasterBean.setIntMobileNo(objCheckInDtlBean.getLngMobileNo());
+						clsGuestMasterHdModel objGuestMasterModel = objGuestMasterService.funPrepareGuestModel(objGuestMasterBean, clientCode, userCode);
+						objGuestMasterDao.funAddUpdateGuestMaster(objGuestMasterModel);
+						*/hmGuestMbWithCode.put(objCheckInDtlBean.getLngMobileNo(), objCheckInDtlBean.getStrGuestCode());
+						
+					}
+					List<clsCheckInDetailsBean> listCheckInDetailBean = new ArrayList<clsCheckInDetailsBean>();
+					for (clsCheckInDetailsBean objCheckInDtlBean : objBean.getListCheckInDetailsBean()) {
+						if (null != hmGuestMbWithCode.get(objCheckInDtlBean.getLngMobileNo())) {
+							objCheckInDtlBean.setStrGuestCode(hmGuestMbWithCode.get(objCheckInDtlBean.getLngMobileNo()));
+						}
+						listCheckInDetailBean.add(objCheckInDtlBean);
+					}
+					objBean.setListCheckInDetailsBean(listCheckInDetailBean);
+				}
+
+				clsCheckInHdModel objHdModel = funPrepareHdModel(objBean, userCode, clientCode, req);
+
+				/*
+				 * List<clsCheckInDtl>
+				 * listCheckInDtlModel=objHdModel.getListCheckInDtl();
+				 * for(clsCheckInDtl objCheckInDtlModel:listCheckInDtlModel) {
+				 * clsFolioHdBean objFolioBean=new clsFolioHdBean(); int
+				 * cntFolios=0;
+				 * 
+				 * while(cntFolios<objCheckInDtlModel.getIntNoOfFolios()) {
+				 * objFolioBean.setStrRoomNo(objCheckInDtlModel.getStrRoomNo());
+				 * objFolioBean.setStrCheckInNo(objHdModel.getStrCheckInNo());
+				 * objFolioBean
+				 * .setStrRegistrationNo(objHdModel.getStrRegistrationNo());
+				 * objFolioBean
+				 * .setStrReservationNo(objHdModel.getStrReservationNo());
+				 * objFolioBean.setDteArrivalDate(objHdModel.getDteArrivalDate());
+				 * objFolioBean
+				 * .setDteDepartureDate(objHdModel.getDteDepartureDate());
+				 * objFolioBean.setTmeArrivalTime(objHdModel.getTmeArrivalTime());
+				 * objFolioBean
+				 * .setTmeDepartureTime(objHdModel.getTmeDepartureTime());
+				 * objFolioBean
+				 * .setStrExtraBedCode(objCheckInDtlModel.getStrExtraBedCode());
+				 * clsFolioHdModel
+				 * objFolioHdModel=objFolioController.funPrepareFolioModel
+				 * (objFolioBean, clientCode, req);
+				 * objFolioService.funAddUpdateFolioHd(objFolioHdModel);
+				 * cntFolios++; } }
+				 */
+
+				List<clsCheckInDtl> listCheckInDtlModel = objHdModel.getListCheckInDtl();
+				// for(clsCheckInDtl objCheckInDtlModel:listCheckInDtlModel)
+				// {
+				// clsFolioHdBean objFolioBean=new clsFolioHdBean();
+				// int cntFolios=0;
+				//
+				// if(null!=objCheckInDtlModel.getStrPayee())
+				// {
+				// if(objCheckInDtlModel.getStrPayee().equals("Y"))
+				// {
+				// objFolioBean.setStrRoomNo(objCheckInDtlModel.getStrRoomNo());
+				// objFolioBean.setStrCheckInNo(objHdModel.getStrCheckInNo());
+				// objFolioBean.setStrRegistrationNo(objHdModel.getStrRegistrationNo());
+				// objFolioBean.setStrReservationNo(objHdModel.getStrReservationNo());
+				// objFolioBean.setDteArrivalDate(objHdModel.getDteArrivalDate());
+				// objFolioBean.setDteDepartureDate(objHdModel.getDteDepartureDate());
+				// objFolioBean.setTmeArrivalTime(objHdModel.getTmeArrivalTime());
+				// objFolioBean.setTmeDepartureTime(objHdModel.getTmeDepartureTime());
+				// objFolioBean.setStrExtraBedCode(objCheckInDtlModel.getStrExtraBedCode());
+				// objFolioBean.setStrGuestCode(objCheckInDtlModel.getStrGuestCode());
+				// clsFolioHdModel
+				// objFolioHdModel=objFolioController.funPrepareFolioModel(objFolioBean,
+				// clientCode, req);
+				// objFolioService.funAddUpdateFolioHd(objFolioHdModel);
+				// cntFolios++;
+				// }
+				// }
+				// }
+				
+				String sql1 = "select strfoliono from tblfoliohd " + " where strCheckInNo ='" + objBean.getStrCheckInNo() + "' ";
+				List listCheckIn = objGlobalFunctionsService.funGetListModuleWise(sql1, "sql");
+
+				
+
+				String folioN = "";
+				if(listCheckIn!=null && listCheckIn.size()>0)
+				{
+					 folioN = (String) listCheckIn.get(0);
+				}
+
+				
+				List<String> listCheckRomm = new ArrayList<String>();
+				List<clsFolioDtlModel> listFolioDtl = new ArrayList<clsFolioDtlModel>();
+				for (clsCheckInDtl objCheckInDtlModel : listCheckInDtlModel) {
+					clsFolioHdBean objFolioBean = new clsFolioHdBean();
+					int cntFolios = 0;
+					if (!listCheckRomm.contains(objCheckInDtlModel.getStrRoomNo())) {
+						objFolioBean.setStrRoomNo(objCheckInDtlModel.getStrRoomNo());
+						objFolioBean.setStrCheckInNo(objHdModel.getStrCheckInNo());
+						objFolioBean.setStrRegistrationNo(objHdModel.getStrRegistrationNo());
+						objFolioBean.setStrReservationNo(objHdModel.getStrReservationNo());
+						objFolioBean.setStrWalkInNo(objHdModel.getStrWalkInNo());
+						objFolioBean.setDteArrivalDate(objHdModel.getDteArrivalDate());
+						objFolioBean.setDteDepartureDate(objHdModel.getDteDepartureDate());
+						objFolioBean.setTmeArrivalTime(objHdModel.getTmeArrivalTime());
+						objFolioBean.setTmeDepartureTime(objHdModel.getTmeDepartureTime());
+						objFolioBean.setStrExtraBedCode(objCheckInDtlModel.getStrExtraBedCode());
+						objFolioBean.setStrGuestCode(objCheckInDtlModel.getStrGuestCode());
+						objFolioBean.setStrFolioNo(folioN);
+						
+						
+						clsFolioHdModel objFolioHdModel = objFolioController.funPrepareFolioModel(objFolioBean, clientCode, req);
+						
+						
+//			@@@@			if(!(objHdModel.getStrReservationNo().equalsIgnoreCase("")))
+//						{
+//							
+//							
+//						}
+//						
+//						long doc = objPMSUtility.funGenerateFolioDocForRoom("RoomFolio");
+//						String docNo = "RM" + String.format("%06d", doc);
+//						double roomTerrif = 0.0;
+//						clsFolioDtlModel objFolioDtl = new clsFolioDtlModel();
+//						objFolioDtl.setStrDocNo(docNo);
+//						objFolioDtl.setDteDocDate(PMSDate);
+//						objFolioDtl.setDblDebitAmt(roomTerrif);
+//						objFolioDtl.setDblBalanceAmt(0);
+//						objFolioDtl.setDblCreditAmt(0);
+//						objFolioDtl.setStrPerticulars("Room Revenue");
+//						objFolioDtl.setStrRevenueType("Room");
+//						objFolioDtl.setStrRevenueCode(objCheckInDtlModel.getStrRoomNo());
+//						listFolioDtl.add(objFolioDtl);
+//						if(objHdModel.getStrReservationNo().equalsIgnoreCase(""))
+//						{
+//							List<clsReservationRoomRateModelDtl>listReservationRoomRate= objReservationService.funGetReservationRoomRateList( objHdModel.getStrReservationNo(),  clientCode,  objCheckInDtlModel.getStrRoomNo()) ;
+//						    	
+//						
+//						
+//		@@				}
+						objFolioService.funAddUpdateFolioHd(objFolioHdModel);
+						
+						cntFolios++;
+
+					}
+					listCheckRomm.add(objCheckInDtlModel.getStrRoomNo());
+				}
+
+				objCheckInService.funAddUpdateCheckInHd(objHdModel);
+				
+				if(objBean.getStrType().equals("Reservation"))
+				{
+					clsReservationHdModel objReservationModel = objReservationService.funGetReservationList(objBean.getStrAgainstDocNo(), clientCode, propCode);
+					List<clsReservationRoomRateModelDtl> listRommRate = new ArrayList<clsReservationRoomRateModelDtl>();
+					if(null!=objBean.getlistReservationRoomRateDtl())
+					{
+					for (clsReservationRoomRateModelDtl objRommDtlBean : objBean.getlistReservationRoomRateDtl()) 
+					{
+						String date=objRommDtlBean.getDtDate();
+						if(date.split("-")[0].toString().length()<3)
+						{	
+						 objRommDtlBean.setDtDate(objGlobal.funGetDate("yyyy-MM-dd",date));
+						}
+						listRommRate.add(objRommDtlBean);
+					}
+				    }
+					objReservationModel.setListReservationRoomRateDtl(listRommRate);
+					objReservationService.funAddUpdateReservationHd(objReservationModel, objReservationModel.getStrBookingTypeCode());	
+					
+				}
+				else
+				{
+					List listWalkinData = objWalkinDao.funGetWalkinDataDtl(objBean.getStrAgainstDocNo(), clientCode);
+					clsWalkinHdModel objWalkinHdModel = (clsWalkinHdModel) listWalkinData.get(0);
+					List<clsWalkinRoomRateDtlModel> listRommRate = new ArrayList<clsWalkinRoomRateDtlModel>();
+					//listRommRate=objWalkinHdModel.getListWalkinRoomRateDtlModel();
+					if(null!=objBean.getListWalkinRoomRateDtl()){
+						for (clsWalkinRoomRateDtlModel objRommDtlBean : objWalkinHdModel.getListWalkinRoomRateDtlModel()) {
+						
+							String date=objRommDtlBean.getDtDate();
+							if(date.split("-")[0].toString().length()<3)
+							{	
+							 objRommDtlBean.setDtDate(objGlobal.funGetDate("yyyy-MM-dd",date));
+							}
+							listRommRate.add(objRommDtlBean);
+						}
+						}
+					objWalkinHdModel.setListWalkinRoomRateDtlModel(listRommRate);
+					objWalkinDao.funAddUpdateWalkinHd(objWalkinHdModel);
+				}
+				
+				
+				if(null!=objBean.getListRoomPackageDtl() && objBean.getListRoomPackageDtl().size()>0 )
+				{
+					long lastNo=0;
+					boolean flgData=false;
+					String packageCode="",insertSql="";
+					clsPackageMasterHdModel objPkgHdModel=null;
+					if (objBean.getStrPackageCode().trim().length() == 0) 
+					{
+						lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tblpackagemasterhd", "PackageMaster", "strPackageCode", clientCode);
+						packageCode = "PK" + String.format("%06d", lastNo);
+					} 
+					else
+					{
+						packageCode=objBean.getStrPackageCode();
+					}
+					objPkgHdModel=new clsPackageMasterHdModel();
+					objPkgHdModel.setStrPackageCode(packageCode);
+					objPkgHdModel.setStrPackageName(objBean.getStrPackageName());
+					objPkgHdModel.setDblPackageAmt(Double.valueOf(objBean.getStrTotalPackageAmt()));
+					objPkgHdModel.setStrUserCreated(userCode);
+					objPkgHdModel.setStrUserEdited(userCode);
+					objPkgHdModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+					objPkgHdModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+					objPkgHdModel.setStrClientCode(clientCode);
+					List<clsPackageMasterDtl> listPkgDtlModel = new ArrayList<clsPackageMasterDtl>();
+					String insertPkgDtl= "INSERT INTO `tblroompackagedtl` (`strWalkinNo`, `strReservationNo`,"
+							+ " `strCheckInNo`, `strPackageCode`, `strIncomeHeadCode`, `dblIncomeHeadAmt`, "
+							+ "`strType`,`strRoomNo`,`strClientCode`) VALUES";
+					
+					if(objBean.getStrType().equals("Reservation"))
+					{
+						objWebPMSUtility.funExecuteUpdate("delete from tblroompackagedtl where strReservationNo='"+objHdModel.getStrReservationNo()+"' and strClientCode='"+clientCode+"'", "sql");
+						objWebPMSUtility.funExecuteUpdate("delete from tblroompackagedtl where strCheckInNo='"+objHdModel.getStrCheckInNo()+"' and strReservationNo='"+objHdModel.getStrReservationNo()+"' and strClientCode='"+clientCode+"'", "sql");
+						for (clsRoomPackageDtl objPkgDtlBean : objBean.getListRoomPackageDtl()) 
+						{
+							insertSql+=",('','"+objHdModel.getStrReservationNo()+"','"+objHdModel.getStrCheckInNo()+"' "
+									+ ",'"+packageCode+"','"+objPkgDtlBean.getStrIncomeHeadCode()+"','"+Double.valueOf(objPkgDtlBean.getDblIncomeHeadAmt())+"'"
+									+ ",'IncomeHead','','"+clientCode+"')";
+								flgData=true;
+								
+							clsPackageMasterDtl objPkdDtl=new clsPackageMasterDtl();
+							objPkdDtl.setStrIncomeHeadCode(objPkgDtlBean.getStrIncomeHeadCode());
+							objPkdDtl.setDblAmt(Double.valueOf(objPkgDtlBean.getDblIncomeHeadAmt()));
+							listPkgDtlModel.add(objPkdDtl);
+						}
+						for (clsReservationRoomRateModelDtl objRommDtlBean : objBean.getlistReservationRoomRateDtl()) 
+						{
+							for (clsCheckInDetailsBean objCheckInDtlBean : objBean.getListCheckInDetailsBean()) 
+							{
+								if(objRommDtlBean.getStrRoomType().equals(objCheckInDtlBean.getStrRoomType()))
+								{
+									insertSql+=",('','"+objHdModel.getStrReservationNo()+"','"+objHdModel.getStrCheckInNo()+"' "
+											+ ",'"+packageCode+"','','"+objRommDtlBean.getDblRoomRate()+"' "
+											+ ",'RoomTariff','"+objCheckInDtlBean.getStrRoomNo()+"','"+clientCode+"')";
+									
+								}
+							}
+						 }
+					}
+					else
+					{
+						objWebPMSUtility.funExecuteUpdate("delete from tblroompackagedtl where strWalkinNo='"+objHdModel.getStrWalkInNo()+"' and strClientCode='"+clientCode+"'", "sql");
+						objWebPMSUtility.funExecuteUpdate("delete from tblroompackagedtl where strCheckInNo='"+objHdModel.getStrCheckInNo()+"' and strWalkinNo='"+objHdModel.getStrWalkInNo()+"' and strClientCode='"+clientCode+"'", "sql");
+						for (clsRoomPackageDtl objPkgDtlBean : objBean.getListRoomPackageDtl()) 
+						{
+							insertSql+=",('"+objHdModel.getStrWalkInNo()+"','','"+objHdModel.getStrCheckInNo()+"' "
+									+ ",'"+packageCode+"','"+objPkgDtlBean.getStrIncomeHeadCode()+"','"+Double.valueOf(objPkgDtlBean.getDblIncomeHeadAmt())+"'"
+									+ ",'IncomeHead','','"+clientCode+"')";
+								flgData=true;
+								
+							clsPackageMasterDtl objPkdDtl=new clsPackageMasterDtl();
+							objPkdDtl.setStrIncomeHeadCode(objPkgDtlBean.getStrIncomeHeadCode());
+							objPkdDtl.setDblAmt(Double.valueOf(objPkgDtlBean.getDblIncomeHeadAmt()));
+							listPkgDtlModel.add(objPkdDtl);
+						}
+						
+						for (clsWalkinRoomRateDtlModel objRommDtlBean : objBean.getListWalkinRoomRateDtl()) 
+						{
+							for (clsCheckInDetailsBean objCheckInDtlBean : objBean.getListCheckInDetailsBean()) 
+							{
+								if(objRommDtlBean.getStrRoomType().equals(objCheckInDtlBean.getStrRoomType()))
+								{
+									insertSql+=",('"+objHdModel.getStrWalkInNo()+"','','"+objHdModel.getStrCheckInNo()+"' "
+								    		 + ",'"+packageCode+"','','"+objRommDtlBean.getDblRoomRate()+"' "
+												+ ",'RoomTariff','"+objCheckInDtlBean.getStrRoomNo()+"','"+clientCode+"')";
+									
+								}
+							}
+						 }
+					}
+						
+					
+					
+					if(flgData)
+					{
+						insertSql=insertSql.substring(1,insertSql.length());
+						insertPkgDtl+=" "+insertSql;
+						objWebPMSUtility.funExecuteUpdate(insertPkgDtl, "sql");
+						objPkgHdModel.setListPackageDtl(listPkgDtlModel);
+						try {
+							objBaseService.funSaveForPMS(objPkgHdModel);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					
+			    }
+				
+				///Change for saving changed roomtype details....
+				if(null!=listCheckInDtlModel)
+				{
+					for (clsCheckInDtl objCheckInDtlModel : listCheckInDtlModel) 
+					{
+						String date="",oldRoomType="",oldRoomNo="";
+						boolean isFound=false;
+						String sql = " select a.strDocNo,a.strRoomType,a.dteToDate,a.strRoomNo from tblchangedroomtypedtl a where a.strDocNo='"+objHdModel.getStrCheckInNo()+"' "
+								+ " and a.strClientCode='"+clientCode+"'  and a.strGuestCode='"+objCheckInDtlModel.getStrGuestCode()+"' ";
+						List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+						if(list.size()>0)
+						{
+							for (int cnt = 0; cnt < list.size(); cnt++) {
+								Object[] arrObjRoom = (Object[]) list.get(cnt);
+								if(!arrObjRoom[1].toString().isEmpty())
+								{
+									date=arrObjRoom[2].toString();
+									if(!objCheckInDtlModel.getStrRoomNo().equals(arrObjRoom[3]))
+									{
+										if(arrObjRoom[2].toString().equalsIgnoreCase(""))
+										{
+											String []spDate=PMSDate.split("-");
+											int changedDate=Integer.valueOf(spDate[2])-1;
+											if(changedDate<10)
+											{
+												date=spDate[0]+"-"+spDate[1]+"-0"+changedDate;
+											}
+											else
+											{
+												date=spDate[0]+"-"+spDate[1]+"-"+changedDate;
+											}
+											isFound=true;
+										}
+										oldRoomType=(String) arrObjRoom[1];
+										oldRoomNo=(String) arrObjRoom[3];
+									}
+								}
+							}	
+						}
+						
+					if(oldRoomType.isEmpty())
+					{
+						oldRoomType=objCheckInDtlModel.getStrRoomType();	
+						oldRoomNo=objCheckInDtlModel.getStrRoomNo();
+					}
+					
+					objWebPMSUtility.funExecuteUpdate("delete from tblchangedroomtypedtl where strDocNo='"+objHdModel.getStrCheckInNo()+"' and strRoomType='"+oldRoomType+"' and strGuestCode='"+objCheckInDtlModel.getStrGuestCode()+"' and strClientCode='"+clientCode+"'", "sql");	
+					
+					String insertChangedRoomType = "INSERT INTO `tblchangedroomtypedtl` (`strDocNo`, `strType`,"
+							+ " `strRoomNo`, `strRoomType`, `strGuestCode`, `dteFromDate`, "
+							+ " `dteToDate`, `strClientCode`) "
+							+ " VALUES ('"+objHdModel.getStrCheckInNo()+"','CheckIn','"+oldRoomNo+"','"+oldRoomType+"',"
+							+ " '"+objCheckInDtlModel.getStrGuestCode()+"','"+PMSDate+"','"+date+"','"+clientCode+"') ";
+					objWebPMSUtility.funExecuteUpdate(insertChangedRoomType, "sql");	
+
+						if(isFound)
+						{
+							objWebPMSUtility.funExecuteUpdate("delete from tblchangedroomtypedtl where strDocNo='"+objHdModel.getStrCheckInNo()+"' and strRoomType='"+objCheckInDtlModel.getStrRoomType()+"' and strGuestCode='"+objCheckInDtlModel.getStrGuestCode()+"' and strClientCode='"+clientCode+"'", "sql");
+							insertChangedRoomType = "INSERT INTO `tblchangedroomtypedtl` (`strDocNo`, `strType`,"
+									+ " `strRoomNo`, `strRoomType`, `strGuestCode`, `dteFromDate`, "
+									+ " `dteToDate`, `strClientCode`) "
+									+ " VALUES ('"+objHdModel.getStrCheckInNo()+"','CheckIn','"+objCheckInDtlModel.getStrRoomNo()+"','"+objCheckInDtlModel.getStrRoomType()+"',"
+									+ " '"+objCheckInDtlModel.getStrGuestCode()+"','"+PMSDate+"','','"+clientCode+"') ";
+							objWebPMSUtility.funExecuteUpdate(insertChangedRoomType, "sql");
+							
+							sql="update tblroom a set a.strStatus='Occupied' where a.strRoomCode='"+objCheckInDtlModel.getStrRoomNo()+"'";
+							objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
+							sql="update tblroom a set a.strStatus='Free' where a.strRoomCode='"+oldRoomNo+"'";
+							objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
+							sql="update tblreservationdtl a set a.strRoomType='"+objCheckInDtlModel.getStrRoomType()+"' , a.strRoomNo='"+objCheckInDtlModel.getStrRoomNo()+"' where a.strReservationNo='"+objHdModel.getStrReservationNo()+"' and a.strGuestCode='"+objCheckInDtlModel.getStrGuestCode()+"' ";
+							objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
+						}
+					}
+				}
+			
+				
+				
+				
+				funSendSMSCheckIn(objHdModel.getStrCheckInNo(), clientCode, propCode);
+				req.getSession().setAttribute("success", true);
+				req.getSession().setAttribute("successMessage", "Check In No : ".concat(objHdModel.getStrCheckInNo()));
+				req.getSession().setAttribute("AdvanceAmount", objHdModel.getStrCheckInNo());
+				req.getSession().setAttribute("against", objHdModel.getStrType());
+				}
 			}
 			
 			
@@ -1127,6 +1531,22 @@ public class clsCheckInController {
 
 		objModel.setIntNoOfAdults(objBean.getIntNoOfAdults());
 		objModel.setIntNoOfChild(objBean.getIntNoOfChild());
+		if(objBean.getStrReasonCode().equals(""))
+		{
+			objModel.setStrReasonCode("");
+		}
+		else
+		{
+			objModel.setStrReasonCode(objBean.getStrReasonCode());
+		}
+		if(objBean.getStrRemarks().equals(""))
+		{
+			objModel.setStrRemarks("");
+		}
+		else
+		{
+			objModel.setStrRemarks(objBean.getStrRemarks());
+		}
 
 		List<clsCheckInDtl> listCheckinDtlModel = new ArrayList<clsCheckInDtl>();
 		if (objBean.getListCheckInDetailsBean().size() > 0) {
@@ -1156,8 +1576,10 @@ public class clsCheckInController {
 		objModel.setListCheckInDtl(listCheckinDtlModel);
 		objModel.setStrNoPostFolio(objGlobal.funIfNull(objBean.getStrNoPostFolio(), "N", objBean.getStrNoPostFolio()));
 		objModel.setStrComplimentry(objGlobal.funIfNull(objBean.getStrComplimentry(), "N",objBean.getStrComplimentry()));
-		objModel.setStrRemarks("");
-		objModel.setStrReasonCode("");
+		/*objModel.setStrRemarks("");
+		objModel.setStrReasonCode("");*/
+		
+
 		
 		return objModel;
 	}

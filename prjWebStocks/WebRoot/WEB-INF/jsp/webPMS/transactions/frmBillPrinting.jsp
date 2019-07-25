@@ -58,11 +58,6 @@
 			 	return false;
 			}
 			$("#hidData").val(strSelectBill);
-				
-			
-			
-			
-			
 			
 			if(against=='Bill')
 			{

@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +118,8 @@ public class clsPMSPaymentController {
 	@Autowired
 	clsRoomMasterService objRoomMaster;
 
+	@Autowired
+	private clsGlobalFunctionsService objGlobalFunService;
 	// Open Payment
 	@RequestMapping(value = "/frmPMSPayment", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
@@ -859,14 +862,15 @@ public class clsPMSPaymentController {
 			}
 		}
 		if(AdvAmount.charAt(2)=='C'){
-		String sqlCheckIn = "SELECT a.dblRoomTerrif FROM tblroomtypemaster a,tblcheckindtl  b "
-		 		+ "WHERE b.strCheckInNo = '"+AdvAmount+"' and a.strRoomTypeCode=b.strRoomType";
-		 List listResevation = objGlobalFunctionsService.funGetDataList(sqlCheckIn, "sql");
-		 if (listResevation.size()>0) 
-			{
-				dblBalanceAmt=Double.parseDouble(listResevation.get(0).toString());
-			}
-		 listAgainst.add(0, "Check-In");
+			
+			String sqlCheckIn = "SELECT a.dblRoomTerrif FROM tblroomtypemaster a,tblcheckindtl  b "
+			 		+ "WHERE b.strCheckInNo = '"+AdvAmount+"' and a.strRoomTypeCode=b.strRoomType";
+			 List listResevation = objGlobalFunctionsService.funGetDataList(sqlCheckIn, "sql");
+			 if (listResevation.size()>0) 
+				{
+					dblBalanceAmt=Double.parseDouble(listResevation.get(0).toString());
+				}
+			 listAgainst.add(0, "Check-In");
 		}
 		request.setAttribute("code", AdvAmount);
 		request.setAttribute("dblBalanceAmt", dblBalanceAmt);

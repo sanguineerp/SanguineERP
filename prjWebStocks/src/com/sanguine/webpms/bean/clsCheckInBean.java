@@ -62,6 +62,10 @@ public class clsCheckInBean {
 	
 	private String strComplimentry;
 	
+	private String strReasonCode;
+	
+	private String strRemarks;
+	
 	private List<clsRoomPackageDtl> listRoomPackageDtl = new ArrayList<clsRoomPackageDtl>();
 	
 	private List<clsReservationRoomRateModelDtl> listReservationRoomRateDtl = new ArrayList<clsReservationRoomRateModelDtl>();
@@ -298,6 +302,22 @@ public class clsCheckInBean {
 
 	public void setStrComplimentry(String strComplimentry) {
 		this.strComplimentry = strComplimentry;
+	}
+
+	public String getStrReasonCode() {
+		return strReasonCode;
+	}
+
+	public void setStrReasonCode(String strReasonCode) {
+		this.strReasonCode = strReasonCode;
+	}
+
+	public String getStrRemarks() {
+		return strRemarks;
+	}
+
+	public void setStrRemarks(String strRemarks) {
+		this.strRemarks = strRemarks;
 	}
 	
 	

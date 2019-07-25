@@ -79,7 +79,8 @@
 		  var dte=pmsDate.split("-");
 
 		  
-		  
+		 	 document.getElementById('txtReason').style.display = 'none';
+			 document.getElementById('txtRemarks').style.display = 'none';
 	});
 
 	
@@ -119,6 +120,10 @@
 				funSetPackageNo(code);
 			break;
 				
+			
+			case 'reasonPMS' : 
+				funSetReasonData(code);
+			break;
 				
 		}
 	}
@@ -667,6 +672,48 @@
 		            }
 				}
 			});
+		}
+		
+		function funSetReasonData(code)
+		{
+			$("#txtReasonCode").val(code);
+			var searchurl=getContextPath()+"/loadPMSReasonMasterData.html?reasonCode="+code;
+			 $.ajax({
+				        type: "GET",
+				        url: searchurl,
+				        dataType: "json",
+				        success: function(response)
+				        {
+				        	if(response.strReasonCode=='Invalid Code')
+				        	{
+				        		alert("Invalid Reason Code");
+				        		$("#txtReasonCode").val('');
+				        	}
+				        	else
+				        	{	
+				        		$("#txtReason").val(response.strReasonCode);
+				        		$("#lblReasonDesc").text(response.strReasonDesc);
+					        	
+				        	}
+						},
+						error: function(jqXHR, exception) {
+				            if (jqXHR.status === 0) {
+				                alert('Not connect.n Verify Network.');
+				            } else if (jqXHR.status == 404) {
+				                alert('Requested page not found. [404]');
+				            } else if (jqXHR.status == 500) {
+				                alert('Internal Server Error [500].');
+				            } else if (exception === 'parsererror') {
+				                alert('Requested JSON parse failed.');
+				            } else if (exception === 'timeout') {
+				                alert('Time out error.');
+				            } else if (exception === 'abort') {
+				                alert('Ajax request aborted.');
+				            } else {
+				                alert('Uncaught Error.n' + jqXHR.responseText);
+				            }		            
+				        }
+			      });
 		}
 		
 		
@@ -1240,6 +1287,23 @@
 					return false;
 				}
 				
+				if($("#txtComplimentry").val()=='Y')
+					{
+					
+					if($("#txtReason").val()=='')
+						{
+							alert("Please Enter Reason and Remarks");							
+						}
+					else
+						{
+						return true;
+						
+						}
+					
+					return false;
+					}
+				
+				
 				return true;	 
 		 }
 		 
@@ -1335,6 +1399,36 @@
 				});
 			}	 
 		 
+		 function funComplimentryChange(select)
+		 {
+			 
+			 if(select.value=='Y')
+				 {
+					 $("#txtComplimentry").val('N');
+				 }
+			 else
+				 {
+				 $("#txtComplimentry").val('Y');
+				 }
+			 if(select.value == 'Y')
+				 {
+				 	document.getElementById('txtReason').style.display = 'block';
+					document.getElementById('txtRemarks').style.display = 'block';
+					document.getElementById('lblReasonDesc').style.display = 'block';
+				 }
+			 else
+				 {
+				 document.getElementById('txtReason').style.display = 'none';
+				 document.getElementById('txtRemarks').style.display = 'none';
+				 document.getElementById('lblReasonDesc').style.display = 'none';
+				 
+				 $("#txtReason").val('');
+				 $("#txtRemarks").val('');
+				 $("#lblReasonDesc").val('');
+				 }
+			 
+			 
+		 }
 		 
 </script>
 </head>
@@ -1433,10 +1527,28 @@
 			<td><s:checkbox id="txtNoPostFolio" path="strNoPostFolio" value="Y" />
 			
 			<td>Complimentry</td>
-			<td><s:checkbox id="txtComplimentry" path="strComplimentry" value="Y" />
+			<td><s:checkbox id="txtComplimentry" path="strComplimentry" value="N" onclick="funComplimentryChange(this);"/>
 			
 			
 			</tr>
+			
+			<tr>				
+							<td><label>Reason Code</label></td>
+				<td>
+					<s:input colspan="1" type="text" id="txtReason" path="strReasonCode" cssClass="searchTextBox" ondblclick="funHelp('reasonPMS');"/>
+				</td>
+							<td><label>Remarks</label></td>
+							<td><s:input id="txtRemarks" path="strRemarks"  cssClass="longTextBox" style="width: 190px"/></td>
+						</tr>
+						
+						<tr>
+						<td>
+							<td><label id="lblReasonDesc"></label></td>
+							<td></td>
+							<td></td>
+						</td>
+						</tr>
+						
 		</table>
 		
 		<br>
