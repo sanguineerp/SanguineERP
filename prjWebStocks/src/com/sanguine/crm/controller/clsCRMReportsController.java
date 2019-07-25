@@ -484,7 +484,7 @@ public class clsCRMReportsController {
 		String dteFromFulDate = ffy + "-" + ffm + "-" + ffd;
 		String dteToFulDate = tfy + "-" + tfm + "-" + tfd;
 
-		sqlQuery = sqlQuery + "and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by b.strProdCode,e.strGName,d.strSGName " + "order by b.strProdCode,e.strGName,d.strSGName ";
+		sqlQuery = sqlQuery + "and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by b.strProdCode,e.strGName,d.strSGName " + "order by d.intSortingNo,d.strSGName,e.strGName ";
 
 		List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 
@@ -534,16 +534,29 @@ public class clsCRMReportsController {
 			if (jp != null) {
 				jprintlist.add(jp);
 				ServletOutputStream servletOutputStream = resp.getOutputStream();
-				JRExporter exporter = new JRPdfExporter();
-				resp.setContentType("application/pdf");
-				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
-				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
-				exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-				resp.setHeader("Content-Disposition", "inline;filename=rptCategoryWiseSalesOrderReport" + dteFromDate + "_To_" + dteToDate + "_" + userCode + ".pdf");
-				exporter.exportReport();
+				if(objBean.getStrDocType().equals("PDF")){
+					JRExporter exporter = new JRPdfExporter();
+					resp.setContentType("application/pdf");
+					exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+					exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+					exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+					resp.setHeader("Content-Disposition", "inline;filename=rptCategoryWiseSalesOrderReport" + dteFromDate + "_To_" + dteToDate + "_" + userCode + ".pdf");
+					exporter.exportReport();
+					
+	
+				}else if(objBean.getStrDocType().equals("XLS")){
+					
+					JRExporter exporterXLS = new JRXlsExporter();
+					exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jp);
+					exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, resp.getOutputStream());
+					resp.setHeader("Content-Disposition", "attachment;filename=" + "rptCategoryWiseSalesOrderReport." + dteFromDate + " To " + dteToDate + "&" + userCode + ".xls");
+					exporterXLS.exportReport();
+					resp.setContentType("application/xlsx");
+				
+				}
 				servletOutputStream.flush();
 				servletOutputStream.close();
-
+					
 			}
 
 		} catch (Exception ex) {

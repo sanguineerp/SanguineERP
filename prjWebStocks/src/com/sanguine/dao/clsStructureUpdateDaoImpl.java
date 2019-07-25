@@ -2062,8 +2062,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		        + " ('frmSalesAndSalesReturnSummaryReport', 'Sales And Sales Return Summary Report', 'Reports',3, 'R', 92, 8, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmSalesAndSalesReturnSummaryReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
 		        + " ('frmVoidInvoiceReport', 'Void Invoice Report', 'Reports', 3, 'R', 68, 4, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmVoidInvoiceReport.html' , NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)," 
 				+ " ('frmWithholdingTaxReport', 'Withholding Tax Report', 'Reports',3, 'R', 93, 8, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmWithholdingTaxReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
-				+ " ('frmAMCFlash', 'AMC Flash', 'Tools', 4, 'L', 5, 9, '1', 'defaults.png', '6', 1, '1', '1', 'NO', 'NO', 'frmAMCFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) "
-				+ " ('frmPMSStructureUpdate', 'Structure Update', 'Tools', 1, 'L', 3, 111, '1', 'default.png', '3', 1, '1', '1', 'NO', 'NO', 'frmPMSStructureUpdate.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ " ('frmAMCFlash', 'AMC Flash', 'Tools', 4, 'L', 5, 9, '1', 'defaults.png', '6', 1, '1', '1', 'NO', 'NO', 'frmAMCFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ;";
 		
 		
 		System.out.println(sql);
@@ -3047,6 +3046,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			Query query = sessionFactory.getCurrentSession().createSQLQuery(sql);
 			query.executeUpdate();
 		} catch (Exception e) {
+			//e.printStackTrace();
 		} finally {
 			return 0;
 		}

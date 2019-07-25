@@ -424,18 +424,18 @@ $(document).ready(function()
 			 /**
 			  * Export to excel
 			 **/
-		     if($("#cmbDocType").val()=="XLS")
+		   /*   if($("#cmbDocType").val()=="XLS")
 		    	{
 		    		flag=false;
-			    	var reportType=$("#cmbDocType").val();
+			    	var reportType=$("#cmbReportType").val();
 					var locCode=$("#txtLocCode").val();
 					var strGCode= $('#strGCode').val();
 					var strSGCode=strSubGroupCode;
 					var param1=reportType+","+locCode+","+strSGCode;
 					var param2=strGCode;
-					//window.location.href=getContextPath()+"/ExportReOrderLevelRpt.html?param1="+param1 +"&param2="+param2;
+					window.location.href=getContextPath()+"/ExportReOrderLevelRpt.html?param1="+param1 +"&param2="+param2;
 		    	}
-			 
+			  */
 			 
 			 
 		    	return flag;		    			    			    			  
@@ -581,7 +581,7 @@ $(document).ready(function()
 					
 					<td ><label>Order Type</label></td>
 					<td colspan="2">	
-					<s:select id="cmbDocType" path="strReportType" cssClass="BoxW124px">
+					<s:select id="cmbReportType" path="strReportType" cssClass="BoxW124px">
 							<option value="Normal Order">Normal Order</option>
 							<option value="Advance Order">Advance Order</option>
 							<option value="Urgent Order">Urgent Order</option>
