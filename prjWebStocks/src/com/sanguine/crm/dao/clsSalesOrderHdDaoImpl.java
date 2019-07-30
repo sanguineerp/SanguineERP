@@ -222,7 +222,38 @@ public class clsSalesOrderHdDaoImpl implements clsSalesOrderHdDao {
 			return objSalesList;
 		}
 	}
+	//
+	@SuppressWarnings({ "unchecked", "rawtypes", "finally" })
+	@Override
+	public List funGetMultipleSODetailsForInvoice(List  listSOCodes,String custCode, String clientCode) {
+		String soCode = "";
+		for (int i = 0; i < listSOCodes.size(); i++) {
+			if (soCode.length() > 0) {
+				soCode = soCode + " or a.strSOCode='" + listSOCodes.get(i) + "' ";
+			} else {
+				soCode = "a.strSOCode='" + listSOCodes.get(i) + "' ";
+			}
+		}
 
+		List objSalesList = null;
+		String sql = " select b.strProdCode,c.strProdName,c.strProdType,sum(b.dblAcceptQty),b.dblUnitPrice , b.dblWeight,a.strCustCode" 
+			+ " ,d.dblDiscount,a.strSOCode,b.dblDiscount,ifnull(a.strCurrency,''),ifnull(a.dblConversion,1.0)  " 
+			+ " from tblsalesorderhd a,tblsalesorderdtl b,tblproductmaster c,tblpartymaster d " 
+			+ " where a.strSOCode=b.strSOCode and b.strProdCode=c.strProdCode and ( " + soCode + " ) " + "  and a.strCustCode=d.strPCode and a.strClientCode='"
+			+ clientCode + "' " + " and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "' and a.strCustCode='"+custCode+"' " 
+			+ " group by a.strCustCode,b.strProdCode,b.dblWeight ";
+
+		try {
+			objSalesList = sessionFactory.getCurrentSession().createSQLQuery(sql).list();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		finally {
+			return objSalesList;
+		}
+	}
 	@Override
 	public List funGetHdList(String fDate, String tDate, String clientCode) {
 		String hql = " from  clsSalesOrderHdModel   where dteSODate between :fDate and :tDate " + " and  strClientCode=:clientCode ";

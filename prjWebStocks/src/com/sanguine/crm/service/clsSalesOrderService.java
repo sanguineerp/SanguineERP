@@ -34,7 +34,9 @@ public interface clsSalesOrderService {
 	public List funGetSalesChar(String soCode, String prodCode);
 
 	public List funGetMultipleSODtlForInvoice(String[] soCodes, String clientCode);
-
+    
+	public List funGetMultipleSODetailsForInvoice(List listSOCodes,String custCode ,String clientCode);
+	
 	public List funGetHdList(String fDate, String tDate, String clientCode);
 	
 	

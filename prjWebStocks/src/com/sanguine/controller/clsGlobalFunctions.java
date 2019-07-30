@@ -2435,6 +2435,14 @@ public class clsGlobalFunctions {
 								}
 							}
 						} else {
+							//purchase tax check mrp calculation
+							if (entry.getValue().getStrPickMRPForTaxCal().equals("Y") && calTaxOnMRP.equalsIgnoreCase("Y")) // Calculate Product MRP
+								{
+									taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+								} else // Calculate Purchase tax on Product Unit Price
+								{
+									taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
+								}
 							flgEligibleForTax = true;
 						}
 					}

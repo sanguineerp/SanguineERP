@@ -1111,7 +1111,7 @@ $F{dblWeight}]]></textFieldExpression>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 2_TD" height="14">
-							<textField pattern="#,##0.00#;(#,##0.00#-)">
+							<textField>
 								<reportElement x="0" y="0" width="60" height="14" uuid="b20f3953-5dd5-4115-9fe7-3068afa56a70"/>
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="8" isBold="true"/>
@@ -1151,7 +1151,7 @@ $F{dblWeight}]]></textFieldExpression>
 				<reportElement x="4" y="122" width="192" height="1" uuid="a64beac8-ccae-4aed-9b32-64419586c6d8"/>
 			</line>
 			<line>
-				<reportElement x="68" y="127" width="1" height="52" uuid="de080593-78bf-415f-8140-cd1f84514053"/>
+				<reportElement x="68" y="122" width="1" height="58" uuid="de080593-78bf-415f-8140-cd1f84514053"/>
 			</line>
 			<staticText>
 				<reportElement x="6" y="127" width="62" height="15" uuid="b072fc47-9a02-4783-b5ee-5e3096366cf2"/>

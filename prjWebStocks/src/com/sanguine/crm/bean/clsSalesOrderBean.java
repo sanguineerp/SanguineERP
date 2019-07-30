@@ -15,6 +15,8 @@ public class clsSalesOrderBean {
 	private String dteSODate;
 
 	private String strCustCode;
+	
+	private String strCustName;
 
 	private String strCustPONo;
 
@@ -162,7 +164,7 @@ public class clsSalesOrderBean {
 	public void setDteSODate(String dteSODate) {
 		this.dteSODate = dteSODate;
 	}
-
+	
 	public String getStrCustCode() {
 		return strCustCode;
 	}
@@ -618,5 +620,13 @@ public class clsSalesOrderBean {
 	public void setListSalesOrderTaxDtl(List<clsSalesOrderTaxDtlModel> listSalesOrderTaxDtl) {
 		this.listSalesOrderTaxDtl = listSalesOrderTaxDtl;
 	}
+	public String getStrCustName() {
+		return strCustName;
+	}
+
+	public void setStrCustName(String strCustName) {
+		this.strCustName = strCustName;
+	}
+
 
 }

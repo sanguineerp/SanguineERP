@@ -1401,8 +1401,8 @@
 		{
 			var taxCode = $("#txtTaxCode").val();
 			var taxDesc=$("#lblTaxDesc").text();
-		    var taxableAmt = $("#txtTaxableAmt").val();
-		    var taxAmt=$("#txtTaxAmt").val();
+		    var taxableAmt = Math.round($("#txtTaxableAmt").val());
+		    var taxAmt=Math.round($("#txtTaxAmt").val());
 	
 		    var table = document.getElementById("tblTax");
 		    var rowCount = table.rows.length;
@@ -1453,7 +1453,9 @@
 		    var table = document.getElementById("tblTax");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
-		
+			
+		    taxableAmt=taxableAmt.toFixed(2);
+		    taxAmt=taxAmt.toFixed(2);
     	
 		    row.insertCell(0).innerHTML= "<input class=\"Box\" size=\"22%\" name=\"listGRNTaxDtl["+(rowCount)+"].strTaxCode\" id=\"txtTaxCode."+(rowCount)+"\" value='"+taxCode+"' >";
 		    row.insertCell(1).innerHTML= "<input class=\"Box\" size=\"22%\" name=\"listGRNTaxDtl["+(rowCount)+"].strTaxDesc\" id=\"txtTaxDesc."+(rowCount)+"\" value='"+taxDesc+"'>";		    	    

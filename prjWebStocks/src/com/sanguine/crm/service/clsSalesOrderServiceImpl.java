@@ -90,11 +90,18 @@ public class clsSalesOrderServiceImpl implements clsSalesOrderService {
 	public List funGetSalesChar(String soCode, String prodCode) {
 		return objSalesOrder.funGetSalesChar(soCode, prodCode);
 	}
-
+	@Override
 	public List funGetMultipleSODtlForInvoice(String[] soCodes, String clientCode) {
 		return objSalesOrder.funGetMultipleSODtlForInvoice(soCodes, clientCode);
 	}
-
+    
+	
+	@Override
+	public List funGetMultipleSODetailsForInvoice(List listSOCodes,String custCode, String clientCode) {
+		return objSalesOrder.funGetMultipleSODetailsForInvoice(listSOCodes,custCode,clientCode);
+	}
+    
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public List funGetHdList(String fDate, String tDate, String clientCode) {

@@ -3279,6 +3279,19 @@
         <put-attribute name="title" value="Withholding Tax Report"></put-attribute>
         <put-attribute name="body" value="/WEB-INF/jsp/crm/frmWithholdingTaxReport.jsp"></put-attribute>
     </definition>
+    
+     <definition name="frmBulkInvoice" extends="base.definition">
+        <put-attribute name="title" value="Bulk Invoice"></put-attribute>
+        <put-attribute name="body" value="/WEB-INF/jsp/crm/frmBulkInvoice.jsp"></put-attribute>
+    </definition>
+     <definition name="frmBulkInvoice_1" extends="base.definition4">
+        <put-attribute name="title" value="Bulk Invoice"></put-attribute>
+        <put-attribute name="body" value="/WEB-INF/jsp/crm/frmBulkInvoice.jsp"></put-attribute>
+    </definition>
+
+
+
+    
 	
 <!-- 	End Of CRM Tiles Entry -->
 

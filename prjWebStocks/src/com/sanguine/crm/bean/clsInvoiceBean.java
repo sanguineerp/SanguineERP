@@ -1,5 +1,6 @@
 package com.sanguine.crm.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import com.sanguine.crm.model.clsInvSettlementdtlModel;
 import com.sanguine.crm.model.clsInvoiceModelDtl;
 import com.sanguine.crm.model.clsInvoiceTaxDtlModel;
 import com.sanguine.model.clsPOTaxDtlModel;
+import com.sanguine.util.clsReportBean;
 
 public class clsInvoiceBean {
 
@@ -147,8 +149,31 @@ public class clsInvoiceBean {
 	private String dteFromDate;
 	private String dteToDate;
 	
+	private String strSuppCode;
 	
-	// Getter And Setter
+	private String SOCodethemes;
+	
+	private String dteSODate;
+	
+	private String strDocType;
+
+	private String strInvoiceDate;
+	
+    private List<clsInvoiceBean> listMultipleSOCodes =new ArrayList<>();
+    
+ // Getter And Setter
+    public String getSOCodethemes() {
+		return SOCodethemes;
+	}
+
+	public void setSOCodethemes(String sOCodethemes) {
+		SOCodethemes = sOCodethemes;
+	}
+
+	public List<clsInvoiceBean> getListMultipleSOCodes() {
+		return listMultipleSOCodes;
+	}
+
 
 	public List<clsInvoiceTaxDtlModel> getListInvoiceTaxDtlModel() {
 		return listInvoiceTaxDtlModel;
@@ -496,10 +521,19 @@ public class clsInvoiceBean {
 
 	public List<clsInvoiceDtlBean> getListclsInvoiceModelDtl() {
 		return listclsInvoiceModelDtl;
+		      
 	}
 
 	public void setListclsInvoiceModelDtl(List<clsInvoiceDtlBean> listclsInvoiceModelDtl) {
 		this.listclsInvoiceModelDtl = listclsInvoiceModelDtl;
+	}
+
+	public String getStrInvoiceDate() {
+		return strInvoiceDate;
+	}
+
+	public void setStrInvoiceDate(String strInvoiceDate) {
+		this.strInvoiceDate = strInvoiceDate;
 	}
 
 	public List<clsInvoiceTaxDtlBean> getListInvoiceTaxDtl() {
@@ -740,6 +774,21 @@ public class clsInvoiceBean {
 		return dteFromDate;
 	}
 
+	public String getStrSuppCode() {
+		return strSuppCode;
+	}
+
+
+	public void setStrSuppCode(String strSuppCode) {
+		this.strSuppCode = strSuppCode;
+	}
+
+
+	public void setListMultipleSOCodes(List<clsInvoiceBean> listMultipleSOCodes) {
+		this.listMultipleSOCodes = listMultipleSOCodes;
+	}
+
+
 	public void setDteFromDate(String dteFromDate) {
 		this.dteFromDate = dteFromDate;
 	}
@@ -750,6 +799,22 @@ public class clsInvoiceBean {
 
 	public void setDteToDate(String dteToDate) {
 		this.dteToDate = dteToDate;
+	}
+
+	public String getDteSODate() {
+		return dteSODate;
+	}
+
+	public void setDteSODate(String dteSODate) {
+		this.dteSODate = dteSODate;
+	}
+
+	public String getStrDocType() {
+		return strDocType;
+	}
+
+	public void setStrDocType(String strDocType) {
+		this.strDocType = strDocType;
 	}
 
 	
