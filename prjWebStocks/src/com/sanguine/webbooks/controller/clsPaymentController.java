@@ -42,6 +42,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.mysql.jdbc.Connection;
 import com.sanguine.base.service.intfBaseService;
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.controller.clsPOSGlobalFunctionsController;
 import com.sanguine.model.clsCurrencyMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsCurrencyMasterService;
@@ -49,12 +50,10 @@ import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.util.clsReportBean;
 import com.sanguine.webbooks.apgl.model.clsSundaryCrBillGRNDtlModel;
-import com.sanguine.webbooks.bean.clsJVBean;
 import com.sanguine.webbooks.bean.clsPaymentBean;
 import com.sanguine.webbooks.bean.clsPaymentDetailsBean;
 import com.sanguine.webbooks.model.clsBankMasterModel;
 import com.sanguine.webbooks.model.clsEmployeeMasterModel;
-import com.sanguine.webbooks.model.clsJVHdModel;
 import com.sanguine.webbooks.model.clsPaymentDebtorDtlModel;
 import com.sanguine.webbooks.model.clsPaymentDtl;
 import com.sanguine.webbooks.model.clsPaymentGRNDtlModel;
@@ -67,7 +66,6 @@ import com.sanguine.webbooks.service.clsPaymentService;
 import com.sanguine.webbooks.service.clsSundryCreditorMasterService;
 import com.sanguine.webbooks.service.clsSundryDebtorMasterService;
 import com.sanguine.webbooks.service.clsWebBooksAccountMasterService;
-import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
 
 @Controller
 public class clsPaymentController {

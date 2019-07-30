@@ -41,7 +41,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
-import com.sanguine.base.service.intfBaseService;
 import com.sanguine.bean.clsPurchaseReturnBean;
 import com.sanguine.model.clsAuditDtlModel;
 import com.sanguine.model.clsAuditHdModel;
@@ -66,7 +65,6 @@ import com.sanguine.service.clsPurchaseReturnService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsSupplierMasterService;
 import com.sanguine.util.clsReportBean;
-import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
 
 @Controller
 public class clsPurchaseReturnController {

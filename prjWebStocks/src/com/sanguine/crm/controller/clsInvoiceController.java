@@ -57,7 +57,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
 import com.sanguine.base.service.intfBaseService;
-import com.sanguine.bean.clsStockFlashBean;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.controller.clsJVGeneratorController;
 import com.sanguine.crm.bean.clsInvoiceBean;
@@ -111,8 +110,6 @@ import com.sanguine.service.clsStkAdjustmentService;
 import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.util.clsNumberToWords;
 import com.sanguine.util.clsReportBean;
-import com.sanguine.webbooks.model.clsReceiptHdModel;
-import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
 
 @Controller
 public class clsInvoiceController

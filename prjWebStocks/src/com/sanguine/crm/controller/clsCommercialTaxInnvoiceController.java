@@ -39,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.controller.clsPOSGlobalFunctionsController;
 import com.sanguine.crm.bean.clsComercialInvTaxBeanReport;
 import com.sanguine.crm.bean.clsInvoiceBean;
 import com.sanguine.crm.bean.clsInvoiceDtlBean;
@@ -63,7 +64,6 @@ import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsTaxMasterService;
 import com.sanguine.util.clsNumberToWords;
 import com.sanguine.util.clsReportBean;
-import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
 
 @Controller
 public class clsCommercialTaxInnvoiceController {

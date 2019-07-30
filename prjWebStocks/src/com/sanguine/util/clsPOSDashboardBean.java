@@ -2,7 +2,7 @@ package com.sanguine.util;
 
 import java.util.List;
 
-import com.sanguine.webpos.bean.clsWebPOSReportBean;
+import com.sanguine.bean.clsWebPOSReportBean;
 
 public class clsPOSDashboardBean {
 	private String strPOSPieChart;

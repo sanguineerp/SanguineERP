@@ -2,7 +2,6 @@ package com.sanguine.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sanguine.bean.clsWebPOSReportBean;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.util.clsPOSDashboardBean;
-import com.sanguine.webpos.bean.clsWebPOSReportBean;
 
 @Controller
 public class clsGrnAndInvoiceController {
@@ -257,7 +256,7 @@ public class clsGrnAndInvoiceController {
 		HashMap<String, clsWebPOSReportBean> mapData = new HashMap<String, clsWebPOSReportBean>();
 
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
-
+	
 		String fromDate = req.getParameter("fromDate");
 
 		String toDate = req.getParameter("toDate");

@@ -10,8 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.sanguine.webpms.bean.clsPaxReportBean;
-import com.sanguine.webpos.bean.clsBillDtl;
-import com.sanguine.webpos.bean.clsGroupSubGroupItemBean;
 
 /**
  *

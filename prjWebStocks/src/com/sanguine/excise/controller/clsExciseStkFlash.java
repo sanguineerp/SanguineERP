@@ -2,11 +2,8 @@ package com.sanguine.excise.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -19,7 +16,6 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
@@ -27,7 +23,6 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -38,17 +33,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sanguine.bean.clsStockAdjFlashBean;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.excise.bean.clsExciseStockFlashBean;
-import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
-import com.sanguine.model.clsStkAdjustmentDtlModel;
-import com.sanguine.model.clsStkAdjustmentHdModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
-import com.sanguine.util.clsComparatorForOwnSorting;
-import com.sanguine.webpos.bean.clsGroupSubGroupItemBean;
 
 @Controller
 public class clsExciseStkFlash {

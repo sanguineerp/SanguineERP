@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.controller.clsGlobalFunctions;
-import com.sanguine.controller.clsUserController;
+import com.sanguine.controller.clsPOSGlobalFunctionsController;
 import com.sanguine.excise.bean.clsExciseRecipeMasterBean;
 import com.sanguine.excise.model.clsBrandMasterModel;
 import com.sanguine.excise.model.clsExciseRecipeMasterDtlModel;
@@ -34,7 +33,6 @@ import com.sanguine.excise.model.clsExciseRecipeMasterHdModel;
 import com.sanguine.excise.service.clsExciseRecipeMasterService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsUOMService;
-import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Controller

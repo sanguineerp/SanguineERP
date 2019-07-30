@@ -1,6 +1,5 @@
 package com.sanguine.controller;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sanguine.base.dao.intfBaseDao;
 import com.sanguine.base.service.intfBaseService;
 import com.sanguine.bean.clsLinkUpBean;
 import com.sanguine.excise.bean.clsBrandMasterBean;
@@ -32,7 +29,6 @@ import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsLinkUpService;
 import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.webbooks.bean.clsSundryDebtorMasterBean;
-import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
 
 @Controller
 public class clsARLinkUpController {

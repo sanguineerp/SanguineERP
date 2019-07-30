@@ -69,8 +69,6 @@ import com.sanguine.util.clsTreeRootNodeItemUtil;
 import com.sanguine.util.clsUserDesktopUtil;
 import com.sanguine.webpms.model.clsDayEndHdModel;
 import com.sanguine.webpms.service.clsDayEndService;
-import com.sanguine.webpos.bean.clsWebPosPOSSelectionBean;
-import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
 
 @Controller
 @SessionAttributes("userdetails")
@@ -2037,7 +2035,7 @@ public class clsUserController {
 	// @SuppressWarnings("unused")
 	// @RequestMapping(value = "/frmWebPOSPOSSelection", method =
 	// RequestMethod.GET)
-	public ArrayList<clsWebPosPOSSelectionBean> funWebPOSPOSSelection(HttpServletRequest req) {
+	/*public ArrayList<clsWebPosPOSSelectionBean> funWebPOSPOSSelection(HttpServletRequest req) {
 
 		String posUrl = clsPOSGlobalFunctionsController.POSWSURL + "/APOSIntegration/funGetPOS";
 		System.out.println(posUrl);
@@ -2080,6 +2078,9 @@ public class clsUserController {
 
 	}
 
+	*/
+	
+	
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/frmWebPOSSelection", method = RequestMethod.GET)
 	public ModelAndView funWebPOSPOSSelectionMaster(@RequestParam("strPOSCode") String strPOSCode, HttpServletRequest req, Map<String, Object> model) {
@@ -2106,7 +2107,7 @@ public class clsUserController {
 
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/frmWebPOSSelectionMaster", method = RequestMethod.GET)
-	public ModelAndView funWebPOSModuleMasterSelection(HttpServletRequest req, Map<String, Object> model) {
+	/*public ModelAndView funWebPOSModuleMasterSelection(HttpServletRequest req, Map<String, Object> model) {
 		List<clsUserDesktopUtil> webPOSDesktop = null;
 		try {
 
@@ -2138,9 +2139,9 @@ public class clsUserController {
 			String posModule = req.getSession().getAttribute("webPOSModuleSelect").toString();
 			String usercode = req.getSession().getAttribute("usercode").toString();
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
-			/*
+			
 			 * if(usercode.equals("SANGUINE")) { usercode = "super"; }
-			 */
+			 
 			webPOSDesktop = funGetPOSMenuMap(usercode, clientCode, posModule, usercode, strPOSCode);
 			JSONArray jArr = new JSONArray();
 			for (clsUserDesktopUtil obj : webPOSDesktop) {
@@ -2236,7 +2237,9 @@ public class clsUserController {
 		return new ModelAndView("frmPOSSelection");
 
 	}
-
+*/
+	
+	
 	private void funCheckNewfinancial(List<clsCompanyMasterModel> listClsCompanyMasterModel, HttpServletRequest req) {
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 		int currentMonth = Calendar.getInstance().get(Calendar.MONTH);

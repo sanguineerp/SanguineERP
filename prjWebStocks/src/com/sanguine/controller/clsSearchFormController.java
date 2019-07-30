@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,12 +32,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sanguine.base.service.intfBaseService;
 import com.sanguine.bean.clsFormSearchElements;
 import com.sanguine.model.clsCompanyMasterModel;
-import com.sanguine.model.clsCurrencyMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
-import com.sanguine.model.clsSessionMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
-import com.sanguine.webpos.controller.clsPOSGlobalFunctionsController;
 
 @Controller
 public class clsSearchFormController {
@@ -194,10 +190,10 @@ public class clsSearchFormController {
 			strModule = "8";
 		}
 
-		if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		if (false) {/*//req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")
 			Map<String, Object> hmSearchData = funGetWebPOSSearchDetail(formName, search_with, req);
 			model.put("searchFormTitle", (String) hmSearchData.get("searchFormTitle"));
-		} else {
+		*/} else {
 			model.put("searchFormTitle", map.get("searchFormTitle"));
 		}
 		return new ModelAndView("frmSearch");
@@ -236,13 +232,13 @@ public class clsSearchFormController {
 		}
 
 		LinkedList<String> columnName = new LinkedList<String>();
-		if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		if (false) {//req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")
 
-			Map<String, Object> hmSearchData = funGetWebPOSSearchDetail(formName, search_with, req);
+			/*Map<String, Object> hmSearchData = funGetWebPOSSearchDetail(formName, search_with, req);
 			String listColumnNames[] = ((String) hmSearchData.get("listColumnNames")).split("\\,");
 			for (int i = 0; i < listColumnNames.length; i++) {
 				columnName.add(listColumnNames[i]);
-			}
+			}*/
 
 		} else {
 			String listColumnNames[] = ((String) map.get("listColumnNames")).split("\\,");
@@ -355,7 +351,7 @@ public class clsSearchFormController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		if (false) {/*//req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")
 			Map<String, Object> hmSearchData = funGetWebPOSSearchDetail(formName, search_with, req);
 
 			String tempColmn = (String) hmSearchData.get("listColumnNames");
@@ -367,7 +363,7 @@ public class clsSearchFormController {
 			model.put("listRecords", funSetFormSearchElements(list));
 			model.put("searchFormName", searchFormName);
 			model.put("multipleSelection", multiDocCodeSelection);
-		}
+		*/}
 		if (formName.contains("Web-Service")) {
 			Map<String, Object> hmSearchData = funGetSearchDetail(formName, search_with, req);
 
@@ -5371,416 +5367,10 @@ public class clsSearchFormController {
 	 * End WebBook Search
 	 */
 
-	/**
-	 * WebPOS Search Start
-	 * 
-	 * @param formName
-	 * @param search_with
-	 * @param req
-	 * @return
-	 */
-	private Map<String, Object> funGetWebPOSSearchDetail(String formName, String searchCode, HttpServletRequest req) {
-		Map<String, Object> mainMap = new HashMap<>();
-
-		String clientCode = req.getSession().getAttribute("clientCode").toString();
-		String criteria = "";
-		String listColumnNames = "";
-		String idColumnName = "";
-		String searchFormTitle = "";
-		JSONArray jArrSearchList = null;
-		List<Object[]> listSearchData = new ArrayList<Object[]>();
-
-		switch (formName) {
-		case "POSGroupMaster": {
-			listColumnNames = "Group Code,Group Name,Operational";
-			searchFormTitle = "Group Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSReasonMaster": {
-			listColumnNames = "Reason Code,Reason Name";
-			searchFormTitle = "Reason Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSCustomerTypeMaster": {
-			listColumnNames = "Customer Type Code,CuStomer Type";
-			searchFormTitle = "Customer Type Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSZoneMaster": {
-			listColumnNames = "Zone Code,Zone Name";
-			searchFormTitle = "Zone Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSshiMaster": {
-			listColumnNames = "Shift Code,Pos Code,ShiftDate,Shift Start Time,Shift End Time,Bill Date Type";
-			searchFormTitle = "Shift Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSAreaMaster": {
-			listColumnNames = "Area Code,Area Name,POS Name";
-			searchFormTitle = "Area Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSTableMaster": {
-			listColumnNames = "Table No,Table Name,Area Name,Waiter Name,POS Name,Status";
-			searchFormTitle = "Table Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSWaiterMaster": {
-			listColumnNames = "Waiter No,Waiter ShortName,Operational";
-			searchFormTitle = "Waiter Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "WebBooksAcountMaster": {
-			listColumnNames = "Account Code,Account Name";
-			searchFormTitle = "Account Details";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "ExciseLicenseMaster": {
-			listColumnNames = "License Code,License Name";
-			searchFormTitle = "License Details";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSMenuHeadMaster": {
-			listColumnNames = "Menu Code,Menu Name,Operational";
-			searchFormTitle = "Menu Head";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSSubMenuHeadMaster": {
-			listColumnNames = "SubMenu Code,SubMenu Name,Operational";
-			searchFormTitle = "SubMenu Head";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSModifierGroupMaster": {
-			listColumnNames = "Modifier GroupCode,Modifier GroupName,Modifier GroupShortName,Operational";
-			searchFormTitle = "Modifier GroupMaster";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSItemModifierMaster": {
-			listColumnNames = "Modifier Code,Modifier Name,Description ";
-			searchFormTitle = "Item Modifier";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSMenuItemMaster": {
-			listColumnNames = "Item Code,Item Name,Item Type,Revenue,Tax Id,External Code,SubGroup Name";
-			searchFormTitle = "Menu Item Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSMaster": {
-			listColumnNames = "POS Code,POS Name";
-			searchFormTitle = "POS Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSTaxMaster": {
-			listColumnNames = "Tax Code,Tax Desc";
-			searchFormTitle = "Tax Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSCustomerMaster": {
-			listColumnNames = "Customer Code,CuStomer Name,Mobile No,Address ";
-			searchFormTitle = "Customer Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSCustomerAreaMaster": {
-			listColumnNames = "Customer Area Code,CuStomer Area Name, Address";
-			searchFormTitle = "Customer Area Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSMenuItemPricingMaster": {
-			listColumnNames = "Id,Item Code,Item Name,POS,Area,Menu,Price Mond,Price Tue,Price Wed,Price Thu,Price Fri,Price Sat,Price Sun " + ",Popular,From Date,To Date,Cost Center,Sub Menu Head,Hourly Pricing";
-			searchFormTitle = "Menu Item Pricing Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSSettlementMaster": {
-			listColumnNames = "Settlement Code,Settlement Name ";
-			searchFormTitle = "Settlement Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSAdvOrderMaster": {
-			listColumnNames = "Adv Order Type Code,Adv Order Type Name ";
-			searchFormTitle = "Advance Order Type Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSDeliveryBoyMaster": {
-			listColumnNames = "Delivery Boy Code, Delivery Boy Name ";
-			searchFormTitle = "Delivery Boy Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSOrderMaster": {
-			listColumnNames = "Order Code, Order Desc ";
-			searchFormTitle = "Order Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "MenuItemForPrice": {
-			listColumnNames = "Item Code, Item Name, Item Type, RevenueHead, Tax Id, External Code, SubGroup Name ";
-			searchFormTitle = "Item Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "MenuItemForRecipeChild": {
-			listColumnNames = "Item Code, Item Name, Item Type, RevenueHead, Tax Id, External Code, SubGroup Name ";
-			searchFormTitle = "Item Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSRecipeMaster": {
-			listColumnNames = "Recipe Code, Item Code, Item Name ";
-			searchFormTitle = "Recipe Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSPromotionMaster": {
-			listColumnNames = "Promotion Code, Promotion Name, Promotion On ";
-			searchFormTitle = "Promotion Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "webstockusermaster": {
-			listColumnNames = "User Code,User Name,Super User";
-			searchFormTitle = "User Master";
-			JSONObject jObjSearchData = funGetWebstockUserSearchDetails(clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSCounterMaster": {
-			listColumnNames = "Counter Type Code,Counter Name,Operational,User,POS";
-			searchFormTitle = "Counter Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSDebitCardMaster": {
-			listColumnNames = "Card Type Code,Card Name";
-			searchFormTitle = "Debit Card Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSUnSettleBill": {
-			listColumnNames = "Bill No,Table Name,Total Amount,Settle Mode,User,Remark";
-			searchFormTitle = "UnSettle Bill";
-			clientCode = req.getSession().getAttribute("clientCode").toString();
-			String strPosCode = req.getSession().getAttribute("loginPOS").toString();
-			String userCode = req.getSession().getAttribute("usercode").toString();
-			String posURL = clsPOSGlobalFunctionsController.POSWSURL + "/APOSIntegration/funGetPOSDate" + "?POSCode=" + strPosCode;
-			JSONObject jObj = objGlobalFunctions.funGETMethodUrlJosnObjectData(posURL);
-			String date = (String) jObj.get("POSDate");
-			String[] splitDate = date.split(" ");
-			String data = clientCode + "#" + strPosCode + "#" + splitDate[0] + "#" + userCode;
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, data);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSItemList": {
-			listColumnNames = "Item Code,Item Name,Item Type,External Code";
-			searchFormTitle = "POS Item List";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "PhysicalStock": {
-			String posCode = req.getSession().getAttribute("loginPOS").toString();
-			listColumnNames = "PSP_Code,Item_Code,Item_Name,Created_Date";
-			searchFormTitle = "Physical Stock Details";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode + "#" + posCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "StockIn": {
-			listColumnNames = "StockIn_Code,Reason Code,Reason_Name";
-			searchFormTitle = "StockIn Details";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "StockOut": {
-			listColumnNames = "StockOut_Code,Reason Code,Reason_Name";
-			searchFormTitle = "StockOut Details";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSUserMaster": {
-			listColumnNames = "User Code,Swipe Card,Super Type";
-			searchFormTitle = "User Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSTableReservation": {
-			listColumnNames = "Reservation Code,Customer Name,Building Code,Building Name,City";
-			searchFormTitle = " Table Reservation";
-			String strPosCode = req.getSession().getAttribute("loginPOS").toString();
-
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, strPosCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSTableReserveMaster": {
-			listColumnNames = "Table No,Table Name,Area Name,Waiter Name,POS Name,Status";
-			searchFormTitle = "Table Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-		case "POSFactoryMaster": {
-			listColumnNames = "Factory Code,Factory Name,User Created,User Edited,Date Created";
-			searchFormTitle = "Factory Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSCostCenterMaster": {
-			listColumnNames = "Cost Center Code,Cost Center Name";
-			searchFormTitle = "Cost Center Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSTDHOnItem": {
-			listColumnNames = "Item Code,Item Name";
-			searchFormTitle = "Search Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, strMenuCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		case "POSLoadTDHData": {
-			listColumnNames = "TDH Code,Description,Menu Code,Item Code,Quantity";
-			searchFormTitle = "TDH Master";
-			JSONObject jObjSearchData = funGetPOSSearchDetails(formName, clientCode);
-			jArrSearchList = (JSONArray) jObjSearchData.get(formName);
-			break;
-		}
-
-		}
-
-		if (null != jArrSearchList) {
-			for (int cnt = 0; cnt < jArrSearchList.size(); cnt++) {
-				JSONArray jArrSearchRow = (JSONArray) jArrSearchList.get(cnt);
-				Object[] arrObj = new Object[jArrSearchRow.size()];
-				for (int row = 0; row < jArrSearchRow.size(); row++) {
-					arrObj[row] = jArrSearchRow.get(row);
-				}
-				listSearchData.add(arrObj);
-			}
-		}
-
-		mainMap.put("criteria", criteria);
-		mainMap.put("listColumnNames", listColumnNames);
-		mainMap.put("idColumnName", idColumnName);
-		mainMap.put("searchFormTitle", searchFormTitle);
-		mainMap.put("listSearchData", listSearchData);
-		return mainMap;
-	}
-
+	
 	/*
 	 * End WebPOS Search
 	 */
-
-	private JSONObject funGetPOSSearchDetails(String searchFormName, String clientCode) {
-		JSONObject jObjSearchDetails = new JSONObject();
-		String posUrl = clsPOSGlobalFunctionsController.POSWSURL + "/APOSSearchIntegration/funGetPOSSearchAll" + "?masterName=" + searchFormName + "&clientCode=" + URLEncoder.encode(clientCode);
-		;
-		System.out.println("posUrl:" + posUrl);
-
-		try {
-			URL url = new URL(posUrl);
-
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json");
-			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-			String output = "", op = "";
-			while ((output = br.readLine()) != null) {
-				op += output;
-			}
-			System.out.println("Obj=" + op);
-			conn.disconnect();
-
-			JSONParser parser = new JSONParser();
-			Object obj = parser.parse(op);
-			jObjSearchDetails = (JSONObject) obj;
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return jObjSearchDetails;
-	}
 
 	private JSONObject funGetIndependentWebServiceDetails(String searchFormName, String clientCode, String propCode) {
 		JSONObject jObjSearchDetails = new JSONObject();
