@@ -51,8 +51,8 @@ public class clsAgentMasterServiceImpl implements clsAgentMasterService {
 			objAgentMasterHdModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 
 		}
-		objAgentMasterHdModel.setDteFromDate(objBean.getDteFromDate());
-		objAgentMasterHdModel.setDteToDate(objBean.getDteToDate());
+		objAgentMasterHdModel.setDteFromDate(objGlobal.funGetDate("yyyy-mm-dd", objBean.getDteFromDate()));
+		objAgentMasterHdModel.setDteToDate(objGlobal.funGetDate("yyyy-mm-dd",objBean.getDteToDate()));
 		objAgentMasterHdModel.setStrDescription(objBean.getStrDescription());
 		objAgentMasterHdModel.setStrAgentCommCode(objBean.getStrAgentCommCode());
 		objAgentMasterHdModel.setStrCorporateCode(objBean.getStrCorporateCode());

@@ -13,10 +13,39 @@
 {   
    white-space: pre-wrap;      
 }
+
+.red
+{
+    background-color: red;
+    width: 50%;
+    height: 5px;
+}
+.gray
+{
+    background-color: gray;
+    width: 50%;
+    height: 5px;
+}
+.ten
+{
+    color: #ffffff;
+}
+
 </style>
 <script type="text/javascript">
 	
 	var fieldName;
+	
+	/* $(document).ready(function(){
+		
+		
+		$(document).ajaxStart(function() {
+				$("#wait").css("display", "block");
+			});
+			$(document).ajaxComplete(function() {
+				$("#wait").css("display", "none");
+			});
+	}); */
 	
 	$(function() 
 	{
@@ -66,6 +95,13 @@
 			type : "GET",
 			url : getContextPath()+ "/getRoomStatusList.html?viewDate=" + viewDate,
 			dataType : "json",
+			/*  beforeSend : function(){
+				 $("#wait").css("display","block");
+		    },
+		    complete: function(){
+		    	 $("#wait").css("display","none");
+		    }, */
+			
 			success : function(response){ 
 				funRemoveHeaderTableRows();
 				funFillHeaderRows(response);
@@ -99,6 +135,14 @@
 			type : "GET",
 			url : getContextPath()+ "/getRoomStatusDtlList.html?viewDate=" + viewDate,
 			dataType : "json",
+			
+			beforeSend : function(){
+				 $("#wait").css("display","block");
+		    },
+		    complete: function(){
+		    	 $("#wait").css("display","none");
+		    },
+			
 			success : function(response){
 				funRemoveDetailTableRows();
 				
@@ -220,6 +264,13 @@
 					      var finalTemp=temp.indexOf("/");
 					      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 					      finalTemp=temp.substring(0,finalTemp);
+					      if(roomStatus.includes("Waiting"))
+					    	  {
+					    	  toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+					      else
+					    	  {
+					    	  
 					      if(nextFinalTemp == "/")
 				    	  {
 					    	  roomStatus="Occupied"
@@ -239,7 +290,7 @@
 					    	  }
 					    	  count++;
 				    	  }
-					      
+					    	  }
 						});
 					}
 				 });
@@ -265,6 +316,12 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
+						      if(roomStatus.includes("Waiting"))
+					    	  {
+					    	  toolTipText2+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+					      else
+					    	  {
 						      if(nextFinalTemp == "/")
 					    	  {
 						    	  roomStatus="Occupied"
@@ -283,6 +340,7 @@
 							    	toolTipText2+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 						    	  }
 						    	  count++;
+					    	  }
 					    	  }
 						});
 					}
@@ -310,6 +368,12 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
+						      if(roomStatus.includes("Waiting"))
+					    	  {
+					    	  toolTipText3+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+					      else
+					    	  {
 						      if(nextFinalTemp == "/")
 					    	  {
 						    	  roomStatus="Occupied"
@@ -328,6 +392,7 @@
 							    	toolTipText3+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 						    	  }
 						    	  count++;
+					    	  }
 					    	  }
 						});
 					}
@@ -355,6 +420,12 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
+						      if(roomStatus.includes("Waiting"))
+					    	  {
+					    	  toolTipText4+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+					      else
+					    	  {
 						      if(nextFinalTemp == "/")
 					    	  {
 						    	  roomStatus="Occupied"
@@ -374,6 +445,7 @@
 						    	  }
 						    	  count++;
 					    	  }  
+					    	  }
 						});
 					}
 				 });
@@ -399,6 +471,12 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
+						      if(roomStatus.includes("Waiting"))
+					    	  {
+					    	  toolTipText5+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+					      else
+					    	  {
 						      if(nextFinalTemp == "/")
 					    	  {
 						    	  roomStatus="Occupied"
@@ -417,6 +495,7 @@
 							    	toolTipText5+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 						    	  }
 						    	  count++;
+					    	  }
 					    	  }
 						});	
 					}
@@ -443,6 +522,12 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
+						      if(roomStatus.includes("Waiting"))
+					    	  {
+					    	  toolTipText6+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+					      else
+					    	  {
 						      if(nextFinalTemp == "/")
 					    	  {
 						    	  roomStatus="Occupied"
@@ -461,6 +546,7 @@
 							    	toolTipText6+=" \n"+item1.strGuestName+"\n"+response.strCheckInNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 						    	  }
 						    	  count++;
+					    	  }
 					    	  }
 						});
 					}
@@ -488,6 +574,12 @@
 						      var finalTemp=temp.indexOf(" ");
 						      var nextFinalTemp = temp.substring(finalTemp,temp.length);
 						      finalTemp=temp.substring(0,finalTemp);
+						      if(roomStatus.includes("Waiting"))
+					    	  {
+					    	  toolTipText7+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+					      else
+					    	  {
 						      if(nextFinalTemp == "/")
 					    	  {
 						    	  roomStatus="Occupied"
@@ -507,13 +599,16 @@
 						    	  }
 						    	  count++;
 					    	  }
+					    	  }
 						});
 					}
 				 });
 			}
 		}
 				
-		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+roomNo+"' >";
+		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \" style=\"padding-left: 5px;width:100%;\" value='"+roomNo+"' >";
+		
+		
 
 		
 		/*if(response.dteArrivalDate!=null)
@@ -533,18 +628,51 @@
 		var x1=row.insertCell(1);
 		var dayTrim1=day1.trim();
 	    var dayValue1 = dayTrim1.substring(0,dayTrim1.length-1);
-		x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue1+"' onClick='funOnClick(this)' >";
+	    var firstName = dayValue1.substring(0,dayValue1.indexOf("/"));
+	    var secondName = dayValue1.substring(dayValue1.indexOf("/")+1,dayValue1.length);
+	   	if(dayValue1.includes("/"))
+	    	{
+		//x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;\" value='"+dayValue1+"' onClick='funOnClick(this)' >";
+	    }
+	    else
+	    	{
+	    	x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width:90%; \" value='"+dayValue1+"' onClick='funOnClick(this)' >";
+	    	x1.width="100px";
+	    	} 
 		if(day1!='')
 		{
-			x1.bgColor=color;
-			x1.title=toolTipText1;
+			
+			if(dayValue1.includes("/"))
+				{
+				
+				var rowdata= '<span class=\'gray\'>'+"<input readonly=\"readonly\" class=\"Box \"  style=\"margin-left: -9px;width:110%;\" value='"+firstName+"' onClick='funOnClick(this)' >";
+				
+				rowdata=rowdata+'<span class=\'red\'>'+"<input readonly=\"readonly\" class=\"Box \"  style=\"margin-left: -9px;width: 110%;\" value='"+secondName+"' onClick='funOnClick(this)' >";
+				x1.innerHTML=rowdata;
+				x1.width="100px";
+				/* var size = x1.innerHTML.length; */
+				//x1.bgColor = 'Red';
+				//x1.bgColor='Red';
+				
+				x1.title=toolTipText1;
+				
+				
+				
+				}
+			else
+				{
+				x1.bgColor=color;
+				x1.title=toolTipText1;	
+				x1.width="100px";
+				}
+			
 		}
 		
 		
 		var x2=row.insertCell(2);
 		var dayTrim2=day2.trim();
 	    var dayValue2 = dayTrim2.substring(0,dayTrim2.length-1);
-		x2.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue2+"' onClick='funOnClick(this)' >";
+		x2.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 90%;\" value='"+dayValue2+"' onClick='funOnClick(this)' >";
 		if(day2!='')
 		{
 			x2.bgColor=color;
@@ -554,7 +682,7 @@
 		var x3=row.insertCell(3);
 		var dayTrim3=day3.trim();
 	    var dayValue3 = dayTrim3.substring(0,dayTrim3.length-1);
-		x3.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue3+"' onClick='funOnClick(this)' >";
+		x3.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 90%;\" value='"+dayValue3+"' onClick='funOnClick(this)' >";
 		if(day3!='')
 		{
 			x3.bgColor=color;
@@ -564,7 +692,7 @@
 		var x4=row.insertCell(4);
 		var dayTrim4=day4.trim();
 	    var dayValue4 = dayTrim4.substring(0,dayTrim4.length-1);
-		x4.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue4+"' onClick='funOnClick(this)' >";
+		x4.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 100%;\" value='"+dayValue4+"' onClick='funOnClick(this)' >";
 		if(day4!='')
 		{
 			x4.bgColor=color;
@@ -574,7 +702,7 @@
 		var x5=row.insertCell(5);
 		var dayTrim5=day5.trim();
 	    var dayValue5 = dayTrim5.substring(0,dayTrim5.length-1);
-		x5.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue5+"' onClick='funOnClick(this)' >";
+		x5.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 100%;\" value='"+dayValue5+"' onClick='funOnClick(this)' >";
 		if(day5!='')
 		{
 			x5.bgColor=color;
@@ -583,7 +711,7 @@
 		var x6=row.insertCell(6);
 		var dayTrim6=day6.trim();
 	    var dayValue6 = dayTrim6.substring(0,dayTrim6.length-1);
-		x6.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue6+"' onClick='funOnClick(this)' >";
+		x6.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 100%;\" value='"+dayValue6+"' onClick='funOnClick(this)' >";
 
 		if(day6!='')
 		{
@@ -593,7 +721,7 @@
 		var x7=row.insertCell(7);
 		var dayTrim7=day7.trim();
 	    var dayValue7 = dayTrim7.substring(0,dayTrim7.length-1);
-		x7.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+dayValue7+"' onClick='funOnClick(this)' >";
+		x7.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 100%;\" value='"+dayValue7+"' onClick='funOnClick(this)' >";
 		if(day7!='')
 		{
 			x7.bgColor=color;
@@ -605,44 +733,44 @@
 			var x1=row.insertCell(1);
 			x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x1.bgColor=color;
-			toolTipText1+=" \n"+response.strGuestName;
+			toolTipText1+=" \n"+response.strGuestName+"\n"+response.strCheckInNo+"\n";
 			x1.title=toolTipText1;
 			
 			
 			var x2=row.insertCell(1);
 			x2.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x2.bgColor=color;
-			toolTipText2+=" \n"+response.strGuestName;
+			toolTipText2+=" \n"+response.strGuestName+"\n"+response.strCheckInNo+"\n";
 			x2.title=toolTipText2;
 			
 			var x3=row.insertCell(1);
 			x3.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x3.bgColor=color;
-			toolTipText3+=" \n"+response.strGuestName;
+			toolTipText3+=" \n"+response.strGuestName+"\n"+response.strCheckInNo+"\n";
 			x3.title=toolTipText3;
 			
 			var x4=row.insertCell(1);
 			x4.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x4.bgColor=color;
-			toolTipText4+=" \n"+response.strGuestName;
+			toolTipText4+=" \n"+response.strGuestName+"\n"+response.strCheckInNo+"\n";
 			x4.title=toolTipText4;
 			
 			var x5=row.insertCell(1);
 			x5.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x5.bgColor=color;
-			toolTipText5+=" \n"+response.strGuestName;
+			toolTipText5+=" \n"+response.strGuestName+"\n"+response.strCheckInNo+"\n";
 			x5.title=toolTipText5;
 			
 			var x6=row.insertCell(1);
 			x6.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x6.bgColor=color;
-			toolTipText6+=" \n"+response.strGuestName;
+			toolTipText6+=" \n"+response.strGuestName+"\n"+response.strCheckInNo+"\n";
 			x6.title=toolTipText6;
 			
 			var x7=row.insertCell(1);
 			x7.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 2px;width: 100%;\" value='"+day1+"' onClick='funOnClick(this)' >";
 			x7.bgColor=color;
-			toolTipText7+=" \n"+response.strGuestName;
+			toolTipText7+=" \n"+response.strGuestName+"\n"+response.strCheckInNo+"\n";
 			x7.title=toolTipText7;
 			}
 	}
@@ -668,8 +796,8 @@
 			case 'rgb(128, 128, 128)'://GREY-->CHECKED-OUT
 									  
 				 code=obj.value;
-				  code=code.split(',')[2].trim();
-				  url=getContextPath()+"/frmCheckOut1.html?docCode="+code
+				  //code=code.split(',')[2].trim();
+				  url=getContextPath()+"/frmBillPrinting.html?docCode="+code
 				  window.open(url);
 									  
 				  break;
@@ -677,8 +805,8 @@
 									  
 			case 'rgb(255, 255, 0)'://YELLOW-->WAITING
 				  code=obj.value;
-				  code=code.split(',')[1].trim();
-				  url=getContextPath()+"/frmReservation1.html?docCode="+code
+				  //code=code.split(',')[1].trim();
+				  url=getContextPath()+"/frmCheckIn1.html?docCode="+code
 				  window.open(url);
 
 				  break;
@@ -772,14 +900,14 @@
 		<div>
 			<table class="transTable">
 				<tr>
-					<td><s:input colspan="1" type="text" id="txtViewDate" path="dteViewDate" cssClass="calenderTextBox" /></td>
+					<td><s:input colspan="1" type="text" id="txtViewDate" disabled="true" path="dteViewDate" cssClass="calenderTextBox" /></td>
 					
 					
 				</tr>
 			</table>
 
 		
-			<table id="tblDays" class="transTable">
+			<table id="tblDays" class="transTable" >
 				<!-- 
 				<tr>
 					<td width="70px">Room No</td>
@@ -861,6 +989,9 @@
 		</div>
 		
 		<br><br>
+		
+		
+		
 		<div>
 			<table >
 				<tr>
@@ -873,6 +1004,8 @@
 					<td bgcolor="Gray">Checked Out</td> -->
 					<td></td>
 					<td bgcolor=Olive>Blocked</td>
+					<td></td>
+					<td bgcolor=Gray>Checked Out</td>
 					<td></td>
 				</tr>
 			</table>
@@ -888,6 +1021,13 @@
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 		<br><br>
+
+		<div id="wait"
+			style="display: none; width: 60px; height: 60px; border: 0px solid black; position: absolute; top: 60%; left: 55%; padding: 2px;">
+			<img
+				src="../${pageContext.request.contextPath}/resources/images/ajax-loader-light.gif"
+				width="60px" height="60px" />
+		</div>
 
 	</s:form>
 </body>

@@ -305,12 +305,12 @@ function funSetAccountCode(code){
 			
 			<tr>
 			    <td><label>No Of Beds</label></td>
-				<td><s:input id="txtNoOfBed" path="intNoBeds" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)"/></td>				
+				<td><s:input id="txtNoOfBed" path="intNoBeds" cssClass="longTextBox" style="text-align:right;" onkeypress="javascript:return isNumber(event)"/></td>				
 			</tr>
 			
 			<tr>
 			    <td><label>Charge Per Bed</label></td>
-				<td><s:input id="txtChargePerBed" path="dblChargePerBed" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" /></td>				
+				<td><s:input id="txtChargePerBed" path="dblChargePerBed" style="text-align:right;" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" /></td>				
 			</tr>
 			
 			

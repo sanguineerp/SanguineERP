@@ -168,6 +168,19 @@
 		    <%
 		    session.removeAttribute("ResNo");
 		}%>
+		
+		
+		var roomNo='';
+		<%if (session.getAttribute("roomNo") != null) 
+		{
+			%>
+			resNo='<%=session.getAttribute("roomNo").toString()%>';
+			$("#txtRoomNo").val(roomNo);
+		    <%
+		    session.removeAttribute("roomNo");
+		}%>
+		
+		
 	});
 
 	
@@ -2268,7 +2281,7 @@
 		<s:input type="hidden" id="txtTotalPackageAmt" path="strTotalPackageAmt"></s:input>
 		
 		
-			<input type="hidden" id="txtRoomNo" name="txtRoomNo" ondblclick="funHelp('roomCode')" Class="searchTextBox"/> 
+			<input type="hidden" id="txtRoomNo" name="txtRoomNo" path="strRoomDesc" ondblclick="funHelp('roomCode')" Class="searchTextBox"/> 
 				<td><label type="hidden" id="lblRoomNo"></label></td>
 		<br />
 		<br />

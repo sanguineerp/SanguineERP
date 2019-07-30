@@ -170,7 +170,7 @@
 					<label>Discount Percentage</label>
 				</td>
 				<td>
-					<s:input colspan="3"  type="text" id="txtDiscountPer" path="dblDiscountPer" cssClass="longTextBox" />
+					<s:input colspan="3"  type="text" id="txtDiscountPer" path="dblDiscountPer" style="text-align:right;" cssClass="longTextBox" />
 				</td>
 			</tr>
 			<tr>
@@ -217,7 +217,7 @@
 					<label>MobileNo</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" class="numeric" id="txtMobileNo" path="lngMobileNo" cssClass="longTextBox" />
+					<s:input colspan="3" type="text" class="numeric" id="txtMobileNo" style="text-align:right;" path="lngMobileNo" cssClass="longTextBox" />
 				</td>
 			</tr>
 			<tr>
@@ -225,7 +225,7 @@
 					<label>TelephoneNo</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" id="txtTelephoneNo" path="lngTelephoneNo" cssClass="longTextBox" />
+					<s:input colspan="3" type="text" id="txtTelephoneNo" style="text-align:right;" path="lngTelephoneNo" cssClass="longTextBox" />
 				</td>
 			</tr>
 			<tr>
@@ -251,7 +251,7 @@
 					<label>PinCode</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" class="numeric" id="txtPinCode" path="intPinCode" cssClass="longTextBox" />
+					<s:input colspan="3" type="text" class="numeric" style="text-align:right;" id="txtPinCode" path="intPinCode" cssClass="longTextBox" />
 				</td>
 			</tr>
 			<tr>
@@ -300,7 +300,7 @@
 					<label>CreditLimit</label>
 				</td>
 				<td>
-					<s:input type="number" step="0.01" id="txtCreditLimit" path="dblCreditLimit" cssClass="longTextBox" />
+					<s:input type="number" step="0.01" style="text-align:right;" id="txtCreditLimit" path="dblCreditLimit" cssClass="longTextBox" />
 				</td>
 			
 			</tr>

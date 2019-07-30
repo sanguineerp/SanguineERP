@@ -190,7 +190,7 @@
 			
 			<tr>
 			    <td><label>Room Tariff</label></td>
-				<td><s:input id="txtRoomTerrif" path="dblRoomTerrif" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)"/></td>				
+				<td><s:input id="txtRoomTerrif" path="dblRoomTerrif" cssClass="longTextBox" style="text-align:right;" onkeypress="javascript:return isNumber(event)"/></td>				
 			</tr>
 			
 			

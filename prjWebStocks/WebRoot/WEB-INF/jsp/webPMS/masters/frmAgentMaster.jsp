@@ -281,7 +281,7 @@
 					<label>TelphoneNo</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" id="txtTelphoneNo" path="lngTelphoneNo" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" />
+					<s:input colspan="3" type="text" id="txtTelphoneNo" path="lngTelphoneNo" style="text-align:right;" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" />
 				</td>
 			</tr>
 			<tr>
@@ -289,7 +289,7 @@
 					<label>MobileNo</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" id="txtMobileNo" path="lngMobileNo" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" />
+					<s:input colspan="3" type="text" id="txtMobileNo" style="text-align:right;" path="lngMobileNo" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)" />
 				</td>
 			</tr>
 			<tr>

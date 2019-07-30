@@ -378,7 +378,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<text><![CDATA[Document Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="90" y="1" width="73" height="14" uuid="cd183d42-0457-457f-a039-fc8795d34891"/>
+				<reportElement x="84" y="1" width="73" height="14" uuid="cd183d42-0457-457f-a039-fc8795d34891"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -425,7 +425,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textFieldExpression><![CDATA[$F{dteDocDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="90" y="2" width="73" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
+				<reportElement x="84" y="2" width="82" height="20" uuid="7872613d-ffe8-4e12-864b-41616db77a91"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
@@ -463,6 +463,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 	</detail>
 	<pageFooter>
 		<band height="132">
+			<property name="com.jaspersoft.studio.layout"/>
 			<textField>
 				<reportElement x="20" y="83" width="524" height="21" uuid="831a448f-d4b4-4826-ad0b-0a9e4a51c7d7"/>
 				<textElement>

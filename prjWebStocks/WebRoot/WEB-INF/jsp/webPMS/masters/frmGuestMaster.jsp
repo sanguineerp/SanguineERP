@@ -423,7 +423,7 @@ function funSetGuestCode(code)
 						<label>MobileNo</label>
 					</td>
 					<td>
-					      <s:input colspan="3" type="text" id="txtMobileNo"  path="intMobileNo" cssClass="longTextBox" onblur="fun1(this);" />
+					      <s:input colspan="3" type="text" id="txtMobileNo" style="text-align:right;" path="intMobileNo" cssClass="longTextBox" onblur="fun1(this);" />
 					</td>
 					<td colspan="2">
 						<label>EmailId</label>&nbsp; &nbsp; &nbsp;
@@ -497,7 +497,7 @@ function funSetGuestCode(code)
 							<label>UID No.</label>
 						</td>
 						<td>
-						    <s:input colspan="3" type="text" id="txtUIDNo" path="strUIDNo" cssClass="longTextBox" />
+						    <s:input colspan="3" type="text" id="txtUIDNo" style="text-align:right;" path="strUIDNo" cssClass="longTextBox" />
 							
 						</td>
 				</tr>					
@@ -555,7 +555,7 @@ function funSetGuestCode(code)
 						   <label>PinCode</label>
 					</td>
 					<td>
-					<s:input  type="text" id="txtPinCodeLocal" path="intPinCodeLocal" cssClass="longTextBox" />
+					<s:input  type="text" id="txtPinCodeLocal" style="text-align:right;" path="intPinCodeLocal" cssClass="longTextBox" />
 					</td>
 					<td colspan="4" ></td>
 			  </tr>
@@ -602,7 +602,7 @@ function funSetGuestCode(code)
 						   <label>PinCode</label>
 					</td>
 					<td>
-					<s:input  type="text" id="txtPinCodePermanent" path="intPinCodePermanent" cssClass="longTextBox" />
+					<s:input  type="text" id="txtPinCodePermanent" style="text-align:right;" path="intPinCodePermanent" cssClass="longTextBox" />
 					</td>
 					<td colspan="4" ></td>
 			  </tr>
@@ -649,7 +649,7 @@ function funSetGuestCode(code)
 					   <label>PinCode</label>
 					</td>
 					<td>
-					<s:input colspan="3" type="text" id="txtPinCodeOfc" path="intPinCodeOfc" cssClass="longTextBox" />
+					<s:input colspan="3" type="text" id="txtPinCodeOfc" style="text-align:right;" path="intPinCodeOfc" cssClass="longTextBox" />
 					</td>
 					<td colspan="4" ></td>
 				  </tr>

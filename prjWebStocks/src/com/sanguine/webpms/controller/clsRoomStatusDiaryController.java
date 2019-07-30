@@ -91,7 +91,7 @@ public class clsRoomStatusDiaryController {
 		String[] arrViewDate = viewDate.split("-");
 
 		List<clsRoomStatusDtlBean> listRoomStatusBeanDtl = new ArrayList<clsRoomStatusDtlBean>();
-		String sql = "select a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc ,a.strStatus " + " from tblroom a,tblroomtypemaster b " + " where a.strRoomTypeCode=b.strRoomTypeCode";
+		String sql = "select a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc,a.strStatus " + " from tblroom a,tblroomtypemaster b " + " where a.strRoomTypeCode=b.strRoomTypeCode";
 		List listRoom = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 
 		for (int cnt1 = 0; cnt1 < listRoom.size(); cnt1++) {
@@ -402,17 +402,18 @@ public class clsRoomStatusDiaryController {
 //							+ " where a.strCheckInNo=b.strCheckInNo and b.strGuestCode=c.strGuestCode and b.strRoomNo=d.strRoomCode " + " and date(a.dteDepartureDate) >= '" + transDate + "' and date(a.dteArrivalDate) <= '" + transDate + "' " + " and b.strRoomNo='" + arrObjRooms[0].toString() + "' " + " and a.strCheckInNo not in (select strCheckInNo from tblbillhd) ";
 					
 					sql = "select a.strReservationNo,d.strRoomCode,d.strRoomDesc" 
-							+ " ,concat(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Occupied',DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y')" + " ,a.strCheckInNo " 
-							+ ",a.strWalkInNo from tblcheckinhd a,tblcheckindtl b,tblguestmaster c,tblroom d "
+							+ " ,concat(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Occupied',DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y')" + " ,e.strFolioNo,a.tmeArrivalTime" 
+							+ ",a.strWalkInNo from tblcheckinhd a,tblcheckindtl b,tblguestmaster c,tblroom d,tblfoliohd e "
 							+ " where a.strCheckInNo=b.strCheckInNo and b.strGuestCode=c.strGuestCode and b.strRoomNo=d.strRoomCode " 
 							+ " and date(a.dteDepartureDate) >= '" + transDate + "'  " 
-							+ " and b.strRoomNo='" + arrObjRooms[0].toString() + "' " 
+							+ " and b.strRoomNo='" + arrObjRooms[0].toString() + "' AND a.strCheckInNo=e.strCheckInNo " 
 							+ " and a.strCheckInNo not in (select strCheckInNo from tblbillhd) ";
 					
 					List listCheckInRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 					if (listCheckInRoomDtl.size() > 0) {
 						Object[] arrObjRoomDtl = (Object[]) listCheckInRoomDtl.get(0);
 						clsGuestListReportBean objGuestStatusDtl = new clsGuestListReportBean();
+						String strArrTime = arrObjRoomDtl[8].toString();
 						if(arrObjRoomDtl[0].toString().isEmpty())
 						{
 							objGuestStatusDtl.setStrRoomNo(arrObjRoomDtl[8].toString());
@@ -424,7 +425,7 @@ public class clsRoomStatusDiaryController {
 							objRoomStatusDtl.setStrReservationNo(arrObjRoomDtl[0].toString());
 						}
 						objGuestStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
-						objGuestStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
+						objGuestStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString()+" "+strArrTime);
 						objGuestStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
 						
 						objRoomStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
@@ -576,7 +577,7 @@ public class clsRoomStatusDiaryController {
 						
 						objRoomStatusDtl.setStrReservationNo(arrObjRoomDtl[0].toString());
 						objRoomStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
-						if(objRoomStatusDtl.getStrRoomStatus()!=null && objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("")){
+						if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Free")){
 							objRoomStatusDtl.setStrRoomStatus(arrObjRoomDtl[4].toString());
 						}
 						else
@@ -688,6 +689,21 @@ public class clsRoomStatusDiaryController {
 				
 			}
 			
+			if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Free"))
+			{
+				String sqlBillNo="SELECT a.strBillNo FROM tblbillhd a WHERE a.strCheckInNo='"+objRoomStatusDtl.getStrCheckInNo()+"' AND a.strClientCode='"+clientCode+"'";
+				List listBillNo = objGlobalFunctionsService.funGetListModuleWise(sqlBillNo, "sql");
+				if(listBillNo.size()>0)
+				{
+				String strBillNo = listBillNo.get(0).toString();
+				objRoomStatusDtl.setStrCheckInNo(strBillNo);
+				objRoomStatusDtl.setStrRoomStatus("Checked Out");
+				}
+				else
+				{
+					
+				}
+			}
 			objRoomStatusDtl.setMapGuestListPerDay(mapGuestListPerDay);
 			if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Blocked"))
 			{
@@ -698,6 +714,7 @@ public class clsRoomStatusDiaryController {
 					{
 						Object[] arrObjBlockRoom = (Object[]) listBlockRoom.get(i);
 						String reason=arrObjBlockRoom[0].toString();
+						String remarks = arrObjBlockRoom[1].toString();
 						objRoomStatusDtl.setStrDay1("Blocked Room");
 						objRoomStatusDtl.setStrDay2("Blocked Room");
 						objRoomStatusDtl.setStrDay3("Blocked Room");
@@ -706,6 +723,7 @@ public class clsRoomStatusDiaryController {
 						objRoomStatusDtl.setStrDay6("Blocked Room");
 						objRoomStatusDtl.setStrDay7("Blocked Room");
 						objRoomStatusDtl.setStrGuestName(reason);
+						objRoomStatusDtl.setStrCheckInNo(remarks);
 					}
 				}
 			}

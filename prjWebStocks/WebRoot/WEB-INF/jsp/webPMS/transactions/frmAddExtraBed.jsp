@@ -1337,7 +1337,7 @@
 							
 				</tr>
 			
-		 	<tr>
+		 	<%-- <tr>
 				<td><label>Type</label></td>
 				<td>
 					<s:select id="cmbAgainst" path="strType" cssClass="BoxW124px" onchange="funOnChange();">
@@ -1352,7 +1352,7 @@
 				<td>
 					<s:input  type="text" id="txtDocNo" path="strAgainstDocNo" cssClass="searchTextBox" ondblclick="funHelpAgainst();"/>
 				</td>
-			</tr>
+			</tr> --%>
 	
 		</table>
 		

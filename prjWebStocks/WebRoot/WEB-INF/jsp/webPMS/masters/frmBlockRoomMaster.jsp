@@ -306,6 +306,10 @@
 			case "bathType":
 				funSetBathType(code);
 				break;
+				
+			case 'reasonPMS' : 
+				funSetReasonData(code);
+			break;
 		}
 	}
 
@@ -424,9 +428,56 @@
 		function funBtnSubmit(){
 		
 			if($("#txtReason").val()==''){
-				alert("Please Select Reaseon");
+				alert("Please Select Reason");
 				return false;
 			}
+			
+			if($("#txtRemarks").val()==''){
+				alert("Please Select Remark");
+				return false;
+			}
+		}
+		
+		function funSetReasonData(code)
+		{
+			$("#txtReason").val(code);
+			var searchurl=getContextPath()+"/loadPMSReasonMasterData.html?reasonCode="+code;
+			 $.ajax({
+				        type: "GET",
+				        url: searchurl,
+				        dataType: "json",
+				        success: function(response)
+				        {
+				        	if(response.strReasonCode=='Invalid Code')
+				        	{
+				        		alert("Invalid Reason Code");
+				        		$("#txtReasonCode").val('');
+				        	}
+				        	else
+				        	{	
+				        		$("#txtReason").val(response.strReasonCode);
+				        		$("#lblReasonDesc").text(response.strReasonDesc);
+					        	
+				        	}
+						},
+						error: function(jqXHR, exception) {
+				            if (jqXHR.status === 0) {
+				                alert('Not connect.n Verify Network.');
+				            } else if (jqXHR.status == 404) {
+				                alert('Requested page not found. [404]');
+				            } else if (jqXHR.status == 500) {
+				                alert('Internal Server Error [500].');
+				            } else if (exception === 'parsererror') {
+				                alert('Requested JSON parse failed.');
+				            } else if (exception === 'timeout') {
+				                alert('Time out error.');
+				            } else if (exception === 'abort') {
+				                alert('Ajax request aborted.');
+				            } else {
+				                alert('Uncaught Error.n' + jqXHR.responseText);
+				            }		            
+				        }
+			      });
 		}
 
 	
@@ -479,8 +530,14 @@
 					
 					<tr>
 						<td><label>Reason</label></td>
-						<td><s:input id="txtReason" path="strReason"
-								cssClass="longTextBox" style="width: 190px" /></td>
+						<%-- <td><s:input id="txtReason" path="strReason"
+								cssClass="longTextBox" style="width: 190px" /></td> --%>
+								
+								
+								<td>
+					<s:input colspan="1" type="text" id="txtReason" path="strReason" cssClass="searchTextBox" ondblclick="funHelp('reasonPMS');"/>
+				</td>
+				<td><label id="lblReasonDesc" ></label></td>
 						</td>
 						<td></td>
 						<td></td>

@@ -18,6 +18,7 @@
 <script type="text/javascript">
 var fieldName;
 var guestdata;
+var strPerticulars;
 //set date
 $(document).ready(function(){
 	
@@ -140,6 +141,40 @@ function funExecuteReport()
 	});
 }
 
+
+	function funGetBillPerticular(billNo)
+	{
+		var searchurl=getContextPath()+"/loadBillPerticulars.html?billNo="+billNo;
+		
+		$.ajax({
+	        type: "GET",
+		    url: searchurl,
+	    	dataType: "json",
+	    
+	    	success: function (response) {
+	    		strPerticulars=response.strBillPerticular;
+	    	},
+	        error: function(jqXHR, exception)
+	   		 {
+	       		 if (jqXHR.status === 0) {
+	           	 	alert('Not connect.n Verify Network.');
+	       	 	} else if (jqXHR.status == 404) {
+	           		 alert('Requested page not found. [404]');
+	        	} else if (jqXHR.status == 500) {
+	            	alert('Internal Server Error [500].');
+	        	} else if (exception === 'parsererror') {
+	           		 alert('Requested JSON parse failed.');
+	        	} else if (exception === 'timeout') {
+	           		 alert('Time out error.');
+	        	} else if (exception === 'abort') {
+	         	  	 alert('Ajax request aborted.');
+	      	  	} else {
+	           		 alert('Uncaught Error.n' + jqXHR.responseText);
+	        	}		            
+	    	}
+		});
+	}
+
 	function funClick(obj)
 	{
 		var billNo=document.getElementById(""+obj.id+"").innerHTML;
@@ -147,6 +182,7 @@ function funExecuteReport()
 		var dteToDate=document.getElementById("dteToDate").value;
 		var strSelectBill="";
 		var against='Bill';
+		funGetBillPerticular(billNo);
 		if(against=='Bill')
 		{
 			window.open(getContextPath()+"/rptBillPrinting.html?fromDate="+dteFromDate+"&toDate="+dteToDate+"&billNo="+billNo+"&strSelectBill="+strSelectBill+"");
@@ -160,7 +196,7 @@ function funExecuteReport()
 		var dteFromDate=document.getElementById("dteFromDate").value;
 		var dteToDate=document.getElementById("dteToDate").value;
 		
-		window.location.href=getContextPath()+"/exportGuestHistoryExcel.html?guestCode="+guestCode+"&dteFromDate="+dteFromDate+"&dteToDate="+dteToDate;
+		window.location.href=getContextPath()+"/exportGuestHistoryExcel.html?guestCode="+guestCode+"&dteFromDate="+dteFromDate+"&dteToDate="+dteToDate+"&strSelectBill="+strPerticulars;
 		
 		
 	}

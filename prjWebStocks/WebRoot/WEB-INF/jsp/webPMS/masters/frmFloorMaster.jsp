@@ -136,7 +136,7 @@
 
 			<tr>
 				<td><label>Amount</label></td>
-				<td><s:input id="txtFloorAmt" path="dblFloorAmt"
+				<td><s:input id="txtFloorAmt" path="dblFloorAmt" style="text-align:right;"
 						cssClass="longTextBox"
 						onkeypress="javascript:return isNumber(event)" /></td>
 			</tr>

@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="s"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -124,7 +125,7 @@
 			alert("select reason");
 			return false;
 		}
-		if($("#txtRemark").val==''){
+		if($("#txtRemark").val()==''){
 			alert("Enter Valied Remark");
 			return false;
 		}
@@ -145,11 +146,11 @@
 			alert("Please Select Full Void Option");
 			return false;
 		}
-		if($("#cmbReason").val==''){
-			alert("select reason");
+		if($("#cmbReason").val()==''){
+			alert("Select Reason");
 			return false;
 		}
-		if($("#txtRemark").val==''){
+		if($("#txtRemark").val()==''){
 			alert("Enter Valied Remark");
 			return false;
 		}
@@ -163,19 +164,18 @@
 	{
 		var message='';
 		<%if (session.getAttribute("success") != null) {
-			            if(session.getAttribute("successMessage") != null){%>
-			            message='<%=session.getAttribute("successMessage").toString()%>';
-			            <%
-			            session.removeAttribute("successMessage");
-			            }
-						boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
-						session.removeAttribute("success");
-						if (test) {
-						%>	
-			alert("Data Save successfully\n\n"+message);
-		<%
-		}}%>
-
+				if (session.getAttribute("successMessage") != null) {%>
+			            message='<%=session.getAttribute("successMessage").toString()%>
+	';
+<%session.removeAttribute("successMessage");
+				}
+				boolean test = ((Boolean) session.getAttribute("success"))
+						.booleanValue();
+				session.removeAttribute("success");
+				if (test) {%>
+	alert("Data Save successfully\n\n" + message);
+<%}
+			}%>
 	});
 </script>
 </head>
@@ -183,109 +183,119 @@
 
 
 	<div id="formHeading">
-	<label>Void Bill</label>
+		<label>Void Bill</label>
 	</div>
 
-<br/>
-<br/>
+	<br />
+	<br />
 
-	<s:form name="frmVoidBill" method="POST" action="voidBill.html?saddr=${urlHits}">
-		
+	<s:form name="frmVoidBill" method="POST"
+		action="voidBill.html?saddr=${urlHits}">
+
 		<table class="transTable">
-		
+
 			<tr>
 				<td><label>Bill No.</label></td>
-				<td><s:input id="txtBillNo" path="strBillNo"  cssClass="searchTextBox" ondblclick="funHelp('billNo')"/></td>
-				<td><label>Folio No</label></td>	
-				<td><s:input id="txtFolioNo" path="strFolioNo"  cssClass="longTextBox"/></td>
+				<td><s:input id="txtBillNo" path="strBillNo"
+						cssClass="searchTextBox" ondblclick="funHelp('billNo')" /></td>
+				<td><label>Folio No</label></td>
+				<td><s:input id="txtFolioNo" path="strFolioNo"
+						cssClass="longTextBox" /></td>
 				<td><label>Bill Date</label></td>
-		        <td><s:input id="txtBillDate" required="required" path="strBilldate" pattern="\d{1,2}-\d{1,2}-\d{4}" cssClass="calenderTextBox"/></td>
+				<td><s:input id="txtBillDate" required="required"
+						path="strBilldate" pattern="\d{1,2}-\d{1,2}-\d{4}"
+						cssClass="calenderTextBox" /></td>
 			</tr>
-			
+
 			<tr>
-				<td><label>Guest Name</label></td>	
-				<td><s:input id="txtGuestName" path="strGuestName"  cssClass="longTextBox"/></td>
-				<td><label>Room No</label></td>	
-				<td><s:input id="txtRoomName" path="strRoomName"  cssClass="longTextBox"/></td>
-				
-				<td><s:input type="hidden" id="txtRoomNo" path="strRoomNo"/></td>
-				<td><s:input type="hidden" id="txtVoidType" path="strVoidType"/></td>
+				<td><label>Guest Name</label></td>
+				<td><s:input id="txtGuestName" path="strGuestName"
+						cssClass="longTextBox" /></td>
+				<td><label>Room No</label></td>
+				<td><s:input id="txtRoomName" path="strRoomName"
+						cssClass="longTextBox" /></td>
+
+				<td><s:input type="hidden" id="txtRoomNo" path="strRoomNo" /></td>
+				<td><s:input type="hidden" id="txtVoidType" path="strVoidType" /></td>
 				<%-- <td><label>Extra Bed</label></td>	
 				<td><s:input id="txtExtraBed" path="strExtraBed"  cssClass="longTextBox"/></td> --%>
-				 
+
 			</tr>
-			
+
 			<tr>
-				<td><label>Total Amount</label></td>	
-				<td><s:input id="txtTotalAmt" path="dblTotalAmt"  cssClass="longTextBox"/></td>
+				<td><label>Total Amount</label></td>
+				<td><s:input id="txtTotalAmt" path="dblTotalAmt" style="text-align:right;"
+						cssClass="longTextBox" /></td>
 				<td colspan="4">
-				<%-- <td><label>Room No</label></td>	
+					<%-- <td><label>Room No</label></td>	
 				<td><s:input id="strBillNo" path="strBillNo"  cssClass="longTextBox"/></td>
 				<td><label>Extra Bed</label></td>	
 				<td><s:input id="strBillNo" path="strBillNo"  cssClass="longTextBox"/></td>
 				  --%>
 			</tr>
 			<tr>
-			<td colspan="6">
-			<div id="divReason">
-				<label>Reason</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				 <s:select id="cmbReason" path="strReason" cssClass="BoxW124px">
-    			 <s:options items="${listReason}"/>
-    			</s:select>
-    			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    			<label>Remark</label>
-    			<s:input id="txtRemark" path="strRemark"  cssClass="longTextBox"/>
-			</div>
-			</td>
+				<td colspan="6">
+					<div id="divReason">
+						<label>Reason</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<s:select id="cmbReason" path="strReason" cssClass="BoxW124px">
+							<s:options items="${listReason}" />
+						</s:select>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>Remark</label>
+						<s:input id="txtRemark" path="strRemark" cssClass="longTextBox" />
+					</div>
+				</td>
 			</tr>
 			<tr>
-			<td colspan="6"></td>
+				<td colspan="6"></td>
 			</tr>
 			<tr>
-			<td colspan="5"></td>
-			<td>
-			<input type="submit" value="Full Void Bill"  tabindex="3" class="form_button"  onclick="return funBtnFullVoidBill()"/>
-			</td>
+				<td colspan="5"></td>
+				<td><input type="submit" value="Full Void Bill" tabindex="3"
+					class="form_button" onclick="return funBtnFullVoidBill()" /></td>
 			</tr>
 		</table>
 		<div class="dynamicTableContainer" style="height: 300px;">
-				<table style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
-					<tr bgcolor="#72BEFC">
-					
-						<td style="width:8%;">Folio</td>
-						<td style="width:7.5%;">Revenue Code</td>
-						<!-- <td style="width:7%;">Doc Code</td> -->
-						<td style="width:14%;">Income Head</td>
-						<td style="width:9%; text-align: center;">Total</td>
-						<td style="width:3%;">Delete</td>
-						
-					</tr>
-				</table>
-		
-			<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
+			<table
+				style="height: 28px; border: #0F0; width: 100%; font-size: 11px; font-weight: bold;">
+				<tr bgcolor="#72BEFC">
+
+					<td style="width: 8%;">Folio</td>
+					<td style="width: 7.5%;">Revenue Code</td>
+					<!-- <td style="width:7%;">Doc Code</td> -->
+					<td style="width: 14%;">Income Head</td>
+					<td style="width: 9%; text-align: center;">Total</td>
+					<td style="width: 3%;">Delete</td>
+
+				</tr>
+			</table>
+
+			<div
+				style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 99.80%;">
 				<table id="tblVoidBillDetails"
 					style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
 					class="transTablex col8-center">
 					<tbody>
-						<col style="width: 8.5%;">
-						<col style="width: 8%;">
+					<col style="width: 8.5%;">
+					<col style="width: 8%;">
 					<%-- 	<col style="width: 7%;"> --%>
-						<col style="width: 15%;">
-						<col style="width: 9%;">
-						<col style="width: 3%;">
-						<col style="width: 0%;">
+					<col style="width: 15%;">
+					<col style="width: 9%;">
+					<col style="width: 3%;">
+					<col style="width: 0%;">
 					</tbody>
 				</table>
 			</div>
 		</div>
-				
-		<br/>
-		<br/>
+
+		<br />
+		<br />
 		<p align="center">
-			<input type="submit" value="Void Bill" tabindex="3" class="form_button"  onclick="return funBtnVoidBillItem()" />
-			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
-		</p>		
-		
+			<input type="submit" value="Void Bill" tabindex="3"
+				class="form_button" onclick="return funBtnVoidBillItem()" /> <input
+				type="reset" value="Reset" class="form_button"
+				onclick="funResetFields()" />
+		</p>
+
 	</s:form>
 </body>
 </html>

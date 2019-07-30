@@ -206,9 +206,9 @@
 			
 			<tr>
 				<td><label>Total Amount</label></td>	
-				<td><s:input type="readonly" id="txtTotalAmt" path="dblTotalAmt"  cssClass="longTextBox"/></td>
+				<td><s:input type="readonly" id="txtTotalAmt" path="dblTotalAmt" style="text-align:right;" cssClass="longTextBox"/></td>
 				<td><label>GST No</label></td>	
-				<td><s:input id="txtGRNNo" path="strGSTNo"  cssClass="longTextBox"/></td>
+				<td><s:input id="txtGRNNo" path="strGSTNo" style="text-align:right;" cssClass="longTextBox"/></td>
 				<td><label>Company Name</label></td>	
 				<td><s:input id="txtCompanyName" path="strCompanyName"  cssClass="longTextBox"/></td>
 				<td colspan="4">

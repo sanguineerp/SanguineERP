@@ -264,9 +264,30 @@ public class clsGuestHistoryReportController {
 	
 	
 	
-	
-	
+	@RequestMapping(value = "/loadBillPerticulars", method = RequestMethod.GET)
+	public ModelAndView funGetBillPerticulars(Map<String, Object> model,@RequestParam("billNo")String strBillNo ,HttpServletRequest request) {
+		String strClientCode = request.getSession().getAttribute("clientCode").toString();
+		String urlHits = "1";
+		String strBillPerticular = "";
+		String sqlPerticular="select a.strPerticulars from tblbilldtl a where a.strBillNo='"+strBillNo+"' and a.strClientCode='"+strClientCode+"'";
 		
+		List listRecord = objGlobalFunctionsService.funGetDataList(sqlPerticular, "sql");
+	/*	if(listRecord.size()>0){
+			
+		
+			for(int j=0;j<listRecord.size();j++){
+				String[] objRec=listRecord.get(j).toString().split(",");
+				
+				strBillPerticular = strBillPerticular+objRec[j]+",";
+		
+			}
+		}*/
+		
+		ArrayList<String> perticularList = new ArrayList<>(); 
+		model.put("perticular", listRecord);
+	
+		return new ModelAndView("frmGuestHistoryReport");
+	}
 }
 
 

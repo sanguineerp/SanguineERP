@@ -147,6 +147,7 @@ public class clsReservationController {
 		String urlHits = "1";
 		String reservationNo = request.getParameter("docCode").toString();
 		String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
+		String strRoomNo = request.getParameter("roomNo").toString();
 
 		try {
 			urlHits = request.getParameter("saddr").toString();
@@ -161,6 +162,7 @@ public class clsReservationController {
 		model.put("urlHits", urlHits);
 
 		request.getSession().setAttribute("ResNo", reservationNo);
+		request.getSession().setAttribute("roomNo", strRoomNo);
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmReservation_1", "command", new clsReservationBean());

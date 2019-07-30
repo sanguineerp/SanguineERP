@@ -188,8 +188,11 @@
 			{
 				%>
 				alert("Data Save successfully\n\n"+message);
-				var isCheckOk=confirm("Do you want to print the bill ?"); 
+				var isCheckOk=confirm("Do you want to print the bill ?");
+				if(isCheckOk){
 				window.open(getContextPath() +"/frmBillPrinting.html",'_blank');
+				}
+				
 				
 				<%
 			}

@@ -333,7 +333,7 @@ public class clsBillPrintingController {
 				{
 					sqlBillDtl = "SELECT DATE(b.dteDocDate),b.strDocNo,"
 							+ "IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,"
-							+ "b.dblBalanceAmt FROM tblbillhd a INNER JOIN tblbilldtl b "
+							+ "b.dblBalanceAmt ,ifnull(a.strReservationNo,'') FROM tblbillhd a INNER JOIN tblbilldtl b "
 							+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo AND b.strPerticulars IN("+billNames.substring(0, billNames.length()-1)+") "
 							+ "WHERE a.strBillNo='"+billNo+"' ";
 				}
@@ -341,7 +341,7 @@ public class clsBillPrintingController {
 				// + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '"
 				// + toDate + "' ";
 				List billDtlList = objFolioService.funGetParametersList(sqlBillDtl);
-			
+			String strReservationNo = "";
 				for (int i = 0; i < billDtlList.size(); i++) {
 					Object[] folioArr = (Object[]) billDtlList.get(i);
 
@@ -354,6 +354,7 @@ public class clsBillPrintingController {
 						clsBillPrintingBean billPrintingBean = new clsBillPrintingBean();
 						String docNo = folioArr[1].toString();
 						String particulars = folioArr[2].toString();
+						strReservationNo = folioArr[6].toString();
 						if(particulars.equalsIgnoreCase("Room Tariff"))
 						{
 							count++;

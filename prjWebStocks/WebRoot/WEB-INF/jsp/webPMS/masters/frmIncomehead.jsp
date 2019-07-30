@@ -344,7 +344,7 @@
 			</tr>
 			<tr>
 			    <td width="20%"><label>Rate</label></td>
-				<td width="40%"><s:input id="dblRate" path="dblRate" cssClass="longTextBox" /></td>				
+				<td width="40%"><s:input id="dblRate" path="dblRate" style="text-align:right;" cssClass="longTextBox" /></td>				
 			    <td colspan="1"></td>
 			</tr>
 			
