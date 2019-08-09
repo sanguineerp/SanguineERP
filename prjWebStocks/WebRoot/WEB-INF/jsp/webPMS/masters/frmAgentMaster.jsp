@@ -14,12 +14,12 @@
 		var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
 		
 		$("#txtFromDate").datepicker({
-			dateFormat : 'yy-mm-dd'
+			dateFormat : 'dd-mm-yy'
 		});
 		$("#txtFromDate").datepicker('setDate', pmsDate);
 
 		$("#txtToDate").datepicker({
-			dateFormat : 'yy-mm-dd'
+			dateFormat : 'dd-mm-yy'
 		});
 		$("#txtToDate").datepicker('setDate', pmsDate);
 
@@ -297,7 +297,7 @@
 					<label>FaxNo</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" id="txtFaxNo" path="lngFaxNo" cssClass="longTextBox" />
+					<s:input colspan="3" type="text" id="txtFaxNo" path="lngFaxNo" cssClass="longTextBox" onkeypress="javascript:return isNumber(event)"/>
 				</td>
 			</tr>
 			<tr>

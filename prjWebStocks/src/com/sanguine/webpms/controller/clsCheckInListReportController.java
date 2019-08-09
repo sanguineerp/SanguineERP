@@ -107,12 +107,12 @@ public class clsCheckInListReportController {
 			reportParams.put("pContactDetails", "");
 			reportParams.put("strImagePath", imagePath);
 			reportParams.put("strUserCode", userCode);
-			reportParams.put("pFromDate", fromDate);
-			reportParams.put("pTtoDate", toDate);
+			reportParams.put("pFromDate", objGlobal.funGetDate("dd-MM-yyyy", fromDate));
+			reportParams.put("pTtoDate", objGlobal.funGetDate("dd-MM-yyyy", toDate));
 			reportParams.put("propName", propName);
 
 			// get all parameters
-			String sqlParametersCheckInList = " SELECT ch.strReservationNo, IFNULL(h.strBookingTypeDesc,'NA'), " + " DATE_FORMAT(ch.dteDateCreated,'%d-%m-%Y'),IFNULL(c.strCorporateDesc,'NA'), " + " IFNULL(k.strBookerName,'NA'), DATE_FORMAT(a.dteCancelDate,'%d-%m-%Y'), " + " IFNULL(f.strDescription,'NA'),IFNULL(g.strBillingInstDesc,'NA'), "
+			/*String sqlParametersCheckInList = " SELECT ch.strReservationNo, IFNULL(h.strBookingTypeDesc,'NA'), " + " DATE_FORMAT(ch.dteDateCreated,'%d-%m-%Y'),IFNULL(c.strCorporateDesc,'NA'), " + " IFNULL(k.strBookerName,'NA'), DATE_FORMAT(a.dteCancelDate,'%d-%m-%Y'), " + " IFNULL(f.strDescription,'NA'),IFNULL(g.strBillingInstDesc,'NA'), "
 					+ " CONCAT(j.strFirstName,' ',j.strMiddleName,' ',j.strLastName),j.strGuestCode,ch.strCheckInNo,sum(i.dblReceiptAmt),b.strRoomNo " 
 					+ " FROM tblcheckinhd ch " + " LEFT OUTER JOIN tblreservationhd a ON a.strReservationNo = ch.strReservationNo and a.strClientCode='"
 					+ clientCode
@@ -139,31 +139,40 @@ public class clsCheckInListReportController {
 					+ clientCode
 					+ "' "
 					+ " LEFT OUTER JOIN tblbookermaster k ON k.strBookerCode=a.strBookerCode AND k.strClientCode='"
-					+ clientCode + "' " + " WHERE DATE(a.dteArrivalDate) BETWEEN '" + fromDate + "' and '" + toDate + "' " + " AND ch.strClientCode='" + clientCode + "' AND a.strPropertyCode='" + propertyCode + "' " + " group by ch.strReservationNo ";
+					+ clientCode + "' " + " WHERE DATE(a.dteArrivalDate) BETWEEN '" + fromDate + "' and '" + toDate + "' " + " AND ch.strClientCode='" + clientCode + "' AND a.strPropertyCode='" + propertyCode + "' " + " group by ch.strReservationNo ";*/
 
+			String sqlParametersCheckInList = "SELECT a.strCheckInNo,a.strType, DATE(a.dteArrivalDate),c.strRoomDesc,"
+					+ "c.strRoomTypeDesc,d.strFirstName, "
+					+ "d.strMiddleName,d.strLastName,Concat(d.strAddressLocal,' ',d.strCityLocal,' ',"
+					+ "d.strStateLocal,' ',d.strCountryLocal,' ',d.intPinCodeLocal),d.strArrivalFrom "
+					+ "FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d "
+					+ "WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode "
+					+ "AND b.strGuestCode=d.strGuestCode  "
+					+ "and Date(a.dteCheckInDate) between '"+fromDate+"' and '"+toDate+"'";
+			
 			List listOfCheckIn = objGlobalFunctionsService.funGetDataList(sqlParametersCheckInList, "sql");
 			ArrayList fieldList = new ArrayList();
 
 			for (int i = 0; i < listOfCheckIn.size(); i++) {
 				Object[] arr = (Object[]) listOfCheckIn.get(i);
-				String strCheckInCode = arr[10].toString();
 				clsCheckInListReportBean checkInListBean = new clsCheckInListReportBean();
 
-				checkInListBean.setStrReservationNo(arr[0].toString());
+				checkInListBean.setStrCheckInNo(arr[0].toString());
 				checkInListBean.setStrBookingTypeDesc(arr[1].toString());
-				checkInListBean.setDteDateCreated(arr[2].toString());
-				checkInListBean.setStrCorporateDesc(arr[3].toString());
-				// checkInListBean.setAgentDescription(agentDescription);
-				checkInListBean.setStrBookerName(arr[4].toString());
-				checkInListBean.setDteCancelDate(arr[5].toString());
-				checkInListBean.setBusinessSrc(arr[6].toString());
-				checkInListBean.setStrBillingInstDesc(arr[7].toString());
-				checkInListBean.setStrFirstName(arr[8].toString());
-				checkInListBean.setStrGuestCode(arr[9].toString());
-				checkInListBean.setDblReceiptAmt((arr[11] == null) ? 0 : Double.parseDouble(arr[11].toString()));
-				checkInListBean.setStrRoomTypeCode(arr[12].toString());
+				checkInListBean.setDteDateCreated(objGlobal.funGetDate("dd-MM-yyyy", arr[2].toString()));
+				checkInListBean.setStrRoomTypeCode(arr[3].toString());
+				checkInListBean.setStrRoomTypeDesc(arr[4].toString());
+				checkInListBean.setStrFirstName(arr[5].toString());
+				checkInListBean.setStrMiddleName(arr[6].toString());
+				checkInListBean.setStrLastName(arr[7].toString());
+				checkInListBean.setStrAddress(arr[8].toString());
+				//checkInListBean.setDblReceiptAmt(Double.parseDouble(arr[9].toString()));
+				checkInListBean.setStrArrivalFrom(arr[9].toString());
 				
-				String sqlCheckInListDtl = " select a.strFirstName,a.strMiddleName,a.strLastName,b.strRoomTypeDesc,a.strAddress," 
+				
+				fieldList.add(checkInListBean);
+				
+			/*	String sqlCheckInListDtl = " select a.strFirstName,a.strMiddleName,a.strLastName,b.strRoomTypeDesc,a.strAddress," 
 						+ " a.strArrivalFrom,a.strProceedingTo,b.strRoomTypeCode"
 						+ " from tblguestmaster a,tblroomtypemaster b,tblcheckinhd c,tblroom d,tblcheckindtl e " + " where  date(c.dteArrivalDate) between '" + fromDate + "' and '" + toDate + "' and c.strCheckInNo='" + strCheckInCode + "' "
 						+ " and c.strCheckInNo=e.strCheckInNo and e.strGuestCode=a.strGuestCode" + " and e.strRoomNo=d.strRoomCode and  d.strRoomTypeCode=b.strRoomTypeCode" + " and  a.strClientCode='" + clientCode + "' and  b.strClientCode='" + clientCode + "' " + " and  c.strClientCode='" + clientCode + "' and  d.strClientCode='" + clientCode + "' " + " and  e.strClientCode='" + clientCode
@@ -180,7 +189,7 @@ public class clsCheckInListReportController {
 					checkInListBean.setStrProceedingTo(GuestArr[6].toString());
 					
 					fieldList.add(checkInListBean);
-				}
+				}*/
 			}
 
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);

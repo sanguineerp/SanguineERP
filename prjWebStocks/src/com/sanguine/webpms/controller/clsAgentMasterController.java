@@ -31,6 +31,9 @@ public class clsAgentMasterController {
 
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
+	
+	@Autowired
+	private clsGlobalFunctions objGlobal;
 
 	// Open AgentMaster
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -94,6 +97,8 @@ public class clsAgentMasterController {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			clsAgentMasterHdModel objModel = objAgentMasterService.funPrepareModel(objBean, userCode, clientCode);
+			objModel.setDteFromDate(objGlobal.funGetDate("yyyy-MM-dd", objModel.getDteFromDate()));
+			objModel.setDteToDate(objGlobal.funGetDate("yyyy-MM-dd", objModel.getDteToDate()));
 			objAgentMasterService.funAddUpdateAgentMaster(objModel);
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Agent Code : ".concat(objModel.getStrAgentCode()));

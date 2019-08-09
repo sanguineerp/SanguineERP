@@ -99,8 +99,8 @@ public class clsCancelationReportController {
 			reportParams.put("pContactDetails", "");
 			reportParams.put("strImagePath", imagePath);
 			reportParams.put("strUserCode", userCode);
-			reportParams.put("pFromDate", fromDate);
-			reportParams.put("pTtoDate", toDate);
+			reportParams.put("pFromDate", objGlobal.funGetDate("dd-MM-yyyy", (fromDate)));
+			reportParams.put("pTtoDate", objGlobal.funGetDate("dd-MM-yyyy", (toDate)));
 			reportParams.put("propName", propName);
 
 			// get all parameters

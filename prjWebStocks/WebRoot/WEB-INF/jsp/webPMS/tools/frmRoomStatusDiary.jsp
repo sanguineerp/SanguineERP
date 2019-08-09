@@ -627,7 +627,15 @@
 	
 		var x1=row.insertCell(1);
 		var dayTrim1=day1.trim();
-	    var dayValue1 = dayTrim1.substring(0,dayTrim1.length-1);
+		if(dayTrim1.includes("/"))
+			{
+			 var dayValue1 = dayTrim1.substring(0,dayTrim1.length-1);
+			}
+		else
+			{
+			var dayValue1 = dayTrim1;
+			}
+	    
 	    var firstName = dayValue1.substring(0,dayValue1.indexOf("/"));
 	    var secondName = dayValue1.substring(dayValue1.indexOf("/")+1,dayValue1.length);
 	   	if(dayValue1.includes("/"))
@@ -671,7 +679,17 @@
 		
 		var x2=row.insertCell(2);
 		var dayTrim2=day2.trim();
-	    var dayValue2 = dayTrim2.substring(0,dayTrim2.length-1);
+		if(dayTrim2.includes("/"))
+		{
+		 var dayValue2 = dayTrim2.substring(0,dayTrim2.length-1);
+		}
+	else
+		{
+		var dayValue2 = dayTrim2;
+		}
+    
+    var firstName = dayValue2.substring(0,dayValue2.indexOf("/"));
+    var secondName = dayValue2.substring(dayValue2.indexOf("/")+1,dayValue1.length);
 		x2.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 90%;\" value='"+dayValue2+"' onClick='funOnClick(this)' >";
 		if(day2!='')
 		{
@@ -681,7 +699,17 @@
 		
 		var x3=row.insertCell(3);
 		var dayTrim3=day3.trim();
-	    var dayValue3 = dayTrim3.substring(0,dayTrim3.length-1);
+		if(dayTrim3.includes("/"))
+		{
+		 var dayValue3 = dayTrim1.substring(0,dayTrim3.length-1);
+		}
+	else
+		{
+		var dayValue3 = dayTrim3;
+		}
+    
+    var firstName = dayValue3.substring(0,dayValue3.indexOf("/"));
+    var secondName = dayValue3.substring(dayValue3.indexOf("/")+1,dayValue3.length);
 		x3.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 90%;\" value='"+dayValue3+"' onClick='funOnClick(this)' >";
 		if(day3!='')
 		{
@@ -691,7 +719,17 @@
 		
 		var x4=row.insertCell(4);
 		var dayTrim4=day4.trim();
-	    var dayValue4 = dayTrim4.substring(0,dayTrim4.length-1);
+		if(dayTrim4.includes("/"))
+		{
+		 var dayValue4 = dayTrim4.substring(0,dayTrim4.length-1);
+		}
+	else
+		{
+		var dayValue4 = dayTrim4;
+		}
+    
+    var firstName = dayValue4.substring(0,dayValue4.indexOf("/"));
+    var secondName = dayValue4.substring(dayValue4.indexOf("/")+1,dayValue4.length);
 		x4.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 100%;\" value='"+dayValue4+"' onClick='funOnClick(this)' >";
 		if(day4!='')
 		{
@@ -701,7 +739,17 @@
 		
 		var x5=row.insertCell(5);
 		var dayTrim5=day5.trim();
-	    var dayValue5 = dayTrim5.substring(0,dayTrim5.length-1);
+		if(dayTrim5.includes("/"))
+		{
+		 var dayValue5 = dayTrim5.substring(0,dayTrim5.length-1);
+		}
+	else
+		{
+		var dayValue5 = dayTrim5;
+		}
+    
+    var firstName = dayValue5.substring(0,dayValue5.indexOf("/"));
+    var secondName = dayValue5.substring(dayValue5.indexOf("/")+1,dayValue5.length);
 		x5.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 100%;\" value='"+dayValue5+"' onClick='funOnClick(this)' >";
 		if(day5!='')
 		{
@@ -710,7 +758,17 @@
 		}
 		var x6=row.insertCell(6);
 		var dayTrim6=day6.trim();
-	    var dayValue6 = dayTrim6.substring(0,dayTrim6.length-1);
+		if(dayTrim6.includes("/"))
+		{
+		 var dayValue6 = dayTrim6.substring(0,dayTrim6.length-1);
+		}
+	else
+		{
+		var dayValue6 = dayTrim6;
+		}
+    
+    var firstName = dayValue6.substring(0,dayValue6.indexOf("/"));
+    var secondName = dayValue6.substring(dayValue6.indexOf("/")+1,dayValue6.length);
 		x6.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 100%;\" value='"+dayValue6+"' onClick='funOnClick(this)' >";
 
 		if(day6!='')
@@ -720,7 +778,17 @@
 		}
 		var x7=row.insertCell(7);
 		var dayTrim7=day7.trim();
-	    var dayValue7 = dayTrim7.substring(0,dayTrim7.length-1);
+		if(dayTrim7.includes("/"))
+		{
+		 var dayValue7 = dayTrim7.substring(0,dayTrim7.length-1);
+		}
+	else
+		{
+		var dayValue7 = dayTrim7;
+		}
+    
+    var firstName = dayValue7.substring(0,dayValue7.indexOf("/"));
+    var secondName = dayValue7.substring(dayValue7.indexOf("/")+1,dayValue7.length);
 		x7.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width: 100%;\" value='"+dayValue7+"' onClick='funOnClick(this)' >";
 		if(day7!='')
 		{

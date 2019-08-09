@@ -9,7 +9,8 @@
 
 <script type="text/javascript">
 	
-	var fieldName;
+	var fieldName,checkOutParam;
+	var returnValue=false;;
 	
 	function funValidateData()
 	{
@@ -17,13 +18,69 @@
 		var rowCount=table.rows.length;
 		if(rowCount>0)
 		{
-			return true;
+			var folioNo=document.getElementById("strFolioNo.0").defaultValue;
+			var checkOutDate=document.getElementById("dteCheckOutDate.0").defaultValue;
+			var searchUrl=getContextPath()+"/isCheckFolioStatus.html?folioNo="+folioNo+"&checkOutDate="+checkOutDate;
+			$.ajax({
+				
+				url:searchUrl,
+				type :"GET",
+				dataType: "json",
+				async:false,
+		        success: function(response)
+		        {
+		        	checkOutParam=response;
+		 		   if(checkOutParam==false)
+	 			   {
+		 			  var test=confirm("Do you want to do Post Room Tariff ?");
+						/* if(test)
+						{
+							window.open(getContextPath() +"/frmPostRoomTerrif.html",'_blank');
+						}
+						returnValue=false; */
+						if(test)
+						{
+							window.open(getContextPath() +"/frmPostRoomTerrif.html",'_blank');
+							returnValue=false;
+						}
+						else
+						{
+							returnValue=true;
+						}
+	 			   }
+		 		   else
+	 			   {
+		 			  returnValue=true;
+	 			   }
+				},
+				error: function(jqXHR, exception) 
+				{
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+		        }
+			});
+			
+			return returnValue;
 		}
 		else
 		{
-			alert("Please Selet Room Detail.");
+			alert("Please Select Room Detail.");
 			return false;
 		}
+		return returnValue;
 	}
 	
 	
@@ -187,11 +244,11 @@
 			if (test) 
 			{
 				%>
-				alert("Data Save successfully\n\n"+message);
+				/* alert("Data Save successfully\n\n"+message);
 				var isCheckOk=confirm("Do you want to print the bill ?");
 				if(isCheckOk){
 				window.open(getContextPath() +"/frmBillPrinting.html",'_blank');
-				}
+				} */
 				
 				
 				<%
@@ -257,7 +314,7 @@
 <br/>
 <br/>
 
-	<s:form name="CheckOut" method="POST" action="saveCheckOut.html">
+	<s:form name="frmCheckOut" method="POST" action="saveCheckOut.html" target="_blank">
 
 		<table class="masterTable">
 		
@@ -271,6 +328,7 @@
 					<s:radiobutton id="strSearchTypeRoom" path="strSearchType" style="margin-left: 20px;margin-right:5px;" />Room
 					<s:input id="strSearchTextField" path="strSearchTextField" readonly="true" style="margin-left: 20px;width: 312px;background-position: 300px 2px;" cssClass="searchTextBox" ondblclick="funHelp('checkInRooms')"/>
 					<s:input type="hidden" id="strRoomNo" path="strRoomNo" />
+					<%-- <s:input type="hidden" id="strCheckOutStatus" path="strCheckOutStatus" /> --%>
 				</td>
 			</tr>
 			<tr>

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sanguine.webpms.model.clsPMSSettlementTaxMasterModel;
 import com.sanguine.webpms.model.clsPMSTaxMasterModel;
 import com.sanguine.webpms.model.clsPMSTaxMasterModel_ID;
 
@@ -26,6 +27,12 @@ public class clsPMSTaxMasterDaoImpl implements clsPMSTaxMasterDao {
 	@Transactional(value = "WebPMSTransactionManager")
 	public clsPMSTaxMasterModel funGetPMSTaxMaster(String taxCode, String clientCode) {
 		return (clsPMSTaxMasterModel) webPMSSessionFactory.getCurrentSession().get(clsPMSTaxMasterModel.class, new clsPMSTaxMasterModel_ID(taxCode, clientCode));
+	}
+	
+	@Override
+	@Transactional(value = "WebPMSTransactionManager")
+	public void funAddUpdatePMSSettlementTaxMaster(clsPMSSettlementTaxMasterModel objMaster) {
+		webPMSSessionFactory.getCurrentSession().saveOrUpdate(objMaster);
 	}
 
 	@Override
@@ -57,6 +64,7 @@ public class clsPMSTaxMasterDaoImpl implements clsPMSTaxMasterDao {
 		String code = webPMSSessionFactory.getCurrentSession().createSQLQuery("select " + fieldToBeSeleted + " from " + tableName + " where " + fieldName + "='" + fromFieldNameValue + "' and strClientCode='" + clientCode + "' ").list().get(0).toString();
 		return code;
 	}
+	
 
 	@Override
 	public String funGetMasterName(String query) {

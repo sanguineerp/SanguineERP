@@ -18,6 +18,7 @@
 <script type="text/javascript">
 var fieldName;
 var guestdata;
+var strSelectBill="";
 var strPerticulars;
 //set date
 $(document).ready(function(){
@@ -152,7 +153,7 @@ function funExecuteReport()
 	    	dataType: "json",
 	    
 	    	success: function (response) {
-	    		strPerticulars=response.strBillPerticular;
+	    		strSelectBill=response.strBillPerticular;
 	    	},
 	        error: function(jqXHR, exception)
 	   		 {
@@ -180,9 +181,11 @@ function funExecuteReport()
 		var billNo=document.getElementById(""+obj.id+"").innerHTML;
 		var dteFromDate=document.getElementById("dteFromDate").value;
 		var dteToDate=document.getElementById("dteToDate").value;
-		var strSelectBill="";
+		
 		var against='Bill';
 		funGetBillPerticular(billNo);
+		
+		strSelectBill=${"perticular"};
 		if(against=='Bill')
 		{
 			window.open(getContextPath()+"/rptBillPrinting.html?fromDate="+dteFromDate+"&toDate="+dteToDate+"&billNo="+billNo+"&strSelectBill="+strSelectBill+"");

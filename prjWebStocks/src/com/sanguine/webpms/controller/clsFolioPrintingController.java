@@ -186,9 +186,9 @@ public class clsFolioPrintingController {
 				reportParams.put("pRoomNo", roomNo);
 				reportParams.put("pRegistrationNo", registrationNo);
 				reportParams.put("pReservationNo", reservationNo);
-				reportParams.put("pArrivalDate", arrivalDate);
+				reportParams.put("pArrivalDate", objGlobal.funGetDate("dd-MM-yyyy", arrivalDate));
 				reportParams.put("pArrivalTime", arrivalTime);
-				reportParams.put("pDepartureDate", departureDate);
+				reportParams.put("pDepartureDate", objGlobal.funGetDate("dd-MM-yyyy", departureDate));
 				reportParams.put("pDepartureTime", departureTime);
 				reportParams.put("pAdult", adults);
 				reportParams.put("pChild", childs);
@@ -198,7 +198,7 @@ public class clsFolioPrintingController {
 				reportParams.put("pBillNo", billNo);
 
 				// get folio details
-				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
+				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt ,b.strPerticulars" + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
 									+ " order by b.strRevenueType desc";
 				List folioDtlList = objFolioService.funGetParametersList(sqlFolioDtl);
 				for (int i = 0; i < folioDtlList.size(); i++) {
@@ -213,6 +213,7 @@ public class clsFolioPrintingController {
 						double debitAmount = Double.parseDouble(folioArr[4].toString());
 						double creditAmount = Double.parseDouble(folioArr[5].toString());
 						double balance = debitAmount - creditAmount;
+						String strCompletePertName = folioArr[7].toString();
 
 						folioPrintingBean.setDteDocDate(docDate);
 						folioPrintingBean.setStrDocNo(docNo);
@@ -224,6 +225,8 @@ public class clsFolioPrintingController {
 						dataList.add(folioPrintingBean);
 						
 
+						if(!strCompletePertName.contains("POS"))
+						{
 						sqlFolioDtl = "SELECT DATE_FORMAT(date(a.dteDocDate),'%d-%m-%Y'),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblfoliodtl a,tblfoliotaxdtl b where a.strDocNo=b.strDocNo " + " and  a.strFolioNo='" + folioNo + "' and a.strDocNo='" + docNo + "'";
 						List listFolioTaxDtl = objWebPMSUtility.funExecuteQuery(sqlFolioDtl, "sql");
 						for (int cnt = 0; cnt < listFolioTaxDtl.size(); cnt++) {
@@ -238,6 +241,7 @@ public class clsFolioPrintingController {
 							folioPrintingBean.setDblBalanceAmt(Double.parseDouble(arrObjFolioTaxDtl[3].toString()) - Double.parseDouble(arrObjFolioTaxDtl[4].toString()));
 							folioPrintingBean.setTax(true);
 							dataList.add(folioPrintingBean);
+						}
 						}
 					}
 				}

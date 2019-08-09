@@ -13,32 +13,7 @@
 <script>
 
 
-	function funValidateFields()
-	{
-		var flag=false;
-			flag=true;
-			
-			var fromDate=$("#dteFromDate").val();
-			var toDate=$("#dteToDate").val();
-			
-			var fd=fromDate.split("-")[0];
-			var fm=fromDate.split("-")[1];
-			var fy=fromDate.split("-")[2];
-			
-			var td=toDate.split("-")[0];
-			var tm=toDate.split("-")[1];
-			var ty=toDate.split("-")[2];
-			
-			$("#dteFromDate").val(fy+"-"+fm+"-"+fd);
-			$("#dteToDate").val(ty+"-"+tm+"-"+td);
-			
-		
-			
-			 /* window.open(getContextPath()+"/rptChangedRoomTypeReport.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+" "); */ 
-			 window.open(getContextPath()+"/rptChangedRoomReport.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+" "); 
-		
-		return flag;
-	}
+	
 
 
 //set date
@@ -64,22 +39,22 @@
 </script>
 <body onload="funOnLoad();">
 	<div id="formHeading">
-		<label>Change Room Report </label>
+		<label>Check-In Check-Out List </label>
 	</div>
-	<s:form name="frmCheckInList" method="GET" action="" >
+	<s:form name="frmCheckInCheckOutList" method="GET" action="CheckInCheckOutList.html" >
 		
 	<table class="masterTable">
 		<br/><br/>
 			<tr>
 				<td><label>From Date</label></td>
-				<td><s:input type="text" id="dteFromDate" path="dteFromDate" required="true" class="calenderTextBox" /></td>
+				<td><s:input type="text" id="dteFromDate" path="strArrivedDate" required="true" class="calenderTextBox" /></td>
 				<td><label>To Date</label></td>
-				<td><s:input type="text" id="dteToDate" path="dteToDate" required="true" class="calenderTextBox" /></td>				
+				<td><s:input type="text" id="dteToDate" path="dteDepartureDate" required="true" class="calenderTextBox" /></td>				
 			</tr>
 		</table>
 		<br>
 	<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funValidateFields()" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" />
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>	
 	</s:form>

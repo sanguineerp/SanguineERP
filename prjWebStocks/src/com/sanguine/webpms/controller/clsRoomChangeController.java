@@ -8,25 +8,38 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.JOptionPane;
 import javax.validation.Valid;
 
+import org.hibernate.Query;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import sun.nio.cs.ext.Big5;
+
+import com.ibm.icu.math.BigDecimal;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.webpms.bean.clsRoomCancellationBean;
 import com.sanguine.webpms.bean.clsRoomMasterBean;
 import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
+import com.sanguine.webpms.model.clsReservationDtlModel;
+import com.sanguine.webpms.model.clsReservationHdModel;
+import com.sanguine.webpms.model.clsRoomCancellationModel;
 import com.sanguine.webpms.service.clsRoomCancellationService;
+
 
 
 @Controller
@@ -240,7 +253,7 @@ public class clsRoomChangeController {
 			String dteChangedRoom = changedDate[2]+"-"+changedDate[1]+"-"+changedDate[0];
 			
 			String sqlOfChangeRoom = "select a.strRoomDesc as previousRoom,a.strRoomTypeDesc as previousroomType,d.strFolioNo,b.strCheckInNo,date(b.dteCheckInDate),concat(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName) "
-						+ " ,b.strRemarks,b.strReasonCode,a.strStatus "
+						+ " ,b.strRemarks,b.strReasonCode,a.strStatus,e.strGuestCode "
 						+ " from tblfoliohd d,tblcheckinhd b left outer join tblcheckindtl c on b.strCheckInNo=c.strCheckInNo " 
 						+ " left outer join tblroom a on a.strRoomCode=c.strRoomNo , " 
 						+ " tblguestmaster e  "
@@ -257,7 +270,7 @@ public class clsRoomChangeController {
 				{
 					Object[] obj = (Object[]) listData.get(i);
 					sqlOfChangeRoom = "insert into tblchangeroom (strRoomNo,strRoomTypeCode,strFolioNo,strGuestCode,strReason,strRemark,strUserEdited,dteChangeDate) "
-							+ " values('"+obj[0].toString()+"','"+obj[1].toString()+"','"+obj[2].toString()+"','"+obj[5].toString()+"','"+obj[7].toString()+"','"+obj[6].toString()+"','"+userCode+"','"+dteChangedRoom+" "+dateFormat.format(date)+"')";
+							+ " values('"+obj[0].toString()+"','"+obj[1].toString()+"','"+obj[2].toString()+"','"+obj[9].toString()+"','"+obj[7].toString()+"','"+obj[6].toString()+"','"+userCode+"','"+dteChangedRoom+" ')";
 					objWebPMSUtility.funExecuteUpdate(sqlOfChangeRoom, "sql"); 
 				
 				}

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.webpms.bean.clsChangedRoomTypeDtlBean;
@@ -47,6 +48,9 @@ public class clsChangedRoomTypeController
 	
 	@Autowired
 	private clsWebPMSDBUtilityDao objWebPMSUtility;
+	
+	@Autowired
+	private clsGlobalFunctions objGlobal;
 	
 	@RequestMapping(value = "/frmChangedRoomTypeReport", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
@@ -204,5 +208,105 @@ public class clsChangedRoomTypeController
 			e.printStackTrace();
 		}
 	}
+	@RequestMapping(value = "/rptChangedRoomReport", method = RequestMethod.GET)
+	public void funGenerateChangedRoomReport(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate, HttpServletRequest req, HttpServletResponse resp) {
+		try {
+			boolean flgBillRecord = false;
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String userCode = req.getSession().getAttribute("usercode").toString();
+			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+			String companyName = req.getSession().getAttribute("companyName").toString();
+			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+			if (objSetup == null) {
+				objSetup = new clsPropertySetupModel();
+			}
+			String reportName = servletContext.getRealPath("/WEB-INF/reports/webpms/rptChangedRoomTypeReport.jrxml");
+			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+
+			List<clsChangedRoomTypeDtlBean> dataList = new ArrayList<clsChangedRoomTypeDtlBean>();
+			@SuppressWarnings("rawtypes")
+			HashMap reportParams = new HashMap();
+
+			reportParams.put("pCompanyName", companyName);
+			reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
+			reportParams.put("pAddress2", objSetup.getStrState() + "," + objSetup.getStrCountry() + "," + objSetup.getStrPin());
+			reportParams.put("pContactDetails", "");
+			reportParams.put("strImagePath", imagePath);
+			reportParams.put("strUserCode", userCode);
+			reportParams.put("pFromDate", objGlobal.funGetDate("dd-MM-yyyy", fromDate));
+			reportParams.put("pTtoDate", objGlobal.funGetDate("dd-MM-yyyy", toDate));
+			/*if(against.equalsIgnoreCase("Reservation"))
+			{
+				reportParams.put("pDocName", "Reservation No");	
+			}
+			else
+			{
+				reportParams.put("pDocName", "Check In No");
+			}
+			reportParams.put("pDocNo", docNo);	
+			*/
+			Map<String,clsChangedRoomTypeDtlBean> mapUpdatedRoomType=new TreeMap<>();	
+			clsChangedRoomTypeDtlBean roomBean=null;
+			// get bill details
+			
+				String sqlBillDtl = "SELECT a.strRoomNo,a.strRemark,c.strReasonDesc,e.strRoomDesc as newRoomNo,"
+						+ "CONCAT(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName),a.strUserEdited ,e.strBedType,a.strRoomTypeCode "
+						+ "FROM tblchangeroom a,tblcheckindtl b,tblreasonmaster c,tblguestmaster d,tblroom e "
+						+ "WHERE a.strGuestCode=b.strGuestCode AND a.strReason=c.strReasonCode AND a.strGuestCode=d.strGuestCode "
+						+ "and b.strRoomNo=e.strRoomCode";
+			
+				List roomDtlList = objWebPMSUtility.funExecuteQuery(sqlBillDtl, "sql");
+				for (int i = 0; i < roomDtlList.size(); i++) 
+				{
+					Object[] roomArr = (Object[]) roomDtlList.get(i);
+
+					roomBean = new clsChangedRoomTypeDtlBean();
+					
+					roomBean.setStrOldRoomName(roomArr[0].toString());
+					roomBean.setStrRemarks(roomArr[1].toString());;
+					roomBean.setStrReason(roomArr[2].toString());;
+					roomBean.setStrNewRoomName(roomArr[3].toString());
+					roomBean.setStrGuestName(roomArr[4].toString());
+					roomBean.setStrUserEdited(roomArr[5].toString());
+					roomBean.setStrNewRoomTypeDesc(roomArr[6].toString());
+					roomBean.setStrOldRoomTypeDesc(roomArr[7].toString());
+					
+					dataList.add(roomBean);
+					
+				}
+				
+				/*if(mapUpdatedRoomType.size()>0)
+                {
+                	 for (Map.Entry<String,clsChangedRoomTypeDtlBean> entry : mapUpdatedRoomType.entrySet()) 
+                	 {
+                		 roomBean= entry.getValue();
+                		 dataList.add(roomBean);
+                	 }
+                }*/
+		
+		
+			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(dataList);
+			JasperDesign jd = JRXmlLoader.load(reportName);
+			JasperReport jr = JasperCompileManager.compileReport(jd);
+			JasperPrint jp = JasperFillManager.fillReport(jr, reportParams, beanCollectionDataSource);
+			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+			if (jp != null) {
+				jprintlist.add(jp);
+				ServletOutputStream servletOutputStream = resp.getOutputStream();
+				JRExporter exporter = new JRPdfExporter();
+				resp.setContentType("application/pdf");
+				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+				exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+				resp.setHeader("Content-Disposition", "inline;filename=Bill.pdf");
+				exporter.exportReport();
+				servletOutputStream.flush();
+				servletOutputStream.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 }	

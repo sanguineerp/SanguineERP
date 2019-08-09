@@ -37,6 +37,7 @@ public class clsPropertySetupBean {
 	private String strPanNo;
 	private String strHscCode;
 	
+	
 
 	public String getStrGSTNo() {
 		return strGSTNo;
@@ -198,6 +199,8 @@ public class clsPropertySetupBean {
 	public void setStrHscCode(String strHscCode) {
 		this.strHscCode = strHscCode;
 	}
+
+	
 
 	
 

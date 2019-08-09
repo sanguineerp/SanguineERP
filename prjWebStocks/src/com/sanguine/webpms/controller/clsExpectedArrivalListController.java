@@ -138,6 +138,17 @@ public class clsExpectedArrivalListController {
 
 				clsExpectedArrivalListBean expectedArrivalListBean = new clsExpectedArrivalListBean();
 
+				String sqlReseCancel = "select a.strPropertyCode from tblroomcancelation a "
+						+ "where a.strReservationNo='"+strReservationNo+"' and a.strClientCode='"+clientCode+"'";
+				
+				List listOfCancelReservation = objGlobalFunctionsService.funGetDataList(sqlReseCancel, "sql");
+				if(listOfCancelReservation.size()>0)
+				{
+					
+				}
+				else
+				{
+				
 				expectedArrivalListBean.setStrReservationNo(strReservationNo);
 				expectedArrivalListBean.setStrBookingTypeDesc(strBookingTypeDesc);
 				expectedArrivalListBean.setDteDateCreated(dteDateCreated);
@@ -151,7 +162,7 @@ public class clsExpectedArrivalListController {
 				expectedArrivalListBean.setStrBillingInstDesc(strBillingInstDesc);
 				expectedArrivalListBean.setStrFirstName(strFirstName);
 				expectedArrivalListBean.setStrGuestCode(strGuestCode);
-
+				
 				String sqlExpectedArrivalDtl = "select a.strFirstName,a.strMiddleName,a.strLastName,b.strRoomTypeDesc,a.strAddress,a.strArrivalFrom,a.strProceedingTo " + "from tblguestmaster a,tblroomtypemaster b,tblreservationhd c,tblroom d,tblreservationdtl e " + " where  date(c.dteArrivalDate) between '" + fromDate + "' and '" + toDate + "'  and c.strReservationNo='" + strReservationNo
 						+ "' and c.strReservationNo=e.strReservationNo and e.strGuestCode=a.strGuestCode and d.strRoomTypeCode=b.strRoomTypeCode  group by e.strRoomType,e.strGuestCode";
 				List expectedArrivalDtlList = objGlobalFunctionsService.funGetDataList(sqlExpectedArrivalDtl, "sql");
@@ -175,6 +186,7 @@ public class clsExpectedArrivalListController {
 					expectedArrivalListBean.setStrArrivalFrom(strArrivalFrom);
 					expectedArrivalListBean.setStrProceedingTo(strProceedingTo);
 					fieldList.add(expectedArrivalListBean);
+				}
 				}
 			}
 

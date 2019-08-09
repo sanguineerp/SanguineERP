@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sanguine.webpms.dao.clsPMSTaxMasterDao;
+import com.sanguine.webpms.model.clsPMSSettlementTaxMasterModel;
 import com.sanguine.webpms.model.clsPMSTaxMasterModel;
 
 @Service("clsPMSTaxMasterService")
@@ -54,6 +55,11 @@ public class clsPMSTaxMasterServiceImpl implements clsPMSTaxMasterService {
 	@Override
 	public String funGetMasterName(String query) {
 		return objPMSTaxMasterDao.funGetMasterName(query);
+	}
+	
+	@Override
+	public void funAddUpdatePMSSettlementTaxMaster(clsPMSSettlementTaxMasterModel objMaster) {
+		objPMSTaxMasterDao.funAddUpdatePMSSettlementTaxMaster(objMaster);
 	}
 
 }

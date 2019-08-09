@@ -23,6 +23,28 @@
 		}
 	}
 
+	
+	/**
+	 *  Check Validation Before Saving Record
+	 **/
+	function funCallFormAction(actionName,object) 
+	{
+		var flg=true;
+		if($('#txtMobileNo').val()=='')
+		{
+			alert('Enter Mobile Number ');
+			flg=false;								  
+		}
+		
+		if($('#txtPersonIncharge').val()=='')
+		{
+			alert('Enter Name Of Person in charge ');
+			flg=false;								  
+		}
+		
+		
+		return flg;
+	}
 
 	function funSetCorporateCode(code){
 
@@ -57,7 +79,7 @@
 	        		$("#txtRemarks").val(response.strRemarks);
 	        		$("#txtAgentType").val(response.strAgentType);
 	        		$("#txtCreditLimit").val(response.dblCreditLimit);
-	        		
+	        		$("#txtDiscountPer").val(response.dblDiscountPer);
 	        		
 	        		if(response.strBlackList=='Y')
 			    	{
@@ -319,7 +341,7 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funCallFormAction('submit',this);" />
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 

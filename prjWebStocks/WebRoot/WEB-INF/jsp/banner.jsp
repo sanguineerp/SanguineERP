@@ -303,7 +303,7 @@ function funGetFormName(){
 }
 
 
-  <%-- $(document).ready(function()
+   $(document).ready(function()
 {
 	var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
 	  if(null!=pmsDate)
@@ -311,7 +311,7 @@ function funGetFormName(){
 	 	  var dte=pmsDate.split("-");
 		  $("#txtPMSDate").text(dte[0]+"-"+dte[1]+"-"+dte[2]); 	
 	  }
- });  --%>
+ });  
 
 
 </script>
@@ -322,7 +322,7 @@ function funGetFormName(){
 			<tr>
 				<th style="width: 47%; text-align: left;font-weight: bold;font-size: 11px;text-transform: uppercase;padding-top: 5px;padding-bottom: 5px; FONT-FAMILY: trebuchet ms, Helvetica, sans-serif;">${companyName} &nbsp;-&nbsp; ${financialYear} &nbsp;-&nbsp; ${propertyName} &nbsp;-&nbsp; ${locationName}</th>
  				 <th style="width: 34%; text-align: left;font-weight: bold;font-size: 11px; text-transform: uppercase;padding-top: 5px;padding-bottom: 5px; FONT-FAMILY: trebuchet ms, Helvetica, sans-serif;">&nbsp;&nbsp;
- 				 <!-- <label id="txtPMSDate"> </label></th>  -->
+					<label id="txtPMSDate"> </label></th> 
 				 
  				 <!-- <th style="width: 34%;"><label>PMS Date</label>&nbsp; &nbsp;<input id="txtPMSDate" style="width: 90px;font-weight: bold;" readonly="readonly" class="longTextBox"/></th> --> 
 				 

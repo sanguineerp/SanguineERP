@@ -1,8 +1,10 @@
 package com.sanguine.webpms.controller;
 
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.webpms.bean.clsAgentCommisionBean;
 import com.sanguine.webpms.model.clsAgentCommisionHdModel;
 import com.sanguine.webpms.service.clsAgentCommisionService;
@@ -21,6 +25,11 @@ public class clsAgentCommisionController {
 
 	@Autowired
 	private clsAgentCommisionService objAgentCommisionService;
+	
+	
+	@Autowired
+	private clsGlobalFunctions objGlobal;
+
 
 	// Open AgentCommision
 	@RequestMapping(value = "/frmAgentCommision", method = RequestMethod.GET)
@@ -48,6 +57,8 @@ public class clsAgentCommisionController {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			clsAgentCommisionHdModel objModel = objAgentCommisionService.funPrepareModel(objBean, userCode, clientCode);
+			objModel.setDteFromDate(objGlobal.funGetDate("yyyy-MM-dd", objModel.getDteFromDate()));
+			objModel.setDteToDate(objGlobal.funGetDate("yyyy-MM-dd", objModel.getDteToDate()));
 			objAgentCommisionService.funAddUpdateAgentCommision(objModel);
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Agent Commission Code : ".concat(objModel.getStrAgentCommCode()));

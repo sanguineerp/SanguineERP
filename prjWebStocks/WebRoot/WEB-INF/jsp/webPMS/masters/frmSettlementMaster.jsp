@@ -280,6 +280,10 @@
 				    	<option value="Complimentry">Complementary</option>
 				    	<option value="Online">Online</option>
 				    	<option value="Cheque">Cheque</option>
+				    	<option value="Paytm">Paytm</option>
+				    	<option value="Online">Online</option>
+				    	<option value="Oyo">Oyo</option>
+				    	<option value="Cash1">Cash1</option>
 				    	</s:select>					
 				</td>				
 			</tr>

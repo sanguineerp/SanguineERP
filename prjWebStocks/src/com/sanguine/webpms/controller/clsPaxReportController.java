@@ -42,6 +42,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 @Controller
 public class clsPaxReportController {
 
+	
+	
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
 	@Autowired
@@ -102,12 +104,12 @@ public class clsPaxReportController {
 			reportParams.put("pContactDetails", "");
 			reportParams.put("strImagePath", imagePath);
 			reportParams.put("strUserCode", userCode);
-			reportParams.put("pFromDate", fromDate);
-			reportParams.put("pTtoDate", toDate);
+			reportParams.put("pFromDate", objGlobal.funGetDate("dd-MM-yyyy", fromDate));
+			reportParams.put("pTtoDate", objGlobal.funGetDate("dd-MM-yyyy", toDate));
 			reportParams.put("propName", propName);
 
 			// get all parameters
-			String sqlPax = " select b.strGuestCode,b.strRoomNo,a.strCheckInNo,c.strFirstName,c.strMiddleName,c.strLastName,a.dteCheckInDate "
+			String sqlPax = " select b.strGuestCode,b.strRoomNo,a.strCheckInNo,c.strFirstName,c.strMiddleName,c.strLastName,Date(a.dteCheckInDate) "
 								+ ",a.strReservationNo,a.strWalkInNo,d.strRoomDesc "
 								+ " from tblcheckinhd a, tblcheckindtl b,tblguestmaster c,tblroom d "
 								+ " where a.strCheckInNo=b.strCheckInNo "
@@ -124,7 +126,7 @@ public class clsPaxReportController {
 				objPaxBean.setStrRoomNo(arr[1].toString());
 				objPaxBean.setStrCheckInNo(arr[2].toString());
 				objPaxBean.setStrGuestFullName(arr[3].toString()+" "+arr[4].toString()+" "+arr[5].toString());
-				objPaxBean.setDteCheckInDate(arr[6].toString());
+				objPaxBean.setDteCheckInDate(objGlobal.funGetDate("dd-MM-yyyy", arr[6].toString()));
 				if(!arr[7].toString().equalsIgnoreCase(""))
 				{
 					objPaxBean.setStrAgainstType("Reservation");

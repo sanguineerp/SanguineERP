@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCheckInList" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="1.156629868288595"/>
 	<property name="ireport.x" value="0"/>
@@ -24,6 +24,9 @@
 	<field name="strDocNo" class="java.lang.String"/>
 	<field name="strNewRoomName" class="java.lang.String"/>
 	<field name="strNewRoomTypeDesc" class="java.lang.String"/>
+	<field name="strRemarks" class="java.lang.String"/>
+	<field name="strUserEdited" class="java.lang.String"/>
+	<field name="strReason" class="java.lang.String"/>
 	<variable name="totalBill" class="java.lang.Double" calculation="Sum"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -123,49 +126,49 @@
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Old Room No ]]></text>
+				<text><![CDATA[New Room]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="380" y="1" width="78" height="20" uuid="e0cdf44a-2640-4aa9-a7e0-217f0b01ba8e"/>
+				<reportElement x="390" y="1" width="90" height="20" uuid="e0cdf44a-2640-4aa9-a7e0-217f0b01ba8e"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[New RoomType]]></text>
+				<text><![CDATA[Reason]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1" width="70" height="20" uuid="246ab501-1b36-4eea-a38e-a011d5c8e09d"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Type]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="463" y="1" width="92" height="20" uuid="9fc994ef-45c6-459b-854b-3265d2dd7415"/>
+				<reportElement x="0" y="1" width="90" height="20" uuid="246ab501-1b36-4eea-a38e-a011d5c8e09d"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Guest Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="70" y="1" width="90" height="20" uuid="7b6a8937-3005-4752-8d17-ef255c091997"/>
+				<reportElement x="480" y="1" width="74" height="20" uuid="9fc994ef-45c6-459b-854b-3265d2dd7415"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Document No]]></text>
+				<text><![CDATA[Remarks]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="301" y="1" width="75" height="20" uuid="407e0451-eaba-482f-a8a0-8c0d2ac6b731"/>
+				<reportElement x="90" y="1" width="72" height="20" uuid="7b6a8937-3005-4752-8d17-ef255c091997"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Old Room No ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="307" y="1" width="79" height="20" uuid="407e0451-eaba-482f-a8a0-8c0d2ac6b731"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[New RoomType]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="227" y="1" width="74" height="20" uuid="30a8e8fa-c266-4a74-b14e-284714e7ed44"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Old RoomType]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="227" y="1" width="70" height="20" uuid="30a8e8fa-c266-4a74-b14e-284714e7ed44"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[New Room]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -175,29 +178,29 @@
 				<reportElement x="165" y="10" width="60" height="20" uuid="3641bf56-1f45-4f4b-83f1-36756e3bf5f4"/>
 				<textFieldExpression><![CDATA[$F{strOldRoomName}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="380" y="10" width="78" height="20" uuid="520bd95e-f81a-4753-9b3f-3119c02703e2"/>
-				<textFieldExpression><![CDATA[$F{strNewRoomTypeDesc}]]></textFieldExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="390" y="10" width="90" height="20" uuid="520bd95e-f81a-4753-9b3f-3119c02703e2"/>
+				<textFieldExpression><![CDATA[$F{strReason}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="463" y="8" width="92" height="20" uuid="179dcca2-76cb-4a4c-97c1-7c769591682f"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="480" y="8" width="74" height="20" uuid="179dcca2-76cb-4a4c-97c1-7c769591682f"/>
+				<textFieldExpression><![CDATA[$F{strRemarks}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="10" width="90" height="20" uuid="b6dbe75d-9b1a-40aa-a216-80632dfb09c7"/>
 				<textFieldExpression><![CDATA[$F{strGuestName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="10" width="70" height="20" uuid="b6dbe75d-9b1a-40aa-a216-80632dfb09c7"/>
-				<textFieldExpression><![CDATA[$F{strType}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="70" y="10" width="90" height="20" uuid="1dd42817-28d7-4148-b1d1-bba81804a625"/>
-				<textFieldExpression><![CDATA[$F{strDocNo}]]></textFieldExpression>
+				<reportElement x="90" y="10" width="70" height="20" uuid="1dd42817-28d7-4148-b1d1-bba81804a625"/>
+				<textFieldExpression><![CDATA[$F{strOldRoomName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="301" y="10" width="75" height="20" uuid="9e5781e8-7127-4d56-a014-ca822e63af8e"/>
-				<textFieldExpression><![CDATA[$F{strOldRoomTypeDesc}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{strNewRoomTypeDesc}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="227" y="10" width="70" height="20" uuid="8eef25ef-8110-49f2-9723-9e2a78411540"/>
-				<textFieldExpression><![CDATA[$F{strNewRoomName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{strOldRoomTypeDesc}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

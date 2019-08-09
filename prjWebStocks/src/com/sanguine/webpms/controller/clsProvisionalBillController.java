@@ -354,7 +354,7 @@ public class clsProvisionalBillController
 					dataList.add(billPrintingBean);
 					
 					double pkgsAmt=0,totalRoomBill=0;
-					String sqlCheckInListDtl = " select b.strFolioNo,b.strPerticulars,b.dblDebitAmt "
+					String sqlCheckInListDtl = " select b.strFolioNo,b.strPerticulars,b.dblDebitAmt,Date(b.dteDocDate) "
 							+ " from tblfoliohd a,tblfoliodtl b "
 							+ " where b.strFolioNo='"+billArr[6].toString()+"' and  b.strRevenueType!='Package' and b.strRevenueType!='Room' "
 							+ " group by b.strDocNo ";
@@ -369,6 +369,7 @@ public class clsProvisionalBillController
 						billPrintingBean.setStrRoomName("");
 						billPrintingBean.setStrBillIncluded(pkgsArr[1].toString());
 						billPrintingBean.setStrGuestName("");
+						billPrintingBean.setDteDocDate(pkgsArr[3].toString());
 						dataList.add(billPrintingBean);
 					}
 					

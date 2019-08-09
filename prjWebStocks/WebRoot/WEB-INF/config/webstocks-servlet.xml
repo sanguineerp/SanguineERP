@@ -213,6 +213,7 @@
 			<value>com.sanguine.crm.model.clsCategoryMasterModel</value>
 			<value>com.sanguine.crm.model.clsRegionMasterModel</value>
 			
+			
 
 			</list>
 		</property>
@@ -574,6 +575,7 @@
 					<value>com.sanguine.webpms.model.clsPackageMasterDtl</value>
 					<value>com.sanguine.webpms.model.clsVoidBillHdModel</value>
 					<value>com.sanguine.webpms.model.clsBlockRoomModel</value>
+					<value>com.sanguine.webpms.model.clsPMSSettlementTaxMasterModel</value>
 					
 						
 				</list>

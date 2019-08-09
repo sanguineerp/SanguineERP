@@ -2,6 +2,7 @@ package com.sanguine.webpms.service;
 
 import java.util.List;
 
+import com.sanguine.webpms.model.clsPMSSettlementTaxMasterModel;
 import com.sanguine.webpms.model.clsPMSTaxMasterModel;
 
 public interface clsPMSTaxMasterService {
@@ -21,5 +22,7 @@ public interface clsPMSTaxMasterService {
 	public String funGetCodeFromName(String fieldToBeSeleted, String fieldName, String fromFieldNameValue, String tableName, String clientCode);
 
 	public String funGetMasterName(String query);
+	
+	public void funAddUpdatePMSSettlementTaxMaster(clsPMSSettlementTaxMasterModel objMaster);
 
 }

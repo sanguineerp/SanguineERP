@@ -118,7 +118,7 @@ public class clsRoomStatusDiaryController {
 				
 				// New Added
 				
-				sql = "select a.strReservationNo,f.strRoomCode,f.strRoomDesc,concat(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName)" + " ,'Checked Out',DATE_FORMAT(DATE(c.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(c.dteDepartureDate),'%d-%m-%Y')" + ",a.strCheckInNo " + " from tblbillhd a,tblcheckinhd c,tblcheckindtl d,tblguestmaster e,tblroom f "
+				sql = "select a.strReservationNo,f.strRoomCode,f.strRoomDesc,concat(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName)" + " ,'Checked Out',DATE_FORMAT(DATE(c.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(c.dteDepartureDate),'%d-%m-%Y')" + ",a.strCheckInNo ,c.tmeArrivalTime,c.tmeDepartureTime" + " from tblbillhd a,tblcheckinhd c,tblcheckindtl d,tblguestmaster e,tblroom f "
 						+ " where a.strCheckInNo=c.strCheckInNo and c.strCheckInNo=d.strCheckInNo and d.strGuestCode=e.strGuestCode " + " and a.strRoomNo=f.strRoomCode and date(a.dteBillDate) >= '" + transDate + "' and date(c.dteArrivalDate) <= '" + transDate + "' " + " and a.strRoomNo='" + arrObjRooms[0].toString() + "'";
 				
 			
@@ -126,10 +126,14 @@ public class clsRoomStatusDiaryController {
 				List listCheckOutRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 				if (listCheckOutRoomDtl.size() > 0) {
 					Object[] arrObjRoomDtl = (Object[]) listCheckOutRoomDtl.get(0);
+					
+					String strCheckInTime = arrObjRoomDtl[8].toString();
+					String strCheckOutTime = arrObjRoomDtl[9].toString();
+					strCheckInTime.toLowerCase();
 					clsGuestListReportBean objGuestStatusDtl = new clsGuestListReportBean();
 					objGuestStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
-					objGuestStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
-					objGuestStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
+					objGuestStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString()+" "+strCheckInTime);
+					objGuestStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString()+" "+strCheckOutTime);
 					objGuestStatusDtl.setStrRoomNo(arrObjRoomDtl[0].toString());
 					
 					
@@ -402,7 +406,7 @@ public class clsRoomStatusDiaryController {
 //							+ " where a.strCheckInNo=b.strCheckInNo and b.strGuestCode=c.strGuestCode and b.strRoomNo=d.strRoomCode " + " and date(a.dteDepartureDate) >= '" + transDate + "' and date(a.dteArrivalDate) <= '" + transDate + "' " + " and b.strRoomNo='" + arrObjRooms[0].toString() + "' " + " and a.strCheckInNo not in (select strCheckInNo from tblbillhd) ";
 					
 					sql = "select a.strReservationNo,d.strRoomCode,d.strRoomDesc" 
-							+ " ,concat(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Occupied',DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y')" + " ,e.strFolioNo,a.tmeArrivalTime" 
+							+ " ,concat(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Occupied',DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y')" + " ,e.strFolioNo,a.tmeArrivalTime,a.tmeDepartureTime " 
 							+ ",a.strWalkInNo from tblcheckinhd a,tblcheckindtl b,tblguestmaster c,tblroom d,tblfoliohd e "
 							+ " where a.strCheckInNo=b.strCheckInNo and b.strGuestCode=c.strGuestCode and b.strRoomNo=d.strRoomCode " 
 							+ " and date(a.dteDepartureDate) >= '" + transDate + "'  " 
@@ -414,6 +418,7 @@ public class clsRoomStatusDiaryController {
 						Object[] arrObjRoomDtl = (Object[]) listCheckInRoomDtl.get(0);
 						clsGuestListReportBean objGuestStatusDtl = new clsGuestListReportBean();
 						String strArrTime = arrObjRoomDtl[8].toString();
+						String strDeptTime = arrObjRoomDtl[9].toString().toLowerCase();
 						if(arrObjRoomDtl[0].toString().isEmpty())
 						{
 							objGuestStatusDtl.setStrRoomNo(arrObjRoomDtl[8].toString());
@@ -426,7 +431,7 @@ public class clsRoomStatusDiaryController {
 						}
 						objGuestStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
 						objGuestStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString()+" "+strArrTime);
-						objGuestStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
+						objGuestStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString()+" "+strDeptTime);
 						
 						objRoomStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
 						
@@ -713,7 +718,19 @@ public class clsRoomStatusDiaryController {
 					for(int i=0;i<listBlockRoom.size();i++)
 					{
 						Object[] arrObjBlockRoom = (Object[]) listBlockRoom.get(i);
-						String reason=arrObjBlockRoom[0].toString();
+						String sqlReason = "select a.strReasonDesc from tblreasonmaster a where a.strReasonCode='"+arrObjBlockRoom[0].toString()+"'";
+						List listRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sqlReason, "sql");
+						String strReason="";
+						if(listRoomDtl.size()>0)
+						{
+							strReason = listRoomDtl.get(0).toString();
+							/*strReason=arrObjBlockRoom[0].toString();*/
+						}
+						else
+						{
+							strReason="";
+						}
+						
 						String remarks = arrObjBlockRoom[1].toString();
 						objRoomStatusDtl.setStrDay1("Blocked Room");
 						objRoomStatusDtl.setStrDay2("Blocked Room");
@@ -722,7 +739,7 @@ public class clsRoomStatusDiaryController {
 						objRoomStatusDtl.setStrDay5("Blocked Room");
 						objRoomStatusDtl.setStrDay6("Blocked Room");
 						objRoomStatusDtl.setStrDay7("Blocked Room");
-						objRoomStatusDtl.setStrGuestName(reason);
+						objRoomStatusDtl.setStrGuestName(strReason);
 						objRoomStatusDtl.setStrCheckInNo(remarks);
 					}
 				}

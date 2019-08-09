@@ -28,6 +28,9 @@
 		$(document).ajaxComplete(function(){
 		   	$("#wait").css("display","none");
 		});
+		
+		funRemAllRows("tblSettlement");
+		funLoadSettlement();
 	});
 	
 	/**
@@ -248,6 +251,8 @@
         			{
 	        			funSetAccountCode(response.strAccountCode);
         			}
+	        		
+	        		funUpdateTaxSettlementData(response.listSettlementTaxModels);
 	        	}
 			},
 			error: function(jqXHR, exception) 
@@ -503,6 +508,90 @@
 		}
 		
 	}
+	
+	
+	function funLoadSettlement()
+	{
+		
+		$.ajax({
+			type: "GET",
+	        url: getContextPath()+"/loadSettlementData.html",
+	        dataType: "json",
+	        success: function(response)
+	        {
+	        
+	        		$.each(response, function(i,item)
+	                {
+	        			funfillSettlementRow(response[i][0],response[i][1],'Y');
+					});
+	        	
+			},
+			error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+	        }
+      });
+	}
+	
+	
+	function funfillSettlementRow(SettleCode,SettleName,applicable)
+	{
+		
+		var checked=true;
+		var table = document.getElementById("tblSettlement");
+	    var rowCount = table.rows.length;
+	    var row = table.insertRow(rowCount);
+	    var cnt=0;
+	    var insertRowflg='Y';
+	    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listSettlement["+(rowCount)+"].strSettlementCode\"  id=\"txtSettlementCode."+(rowCount)+"\" value='"+SettleCode+"' />";
+	    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listSettlement["+(rowCount)+"].strSettlementName\"  id=\"txtSettlementName."+(rowCount)+"\" value='"+SettleName+"'/>";
+	    if(applicable=='Y'){
+	    	row.insertCell(2).innerHTML= "<input id=\"chkApplicable."+(rowCount)+"\" type=\"checkbox\" class=\"GCheckBoxClass\"  name=\"listSettlement["+(rowCount)+"].strApplicable\" checked=\"checked\"  value='"+checked+"' />"; /*  checked=\"checked\"  */
+	    }else{
+	    	row.insertCell(2).innerHTML= "<input id=\"chkApplicable."+(rowCount)+"\" type=\"checkbox\" class=\"GCheckBoxClass\"  name=\"listSettlement["+(rowCount)+"].strApplicable\"  value=\"false\" />"; /*  checked=\"checked\"  */	
+	    }
+	     
+	    
+	}
+	/**
+	 * Remove all product from grid
+	 */
+	
+	function funRemAllRows(tableName)
+	{
+		var table = document.getElementById(tableName);
+		var rowCount = table.rows.length;
+		while(rowCount>0)
+		{
+			table.deleteRow(0);
+			rowCount--;
+		}
+	}
+	
+	function funUpdateTaxSettlementData(listSettlementTaxModels){
+		
+		if(listSettlementTaxModels.length>0){
+			funRemAllRows("tblSettlement");
+    		$.each(listSettlementTaxModels, function(i,item)
+            {
+    			funfillSettlementRow(listSettlementTaxModels[i].strSettlementCode,listSettlementTaxModels[i].strSettlementName,listSettlementTaxModels[i].strApplicable);
+			});
+    	
+		}
+	}
 	 
 </script>
 
@@ -522,6 +611,7 @@
 				<ul class="tabs">
 					<li data-state="tab1" style="width: 6%; padding-left: 2%;margin-left: 10%; " class="active" >General</li>
 					<li data-state="tab2" style="width: 8%; padding-left: 1%">LinkUp</li>
+					<li data-state="tab3" style="width: 8%; padding-left: 1%">Settlemet</li>
 				</ul>
 							
 				<!-- General Tab Start -->
@@ -630,6 +720,28 @@
 						    <td colspan="3"><s:input id="txtAccountName" path="" readonly="true" cssClass="longTextBox"  style="width: 316px"/></td>			        			        						    			    		        			  
 						</tr>
 				</table>
+			</div>
+			
+			<div id="tab3" class="tab_content" style="height: 400px">
+			
+			<table class="masterTable">
+					<tr>
+						<th style="border: 1px white solid;width: 10%"><label>Settlement Code</label></th>
+						<th style="border: 1px white solid;width: 50%"><label>Settlement Desc</label></th>
+						<th style="border: 1px white solid;width: 10%"><label>Select</label></th>
+					</tr>
+				</table>
+				
+				<div style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 80%;">
+					<table id="tblSettlement" style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll" class="transTablex col5-center">
+						<tbody>
+							<col style="width: 5%"><!-- col1   -->
+						    <col style="width: 25%"><!-- col2   -->
+							<col style="width: 5%"><!-- col3   -->
+						</tbody>
+					</table>
+				</div>
+			
 			</div>
 			
 		</div>

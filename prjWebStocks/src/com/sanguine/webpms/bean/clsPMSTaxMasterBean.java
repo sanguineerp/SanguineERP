@@ -1,5 +1,11 @@
 package com.sanguine.webpms.bean;
 
+import java.util.List;
+
+import com.sanguine.model.clsProdSuppMasterModel;
+import com.sanguine.webpms.model.clsPMSSettlementMasterHdModel;
+import com.sanguine.webpms.model.clsPMSSettlementTaxMasterModel;
+
 public class clsPMSTaxMasterBean {
 	// Variable Declaration
 	private long intGId;
@@ -49,6 +55,12 @@ public class clsPMSTaxMasterBean {
 	private double dblFromRate;
 	
 	private double dblToRate;
+	
+	private String strSettlementCode;
+	
+	private String strSettlementDesc;
+	
+	private List<clsPMSSettlementTaxMasterModel> listSettlement;
 	
 
 	// Setter-Getter Methods
@@ -244,4 +256,31 @@ public class clsPMSTaxMasterBean {
 		this.dblToRate = dblToRate;
 	}
 
+	public List<clsPMSSettlementTaxMasterModel> getListSettlement() {
+		return listSettlement;
+	}
+
+	public void setListSettlement(List<clsPMSSettlementTaxMasterModel> listSettlement) {
+		this.listSettlement = listSettlement;
+	}
+
+	public String getStrSettlementCode() {
+		return strSettlementCode;
+	}
+
+	public void setStrSettlementCode(String strSettlementCode) {
+		this.strSettlementCode = strSettlementCode;
+	}
+
+	public String getStrSettlementDesc() {
+		return strSettlementDesc;
+	}
+
+	public void setStrSettlementDesc(String strSettlementDesc) {
+		this.strSettlementDesc = strSettlementDesc;
+	}
+
+	
+
+	
 }

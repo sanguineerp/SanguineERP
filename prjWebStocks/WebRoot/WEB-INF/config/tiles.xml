@@ -4677,6 +4677,17 @@
 			<put-attribute name="body" value="/WEB-INF/jsp/webPMS/reports/frmCheckOutList.jsp" />
 		</definition>
 		
+		
+		<definition name="frmCheckInCheckOutList" extends="base.definition">
+			<put-attribute name="title" value="CheckIn/Check Out List" />
+			<put-attribute name="body" value="/WEB-INF/jsp/webPMS/reports/frmCheckInCheckOutList.jsp" />
+		</definition>
+		<definition name="frmCheckInCheckOutList_1" extends="base.definition4">
+			<put-attribute name="title" value="CheckIn/Check Out List" />
+			<put-attribute name="body" value="/WEB-INF/jsp/webPMS/reports/frmCheckInCheckOutList.jsp" />
+		</definition>
+		
+		
 		<definition name="frmPMSFlash" extends="base.definition">
 			<put-attribute name="title" value="PMS Flash" />
 			<put-attribute name="body" value="/WEB-INF/jsp/webPMS/tools/frmPMSFlash.jsp" />
@@ -4941,6 +4952,16 @@
  	</definition>
  	
  	
+ 	 	<definition name="frmBlockRoomReport" extends="base.definition">
+  		<put-attribute name="title" value="Block Room Report" /> 
+  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/reports/frmBlockRoomReport.jsp" />
+ 	</definition>	  	
+	<definition name="frmBlockRoomReport_1" extends="base.definition4">
+ 		<put-attribute name="title" value="Block Room Report" /> 
+ 		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/reports/frmBlockRoomReport.jsp" /> 
+ 	</definition>
+ 	
+ 	
  	
  	<definition name="frmVoidBillReport" extends="base.definition">
 			<put-attribute name="title" value="Void Bill Report" />
@@ -4963,6 +4984,17 @@
 		<put-attribute name="body"
 			value="/WEB-INF/jsp/webPMS/tools/frmPMSStructureUpdate.jsp"></put-attribute>
 	</definition>
+	
+	
+	<definition name="frmPMSSalesFlash" extends="base.definition">
+  		<put-attribute name="title" value="Sales Flash" /> 
+  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/tools/frmPMSSalesFlash.jsp" />
+ 	</definition>
+	<definition name="frmPMSSalesFlash_1" extends="base.definition4">
+ 		<put-attribute name="title" value="Sales Flash" /> 
+ 		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/tools/frmPMSSalesFlash.jsp" /> 
+ 	</definition>
+	
   	
 <!-- 	End Of WebPMS Tiles Entry -->
 

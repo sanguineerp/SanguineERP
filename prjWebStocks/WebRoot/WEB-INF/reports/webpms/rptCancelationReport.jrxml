@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCheckInList" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="1.156629868288595"/>
 	<property name="ireport.x" value="0"/>
@@ -97,9 +97,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pAddress2}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="0" y="103" width="555" height="1" uuid="e18e9f7a-d80b-4aa5-b730-5a5416101055"/>
-			</line>
 			<image>
 				<reportElement x="13" y="10" width="136" height="79" uuid="5ea12fd6-6cbd-47f0-87cd-263c311d7cfd"/>
 				<imageExpression><![CDATA[$P{strImagePath}]]></imageExpression>
@@ -115,23 +112,12 @@
 				<reportElement x="0" y="125" width="555" height="1" uuid="e18e9f7a-d80b-4aa5-b730-5a5416101055"/>
 			</line>
 			<staticText>
-				<reportElement x="4" y="105" width="59" height="18" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
-				<textElement verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Group: ]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="3" y="126" width="59" height="17" uuid="d2930865-ba58-4f2a-aaef-f648e1efd9ab"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Property:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="62" y="103" width="146" height="20" uuid="c91f2980-9bed-40a5-beb0-0afac8734e83"/>
-				<textFieldExpression><![CDATA[$P{pCompanyName}]]></textFieldExpression>
-			</textField>
 			<textField>
 				<reportElement x="61" y="125" width="147" height="19" uuid="235805f6-e64a-4e6c-9cc8-16fe47e52fc9"/>
 				<textFieldExpression><![CDATA[$P{propName}]]></textFieldExpression>

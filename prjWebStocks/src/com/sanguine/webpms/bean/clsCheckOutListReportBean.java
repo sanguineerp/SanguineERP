@@ -9,6 +9,8 @@ public class clsCheckOutListReportBean {
 	private String dteToDate;
 
 	private String strReservationNo;
+	
+	private String strCheckInNo;
 
 	private String strBookingTypeDesc;
 
@@ -27,8 +29,25 @@ public class clsCheckOutListReportBean {
 	private String strBillingInstDesc;
 
 	private String strFirstName;
+	
+	private String strMiddleName;
+	
+	private String strLastName;
 
-	private String strGuestCode;
+	private String dteDepartureDate;
+	
+	private String strType;
+	
+	private String strRoomTypeCode;
+	
+	private String strRoomTypeDesc;
+	
+	private String strAddress;
+	
+	private double dblReceiptAmt;
+	
+	private String strArrivalFrom;
+	
 
 	// private String guestFirstName;
 	//
@@ -144,14 +163,7 @@ public class clsCheckOutListReportBean {
 		this.strFirstName = strFirstName;
 	}
 
-	public String getStrGuestCode() {
-		return strGuestCode;
-	}
-
-	public void setStrGuestCode(String strGuestCode) {
-		this.strGuestCode = strGuestCode;
-	}
-
+	
 	// public String getGuestFirstName() {
 	// return guestFirstName;
 	// }
@@ -222,6 +234,86 @@ public class clsCheckOutListReportBean {
 
 	public void setListCheckOutDtl(List<clsCheckOutListReportDtlBean> listCheckOutDtl) {
 		this.listCheckOutDtl = listCheckOutDtl;
+	}
+
+	public String getStrMiddleName() {
+		return strMiddleName;
+	}
+
+	public void setStrMiddleName(String strMiddleName) {
+		this.strMiddleName = strMiddleName;
+	}
+
+	public String getStrLastName() {
+		return strLastName;
+	}
+
+	public void setStrLastName(String strLastName) {
+		this.strLastName = strLastName;
+	}
+
+	public String getDteDepartureDate() {
+		return dteDepartureDate;
+	}
+
+	public void setDteDepartureDate(String dteDepartureDate) {
+		this.dteDepartureDate = dteDepartureDate;
+	}
+
+	public String getStrCheckInNo() {
+		return strCheckInNo;
+	}
+
+	public void setStrCheckInNo(String strCheckInNo) {
+		this.strCheckInNo = strCheckInNo;
+	}
+
+	public String getStrType() {
+		return strType;
+	}
+
+	public void setStrType(String strType) {
+		this.strType = strType;
+	}
+
+	public String getStrRoomTypeCode() {
+		return strRoomTypeCode;
+	}
+
+	public void setStrRoomTypeCode(String strRoomTypeCode) {
+		this.strRoomTypeCode = strRoomTypeCode;
+	}
+
+	public String getStrRoomTypeDesc() {
+		return strRoomTypeDesc;
+	}
+
+	public void setStrRoomTypeDesc(String strRoomTypeDesc) {
+		this.strRoomTypeDesc = strRoomTypeDesc;
+	}
+
+	public String getStrAddress() {
+		return strAddress;
+	}
+
+	public void setStrAddress(String strAddress) {
+		this.strAddress = strAddress;
+	}
+
+	public double getDblReceiptAmt() {
+		return dblReceiptAmt;
+	}
+
+	public void setDblReceiptAmt(double dblReceiptAmt) {
+		this.dblReceiptAmt = dblReceiptAmt;
+	}
+
+	public String getStrArrivalFrom() {
+		return strArrivalFrom;
+	}
+
+	public void setStrArrivalFrom(String strArrivalFrom) {
+		this.strArrivalFrom = strArrivalFrom;
 	}
 
 }

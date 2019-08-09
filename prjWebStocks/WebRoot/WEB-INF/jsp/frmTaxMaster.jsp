@@ -14,6 +14,11 @@
 		 resetForms('taxForm');
 		    $("#txtTaxDesc").focus();	
 	});
+	
+	$("#chkBill").click(function ()
+			{
+			    $(".suppCheckBoxClass").prop('checked', $(this).prop('checked'));
+			});
 	</script>
 	<script type="text/javascript">
 	
@@ -1002,6 +1007,7 @@
 						<th style="border: 1px white solid;width: 10%"><label>Tax Code</label></th>
 						<th style="border: 1px white solid;width: 50%"><label>Tax Desc</label></th>
 						<th style="border: 1px white solid;width: 10%"><label>Select</label></th>
+						
 					</tr>
 				</table>
 				

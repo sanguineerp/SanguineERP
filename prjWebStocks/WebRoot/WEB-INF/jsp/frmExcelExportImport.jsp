@@ -94,7 +94,12 @@
 			case "frmGuestMaster" :
 				window.location.href=getContextPath()+"/GuestMasterExport.html";	
 				break;
-			
+				
+			/* case "frmCheckInCheckOutList" :
+				window.location.href=getContextPath()+"/CheckInCheckOutList.html";	
+				
+				break;
+			 */
 		}
 	}
 
@@ -427,7 +432,9 @@
 				       <td><label id="txtSubGroupName">All</label></td>
 				        <td></td>
 				       
-			   		</tr>    	
+			   		</tr>
+			   		
+			   	  	
 		  
 	    </tbody>
 	</table>

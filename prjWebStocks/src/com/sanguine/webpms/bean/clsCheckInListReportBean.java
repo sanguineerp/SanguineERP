@@ -45,6 +45,8 @@ public class clsCheckInListReportBean {
 	private double dblReceiptAmt;
 	
 	private String strRoomTypeCode;
+	
+	private String strCheckInNo;
 
 	public String getDteFromDate() {
 		return dteFromDate;
@@ -219,7 +221,15 @@ public class clsCheckInListReportBean {
 	}
 
 	public void setStrRoomTypeCode(String strRoomTypeCode) {
-		strRoomTypeCode = strRoomTypeCode;
+		this.strRoomTypeCode = strRoomTypeCode;
+	}
+
+	public String getStrCheckInNo() {
+		return strCheckInNo;
+	}
+
+	public void setStrCheckInNo(String strCheckInNo) {
+		this.strCheckInNo = strCheckInNo;
 	}
 
 }

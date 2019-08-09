@@ -13,6 +13,11 @@ public class clsChangedRoomTypeDtlBean
 	private String strDocDate;
 	private String dteFromDate;
 	private String dteToDate;
+	private String strRemarks;
+	private String strReason;
+	private String strUserEdited;
+	
+	
 
 	public String getDteFromDate() {
 		return dteFromDate;
@@ -74,6 +79,24 @@ public class clsChangedRoomTypeDtlBean
 	}
 	public void setStrGuestName(String strGuestName) {
 		this.strGuestName = strGuestName;
+	}
+	public String getStrRemarks() {
+		return strRemarks;
+	}
+	public void setStrRemarks(String strRemarks) {
+		this.strRemarks = strRemarks;
+	}
+	public String getStrReason() {
+		return strReason;
+	}
+	public void setStrReason(String strReason) {
+		this.strReason = strReason;
+	}
+	public String getStrUserEdited() {
+		return strUserEdited;
+	}
+	public void setStrUserEdited(String strUserEdited) {
+		this.strUserEdited = strUserEdited;
 	}
 	
 }

@@ -105,12 +105,12 @@ public class clsCheckOutListReportController {
 			reportParams.put("pContactDetails", "");
 			reportParams.put("strImagePath", imagePath);
 			reportParams.put("strUserCode", userCode);
-			reportParams.put("pFromDate", fromDate);
-			reportParams.put("pTtoDate", toDate);
+			reportParams.put("pFromDate", objGlobal.funGetDate("dd-MM-yyyy", fromDate));
+			reportParams.put("pTtoDate", objGlobal.funGetDate("dd-MM-yyyy", toDate));
 			reportParams.put("propName", propName);
 
 			// get all parameters
-			String sqlParametersCheckOutList = " SELECT bh.strReservationNo, IFNULL(h.strBookingTypeDesc,'NA'), " + " DATE_FORMAT(ch.dteDateCreated,'%d-%m-%Y'),IFNULL(c.strCorporateDesc,'NA'), " + " IFNULL(k.strBookerName,'NA'), DATE_FORMAT(a.dteCancelDate,'%d-%m-%Y'), " + " IFNULL(f.strDescription,'NA'),IFNULL(g.strBillingInstDesc,'NA'), "
+			/*String sqlParametersCheckOutList = " SELECT bh.strReservationNo, IFNULL(h.strBookingTypeDesc,'NA'), " + " DATE_FORMAT(ch.dteDateCreated,'%d-%m-%Y'),IFNULL(c.strCorporateDesc,'NA'), " + " IFNULL(k.strBookerName,'NA'), DATE_FORMAT(a.dteCancelDate,'%d-%m-%Y'), " + " IFNULL(f.strDescription,'NA'),IFNULL(g.strBillingInstDesc,'NA'), "
 					+ " CONCAT(j.strFirstName,' ',j.strMiddleName,' ',j.strLastName),j.strGuestCode,bh.strBillNo,Sum(bd.dblDebitAmt) " + " FROM tblbillhd bh " + " LEFT OUTER JOIN tblbilldtl bd ON bh.strBillNo = bd.strBillNo AND bd.strClientCode='"
 					+ clientCode
 					+ "' "
@@ -139,8 +139,17 @@ public class clsCheckOutListReportController {
 					+ clientCode
 					+ "' "
 					+ " LEFT OUTER JOIN tblguestmaster j ON j.strGuestCode=b.strGuestCode and j.strClientCode='"
-					+ clientCode + "' " + " LEFT OUTER JOIN tblbookermaster k ON k.strBookerCode=a.strBookerCode AND k.strClientCode='" + clientCode + "' " + " WHERE DATE(bh.dteBillDate) " + "  BETWEEN '" + fromDate + "' and '" + toDate + "' " + " AND ch.strClientCode='" + clientCode + "' AND a.strPropertyCode='" + propertyCode + "' group by bh.strReservationNo ";
+					+ clientCode + "' " + " LEFT OUTER JOIN tblbookermaster k ON k.strBookerCode=a.strBookerCode AND k.strClientCode='" + clientCode + "' " + " WHERE DATE(bh.dteBillDate) " + "  BETWEEN '" + fromDate + "' and '" + toDate + "' " + " AND ch.strClientCode='" + clientCode + "' AND a.strPropertyCode='" + propertyCode + "' group by bh.strReservationNo ";*/
 
+			String sqlParametersCheckOutList = "SELECT a.strCheckInNo,a.strType, DATE(a.dteArrivalDate),Date(a.dteDepartureDate),c.strRoomDesc,"
+					+ "c.strRoomTypeDesc,d.strFirstName, "
+					+ "d.strMiddleName,d.strLastName,Concat(d.strAddressLocal,' ',d.strCityLocal,' ',"
+					+ "d.strStateLocal,' ',d.strCountryLocal,' ',d.intPinCodeLocal),e.dblGrandTotal,d.strArrivalFrom "
+					+ "FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d,tblbillhd e "
+					+ "WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode "
+					+ "AND b.strGuestCode=d.strGuestCode and a.strCheckInNo=e.strCheckInNo "
+					+ "and Date(a.dteDepartureDate) between '"+fromDate+"' and '"+toDate+"'";			
+			
 			List listOfCheckOut = objGlobalFunctionsService.funGetDataList(sqlParametersCheckOutList, "sql");
 			ArrayList fieldList = new ArrayList();
 
@@ -148,53 +157,24 @@ public class clsCheckOutListReportController {
 			for (int i = 0; i < listOfCheckOut.size(); i++) {
 				clsCheckOutListReportBean checkOutListBean = new clsCheckOutListReportBean();
 				Object[] arr = (Object[]) listOfCheckOut.get(i);
-				String strBillNo = arr[10].toString();
-				// clsCheckOutListReportBean checkOutListBean=new
-				// clsCheckOutListReportBean();
+				
 
-				checkOutListBean.setStrReservationNo(arr[0].toString());
-				checkOutListBean.setStrBookingTypeDesc(arr[1].toString());
-				checkOutListBean.setDteDateCreated(arr[2].toString());
-				checkOutListBean.setStrCorporateDesc(arr[3].toString());
-				// checkInListBean.setAgentDescription(agentDescription);
-				checkOutListBean.setStrBookerName(arr[4].toString());
-				checkOutListBean.setDteCancelDate(arr[5].toString());
-				checkOutListBean.setBusinessSrc(arr[6].toString());
-				checkOutListBean.setStrBillingInstDesc(arr[7].toString());
-				checkOutListBean.setStrFirstName(arr[8].toString());
-				checkOutListBean.setStrGuestCode(arr[9].toString());
-				checkOutListBean.setDblCreditAmt((arr[11] == null) ? 0 : Double.parseDouble(arr[11].toString()));
-
-				String sqlCheckOutListDtl = " select a.strFirstName,a.strMiddleName,a.strLastName,b.strRoomTypeDesc,a.strAddress," 
-						+ " a.strArrivalFrom,a.strProceedingTo,d.strRoomDesc" + " from tblguestmaster a,tblroomtypemaster b,tblbillhd c,tblroom d,tblcheckindtl e, tblbilldtl f " 
-						+ " where  date(c.dteBillDate) between '" + fromDate + "' and '" + toDate + "' " 
-						+ " and c.strBillNo='" + strBillNo + "' "
-						+ " and c.strCheckInNo=e.strCheckInNo and e.strGuestCode=a.strGuestCode" 
-						+ " and e.strRoomNo=d.strRoomCode and  d.strRoomTypeCode=b.strRoomTypeCode" 
-						+ " and  a.strClientCode='" + clientCode + "' " 
-						+ " and  b.strClientCode='" + clientCode + "' " 
-						+ " and  c.strClientCode='" + clientCode + "' " 
-						+ " and  d.strClientCode='" + clientCode + "' " 
-						+ " and  e.strClientCode='" + clientCode + "' group by b.strRoomTypeDesc ";
-				List checkOutDtlList = objGlobalFunctionsService.funGetDataList(sqlCheckOutListDtl, "sql");
-				List<clsCheckOutListReportDtlBean> listModelDtl = new ArrayList<clsCheckOutListReportDtlBean>();
-
-				for (int j = 0; j < checkOutDtlList.size(); j++) {
-					Object[] GuestArr = (Object[]) checkOutDtlList.get(j);
-					clsCheckOutListReportDtlBean objModelDtl = new clsCheckOutListReportDtlBean();
-
-					objModelDtl.setGuestFirstName(GuestArr[0].toString());
-					objModelDtl.setStrMiddleName(GuestArr[1].toString());
-					objModelDtl.setStrLastName(GuestArr[2].toString());
-					objModelDtl.setStrRoomTypeDesc(GuestArr[3].toString());
-					objModelDtl.setStrAddress(GuestArr[4].toString());
-					objModelDtl.setStrArrivalFrom(GuestArr[5].toString());
-					objModelDtl.setStrProceedingTo(GuestArr[6].toString());
-					objModelDtl.setStrRoomDesc(GuestArr[7].toString());
-					listModelDtl.add(objModelDtl);
-
-				}
-				checkOutListBean.setListCheckOutDtl(listModelDtl);
+				checkOutListBean.setStrCheckInNo(arr[0].toString());
+				checkOutListBean.setStrType(arr[1].toString());
+				checkOutListBean.setDteDateCreated(objGlobal.funGetDate("dd-MM-yyyy", arr[2].toString()));
+				checkOutListBean.setDteDepartureDate(objGlobal.funGetDate("dd-MM-yyyy", arr[3].toString()));
+				checkOutListBean.setStrRoomTypeCode(arr[4].toString());
+				checkOutListBean.setStrRoomTypeDesc(arr[5].toString());
+				checkOutListBean.setStrFirstName(arr[6].toString());
+				checkOutListBean.setStrMiddleName(arr[7].toString());
+				checkOutListBean.setStrLastName(arr[8].toString());
+				checkOutListBean.setStrAddress(arr[9].toString());
+				checkOutListBean.setDblReceiptAmt(Double.parseDouble(arr[10].toString()));
+				checkOutListBean.setStrArrivalFrom(arr[11].toString());
+				
+				
+				
+				
 				fieldList.add(checkOutListBean);
 			}
 

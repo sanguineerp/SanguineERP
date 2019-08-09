@@ -159,6 +159,7 @@
 			}
 			if(isAdvanceOk)
 			{
+				checkInNo='<%=session.getAttribute("AdvanceAmount").toString()%>';
 				window.open(getContextPath()+"/frmPMSPaymentAdvanceAmount.html?AdvAmount="+checkInNo);
 				session.removeAttribute("AdvanceAmount");
 				

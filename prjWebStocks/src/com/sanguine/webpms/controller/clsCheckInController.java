@@ -27,6 +27,7 @@ import com.sanguine.webpms.bean.clsCheckInBean;
 import com.sanguine.webpms.bean.clsCheckInDetailsBean;
 import com.sanguine.webpms.bean.clsFolioHdBean;
 import com.sanguine.webpms.bean.clsGuestMasterBean;
+import com.sanguine.webpms.bean.clsPostRoomTerrifBean;
 import com.sanguine.webpms.bean.clsReservationDetailsBean;
 import com.sanguine.webpms.bean.clsTaxCalculation;
 import com.sanguine.webpms.bean.clsTaxProductDtl;
@@ -72,7 +73,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,6 +153,9 @@ public class clsCheckInController {
 
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunService;
+	
+	@Autowired
+	private clsPostRoomTerrifController objPostRoomTerrif;
 	
 	// Open CheckIn
 	@RequestMapping(value = "/frmCheckIn", method = RequestMethod.GET)
@@ -1151,7 +1157,7 @@ public class clsCheckInController {
 			}
 		
 			
-			
+			funPostRoomTarrif(objHdModel.getStrCheckInNo(),clientCode,PMSDate,propCode);
 			
 			funSendSMSCheckIn(objHdModel.getStrCheckInNo(), clientCode, propCode);
 			req.getSession().setAttribute("success", true);
@@ -1163,6 +1169,121 @@ public class clsCheckInController {
 		} else {
 			return new ModelAndView("frmCheckIn");
 		}
+	}
+
+	private void funPostRoomTarrif(String strCheckInNo,String clientCode,String strpmsDate,String propCode) 
+	{
+		String[] arrSpDate = strpmsDate.split("-");
+		Date dtNextDate = new Date(Integer.parseInt(arrSpDate[0]), Integer.parseInt(arrSpDate[1]), Integer.parseInt(arrSpDate[2]));
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(dtNextDate);
+		cal.add(Calendar.DATE, 1);
+		String newStartDate = cal.getTime().getYear() + "-" + (cal.getTime().getMonth()) + "-" + (cal.getTime().getDate());
+		List<String> listRoomTerrifDocNo = new ArrayList<String>();
+		
+		String sqlPostRoom = "SELECT a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode, "
+				+ "IFNULL(a.strReservationNo,''), IFNULL(a.strWalkInNo,''),c.strRoomTypeCode, "
+				+ "IFNULL(SUM(d.dblIncomeHeadAmt),0), IFNULL(e.strComplimentry,'N') "
+				+ "FROM tblfoliohd a LEFT OUTER JOIN tblroompackagedtl d ON a.strCheckInNo=d.strCheckInNo,"
+				+ "tblroom b,tblroomtypemaster c,tblcheckinhd e WHERE a.strRoomNo=b.strRoomCode "
+				+ "AND b.strRoomTypeCode=c.strRoomTypeCode AND a.strCheckInNo=e.strCheckInNo "
+				+ "and e.strCheckInNo='"+strCheckInNo+"' GROUP BY a.strFolioNo ";
+		
+		List listRoomInfo = objGlobalFunctionsService.funGetListModuleWise(sqlPostRoom, "sql");
+        
+		for (int cnt = 0; cnt < listRoomInfo.size(); cnt++) 
+		{
+			clsPostRoomTerrifBean objPostRoomTerrifBean = new clsPostRoomTerrifBean();
+			Object[] arrObjRoom = (Object[]) listRoomInfo.get(cnt);
+			double dblRoomRate=0.0;
+			
+			if(!arrObjRoom[4].toString().equals(""))
+			{
+				 String sqlRoomRate=" select a.dblRoomRate from  tblreservationroomratedtl a "
+					        +" where a.strReservationNo='"+arrObjRoom[4].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+strpmsDate+"' ";
+				 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+				 
+				 	/*String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+newStartDate+"' where a.strClientCode='"+clientCode+"' AND a.strReservationNo='"+arrObjRoom[4].toString()+"' ";
+					objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql");*/ 
+
+				 
+				 if(listRoomRate.size()>0)
+				 {
+					 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
+				 }
+				 else
+				 {
+					  sqlRoomRate=" select a.dblRoomRate from  tblreservationroomratedtl a "
+						        +" where a.strReservationNo='"+arrObjRoom[4].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' order by date(a.dtDate) desc ";
+					  listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+					 if(listRoomRate.size()>0)
+					 {
+						 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
+					 }
+				 }
+			}
+			if(!arrObjRoom[5].toString().equals(""))
+			{
+				String sqlRoomRate=" select a.dblRoomRate from  tblwalkinroomratedtl a "
+					        +" where a.strWalkinNo='"+arrObjRoom[5].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+strpmsDate+"' ";
+				 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+				 
+				 	/*String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+newStartDate+"' where a.strClientCode='"+clientCode+"' AND a.strWalkInNo='"+arrObjRoom[5].toString()+"' ";
+					objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql"); */
+
+				 
+				 if(listRoomRate.size()>0)
+				 {
+				 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
+				 }
+				 else
+				 {
+					sqlRoomRate=" select a.dblRoomRate from  tblwalkinroomratedtl a "
+						        +" where a.strWalkinNo='"+arrObjRoom[5].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"'  order by date(a.dtDate) desc ";
+					  listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
+					 if(listRoomRate.size()>0)
+					 {
+					 dblRoomRate=Double.parseDouble(listRoomRate.get(0).toString());
+					 }
+				 }
+			}
+			objPostRoomTerrifBean = new clsPostRoomTerrifBean();
+			objPostRoomTerrifBean.setStrFolioNo(arrObjRoom[0].toString());
+			objPostRoomTerrifBean.setStrRoomNo(arrObjRoom[1].toString());
+			if(arrObjRoom[8].toString().equals("Y"))
+			{
+				objPostRoomTerrifBean.setDblRoomTerrif(0.0);
+				objPostRoomTerrifBean.setDblOriginalPostingAmt(0.0);
+			}
+			else
+			{
+				objPostRoomTerrifBean.setDblRoomTerrif(dblRoomRate);
+				objPostRoomTerrifBean.setDblOriginalPostingAmt(dblRoomRate);
+			}
+			objPostRoomTerrifBean.setStrFolioType("Room");
+			String folioNo = arrObjRoom[0].toString();
+			String docNo = objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean,  strpmsDate, arrObjRoom[3].toString());
+			listRoomTerrifDocNo.add(docNo);
+			if(Double.valueOf(arrObjRoom[7].toString())>0)
+			{   
+				dblRoomRate=Double.valueOf(arrObjRoom[7].toString())/2;
+				objPostRoomTerrifBean = new clsPostRoomTerrifBean();
+				objPostRoomTerrifBean.setStrFolioNo(arrObjRoom[0].toString());
+				objPostRoomTerrifBean.setStrRoomNo(arrObjRoom[1].toString());
+				objPostRoomTerrifBean.setDblRoomTerrif(dblRoomRate);
+				objPostRoomTerrifBean.setDblOriginalPostingAmt(dblRoomRate);
+				objPostRoomTerrifBean.setStrFolioType("Package");
+				folioNo = arrObjRoom[0].toString();
+				docNo=objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean,strpmsDate, arrObjRoom[3].toString());	
+				listRoomTerrifDocNo.add(docNo);
+			}
+			
+			
+			
+		
+		}
+		
+		
 	}
 
 	//check in slip

@@ -229,6 +229,8 @@ public class clsTaxMasterController {
 		objModel.setStrNotApplicableForComesa(objBean.getStrNotApplicableForComesa());
 		objModel.setStrTaxReversal(objBean.getStrTaxReversal());
 		objModel.setStrChargesPayable(objBean.getStrChargesPayable());
+		
+		
 	List <clsTaxSettlementMasterModel>listsettlemnt=new ArrayList<clsTaxSettlementMasterModel>();
 	if(objBean.getListTaxSettlement()!=null)
 			{

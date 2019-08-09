@@ -69,6 +69,7 @@ public class clsPropertySetupController {
 			model.put("panNo", "");
 			model.put("BranchName", "");
 			model.put("bankAcName", "");
+			model.put("", "");
 		} else {
 			model.put("checkInTime", objModel.getTmeCheckInTime());
 			model.put("checkOutTime", objModel.getTmeCheckOutTime());
@@ -79,7 +80,7 @@ public class clsPropertySetupController {
 			model.put("panNo", objModel.getStrPanNo());
 			model.put("BranchName", objModel.getStBranchName());
 			model.put("bankAcName", objModel.getStrBankAcName());
-
+			model.put("RoomLimit", objModel.getStrRoomLimit());
 			
 
 		}

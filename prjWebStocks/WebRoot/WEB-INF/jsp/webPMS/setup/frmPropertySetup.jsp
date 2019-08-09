@@ -116,11 +116,18 @@
 		
 		
 		$('#tmeCheckInTime').timepicker({
-		        'timeFormat':'H:i:s'
+		       
+			datepicker:false,
+		    formatTime:"h:i A",
+		    step:60,
+		    format:"h:i A"
 		});
 		 
 		$('#tmeCheckOutTime').timepicker({
-		        'timeFormat':'H:i:s'
+			datepicker:false,
+		    formatTime:"h:i A",
+		    step:60,
+		    format:"h:i A"
 		}); 			
 		/* 
 		$('#tmeCheckInTime').timepicker('setTime', new Date());
@@ -322,11 +329,11 @@
 			var roomLimit =  parseFloat($("#txtRoomLimit").val());
 			var noOfRoom =  parseFloat($("#txtNoOfRooms").val());
 			
-			if(roomLimit =="0" || roomLimit == "")
+			/* if(roomLimit =="0" || roomLimit == "")
 			{
 				 alert("Please Enter Room Limit");
 				 return false;
-			}
+			} 
 			else if(roomLimit!="0")
 			{
 				
@@ -334,9 +341,9 @@
 				   {
 					alert("Room Limit Cannot be greater than Number of Room.");
 				   	return false;
-				   }
-			}
+				   }*/
 			
+				
 		}
 		
 		function funRoomTypeLinkUpData(code)
@@ -877,6 +884,7 @@
 							    <td><s:input path="strGSTNo"  id="txtGSTNo"  value="${GSTNo}" cssClass="longTextBox" style="width: 190px" /></td>								    						    		        			
 							</tr>
 							
+							<tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
 							<br /><br />
 							
 									
@@ -885,7 +893,7 @@
 									     <td style="width: 5%;"><input type="text" class="numeric" id="txtNoOfRooms" Class="longTextBox" value="${listOfRoom}"/>
 									     </td>	
 									     <td style="width: 10%;"><label>Room Limit</label></td>
-									     <td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtRoomLimit" path="strRoomLimit" cssClass="longTextBox"/></td>	
+									     <td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtRoomLimit" path="strRoomLimit" value="${RoomLimit}"  cssClass="longTextBox"/></td>	
 									</tr>
 									
 									<tr>
@@ -912,6 +920,27 @@
 									<td style="width: 5%;"><s:input colspan="3" type="text" class="numeric" id="txtHSCCode" value="${HSCCode}" path="strHscCode" cssClass="longTextBox"/></td>
 									
 									</tr>
+									
+									<%-- <tr>
+									
+									<td ><label>Amount Decimal Places</label></td>
+										<td><s:select path="intdec" id="intdec"
+												cssClass="BoxW48px">
+												<s:option value="0">0</s:option>
+												<s:option value="1">1</s:option>
+												<s:option value="2">2</s:option>
+												<s:option value="3">3</s:option>
+												<s:option value="4">4</s:option>
+												<s:option value="5">5</s:option>
+												<s:option value="6">6</s:option>
+												<s:option value="7">7</s:option>
+												<s:option value="8">8</s:option>
+												<s:option value="9">9</s:option>
+												<s:option value="10">10</s:option>
+												
+											</s:select></td>
+									
+									</tr> --%>
 									
 									
 								

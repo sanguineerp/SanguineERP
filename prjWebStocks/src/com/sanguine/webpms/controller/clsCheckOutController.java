@@ -5,12 +5,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.webpms.bean.clsCheckInBean;
 import com.sanguine.webpms.bean.clsCheckOutBean;
 import com.sanguine.webpms.bean.clsCheckOutRoomDtlBean;
+import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
 import com.sanguine.webpms.model.clsBillDtlModel;
 import com.sanguine.webpms.model.clsBillHdModel;
 import com.sanguine.webpms.model.clsBillTaxDtlModel;
@@ -76,6 +80,13 @@ public class clsCheckOutController {
 
 	@Autowired
 	clsRoomMasterService objRoomMaster;
+	
+
+	@Autowired
+	private clsWebPMSDBUtilityDao objWebPMSUtility;
+	
+	@Autowired
+	private clsBillPrintingController objBillPrintingController;
 
 	// Open CheckIn
 	@RequestMapping(value = "/frmCheckOut", method = RequestMethod.GET)
@@ -196,13 +207,15 @@ public class clsCheckOutController {
 
 	// Save or Update CheckIn
 	@RequestMapping(value = "/saveCheckOut", method = RequestMethod.POST)
-	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsCheckOutBean objBean, BindingResult result, HttpServletRequest req) {
+	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsCheckOutBean objBean, BindingResult result, HttpServletRequest req,HttpServletResponse resp) {
 		String urlHits = "1";
 		try {
 			urlHits = req.getParameter("saddr").toString();
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
+		String strFolioNo="";
+		boolean checkFolioStatus=false;
 		if (!result.hasErrors()) {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
@@ -231,6 +244,7 @@ public class clsCheckOutController {
 					objBillHdModel.setStrClientCode(clientCode);
 					objBillHdModel.setStrCheckInNo(objFolioHdModel.getStrCheckInNo());
 					objBillHdModel.setStrFolioNo(objFolioHdModel.getStrFolioNo());
+					strFolioNo=objFolioHdModel.getStrFolioNo();
 					objBillHdModel.setStrRoomNo(objFolioHdModel.getStrRoomNo());
 					objBillHdModel.setStrExtraBedCode(objFolioHdModel.getStrExtraBedCode());
 					objBillHdModel.setStrRegistrationNo(objFolioHdModel.getStrRegistrationNo());
@@ -287,17 +301,64 @@ public class clsCheckOutController {
 					objBillHdModel.setListBillTaxDtlModels(listBillTaxDtlModel);
 					// objBillHdModel.setSetBillDtlModels(setBillDtlModel);
 					// objBillHdModel.setSetBillTaxDtlModels(setBillTaxDtlModel);
+					
+					LocalTime localTime = LocalTime.now();
+					DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+					
+					String strCurrentTime = localTime.format(dateTimeFormatter);
+					String sqlUpdateCheckOutTime = "update tblcheckinhd a set a.tmeDepartureTime='"+strCurrentTime+"' where a.strCheckInNo='"+objBillHdModel.getStrCheckInNo()+"'";
+					objWebPMSUtility.funExecuteUpdate(sqlUpdateCheckOutTime, "sql");
+					
 					objCheckOutService.funSaveCheckOut(objFolioHdModel, objBillHdModel);
+					
+					String sqlBillPerticulars = "select a.strPerticulars from tblbilldtl a where a.strBillNo='"+billNo+"' and a.strClientCode='"+clientCode+"'";
+					List listCheckForFullPayment= objGlobalFunctionsService.funGetListModuleWise(sqlBillPerticulars, "sql");
+					String strParticulars = "";
+					for(int j=0;j<listCheckForFullPayment.size();j++)
+					{
+						strParticulars = strParticulars+listCheckForFullPayment.get(j).toString()+",";
+					}
+					strParticulars=strParticulars.substring(0,strParticulars.length()-1);
+					
+					
+					objBillPrintingController.funGenerateBillPrintingReport(PMSDate, PMSDate, billNo, strParticulars, req, resp); 
+					
 				}
 				funSendSMSPayment(billNo, clientCode, RommNo, propCode);
 				req.getSession().setAttribute("success", true);
 				req.getSession().setAttribute("successMessage", "Room No. : ".concat(objBean.getStrSearchTextField()));
 			}
-			return new ModelAndView("redirect:/frmCheckOut.html?saddr=" + urlHits);
+			return new ModelAndView("frmCheckOut.html?saddr=" + urlHits);
 		} else {
 			return new ModelAndView("frmCheckOut?saddr=" + urlHits);
 		}
 	}
+	
+	@RequestMapping(value = "/isCheckFolioStatus", method = RequestMethod.GET)
+	public @ResponseBody boolean funIsCheckFolioStatus(@RequestParam("folioNo") String strFolioNo,@RequestParam("checkOutDate") String checkOutDate, HttpServletRequest req)
+	{
+		
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		boolean checkFolioStatus=true;
+		String sql = " select TIME_FORMAT(SYSDATE(),'%H:%i%p')from DUAL";
+		List listCheckFolio = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		String tmeCheckoutTime = "";
+		String strTimeDiff =  "";
+		if(listCheckFolio.size()>0)
+		{
+			tmeCheckoutTime = listCheckFolio.get(0).toString();
+		}
+		clsPropertySetupHdModel objModel = objPropertySetupService.funGetPropertySetup(propertyCode, clientCode);
+		if(tmeCheckoutTime.contains("PM"))
+		{
+			checkFolioStatus=false;
+		}
+				
+		
+		return checkFolioStatus;
+	}
+	
 
 	@RequestMapping(value = "/isPendingRoomTerrif", method = RequestMethod.POST)
 	public @ResponseBody boolean funIsPendingRoomTerrif(@RequestParam("roomCode") String roomCode, HttpServletRequest req) {

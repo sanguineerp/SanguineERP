@@ -523,8 +523,21 @@ public class clsPMSPaymentController {
 				Object[] obj = (Object[])listFoliaData.get(i);
 				clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
 				
-				String sqlRecipt="select sum(a.dblReceiptAmt) from tblreceipthd a where a.strReservationNo='"+obj[5].toString()+"'   group by a.strCheckInNo " ;
+				/*String sqlRecipt="select sum(a.dblReceiptAmt) from tblreceipthd a where a.strReservationNo='"+obj[5].toString()+"'   group by a.strCheckInNo " ;*/
+				String sqlRecipt="";
+				if(obj[5].toString().equals(""))
+				{
+				sqlRecipt = "SELECT ifnull(SUM(a.dblReceiptAmt),0) "
+						+ "FROM tblreceipthd a "
+						+ "WHERE a.strCheckInNo='"+obj[6].toString()+"' ";
 				
+				}
+				else
+				{
+					sqlRecipt = "SELECT ifnull(SUM(a.dblReceiptAmt),0) "
+							+ "FROM tblreceipthd a "
+							+ "WHERE a.strCheckInNo='"+obj[5].toString()+"' ";
+				}
 				List listRecipt = objGlobalFunctionsService.funGetListModuleWise(sqlRecipt, "sql");
 				double reciptAmt=0.0;
 				if(listRecipt.size()>0)
@@ -532,11 +545,13 @@ public class clsPMSPaymentController {
 					reciptAmt=Double.parseDouble(listRecipt.get(0).toString());	
 					
 				}
+				NumberFormat formatter = new DecimalFormat("0.00");
+				double dblBal = Double.parseDouble(obj[4].toString())-reciptAmt;
 				objPaymentReciptBean.setStrGuestCode(obj[0].toString());
 				objPaymentReciptBean.setStrFirstName(obj[1].toString());
 				objPaymentReciptBean.setStrMiddleName(obj[2].toString());
 				objPaymentReciptBean.setStrLastName(obj[3].toString());
-				objPaymentReciptBean.setDblBalanceAmount(Double.parseDouble(obj[4].toString())-reciptAmt);
+				objPaymentReciptBean.setDblBalanceAmount(Double.parseDouble(formatter.format(dblBal)));
 				listGuestDataDtl.add(objPaymentReciptBean);
 				}
 			}

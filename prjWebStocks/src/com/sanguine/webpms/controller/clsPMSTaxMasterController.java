@@ -22,6 +22,7 @@ import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webpms.bean.clsPMSTaxMasterBean;
 import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
+import com.sanguine.webpms.model.clsPMSSettlementTaxMasterModel;
 import com.sanguine.webpms.model.clsPMSTaxMasterModel;
 import com.sanguine.webpms.model.clsPMSTaxMasterModel_ID;
 import com.sanguine.webpms.service.clsPMSTaxMasterService;
@@ -163,7 +164,10 @@ public class clsPMSTaxMasterController {
 			
 			clsPMSTaxMasterModel objModel = funPrepareModel(objBean, userCode, clientCode, propertyCode);
 			objPMSTaxMasterService.funAddUpdatePMSTaxMaster(objModel);
-
+			
+			//clsPMSSettlementMasterModel objModel1 = funPrepareModelSettlemet(objBean, userCode, clientCode, propertyCode);
+			//objPMSTaxMasterService.funAddUpdatePMSSettlementTaxMaster(objModel1);
+			
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Tax Code : ".concat(objModel.getStrTaxCode()));
 
@@ -222,6 +226,24 @@ public class clsPMSTaxMasterController {
 		}
 	}*/
 
+	/*private clsPMSSettlementMasterModel funPrepareModelSettlemet(clsPMSTaxMasterBean objBean, String userCode, String clientCode,
+			String propertyCode) {
+	
+		
+		 
+		for (clsPMSSettlementMasterModel objModel : objBean.getListSettlement()) 
+		{
+			objBean.setStrSettlementCode(objModel.getStrSettlementCode());
+			objBean.setStrSettlementDesc(objModel.getStrSettlementName());
+			break;
+		}
+			
+		
+		
+		
+		return objModel;
+	}*/
+
 	// Convert bean to model function
 	private clsPMSTaxMasterModel funPrepareModel(clsPMSTaxMasterBean objBean, String userCode, String clientCode, String propertyCode) {
 		long lastNo = 0;
@@ -276,7 +298,37 @@ public class clsPMSTaxMasterController {
 		objModel.setStrUserEdited(userCode);
 		objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 		objModel.setStrAccountCode(objBean.getStrAccountCode());
-
+		
+		List<clsPMSSettlementTaxMasterModel> listSetTAxModel =new ArrayList();
+		
+		if(objBean.getListSettlement()!=null && objBean.getListSettlement().size()>0){
+			for(clsPMSSettlementTaxMasterModel objSettlmentTax :objBean.getListSettlement())
+			{
+				if(objSettlmentTax.getStrApplicable()!=null ){
+					objSettlmentTax.setStrApplicable("Y");
+				}else{
+					objSettlmentTax.setStrApplicable("N");
+				}
+				objSettlmentTax.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+				objSettlmentTax.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+				objSettlmentTax.setStrUserCreated(userCode);
+				objSettlmentTax.setStrUserEdited(userCode);
+				objSettlmentTax.setDteFrom(objGlobal.funGetDate("yyyy-MM-dd", objBean.getDteValidFrom()));
+				objSettlmentTax.setDteTo(objGlobal.funGetDate("yyyy-MM-dd", objBean.getDteValidTo()));
+				listSetTAxModel.add(objSettlmentTax);
+			}
+		}
+		objModel.setListSettlementTaxModels(listSetTAxModel);
+		
+		
+		
+		/*if(objBean.getListSettlement()!=null && objBean.getListSettlement().size()>0){
+			for(int k=0;k<objBean.getListSettlement().size();k++){
+				
+				
+			}
+		}
+		*/
 		return objModel;
 	}
 
@@ -285,6 +337,24 @@ public class clsPMSTaxMasterController {
 		String code = null;
 		code = objPMSTaxMasterService.funGetCodeFromName(fieldToBeSeleted, fromFieldName, fromFieldNameValue, fromTableName, clientCode);
 		return code;
+	}
+	
+	@RequestMapping(value = "/loadSettlementData", method = RequestMethod.GET)
+	public @ResponseBody List funLoadSettlementMasterData(HttpServletRequest req) {
+		List list =null;
+		try{
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		
+		String sqlSettlement = "select a.strSettlementCode,a.strSettlementDesc from tblsettlementmaster a";
+		list= objGlobalFunctionsService.funGetDataList(sqlSettlement, "sql");
+			
+				
+			}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }

@@ -34,8 +34,7 @@
 			
 		
 			
-			 /* window.open(getContextPath()+"/rptChangedRoomTypeReport.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+" "); */ 
-			 window.open(getContextPath()+"/rptChangedRoomReport.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+" "); 
+			window.open(getContextPath()+"/rptBlockRoomReport.html?fromDate="+fy+"-"+fm+"-"+fd+"&toDate="+ty+"-"+tm+"-"+td+" ");
 		
 		return flag;
 	}
@@ -62,11 +61,12 @@
 		
 		
 </script>
+
 <body onload="funOnLoad();">
 	<div id="formHeading">
-		<label>Change Room Report </label>
+		<label>Block Room Report </label>
 	</div>
-	<s:form name="frmCheckInList" method="GET" action="" >
+	<s:form name="frmBlockRoomReport" method="GET" action="" >
 		
 	<table class="masterTable">
 		<br/><br/>
