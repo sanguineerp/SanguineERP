@@ -86,10 +86,17 @@ public class clsCheckInCheckOutListController {
 			List list = new ArrayList<>();
 			List AllGuestlist= new ArrayList();
 			List DataGuestList=null;
+			
+			
 			String dteArrDate = objGlobal.funGetDate("yyyy-MM-dd", objBean.getStrArrivedDate());
 			String dteDepDate = objGlobal.funGetDate("yyyy-MM-dd", objBean.getDteDepartureDate());
 			String header = "Name Of Hotel / Guest House,Name Of Hotel Owner,Name ,Address of Passenger,Mobile No.,Passenger Passport/visa details,Propose Of visit,Total Days Of stay,Arrived Date,Departure Date";
 			List ExportList = new ArrayList();
+			
+			String repeortfileName = "CheckIn-CheckOutReport";
+			repeortfileName = repeortfileName.replaceAll(" ", "");
+			ExportList.add(repeortfileName);
+			
 			String[] ExcelHeader = header.split(",");
 			ExportList.add(ExcelHeader);
 			try{
@@ -131,8 +138,9 @@ public class clsCheckInCheckOutListController {
 				ex.printStackTrace();
 				}
 			ExportList.add(AllGuestlist);
+			//excelView
 			
-			return new ModelAndView("excelView", "stocklist", ExportList);
+			return new ModelAndView("excelViewWithReportName", "listWithReportName", ExportList);
 		}
 
 

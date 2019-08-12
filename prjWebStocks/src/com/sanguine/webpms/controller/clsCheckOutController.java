@@ -168,6 +168,12 @@ public class clsCheckOutController {
 				Object[] arrObjFolio = (Object[]) listReceiptAmtAtCheckIN.get(cnt);
 				objCheckOutRoomDtlBean.setDblAmount(objCheckOutRoomDtlBean.getDblAmount() - Double.parseDouble(arrObjFolio[1].toString()));
 			}
+			
+			sql = "SELECT Sum(a.dblCreditAmt) from tblfoliodtl a where a.strFolioNo='"+obj[6].toString()+"'";
+			List listFolioDisc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+			for (int cnt = 0; cnt < listFolioDisc.size(); cnt++) {
+				objCheckOutRoomDtlBean.setDblAmount(objCheckOutRoomDtlBean.getDblAmount() - Double.parseDouble(listFolioDisc.get(cnt).toString()));
+			}
             
 			boolean flgIsFullPayment=false;
 			if(!objCheckOutRoomDtlBean.getStrReservationNo().toString().isEmpty())

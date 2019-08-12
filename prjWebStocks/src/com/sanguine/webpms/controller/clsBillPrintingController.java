@@ -369,7 +369,16 @@ public class clsBillPrintingController {
 
 						billPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate)));
 						billPrintingBean.setStrDocNo(docNo);
-						billPrintingBean.setStrPerticulars(particulars);
+						if(folioArr[7].toString().equalsIgnoreCase("Folio Discount"))
+						{
+							particulars = particulars+" %";
+							billPrintingBean.setStrPerticulars(particulars);
+						}
+						
+						else
+						{
+							billPrintingBean.setStrPerticulars(particulars);
+						}
 						billPrintingBean.setDblDebitAmt(debitAmount);
 						billPrintingBean.setDblCreditAmt(creditAmount);
 						billPrintingBean.setDblBalanceAmt(balance);

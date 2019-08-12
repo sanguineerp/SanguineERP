@@ -898,6 +898,11 @@
 				  var roomNo=indexData.cells[0].childNodes[0].defaultValue;
 				  var count=indexData.cells[1].cellIndex;
 				  
+				  var table2=document.getElementById("tblDays");
+				  var indexDate=table2.rows[0];
+				  var roomDate=table2.rows[0].cells[index-1].childNodes[0].defaultValue;
+				  
+				  
 				  if(obj.parentNode.cellIndex>1)
 					  {
 						  alert("Proceed to Reservation \n\n"+message);

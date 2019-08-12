@@ -119,7 +119,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Registration No   :]]></text>
+				<text><![CDATA[Registration No  :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="136" width="94" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
@@ -133,7 +133,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Room No             :]]></text>
+				<text><![CDATA[Room No            :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="211" width="94" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>

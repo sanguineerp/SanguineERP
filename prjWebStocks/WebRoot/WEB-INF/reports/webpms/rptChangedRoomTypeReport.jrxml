@@ -90,7 +90,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Changed RoomType Report]]></text>
+				<text><![CDATA[Changed Room Report]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="126" width="61" height="14" uuid="ec80667e-e6d5-4fd3-82f9-65495e2fc4c3"/>
@@ -176,7 +176,7 @@
 		<band height="54" splitType="Stretch">
 			<textField>
 				<reportElement x="165" y="10" width="60" height="20" uuid="3641bf56-1f45-4f4b-83f1-36756e3bf5f4"/>
-				<textFieldExpression><![CDATA[$F{strOldRoomName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{strNewRoomName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="390" y="10" width="90" height="20" uuid="520bd95e-f81a-4753-9b3f-3119c02703e2"/>

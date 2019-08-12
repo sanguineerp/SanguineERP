@@ -153,7 +153,8 @@ function funExecuteReport()
 	    	dataType: "json",
 	    
 	    	success: function (response) {
-	    		strSelectBill=response.strBillPerticular;
+	    		/* strSelectBill=response.strBillPerticular; */
+	    		alert('Success.');
 	    	},
 	        error: function(jqXHR, exception)
 	   		 {

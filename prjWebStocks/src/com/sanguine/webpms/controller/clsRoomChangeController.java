@@ -251,6 +251,8 @@ public class clsRoomChangeController {
 			String pmsDate = req.getSession().getAttribute("PMSDate").toString();
 			String[] changedDate = pmsDate.split("-");
 			String dteChangedRoom = changedDate[2]+"-"+changedDate[1]+"-"+changedDate[0];
+			String strReasonCode = objBean.getStrReasonCode();
+			String strRemarks = objBean.getStrRemarks();
 			
 			String sqlOfChangeRoom = "select a.strRoomDesc as previousRoom,a.strRoomTypeDesc as previousroomType,d.strFolioNo,b.strCheckInNo,date(b.dteCheckInDate),concat(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName) "
 						+ " ,b.strRemarks,b.strReasonCode,a.strStatus,e.strGuestCode "
@@ -270,7 +272,7 @@ public class clsRoomChangeController {
 				{
 					Object[] obj = (Object[]) listData.get(i);
 					sqlOfChangeRoom = "insert into tblchangeroom (strRoomNo,strRoomTypeCode,strFolioNo,strGuestCode,strReason,strRemark,strUserEdited,dteChangeDate) "
-							+ " values('"+obj[0].toString()+"','"+obj[1].toString()+"','"+obj[2].toString()+"','"+obj[9].toString()+"','"+obj[7].toString()+"','"+obj[6].toString()+"','"+userCode+"','"+dteChangedRoom+" ')";
+							+ " values('"+obj[0].toString()+"','"+obj[1].toString()+"','"+obj[2].toString()+"','"+obj[9].toString()+"','"+strReasonCode+"','"+strRemarks+"','"+userCode+"','"+dteChangedRoom+" ')";
 					objWebPMSUtility.funExecuteUpdate(sqlOfChangeRoom, "sql"); 
 				
 				}
