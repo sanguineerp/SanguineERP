@@ -2050,14 +2050,16 @@
 					<td colspan="1"></td>
 				</tr>
 				<tr>
-				<td><label>Room Type</label></td>
-				<td>
-                  <input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" /></td>
-				<td><label id="lblRoomType"></label></td>
-			    <td colspan="1" ></td>
-				<td><label>Extra Bed</label></td>
+				<td><label id="lblRoomType">Room Type</label></td>
+				<td><input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" /></td>
+				
+			    <!-- <td><label id="lblRoomNo">Room</label></td>
+			    <td><input type="text" id="txtRoomNo" name="txtRoomNo" path="strRoomNo" ondblclick="funHelp('roomCode')" Class="searchTextBox"/></td> 
+				 -->
+				<td><label id="lblExtraBed">Extra Bed</label></td>
 				<td><input type="text" id="txtExtraBed" name="txtExtraBed" Class="searchTextBox" ondblclick="funHelp('extraBed')" /></td>
-				<td><label id="lblExtraBed"></label></td>
+				<td colspan="1" ></td>
+				
 				</tr>
 				
 				<tr>
@@ -2281,8 +2283,7 @@
 		<s:input type="hidden" id="txtTotalPackageAmt" path="strTotalPackageAmt"></s:input>
 		
 		
-			<input type="hidden" id="txtRoomNo" name="txtRoomNo" path="strRoomDesc" ondblclick="funHelp('roomCode')" Class="searchTextBox"/> 
-				<td><label type="hidden" id="lblRoomNo"></label></td>
+			
 		<br />
 		<br />
 

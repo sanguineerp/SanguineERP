@@ -149,6 +149,7 @@ public class clsBlockRoomReportController {
 		hm.put("toDate", toDate);
 		hm.put("pContactDetails", "");
 		
+		if (dataList != null && !dataList.isEmpty()){
 		
 		JasperDesign jd = JRXmlLoader.load(reportName);
 		JasperReport jr = JasperCompileManager.compileReport(jd);
@@ -180,8 +181,11 @@ public class clsBlockRoomReportController {
 				servletOutputStream.flush();
 				servletOutputStream.close();
 			}
+		}
 		} else {
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			/*resp.getWriter().append("No Record Found");*/
+
 			try {
 				resp.getWriter().append("No Record Found");
 			} catch (IOException e1) {

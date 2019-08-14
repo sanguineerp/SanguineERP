@@ -66,7 +66,9 @@
 		<label>Pax Report </label>
 	</div>
 	<s:form name="frmPaxReport" method="GET" action="" >
-		
+		<br/>
+		<br/>
+		<br/>
 	<table class="masterTable">
 		
 			<tr>

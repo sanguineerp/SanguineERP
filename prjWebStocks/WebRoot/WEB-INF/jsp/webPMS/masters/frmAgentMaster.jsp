@@ -157,6 +157,24 @@
 			alert('Please Enter Description ');
 			flg=false;
 		}
+		if($('#txtMobileNo').val()=='')
+		{
+			alert('Please Enter Mobile Number ');
+			flg=false;
+		}
+		
+		if($('#txtTelphoneNo').val()=='')
+		{
+			alert('Please Enter Telephone Number ');
+			flg=false;
+		}
+		
+		if($('#txtAddress').val()=='')
+		{
+			alert('Please Enter Address ');
+			flg=false;
+		}
+		
 		return flg;
 	}
 	
