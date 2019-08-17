@@ -302,7 +302,7 @@ function funGetFormName(){
   });
 }
 
-
+<%-- 
    $(document).ready(function()
 {
 	var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
@@ -312,7 +312,7 @@ function funGetFormName(){
 		  $("#txtPMSDate").text(dte[0]+"-"+dte[1]+"-"+dte[2]); 	
 	  }
  });  
-
+ --%>
 
 </script>
 </head>

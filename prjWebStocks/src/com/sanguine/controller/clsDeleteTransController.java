@@ -132,15 +132,24 @@ public class clsDeleteTransController {
 	public ModelAndView funOpenForm(@ModelAttribute("command") clsDeleteTransactionBean objBean, BindingResult result, Map<String, Object> model, HttpServletRequest req) {
 		String strModule = "1";
 		Map<String, String> mapTransForms = new HashMap<String, String>();
-		StringBuilder sqlBuilder = new StringBuilder("select strFormName,strFormDesc from clsTreeMasterModel " + "where strType='T' and strModule='" + strModule + "' " + "order by strFormName");
-		List list = objGlobalFunService.funGetList(sqlBuilder.toString(), "hql");
-		for (int cnt = 0; cnt < list.size(); cnt++) {
-			Object[] arrObj = (Object[]) list.get(cnt);
-			mapTransForms.put(arrObj[0].toString(), arrObj[1].toString());
-		}
-		mapTransForms.put("frmInvoice", "Invoice");
-		mapTransForms.put("frmSalesReturn", "Sales Return");
-		mapTransForms.put("frmSalesOrder", "Sales Order");
+		
+		 if(req.getSession().getAttribute("selectedModuleName").equals("6-WebCRM"))
+		 {
+				mapTransForms.put("frmInvoice", "Invoice");
+				mapTransForms.put("frmSalesReturn", "Sales Return");
+				mapTransForms.put("frmSalesOrder", "Sales Order"); 
+		 }
+		 else
+		 {
+			 StringBuilder sqlBuilder = new StringBuilder("select strFormName,strFormDesc from clsTreeMasterModel " + "where strType='T' and strModule='" + strModule + "' " + "order by strFormName");
+				List list = objGlobalFunService.funGetList(sqlBuilder.toString(), "hql");
+				for (int cnt = 0; cnt < list.size(); cnt++) {
+					Object[] arrObj = (Object[]) list.get(cnt);
+					mapTransForms.put(arrObj[0].toString(), arrObj[1].toString());
+				}
+			 
+		 }
+	
 		
 		mapTransForms.remove("frmExciseOpeningStock");
 		mapTransForms.remove("frmStockAdjustment");

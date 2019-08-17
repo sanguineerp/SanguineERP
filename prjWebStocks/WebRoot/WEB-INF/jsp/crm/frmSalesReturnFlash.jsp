@@ -268,7 +268,7 @@
 			    row.insertCell(2).innerHTML= "<input name=\"dteSRDate["+(rowCount)+"]\" id=\"dteSRDate."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.dteSRDate+">";
 			    row.insertCell(3).innerHTML= "<input name=\"strDCCode["+(rowCount)+"]\" id=\"strDCCode."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.strDCCode+">";
 			    row.insertCell(4).innerHTML= "<input name=\"strCustName["+(rowCount)+"]\" readonly=\"readonly\"  class=\"Box\" size=\"25%\" id=\"strCustName."+(rowCount)+"\" value='"+data.strCustName+"'>";
-			    row.insertCell(5).innerHTML= "<input name=\"strAgainst["+(rowCount)+"]\" id=\"strAgainst."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.strAgainst+">";		    	   
+			    row.insertCell(5).innerHTML= "<input name=\"strAgainst["+(rowCount)+"]\" id=\"strAgainst."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value='"+data.strAgainst+"'>";		    	   
 			    row.insertCell(6).innerHTML= "<input name=\"DblSubTotalAmt["+(rowCount)+"]\" id=\"DblSubTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"8%\" class=\"Box\" value="+data.dblTotalAmt+">";
 			    row.insertCell(7).innerHTML= "<input name=\"DblTaxAmt["+(rowCount)+"]\" id=\"DblTaxAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"12%\" class=\"Box\" value="+data.dblTaxAmt+">";
 			    row.insertCell(8).innerHTML= "<input name=\"DblTotalAmt["+(rowCount)+"]\" id=\"DblTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"12%\" class=\"Box\" value="+data.dblGrandTotal+">";
@@ -343,7 +343,7 @@
 				    row.insertCell(2).innerHTML= "<input name=\"strAgainst["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strAgainst."+(rowCount)+"\" value='"+data.strAgainst+"'>";
 				    row.insertCell(3).innerHTML= "<input name=\"dteSRDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"12%\" id=\"dteSRDate."+(rowCount)+"\" value='"+data.dteSRDate+"'>";
 				    row.insertCell(4).innerHTML= "<input name=\"CustomerName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"CustomerName."+(rowCount)+"\" value='"+data.strCustName+"'>";
-				    row.insertCell(5).innerHTML= "<input name=\"strLocName["+(rowCount)+"]\" id=\"strLocName."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.strLocName+">";
+				    row.insertCell(5).innerHTML= "<input name=\"strLocName["+(rowCount)+"]\" id=\"strLocName."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value='"+data.strLocName+"'>";
 				    row.insertCell(6).innerHTML= "<input name=\"dblQty["+(rowCount)+"]\" id=\"dblQty."+(rowCount)+"\" readonly=\"readonly\"   style=\"text-align: right;\" size=\"9%\" class=\"Box\" value="+data.dblConversion+">";
 				    row.insertCell(7).innerHTML= "<input name=\"DblSubTotalAmt["+(rowCount)+"]\" id=\"DblSubTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblTotalAmt+">";
 				   // row.insertCell(8).innerHTML= "<input name=\"DblTaxAmt["+(rowCount)+"]\" id=\"DblTaxAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblTaxAmt+">";
@@ -416,8 +416,8 @@
 			    
 			    row.insertCell(0).innerHTML= "<input name=\"customerCode["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"customerCode."+(rowCount)+"\" value='"+data.strSRCode+"'>";
 			    row.insertCell(1).innerHTML= "<input name=\"CustomerName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"CustomerName."+(rowCount)+"\" value='"+data.strCustName+"'>";	    
-			    row.insertCell(2).innerHTML= "<input name=\"strAgainst["+(rowCount)+"]\" id=\"strAgainst."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.strAgainst+">";
-			    row.insertCell(3).innerHTML= "<input name=\"strLocName["+(rowCount)+"]\" id=\"strLocName."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.strLocName+">";
+			    row.insertCell(2).innerHTML= "<input name=\"strAgainst["+(rowCount)+"]\" id=\"strAgainst."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value='"+data.strAgainst+"'>";
+			    row.insertCell(3).innerHTML= "<input name=\"strLocName["+(rowCount)+"]\" id=\"strLocName."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value='"+data.strLocName+"'>";
 			    row.insertCell(4).innerHTML= "<input name=\"dteSRDate["+(rowCount)+"]\" id=\"dteSRDate."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.dteSRDate+">";
 			    row.insertCell(5).innerHTML= "<input name=\"DblSubTotalAmt["+(rowCount)+"]\" id=\"DblSubTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"12%\" class=\"Box\" value="+data.dblTotalAmt+">";
 			    
@@ -486,7 +486,7 @@
 				    row.insertCell(2).innerHTML= "<input name=\"strAgainst["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strAgainst."+(rowCount)+"\" value='"+data.strAgainst+"'>";
 				    row.insertCell(3).innerHTML= "<input name=\"dteSRDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"12%\" id=\"dteSRDate."+(rowCount)+"\" value='"+data.dteSRDate+"'>";
 				    row.insertCell(4).innerHTML= "<input name=\"CustomerName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"CustomerName."+(rowCount)+"\" value='"+data.strCustName+"'>";
-				    row.insertCell(5).innerHTML= "<input name=\"strLocName["+(rowCount)+"]\" id=\"strLocName."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.strLocName+">";
+				    row.insertCell(5).innerHTML= "<input name=\"strLocName["+(rowCount)+"]\" id=\"strLocName."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value='"+data.strLocName+"'>";
 				    row.insertCell(6).innerHTML= "<input name=\"dblQty["+(rowCount)+"]\" id=\"dblQty."+(rowCount)+"\" readonly=\"readonly\"   style=\"text-align: right;\" size=\"9%\" class=\"Box\" value="+data.dblConversion+">";
 				    row.insertCell(7).innerHTML= "<input name=\"DblSubTotalAmt["+(rowCount)+"]\" id=\"DblSubTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblTotalAmt+">";
 				   // row.insertCell(8).innerHTML= "<input name=\"DblTaxAmt["+(rowCount)+"]\" id=\"DblTaxAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblTaxAmt+">";

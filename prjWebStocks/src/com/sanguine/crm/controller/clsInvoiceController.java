@@ -388,57 +388,16 @@ public class clsInvoiceController
 			// /********Save Data forDetail in SO***********////
 
 			StringBuilder sqlQuery = new StringBuilder();
-			int decimalPlaces = Integer.parseInt(req.getSession().getAttribute("amtDecPlace").toString());
-			String pattern = "";
-			if (decimalPlaces == 1)
-			{
-				pattern = "#.#";
-			}
-			else if (decimalPlaces == 2)
-			{
-				pattern = "#.##";
-			}
-			else if (decimalPlaces == 3)
-			{
-				pattern = "#.###";
-			}
-			else if (decimalPlaces == 4)
-			{
-				pattern = "#.####";
-			}
-			else if (decimalPlaces == 5)
-			{
-				pattern = "#.#####";
-			}
-			else if (decimalPlaces == 6)
-			{
-				pattern = "#.######";
-			}
-			else if (decimalPlaces == 7)
-			{
-				pattern = "#.#######";
-			}
-			else if (decimalPlaces == 8)
-			{
-				pattern = "#.########";
-			}
-			else if (decimalPlaces == 9)
-			{
-				pattern = "#.#########";
-			}
-			else if (decimalPlaces == 10)
-			{
-				pattern = "#.##########";
-			}
-
-			DecimalFormat decFormat = new DecimalFormat(pattern);
+			DecimalFormat decFormat = objGlobalFunctions.funGetDecimatFormat(req);
 
 			List<clsInvoiceModelDtl> listInvDtlModel = null;
 			Map<String, List<clsInvoiceModelDtl>> hmInvCustDtl = new HashMap<String, List<clsInvoiceModelDtl>>();
 			Map<String, Map<String, clsInvoiceTaxDtlModel>> hmInvCustTaxDtl = new HashMap<String, Map<String, clsInvoiceTaxDtlModel>>();
 			Map<String, List<clsInvoiceProdTaxDtl>> hmInvProdTaxDtl = new HashMap<String, List<clsInvoiceProdTaxDtl>>();
 			List<clsInvoiceDtlBean> listInvDtlBean = objBean.getListclsInvoiceModelDtl();
-
+			Map mapSubTotal=new HashMap<>();
+			double dblSubTotalAmt=0;
+			
 			for (clsInvoiceDtlBean objInvDtl : listInvDtlBean)
 			{
 				if (!(objInvDtl.getDblQty() == 0))
@@ -473,9 +432,9 @@ public class clsInvoiceController
 					objInvDtlModel.setIntindex(objInvDtl.getIntindex());
 					objInvDtlModel.setStrInvoiceable(objInvDtl.getStrInvoiceable());
 					objInvDtlModel.setStrSerialNo(objInvDtl.getStrSerialNo());
-					objInvDtlModel.setDblUnitPrice(objInvDtl.getDblUnitPrice() * dblCurrencyConv);
-					objInvDtlModel.setDblAssValue(objInvDtl.getDblAssValue() * dblCurrencyConv);
-					objInvDtlModel.setDblBillRate(objInvDtl.getDblBillRate() * dblCurrencyConv);
+					objInvDtlModel.setDblUnitPrice(Double.parseDouble(decFormat.format(objInvDtl.getDblUnitPrice() * dblCurrencyConv)));
+					objInvDtlModel.setDblAssValue(Double.parseDouble(decFormat.format(objInvDtl.getDblAssValue() * dblCurrencyConv)));
+					objInvDtlModel.setDblBillRate(Double.parseDouble(decFormat.format(objInvDtl.getDblBillRate() * dblCurrencyConv)));
 					objInvDtlModel.setStrSOCode(objInvDtl.getStrSOCode());
 					objInvDtlModel.setStrCustCode(objInvDtl.getStrCustCode());
 					objInvDtlModel.setStrUOM(objProdTempUom.getStrReceivedUOM());
@@ -514,7 +473,7 @@ public class clsInvoiceController
 					objInvProdTaxDtl.setStrProdCode(objInvDtl.getStrProdCode());
 					objInvProdTaxDtl.setStrCustCode(objInvDtl.getStrCustCode());
 					objInvProdTaxDtl.setStrDocNo("Margin");
-					objInvProdTaxDtl.setDblValue(marginAmt);
+					objInvProdTaxDtl.setDblValue(Double.parseDouble(decFormat.format(marginAmt)));
 					objInvProdTaxDtl.setDblTaxableAmt(0);
 					objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
 					listInvProdTaxDtl.add(objInvProdTaxDtl);
@@ -571,10 +530,8 @@ public class clsInvoiceController
 						String shortName = taxDtl.split("#")[6];
 
 						double taxAmtForSingleQty = taxAmt / objInvDtl.getDblQty();
-						if (!pattern.trim().isEmpty())
-						{
-							taxAmtForSingleQty = Double.parseDouble(decFormat.format(taxAmtForSingleQty));
-						}
+						
+						taxAmtForSingleQty = Double.parseDouble(decFormat.format(taxAmtForSingleQty));
 						taxAmt = taxAmtForSingleQty * objInvDtl.getDblQty();
 
 						// For Check it is Correct Or not
@@ -609,6 +566,13 @@ public class clsInvoiceController
 						objInvProdTaxDtl.setDblTaxableAmt(taxableAmt);
 						objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
 						listInvProdTaxDtl.add(objInvProdTaxDtl);
+						
+						if(!mapSubTotal.containsKey(objInvProdTaxDtl.getStrProdCode()))
+						{
+							dblSubTotalAmt=dblSubTotalAmt+objInvProdTaxDtl.getDblTaxableAmt();
+						}
+						
+						mapSubTotal.put(objInvProdTaxDtl.getStrProdCode(), dblSubTotalAmt);
 					}
 
 					hmInvCustTaxDtl.put(key, hmInvTaxDtl);
@@ -648,11 +612,9 @@ public class clsInvoiceController
 					}
 
 					double assableUnitRate = (assesableRate / objInvDtlModel.getDblQty());
-					if (!pattern.trim().isEmpty())
-					{
-						assableUnitRate = Double.parseDouble(decFormat.format(assableUnitRate));
-					}
-
+					
+					assableUnitRate = Double.parseDouble(decFormat.format(assableUnitRate));
+					
 					objInvDtlModel.setDblAssValue(assableUnitRate * objInvDtlModel.getDblQty());
 					// objInvDtlModel.setDblAssValue(assesableRate);
 					listInvDtlModel.add(objInvDtlModel);
@@ -763,7 +725,8 @@ public class clsInvoiceController
 					String key = custCode + "!" + excisable;
 					if (pickMRP.equals("Y"))
 					{
-						List<clsInvoiceProdTaxDtl> listInvProdTaxDtl = hmInvProdTaxDtl.get(key);
+						totalAmt += objInvItemDtl.getDblAssValue();
+						/*List<clsInvoiceProdTaxDtl> listInvProdTaxDtl = hmInvProdTaxDtl.get(key);
 						for (clsInvoiceProdTaxDtl objInvTaxModel : listInvProdTaxDtl)
 						{
 							if (objInvItemDtl.getStrProdCode().equals(objInvTaxModel.getStrProdCode()))
@@ -795,7 +758,9 @@ public class clsInvoiceController
 									}
 								}
 							}
-						}
+						}*/
+						
+						
 					}
 					else
 					{
@@ -856,7 +821,7 @@ public class clsInvoiceController
 					}
 				}
 
-				double grandTotal = totalAmt + taxAmt+objHDModel.getDblExtraCharges();
+				double grandTotal = dblSubTotalAmt + taxAmt+objHDModel.getDblExtraCharges();
 				subTotal = totalAmt + excisableTaxAmt;
 
 				if (exciseable.equalsIgnoreCase("Y"))
@@ -869,9 +834,9 @@ public class clsInvoiceController
 				{
 					objHDModel.setDblTotalAmt(totalAmt);
 				}
-				objHDModel.setDblSubTotalAmt(subTotal);
-				objHDModel.setDblTaxAmt(taxAmt);
-				objHDModel.setDblGrandTotal(grandTotal);
+				objHDModel.setDblSubTotalAmt(Double.parseDouble(decFormat.format(dblSubTotalAmt)));
+				objHDModel.setDblTaxAmt(Double.parseDouble(decFormat.format(taxAmt)));
+				objHDModel.setDblGrandTotal(Double.parseDouble(decFormat.format(grandTotal)));
 
 				List<clsInvSalesOrderDtl> listInvSODtl = new ArrayList<clsInvSalesOrderDtl>();
 				String[] arrSOCodes = objHDModel.getStrSOCode().split(",");
@@ -887,10 +852,10 @@ public class clsInvoiceController
 				objHDModel.setListInvProdTaxDtlModel(hmInvProdTaxDtl.get(entry.getKey()));
 				objHDModel.setDblDiscountAmt(objBean.getDblDiscountAmt() * dblCurrencyConv);
 
-				objHDModel.setDblDiscount(objBean.getDblDiscount());
+				objHDModel.setDblDiscount(Double.parseDouble(decFormat.format(objBean.getDblDiscount())));
 				double totalAmount = objHDModel.getDblTotalAmt() - objHDModel.getDblDiscountAmt();
-				objHDModel.setDblTotalAmt(totalAmount);
-				objHDModel.setDblGrandTotal(objHDModel.getDblGrandTotal() - objHDModel.getDblDiscountAmt());
+				objHDModel.setDblTotalAmt(Double.parseDouble(decFormat.format(totalAmount)));
+				//objHDModel.setDblGrandTotal(objHDModel.getDblGrandTotal());//objHDModel.getDblGrandTotal() - objHDModel.getDblDiscountAmt()
 				objHDModel.setStrCloseIV("N");
 				objHDModel.setDblExtraCharges(objBean.getDblExtraCharges());
 				objHDModel.setStrJVNo("");

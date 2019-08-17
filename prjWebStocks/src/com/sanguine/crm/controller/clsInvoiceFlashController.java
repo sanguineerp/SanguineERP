@@ -3,17 +3,12 @@ package com.sanguine.crm.controller;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableSet;
-import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,16 +21,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ibm.icu.math.BigDecimal;
-import com.sanguine.bean.clsStockFlashBean;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.crm.bean.clsInvoiceBean;
-import com.sanguine.crm.model.clsInvoiceHdModel;
 import com.sanguine.crm.service.clsCRMSettlementMasterService;
-import com.sanguine.crm.service.clsInvoiceHdService;
+import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsCurrencyMasterModel;
 import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
-import com.sanguine.model.clsTaxHdModel;
 import com.sanguine.service.clsCurrencyMasterService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsLocationMasterService;
@@ -57,6 +49,9 @@ public class clsInvoiceFlashController {
 
 	@Autowired
 	private clsSetupMasterService objSetupMasterService;
+	
+	@Autowired
+	private clsGlobalFunctions objGlobalFunctions;
 	
 	String baseCurrencyCode="";
 	Map<String,String> currencyList=new TreeMap<String, String>();
@@ -81,6 +76,9 @@ public class clsInvoiceFlashController {
 		String strClientCode = request.getSession().getAttribute("clientCode").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String dbWebBook=request.getSession().getAttribute("WebBooksDB").toString();
+		clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(strClientCode);
+		
+		DecimalFormat df = objGlobalFunctions.funGetDecimatFormat(request);
 		String currencyName="";
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblSubTotalValue = new BigDecimal(0);
@@ -104,28 +102,57 @@ public class clsInvoiceFlashController {
 		}
 		
 		List<clsInvoiceBean> listofInvFlash = new ArrayList<clsInvoiceBean>();
-		List listofInvoiveTotal = new ArrayList<>();
+		List<Object> listofInvoiveTotal = new ArrayList<>();
 		StringBuilder  sqlInvoiceFlash = new StringBuilder(); 
 		sqlInvoiceFlash.setLength(0);
-		sqlInvoiceFlash.append("select a.strInvCode ,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y'),b.strPName,a.strAgainst,a.strVehNo,a.dblSubTotalAmt/" + currValue + ",a.dblTaxAmt/" + currValue + ""
-				+ ",a.dblGrandTotal/" + currValue + ",a.strExciseable,c.strSettlementDesc,ifnull(d.strVouchNo,''),ifnull(a.strNarration,'') "
-				+ " FROM tblpartymaster b,tblsettlementmaster c,tblinvoicehd a left outer join "+dbWebBook+".tbljvhd d on a.strInvCode=d.strSourceDocNo"
-				+ " where   date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' " + " and a.strLocCode='" + locCode +"' "
-				+ " and a.strCustCode=b.strPCode and  a.strClientCode='" + strClientCode + "'");
-		if (!settlementcode.equals("All")) {
-			sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
+
+	
+		if (objCompModel.getStrWebBookModule().equals("Yes")) {
+			sqlInvoiceFlash.append("select a.strInvCode ,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y'),b.strPName,a.strAgainst,a.strVehNo,a.dblSubTotalAmt/" + currValue + ",a.dblTaxAmt/" + currValue + ""
+					+ ",a.dblGrandTotal/" + currValue + ",a.strExciseable,c.strSettlementDesc,ifnull(d.strVouchNo,''),ifnull(a.strNarration,'') "
+					+ " FROM tblpartymaster b,tblsettlementmaster c,tblinvoicehd a left outer join "+dbWebBook+".tbljvhd d on a.strInvCode=d.strSourceDocNo"
+					+ " where   date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' " + " and a.strLocCode='" + locCode +"' "
+					+ " and a.strCustCode=b.strPCode and  a.strClientCode='" + strClientCode + "'");
+			if (!settlementcode.equals("All")) {
+				sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
+			}
+			if (!custCode.equals("All")) {
+				sqlInvoiceFlash.append( " and  a.strCustCode='" + custCode + "' ");
+			}
+			if(!currencyCode.equalsIgnoreCase("All"))
+			{
+				sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
+			}
+			
+
+			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode "
+				+ "  order by a.strInvCode ");
 		}
-		if (!custCode.equals("All")) {
-			sqlInvoiceFlash.append( " and  a.strCustCode='" + custCode + "' ");
-		}
-		if(!currencyCode.equalsIgnoreCase("All"))
+		else
 		{
-			sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
+			sqlInvoiceFlash.append("select a.strInvCode ,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y'),b.strPName,a.strAgainst,a.strVehNo,a.dblSubTotalAmt/" + currValue + ",a.dblTaxAmt/" + currValue + ""
+					+ ",(a.dblSubTotalAmt/" + currValue + "+ a.dblTaxAmt/" + currValue + "),a.strExciseable,c.strSettlementDesc,'',ifnull(a.strNarration,'') "
+					+ " FROM tblpartymaster b,tblsettlementmaster c,tblinvoicehd a "
+					+ " where   date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' " + " and a.strLocCode='" + locCode +"' "
+					+ " and a.strCustCode=b.strPCode and  a.strClientCode='" + strClientCode + "'");
+			if (!settlementcode.equals("All")) {
+				sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
+			}
+			if (!custCode.equals("All")) {
+				sqlInvoiceFlash.append( " and  a.strCustCode='" + custCode + "' ");
+			}
+			if(!currencyCode.equalsIgnoreCase("All"))
+			{
+				sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
+			}
+			
+
+			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode "
+				+ "  order by a.strInvCode ");
 		}
 		
-
-		sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode "
-			+ "  order by a.strInvCode ");
+		
+		
 		List listOfInvoice = objGlobalService.funGetList(sqlInvoiceFlash.toString(), "sql");
 
 		if (!listOfInvoice.isEmpty()) {
@@ -167,10 +194,10 @@ public class clsInvoiceFlashController {
 			}
 		}
 		listofInvoiveTotal.add(listofInvFlash);
-		listofInvoiveTotal.add(dblTotalValue);
-		listofInvoiveTotal.add(dblSubTotalValue);
-		listofInvoiveTotal.add(dblTaxTotalValue);
-		System.out.print(dblTaxTotalValue + "ttoalsubtotal" + dblTaxTotalValue);
+		listofInvoiveTotal.add(df.format(dblTotalValue));
+		listofInvoiveTotal.add(df.format(dblSubTotalValue));
+		listofInvoiveTotal.add(df.format(dblTaxTotalValue));
+		//System.out.print(dblTaxTotalValue + "ttoalsubtotal" + dblTaxTotalValue);
 		return listofInvoiveTotal;
 	}
 
@@ -1096,6 +1123,7 @@ public class clsInvoiceFlashController {
 		String dbWebBook=request.getSession().getAttribute("WebBooksDB").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String currencyName="";
+		clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(clientCode);
 
 		double currValue = 1.0;
 		if(currencyCode.equalsIgnoreCase("All"))
@@ -1119,7 +1147,35 @@ public class clsInvoiceFlashController {
 		BigDecimal dblTaxTotalValue = new BigDecimal(0);
 		
 		StringBuilder sqlInvoiceFlash = new StringBuilder();
+		headerList.add("Invoice Code");
+		headerList.add("Date");
+		headerList.add("JV No");
+		headerList.add("Customer Name");
+		headerList.add("Settement");
+		headerList.add("Against");
+		headerList.add("Vehicle No");
+		headerList.add("Currency");
+		headerList.add("SubTotal");
+		//headerList.add("Tax Amount");
+		Map<String,String> mapAllTaxes=new LinkedHashMap<>();
 		sqlInvoiceFlash.setLength(0);
+		sqlInvoiceFlash.append("select a.strTaxCode,a.strTaxDesc from tbltaxhd a order by a.strTaxCode ");
+		List listOfTax = objGlobalService.funGetList(sqlInvoiceFlash.toString(), "sql");
+		if (listOfTax !=null && !listOfTax.isEmpty()) {
+		 for (int i = 0; i < listOfTax.size(); i++) {
+				Object[] objTax = (Object[]) listOfTax.get(i);
+				headerList.add(objTax[1].toString());
+				mapAllTaxes.put(objTax[0].toString(),objTax[1].toString());
+			
+				
+				
+		 }
+		}
+		headerList.add("Grand Total");
+		headerList.add("Remark");
+        
+		Map<String,Double> mapTotalTaxAmt=new TreeMap<>();
+		/*sqlInvoiceFlash.setLength(0);
 		sqlInvoiceFlash.append("select a.strInvCode ,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y'),b.strPName,a.strAgainst,a.strVehNo,a.dblSubTotalAmt/" + currValue + ",a.dblTaxAmt/" + currValue + ""
 				+ ",a.dblGrandTotal/" + currValue + ",a.strExciseable,c.strSettlementDesc,ifnull(d.strVouchNo,''),ifnull(a.strNarration,'')  "
 				+ " FROM tblpartymaster b,tblsettlementmaster c,tblinvoicehd a left outer join "+dbWebBook+".tbljvhd d on a.strInvCode=d.strSourceDocNo"
@@ -1138,10 +1194,55 @@ public class clsInvoiceFlashController {
 		
 		sqlInvoiceFlash.append( "and a.strSettlementCode=c.strSettlementCode "
 		 + " order by a.strInvCode");
+		*/
+		sqlInvoiceFlash.setLength(0);
+		if (objCompModel.getStrWebBookModule().equals("Yes")) {
+			sqlInvoiceFlash.append("select a.strInvCode ,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y'),b.strPName,a.strAgainst,a.strVehNo,a.dblSubTotalAmt/" + currValue + ",a.dblTaxAmt/" + currValue + ""
+					+ ",a.dblGrandTotal/" + currValue + ",a.strExciseable,c.strSettlementDesc,ifnull(d.strVouchNo,''),ifnull(a.strNarration,'') "
+					+ " FROM tblpartymaster b,tblsettlementmaster c,tblinvoicehd a left outer join "+dbWebBook+".tbljvhd d on a.strInvCode=d.strSourceDocNo"
+					+ " where   date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' " + " and a.strLocCode='" + locCode +"' "
+					+ " and a.strCustCode=b.strPCode and  a.strClientCode='" + clientCode + "'");
+			if (!settlementcode.equals("All")) {
+				sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
+			}
+			if (!custCode.equals("All")) {
+				sqlInvoiceFlash.append( " and  a.strCustCode='" + custCode + "' ");
+			}
+			if(!currencyCode.equalsIgnoreCase("All"))
+			{
+				sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
+			}
+			
+
+			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode "
+				+ "  order by a.strInvCode ");
+		}
+		else
+		{
+			sqlInvoiceFlash.append("select a.strInvCode ,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y'),b.strPName,a.strAgainst,a.strVehNo,a.dblSubTotalAmt/" + currValue + ",a.dblTaxAmt/" + currValue + ""
+					+ ",(a.dblSubTotalAmt/" + currValue + "+ a.dblTaxAmt/" + currValue + "),a.strExciseable,c.strSettlementDesc,'',ifnull(a.strNarration,'') "
+					+ " FROM tblpartymaster b,tblsettlementmaster c,tblinvoicehd a "
+					+ " where   date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' " + " and a.strLocCode='" + locCode +"' "
+					+ " and a.strCustCode=b.strPCode and  a.strClientCode='" + clientCode + "'");
+			if (!settlementcode.equals("All")) {
+				sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
+			}
+			if (!custCode.equals("All")) {
+				sqlInvoiceFlash.append( " and  a.strCustCode='" + custCode + "' ");
+			}
+			if(!currencyCode.equalsIgnoreCase("All"))
+			{
+				sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
+			}
+			
+
+			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode "
+				+ "  order by a.strInvCode ");
+		}
 		
 		DecimalFormat df = new DecimalFormat("#.##");
 		List listOfInvoice = objGlobalService.funGetList(sqlInvoiceFlash.toString(), "sql");
-		if (!listOfInvoice.isEmpty()) {
+		if (listOfInvoice !=null && !listOfInvoice.isEmpty()) {
 		 for (int i = 0; i < listOfInvoice.size(); i++) {
 				Object[] objInvoice = (Object[]) listOfInvoice.get(i);
 				
@@ -1166,9 +1267,52 @@ public class clsInvoiceFlashController {
 				dataList.add(objInvoice[3].toString());
 				dataList.add(objInvoice[4].toString());
 				dataList.add(currencyName);
-				
 				dataList.add(df.format(Double.parseDouble(objInvoice[5].toString())));
-				dataList.add(df.format(Double.parseDouble(objInvoice[6].toString())));
+				
+				sqlInvoiceFlash.setLength(0);
+				sqlInvoiceFlash.append("select a.strTaxCode,a.strTaxDesc,a.dblTaxAmt from tblinvtaxdtl a where a.strInvCode='"+objInvoice[0].toString()+"' order by a.strTaxCode;");
+				List listTax = objGlobalService.funGetList(sqlInvoiceFlash.toString(), "sql");
+				Map<String,String> mapTaxAmt=new LinkedHashMap<>();
+				if (listTax !=null && !listTax.isEmpty()) {
+				 for (int j = 0; j < listTax.size(); j++) {
+						Object[] objTaxAmt = (Object[]) listTax.get(j);
+						mapTaxAmt.put(objTaxAmt[0].toString(),objTaxAmt[2].toString());
+						
+				 }
+				}
+						
+			     for(Map.Entry map:mapAllTaxes.entrySet())
+				 {
+			    	 
+			    	 if(mapTaxAmt.containsKey(map.getKey()))
+			    	 {
+			    		 dataList.add(df.format(Double.parseDouble(mapTaxAmt.get(map.getKey()).toString())));
+			    		 if(mapTotalTaxAmt.containsKey(map.getKey()))
+			    		 {
+			    			 double totalTaxAmt=mapTotalTaxAmt.get(map.getKey().toString());
+			    			 mapTotalTaxAmt.put(map.getKey().toString(),(totalTaxAmt+Double.parseDouble(df.format((Double.parseDouble(mapTaxAmt.get(map.getKey().toString())))))));
+			    			 
+			    		 }
+			    		 else
+			    		 {
+			    			 double dblTotalTaxAmt=Double.parseDouble(df.format((Double.parseDouble(mapTaxAmt.get(map.getKey().toString())))));
+			    			 mapTotalTaxAmt.put(map.getKey().toString(), dblTotalTaxAmt);
+			    		 }
+			    		 
+			    		 
+			    	 }
+			    	 else
+			    	 {
+			    		 dataList.add("0.00");
+			    	 }
+				 }
+						
+						
+						
+						
+						
+				
+				//dataList.add(df.format(Double.parseDouble(objInvoice[6].toString())));
 				dataList.add(df.format(Double.parseDouble(objInvoice[7].toString())));
 				dataList.add(objInvoice[11].toString());
 				detailList.add(dataList);
@@ -1183,23 +1327,24 @@ public class clsInvoiceFlashController {
 		}
 
 		totalsList.add(df.format(dblSubTotalValue));
-		totalsList.add(df.format(dblTaxTotalValue));
+		//totalsList.add(df.format(dblTaxTotalValue));
+		for(Map.Entry map:mapAllTaxes.entrySet())
+		{
+		    if(mapTotalTaxAmt.containsKey(map.getKey().toString()))
+		    {
+		    	double dblFinalTotalTAxAmt=mapTotalTaxAmt.get(map.getKey().toString());
+		    	totalsList.add(df.format(dblFinalTotalTAxAmt));
+		    }
+		    else
+		    {
+		    	totalsList.add("0.00");
+		    }
+			
+		}
 		totalsList.add(df.format(dblTotalValue));
 		
 		
-		headerList.add("Invoice Code");
-		headerList.add("Date");
-		headerList.add("JV No");
-		headerList.add("Customer Name");
-		headerList.add("Settement");
-		headerList.add("Against");
-		headerList.add("Vehicle No");
-		headerList.add("Currency");
-		headerList.add("SubTotal");
-		headerList.add("Tax Amount");
-		headerList.add("Grand Total");
-		headerList.add("Remark");
-
+		
 		Object[] objHeader = (Object[]) headerList.toArray();
 
 		String[] excelHeader = new String[objHeader.length];

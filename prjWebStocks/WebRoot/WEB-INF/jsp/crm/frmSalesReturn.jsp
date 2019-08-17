@@ -115,12 +115,16 @@ function funHelp1(){
 }
 
 
-function funHelp(transactionName)
-{
-	fieldName = transactionName;
-//	window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
-	window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500,left=500");
-}
+	function funHelp(transactionName)
+	{
+		fieldName = transactionName;
+		if(transactionName=='invoiceForSR'){
+			var strCustCode=$("#txtCustCode").val();
+			window.open("searchform.html?formname="+transactionName+"&custCode="+strCustCode+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500,left=500");
+		}else{
+			window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500,left=500");
+		}
+	}
 
  	function funSetData(code)
 	{

@@ -75,6 +75,7 @@ public class clsSearchFormController {
 
 	// Variable For CRM
 	private String strSubConCode = "";
+	private  String strCustCode="";
 
 	@RequestMapping(value = "/searchform", method = RequestMethod.GET)
 	public ModelAndView funOpenSearchForm(Map<String, Object> model, @ModelAttribute("formname") String value, BindingResult result, @RequestParam(value = "formname") String formName, @RequestParam(value = "searchText") String search_with, HttpServletRequest req) {
@@ -179,6 +180,11 @@ public class clsSearchFormController {
 			if (req.getParameter("strSubConCode") != null) {
 				strSubConCode = req.getParameter("strSubConCode").toString();
 			}
+			if(req.getParameter("custCode")!= null)
+			{
+				 strCustCode=req.getParameter("custCode");
+			}
+
 
 			map = funGetCRMSearchDetail(formName, search_with, req);
 			strModule = "6";
@@ -4562,6 +4568,9 @@ public class clsSearchFormController {
 				+ " and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode and a.strCloseIV='N' and a.strInvCode like '%IV%' ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strInvCode like '" + propertyCode + "%' ";
+			}
+			if (strCustCode != null && !strCustCode.isEmpty()){
+				tableName +=" and b.strPCode='"+strCustCode+"'";
 			}
 			boolean flgAuth = false;
 			if (null != req.getSession().getAttribute("hmAuthorization")) {

@@ -102,13 +102,13 @@
     			var arr = startDate.split("/");
     			Dat=arr[0]+"-"+arr[1]+"-"+arr[2];
     			$( "#txtFromDate" ).datepicker({ dateFormat: 'dd-mm-yy' });
-    			$("#txtFromDate" ).datepicker('setDate', Dat);
+    			$("#txtFromDate" ).datepicker('setDate', 'today');
     			
     			$( "#txtToDate" ).datepicker({ dateFormat: 'dd-mm-yy' });		
     			$("#txtToDate" ).datepicker('setDate', 'today'); 
     			
     			$( "#txtInvoiceDate" ).datepicker({ dateFormat: 'dd-mm-yy' });
-    			$("#txtInvoiceDate" ).datepicker('setDate', Dat);
+    			$("#txtInvoiceDate" ).datepicker('setDate', 'today');
     			
     		   var strPropCode='<%=session.getAttribute("propertyCode").toString()%>';
     			 

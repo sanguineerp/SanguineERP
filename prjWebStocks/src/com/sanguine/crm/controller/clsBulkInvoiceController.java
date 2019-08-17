@@ -1,6 +1,5 @@
 package com.sanguine.crm.controller;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -11,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -20,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -30,8 +27,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +54,6 @@ import com.sanguine.crm.model.clsInvoiceHdModel;
 import com.sanguine.crm.model.clsInvoiceModelDtl;
 import com.sanguine.crm.model.clsInvoiceProdTaxDtl;
 import com.sanguine.crm.model.clsInvoiceTaxDtlModel;
-import com.sanguine.crm.model.clsPartyMasterModel;
 import com.sanguine.crm.model.clsSalesOrderDtl;
 import com.sanguine.crm.service.clsCRMSettlementMasterService;
 import com.sanguine.crm.service.clsDeliveryChallanHdService;
@@ -68,23 +62,14 @@ import com.sanguine.crm.service.clsPartyMasterService;
 import com.sanguine.crm.service.clsSalesOrderService;
 import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsCurrencyMasterModel;
-import com.sanguine.model.clsProdSuppMasterModel;
 import com.sanguine.model.clsProductMasterModel;
-import com.sanguine.model.clsProductReOrderLevelModel;
-import com.sanguine.model.clsProductReOrderLevelModel_ID;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsSettlementMasterModel;
 import com.sanguine.service.clsCurrencyMasterService;
-import com.sanguine.service.clsDelTransService;
 import com.sanguine.service.clsGlobalFunctionsService;
-import com.sanguine.service.clsLinkUpService;
-import com.sanguine.service.clsLocationMasterService;
 import com.sanguine.service.clsProductMasterService;
 import com.sanguine.service.clsSetupMasterService;
-import com.sanguine.service.clsStkAdjustmentService;
-import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.util.clsNumberToWords;
-import com.sanguine.util.clsReportBean;
 
 
 
@@ -93,8 +78,8 @@ public class clsBulkInvoiceController {
 	
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
-	@Autowired
 	
+	@Autowired
 	private clsInvoiceHdService objInvoiceHdService;
 
 	@Autowired
@@ -194,10 +179,14 @@ public class clsBulkInvoiceController {
 		for(int i=0;i<StrSuppCode.length;i++)
 		{
 			String strSupplierCode=StrSuppCode[i];
-			String sqlSO = "select a.strSOCode,a.dteSODate,a.strCustCode,a.dblSubTotal,b.strPName from tblsalesorderhd a,"
-					+ "tblpartymaster b  where  a.strCustCode=b.strPCode  and Date(a.dteSODate) BETWEEN '"+dteFrmDateSql+"' and '"+dteToDateSql+"' and a.strCustCode='"+strSupplierCode+"';";
-
-			
+			String sqlSO=" SELECT a.strSOCode,a.dteSODate,a.strCustCode,a.dblSubTotal,c.strPName,a.strStatus "
+				+" FROM tblsalesorderhd a,tbllocationmaster b,tblpartymaster c " 
+				+" WHERE a.strLocCode=b.strLocCode AND a.strCustCode=c.strPCode "
+				+"  AND c.strPType='cust' AND a.strSOCode NOT IN( "
+				+" SELECT strSOCode FROM tblinvsalesorderdtl)  "
+				+" AND a.strClientCode='"+clientCode+"' AND a.strCustCode='"+strSupplierCode+"' " 
+				+" AND a.strLocCode='L000001' AND date(a.dteFulmtDate) BETWEEN '"+dteFrmDateSql+"' AND '"+dteToDateSql+"'";
+				
 			List listSO = objGlobalFunctionsService.funGetList(sqlSO,"sql");
 			if (!listSO.isEmpty())
 			{
@@ -238,12 +227,14 @@ public class clsBulkInvoiceController {
 		String userCode = request.getSession().getAttribute("usercode").toString();
 		String propCode = request.getSession().getAttribute("propertyCode").toString();
 		String startDate = request.getSession().getAttribute("startDate").toString();
+		String strLocCode= request.getSession().getAttribute("locationCode").toString();
 		double dblCurrencyConv = 1.0;
 		Date today = Calendar.getInstance().getTime();
 		DateFormat df = new SimpleDateFormat("HH:mm:ss");
 		String reportDate = df.format(today);
 		
-		String strInvoiceDate=  objGlobalFunctions.funGetDate("yyyy-MM-dd", objBean.getDteInvDate());   
+		
+		String strInvoiceDate=  objGlobalFunctions.funGetDateAndTime("yyyy-MM-dd", objBean.getDteInvDate());   
 		
 		objBean.setStrInvCode("");
 		
@@ -268,79 +259,316 @@ public class clsBulkInvoiceController {
 						List listSoCodes=mapSoList.get(strCustCode);
 						listSoCodes.add(strSOCode);
 						mapSoList.put(strCustCode, listSoCodes);
-						
 				    }
 					else
 					{
 						listSO = new ArrayList();
 						listSO.add(strSOCode);
 						mapSoList.put(strCustCode, listSO);
-					}
-					
-					
+					}	
 				}
-				
-				
-				
 			}
-			    
-			
 		}
 		//String[] SOCode = objBean.getStrSOCode().split(",");
 		List<clsInvoiceDtlBean> listInvoiceDtlBean=new ArrayList<clsInvoiceDtlBean>();
-		clsInvoiceDtlBean objInvoiceDtl=null;
+		clsInvoiceDtlBean objInvDtl=null;
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+		clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(clientCode);
+		clsInvoiceHdModel objHDModel =null;
+		StringBuilder sqlQuery = new StringBuilder();
+		DecimalFormat decFormat = objGlobalFunctions.funGetDecimatFormat(request);
+
+		List<clsInvoiceModelDtl> listInvDtlModel = null;
+
+		Map<String, List<clsInvoiceModelDtl>> hmInvCustDtl = new HashMap<String, List<clsInvoiceModelDtl>>();
+		Map<String, Map<String, clsInvoiceTaxDtlModel>> hmInvCustTaxDtl = new HashMap<String, Map<String, clsInvoiceTaxDtlModel>>();
+		Map<String, List<clsInvoiceProdTaxDtl>> hmInvProdTaxDtl = new HashMap<String, List<clsInvoiceProdTaxDtl>>();
+		
+		
+		StringBuilder arrInvCode = new StringBuilder();
+		StringBuilder arrDcCode = new StringBuilder();
+		StringBuilder sbSql = new StringBuilder();
+		//Customer wise SO Map
+		clsInvoiceModelDtl objInvDtlModel =null;
+		
+		
 	    for(Map.Entry<String, List> entrySOList : mapSoList.entrySet())
 	    {
-	    	
+			hmInvCustDtl = new HashMap<String, List<clsInvoiceModelDtl>>();
+			hmInvCustTaxDtl = new HashMap<String, Map<String, clsInvoiceTaxDtlModel>>();
+			hmInvProdTaxDtl = new HashMap<String, List<clsInvoiceProdTaxDtl>>();
+		
+			double dblSubTotalAmt=0;
+			Map mapSubTotal=new HashMap<>();
+			
 	    	List listSOCust=entrySOList.getValue();
 	    	String custCode =entrySOList.getKey();
+	    	String strSOCodes="";
+	    	if(listSOCust.size()>0){
+	    		for(Object objSo:listSOCust){
+	    			if(strSOCodes.isEmpty()){
+	    				strSOCodes=objSo.toString();
+	    			}else{
+	    				strSOCodes=strSOCodes+","+objSo.toString();
+	    			}
+	    		}
+	    	}
 	    	List objSales = objSalesOrderService.funGetMultipleSODetailsForInvoice(listSOCust,custCode, clientCode);
 	    	if (null != objSales)
 			{
 	    		for (int i = 0; i < objSales.size(); i++)
 			   {
-	    			objInvoiceDtl=new clsInvoiceDtlBean();
+	    			objInvDtl=new clsInvoiceDtlBean();
 					Object[] obj = (Object[]) objSales.get(i);
 					clsSalesOrderDtl saleDtl = new clsSalesOrderDtl();
-					objInvoiceDtl.setStrProdCode(obj[0].toString());
-					objInvoiceDtl.setStrProdName(obj[1].toString());
-					objInvoiceDtl.setStrProdType(obj[2].toString());
+					objInvDtl.setStrProdCode(obj[0].toString());
+					objInvDtl.setStrProdName(obj[1].toString());
+					objInvDtl.setStrProdType(obj[2].toString());
 	
-					clsProductMasterModel objProdMaster = objProductMasterService.funGetObject(obj[0].toString(), clientCode);
-					objInvoiceDtl.setDblQty(Double.parseDouble(obj[3].toString()));
-					objInvoiceDtl.setDblUnitPrice(Double.parseDouble(obj[4].toString()));
+				//	clsProductMasterModel objProdMaster = objProductMasterService.funGetObject(obj[0].toString(), clientCode);
+					objInvDtl.setDblQty(Double.parseDouble(obj[3].toString()));
+					objInvDtl.setDblUnitPrice(Double.parseDouble(obj[4].toString()));
 					// saleDtl.setDblUnitPrice(objProdMaster.getDblMRP());
-					objInvoiceDtl.setDblWeight(Double.parseDouble(obj[5].toString()));
-					objInvoiceDtl.setStrClientCode(clientCode);
-					objInvoiceDtl.setStrCustCode(obj[6].toString());
-					objInvoiceDtl.setStrSOCode(obj[8].toString());				
+					objInvDtl.setDblWeight(Double.parseDouble(obj[5].toString()));
+					objInvDtl.setStrClientCode(clientCode);
+					objInvDtl.setStrCustCode(obj[6].toString());
+					objInvDtl.setStrSOCode(obj[8].toString());				
 					double discPer=Double.parseDouble(obj[9].toString());								
-					objInvoiceDtl.setDblDisAmt((discPer/100)*(saleDtl.getDblAcceptQty()*saleDtl.getDblUnitPrice()));
-					objInvoiceDtl.setIntindex(i);
-					//objInvoiceDtl.setStrCurrency(obj[10].toString());
-				//	objInvoiceDtl.setDblConversion(Double.parseDouble(obj[11].toString()));
-					String sqlHd = "select b.dteInvDate,a.dblUnitPrice,b.strInvCode  from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + obj[0].toString() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode " + " and a.strCustCode='" + obj[6].toString() + "' and  b.dteInvDate=(SELECT MAX(b.dteInvDate) from tblinvoicedtl a,tblinvoicehd b " + " where a.strProdCode='" + obj[0].toString() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode  " + " and a.strCustCode='" + obj[6].toString() + "')";
-	
-					List listPrevInvData = objGlobalFunctionsService.funGetList(sqlHd, "sql");
-	
-					if (listPrevInvData.size() > 0)
+					objInvDtl.setDblDisAmt((discPer/100)*(saleDtl.getDblAcceptQty()*saleDtl.getDblUnitPrice()));
+					objInvDtl.setIntindex(i);
+
+					
+					
+					if (!(objInvDtl.getDblQty() == 0))
 					{
-						Object objInv[] = (Object[]) listPrevInvData.get(0);
-						objInvoiceDtl.setPrevUnitPrice(Double.parseDouble(objInv[1].toString()));
-						objInvoiceDtl.setPrevInvCode(objInv[2].toString());
-	
+						//List listDtlBean = objGlobalFunctionsService.funGetList("select strExciseable,strPickMRPForTaxCal from tblproductmaster " + " where strProdCode='" + objInvDtl.getStrProdCode() + "' ", "sql");
+						clsProductMasterModel objProdTempUom = objProductMasterService.funGetObject(objInvDtl.getStrProdCode(), clientCode);
+					//	Object[] arrProdDtl = (Object[]) listDtlBean.get(0);
+						String excisable = objProdTempUom.getStrExciseable();// arrProdDtl[0].toString();
+						String pickMRP = objProdTempUom.getStrPickMRPForTaxCal();//
+						String key = objInvDtl.getStrCustCode() + "!" + excisable;
+
+						if (hmInvCustDtl.containsKey(key))
+						{
+							listInvDtlModel = hmInvCustDtl.get(key);
+						}
+						else
+						{
+							listInvDtlModel = new ArrayList<clsInvoiceModelDtl>();
+						}
+
+						objInvDtlModel = new clsInvoiceModelDtl();
+
+						objInvDtlModel.setStrProdCode(objInvDtl.getStrProdCode());
+						objInvDtlModel.setDblPrice(objInvDtl.getDblUnitPrice() * dblCurrencyConv);
+						objInvDtlModel.setDblQty(objInvDtl.getDblQty());
+						objInvDtlModel.setDblWeight(objInvDtl.getDblWeight());
+						objInvDtlModel.setStrProdType(objInvDtl.getStrProdType());
+						objInvDtlModel.setStrPktNo(objInvDtl.getStrPktNo());
+						objInvDtlModel.setStrRemarks(objInvDtl.getStrRemarks());
+						objInvDtlModel.setIntindex(objInvDtl.getIntindex());
+						objInvDtlModel.setStrInvoiceable(objInvDtl.getStrInvoiceable());
+						objInvDtlModel.setStrSerialNo(objInvDtl.getStrSerialNo());
+						objInvDtlModel.setDblUnitPrice(Double.parseDouble(decFormat.format(objInvDtl.getDblUnitPrice() * dblCurrencyConv)));
+						objInvDtlModel.setDblAssValue(Double.parseDouble(decFormat.format(objInvDtl.getDblAssValue() * dblCurrencyConv)));
+						objInvDtlModel.setDblBillRate(Double.parseDouble(decFormat.format(objInvDtl.getDblBillRate() * dblCurrencyConv)));
+						objInvDtlModel.setStrSOCode(objInvDtl.getStrSOCode());
+						objInvDtlModel.setStrCustCode(objInvDtl.getStrCustCode());
+						objInvDtlModel.setStrUOM(objProdTempUom.getStrReceivedUOM());
+						objInvDtlModel.setDblUOMConversion(objProdTempUom.getDblReceiveConversion());
+						objInvDtlModel.setDblProdDiscAmount(objInvDtl.getDblDisAmt());
+						List<clsInvoiceProdTaxDtl> listInvProdTaxDtl = null;
+						if (hmInvProdTaxDtl.containsKey(key))
+						{
+							listInvProdTaxDtl = hmInvProdTaxDtl.get(key);
+						}
+						else
+						{
+							listInvProdTaxDtl = new ArrayList<clsInvoiceProdTaxDtl>();
+						}
+
+						double prodMRP = objInvDtl.getDblUnitPrice() * dblCurrencyConv;
+						if (objInvDtl.getDblWeight() > 0)
+						{
+							prodMRP = prodMRP * objInvDtl.getDblWeight();
+						}
+						double marginePer = 0;
+						double marginAmt = 0;
+						double billRate = prodMRP;
+
+						sqlQuery.setLength(0);
+						sqlQuery.append("select a.dblMargin,a.strProdCode from tblprodsuppmaster a " + " where a.strSuppCode='" + objInvDtl.getStrCustCode() + "' and a.strProdCode='" + objInvDtl.getStrProdCode() + "' " + " and a.strClientCode='" + clientCode + "' ");
+						List listProdMargin = objGlobalFunctionsService.funGetList(sqlQuery.toString(), "sql");
+						if (listProdMargin.size() > 0)
+						{
+							Object[] arrObjProdMargin = (Object[]) listProdMargin.get(0);
+							marginePer = Double.parseDouble(arrObjProdMargin[0].toString());
+							marginAmt = prodMRP * (marginePer / 100);
+							billRate = prodMRP - marginAmt;
+						}
+						clsInvoiceProdTaxDtl objInvProdTaxDtl = new clsInvoiceProdTaxDtl();
+						objInvProdTaxDtl.setStrProdCode(objInvDtl.getStrProdCode());
+						objInvProdTaxDtl.setStrCustCode(objInvDtl.getStrCustCode());
+						objInvProdTaxDtl.setStrDocNo("Margin");
+						objInvProdTaxDtl.setDblValue(Double.parseDouble(decFormat.format(marginAmt)));
+						objInvProdTaxDtl.setDblTaxableAmt(0);
+						objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
+						listInvProdTaxDtl.add(objInvProdTaxDtl);
+
+						sqlQuery.setLength(0);
+						sqlQuery.append("select a.dblDiscount from tblpartymaster a " + " where a.strPCode='" + objInvDtl.getStrCustCode() + "' and a.strPType='Cust' ");
+						List listproddiscount = objGlobalFunctionsService.funGetList(sqlQuery.toString(), "sql");
+						double discAmt=0;
+					    if(listproddiscount != null && listproddiscount.size() != 0)
+						{
+					    	Object objproddiscount = (Object) listproddiscount.get(0);
+							double discPer1 = Double.parseDouble(objproddiscount.toString());
+						    discAmt = billRate * (discPer1 / 100) * dblCurrencyConv;
+							
+						}
+						
+						billRate = billRate - discAmt;
+						System.out.println(billRate);
+						objInvDtlModel.setDblBillRate(Double.parseDouble(decFormat.format(billRate)));
+
+						objInvProdTaxDtl = new clsInvoiceProdTaxDtl();
+						objInvProdTaxDtl.setStrProdCode(objInvDtl.getStrProdCode());
+						objInvProdTaxDtl.setStrCustCode(objInvDtl.getStrCustCode());
+						objInvProdTaxDtl.setStrDocNo("Disc");
+						objInvProdTaxDtl.setDblValue(Double.parseDouble(decFormat.format(discAmt)));
+						objInvProdTaxDtl.setDblTaxableAmt(0);
+						objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
+						listInvProdTaxDtl.add(objInvProdTaxDtl);
+
+						double prodRateForTaxCal = objInvDtl.getDblUnitPrice() * dblCurrencyConv;
+						/*if (objInvDtl.getDblWeight() > 0)
+						{
+							prodRateForTaxCal = objInvDtl.getDblUnitPrice() * objInvDtl.getDblWeight() * dblCurrencyConv;
+						}*/
+						String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0,"+objInvDtl.getDblWeight();
+						Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", strInvoiceDate, "0",objBean.getStrSettlementCode(), request);
+						System.out.println("Map Size= " + hmProdTaxDtl.size());
+
+						Map<String, clsInvoiceTaxDtlModel> hmInvTaxDtl = new HashMap<String, clsInvoiceTaxDtlModel>();
+						if (hmInvCustTaxDtl.containsKey(key))
+						{
+							hmInvTaxDtl = hmInvCustTaxDtl.get(key);
+						}
+						else
+						{
+							hmInvTaxDtl.clear();
+						}
+						clsInvoiceTaxDtlModel objInvTaxModel = null;
+						for (Map.Entry<String, String> mapEntrySet : hmProdTaxDtl.entrySet())
+						{
+							// 137.2#T0000011#Vat 12.5#NA#12.5#15.244444444444444
+							// taxable amt,Tax code,tax desc,tax type,tax per
+
+							String taxDtl = mapEntrySet.getValue();
+							String taxCode = mapEntrySet.getKey();
+							double taxableAmt = Double.parseDouble(decFormat.format(Double.parseDouble(taxDtl.split("#")[0])));
+							double taxAmt = Double.parseDouble(taxDtl.split("#")[5]);
+							String shortName = taxDtl.split("#")[6];
+
+							double taxAmtForSingleQty = taxAmt / objInvDtl.getDblQty();
+							
+							taxAmtForSingleQty = Double.parseDouble(decFormat.format(taxAmtForSingleQty));
+							
+							taxAmt = taxAmtForSingleQty * objInvDtl.getDblQty();
+
+							// For Check it is Correct Or not
+							// double
+							// taxAmt=Math.round(Double.parseDouble(taxDtl.split("#")[5]));
+
+							if (hmInvTaxDtl.containsKey(mapEntrySet.getKey()))
+							{
+								objInvTaxModel = hmInvTaxDtl.get(mapEntrySet.getKey());
+								objInvTaxModel.setDblTaxableAmt(objInvTaxModel.getDblTaxableAmt() + taxableAmt);
+								objInvTaxModel.setDblTaxAmt(objInvTaxModel.getDblTaxAmt() + taxAmt);
+							}
+							else
+							{
+								objInvTaxModel = new clsInvoiceTaxDtlModel();
+								objInvTaxModel.setStrTaxCode(taxDtl.split("#")[1]);
+								objInvTaxModel.setDblTaxAmt(taxAmt);
+								objInvTaxModel.setDblTaxableAmt(taxableAmt);
+								objInvTaxModel.setStrTaxDesc(taxDtl.split("#")[2]);
+							}
+
+							if (null != objInvTaxModel)
+							{
+								hmInvTaxDtl.put(taxCode, objInvTaxModel);
+							}
+
+							objInvProdTaxDtl = new clsInvoiceProdTaxDtl();
+							objInvProdTaxDtl.setStrProdCode(objInvDtl.getStrProdCode());
+							objInvProdTaxDtl.setStrCustCode(objInvDtl.getStrCustCode());
+							objInvProdTaxDtl.setStrDocNo(taxDtl.split("#")[1]);
+							objInvProdTaxDtl.setDblValue(Double.parseDouble(decFormat.format(taxAmt)));
+							objInvProdTaxDtl.setDblTaxableAmt(Double.parseDouble(decFormat.format(taxableAmt)));
+							objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
+							listInvProdTaxDtl.add(objInvProdTaxDtl);
+						
+							if(!mapSubTotal.containsKey(objInvProdTaxDtl.getStrProdCode()))
+							{
+								dblSubTotalAmt=dblSubTotalAmt+objInvProdTaxDtl.getDblTaxableAmt();
+							}
+							
+							mapSubTotal.put(objInvProdTaxDtl.getStrProdCode(), dblSubTotalAmt);
+						}
+            
+						hmInvCustTaxDtl.put(key, hmInvTaxDtl);
+						hmInvProdTaxDtl.put(key, listInvProdTaxDtl);
+						
+                        System.out.println("***********"+dblSubTotalAmt);
+                        
+						boolean flgProdFound = false;
+						double taxtotal = 0;
+					
+						for (Map.Entry<String, List<clsInvoiceProdTaxDtl>> entryTaxTemp : hmInvProdTaxDtl.entrySet())
+						{
+							if (!flgProdFound)
+							{
+								List<clsInvoiceProdTaxDtl> listProdTaxDtl = entryTaxTemp.getValue();
+								for (clsInvoiceProdTaxDtl objProdTaxDtl : listInvProdTaxDtl)
+								{
+									if (objProdTaxDtl.getStrProdCode().equals(objInvDtlModel.getStrProdCode()))
+									{
+										if (!objProdTaxDtl.getStrDocNo().equals("Margin"))
+										{
+											if (!objProdTaxDtl.getStrDocNo().equals("Disc"))
+											{
+												taxtotal += objProdTaxDtl.getDblValue();
+												flgProdFound = true;
+											}
+										}
+									}
+								}
+							}
+						}
+
+						double totalMarginAmt = marginAmt * objInvDtlModel.getDblQty();
+						double totalDiscAmt = discAmt * objInvDtlModel.getDblQty();
+						double assesableRateForSingleQty = (prodMRP) - (totalMarginAmt + totalDiscAmt + taxtotal);
+						double assesableRate = (prodMRP * objInvDtlModel.getDblQty()) - (totalMarginAmt + totalDiscAmt + taxtotal);
+						if (assesableRate < 0)
+						{
+							assesableRate = 0;
+						}
+
+						double assableUnitRate = (assesableRate / objInvDtlModel.getDblQty());
+						assableUnitRate = Double.parseDouble(decFormat.format(assableUnitRate));
+
+						objInvDtlModel.setDblAssValue(assableUnitRate * objInvDtlModel.getDblQty());
+						// objInvDtlModel.setDblAssValue(assesableRate);
+						listInvDtlModel.add(objInvDtlModel);
+						// hmInvCustDtl.put(objInvDtl.getStrCustCode(),listInvDtlModel);
+						hmInvCustDtl.put(key, listInvDtlModel);
+					//	System.out.println(hmInvTaxDtl);
 					}
-					else
-					{
-						objInvoiceDtl.setPrevUnitPrice(0.0);
-						objInvoiceDtl.setPrevInvCode(" ");
-				     }
-					listInvoiceDtlBean.add(objInvoiceDtl);
+				
 			  }
 		}	
-	    	
-	    	objBean.setListclsInvoiceModelDtl(listInvoiceDtlBean);
-	    	
 	    	List listcust = objGlobalFunctionsService.funGetList("select a.strBAdd1,a.strBAdd2,a.strSCity,a.strSState,a.strSCountry,a.strSPin,a.strMobile from tblpartymaster a where a.strPCode='"+custCode+"'");
 	    	if(listcust.size()>0)
 	    	{
@@ -356,24 +584,13 @@ public class clsBulkInvoiceController {
 	    		
 	    	}
 	    	
-	    	clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
-			clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(clientCode);
-            
-			clsInvoiceHdModel objHDModel = new clsInvoiceHdModel();
+	    	
+			objHDModel = new clsInvoiceHdModel();
 			objHDModel.setStrUserModified(userCode);
 			objHDModel.setDteLastModified(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
-			objHDModel.setDteInvDate(strInvoiceDate+ " " + reportDate);
-			objHDModel.setStrAgainst(objBean.getStrAgainst());
+			objHDModel.setDteInvDate(strInvoiceDate);
+			objHDModel.setStrAgainst("Sales Order");
 			objHDModel.setStrAuthorise(objGlobalFunctions.funCheckFormAuthorization("Invoice", request));
-			
-			/*if (objBean.getStrAgainst().equalsIgnoreCase("Sales Order"))
-			{
-				objHDModel.setStrCustCode("");
-			}
-			else
-			{
-				objHDModel.setStrCustCode(objBean.getStrCustCode());
-			}*/
 			objHDModel.setStrInvNo("");
 			objHDModel.setStrDktNo(objGlobalFunctions.funIfNull(objBean.getStrDktNo()," ",objBean.getStrDktNo()));
 			objHDModel.setStrLocCode(objGlobalFunctions.funIfNull(objBean.getStrLocCode()," ",objBean.getStrLocCode()));
@@ -394,34 +611,17 @@ public class clsBulkInvoiceController {
 			objHDModel.setStrWarraValidity(objBean.getStrWarraValidity());
 			objHDModel.setStrWarrPeriod(objBean.getStrWarrPeriod());
 			objHDModel.setDblSubTotalAmt(0.0);
-			objHDModel.setStrSOCode(objBean.getStrSOCode());
+			objHDModel.setStrSOCode(strSOCodes);
 			objHDModel.setStrSettlementCode(objBean.getStrSettlementCode());
 			objHDModel.setStrUserCreated(userCode);
 			objHDModel.setDteCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
 			objHDModel.setStrClientCode(clientCode);
 
 			objHDModel.setStrMobileNo(objBean.getStrMobileNoForSettlement());
-			double taxamt = 0.0;
-
-			if (objBean.getDblTaxAmt() != null)
-			{
-				taxamt = objBean.getDblTaxAmt();
-			}
 			objHDModel.setDblTotalAmt(0.0);
 			objHDModel.setDblTaxAmt(0.0);
 
 			objHDModel.setStrCurrencyCode(objBean.getStrCurrencyCode());
-			/*clsCurrencyMasterModel objModel = objCurrencyMasterService.funGetCurrencyMaster(objHDModel.getStrCurrencyCode(), clientCode);
-			if (objModel == null)
-			{
-				// dblCurrencyConv=1;
-				objHDModel.setDblCurrencyConv(dblCurrencyConv);
-			}
-			else
-			{
-				dblCurrencyConv = objModel.getDblConvToBaseCurr();
-				objHDModel.setDblCurrencyConv(objModel.getDblConvToBaseCurr());
-			}*/
 			
 			dblCurrencyConv = objBean.getDblCurrencyConv();
 			if(dblCurrencyConv ==0){
@@ -439,292 +639,11 @@ public class clsBulkInvoiceController {
 			objHDModel.setStrDispatchThrough(" ");//objBean.getStrDispatchThrough()
 			objHDModel.setStrDestination(" ");//objBean.getStrDestination()
 			objHDModel.setDblExtraCharges(0);//objBean.getDblExtraCharges()
-
+			objHDModel.setStrLocCode(strLocCode);
+			
 			// /********Save Data forDetail in SO***********////
 
-			StringBuilder sqlQuery = new StringBuilder();
-			int decimalPlaces = Integer.parseInt(request.getSession().getAttribute("amtDecPlace").toString());
-			String pattern = "";
-			if (decimalPlaces == 1)
-			{
-				pattern = "#.#";
-			}
-			else if (decimalPlaces == 2)
-			{
-				pattern = "#.##";
-			}
-			else if (decimalPlaces == 3)
-			{
-				pattern = "#.###";
-			}
-			else if (decimalPlaces == 4)
-			{
-				pattern = "#.####";
-			}
-			else if (decimalPlaces == 5)
-			{
-				pattern = "#.#####";
-			}
-			else if (decimalPlaces == 6)
-			{
-				pattern = "#.######";
-			}
-			else if (decimalPlaces == 7)
-			{
-				pattern = "#.#######";
-			}
-			else if (decimalPlaces == 8)
-			{
-				pattern = "#.########";
-			}
-			else if (decimalPlaces == 9)
-			{
-				pattern = "#.#########";
-			}
-			else if (decimalPlaces == 10)
-			{
-				pattern = "#.##########";
-			}
-
-			DecimalFormat decFormat = new DecimalFormat(pattern);
-
-			List<clsInvoiceModelDtl> listInvDtlModel = null;
-			Map<String, List<clsInvoiceModelDtl>> hmInvCustDtl = new HashMap<String, List<clsInvoiceModelDtl>>();
-			Map<String, Map<String, clsInvoiceTaxDtlModel>> hmInvCustTaxDtl = new HashMap<String, Map<String, clsInvoiceTaxDtlModel>>();
-			Map<String, List<clsInvoiceProdTaxDtl>> hmInvProdTaxDtl = new HashMap<String, List<clsInvoiceProdTaxDtl>>();
-			List<clsInvoiceDtlBean> listInvDtlBean = objBean.getListclsInvoiceModelDtl();
-
-			for (clsInvoiceDtlBean objInvDtl : listInvDtlBean)
-			{
-				if (!(objInvDtl.getDblQty() == 0))
-				{
-					List listDtlBean = objGlobalFunctionsService.funGetList("select strExciseable,strPickMRPForTaxCal from tblproductmaster " + " where strProdCode='" + objInvDtl.getStrProdCode() + "' ", "sql");
-
-					Object[] arrProdDtl = (Object[]) listDtlBean.get(0);
-					String excisable = arrProdDtl[0].toString();
-					String pickMRP = arrProdDtl[1].toString();
-					String key = objInvDtl.getStrCustCode() + "!" + excisable;
-
-					if (hmInvCustDtl.containsKey(key))
-					{
-						listInvDtlModel = hmInvCustDtl.get(key);
-					}
-					else
-					{
-						listInvDtlModel = new ArrayList<clsInvoiceModelDtl>();
-					}
-
-					clsInvoiceModelDtl objInvDtlModel = new clsInvoiceModelDtl();
-
-					clsProductMasterModel objProdTempUom = objProductMasterService.funGetObject(objInvDtl.getStrProdCode(), clientCode);
-
-					objInvDtlModel.setStrProdCode(objInvDtl.getStrProdCode());
-					objInvDtlModel.setDblPrice(objInvDtl.getDblUnitPrice() * dblCurrencyConv);
-					objInvDtlModel.setDblQty(objInvDtl.getDblQty());
-					objInvDtlModel.setDblWeight(objInvDtl.getDblWeight());
-					objInvDtlModel.setStrProdType(objInvDtl.getStrProdType());
-					objInvDtlModel.setStrPktNo(objInvDtl.getStrPktNo());
-					objInvDtlModel.setStrRemarks(objInvDtl.getStrRemarks());
-					objInvDtlModel.setIntindex(objInvDtl.getIntindex());
-					objInvDtlModel.setStrInvoiceable(objInvDtl.getStrInvoiceable());
-					objInvDtlModel.setStrSerialNo(objInvDtl.getStrSerialNo());
-					objInvDtlModel.setDblUnitPrice(objInvDtl.getDblUnitPrice() * dblCurrencyConv);
-					objInvDtlModel.setDblAssValue(objInvDtl.getDblAssValue() * dblCurrencyConv);
-					objInvDtlModel.setDblBillRate(objInvDtl.getDblBillRate() * dblCurrencyConv);
-					objInvDtlModel.setStrSOCode(objInvDtl.getStrSOCode());
-					objInvDtlModel.setStrCustCode(objInvDtl.getStrCustCode());
-					objInvDtlModel.setStrUOM(objProdTempUom.getStrReceivedUOM());
-					objInvDtlModel.setDblUOMConversion(objProdTempUom.getDblReceiveConversion());
-					objInvDtlModel.setDblProdDiscAmount(objInvDtl.getDblDisAmt());
-					List<clsInvoiceProdTaxDtl> listInvProdTaxDtl = null;
-					if (hmInvProdTaxDtl.containsKey(key))
-					{
-						listInvProdTaxDtl = hmInvProdTaxDtl.get(key);
-					}
-					else
-					{
-						listInvProdTaxDtl = new ArrayList<clsInvoiceProdTaxDtl>();
-					}
-
-					double prodMRP = objInvDtl.getDblUnitPrice() * dblCurrencyConv;
-					if (objInvDtl.getDblWeight() > 0)
-					{
-						prodMRP = prodMRP * objInvDtl.getDblWeight();
-					}
-					double marginePer = 0;
-					double marginAmt = 0;
-					double billRate = prodMRP;
-
-					sqlQuery.setLength(0);
-					sqlQuery.append("select a.dblMargin,a.strProdCode from tblprodsuppmaster a " + " where a.strSuppCode='" + objInvDtl.getStrCustCode() + "' and a.strProdCode='" + objInvDtl.getStrProdCode() + "' " + " and a.strClientCode='" + clientCode + "' ");
-					List listProdMargin = objGlobalFunctionsService.funGetList(sqlQuery.toString(), "sql");
-					if (listProdMargin.size() > 0)
-					{
-						Object[] arrObjProdMargin = (Object[]) listProdMargin.get(0);
-						marginePer = Double.parseDouble(arrObjProdMargin[0].toString());
-						marginAmt = prodMRP * (marginePer / 100);
-						billRate = prodMRP - marginAmt;
-					}
-					clsInvoiceProdTaxDtl objInvProdTaxDtl = new clsInvoiceProdTaxDtl();
-					objInvProdTaxDtl.setStrProdCode(objInvDtl.getStrProdCode());
-					objInvProdTaxDtl.setStrCustCode(objInvDtl.getStrCustCode());
-					objInvProdTaxDtl.setStrDocNo("Margin");
-					objInvProdTaxDtl.setDblValue(marginAmt);
-					objInvProdTaxDtl.setDblTaxableAmt(0);
-					objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
-					listInvProdTaxDtl.add(objInvProdTaxDtl);
-
-					sqlQuery.setLength(0);
-					sqlQuery.append("select a.dblDiscount from tblpartymaster a " + " where a.strPCode='" + objInvDtl.getStrCustCode() + "' and a.strPType='Cust' ");
-					List listproddiscount = objGlobalFunctionsService.funGetList(sqlQuery.toString(), "sql");
-					double discAmt=0;
-				    if(listproddiscount != null && listproddiscount.size() != 0)
-					{
-				    	Object objproddiscount = (Object) listproddiscount.get(0);
-						double discPer = Double.parseDouble(objproddiscount.toString());
-					    discAmt = billRate * (discPer / 100) * dblCurrencyConv;
-						
-					}
-					
-					billRate = billRate - discAmt;
-					System.out.println(billRate);
-					objInvDtlModel.setDblBillRate(billRate);
-
-					objInvProdTaxDtl = new clsInvoiceProdTaxDtl();
-					objInvProdTaxDtl.setStrProdCode(objInvDtl.getStrProdCode());
-					objInvProdTaxDtl.setStrCustCode(objInvDtl.getStrCustCode());
-					objInvProdTaxDtl.setStrDocNo("Disc");
-					objInvProdTaxDtl.setDblValue(discAmt);
-					objInvProdTaxDtl.setDblTaxableAmt(0);
-					objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
-					listInvProdTaxDtl.add(objInvProdTaxDtl);
-
-					double prodRateForTaxCal = objInvDtl.getDblUnitPrice() * dblCurrencyConv;
-					/*if (objInvDtl.getDblWeight() > 0)
-					{
-						prodRateForTaxCal = objInvDtl.getDblUnitPrice() * objInvDtl.getDblWeight() * dblCurrencyConv;
-					}*/
-					String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0,"+objInvDtl.getDblWeight();
-					Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", strInvoiceDate, "0",objBean.getStrSettlementCode(), request);
-					System.out.println("Map Size= " + hmProdTaxDtl.size());
-
-					Map<String, clsInvoiceTaxDtlModel> hmInvTaxDtl = new HashMap<String, clsInvoiceTaxDtlModel>();
-					if (hmInvCustTaxDtl.containsKey(key))
-					{
-						hmInvTaxDtl = hmInvCustTaxDtl.get(key);
-					}
-					else
-					{
-						hmInvTaxDtl.clear();
-					}
-
-					for (Map.Entry<String, String> mapEntrySet : hmProdTaxDtl.entrySet())
-					{
-						clsInvoiceTaxDtlModel objInvTaxModel = null;
-
-						// 137.2#T0000011#Vat 12.5#NA#12.5#15.244444444444444
-						// taxable amt,Tax code,tax desc,tax type,tax per
-
-						String taxDtl = mapEntrySet.getValue();
-						String taxCode = mapEntrySet.getKey();
-						double taxableAmt = Double.parseDouble(taxDtl.split("#")[0]);
-						double taxAmt = Double.parseDouble(taxDtl.split("#")[5]);
-						String shortName = taxDtl.split("#")[6];
-
-						double taxAmtForSingleQty = taxAmt / objInvDtl.getDblQty();
-						if (!pattern.trim().isEmpty())
-						{
-							taxAmtForSingleQty = Double.parseDouble(decFormat.format(taxAmtForSingleQty));
-						}
-						taxAmt = taxAmtForSingleQty * objInvDtl.getDblQty();
-
-						// For Check it is Correct Or not
-						// double
-						// taxAmt=Math.round(Double.parseDouble(taxDtl.split("#")[5]));
-
-						if (hmInvTaxDtl.containsKey(mapEntrySet.getKey()))
-						{
-							objInvTaxModel = hmInvTaxDtl.get(mapEntrySet.getKey());
-							objInvTaxModel.setDblTaxableAmt(objInvTaxModel.getDblTaxableAmt() + taxableAmt);
-							objInvTaxModel.setDblTaxAmt(objInvTaxModel.getDblTaxAmt() + taxAmt);
-						}
-						else
-						{
-							objInvTaxModel = new clsInvoiceTaxDtlModel();
-							objInvTaxModel.setStrTaxCode(taxDtl.split("#")[1]);
-							objInvTaxModel.setDblTaxAmt(taxAmt);
-							objInvTaxModel.setDblTaxableAmt(taxableAmt);
-							objInvTaxModel.setStrTaxDesc(taxDtl.split("#")[2]);
-						}
-
-						if (null != objInvTaxModel)
-						{
-							hmInvTaxDtl.put(taxCode, objInvTaxModel);
-						}
-
-						objInvProdTaxDtl = new clsInvoiceProdTaxDtl();
-						objInvProdTaxDtl.setStrProdCode(objInvDtl.getStrProdCode());
-						objInvProdTaxDtl.setStrCustCode(objInvDtl.getStrCustCode());
-						objInvProdTaxDtl.setStrDocNo(taxDtl.split("#")[1]);
-						objInvProdTaxDtl.setDblValue(taxAmt);
-						objInvProdTaxDtl.setDblTaxableAmt(taxableAmt);
-						objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
-						listInvProdTaxDtl.add(objInvProdTaxDtl);
-					}
-
-					hmInvCustTaxDtl.put(key, hmInvTaxDtl);
-					hmInvProdTaxDtl.put(key, listInvProdTaxDtl);
-
-					boolean flgProdFound = false;
-					double taxtotal = 0;
-					for (Map.Entry<String, List<clsInvoiceProdTaxDtl>> entryTaxTemp : hmInvProdTaxDtl.entrySet())
-					{
-						if (!flgProdFound)
-						{
-							List<clsInvoiceProdTaxDtl> listProdTaxDtl = entryTaxTemp.getValue();
-							for (clsInvoiceProdTaxDtl objProdTaxDtl : listInvProdTaxDtl)
-							{
-								if (objProdTaxDtl.getStrProdCode().equals(objInvDtlModel.getStrProdCode()))
-								{
-									if (!objProdTaxDtl.getStrDocNo().equals("Margin"))
-									{
-										if (!objProdTaxDtl.getStrDocNo().equals("Disc"))
-										{
-											taxtotal += objProdTaxDtl.getDblValue();
-											flgProdFound = true;
-										}
-									}
-								}
-							}
-						}
-					}
-
-					double totalMarginAmt = marginAmt * objInvDtlModel.getDblQty();
-					double totalDiscAmt = discAmt * objInvDtlModel.getDblQty();
-					double assesableRateForSingleQty = (prodMRP) - (totalMarginAmt + totalDiscAmt + taxtotal);
-					double assesableRate = (prodMRP * objInvDtlModel.getDblQty()) - (totalMarginAmt + totalDiscAmt + taxtotal);
-					if (assesableRate < 0)
-					{
-						assesableRate = 0;
-					}
-
-					double assableUnitRate = (assesableRate / objInvDtlModel.getDblQty());
-					if (!pattern.trim().isEmpty())
-					{
-						assableUnitRate = Double.parseDouble(decFormat.format(assableUnitRate));
-					}
-
-					objInvDtlModel.setDblAssValue(assableUnitRate * objInvDtlModel.getDblQty());
-					// objInvDtlModel.setDblAssValue(assesableRate);
-					listInvDtlModel.add(objInvDtlModel);
-					// hmInvCustDtl.put(objInvDtl.getStrCustCode(),listInvDtlModel);
-					hmInvCustDtl.put(key, listInvDtlModel);
-					System.out.println(hmInvTaxDtl);
-				}
-			}
-
-			StringBuilder arrInvCode = new StringBuilder();
-			StringBuilder arrDcCode = new StringBuilder();
+			
 			for (Map.Entry<String, List<clsInvoiceModelDtl>> entrySetInvoiceModelDtl : hmInvCustDtl.entrySet())
 			{
 				double qty = 0.0;
@@ -826,7 +745,8 @@ public class clsBulkInvoiceController {
 					if (pickMRP.equals("Y"))
 					{
 						List<clsInvoiceProdTaxDtl> listInvProdTaxDtl = hmInvProdTaxDtl.get(key);
-						for (clsInvoiceProdTaxDtl objInvTaxModel : listInvProdTaxDtl)
+						
+						/*for (clsInvoiceProdTaxDtl objInvTaxModel : listInvProdTaxDtl)
 						{
  							if (objInvItemDtl.getStrProdCode().equals(objInvTaxModel.getStrProdCode()))
 							{
@@ -841,7 +761,7 @@ public class clsBulkInvoiceController {
 									if (dblAbtmt > 0)
 									{
 										//totalAmt += (objInvItemDtl.getDblQty() * dblMrp) * dblAbtmt / 100;
-										totalAmt += objInvItemDtl.getDblAssValue();
+										//totalAmt += objInvItemDtl.getDblAssValue();
 										if (excisableTax.equalsIgnoreCase("Y") && excisable.equalsIgnoreCase("Y"))
 										{
 											totalExcisableAmt += objInvItemDtl.getDblAssValue();
@@ -849,7 +769,7 @@ public class clsBulkInvoiceController {
 									}
 									else
 									{
-										totalAmt += objInvItemDtl.getDblAssValue();
+										//totalAmt += objInvItemDtl.getDblAssValue();
 										if (excisableTax.equalsIgnoreCase("Y") && excisable.equalsIgnoreCase("Y"))
 										{
 											totalExcisableAmt += objInvItemDtl.getDblAssValue();
@@ -857,7 +777,9 @@ public class clsBulkInvoiceController {
 									}
 								}
 							}
-						}
+						}*/
+						
+						totalAmt += objInvItemDtl.getDblAssValue();
 					}
 					else
 					{
@@ -929,17 +851,18 @@ public class clsBulkInvoiceController {
 				}
 				else
 				{
-					objHDModel.setDblTotalAmt(totalAmt);
+					objHDModel.setDblTotalAmt(Double.parseDouble(decFormat.format(totalAmt)));
 				}
-				objHDModel.setDblSubTotalAmt(subTotal);
-				objHDModel.setDblTaxAmt(taxAmt);
-				objHDModel.setDblGrandTotal(grandTotal);
+				objHDModel.setDblSubTotalAmt(Double.parseDouble(decFormat.format(dblSubTotalAmt)));
+				objHDModel.setDblTaxAmt(Double.parseDouble(decFormat.format(taxAmt)));
+				objHDModel.setDblGrandTotal(Double.parseDouble(decFormat.format(grandTotal)));
 
 				List<clsInvSalesOrderDtl> listInvSODtl = new ArrayList<clsInvSalesOrderDtl>();
 				String[] arrSOCodes = objHDModel.getStrSOCode().split(",");
+				clsInvSalesOrderDtl objInvSODtl =null;
 				for (int cn = 0; cn < arrSOCodes.length; cn++)
 				{
-					clsInvSalesOrderDtl objInvSODtl = new clsInvSalesOrderDtl();
+					objInvSODtl = new clsInvSalesOrderDtl();
 					objInvSODtl.setStrSOCode(arrSOCodes[cn]);
 					objInvSODtl.setDteInvDate(objHDModel.getDteInvDate());
 					listInvSODtl.add(objInvSODtl);
@@ -952,72 +875,22 @@ public class clsBulkInvoiceController {
 				objHDModel.setDblDiscount(0);
 				double totalAmount = objHDModel.getDblTotalAmt() - objHDModel.getDblDiscountAmt();
 				objHDModel.setDblTotalAmt(totalAmount);
-				objHDModel.setDblGrandTotal(objHDModel.getDblGrandTotal() - objHDModel.getDblDiscountAmt());
+				//objHDModel.setDblGrandTotal(objHDModel.getDblGrandTotal() - objHDModel.getDblDiscountAmt());
 				objHDModel.setStrCloseIV("N");
 				objHDModel.setDblExtraCharges(objBean.getDblExtraCharges());
 				objHDModel.setStrJVNo("");
 				
 				//For Keeping audit of voided/deleted items....	
-				objHDModel=funSaveVoidedProductList(objHDModel,objBean,clientCode);
+				//objHDModel=funSaveVoidedProductList(objHDModel,objBean,clientCode);
 
 				objInvoiceHdService.funAddUpdateInvoiceHd(objHDModel);
 				String dcCode = "";
 				if (objSetup.getStrEffectOfInvoice().equals("DC"))
 				{
-					dcCode = funDataSetInDeliveryChallan(objHDModel, request);
+					//dcCode = funDataSetInDeliveryChallan(objHDModel, request);
 				}
 				arrInvCode.append(objHDModel.getStrInvCode() + ",");
 				arrDcCode.append(dcCode + ",");
-			}
-
-			clsPartyMasterModel objCust = objPartyMasterService.funGetObject(objHDModel.getStrCustCode(), clientCode);
-			for (clsInvoiceDtlBean objInvDtl : objBean.getListclsInvoiceModelDtl())
-			{
-				if(objInvDtl.getStrProdCode()!=null)      //Change due to void invoice
-				{
-			
-					clsProdSuppMasterModel objProdCustModel = new clsProdSuppMasterModel();
-					objProdCustModel.setStrSuppCode(objHDModel.getStrCustCode());
-					objProdCustModel.setStrSuppName(objCust.getStrPName());
-					objProdCustModel.setStrClientCode(clientCode);
-					objProdCustModel.setStrProdCode(objInvDtl.getStrProdCode());
-					objProdCustModel.setStrProdName(objInvDtl.getStrProdName());
-					objProdCustModel.setDblLastCost(objInvDtl.getDblUnitPrice() * dblCurrencyConv);
-					objProdCustModel.setStrDefault("N");
-					objProdCustModel.setStrLeadTime("");
-					objProdCustModel.setStrSuppPartDesc("");
-					objProdCustModel.setStrSuppPartNo("");
-					objProdCustModel.setStrSuppUOM("");
-					objProdCustModel.setDblMargin(0);
-					objProdCustModel.setDblMaxQty(0);
-					objProdCustModel.setDblStandingOrder(0);
-					
-					objProdCustModel.setDtLastDate(strInvoiceDate);
-					
-		
-					
-					List listProdsupp = objProductMasterService.funGetProdSuppDtl( objInvDtl.getStrProdCode(),objHDModel.getStrCustCode(), clientCode);
-					if(listProdsupp.size()>0)
-					{
-						objProductMasterService.funDeleteProdSuppWise( objInvDtl.getStrProdCode(),objHDModel.getStrCustCode(), clientCode);
-						Object[] arrObj = (Object[]) listProdsupp.get(0);	
-						objProdCustModel.setDblAMCAmt(Double.parseDouble(arrObj[3].toString()));
-						objProdCustModel.setDteInstallation(arrObj[4].toString());
-						objProdCustModel.setIntWarrantyDays(Integer.parseInt(arrObj[5].toString()));
-						objProdCustModel.setDblStandingOrder(Double.parseDouble(arrObj[6].toString()));
-						objProdCustModel.setDblMargin(Double.parseDouble(arrObj[2].toString()));
-						
-					}else{
-						objProdCustModel.setDblAMCAmt(0.0);
-						objProdCustModel.setDteInstallation("1900-01-01 00:00:00");
-						objProdCustModel.setIntWarrantyDays(0);
-						objProdCustModel.setDblStandingOrder(0.0);
-						
-					}
-					
-					objProductMasterService.funAddUpdateProdSupplier(objProdCustModel);
-					funUpdatePurchagesPricePropertywise(objInvDtl.getStrProdCode(), objCust.getStrLocCode(), clientCode, objInvDtl.getDblUnitPrice() * dblCurrencyConv);
-				}
 			}
 
 			if (objCompModel.getStrWebBookModule().equals("Yes"))
@@ -1486,24 +1359,6 @@ public class clsBulkInvoiceController {
 	
 
 	}
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
@@ -1609,99 +1464,5 @@ public class clsBulkInvoiceController {
 		objGlobalFunctionsService.funUpdateAllModule(sqlUpdateDC, "sql");
 		return objDcHdModel.getStrDCCode();
 	}
-    
-	private clsInvoiceHdModel funSaveVoidedProductList(clsInvoiceHdModel objHDModel,clsInvoiceBean objBean,String clientCode)
-	{
-		 if (!objBean.getStrInvCode().isEmpty()) // New Entry
-			{
-				clsInvoiceHdModel objInvHDModelList = objInvoiceHdService.funGetInvoiceDtl(objBean.getStrInvCode(), clientCode);
-				TreeMap hmPreviousInvProdList=new TreeMap<>();
-				TreeMap hmPrevProdSeq=new TreeMap<>();
-				List<clsInvoiceModelDtl> listOfVoidedInvDtlModel =new ArrayList<>();
-				listOfVoidedInvDtlModel=objInvHDModelList.getListVoidedProdInvModel();
-				if(objInvHDModelList.getListInvDtlModel().size()>0)
-				{
-					for(int cnt=0;cnt<objInvHDModelList.getListInvDtlModel().size();cnt++)
-					{
-						clsInvoiceModelDtl objInvDtlModel=objInvHDModelList.getListInvDtlModel().get(cnt);
-						hmPreviousInvProdList.put(objInvDtlModel.getStrProdCode(), objInvDtlModel);
-						hmPrevProdSeq.put(cnt, objInvDtlModel.getStrProdCode());
-					}
-					
-					for(int i=0;i<objBean.getListclsInvoiceModelDtl().size();i++)
-					{
-						if(objBean.getListclsInvoiceModelDtl().get(i).getStrProdCode()!=null)
-						{
-							String newItem=objBean.getListclsInvoiceModelDtl().get(i).getStrProdCode().toString();
-							if(hmPreviousInvProdList.containsKey(newItem))
-							{
-								clsInvoiceModelDtl objVoidInvDtlModel=(clsInvoiceModelDtl) hmPreviousInvProdList.get(newItem);
-								double voidedQty=objVoidInvDtlModel.getDblQty()-objBean.getListclsInvoiceModelDtl().get(i).getDblQty();	
-								if(voidedQty>0)
-								{   
-									voidedQty=funGetExistenceProduct(voidedQty,listOfVoidedInvDtlModel,objVoidInvDtlModel.getStrProdCode());
-									objVoidInvDtlModel.setDblAssValue(voidedQty*(objVoidInvDtlModel.getDblAssValue()/objVoidInvDtlModel.getDblQty()));
-									objVoidInvDtlModel.setDblQty(voidedQty);
-									listOfVoidedInvDtlModel.add(objVoidInvDtlModel);
-								}
-							}
-							else
-							{
-								clsInvoiceModelDtl objVoidInvDtlModel=(clsInvoiceModelDtl) hmPreviousInvProdList.get(newItem);
-								listOfVoidedInvDtlModel.add(objVoidInvDtlModel);
-							}
-						}
-						else
-						{
-							Object prodCode=hmPrevProdSeq.get(i);
-							//clsInvoiceModelDtl objVoidInvDtlModel=(clsInvoiceModelDtl)hmPreviousInvProdList.get( (hmPreviousInvProdList.keySet().toArray())[ i ] );
-							clsInvoiceModelDtl objVoidInvDtlModel=(clsInvoiceModelDtl)hmPreviousInvProdList.get(prodCode);
-							double voidedQty=objVoidInvDtlModel.getDblQty();
-							voidedQty=funGetExistenceProduct(voidedQty,listOfVoidedInvDtlModel,objVoidInvDtlModel.getStrProdCode());
-							objVoidInvDtlModel.setDblAssValue(voidedQty*(objVoidInvDtlModel.getDblAssValue()/objVoidInvDtlModel.getDblQty()));
-							objVoidInvDtlModel.setDblQty(voidedQty);
-							listOfVoidedInvDtlModel.add(objVoidInvDtlModel);
-						}
-						
-					}
-					
-					if(listOfVoidedInvDtlModel.size()>0)
-					{
-						objHDModel.setListVoidedProdInvModel(listOfVoidedInvDtlModel);
-					}
-				}
-				
-			}	
-		   
-		   return objHDModel;
-	  }
-	private void funUpdatePurchagesPricePropertywise(String prodCode, String locCode, String clientCode, double price)
-	{
-		objProductMasterService.funDeleteProdReorderLoc(prodCode, locCode, clientCode);
-		clsProductReOrderLevelModel objProdReOrder = new clsProductReOrderLevelModel(new clsProductReOrderLevelModel_ID(locCode, clientCode, prodCode));
-		objProdReOrder.setDblReOrderLevel(0);
-		objProdReOrder.setDblReOrderQty(0);
-		objProdReOrder.setDblPrice(price);
-		objProductMasterService.funAddUpdateProdReOrderLvl(objProdReOrder);
-
-	}
-	private double funGetExistenceProduct(double voidedQty,List<clsInvoiceModelDtl> listOfVoidedInvDtlModel,String voidedProductCode)
-	{
-		   if(listOfVoidedInvDtlModel.size()>0)
-			{
-				for (int cn = 0; cn < listOfVoidedInvDtlModel.size(); cn++)
-				{
-					clsInvoiceModelDtl objModel=listOfVoidedInvDtlModel.get(cn);
-					if(objModel.getStrProdCode().equals(voidedProductCode))
-					{
-						voidedQty+=Double.valueOf(objModel.getDblQty());	
-						listOfVoidedInvDtlModel.remove(cn);
-						break;
-					}
-				}
-			}
-		   return voidedQty;
-	}
-
 
 }

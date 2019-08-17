@@ -1177,7 +1177,7 @@
 	    var unitprice="";
 	    var dblAssValue=DCDtl.dblAssValue;
 	    var CustCode=$("#txtCustCode").val();
-	    var SOCode=$("#txtSOCode").val();
+	    var SOCode=DCDtl.strSOCode//$("#txtSOCode").val();
 	    var precode="";
 	    var preAmt="";
 	    

@@ -200,7 +200,8 @@ public class clsSalesReturnController {
 
 					double marginePer = 0;
 					double marginAmt = 0;
-					double billRate = 0,prodMRP=0;
+					double billRate = 0,prodMRP=0,dblWeight=1;
+					double totalTaxablAmt = 0.00;
 					StringBuilder sqlQuery = new StringBuilder();
 					for (clsSalesReturnDtlModel obSrDtl : listSRDtlModel) {
 						if (null != obSrDtl.getStrProdCode()) {
@@ -220,8 +221,13 @@ public class clsSalesReturnController {
 								marginAmt = prodMRP * (marginePer / 100);
 								billRate = prodMRP - marginAmt;
 							}
-							billRate=billRate*obSrDtl.getDblQty()*obSrDtl.getDblWeight();
+							
+							if(obSrDtl.getDblWeight()>1){
+								dblWeight=obSrDtl.getDblWeight();	
+							}
+							billRate=billRate*obSrDtl.getDblQty()*dblWeight;
 							obSrDtl.setDblPrice(billRate);
+							totalTaxablAmt+=billRate;
 							if (objHdModel.getStrAgainst().equalsIgnoreCase("Delivery Challan")) {
 								String sqlCloseDC = "update tbldeliverychallanhd set strCloseDC='Y'  where strDCCode='" + objBean.getStrDCCode() + "' and strClientCode='" + clientCode + "'";
 								objGlobalFunctionsService.funUpdateAllModule(sqlCloseDC, "sql");
@@ -239,7 +245,7 @@ public class clsSalesReturnController {
 					}
 					// Save Data SalesReturn Tax
 					double totalTaxAmt = 0.00;
-					double totalTaxablAmt = 0.00;
+					
 					// double dblGrandAmt = 0.00;
 					
 					if (null != objBean.getListSalesRetrunTaxModel()) {
@@ -253,7 +259,7 @@ public class clsSalesReturnController {
 							ojInvoiceTaxDtlModel.setStrSRCode(strSRCode);
 							objSalesReturnService.funAddTaxDtl(ojInvoiceTaxDtlModel);
 							totalTaxAmt += ojInvoiceTaxDtlModel.getStrTaxAmt();
-							totalTaxablAmt = ojInvoiceTaxDtlModel.getStrTaxableAmt();
+						//	totalTaxablAmt = ojInvoiceTaxDtlModel.getStrTaxableAmt();
 							listSRTaxModel.add(ojInvoiceTaxDtlModel);
 						}
 						objHdModel.setDblTotalAmt(String.valueOf(totalTaxablAmt + totalTaxAmt));

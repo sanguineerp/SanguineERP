@@ -128,6 +128,9 @@
 			<variableExpression><![CDATA[$F{dblTotalAmt}]]></variableExpression>
 			<initialValueExpression><![CDATA[new Double(0.00)]]></initialValueExpression>
 		</variable>
+		<variable name="dblSubTotal" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{dblTotalAmt}]]></variableExpression>
+		</variable>
 	</subDataset>
 	<subDataset name="dsTaxSummary" uuid="aca2a2dc-c2c3-47cd-9761-5f1f6dca216f">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
@@ -527,7 +530,7 @@
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{dblSubTotal}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{dblSubTotal}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table_TD" height="15">

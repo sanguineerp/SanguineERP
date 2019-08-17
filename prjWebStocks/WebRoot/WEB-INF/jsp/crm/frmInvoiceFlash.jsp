@@ -456,32 +456,36 @@
 			
 			function funOpenInvoiceFormat()
 			{
-				var invPath="";
+				    var invPath="";
 					invoiceformat='<%=session.getAttribute("invoieFormat").toString()%>';
 					if(invoiceformat=="Format 1")
 						{
 							invPath="openRptInvoiceSlip";
 							
 						}
-					else if(invoiceformat=="Format 2")
+					 else if(invoiceformat=="Format 2")
 						{
 							invPath="rptInvoiceSlipFromat2";
 						}
-					else if(invoiceformat=="Format 5")
+					  else if(invoiceformat=="Format 5")
 						{
 							invPath="rptInvoiceSlipFormat5Report";
 						}
-					else if(invoiceformat=="RetailNonGSTA4"){
+					 else if(invoiceformat=="RetailNonGSTA4"){
 						 invPath="openRptInvoiceRetailNonGSTReport";
 						}
-					else if("Format 6")
+					  else if(invoiceformat=="Format 6")
 						{
 							invPath="rptInvoiceSlipFormat6Report";
 						}
-						else
+						else if(invoiceformat=="Format 8")
 					    {
-							invPath="rptInvoiceSlipFormat6Report";
+							invPath="rptInvoiceSlipFormat8Report";
 					    }
+						else
+						{
+							invPath="rptInvoiceSlipFormat8Report";
+						}
 				return invPath;
 			}
 			

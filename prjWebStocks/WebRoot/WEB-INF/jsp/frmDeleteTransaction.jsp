@@ -252,6 +252,18 @@
 		  	});
 		}
 		
+		function funSubmit_onClick()
+		{
+			var flag=true;
+			if($("#txtNarration").val()=="" &&$("#txtReason").val()=="" )
+			{
+				flag=false
+				alert("Please Enter the Valid Reason And Narration")
+			}
+			return flag;
+			
+		}
+		
 		$(function ()
 				{
 					 var message='';
@@ -347,10 +359,8 @@
 				<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit"
-				id="btnSubmit"
-				class="form_button" /> <input type="reset" value="Reset"
-				id="btnReset" class="form_button" />
+			<input type="submit" value="Submit" id="btnSubmit" class="form_button" onclick="return funSubmit_onClick();" />
+				 <input type="reset" value="Reset" id="btnReset" class="form_button" />
 		</p>
 <br><br>
 		</s:form>

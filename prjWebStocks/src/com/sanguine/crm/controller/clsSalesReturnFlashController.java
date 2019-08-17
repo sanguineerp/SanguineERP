@@ -159,7 +159,7 @@ public class clsSalesReturnFlashController {
 		List listofSaleRetuTotal = new ArrayList<>();
 		String strClientCode = request.getSession().getAttribute("clientCode").toString();
 		
-		String sql=" select d.strProdCode,d.strProdName, a.strAgainst,DATE_FORMAT(Date(a.dteSRDate),'%d-%m-%Y'),e.strLocName,b.strPName,sum(c.dblQty * c.dblPrice),sum(c.dblQty)"
+		String sql=" select d.strProdCode,d.strProdName, a.strAgainst,DATE_FORMAT(Date(a.dteSRDate),'%d-%m-%Y'),e.strLocName,b.strPName,sum(c.dblPrice),sum(c.dblQty)"
 				+ " from tblsalesreturnhd a "
 				+ " left outer join tblsalesreturndtl c on a.strSRCode=c.strSRCode"
 				+ " left outer join tblpartymaster b on a.strCustCode=b.strPCode "
@@ -221,7 +221,7 @@ public class clsSalesReturnFlashController {
 		List listofSaleRetuTotal = new ArrayList<>();
 		String strClientCode = request.getSession().getAttribute("clientCode").toString();
 		
-		String sql=" SELECT b.strPCode,b.strPName,a.strAgainst,DATE_FORMAT(Date(a.dteSRDate),'%d-%m-%Y'),d.strLocName,sum(c.dblQty*c.dblPrice)"
+		String sql=" SELECT b.strPCode,b.strPName,a.strAgainst,DATE_FORMAT(Date(a.dteSRDate),'%d-%m-%Y'),d.strLocName,sum(c.dblPrice)"
 				+ " from tblsalesreturnhd a "
 				+ " left outer join tblsalesreturndtl c on a.strSRCode=c.strSRCode"
 				+ " left outer join tblpartymaster b on a.strCustCode=b.strPCode left outer join tbllocationmaster d on a.strLocCode=d.strLocCode"
@@ -271,7 +271,7 @@ public class clsSalesReturnFlashController {
 		List listofSaleRetuTotal = new ArrayList<>();
 		String strClientCode = request.getSession().getAttribute("clientCode").toString();
 		
-		String sql=" select g.strGName,f.strSGName, a.strAgainst,DATE_FORMAT(Date(a.dteSRDate),'%d-%m-%Y'),e.strLocName,b.strPName,sum(c.dblQty * c.dblPrice),sum(c.dblQty)"
+		String sql=" select g.strGName,f.strSGName, a.strAgainst,DATE_FORMAT(Date(a.dteSRDate),'%d-%m-%Y'),e.strLocName,b.strPName,sum(c.dblPrice),sum(c.dblQty)"
 				+ " from tblsalesreturnhd a "
 				+ " left outer join tblsalesreturndtl c on a.strSRCode=c.strSRCode"
 				+ " left outer join tblpartymaster b on a.strCustCode=b.strPCode "
