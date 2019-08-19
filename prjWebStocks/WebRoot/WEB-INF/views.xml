@@ -13,4 +13,5 @@
     <bean id="excelViewForAccountReports" class="com.sanguine.util.clsExcelBuilderForAccountReports" />
     <bean id="pdfViewMISFlash" class="com.sanguine.util.clsPDFBuilderForMISFlash" />
     <bean id="pdfViewMISLocationWiseCategoryWiseReport" class="com.sanguine.util.clsPDFBuilderMISLocationWiseCategoryWiseReport" />
+    <bean id="excelViewFromToDteReportName" class="com.sanguine.util.clsExcelViewFromToDteReportName" />
 </beans>

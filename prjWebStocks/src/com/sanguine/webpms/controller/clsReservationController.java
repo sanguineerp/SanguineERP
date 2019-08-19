@@ -121,12 +121,14 @@ public class clsReservationController {
 		String propCode = request.getSession().getAttribute("propertyCode").toString();
 		String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
 		List listOfProperty = objGlobalFunctionsService.funGetList("select strPropertyName from "+webStockDB+".tblpropertymaster where strPropertyCode='" + propCode + "' ");
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		model.put("listOfProperty", listOfProperty);
 
 		model.put("urlHits", urlHits);
+		clsPropertySetupHdModel objModel = objPropertySetupService.funGetPropertySetup(propCode, clientCode);
 		
-		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		
+		String tmeCheckOutTime = objModel.getTmeCheckOutTime();
+		model.put("tmeCheckOutPropertySetupTime", tmeCheckOutTime);
 
 //		clsPropertySetupHdModel objPropertySetupModel = objPropertySetupService.funGetPropertySetup(propCode, clientCode);
 //		String noOfRoom = objPropertySetupModel.getStrRoomLimit();

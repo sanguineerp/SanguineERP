@@ -11,6 +11,7 @@ public class clsPMSSalesFlashBean implements Serializable
 	private String dblSettlementAmt;
 	private String strRevenueType;
 	private double dblAmount;
+	private double dblTaxAmount;
 	private String strTaxDesc;
 	private String dblTaxableAmt;
 	private String dblTaxAmt;
@@ -81,6 +82,12 @@ public class clsPMSSalesFlashBean implements Serializable
 		this.dblAmount = dblAmount;
 	}
 	
+	public double getDblTaxAmount() {
+		return dblTaxAmount;
+	}
+	public void setDblTaxAmount(double dblTaxAmount) {
+		this.dblTaxAmount = dblTaxAmount;
+	}
 	public String getStrTaxDesc() {
 		return strTaxDesc;
 	}

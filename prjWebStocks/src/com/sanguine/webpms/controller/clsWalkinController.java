@@ -139,6 +139,8 @@ public class clsWalkinController {
 		String urlHits = "1";
 		String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
+
 		List<String> listPrefix = new ArrayList<>();
 		listPrefix.add("Mr.");
 		listPrefix.add("Mrs.");
@@ -174,6 +176,12 @@ public class clsWalkinController {
 		}
 		model.put("listCountry", listCountry);
 
+		clsPropertySetupHdModel objModel = objPropertySetupService.funGetPropertySetup(propCode, clientCode);
+		
+		String tmeCheckOutTime = objModel.getTmeCheckOutTime();
+		model.put("tmeCheckOutPropertySetupTime", tmeCheckOutTime);
+		
+		
 		try {
 			urlHits = request.getParameter("saddr").toString();
 		} catch (NullPointerException e) {

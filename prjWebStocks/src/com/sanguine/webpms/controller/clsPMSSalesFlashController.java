@@ -1,7 +1,9 @@
 package com.sanguine.webpms.controller;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ibm.icu.math.BigDecimal;
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.crm.bean.clsSalesReturnBean;
+import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webpms.bean.clsPMSSalesFlashBean;
+import com.sanguine.webpms.bean.clsRevenueHeadReportBean;
 
 @Controller
 public class clsPMSSalesFlashController {
@@ -57,8 +64,12 @@ public class clsPMSSalesFlashController {
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
-
+		
+		BigDecimal dblTotalValue = new BigDecimal(0);
+	
+		
 		List<clsPMSSalesFlashBean> listofSettlementDtl = new ArrayList<clsPMSSalesFlashBean>();
+		List listofSettlementTotal = new ArrayList<>();
 
 		String sql = "select c.strSettlementDesc,sum(b.dblSettlementAmt) "
 				+ " from tblreceipthd a ,tblreceiptdtl b ,tblsettlementmaster c"
@@ -80,9 +91,12 @@ public class clsPMSSalesFlashController {
 				objBean.setStrSettlementDesc(arr2[0].toString());
 				objBean.setDblSettlementAmt(arr2[1].toString());
 				listofSettlementDtl.add(objBean);
+				dblTotalValue = new BigDecimal(Double.parseDouble(arr2[1].toString())).add(dblTotalValue);
 			}
 		}
-		return listofSettlementDtl;
+		listofSettlementTotal.add(listofSettlementDtl);
+		listofSettlementTotal.add(dblTotalValue);
+		return listofSettlementTotal;
 	}
 
 	@RequestMapping(value = "/loadRevenueHeadWiseDtl", method = RequestMethod.GET)
@@ -93,47 +107,81 @@ public class clsPMSSalesFlashController {
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		BigDecimal dblTaxTotalValue = new BigDecimal(0);
 
 		List<clsPMSSalesFlashBean> listofRevenueDtl = new ArrayList<clsPMSSalesFlashBean>();
-		HashMap<String, Double> hmRevenueType = new HashMap<String, Double>();
-		String sql = "select * from "
-				+ " (SELECT b.strRevenueType as strRevenueType , SUM(b.dblDebitAmt) as Amount "
-				+ " FROM tblbillhd a, tblbilldtl b WHERE a.strBillNo=b.strBillNo AND DATE(a.dteBillDate) BETWEEN '"
-				+ fromDte
-				+ "' AND '"
-				+ toDte
-				+ "' GROUP BY b.strRevenueType) c"
-				+ " union"
-				+ " select * from"
-				+ " (SELECT b.strRevenueType as strRevenueType, SUM(b.dblDebitAmt) as Amount "
-				+ " FROM tblfoliohd a,tblfoliodtl b"
-				+ " WHERE a.strFolioNo=b.strFolioNo AND DATE(b.dteDocDate) BETWEEN '"
-				+ fromDte + "' AND '" + toDte + "' "
-				+ " GROUP BY b.strRevenueType ) d ";
-
-		List listRevenueDtl = objGlobalService.funGetListModuleWise(sql, "sql");
-		if (!listRevenueDtl.isEmpty()) {
-			for (int i = 0; i < listRevenueDtl.size(); i++) {
-				Object[] arr2 = (Object[]) listRevenueDtl.get(i);
-				if (hmRevenueType.containsKey(arr2[0].toString())) {
-					double dblAmount = hmRevenueType.get(arr2[0].toString())
-							+ Double.parseDouble(arr2[1].toString());
-					hmRevenueType.put(arr2[0].toString(), dblAmount);
-
-				} else {
-					hmRevenueType.put(arr2[0].toString(),
-							Double.parseDouble(arr2[1].toString()));
+		List listofRevenueHeadTotal = new ArrayList<>();
+		HashMap<String,clsPMSSalesFlashBean> hmRevenueType = new HashMap<String,clsPMSSalesFlashBean >();
+		
+		
+		String sql=" select * from  "
+                  +" (select a.strRevenueType AS strRevenueType,sum(a.Amount),sum(b.TAXAMT) from (SELECT a.strBillNo,b.strDocNo ,b.strRevenueType AS strRevenueType, sum(b.dblDebitAmt) AS Amount "
+                  +" FROM tblbillhd a, tblbilldtl b "
+                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" GROUP BY a.strBillNo ,b.strDocNo) a, "
+                  +" (select a.strBillNo,b.strDocNo,sum(b.dblTaxAmt) AS TAXAMT  "
+                  +" from tblbillhd a , tblbilltaxdtl b "
+                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" GROUP BY a.strBillNo,b.strDocNo) b "
+                  +" where a.strBillNo=b.strBillNo AND a.strDocNo=b.strDocNo group by  a.strRevenueType)  c "
+                  +" UNION select * from  "
+                  +" (select a.strRevenueType AS strRevenueType,sum(a.Amount),sum(b.TAXAMT) from (SELECT a.strFolioNo,b.strDocNo,b.strRevenueType AS strRevenueType, SUM(b.dblDebitAmt) AS Amount "
+                  +" FROM tblfoliohd a,tblfoliodtl b "
+                  +" WHERE a.strFolioNo=b.strFolioNo     AND DATE(b.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" GROUP BY b.strRevenueType)  a , "
+                  +" (select a.strFolioNo,b.strDocNo,sum(b.dblTaxAmt) AS TAXAMT from tblfoliodtl a ,tblfoliotaxdtl b "
+                  +" where a.strFolioNo=b.strFolioNo and DATE(a.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" GROUP BY a.strFolioNo,b.strDocNo) b "
+                  +" where a.strFolioNo=b.strFolioNo and a.strDocNo=b.strDocNo group by a.strRevenueType )  d ; ";
+		
+		List listRevenueDtl=objGlobalService.funGetListModuleWise(sql, "sql");
+	
+		if(!listRevenueDtl.isEmpty())
+		{
+			for(int i=0;i< listRevenueDtl.size();i++)
+			{
+				Object[] arr2=(Object[]) listRevenueDtl.get(i);
+				clsPMSSalesFlashBean objBean=new clsPMSSalesFlashBean();
+				
+				if(hmRevenueType.containsKey(arr2[0].toString()))
+				{
+					objBean=hmRevenueType.get(arr2[0].toString());
+			        double newAmount=objBean.getDblAmount() + Double.parseDouble(arr2[1].toString());
+			        objBean.setDblAmount(newAmount);
+			        double newTaxAmt=objBean.getDblTaxAmount() + Double.parseDouble(arr2[2].toString());
+			        objBean.setDblTaxAmount(newTaxAmt);
+			        hmRevenueType.put(arr2[0].toString(), objBean);
 				}
+				else
+				{
+					objBean.setDblAmount(Double.parseDouble(arr2[1].toString()));
+					objBean.setDblTaxAmount(Double.parseDouble(arr2[2].toString()));
+					hmRevenueType.put(arr2[0].toString(),objBean);
+				}
+				dblTotalValue = new BigDecimal(Double.parseDouble(arr2[1].toString())).add(dblTotalValue);
+				
+				dblTaxTotalValue =  new BigDecimal(Double.parseDouble(arr2[2].toString())).add(dblTaxTotalValue);
 			}
 		}
-		for (HashMap.Entry<String, Double> hmRevenue : hmRevenueType.entrySet()) {
-			clsPMSSalesFlashBean objBean = new clsPMSSalesFlashBean();
+		
+		for(HashMap.Entry<String,clsPMSSalesFlashBean> hmRevenue : hmRevenueType.entrySet() )
+		{
+			clsPMSSalesFlashBean objBean=new clsPMSSalesFlashBean();
 			objBean.setStrRevenueType(hmRevenue.getKey());
-			objBean.setDblAmount(hmRevenue.getValue());
-			listofRevenueDtl.add(objBean);
+		    clsPMSSalesFlashBean obj=hmRevenue.getValue();
+		    double amount=obj.getDblAmount();
+		    objBean.setDblAmount(amount);
+		    double taxAmount=obj.getDblTaxAmount();
+		    objBean.setDblTaxAmount(taxAmount);
+		    listofRevenueDtl.add(objBean);
+		    
+			
 		}
-
-		return listofRevenueDtl;
+		listofRevenueHeadTotal.add(listofRevenueDtl);
+		listofRevenueHeadTotal.add(dblTotalValue);
+		listofRevenueHeadTotal.add(dblTaxTotalValue);
+		return listofRevenueHeadTotal;
 	}
 
 	@RequestMapping(value = "/loadTaxWiseDtl", method = RequestMethod.GET)
@@ -144,8 +192,11 @@ public class clsPMSSalesFlashController {
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		BigDecimal dblTaxTotalValue = new BigDecimal(0);
 
 		List<clsPMSSalesFlashBean> listofTaxDtl = new ArrayList<clsPMSSalesFlashBean>();
+		List listofTaxTotal = new ArrayList<>();
 		String sql = " SELECT  IFNULL(c.strTaxDesc,''), IFNULL(SUM(c.dblTaxableAmt),0), IFNULL(SUM(c.dblTaxAmt),0) "
 				+ " FROM tblbillhd a "
 				+ " LEFT OUTER "
@@ -168,10 +219,15 @@ public class clsPMSSalesFlashController {
 				objBean.setDblTaxableAmt(arr2[1].toString());
 				objBean.setDblTaxAmt(arr2[2].toString());
 				listofTaxDtl.add(objBean);
+                dblTotalValue = new BigDecimal(Double.parseDouble(arr2[1].toString())).add(dblTotalValue);
+				dblTaxTotalValue =  new BigDecimal(arr2[2].toString()).add(dblTaxTotalValue);
 			}
 		}
+		listofTaxTotal.add(listofTaxDtl);
+		listofTaxTotal.add(dblTotalValue);
+		listofTaxTotal.add(dblTaxTotalValue);
 
-		return listofTaxDtl;
+		return listofTaxTotal;
 	}
 
 	@RequestMapping(value = "/loadExpectedArrWiseDtl", method = RequestMethod.GET)
@@ -182,9 +238,12 @@ public class clsPMSSalesFlashController {
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		
 
 		List<clsPMSSalesFlashBean> listofExpectedArrDtl = new ArrayList<clsPMSSalesFlashBean>();
-		String sql = "SELECT a.strReservationNo,  DATE_FORMAT(a.dteDateCreated,'%d-%m-%Y'),CONCAT(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName),   IFNULL(d.dblReceiptAmt,0), DATE_FORMAT(a.dteArrivalDate,'%d-%m-%Y'), DATE_FORMAT(a.dteDepartureDate,'%d-%m-%Y') "
+		List listofExpectedArrTotal = new ArrayList<>();
+		String sql = "SELECT a.strReservationNo,  DATE_FORMAT(a.dteDateCreated,'%d-%m-%Y'),CONCAT(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName),    DATE_FORMAT(a.dteDepartureDate,'%d-%m-%Y'), DATE_FORMAT(a.dteArrivalDate,'%d-%m-%Y'), IFNULL(d.dblReceiptAmt,0) "
 				+ " FROM tblreservationhd a "
 				+ " LEFT OUTER JOIN tblreservationdtl b ON a.strReservationNo=b.strReservationNo "
 				+ " LEFT OUTER JOIN tblbookingtype c ON a.strBookingTypeCode=c.strBookingTypeCode "
@@ -201,15 +260,17 @@ public class clsPMSSalesFlashController {
 				objBean.setStrReservationNo(arr2[0].toString());
 				objBean.setDteReservationDate(arr2[1].toString());
 				objBean.setStrGuestName(arr2[2].toString());
-				objBean.setDblReceiptAmt(arr2[3].toString());
+				objBean.setDteDepartureDate(arr2[3].toString());
 				objBean.setDteArrivalDate(arr2[4].toString());
-				objBean.setDteDepartureDate(arr2[5].toString());
+				objBean.setDblReceiptAmt(arr2[5].toString());
 				listofExpectedArrDtl.add(objBean);
+				dblTotalValue = new BigDecimal(Double.parseDouble(arr2[5].toString())).add(dblTotalValue);
 
 			}
 		}
-
-		return listofExpectedArrDtl;
+		listofExpectedArrTotal.add(listofExpectedArrDtl);
+		listofExpectedArrTotal.add(dblTotalValue);
+		return listofExpectedArrTotal;
 	}
 
 	
@@ -223,11 +284,11 @@ public class clsPMSSalesFlashController {
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
 
 		List<clsPMSSalesFlashBean> listofExpectedDeptDtl = new ArrayList<clsPMSSalesFlashBean>();
-		String sql="SELECT a.strCheckInNo,a.strType, DATE(a.dteDepartureDate),c.strRoomDesc,c.strRoomTypeDesc, CONCAT(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName) "
-                  +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d,tblbillhd e "
-                  +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode "
-                  +" AND b.strGuestCode=d.strGuestCode "
-                  +" AND DATE(a.dteCheckInDate) BETWEEN '"+fromDte+"' AND '"+toDte+"';";
+		String sql="SELECT a.strCheckInNo,a.strType, DATE(a.dteDepartureDate),c.strRoomDesc,c.strRoomTypeDesc,"
+				  +" CONCAT(d.strFirstName,' ',d.strMiddleName,'',d.strLastName) "
+                  +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d "
+                  +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode AND b.strGuestCode=d.strGuestCode "
+                  +" AND DATE(a.dteDepartureDate) BETWEEN '"+fromDte+"' AND '"+toDte+"';";
 		
 		List listExpectedDeptDtl=objGlobalService.funGetListModuleWise(sql,"sql");
 		if(!listExpectedDeptDtl.isEmpty())
@@ -264,11 +325,11 @@ public class clsPMSSalesFlashController {
 			String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
 
 			List<clsPMSSalesFlashBean> listofCheckInDtl = new ArrayList<clsPMSSalesFlashBean>();
-			String sql="SELECT a.strCheckInNo,a.strType, DATE(a.dteArrivalDate),c.strRoomDesc,c.strRoomTypeDesc,CONCAT(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName), "
-                      +" a.tmeArrivalTime"
-					  +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d,tblbillhd e "
-                      +" WHERE DATE(a.dteCheckInDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode AND b.strGuestCode=d.strGuestCode "
-                      +" AND a.strCheckInNo=e.strCheckInNo ;";
+			String sql="SELECT a.strCheckInNo,a.strType, DATE(a.dteArrivalDate),c.strRoomDesc,c.strRoomTypeDesc, "
+                      +" CONCAT(d.strFirstName,'', d.strMiddleName,'',d.strLastName), a.tmeArrivalTime "
+                      +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d "
+                      +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode "
+                      +" AND b.strGuestCode=d.strGuestCode AND DATE(a.dteCheckInDate) BETWEEN '"+fromDte+"' AND '"+toDte+"';";
 			List listCheckInDtl = objGlobalService.funGetListModuleWise(sql, "sql");
 			if (!listCheckInDtl.isEmpty()) {
 				for (int i = 0; i < listCheckInDtl.size(); i++) {
@@ -297,19 +358,22 @@ public class clsPMSSalesFlashController {
 			String toDate = request.getParameter("toDte").toString();
 			String[] arr1 = toDate.split("-");
 			String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
-
+			BigDecimal dblTotalValue = new BigDecimal(0);
+			
 			List<clsPMSSalesFlashBean> listofCheckOutDtl = new ArrayList<clsPMSSalesFlashBean>();
-			String sql="SELECT a.strCheckInNo,a.strType , DATE(a.dteDepartureDate),c.strRoomDesc,c.strRoomTypeDesc,CONCAT(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName),"
-					  +" e.dblGrandTotal"
+			List listofCheckOutTotal = new ArrayList<>();
+
+			String sql="SELECT a.strCheckInNo,a.strType, DATE(a.dteDepartureDate),c.strRoomDesc,c.strRoomTypeDesc, "
+                      +" CONCAT(d.strFirstName,'', d.strMiddleName,'',d.strLastName), e.dblGrandTotal "
                       +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d,tblbillhd e "
-                      +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode AND b.strGuestCode=d.strGuestCode "
-                      +" AND a.strCheckInNo=e.strCheckInNo AND DATE(a.dteCheckInDate) BETWEEN '"+fromDte+"' AND '"+toDte+"';";
+                      +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode AND b.strGuestCode=d.strGuestCode " 
+                      +" AND  a.strCheckInNo=e.strCheckInNo AND DATE(a.dteDepartureDate) BETWEEN '"+fromDte+"' AND '"+toDte+"';";
 			List listCheckOutDtl = objGlobalService.funGetListModuleWise(sql, "sql");
 			if (!listCheckOutDtl.isEmpty()) {
 				for (int i = 0; i < listCheckOutDtl.size(); i++) {
 				    Object[] arr2=(Object[]) listCheckOutDtl.get(i);
 					clsPMSSalesFlashBean objBean = new clsPMSSalesFlashBean();
-					objBean.setStrCheckInNo(arr2[0].toString());
+					objBean.setStrBillNo(arr2[0].toString());
 					objBean.setStrBookingType(arr2[1].toString());
 					objBean.setDteDepartureDate(arr2[2].toString());
 					objBean.setStrRoomDesc(arr2[3].toString());
@@ -317,10 +381,12 @@ public class clsPMSSalesFlashController {
 					objBean.setStrGuestName(arr2[5].toString());
 					objBean.setDblGrandTotal(arr2[6].toString());
 					listofCheckOutDtl.add(objBean);
-
+					dblTotalValue = new BigDecimal(Double.parseDouble(arr2[6].toString())).add(dblTotalValue);
 				}
 			}
-			return listofCheckOutDtl;
+			 listofCheckOutTotal.add(listofCheckOutDtl); 
+			 listofCheckOutTotal.add(dblTotalValue); 
+			return listofCheckOutTotal;
 	
 	}
 	
@@ -461,12 +527,22 @@ public class clsPMSSalesFlashController {
 		List retList = new ArrayList();
 		List detailList = new ArrayList();
 		List headerList = new ArrayList();
+		List totalsList = new ArrayList();
+		totalsList.add("Total");
+		
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		DecimalFormat df = new DecimalFormat("#.##");
+		
+
+		
 		String sql = "select c.strSettlementDesc,sum(b.dblSettlementAmt) "
 				+ " from tblreceipthd a ,tblreceiptdtl b ,tblsettlementmaster c"
 				+ " where a.strReceiptNo=b.strReceiptNo"
@@ -487,8 +563,25 @@ public class clsPMSSalesFlashController {
 				DataList.add(arr2[0].toString());
 				DataList.add(arr2[1].toString());
 				detailList.add(DataList);
+				dblTotalValue = new BigDecimal(df.format(Double.parseDouble(arr2[1].toString()))).add(dblTotalValue);
+				
 			}
 		}
+	
+		totalsList.add(dblTotalValue);
+		
+		retList.add("SettlementWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List titleData = new ArrayList<>();
+		titleData.add("Settlement Wise Report");
+		retList.add(titleData);
+		
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+		filterData.add(toDate);
+        retList.add(filterData); 
+		
 		headerList.add("Settlement Type");
 		headerList.add("Settlement Amount");
 		Object[] objHeader = (Object[]) headerList.toArray();
@@ -497,11 +590,16 @@ public class clsPMSSalesFlashController {
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("SettlementWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
-		retList.add(ExcelHeader);
+		
+		
+		List blankList = new ArrayList();
+	    detailList.add(blankList);// Blank Row at Bottom
+	    detailList.add(totalsList);
+			
+        retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
     }
 	
 	
@@ -513,63 +611,127 @@ public class clsPMSSalesFlashController {
 		List retList = new ArrayList();
 		List detailList = new ArrayList();
 		List headerList = new ArrayList();
+		List totalsList = new ArrayList();
+		totalsList.add("Total");
+		
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
 		
-		HashMap<String, Double> hmRevenueType = new HashMap<String, Double>();
-		String sql="select * from "
-				+ " (SELECT b.strRevenueType as strRevenueType , SUM(b.dblDebitAmt) as Amount "
-				+ " FROM tblbillhd a, tblbilldtl b WHERE a.strBillNo=b.strBillNo AND DATE(a.dteBillDate) BETWEEN '"
-				+ fromDte
-				+ "' AND '"
-				+ toDte
-				+ "' GROUP BY b.strRevenueType) c"
-				+ " union"
-				+ " select * from"
-				+ " (SELECT b.strRevenueType as strRevenueType, SUM(b.dblDebitAmt) as Amount "
-				+ " FROM tblfoliohd a,tblfoliodtl b"
-				+ " WHERE a.strFolioNo=b.strFolioNo AND DATE(b.dteDocDate) BETWEEN '"
-				+ fromDte + "' AND '" + toDte + "' "
-				+ " GROUP BY b.strRevenueType ) d ";
-		List listRevenueDtl = objGlobalService.funGetListModuleWise(sql, "sql");
-		if (!listRevenueDtl.isEmpty()) {
-			for (int i = 0; i < listRevenueDtl.size(); i++) {
-				Object[] arr2 = (Object[]) listRevenueDtl.get(i);
-				if (hmRevenueType.containsKey(arr2[0].toString())) {
-					double dblAmount = hmRevenueType.get(arr2[0].toString())
-							+ Double.parseDouble(arr2[1].toString());
-					hmRevenueType.put(arr2[0].toString(), dblAmount);
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		BigDecimal dblTaxTotalValue = new BigDecimal(0);
+		DecimalFormat df = new DecimalFormat("#.##");
 
-				} else {
-					hmRevenueType.put(arr2[0].toString(),
-							Double.parseDouble(arr2[1].toString()));
+		List<clsPMSSalesFlashBean> listofRevenueDtl = new ArrayList<clsPMSSalesFlashBean>();
+		
+		HashMap<String,clsPMSSalesFlashBean> hmRevenueType = new HashMap<String,clsPMSSalesFlashBean >();
+		
+		
+		String sql=" select * from  "
+                  +" (select a.strRevenueType AS strRevenueType,sum(a.Amount),sum(b.TAXAMT) from (SELECT a.strBillNo,b.strDocNo ,b.strRevenueType AS strRevenueType, sum(b.dblDebitAmt) AS Amount "
+                  +" FROM tblbillhd a, tblbilldtl b "
+                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" GROUP BY a.strBillNo ,b.strDocNo) a, "
+                  +" (select a.strBillNo,b.strDocNo,sum(b.dblTaxAmt) AS TAXAMT  "
+                  +" from tblbillhd a , tblbilltaxdtl b "
+                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" GROUP BY a.strBillNo,b.strDocNo) b "
+                  +" where a.strBillNo=b.strBillNo AND a.strDocNo=b.strDocNo group by  a.strRevenueType)  c "
+                  +" UNION select * from  "
+                  +" (select a.strRevenueType AS strRevenueType,sum(a.Amount),sum(b.TAXAMT) from (SELECT a.strFolioNo,b.strDocNo,b.strRevenueType AS strRevenueType, SUM(b.dblDebitAmt) AS Amount "
+                  +" FROM tblfoliohd a,tblfoliodtl b "
+                  +" WHERE a.strFolioNo=b.strFolioNo     AND DATE(b.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" GROUP BY b.strRevenueType)  a , "
+                  +" (select a.strFolioNo,b.strDocNo,sum(b.dblTaxAmt) AS TAXAMT from tblfoliodtl a ,tblfoliotaxdtl b "
+                  +" where a.strFolioNo=b.strFolioNo and DATE(a.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" GROUP BY a.strFolioNo,b.strDocNo) b "
+                  +" where a.strFolioNo=b.strFolioNo and a.strDocNo=b.strDocNo group by a.strRevenueType )  d ; ";
+		
+		List listRevenueDtl=objGlobalService.funGetListModuleWise(sql, "sql");
+	
+		if(!listRevenueDtl.isEmpty())
+		{
+			for(int i=0;i< listRevenueDtl.size();i++)
+			{
+				Object[] arr2=(Object[]) listRevenueDtl.get(i);
+				clsPMSSalesFlashBean objBean=new clsPMSSalesFlashBean();
+				
+				if(hmRevenueType.containsKey(arr2[0].toString()))
+				{
+					objBean=hmRevenueType.get(arr2[0].toString());
+			        double newAmount=objBean.getDblAmount() + Double.parseDouble(arr2[1].toString());
+			        objBean.setDblAmount(newAmount);
+			        double newTaxAmt=objBean.getDblTaxAmount() + Double.parseDouble(arr2[2].toString());
+			        objBean.setDblTaxAmount(newTaxAmt);
+			        hmRevenueType.put(arr2[0].toString(), objBean);
 				}
+				else
+				{
+					objBean.setDblAmount(Double.parseDouble(arr2[1].toString()));
+					objBean.setDblTaxAmount(Double.parseDouble(arr2[2].toString()));
+					hmRevenueType.put(arr2[0].toString(),objBean);
+				}
+				dblTotalValue = new BigDecimal(df.format(Double.parseDouble(arr2[1].toString()))).add(dblTotalValue);
+				
+				dblTaxTotalValue =  new BigDecimal(df.format(Double.parseDouble(arr2[2].toString()))).add(dblTaxTotalValue);
+			
 			}
 		}
-		for (HashMap.Entry<String, Double> hmRevenue : hmRevenueType.entrySet()) {
-			List DataList = new ArrayList<>();
-			DataList.add(hmRevenue.getKey());
-			DataList.add(hmRevenue.getValue());
-			detailList.add(DataList);
+		
+		for(HashMap.Entry<String,clsPMSSalesFlashBean> hmRevenue : hmRevenueType.entrySet() )
+		{
+			
+		   List DataList = new ArrayList<>();
+		   DataList.add(hmRevenue.getKey());
+		   clsPMSSalesFlashBean obj=hmRevenue.getValue();
+		   double amount=obj.getDblAmount();
+		   DataList.add(amount);
+		  
+		   double taxAmount=obj.getDblTaxAmount();
+		   DataList.add(df.format(taxAmount));
+		  
+		   detailList.add(DataList);
+		    
+			
 		}
 		
+		totalsList.add(dblTotalValue);
+		totalsList.add(dblTaxTotalValue);
+		retList.add("RevenueHeadWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List titleData = new ArrayList<>();
+		titleData.add("Revenue Head Wise Report");
+		retList.add(titleData);
+		
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+		filterData.add(toDate);
+		retList.add(filterData); 
+
 		headerList.add("Revenue Type");
 		headerList.add("Amount");
+		headerList.add("Tax Amount");
 		Object[] objHeader = (Object[]) headerList.toArray();
 
 		String[] ExcelHeader = new String[objHeader.length];
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("RevenueHeadWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		
+		List blankList = new ArrayList();
+	    detailList.add(blankList);// Blank Row at Bottom
+	    detailList.add(totalsList);
+	    
+		
 		retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
 
 	}
 	
@@ -582,12 +744,20 @@ public class clsPMSSalesFlashController {
 		List retList = new ArrayList();
 		List detailList = new ArrayList();
 		List headerList = new ArrayList();
+		List totalsList = new ArrayList();
+		totalsList.add("Total");
+		
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		BigDecimal dblTaxTotalValue = new BigDecimal(0);
+		DecimalFormat df = new DecimalFormat("#.##");
 		String sql=" SELECT  IFNULL(c.strTaxDesc,''), IFNULL(SUM(c.dblTaxableAmt),0), IFNULL(SUM(c.dblTaxAmt),0) "
 				+ " FROM tblbillhd a "
 				+ " LEFT OUTER "
@@ -609,9 +779,25 @@ public class clsPMSSalesFlashController {
 				DataList.add(arr2[1].toString());
 				DataList.add(arr2[2].toString());
 				detailList.add(DataList);
+				dblTotalValue = new BigDecimal(df.format(Double.parseDouble(arr2[1].toString()))).add(dblTotalValue);
+				dblTaxTotalValue =  new BigDecimal(df.format(Double.parseDouble(arr2[2].toString()))).add(dblTaxTotalValue);
 			}
 		}
-
+        totalsList.add(dblTotalValue);
+        totalsList.add(dblTaxTotalValue);
+        
+        retList.add("TaxWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+        List titleData = new ArrayList<>();
+		titleData.add("Tax Wise Report");
+		retList.add(titleData);
+		
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+		filterData.add(toDate);
+		retList.add(filterData); 
+		
 		headerList.add("Tax Description");
 		headerList.add("Taxable Amount");
 		headerList.add("Tax Amount");
@@ -621,11 +807,16 @@ public class clsPMSSalesFlashController {
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("TaxWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		
+		List blankList = new ArrayList();
+	    detailList.add(blankList);// Blank Row at Bottom
+	    detailList.add(totalsList);
+	    
+		
 		retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
 	
 	}
 	
@@ -637,12 +828,21 @@ public class clsPMSSalesFlashController {
 		List retList = new ArrayList();
 		List detailList = new ArrayList();
 		List headerList = new ArrayList();
+		List totalsList = new ArrayList();
+		totalsList.add("Total");
+		totalsList.add("");
+		totalsList.add("");	
+		
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		DecimalFormat df = new DecimalFormat("#.##");
 		String sql="SELECT a.strReservationNo,  DATE_FORMAT(a.dteDateCreated,'%d-%m-%Y'),CONCAT(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName),   IFNULL(d.dblReceiptAmt,0), DATE_FORMAT(a.dteArrivalDate,'%d-%m-%Y'), DATE_FORMAT(a.dteDepartureDate,'%d-%m-%Y') "
 				+ " FROM tblreservationhd a "
 				+ " LEFT OUTER JOIN tblreservationdtl b ON a.strReservationNo=b.strReservationNo "
@@ -662,11 +862,25 @@ public class clsPMSSalesFlashController {
 			    DataList.add(arr2[3].toString());
 			    DataList.add(arr2[4].toString());
 			    DataList.add(arr2[5].toString());
+			    dblTotalValue = new BigDecimal(df.format(Double.parseDouble(arr2[3].toString()))).add(dblTotalValue);
 				detailList.add(DataList);
 
 			}
 		}
-		headerList.add("Reservation No");
+		totalsList.add(dblTotalValue);
+		retList.add("ExpectedArrWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List titleData = new ArrayList<>();
+		titleData.add("Expected Arrival Report");
+		retList.add(titleData);
+			
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+	    filterData.add(toDate);
+	    retList.add(filterData);  
+		
+	    headerList.add("Reservation No");
 		headerList.add("Reservation Date");
 		headerList.add("Guest Name");
 		headerList.add("Receipt Amount");
@@ -678,11 +892,15 @@ public class clsPMSSalesFlashController {
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("ExpectedArrWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List blankList = new ArrayList();
+	    detailList.add(blankList);// Blank Row at Bottom
+	    detailList.add(totalsList);
+	    
+		
 		retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -693,18 +911,23 @@ public class clsPMSSalesFlashController {
 		List retList = new ArrayList();
 		List detailList = new ArrayList();
 		List headerList = new ArrayList();
+		
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
 		
-		String sql="SELECT a.strCheckInNo,a.strType, DATE(a.dteDepartureDate),c.strRoomDesc,c.strRoomTypeDesc, CONCAT(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName) "
-                  +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d,tblbillhd e "
-                  +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode "
-                  +" AND b.strGuestCode=d.strGuestCode "
-                  +" AND DATE(a.dteCheckInDate) BETWEEN '"+fromDte+"' AND '"+toDte+"';";
+		
+		DecimalFormat df = new DecimalFormat("#.##");
+		
+		String sql="SELECT a.strCheckInNo,a.strType, DATE(a.dteDepartureDate),c.strRoomDesc,c.strRoomTypeDesc,"
+				  +" CONCAT(d.strFirstName,' ',d.strMiddleName,'',d.strLastName) "
+                  +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d "
+                  +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode AND b.strGuestCode=d.strGuestCode "
+                  +" AND DATE(a.dteDepartureDate) BETWEEN '"+fromDte+"' AND '"+toDte+"';";
 		List listExpectedDeptDtl=objGlobalService.funGetListModuleWise(sql,"sql");
 		if(!listExpectedDeptDtl.isEmpty())
 		{
@@ -722,6 +945,18 @@ public class clsPMSSalesFlashController {
 				
 			}
 		}
+		retList.add("ExpectedDeptWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List titleData = new ArrayList<>();
+		titleData.add("Expected Departure Report");
+		retList.add(titleData);
+			
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+	    filterData.add(toDate);
+	    retList.add(filterData);  
+		
 		headerList.add("CheckIn No");
 		headerList.add("Booking Type");
 		headerList.add("Departure Date");
@@ -734,11 +969,11 @@ public class clsPMSSalesFlashController {
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("ExpectedDeptWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		
 		retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -752,9 +987,12 @@ public class clsPMSSalesFlashController {
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		
+		DecimalFormat df = new DecimalFormat("#.##");
 		String sql="SELECT a.strCheckInNo,a.strType, DATE(a.dteArrivalDate),c.strRoomDesc,c.strRoomTypeDesc,CONCAT(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName), "
                  +" a.tmeArrivalTime"
 				 +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d,tblbillhd e "
@@ -776,6 +1014,18 @@ public class clsPMSSalesFlashController {
 
 			}
 		}
+		retList.add("CheckInWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List titleData = new ArrayList<>();
+		titleData.add("CheckIn Report");
+		retList.add(titleData);
+			
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+	    filterData.add(toDate);
+	    retList.add(filterData);  
+	    
 		headerList.add("CheckIn No");
 		headerList.add("Guest Name");
 		headerList.add("CheckIn Date");
@@ -789,11 +1039,11 @@ public class clsPMSSalesFlashController {
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("CheckInWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		
 		retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -804,14 +1054,24 @@ public class clsPMSSalesFlashController {
 		List retList = new ArrayList();
 		List detailList = new ArrayList();
 		List headerList = new ArrayList();
+		List totalsList = new ArrayList();
+		totalsList.add("Total");
+		totalsList.add("");
+		totalsList.add("");	
+		totalsList.add("");
+		totalsList.add("");	
+		totalsList.add("");	
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
 		
-		String sql="SELECT a.strCheckInNo,a.strType , DATE(a.dteDepartureDate),c.strRoomDesc,c.strRoomTypeDesc,CONCAT(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName),"
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		DecimalFormat df = new DecimalFormat("#.##");
+		String sql="SELECT e.strBillNo,a.strType , DATE(a.dteDepartureDate),c.strRoomDesc,c.strRoomTypeDesc,CONCAT(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName),"
 				  +" e.dblGrandTotal"
                 +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d,tblbillhd e "
                 +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode AND b.strGuestCode=d.strGuestCode "
@@ -828,11 +1088,28 @@ public class clsPMSSalesFlashController {
 			    DataList.add(arr2[4].toString());
 			    DataList.add(arr2[5].toString());
 			    DataList.add(arr2[6].toString());
+			
+			    dblTotalValue = new BigDecimal(df.format(Double.parseDouble(arr2[6].toString()))).add(dblTotalValue);
 				detailList.add(DataList);
+				
 
 			}
 		}
-		headerList.add("CheckIn No");
+		totalsList.add(dblTotalValue);
+		df.format(dblTotalValue);
+		retList.add("CheckOutWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List titleData = new ArrayList<>();
+		titleData.add("CheckOut Report");
+		retList.add(titleData);
+			
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+	    filterData.add(toDate);
+	    retList.add(filterData);  
+	    
+		headerList.add("Bill No");
 		headerList.add("Booking Type");
 		headerList.add("Departure Date");
 		headerList.add("Room Description");
@@ -845,11 +1122,14 @@ public class clsPMSSalesFlashController {
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("CheckOutWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List blankList = new ArrayList();
+	    detailList.add(blankList);// Blank Row at Bottom
+	    detailList.add(totalsList);
+		
 		retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
 	}
  
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -863,9 +1143,12 @@ public class clsPMSSalesFlashController {
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		
+		DecimalFormat df = new DecimalFormat("#.##");
 		String sql = "SELECT a.strReservationNo, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName) AS strGuestName, e.strBookingTypeDesc,h.strRoomTypeDesc,DATE_FORMAT(b.dteReservationDate,'%d-%m-%Y') AS dteReservationDate,DATE_FORMAT(a.dteCancelDate,'%d-%m-%Y') AS dteCancelDate,f.strRoomDesc, g.strReasonDesc, a.strRemarks "
 				+ " FROM tblroomcancelation a,tblreservationhd b,tblguestmaster c,tblreservationdtl d,tblbookingtype e,tblroom f, tblreasonmaster g,tblroomtypemaster h "
 				+ " WHERE DATE(a.dteCancelDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strReservationNo=b.strReservationNo AND b.strCancelReservation='Y' AND b.strReservationNo=d.strReservationNo "
@@ -890,7 +1173,19 @@ public class clsPMSSalesFlashController {
 				detailList.add(DataList);
 			}
 		}
-	
+		retList.add("CancelationWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);	
+		List titleData = new ArrayList<>();
+		titleData.add("Cancelation Report");
+		retList.add(titleData);
+		
+		
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+	    filterData.add(toDate);
+	    retList.add(filterData); 
+	    
 		headerList.add("Reservation No");
 		headerList.add("Guest Name");
 		headerList.add("Booking type");
@@ -905,11 +1200,11 @@ public class clsPMSSalesFlashController {
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("CancelationWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		
 		retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -920,12 +1215,21 @@ public class clsPMSSalesFlashController {
 		List retList = new ArrayList();
 		List detailList = new ArrayList();
 		List headerList = new ArrayList();
+		List totalsList = new ArrayList();
+		totalsList.add("Total");
+		totalsList.add("");
+		totalsList.add("");	
+		
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+	
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		DecimalFormat df = new DecimalFormat("#.##");
 		String sql = "SELECT CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),a.strReservationNo,a.strNoRoomsBooked, IFNULL(b.dblReceiptAmt,0) "
 				+ " from tblreservationhd a left outer join tblreceipthd b "
 				+ " on a.strReservationNo=b.strReservationNo,tblguestmaster c,tblreservationdtl d "
@@ -953,7 +1257,21 @@ public class clsPMSSalesFlashController {
 				detailList.add(DataList);
 			}
 		}
-
+		
+		totalsList.add(dblTotalValue);
+		retList.add("NoShowWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List titleData = new ArrayList<>();
+		titleData.add("No Show Report");
+		retList.add(titleData);
+		
+		
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+	    filterData.add(toDate);
+	    retList.add(filterData); 
+	    
 		headerList.add("Guest Name");
 		headerList.add("Reservation No");
 		headerList.add("No of Rooms");
@@ -965,11 +1283,14 @@ public class clsPMSSalesFlashController {
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("NoShowWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List blankList = new ArrayList();
+	    detailList.add(blankList);// Blank Row at Bottom
+	    detailList.add(totalsList);
+		
 		retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -980,12 +1301,17 @@ public class clsPMSSalesFlashController {
 		List retList = new ArrayList();
 		List detailList = new ArrayList();
 		List headerList = new ArrayList();
+		
+		
+		DecimalFormat df = new DecimalFormat("#.##");
 		String fromDate = request.getParameter("frmDte").toString();
 		String[] arr = fromDate.split("-");
 		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
 		String toDate = request.getParameter("toDte").toString();
 		String[] arr1 = toDate.split("-");
 		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		
 		String sql = "SELECT a.strBillNo, DATE_FORMAT(a.dteBillDate,'%d-%m-%Y'),CONCAT(e.strGuestPrefix,\" \",e.strFirstName,\" \",e.strLastName) AS gName,d.strRoomDesc,b.strPerticulars, "
 				+ " SUM(b.dblDebitAmt), a.strReasonName,a.strRemark,a.strVoidType, a.strUserCreated "
 				+ " FROM tblvoidbillhd a inner join tblvoidbilldtl b on a.strBillNo=b.strBillNo "
@@ -1019,6 +1345,19 @@ public class clsPMSSalesFlashController {
 				detailList.add(DataList);
 			}
 		}
+		retList.add("VoidBillWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		List titleData = new ArrayList<>();
+		titleData.add("Void Bill Report");
+		retList.add(titleData);
+		
+		
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+	    filterData.add(toDate);
+	    retList.add(filterData);
+	    
 		headerList.add("Bill No");
 		headerList.add("Bill Date");
 		headerList.add("Guest Name");
@@ -1035,11 +1374,28 @@ public class clsPMSSalesFlashController {
 		for (int k = 0; k < objHeader.length; k++) {
 			ExcelHeader[k] = objHeader[k].toString();
 		}
-		retList.add("VoidBillWisePMSSalesFlashData_" + fromDte + "to" + toDte + "_" + userCode);
+		
 		retList.add(ExcelHeader);
 		retList.add(detailList);
 		
-		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
 	}
 	
+
+	@RequestMapping(value = "/loadPerticulars", method = RequestMethod.GET)
+	public ModelAndView funGetBillPerticulars(Map<String, Object> model,@RequestParam("billNo")String strBillNo ,HttpServletRequest request) {
+		String strClientCode = request.getSession().getAttribute("clientCode").toString();
+		String urlHits = "1";
+		String strBillPerticular = "";
+		String sqlPerticular="select a.strPerticulars from tblbilldtl a where a.strBillNo='"+strBillNo+"' and a.strClientCode='"+strClientCode+"'";
+		
+		List listRecord = objGlobalService.funGetListModuleWise(sqlPerticular, "sql");
+	
+		
+		ArrayList<String> perticularList = new ArrayList<>(); 
+		model.put("perticular", listRecord);
+	
+		return new ModelAndView("frmPMSSalesFlash");
+	}
 }
+

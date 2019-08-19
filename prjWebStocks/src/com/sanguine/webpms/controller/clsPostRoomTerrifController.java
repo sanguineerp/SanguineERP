@@ -358,6 +358,7 @@ public class clsPostRoomTerrifController {
 		List<clsFolioTaxDtl> listFolioTaxDtl = new ArrayList<clsFolioTaxDtl>();		
 		List<String> listDocNo = new ArrayList<String>();
 		boolean flgDupRoomTerrif=false;
+		boolean flgDupExtraBed=false;
 
 	    if(null!=objFolioHd.getListFolioDtlModel() && objFolioHd.getListFolioDtlModel().size()>0)
 	    {
@@ -365,6 +366,7 @@ public class clsPostRoomTerrifController {
 	    	{
 	    		if(obFolioDtlModel.getStrRevenueType().equals(objBean.getStrFolioType()) && obFolioDtlModel.getDteDocDate().split(" ")[0].equals(PMSDate))
 	    		{
+	    			flgDupExtraBed=true;
 	    			flgDupRoomTerrif=true;
 	    			obFolioDtlModel.setDblDebitAmt(roomTerrif+obFolioDtlModel.getDblDebitAmt());
 	    			obFolioDtlModel.setDblBalanceAmt(objBean.getDblOriginalPostingAmt()-roomTerrif);
@@ -412,6 +414,8 @@ public class clsPostRoomTerrifController {
 				listFolioTaxDtl.add(objFolioTaxDtl);
 			}
 		}
+		if(!flgDupExtraBed)
+		{	
 		if (!extraBedCode.isEmpty()) {
 			List listExtraBed = objExtraBedMasterDao.funGetExtraBedMaster(extraBedCode, clientCode);
 			clsExtraBedMasterModel objExtraBedMaster = (clsExtraBedMasterModel) listExtraBed.get(0);
@@ -451,6 +455,7 @@ public class clsPostRoomTerrifController {
 			}
 		}
 		}
+	}
 		//objWebPMSUtility.funExecuteUpdate("delete from tblfoliodtl where strFolioNo='"+objFolioHd.getStrFolioNo()+"' and strRevenueType='Room' or strRevenueType='Package' and strClientCode='"+clientCode+"'", "sql");
 		objFolioHd.setListFolioDtlModel(listFolioDtl);
 		objFolioHd.setListFolioTaxDtlModel(listFolioTaxDtl);

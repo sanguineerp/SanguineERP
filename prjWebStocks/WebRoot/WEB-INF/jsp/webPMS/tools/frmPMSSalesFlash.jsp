@@ -55,6 +55,24 @@ $(document).ready(function()
 				$("#wait").css("display","none");
 			});
 		});
+		
+		
+$(document).ready(function(){
+	
+	var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
+	
+	$("#dteFromDate").datepicker({
+		dateFormat : 'dd-mm-yy'
+	});
+	$("#dteFromDate").datepicker('setDate', pmsDate);	
+	
+	
+	$("#dteToDate").datepicker({
+		dateFormat : 'dd-mm-yy'
+	});
+	$("#dteToDate").datepicker('setDate', pmsDate);	
+});
+
 
 function funShowTableGUI(divID)
 {
@@ -88,10 +106,11 @@ function funOnClckSettlementWiseBtn( divId)
 		    dataType: "json",
 		    success: function(response)
 		    {
-		    	funSettlementWiseDetail(response);
-		    	//$("#txtTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
-		    	//$("#txtSubTotValue").val("");
-				//$("#txtTaxTotValue").val(parseFloat(response[2]).toFixed(maxQuantityDecimalPlaceLimit));
+		    	
+		    	funSettlementWiseDetail(response[0]);
+		    	$("#txtTotValue").val("");
+		    	$("#txtTaxTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
+		    	
 		    	
 		    },
 		    error: function(jqXHR, exception) {
@@ -125,7 +144,7 @@ function funSettlementWiseDetail(ProdDtl)
     var row = table.insertRow(rowCount);
    
     row.insertCell(0).innerHTML= "<input name=\"strSettlementDesc["+(rowCount)+"]\" readonly=\"readonly\"  class=\"Box\" size=\"50%\" id=\"strSettlementDesc."+(rowCount)+"\" value='"+data.strSettlementDesc+"'>";		    
-    row.insertCell(1).innerHTML= "<input name=\"dblSettlementAmt["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"50%\" id=\"dblSettlementAmt."+(rowCount)+"\" value='"+data.dblSettlementAmt+"'>";
+    row.insertCell(1).innerHTML= "<input name=\"dblSettlementAmt["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"49%\" id=\"dblSettlementAmt."+(rowCount)+"\" value='"+data.dblSettlementAmt+"'>";
     
      funApplyNumberValidation();
 	}
@@ -140,6 +159,7 @@ function funApplyNumberValidation(){
     $(".decimal-places-amt").numeric({ decimalPlaces: maxAmountDecimalPlaceLimit, negative: false });
 }
 
+
 function funOnClckRevenueHeadWiseBtn( divId)
 {
 	funShowTableGUI(divId)
@@ -152,7 +172,10 @@ function funOnClckRevenueHeadWiseBtn( divId)
 		    dataType: "json",
 		    success: function(response)
 		    {
-		    	funRevenueHeadWiseDetail(response);
+		    	funRevenueHeadWiseDetail(response[0]);
+		    	$("#txtTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
+		        $("#txtTaxTotValue").val(parseFloat(response[2]).toFixed(maxQuantityDecimalPlaceLimit));
+		    	
 		    },
 		    error: function(jqXHR, exception) {
 	            if (jqXHR.status === 0) {
@@ -181,13 +204,14 @@ function funRevenueHeadWiseDetail(ProdDtl)
 	{
 	 var data=ProdDtl[i];
 	 data.dblAmount=parseFloat(data.dblAmount).toFixed(maxQuantityDecimalPlaceLimit);
+	 data.dblTaxAmount=parseFloat(data.dblTaxAmount).toFixed(maxQuantityDecimalPlaceLimit);
     var table = document.getElementById("tblRevenueHeadDet");
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
    
     row.insertCell(0).innerHTML= "<input name=\"strRevenueType["+(rowCount)+"]\" readonly=\"readonly\"  class=\"Box\" size=\"25%\" id=\"strRevenueType."+(rowCount)+"\" value='"+data.strRevenueType+"'>";		    
-    row.insertCell(1).innerHTML= "<input name=\"dblAmount["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"50%\" id=\"dblAmount."+(rowCount)+"\" value='"+data.dblAmount+"'>";
-    
+    row.insertCell(1).innerHTML= "<input name=\"dblAmount["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"57%\" id=\"dblAmount."+(rowCount)+"\" value='"+data.dblAmount+"'>";
+    row.insertCell(2).innerHTML= "<input name=\"dblTaxAmountt["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\"  style=\"text-align: right;\" size=\"27%\" id=\"dblTaxAmount."+(rowCount)+"\" value='"+data.dblTaxAmount+"'>";
      funApplyNumberValidation();
 	}	
 }
@@ -203,7 +227,10 @@ function funOnClckTaxWiseBtn( divId)
 		    dataType: "json",
 		    success: function(response)
 		    {
-		    	funTaxWiseDetail(response);
+		    	funTaxWiseDetail(response[0]);
+		    	$("#txtTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
+		        $("#txtTaxTotValue").val(parseFloat(response[2]).toFixed(maxQuantityDecimalPlaceLimit));
+		    	
 		    },
 		    error: function(jqXHR, exception) {
 	            if (jqXHR.status === 0) {
@@ -254,7 +281,9 @@ function funOnClckExpectedArrWiseBtn( divId)
 		    dataType: "json",
 		    success: function(response)
 		    {
-		    	funExpectedArrDetail(response);
+		    	funExpectedArrDetail(response[0]);
+		    	$("#txtTotValue").val("");
+		    	$("#txtTaxTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
 		    },
 		    error: function(jqXHR, exception) {
 	            if (jqXHR.status === 0) {
@@ -289,9 +318,9 @@ function funExpectedArrDetail(ProdDtl)
 	    row.insertCell(0).innerHTML= "<input name=\"strReservationNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"strReservationNo."+(rowCount)+"\" value='"+data.strReservationNo+"'>";		    
 	    row.insertCell(1).innerHTML= "<input name=\"dteReservationDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"20%\" id=\"dteReservationDate."+(rowCount)+"\" value='"+data.dteReservationDate+"'>";
 	    row.insertCell(2).innerHTML= "<input name=\"strGuestName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strGuestName."+(rowCount)+"\" value='"+data.strGuestName+"'>";
-	    row.insertCell(3).innerHTML= "<input name=\"dblReceiptAmt["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\"  style=\"text-align: right;\" size=\"12%\" id=\"dblReceiptAmt."+(rowCount)+"\" value='"+data.dblReceiptAmt+"'>";
+	    row.insertCell(3).innerHTML= "<input name=\"dteDepartureDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"12%\" id=\"dteDepartureDatet."+(rowCount)+"\" value='"+data.dteDepartureDate+"'>";
 	    row.insertCell(4).innerHTML= "<input name=\"dteArrivalDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"dteArrivalDate."+(rowCount)+"\" value='"+data.dteArrivalDate+"'>";
-	    row.insertCell(5).innerHTML= "<input name=\"dteDepartureDate["+(rowCount)+"]\" id=\"strLocName."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.dteDepartureDate+">";
+	    row.insertCell(5).innerHTML= "<input name=\"dblReceiptAmt["+(rowCount)+"]\" id=\"dblReceiptAmt."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.dblReceiptAmt+">";
 	    
 	funApplyNumberValidation();
 	}
@@ -312,6 +341,8 @@ function funOnClckExpectedDeptWiseBtn( divId)
 		    success: function(response)
 		    {
 		    	funExpectedDeptDetail(response);
+		    	$("#txtTotValue").val("");
+		    	$("#txtTaxTotValue").val("");
 		    },
 		    error: function(jqXHR, exception) {
 	            if (jqXHR.status === 0) {
@@ -376,6 +407,8 @@ function funOnClckCheckInBtn( divId)
 		    success: function(response)
 		    {
 		    	funCheckInDetail(response);
+		    	$("#txtTotValue").val("");
+		    	$("#txtTaxTotValue").val("");
 		    },
 		    error: function(jqXHR, exception) {
 	            if (jqXHR.status === 0) {
@@ -437,7 +470,9 @@ function funOnClckCheckOutBtn( divId)
 		    dataType: "json",
 		    success: function(response)
 		    {
-		    	funCheckOutDetail(response);
+		    	funCheckOutDetail(response[0]);
+		    	$("#txtTotValue").val("");
+		    	$("#txtTaxTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
 		    },
 		    error: function(jqXHR, exception) {
 	            if (jqXHR.status === 0) {
@@ -476,14 +511,14 @@ function funCheckOutDetail(ProdDtl)
     	roomDesc=roomDesc=roomDesc.replace(" ",'_');
     	bookingType=bookingType.replace(" ",'_');
     	}
-  
-	row.insertCell(0).innerHTML= "<input name=\"strCheckInNo["+(rowCount)+"]\" readonly=\"readonly\"  class=\"Box\" size=\"25%\" id=\"strCheckInNo."+(rowCount)+"\" value='"+data.strCheckInNo+"'>";		    
-    row.insertCell(1).innerHTML= "<input name=\"strGuestName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"strGuestName."+(rowCount)+"\" value='"+data.strGuestName+"'>";
+    
+    row.insertCell(0).innerHTML='<a href="#" onclick="funClick(this)"> <input name=\"strBillNo['+(rowCount)+']\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strBillNo.'+(rowCount)+'\" value='+data.strBillNo+'> </a> ';
+	row.insertCell(1).innerHTML= "<input name=\"strGuestName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"strGuestName."+(rowCount)+"\" value='"+data.strGuestName+"'>";
     row.insertCell(2).innerHTML= "<input name=\"dteDepartureDate["+(rowCount)+"]\" id=\"dteDepartureDate."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.dteDepartureDate+">";
     row.insertCell(3).innerHTML= "<input name=\"strRoomDesc["+(rowCount)+"]\" id=\"strRoomDesc."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+roomDesc+">";
     row.insertCell(4).innerHTML= "<input name=\"strRoomType["+(rowCount)+"]\" readonly=\"readonly\"  class=\"Box\" size=\"25%\" id=\"strRoomType."+(rowCount)+"\" value='"+data.strRoomType+"'>";
     row.insertCell(5).innerHTML= "<input name=\"strBookingType["+(rowCount)+"]\" id=\"strBookingType."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.strBookingType+">";		    	   
-    row.insertCell(6).innerHTML= "<input name=\"dblGrandTotal["+(rowCount)+"]\" id=\"dblGrandTotal."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"15%\" class=\"Box\" value="+data.dblGrandTotal+">";
+    row.insertCell(6).innerHTML= "<input name=\"dblGrandTotal["+(rowCount)+"]\" id=\"dblGrandTotal."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"14%\" class=\"Box\" value="+data.dblGrandTotal+">";
 	} 
 }
 
@@ -503,6 +538,8 @@ function funOnClckCancelationWiseBtn( divId)
 		    success: function(response)
 		    {
 		    	funCancelationDetail(response);
+		    	$("#txtTotValue").val("");
+		    	$("#txtTaxTotValue").val("");
 		    },
 		    error: function(jqXHR, exception) {
 	            if (jqXHR.status === 0) {
@@ -569,6 +606,8 @@ function funOnClckNoShowWiseBtn( divId)
 		    success: function(response)
 		    {
 		    	funNoShowDetail(response);
+		    	$("#txtTotValue").val("");
+		    	$("#txtTaxTotValue").val("");
 		    },
 		    error: function(jqXHR, exception) {
 	            if (jqXHR.status === 0) {
@@ -621,6 +660,8 @@ function funOnClckVoidBillWiseBtn( divId)
 		    success: function(response)
 		    {
 		    	funVoidBillDetail(response);
+		    	$("#txtTotValue").val("");
+		    	$("#txtTaxTotValue").val("");
 		    },
 		    error: function(jqXHR, exception) {
 	            if (jqXHR.status === 0) {
@@ -657,9 +698,7 @@ function funVoidBillDetail(ProdDtl)
  	 {
      reasonDesc=reasonDesc.replace(/ /ig,'_');
  	 }
-
-    
-	    row.insertCell(0).innerHTML= "<input name=\"strBillNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strBillNo."+(rowCount)+"\" value='"+data.strBillNo+"'>";		    
+        row.insertCell(0).innerHTML= "<input name=\"strBillNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strBillNo."+(rowCount)+"\" value='"+data.strBillNo+"'>";		    
 	    row.insertCell(1).innerHTML= "<input name=\"dteBillDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"dteBillDate."+(rowCount)+"\" value='"+data.dteBillDate+"'>";
 	    row.insertCell(2).innerHTML= "<input name=\"strGuestName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"40%\" id=\"strAgainst."+(rowCount)+"\" value='"+data.strGuestName+"'>";
 	    row.insertCell(3).innerHTML= "<input name=\"strRoomDesc["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"05%\" id=\"strGuestName."+(rowCount)+"\" value='"+data.strRoomDesc+"'>";
@@ -726,8 +765,53 @@ function funExportReport()
 	
   }	
 
+function funGetBillPerticular(billNo)
+{
+	var searchurl=getContextPath()+"/loadPerticulars.html?billNo="+billNo;
+	
+	$.ajax({
+        type: "GET",
+	    url: searchurl,
+    	dataType: "json",
+    
+    	success: function (response) {
+    		strPerticulars=response.strBillPerticular;
+    	},
+        error: function(jqXHR, exception)
+   		 {
+       		 if (jqXHR.status === 0) {
+           	 	alert('Not connect.n Verify Network.');
+       	 	} else if (jqXHR.status == 404) {
+           		 alert('Requested page not found. [404]');
+        	} else if (jqXHR.status == 500) {
+            	alert('Internal Server Error [500].');
+        	} else if (exception === 'parsererror') {
+           		 alert('Requested JSON parse failed.');
+        	} else if (exception === 'timeout') {
+           		 alert('Time out error.');
+        	} else if (exception === 'abort') {
+         	  	 alert('Ajax request aborted.');
+      	  	} else {
+           		 alert('Uncaught Error.n' + jqXHR.responseText);
+        	}		            
+    	}
+	});
+}
 
 
+function funClick(obj)
+{
+	var index=obj.parentNode.parentNode.rowIndex;
+	var table1=document.getElementById("tblCheckOutDet");
+	var indexData=table1.rows[index];
+	var billNo=indexData.cells[0].firstElementChild.firstElementChild.defaultValue;
+	var frmDte1=$('#dteFromDate').val();
+    var toDte1=$('#dteToDate').val();
+	var strSelectBill="";
+	funGetBillPerticular(billNo);
+    window.open(getContextPath()+"/rptBillPrinting.html?fromDate="+frmDte1+"&toDate="+toDte1+"&billNo="+billNo+"&strSelectBill="+strSelectBill+"");
+	
+}	
 
 
 
@@ -758,7 +842,7 @@ function funExportReport()
 				<td><label>To Date</label></td>
 				<td><s:input type="text" id="dteToDate" path="dteToDate" required="true" class="calenderTextBox" /></td>
 				
-				<td colspan="7"><input id="btnExecute" type="button" class="form_button1" value="EXECUTE"/></td>
+				
 				<td colspan="9"><input id="btnExport" type="button" value="EXPORT"  class="form_button1" onclick="funExportReport()"/>
 				<s:input type="hidden" id="hidReportName" path=""></s:input>	
 				</td>				
@@ -797,9 +881,9 @@ function funExportReport()
 			<table style="width: 100%; border: #0F0; table-layout: fixed;"
 				class="transTablex col15-center">
 				<tr bgcolor="#72BEFC">
-					<td width="10%">Revenue Type</td>
-					<td width="6.1%">Amount</td>
-					
+					<td width="7.4%">Revenue Type</td>
+					<td width="9.3%">Amount </td>
+					<td width="4.5%">Tax Amount</td>
 
 				</tr>
 			</table>
@@ -809,8 +893,9 @@ function funExportReport()
 					style="width: 100%; border: #0F0; table-layout: fixed;"
 					class="transTablex col15-center">
 					<tbody>
-					<col style="width: 10%">
-					<col style="width:  6%">
+					<col style="width: 7.2%">
+					<col style="width: 9.2%">
+					<col style="width: 4.5%">
 					
 				
 					</tbody>
@@ -857,9 +942,9 @@ function funExportReport()
 					<td width="7.4%">Reservation No</td>
 					<td width="4.5%">Reservation Date </td>
 					<td width="9.3%">Guest Name</td>
-					<td width="4.8%">Receipt Amount</td>
+					<td width="4.8%">Departure Date</td>
 					<td width="7.6%">Arrival Date</td>
-					<td width="5.1%">Departure Date</td>
+					<td width="5.1%">Receipt Amount</td>
 					
 				</tr>
 			</table>
@@ -965,7 +1050,7 @@ function funExportReport()
 			<table style="width: 100%; border: #0F0; table-layout: fixed;"
 				class="transTablex col15-center">
 				<tr bgcolor="#72BEFC">
-					<td width="7.4%">Check In No </td>
+					<td width="7.4%">Bill No </td>
 					<td width="10%">Guest Name</td>
 					<td width="6.1%">Departure Date</td>
 					<td width="5%">Room Description</td>
@@ -1112,6 +1197,24 @@ function funExportReport()
 
 		</div>
 		
+		<div id="divValueTotal"
+			style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 50px; margin: auto; overflow-x: hidden; overflow-y: hidden; width: 94%;">
+			<table id="tblTotalFlash" class="transTablex"
+				style="width: 100%; font-size: 11px; font-weight: bold;">
+				<tr style="margin-left: 28px">
+					<td id="labld26" width="50%" align="right">Total Value</td>
+					<td id="tdTotValue" width="20%" align="right"><input
+						id="txtTotValue" style="width: 100%; text-align: right;"
+						class="Box"></input></td>
+					<td id="tdTaxTotValue" width="20%" align="right"><input
+						id="txtTaxTotValue" style="width: 100%; text-align: right;"
+						class="Box"></input></td>
+					
+
+				</tr>
+			</table>
+		</div>
+
 		
 		
 		

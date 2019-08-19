@@ -62,7 +62,8 @@
 		});
 			
 		$('#txtArrivalTime').timepicker('setTime', new Date());
-		$('#txtDepartureTime').timepicker('setTime', new Date());
+		//$('#txtDepartureTime').timepicker('setTime', new Date());
+		$('#txtDepartureTime').val("${tmeCheckOutPropertySetupTime}");
 		
 		$('#txtArrivalTime').timepicker();
 		$('#txtDepartureTime').timepicker();
@@ -1038,11 +1039,11 @@
 		$("#txtGLastName").val('');
 		$("#txtAddress").val('');
 		
-		$("#lblRoomType").text('');
+		//$("#lblRoomType").text('');
 	    $("#txtRoomNo").val('');
-	    $("#lblRoomNo").text('');
+	    //$("#lblRoomNo").text('');
 	    $("#txtExtraBed").val('');
-	    $("#lblExtraBed").text('');	
+	    //$("#lblExtraBed").text('');	
 	    $("#txtRemark").text('');	
 	    $("#txtRoomTypeCode").val('');
 	    
@@ -1096,7 +1097,7 @@
 			var mobileNo=$("#txtMobileNo").val().trim();
 			var guestName=$("#txtGFirstName").val().trim()+" "+$("#txtGMiddleName").val().trim()+" "+$("#txtGLastName").val().trim();
 			var roomType =$("#txtRoomTypeCode").val();
-			var roomNo =$("#txtRoomNo").val().trim();
+			var roomNo =$("#txtRoomNo").val();
 			var roomDesc =$("#lblRoomNo").text().trim();
 			var extraBedCode=$("#txtExtraBed").val();
 			var extraBedDesc=$("#lblExtraBed").text();
@@ -1923,7 +1924,7 @@
 				<td><s:input type="text" id="txtArrivalTime" path="tmeArrivalTime" cssClass="calenderTextBox" /></td>
 			
 				<td><label>Departure Time</label></td>
-				<td><s:input type="text" id="txtDepartureTime" path="tmeDepartureTime" cssClass="calenderTextBox"  /></td>
+				<td><s:input type="text" id="txtDepartureTime" path="tmeDepartureTime" items="${tmeCheckOutPropertySetupTime}" cssClass="calenderTextBox"  /></td>
 				<td colspan="2"></td>
 			</tr>
 			

@@ -199,7 +199,7 @@ public class clsFolioPrintingController {
 
 				// get folio details
 				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt ,b.strPerticulars" + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
-									+ " order by b.strRevenueType desc";
+									+ " order by b.dteDocDate ASC";
 				List folioDtlList = objFolioService.funGetParametersList(sqlFolioDtl);
 				for (int i = 0; i < folioDtlList.size(); i++) {
 					Object[] folioArr = (Object[]) folioDtlList.get(i);

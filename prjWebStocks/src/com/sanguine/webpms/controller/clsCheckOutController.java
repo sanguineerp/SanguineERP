@@ -315,6 +315,11 @@ public class clsCheckOutController {
 					String sqlUpdateCheckOutTime = "update tblcheckinhd a set a.tmeDepartureTime='"+strCurrentTime+"' where a.strCheckInNo='"+objBillHdModel.getStrCheckInNo()+"'";
 					objWebPMSUtility.funExecuteUpdate(sqlUpdateCheckOutTime, "sql");
 					
+					String sqlUpdateCheckOutDate ="UPDATE tblcheckinhd a SET a.dteDepartureDate= CONCAT('"+PMSDate+"',' ','00:00:00') "
+					+ "WHERE a.strCheckInNo='"+objBillHdModel.getStrCheckInNo()+"'";
+					
+					objWebPMSUtility.funExecuteUpdate(sqlUpdateCheckOutDate, "sql");
+					
 					objCheckOutService.funSaveCheckOut(objFolioHdModel, objBillHdModel);
 					
 					String sqlBillPerticulars = "select a.strPerticulars from tblbilldtl a where a.strBillNo='"+billNo+"' and a.strClientCode='"+clientCode+"'";

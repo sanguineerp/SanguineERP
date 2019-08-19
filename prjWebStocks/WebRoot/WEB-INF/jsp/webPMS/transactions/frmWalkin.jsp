@@ -91,7 +91,8 @@
 		});
 		
 		$('#txtWalkinTime').timepicker('setTime', new Date());
-		$('#txtCheckOutTime').timepicker('setTime', new Date());
+		//$('#txtCheckOutTime').timepicker('setTime', new Date());
+		$('#txtCheckOutTime').val("${tmeCheckOutPropertySetupTime}");
 		
 		$("#txtWalkinDate").datepicker({ dateFormat: 'dd-mm-yy' });
 		$("#txtWalkinDate").datepicker('setDate', pmsDate); 
@@ -1524,7 +1525,7 @@
 							<label>Check-Out Time</label>
 						</td>
 						<td>
-							<s:input type="text" id="txtCheckOutTime" path="tmeCheckOutTime"  cssClass="calenderTextBox" />				
+							<s:input type="text" id="txtCheckOutTime" items="${tmeCheckOutPropertySetupTime}" path="tmeCheckOutTime"  cssClass="calenderTextBox" />				
 						</td>
 					</tr>
 					
