@@ -110,7 +110,7 @@ public class clsPaxReportController {
 
 			// get all parameters
 			String sqlPax = " select b.strGuestCode,b.strRoomNo,a.strCheckInNo,c.strFirstName,c.strMiddleName,c.strLastName,Date(a.dteCheckInDate) "
-								+ ",a.strReservationNo,a.strWalkInNo,d.strRoomDesc "
+								+ ",a.strReservationNo,a.strWalkInNo,d.strRoomDesc,a.intNoOfAdults,a.intNoOfChild "
 								+ " from tblcheckinhd a, tblcheckindtl b,tblguestmaster c,tblroom d "
 								+ " where a.strCheckInNo=b.strCheckInNo "
 								+ " and b.strGuestCode=c.strGuestCode and b.strRoomNo=d.strRoomCode"
@@ -136,6 +136,10 @@ public class clsPaxReportController {
 					objPaxBean.setStrAgainstType("Walk-In");
 				}
 				objPaxBean.setStrRoomName(arr[9].toString());
+				int intNoOfPax=0;
+				intNoOfPax= Integer.parseInt(arr[10].toString())+Integer.parseInt(arr[11].toString());
+				objPaxBean.setIntPaxCount(intNoOfPax);
+				
 				fieldList.add(objPaxBean);
 
 			}

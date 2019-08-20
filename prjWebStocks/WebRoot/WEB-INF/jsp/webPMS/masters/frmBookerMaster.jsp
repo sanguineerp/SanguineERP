@@ -22,27 +22,32 @@
 		{
 			 alert('Enter Mobile Number');
 			 flg=false;
+			 return flg;
 		}	
 		
 		if($('#txtEmailId').val()=='')
 		{
 			 alert('Enter Email address');
 			 flg=false;
+			 return flg;
 		}
 		if($('#txtAddress').val()=='')
 		{
 			 alert('Enter Address');
 			 flg=false;
+			 return flg;
 		}
 		if($('#txtBookerName').val()=='')
 		{
 			 alert('Enter Name of Booker');
 			 flg=false;
+			 return flg;
 		}
 		if($('#txtTelephoneNo').val()=='')
 		{
 			 alert('Enter Telephone Number');
 			 flg=false;
+			 return flg;
 		}
 		
 		return flg;

@@ -184,9 +184,9 @@ function funExecuteReport()
 		var dteToDate=document.getElementById("dteToDate").value;
 		
 		var against='Bill';
-		funGetBillPerticular(billNo);
+		//funGetBillPerticular(billNo);
 		
-		strSelectBill=${"perticular"};
+		strSelectBill="Room Tariff,Folio Discount,Extra Bed Charges,POS Revenue (ROOM SERVICE) ,POS Revenue (DE SHALINIS) ,POS Revenue (SAMARKAND)";
 		if(against=='Bill')
 		{
 			window.open(getContextPath()+"/rptBillPrinting.html?fromDate="+dteFromDate+"&toDate="+dteToDate+"&billNo="+billNo+"&strSelectBill="+strSelectBill+"");

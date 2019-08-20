@@ -10,6 +10,7 @@ private String strGuestFullName;
 private String dteFromDate;
 private String dteToDate;
 private String strRoomName;
+private int intPaxCount;
 
 
 public String getStrRoomNo() {
@@ -60,6 +61,12 @@ public String getStrRoomName() {
 }
 public void setStrRoomName(String strRoomName) {
 	this.strRoomName = strRoomName;
+}
+public int getIntPaxCount() {
+	return intPaxCount;
+}
+public void setIntPaxCount(int intPaxCount) {
+	this.intPaxCount = intPaxCount;
 }
 
 

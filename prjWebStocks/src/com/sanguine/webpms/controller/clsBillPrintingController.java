@@ -116,6 +116,7 @@ public class clsBillPrintingController {
 			String billNames = "";
 			String pSupportVoucher="";
 			double pRoomTariff=0.0;
+			double dblTotalRoomTarrif = 0.0;
 			int count=0;
 			for (int i = 0; i < temp.length; i++) {
 				if (billNames.length()>=0) {
@@ -335,7 +336,7 @@ public class clsBillPrintingController {
 							+ "IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,"
 							+ "b.dblBalanceAmt ,ifnull(a.strReservationNo,'') ,b.strPerticulars FROM tblbillhd a INNER JOIN tblbilldtl b "
 							+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo AND b.strPerticulars IN("+billNames.substring(0, billNames.length()-1)+") "
-							+ "WHERE a.strBillNo='"+billNo+"' ";
+							+ "WHERE a.strBillNo='"+billNo+"' order by b.dblCreditAmt ";
 				}
 				
 				// + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '"
@@ -351,6 +352,7 @@ public class clsBillPrintingController {
 					} 
 					else 
 					{
+						dblTotalRoomTarrif=dblTotalRoomTarrif+Double.parseDouble(folioArr[3].toString());
 						clsBillPrintingBean billPrintingBean = new clsBillPrintingBean();
 						String docNo = folioArr[1].toString();
 						String particulars = folioArr[2].toString();
@@ -371,7 +373,8 @@ public class clsBillPrintingController {
 						billPrintingBean.setStrDocNo(docNo);
 						if(folioArr[7].toString().equalsIgnoreCase("Folio Discount"))
 						{
-							particulars = particulars+" %";
+							double dblDiscPer = ((creditAmount*count)/dblTotalRoomTarrif)*100;
+							particulars = particulars+" "+dblDiscPer+" %";
 							billPrintingBean.setStrPerticulars(particulars);
 						}
 						
@@ -380,7 +383,7 @@ public class clsBillPrintingController {
 							billPrintingBean.setStrPerticulars(particulars);
 						}
 						billPrintingBean.setDblDebitAmt(debitAmount);
-						billPrintingBean.setDblCreditAmt(creditAmount);
+						billPrintingBean.setDblCreditAmt(creditAmount*count);
 						billPrintingBean.setDblBalanceAmt(balance);
 						double hmroomTariff = debitAmount; 
 						

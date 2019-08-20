@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCheckInList" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f2323f3-3122-4114-a59f-df89ff1ddda0">
 	<property name="ireport.zoom" value="1.156629868288595"/>
 	<property name="ireport.x" value="0"/>
@@ -33,6 +33,7 @@
 		<fieldDescription><![CDATA[strAgainstType]]></fieldDescription>
 	</field>
 	<field name="strRoomName" class="java.lang.String"/>
+	<field name="intPaxCount" class="java.lang.Integer"/>
 	<variable name="vRoomWiseCount" class="java.lang.Integer" resetType="Group" resetGroup="RoomNoWiseGroup" calculation="Count"/>
 	<group name="RoomNoWiseGroup">
 		<groupExpression><![CDATA[$F{strRoomNo}]]></groupExpression>
@@ -70,7 +71,7 @@
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{RoomNoWiseGroup_COUNT}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{intPaxCount}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
