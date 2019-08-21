@@ -567,12 +567,12 @@ public class clsInvoiceController
 						objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
 						listInvProdTaxDtl.add(objInvProdTaxDtl);
 						
-						if(!mapSubTotal.containsKey(objInvProdTaxDtl.getStrProdCode()))
+						if(!mapSubTotal.containsKey(objInvProdTaxDtl.getStrProdCode()+""+objInvDtl.getDblWeight()+""+objInvDtl.getDblQty()))
 						{
 							dblSubTotalAmt=dblSubTotalAmt+objInvProdTaxDtl.getDblTaxableAmt();
 						}
 						
-						mapSubTotal.put(objInvProdTaxDtl.getStrProdCode(), dblSubTotalAmt);
+						mapSubTotal.put(objInvProdTaxDtl.getStrProdCode()+""+objInvDtl.getDblWeight()+""+objInvDtl.getDblQty(), dblSubTotalAmt);
 					}
 
 					hmInvCustTaxDtl.put(key, hmInvTaxDtl);

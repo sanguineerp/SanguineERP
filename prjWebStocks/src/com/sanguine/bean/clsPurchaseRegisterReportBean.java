@@ -21,6 +21,16 @@ public class clsPurchaseRegisterReportBean {
 	private String strBillNo;
 	
 	private String strGRNNo;
+	
+	private double dblFinalAmt;
+
+	public double getDblFinalAmt() {
+		return dblFinalAmt;
+	}
+
+	public void setDblFinalAmt(double dblFinalAmt) {
+		this.dblFinalAmt = dblFinalAmt;
+	}
 
 	public String getStrPName() {
 		return strPName;

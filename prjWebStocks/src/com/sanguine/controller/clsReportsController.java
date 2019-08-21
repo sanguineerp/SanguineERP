@@ -5368,7 +5368,9 @@ public class clsReportsController {
 
 			ArrayList fieldList = new ArrayList();
 
-			String sqlQuery = " select d.strPName,c.strProdName,b.dblQty,c.strUOM,b.dblUnitPrice,(b.dblQty*b.dblUnitPrice) as Amt,DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y') " + " from tblgrnhd a,tblgrndtl b,tblproductmaster c,tblpartymaster d where a.strGRNCode=b.strGRNCode " + " and a.strSuppCode=d.strPCode and b.strProdCode=c.strProdCode ";
+			String sqlQuery = " select d.strPName,c.strProdName,b.dblQty,c.strUOM,b.dblUnitPrice,(b.dblQty*b.dblUnitPrice) as Amt,DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y'),"
+					+ "(b.dblQty*b.dblUnitPrice)-((b.dblQty*b.dblUnitPrice)*(a.dblDisRate/100))  as finalamt "
+					+ " from tblgrnhd a,tblgrndtl b,tblproductmaster c,tblpartymaster d where a.strGRNCode=b.strGRNCode " + " and a.strSuppCode=d.strPCode and b.strProdCode=c.strProdCode ";
 
 			if (null != objBean.getStrDocCode() && objBean.getStrDocCode().length() > 0)
 			{
@@ -5410,6 +5412,7 @@ public class clsReportsController {
 				objProdBean.setDblUnitPrice(Double.parseDouble(prodArr[4].toString()));
 				objProdBean.setDblAmount(Double.parseDouble(prodArr[5].toString()));
 				objProdBean.setDtGRNDate(prodArr[6].toString());
+				objProdBean.setDblFinalAmt(Double.parseDouble(prodArr[7].toString()));
 				fieldList.add(objProdBean);
 
 			}

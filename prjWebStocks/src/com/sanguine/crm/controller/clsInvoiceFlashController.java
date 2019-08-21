@@ -8,7 +8,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ibm.icu.math.BigDecimal;
+import com.mysql.jdbc.Connection;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.crm.bean.clsInvoiceBean;
 import com.sanguine.crm.service.clsCRMSettlementMasterService;
@@ -52,6 +67,12 @@ public class clsInvoiceFlashController {
 	
 	@Autowired
 	private clsGlobalFunctions objGlobalFunctions;
+	
+	@Autowired
+	private clsGlobalFunctions objGlobalfunction;
+	
+	@Autowired
+	private ServletContext servletContext;
 	
 	String baseCurrencyCode="";
 	Map<String,String> currencyList=new TreeMap<String, String>();
@@ -2405,6 +2426,147 @@ public class clsInvoiceFlashController {
 		return new ModelAndView("excelViewWithReportName", "listWithReportName", retList);
 	}
 	
-	
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/rptBillWiseFlashReportPDF", method = RequestMethod.GET)
+	private void funBillWiseFlashReportPDF(@RequestParam("settlementcode") String settlementcode, HttpServletRequest request,HttpServletResponse resp) {
+		
+			
+		
+		String fromDate = request.getParameter("frmDte").toString();
+		String toDate = request.getParameter("toDte").toString();
+		String locCode = request.getParameter("locCode").toString();
+		String custCode = request.getParameter("custCode").toString();
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String userCode = request.getSession().getAttribute("usercode").toString();
+		String dbWebBook=request.getSession().getAttribute("WebBooksDB").toString();
+		String companyName = request.getSession().getAttribute("companyName").toString();
+		String currencyCode=request.getParameter("currencyCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
+		StringBuilder sqlInvoiceFlashPDF= new StringBuilder();
+		try
+		{	
+			Connection con = objGlobalfunction.funGetConnection(request);
+			String currencyName="";
+			DecimalFormat df = new DecimalFormat("#.##");
+			double currValue = 1.0;
+			String type="pdf";
+			
+			
+			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+			
+			
+			if(currencyCode.equalsIgnoreCase("All"))
+			{   
+				currencyName=currencyList.get(baseCurrencyCode);
+				clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(baseCurrencyCode, clientCode);
+				if (objCurrModel != null) {
+					currValue = objCurrModel.getDblConvToBaseCurr();
+				}
+			}
+			else
+			{
+				currencyName=currencyList.get(currencyCode);
+				clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(currencyCode, clientCode);
+				if (objCurrModel != null) {
+					currValue = objCurrModel.getDblConvToBaseCurr();
+				}
+			}
+			
+			sqlInvoiceFlashPDF.append("select a.strInvCode ,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y') as dteInvDate,b.strPName as strCustName,a.dblSubTotalAmt/" + currValue + " as subTotalAmt,a.dblTaxAmt/" + currValue + " as taxAmt"
+					+ ",(a.dblSubTotalAmt/" + currValue + "+ a.dblTaxAmt/" + currValue + ") as totalAmt,ifnull(a.strNarration,'') as strRemark"
+					+ " FROM tblpartymaster b,tblsettlementmaster c,tblinvoicehd a "
+					+ " where   date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' " + " and a.strLocCode='" + locCode +"' "
+					+ " and a.strCustCode=b.strPCode and  a.strClientCode='" + clientCode + "'");
+			if (!settlementcode.equals("All")) {
+				sqlInvoiceFlashPDF.append(" and  a.strSettlementCode='" + settlementcode + "' ");
+			}
+			if (!custCode.equals("All")) {
+				sqlInvoiceFlashPDF.append( " and  a.strCustCode='" + custCode + "' ");
+			}
+			if(!currencyCode.equalsIgnoreCase("All"))
+			{
+				sqlInvoiceFlashPDF.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
+			}
+			
+	
+			sqlInvoiceFlashPDF.append("and a.strSettlementCode=c.strSettlementCode and a.dblSubTotalAmt>0 "
+				+ "  order by a.strInvCode ");
+			
+		/*	List listOfInvoicePDF = objGlobalService.funGetList(sqlInvoiceFlashPDF.toString(), "sql");
+			List dataList= new ArrayList<>();
+				
+			clsInvoiceBean objInvoiceFlashBean=new clsInvoiceBean();
+			if (!listOfInvoicePDF.isEmpty() && listOfInvoicePDF!=null) {
+				for (int i = 0; i < listOfInvoicePDF.size(); i++) {
+					Object[] objInvoice = (Object[]) listOfInvoicePDF.get(i);
+					objInvoiceFlashBean=new clsInvoiceBean();
+					objInvoiceFlashBean.setStrInvCode(objInvoice[0].toString());
+					objInvoiceFlashBean.setDteInvDate(objInvoice[1].toString());
+					objInvoiceFlashBean.setStrCustName(objInvoice[2].toString());
+					objInvoiceFlashBean.setDblSubTotalAmt(Double.parseDouble(df.format(Double.parseDouble(objInvoice[3].toString()))));
+					objInvoiceFlashBean.setDblTaxAmt(Double.parseDouble(df.format(Double.parseDouble(objInvoice[4].toString()))));
+					objInvoiceFlashBean.setDblTotalAmt(Double.parseDouble(df.format(Double.parseDouble(objInvoice[5].toString()))));
+					dataList.add(objInvoiceFlashBean);
+					
+					
+				}
+			}*/
+			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+			String reportName = servletContext.getRealPath("/WEB-INF/reports/webcrm/rptCustomerWiseInvoicePDF.jrxml");
+			JasperDesign jd = JRXmlLoader.load(reportName);
+			
+			
+			JRDesignQuery billWiseInvoice = new JRDesignQuery();
+			billWiseInvoice.setText(sqlInvoiceFlashPDF.toString());
+			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
+			JRDesignDataset taxSumDataset = (JRDesignDataset) datasetMap.get("dsBillWiseInvoice");
+			taxSumDataset.setQuery(billWiseInvoice);
+			
+			
+			
+			
+		
+			
+			JasperReport jr = JasperCompileManager.compileReport(jd);
+			HashMap hm = new HashMap();
+			hm.put("strCompanyName", companyName);
+			hm.put("strUserCode", userCode);
+			hm.put("strImagePath", imagePath);
+			hm.put("strAddr1", objSetup.getStrAdd1());
+			hm.put("strAddr2", objSetup.getStrAdd2());
+			hm.put("strCity", objSetup.getStrCity());
+			hm.put("strState", objSetup.getStrState());
+			hm.put("strCountry", objSetup.getStrCountry());
+			hm.put("strPin", objSetup.getStrPin());
+			/*hm.put("srCode", srCode);
+			hm.put("locationCode", locationCode);
+			hm.put("locationName", locationName);
+			hm.put("againstName", againstName);
+			hm.put("strInvoiceCode", dcCode);
+			hm.put("custCode", custCode);
+			hm.put("custName", custName);
+			hm.put("currencyName", currencyName);
+			hm.put("SRDate", salesReturnDate);
+			hm.put("InvoiceDate", invoiceDate);
+	*/
+			JasperPrint p = JasperFillManager.fillReport(jr, hm, con);
+			if (type.trim().equalsIgnoreCase("pdf")) {
+				ServletOutputStream servletOutputStream = resp.getOutputStream();
+				byte[] bytes = null;
+				bytes = JasperRunManager.runReportToPdf(jr, hm, con);
+				resp.setContentType("application/pdf");
+				resp.setContentLength(bytes.length);
+				servletOutputStream.write(bytes, 0, bytes.length);
+				resp.setHeader("Content-Disposition", "attachment;filename=" + "rptBillWiseInvoice." + type.trim());
+				servletOutputStream.flush();
+				servletOutputStream.close();
+			}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+	
 }

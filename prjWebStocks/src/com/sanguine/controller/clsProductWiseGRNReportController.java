@@ -148,7 +148,7 @@ public class clsProductWiseGRNReportController {
 
 		ArrayList fieldList = new ArrayList();
 
-		String sqlQuery = "select c.strSGName,e.strLocName,d.strProdName,sum(b.dblQty) ,sum(b.dblTotalPrice),d.strUOM,d.dblCostRM from tblgrnhd a,tblgrndtl b ,tblsubgroupmaster c,tblproductmaster d,tbllocationmaster e " + " where a.strGRNCode=b.strGRNCode and b.strProdCode=d.strProdCode and d.strSGCode=c.strSGCode and a.strLocCode=e.strLocCode " + " and a.dtGRNDate between '" + dteFromDate
+		String sqlQuery = "select c.strSGName,e.strLocName,d.strProdName,sum(b.dblQty) ,sum(b.dblTotalPrice),d.strUOM,d.dblCostRM from tblgrnhd a,tblgrndtl b ,tblsubgroupmaster c,tblproductmaster d,tbllocationmaster e " + " where a.strGRNCode=b.strGRNCode and b.strProdCode=d.strProdCode and d.strSGCode=c.strSGCode and a.strLocCode=e.strLocCode " + " and date(a.dtGRNDate) between '" + dteFromDate
 				+ "' and '" + dteToDate + "'  ";
 
 		if (!locCode.equals("All")) {

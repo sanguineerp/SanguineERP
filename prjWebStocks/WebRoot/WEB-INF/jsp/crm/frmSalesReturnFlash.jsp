@@ -61,7 +61,7 @@
 				    	funSetLocation(code);
 				        break;
 				        
-				 case 'custMaster' :
+				 case 'custMasterActive' :
 			 			funSetCuster(code);
 			 			break;
 				}		
@@ -213,8 +213,9 @@
 				funShowTableGUI(divId);
 				//var settCode=$('#cmbSettlement').val();
 				var locCode=$('#txtLocCode').val();
+				var custCode=$('#txtCustCode').val();
 				//var searchUrl=getContextPath()+"/loadSalesReturnFlashRegionWise.html?settlementcode="+settCode+"&frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
-				var searchUrl=getContextPath()+"/loadSalesReturnFlashRegionWise.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
+				var searchUrl=getContextPath()+"/loadSalesReturnFlashRegionWise.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode;
 				$.ajax({
 				        type: "GET",
 				        url: searchUrl,
@@ -292,9 +293,10 @@
 			{
 				funShowTableGUI(divId)
 				//var settCode=$('#cmbSettlement').val();
-				var locCode=$('#txtLocCode').val();		
+				var locCode=$('#txtLocCode').val();	
+				var custCode=$('#txtCustCode').val();
 				//var searchUrl=getContextPath()+"/loadItemWiseSaleReturnDtl.html?settlementcode="+settCode+"&frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
-				var searchUrl=getContextPath()+"/loadItemWiseSaleReturnDtl.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
+				var searchUrl=getContextPath()+"/loadItemWiseSaleReturnDtl.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode;
 				$.ajax({
 				        type: "GET",
 				        url: searchUrl,
@@ -364,8 +366,9 @@
 				funShowTableGUI(divId)
 				//var settCode=$('#cmbSettlement').val();
 				var locCode=$('#txtLocCode').val();	
+				var custCode=$('#txtCustCode').val();
 				//var searchUrl=getContextPath()+"/loadCustomerWiseSaleReturnDtl.html?settlementcode="+settCode+"&frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
-				var searchUrl=getContextPath()+"/loadCustomerWiseSaleReturnDtl.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
+				var searchUrl=getContextPath()+"/loadCustomerWiseSaleReturnDtl.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode;
 				$.ajax({
 				        type: "GET",
 				        url: searchUrl,
@@ -435,8 +438,9 @@
 				funShowTableGUI(divId)
 				//var settCode=$('#cmbSettlement').val();
 				var locCode=$('#txtLocCode').val();
+				var custCode=$('#txtCustCode').val();
 				//var searchUrl=getContextPath()+"/loadCategoryWiseSaleReturnDtl.html?settlementcode="+settCode+"&frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
-				var searchUrl=getContextPath()+"/loadGroupSubGroupWiseSaleReturnDtl.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
+				var searchUrl=getContextPath()+"/loadGroupSubGroupWiseSaleReturnDtl.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode;
 				$.ajax({
 				        type: "GET",
 				        url: searchUrl,
@@ -545,6 +549,7 @@
 				
 		 	}
 			
+			
 		
 			
 			
@@ -582,6 +587,16 @@
                    <s:input type="hidden" id="hidReportName" path=""></s:input>		
                </td>
 			</tr>
+			<tr>
+			
+			<td><label>Customer Code</label></td>
+									<td ><s:input path="" id="txtCustCode"
+											ondblclick="funHelp('custMasterActive')" cssClass="searchTextBox" /></td>
+									<td><label id="lblCustomerName"
+										class="namelabel"></label></td>
+									<td>
+									</tr>
+									
 			
 
 

@@ -85,6 +85,7 @@ public class clsSalesReturnFlashController {
 		String fromDate = request.getParameter("frmDte").toString();
 		String toDate = request.getParameter("toDte").toString();
 		String locCode = request.getParameter("locCode").toString();
+		String strCustCode=request.getParameter("custCode").toString();
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblSubTotalValue = new BigDecimal(0);
 		BigDecimal dblTaxTotalValue = new BigDecimal(0);
@@ -99,7 +100,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tblsalesreturndtl c on a.strSRCode=c.strSRCode"
 				+ " left outer join tblpartymaster b on a.strCustCode=b.strPCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'  and a.strCustCode='"+strCustCode+"'"
 				+ " group by c.strSRCode;";
 		
 		List listOfSaleRet = objGlobalService.funGetList(sql, "sql");
@@ -149,6 +150,7 @@ public class clsSalesReturnFlashController {
 		String fromDate = request.getParameter("frmDte").toString();
 		String toDate = request.getParameter("toDte").toString();
 		String locCode = request.getParameter("locCode").toString();
+		String strCustCode = request.getParameter("custCode").toString();
 		BigDecimal dblQty = new BigDecimal(0);
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblSubTotalValue = new BigDecimal(0);
@@ -166,7 +168,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tblproductmaster d on c.strProdCode=d.strProdCode"
 				+ " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"'"
 				+ " group by c.strProdCode"
 				+ " order by c.strSRCode,d.strProdName;";
 		
@@ -212,6 +214,7 @@ public class clsSalesReturnFlashController {
 		String fromDate = request.getParameter("frmDte").toString();
 		String toDate = request.getParameter("toDte").toString();
 		String locCode = request.getParameter("locCode").toString();
+		String strCustCode = request.getParameter("custCode").toString();
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblSubTotalValue = new BigDecimal(0);
 		BigDecimal dblTaxTotalValue = new BigDecimal(0);
@@ -226,7 +229,8 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tblsalesreturndtl c on a.strSRCode=c.strSRCode"
 				+ " left outer join tblpartymaster b on a.strCustCode=b.strPCode left outer join tbllocationmaster d on a.strLocCode=d.strLocCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and  a.strCustCode='"+strCustCode+"'"
+				
 				+ " group by b.strPCode"
 				+ " order by b.strPName";
 		
@@ -261,6 +265,7 @@ public class clsSalesReturnFlashController {
 		String fromDate = request.getParameter("frmDte").toString();
 		String toDate = request.getParameter("toDte").toString();
 		String locCode = request.getParameter("locCode").toString();
+		String strCustCode = request.getParameter("custCode").toString();
 		BigDecimal dblQty = new BigDecimal(0);
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblSubTotalValue = new BigDecimal(0);
@@ -280,7 +285,7 @@ public class clsSalesReturnFlashController {
 				+ " Left outer join tblsubgroupmaster f on d.strSGCode=f.strSGCode"
 				+ " Left outer join tblgroupmaster g on f.strGCode=g.strGCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"'"
 				+ " GROUP BY  g.strGCode,f.strSGCode "
 				+ " ORDER BY g.strGName;";
 		

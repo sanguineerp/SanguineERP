@@ -1293,7 +1293,15 @@
 				 } 
 			
 			}
-			
+			function funPrintReport()
+			{
+				var settCode=$('#cmbSettlement').val();
+				var locCode=$('#txtLocCode').val();
+				var custCode=$('#txtCustCode').val();
+				var currencyCode=$('#cmbCurrency').val();
+				window.open(getContextPath()+"/rptBillWiseFlashReportPDF.html?settlementcode="+settCode+"&frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode+"&currencyCode="+currencyCode);
+				
+			}
 			
 		</script>
 </head>
@@ -1334,7 +1342,7 @@
 				<s:input type="text" id="txtCustCode" path="strCustCode"
 						cssClass="searchTextBox" ondblclick="funHelp('custMaster');" value="All"/>
 						<label id="lblCustName"></label></td> 	
-				
+				<td><input id="btnExport" type="button" value="Print"  class="form_button1" onclick="funPrintReport()" /></td>
 				<td><s:input type="hidden" id="hidReportName" path=""></s:input></td>		
 				<td></td>	
 				<td></td>
