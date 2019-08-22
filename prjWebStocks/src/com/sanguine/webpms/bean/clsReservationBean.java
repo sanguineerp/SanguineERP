@@ -382,14 +382,14 @@ public class clsReservationBean {
 		return strLastName;
 	}
 
-	public String getStrRoomNo() {
+	/*public String getStrRoomNo() {
 		return strRoomNo;
 	}
 
 	public void setStrRoomNo(String strRoomNo) {
 		this.strRoomNo = (String) setDefaultValue(strRoomNo, "");
 		;
-	}
+	}*/
 
 	public void setStrLastName(String strLastName) {
 		this.strLastName = strLastName;
@@ -536,6 +536,14 @@ public class clsReservationBean {
 
 	public void setTmeDropTime(String tmeDropTime) {
 		this.tmeDropTime = tmeDropTime;
+	}
+
+	public String getStrRoomNo() {
+		return strRoomNo;
+	}
+
+	public void setStrRoomNo(String strRoomNo) {
+		this.strRoomNo = strRoomNo;
 	}
 
 	

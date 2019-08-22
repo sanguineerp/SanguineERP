@@ -268,6 +268,11 @@
 					    	  {
 					    	  toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
+					      else if(roomStatus.includes("Confirmed"))
+					    	  {
+					    	 	 roomStatus="Confirmed"
+								 toolTipText1+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
 					      else
 					    	  {
 					    	  
@@ -319,6 +324,11 @@
 						      if(roomStatus.includes("Waiting"))
 					    	  {
 					    	  toolTipText2+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+						      else if(roomStatus.includes("Confirmed"))
+					    	  {
+					    	 	 roomStatus="Confirmed"
+								 toolTipText2+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
 					      else
 					    	  {
@@ -372,6 +382,11 @@
 					    	  {
 					    	  toolTipText3+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
+						      else if(roomStatus.includes("Confirmed"))
+					    	  {
+					    	 	 roomStatus="Confirmed"
+								 toolTipText3+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
 					      else
 					    	  {
 						      if(nextFinalTemp == "/")
@@ -424,6 +439,11 @@
 					    	  {
 					    	  toolTipText4+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
+						      else if(roomStatus.includes("Confirmed"))
+					    	  {
+					    	 	 roomStatus="Confirmed"
+								 toolTipText4+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
 					      else
 					    	  {
 						      if(nextFinalTemp == "/")
@@ -474,6 +494,11 @@
 						      if(roomStatus.includes("Waiting"))
 					    	  {
 					    	  toolTipText5+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+						      else if(roomStatus.includes("Confirmed"))
+					    	  {
+					    	 	 roomStatus="Confirmed"
+								 toolTipText5+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
 					      else
 					    	  {
@@ -526,6 +551,11 @@
 					    	  {
 					    	  toolTipText6+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
+						      else if(roomStatus.includes("Confirmed"))
+					    	  {
+					    	 	 roomStatus="Confirmed"
+								 toolTipText6+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
 					      else
 					    	  {
 						      if(nextFinalTemp == "/")
@@ -577,6 +607,11 @@
 						      if(roomStatus.includes("Waiting"))
 					    	  {
 					    	  toolTipText7+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
+					    	  }
+						      else if(roomStatus.includes("Confirmed"))
+					    	  {
+					    	 	 roomStatus="Confirmed"
+								 toolTipText7+=" \n"+item1.strGuestName+"\n"+response.strReservationNo+"\n"+item1.dteArrivalDate+"\n"+item1.dteDepartureDate+"\n"+roomStatus;
 					    	  }
 					      else
 					    	  {
@@ -882,8 +917,8 @@
 				  
 			case 'rgb(0, 128, 0)'://GREEN-->CONFIRM
 				  code=obj.value;
-				  code=code.split(',')[1].trim();
-				  url=getContextPath()+"/frmReservation1.html?docCode="+code
+				  //code=code.split(',')[1].trim();
+				  url=getContextPath()+"/frmCheckIn1.html?docCode="+code
 				  window.open(url);
 
 				  break;
@@ -900,7 +935,7 @@
 				  
 				  var table2=document.getElementById("tblDays");
 				  var indexDate=table2.rows[0];
-				  var roomDate=table2.rows[0].cells[index-1].childNodes[0].defaultValue;
+				 // var roomDate=table2.rows[0].cells[index-1].childNodes[0].defaultValue;
 				  
 				  
 				  if(obj.parentNode.cellIndex>1)

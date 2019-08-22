@@ -106,8 +106,8 @@ public class clsExpectedArrivalListController {
 			reportParams.put("pContactDetails", "");
 			reportParams.put("strImagePath", imagePath);
 			reportParams.put("strUserCode", userCode);
-			reportParams.put("pFromDate", fromDate);
-			reportParams.put("pTtoDate", toDate);
+			reportParams.put("pFromDate", objGlobal.funGetDate("dd-MM-yyyy", fromDate));
+			reportParams.put("pTtoDate", objGlobal.funGetDate("dd-MM-yyyy", toDate));
 			reportParams.put("propName", propName);
 
 			// get all parameters
@@ -163,8 +163,15 @@ public class clsExpectedArrivalListController {
 				expectedArrivalListBean.setStrFirstName(strFirstName);
 				expectedArrivalListBean.setStrGuestCode(strGuestCode);
 				
-				String sqlExpectedArrivalDtl = "select a.strFirstName,a.strMiddleName,a.strLastName,b.strRoomTypeDesc,a.strAddress,a.strArrivalFrom,a.strProceedingTo " + "from tblguestmaster a,tblroomtypemaster b,tblreservationhd c,tblroom d,tblreservationdtl e " + " where  date(c.dteArrivalDate) between '" + fromDate + "' and '" + toDate + "'  and c.strReservationNo='" + strReservationNo
-						+ "' and c.strReservationNo=e.strReservationNo and e.strGuestCode=a.strGuestCode and d.strRoomTypeCode=b.strRoomTypeCode  group by e.strRoomType,e.strGuestCode";
+				/*String sqlExpectedArrivalDtl = "select a.strFirstName,a.strMiddleName,a.strLastName,b.strRoomTypeDesc,a.strAddress,a.strArrivalFrom,a.strProceedingTo " + "from tblguestmaster a,tblroomtypemaster b,tblreservationhd c,tblroom d,tblreservationdtl e " + " where  date(c.dteArrivalDate) between '" + fromDate + "' and '" + toDate + "'  and c.strReservationNo='" + strReservationNo
+						+ "' and c.strReservationNo=e.strReservationNo and e.strGuestCode=a.strGuestCode and d.strRoomTypeCode=b.strRoomTypeCode  group by e.strRoomType,e.strGuestCode";*/
+				
+				String sqlExpectedArrivalDtl ="SELECT a.strFirstName,a.strMiddleName,a.strLastName,d.strBedType,a.strAddress,a.strArrivalFrom,a.strProceedingTo "
+						+ "FROM tblguestmaster a,tblreservationhd b,tblroom d,tblreservationdtl e WHERE "
+						+ "a.strGuestCode=b.strGuestcode AND e.strReservationNo='"+strReservationNo+"' "
+						+ "AND e.strRoomType=d.strRoomTypeCode AND b.strReservationNo=e.strReservationNo AND date(b.dteArrivalDate) between '" + fromDate + "' and '" + toDate + "'  "
+						+ "group by d.strBedType";
+				
 				List expectedArrivalDtlList = objGlobalFunctionsService.funGetDataList(sqlExpectedArrivalDtl, "sql");
 				for (int j = 0; j < expectedArrivalDtlList.size(); j++) {
 					Object[] GuestArr = (Object[]) expectedArrivalDtlList.get(j);

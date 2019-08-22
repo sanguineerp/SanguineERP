@@ -17,10 +17,27 @@
 	function funCallFormAction(actionName,object) 
 	{
 		var flg=true;
-		
+		if($('#txtBookerName').val()=='')
+		{
+			 alert('Enter Name of Booker');
+			 flg=false;
+			 return flg;
+		}
+		if($('#txtAddress').val()=='')
+		{
+			 alert('Enter Address');
+			 flg=false;
+			 return flg;
+		}
 		if($('#txtMobileNo').val()=='')
 		{
 			 alert('Enter Mobile Number');
+			 flg=false;
+			 return flg;
+		}	
+		if($('#txtTelephoneNo').val()=='')
+		{
+			 alert('Enter Telephone Number');
 			 flg=false;
 			 return flg;
 		}	
@@ -31,18 +48,8 @@
 			 flg=false;
 			 return flg;
 		}
-		if($('#txtAddress').val()=='')
-		{
-			 alert('Enter Address');
-			 flg=false;
-			 return flg;
-		}
-		if($('#txtBookerName').val()=='')
-		{
-			 alert('Enter Name of Booker');
-			 flg=false;
-			 return flg;
-		}
+		
+		
 		if($('#txtTelephoneNo').val()=='')
 		{
 			 alert('Enter Telephone Number');

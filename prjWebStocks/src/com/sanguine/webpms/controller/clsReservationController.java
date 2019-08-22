@@ -487,7 +487,7 @@ public class clsReservationController {
 			{
 				for (clsReservationDetailsBean objRommDtlBean : objBean.getListReservationDetailsBean()) 
 				{
-					String date="",oldRoomType="";
+					String date="",oldRoomType="",strRoomNo="";
 					boolean isFound=false;
 					sql = " select a.strDocNo,a.strRoomType,a.dteToDate from tblchangedroomtypedtl a where a.strDocNo='"+objHdModel.getStrReservationNo()+"' "
 							+ " and a.strClientCode='"+clientCode+"'  and a.strGuestCode='"+objRommDtlBean.getStrGuestCode()+"' ";
@@ -524,6 +524,7 @@ public class clsReservationController {
 				if(oldRoomType.isEmpty())
 				{
 					oldRoomType=objRommDtlBean.getStrRoomType();	
+					strRoomNo=objRommDtlBean.getStrRoomNo();
 				}
 				
 				objWebPMSUtility.funExecuteUpdate("delete from tblchangedroomtypedtl where strDocNo='"+objHdModel.getStrReservationNo()+"' and strRoomType='"+oldRoomType+"' and strGuestCode='"+objRommDtlBean.getStrGuestCode()+"' and strClientCode='"+clientCode+"'", "sql");	
@@ -531,7 +532,7 @@ public class clsReservationController {
 				String insertChangedRoomType = "INSERT INTO `tblchangedroomtypedtl` (`strDocNo`, `strType`,"
 						+ " `strRoomNo`, `strRoomType`, `strGuestCode`, `dteFromDate`, "
 						+ " `dteToDate`, `strClientCode`) "
-						+ " VALUES ('"+objHdModel.getStrReservationNo()+"','Reservation','','"+oldRoomType+"',"
+						+ " VALUES ('"+objHdModel.getStrReservationNo()+"','Reservation','"+strRoomNo+"','"+oldRoomType+"',"
 						+ " '"+objRommDtlBean.getStrGuestCode()+"','"+PMSDate+"','"+date+"','"+clientCode+"') ";
 				objWebPMSUtility.funExecuteUpdate(insertChangedRoomType, "sql");	
 					
@@ -541,7 +542,7 @@ public class clsReservationController {
 					insertChangedRoomType = "INSERT INTO `tblchangedroomtypedtl` (`strDocNo`, `strType`,"
 							+ " `strRoomNo`, `strRoomType`, `strGuestCode`, `dteFromDate`, "
 							+ " `dteToDate`, `strClientCode`) "
-							+ " VALUES ('"+objHdModel.getStrReservationNo()+"','Reservation','','"+objRommDtlBean.getStrRoomType()+"',"
+							+ " VALUES ('"+objHdModel.getStrReservationNo()+"','Reservation','"+strRoomNo+"','"+objRommDtlBean.getStrRoomType()+"',"
 							+ " '"+objRommDtlBean.getStrGuestCode()+"','"+PMSDate+"','','"+clientCode+"') ";
 					objWebPMSUtility.funExecuteUpdate(insertChangedRoomType, "sql");		
 				}
@@ -623,6 +624,7 @@ public class clsReservationController {
 			clsReservationDtlModel objResDtlModel = new clsReservationDtlModel();
 			if (objBean.getStrPayeeGuestCode().equals(objResDtl.getStrGuestCode())) {
 				objResDtlModel.setStrPayee("Y");
+				objResDtlModel.setStrRoomNo(objResDtl.getStrRoomNo());
 				objModel.setStrGuestcode(objBean.getStrPayeeGuestCode());
 			} else {
 				objResDtlModel.setStrPayee("N");

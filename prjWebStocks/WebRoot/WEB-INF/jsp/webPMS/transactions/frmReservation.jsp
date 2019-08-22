@@ -1032,12 +1032,12 @@
 // Reset Detail Fields
 	function funResetDetailFields()
 	{
-		$("#txtGuestCode").val('');
-		$("#txtMobileNo").val('');
-		$("#txtGFirstName").val('');
-		$("#txtGMiddleName").val('');
-		$("#txtGLastName").val('');
-		$("#txtAddress").val('');
+		//$("#txtGuestCode").val('');
+		//$("#txtMobileNo").val('');
+		//$("#txtGFirstName").val('');
+		//$("#txtGMiddleName").val('');
+		//$("#txtGLastName").val('');
+		//$("#txtAddress").val('');
 		
 		//$("#lblRoomType").text('');
 	    $("#txtRoomNo").val('');
@@ -1219,7 +1219,7 @@
 	    row.insertCell(5).innerHTML= "<input type=\"button\" class=\"deletebutton\" size=\"2%\" value = \"Delete\" onClick=\"Javacsript:funDeleteRow(this)\"/>";
 	    
 	    row.insertCell(6).innerHTML= "<input type=\"hidden\"  name=\"listReservationDetailsBean["+(rowCount)+"].strGuestCode\" id=\"strGuestCode."+(rowCount)+"\" value='"+guestCode+"' />";
-	    row.insertCell(7).innerHTML= "<input type=\"hidden\" size=\"0%\" name=\"listReservationDetailsBean["+(rowCount)+"].strRoomNo\" id=\"strRoomNo."+(rowCount)+"\" value='' />";
+	    row.insertCell(7).innerHTML= "<input type=\"hidden\" size=\"0%\" name=\"listReservationDetailsBean["+(rowCount)+"].strRoomNo\" id=\"strRoomNo."+(rowCount)+"\" value='"+roomNo+"' />";
 	    row.insertCell(8).innerHTML= "<input type=\"hidden\" size=\"0%\" name=\"listReservationDetailsBean["+(rowCount)+"].strExtraBedCode\" id=\"strExtraBedCode."+(rowCount)+"\" value='"+extraBedCode+"' />";
 	    row.insertCell(9).innerHTML= "<input type=\"hidden\" size=\"0%\" name=\"listReservationDetailsBean["+(rowCount)+"].strAddress\" id=\"strAddress."+(rowCount)+"\" value='"+address+"' />";
 	    row.insertCell(10).innerHTML= "<input type=\"hidden\" size=\"0%\" id=\"strRoomDesc."+(rowCount)+"\" value='' />";
@@ -2054,9 +2054,9 @@
 				<td><label id="lblRoomType">Room Type</label></td>
 				<td><input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" /></td>
 				
-			    <!-- <td><label id="lblRoomNo">Room</label></td>
+			    <td><label id="lblRoomNo">Room</label></td>
 			    <td><input type="text" id="txtRoomNo" name="txtRoomNo" path="strRoomNo" ondblclick="funHelp('roomCode')" Class="searchTextBox"/></td> 
-				 -->
+				 
 				<td><label id="lblExtraBed">Extra Bed</label></td>
 				<td><input type="text" id="txtExtraBed" name="txtExtraBed" Class="searchTextBox" ondblclick="funHelp('extraBed')" /></td>
 				<td colspan="1" ></td>
