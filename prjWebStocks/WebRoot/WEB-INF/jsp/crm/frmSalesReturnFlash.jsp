@@ -523,6 +523,7 @@
 			function funExportReport()
 		 	{
 		 		var locCode=$('#txtLocCode').val();
+		 		var custCode=$('#txtCustCode').val();
 				if(locCode=="")
 					{
 					locCode="All";
@@ -530,19 +531,19 @@
 				
 				 if(hidReportName=='divRegionWise')
 				 {
-					window.location.href = getContextPath()+"/exportRegionWiseSalesReturnFlash.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
+					window.location.href = getContextPath()+"/exportRegionWiseSalesReturnFlash.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode;
 				 }
 				else if(hidReportName=='divItemWise')
 				 {
-					window.location.href = getContextPath()+"/exportItemWiseSalesReturnFlash.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
+					window.location.href = getContextPath()+"/exportItemWiseSalesReturnFlash.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode;
 				 }
 				else if(hidReportName=='divCustomerWise')
 				 {
-					window.location.href = getContextPath()+"/exportCustomerWiseSalesReturnFlash.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
+					window.location.href = getContextPath()+"/exportCustomerWiseSalesReturnFlash.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode;
 				 }
 				else if(hidReportName=='divCategoryWise')
 				 {
-					window.location.href = getContextPath()+"/exportGroupSubGroupWiseSalesReturnFlash.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode;
+					window.location.href = getContextPath()+"/exportGroupSubGroupWiseSalesReturnFlash.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode;
 				 }
 				
 				
@@ -551,7 +552,15 @@
 			
 			
 		
+			function funPrintReport()
+			{
+				var locCode=$('#txtLocCode').val();
+		 		var custCode=$('#txtCustCode').val();
+				window.open(getContextPath()+"/rptProductWiseSalesReturnPDF.html?frmDte="+frmDte1+"&toDte="+toDte1+"&locCode="+locCode+"&custCode="+custCode);
+				
+			}
 			
+
 			
 		 	</script>
 </head>
@@ -583,9 +592,10 @@
 <!-- 				<td width="100px"><label>Settlement</label> -->
 <%-- 				<td><s:select id="cmbSettlement" path="strSettlementCode" --%>
 <%-- 						items="${settlementList}" cssClass="BoxW124px" /></td> --%>
-               <td><input id="btnExport" type="button" value="EXPORT"  class="form_button1" onclick="funExportReport()" />
+               <td><input id="btnExport" type="button" value="EXPORT"  class="form_button1" onclick="funExportReport()" /></td>
+              
                    <s:input type="hidden" id="hidReportName" path=""></s:input>		
-               </td>
+               
 			</tr>
 			<tr>
 			
@@ -595,6 +605,7 @@
 									<td><label id="lblCustomerName"
 										class="namelabel"></label></td>
 									<td>
+									 <td><input id="btnExport" type="button" value="PRINT"  class="form_button1" onclick="funPrintReport()" /></td>
 									</tr>
 									
 			

@@ -65,6 +65,7 @@ public class clsExcelBuilderWithReportName extends AbstractExcelView {
 		rowFontStyle.setFontName("Arial");
 		rowFontStyle.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		rowFontStyle.setColor(HSSFColor.BLACK.index);
+		rowStyle.setAlignment(rowStyle.ALIGN_RIGHT);
 		rowStyle.setFont(rowFontStyle);
 		
 		CellStyle styleOfAligment = workbook.createCellStyle();
@@ -73,6 +74,13 @@ public class clsExcelBuilderWithReportName extends AbstractExcelView {
 		rowFontAlignment.setColor(HSSFColor.BLACK.index);
 		styleOfAligment.setAlignment(styleOfAligment.ALIGN_RIGHT);
 		styleOfAligment.setFont(rowFontAlignment);
+		
+		CellStyle styleOfTotal = workbook.createCellStyle();
+		Font rowTotalFontAlignment = workbook.createFont();
+		rowTotalFontAlignment.setFontName("Arial");
+		rowTotalFontAlignment.setColor(HSSFColor.BLACK.index);
+		rowTotalFontAlignment.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		styleOfTotal.setFont(rowTotalFontAlignment);
 		
 		CellStyle rowOfLast = workbook.createCellStyle();
 		Font rowFontStyleOfLast = workbook.createFont();
@@ -102,7 +110,7 @@ public class clsExcelBuilderWithReportName extends AbstractExcelView {
 			}
 			*/
 			List arrObj = (List) listStock.get(rowCount);
-			if(rowCount==listStock.size()-1)
+			if( reportName.split("_")[0].equalsIgnoreCase("ItemWiseSalesReturnData") && rowCount>=listStock.size()-6 )
 			{
 				for (int Count = 0; Count < arrObj.size(); Count++) {
 					if (null != arrObj.get(Count) && arrObj.get(Count).toString().length() > 0) {
@@ -118,11 +126,35 @@ public class clsExcelBuilderWithReportName extends AbstractExcelView {
 						}
 						else {
 							aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
-							aRow.getCell(Count).setCellStyle(rowStyle);
+							aRow.getCell(Count).setCellStyle(styleOfTotal);
 						}
 					} else {
 						aRow.createCell(Count).setCellValue("");
-						aRow.getCell(Count).setCellStyle(rowStyle);
+						aRow.getCell(Count).setCellStyle(styleOfTotal);
+					}
+				}
+			}
+			else if(rowCount==listStock.size()-1 )
+			{
+				for (int Count = 0; Count < arrObj.size(); Count++) {
+					if (null != arrObj.get(Count) && arrObj.get(Count).toString().length() > 0) {
+
+						if (isNumeric(arrObj.get(Count).toString())) {
+							aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
+							aRow.getCell(Count).setCellStyle(rowStyle);
+						}
+						else if(arrObj.get(Count).toString().startsWith("("))
+						{
+							aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
+							aRow.getCell(Count).setCellStyle(rowOfLast);
+						}
+						else {
+							aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
+							aRow.getCell(Count).setCellStyle(styleOfTotal);
+						}
+					} else {
+						aRow.createCell(Count).setCellValue("");
+						aRow.getCell(Count).setCellStyle(styleOfTotal);
 					}
 				}
 			}
