@@ -249,6 +249,10 @@
 				funSetPackageNo(code);
 			break;
 			
+			case "roomByRoomType":
+				funSetRoomNo(code);
+			break;
+			
 		}
 	}
 
@@ -701,6 +705,52 @@
 			    } else {
 			    	alert('Uncaught Error.n' + jqXHR.responseText);
 				}
+			}
+		});
+	}
+	
+	function funSetRoomNo(code){
+
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadRoomMasterData.html?roomCode=" + code,
+			dataType : "json",
+			success : function(response){ 
+				if(response.strRoomCode=='Invalid Code')
+	        	{
+	        		alert("Invalid Room No");
+	        		$("#txtRoomNo").val('');
+	        	}
+	        	else
+	        	{
+	        		if(response.strStatus=='Blocked')
+	        			{
+	        			alert('This room is Blocked Please Select Different Room');
+	        			}
+	        		else
+	        		{
+	        		$("#txtRoomNo").val(response.strRoomCode);
+	        		$("#lblRoomNo").text(response.strRoomDesc);
+	        		funSetRoomType(response.strRoomTypeCode);
+	        		}
+	        	}
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
 			}
 		});
 	}

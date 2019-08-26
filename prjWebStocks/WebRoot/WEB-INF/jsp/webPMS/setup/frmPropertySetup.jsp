@@ -323,6 +323,91 @@
 		$("#txtCheckOutSMSContent").val(mainSMS);
 		}		
 		
+		function funCreateEmail1()
+		{
+		 	 	
+			var field =$("#cmbReservationEmailField").val();
+			var content='';
+			var mainSMS =$("#txtReservationEmailContent").val();
+			
+			if(field=='CompanyName')
+			{
+				content='%%CompanyName';
+			}
+			if(field=='PropertyName')
+			{
+				content='%%PropertyName';
+			}
+			if(field=='RNo')
+			{
+				content='%%RNo';
+			}
+			if(field=='RDate')
+			{
+				content='%%RDate';
+			}
+		
+			if(field=='GuestName')
+			{
+				content='%%GuestName';
+			}
+			
+			if(field=='RoomNo')
+			{
+				content='%%RoomNo';
+			}
+			
+			if(field=='NoNights')
+			{
+				content='%%NoNights';
+			}
+			
+			mainSMS+=content;
+			$("#txtReservationEmailContent").val(mainSMS);
+		 }
+		function funCreateEmail2()
+		{
+		
+		   
+		var field =$("#cmbCheckINEmailField").val();
+		var content='';
+		var mainSMS =$("#txtCheckINEmailContent").val();
+		
+		if(field=='CompanyName')
+		{
+			content='%%CompanyName';
+		}
+		if(field=='PropertyName')
+		{
+			content='%%PropertyName';
+		}
+		if(field=='CheckIn')
+		{
+			content='%%CheckIn';
+		}
+		if(field=='GuestName')
+		{
+			content='%%GuestName';
+		}
+		if(field=='CheckInDate')
+		{
+			content='%%CheckInDate';
+		}
+		
+		if(field=='RoomNo')
+		{
+			content='%%RoomNo';
+		}
+		
+		if(field=='NoNights')
+		{
+			content='%%NoNights';
+		}
+		mainSMS+=content;
+		$("#txtCheckINEmailContent").val(mainSMS);
+		
+		}
+		
 		
 		function funValidateFields()
 		{
@@ -865,6 +950,8 @@
 								<li data-state="tab2">SMS Setup</li>
 								
 								<li data-state="tab3">Linkup</li>
+								
+								<li data-state="tab4">E-mail Setup</li>
 
 							</ul>
 							<div id="tab1" class="tab_content" style="height: 800px">
@@ -963,7 +1050,7 @@
 							
 							<tr>
 							<td><label >SMS API</label></td>
-								<td colspan="3"><s:textarea  id="txtSMSAPI" path="strSMSAPI" cssStyle="width: 669px;" /></td>
+								<td colspan="3"><s:textarea  id="txtSMSAPI" text="${SmsApi}" path="strSMSAPI"  cssStyle="width: 669px;" /></td>
 							</tr>
 						 	<tr>
 							<td style="width: 130px;"><label >SMS Content For Reservation </label></td>
@@ -985,7 +1072,7 @@
 							
 							
 							<tr>
-							<td style="width: 130px;"><label >SMS Content For Check IN </label></td>
+							<td style="width: 130px;"><label >Email Content For Check IN </label></td>
 							<td>	
 									<select  id="cmbCheckINSMSField" class="BoxW48px" style="width:130px" >
 										<option value="CompanyName">Company Name</option>
@@ -1188,6 +1275,58 @@
 							
 							
 							</div>
+							
+							<div id="tab4" class="tab_content">
+							<br><br><br>
+							<table id="tblAudit" class="transTable">
+							
+						 	<tr>
+							<td style="width: 130px;"><label >Email Content For Reservation </label></td>
+							<td>	
+									<select  id="cmbReservationEmailField" class="BoxW48px" style="width:130px" >
+										<option value="CompanyName">Company Name</option>
+										<option value="PropertyName">Property Name</option>
+										<option value="RNo">Reservation No</option>
+										<option value="RDate">Reservation Date</option>
+										<option value="GuestName">GuestName</option>
+										<option value="RoomNo">Room No</option>
+									<option value="NoNights">No of Nights</option>
+									</select>
+							 </td>
+							 
+							<td><input type="button" value="Add" class="smallButton" onclick="funCreateEmail1();" id=btnAddEmail1 /></td>
+									<td><s:textarea cssStyle="width: 373px; height: 101px;" id="txtReservationEmailContent" path="strReservationEmailContent"  /></td>
+							</tr> 
+							
+							
+							<tr>
+							<td style="width: 130px;"><label >Email Content For Check IN </label></td>
+							<td>	
+									<select  id="cmbCheckINEmailField" class="BoxW48px" style="width:130px" >
+										<option value="CompanyName">Company Name</option>
+										<option value="PropertyName">Property Name</option>
+										<option value="CheckIn">Check IN</option>
+										<option value="GuestName">GuestName</option>
+										<option value="RoomNo">RoomNo</option>
+										<option value="NoNights">No of Nights</option>
+										<option value="RDate">CheckInDate</option>
+										
+									</select>
+							 </td>
+							 
+									<td><input type="button" value="Add" class="smallButton" onclick="funCreateEmail2();" id=btnAddEmail2 /></td>
+									<td><s:textarea cssStyle="width: 373px; height: 101px;" id="txtCheckINEmailContent" path="strCheckInEmailContent"  /></td>
+							</tr>
+							
+	
+										
+							
+							
+									
+							
+							</table>							
+							</div>
+							
 						</div>
 					</td>
 				</tr>

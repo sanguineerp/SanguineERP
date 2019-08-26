@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -465,6 +466,78 @@ public class clsSendEmailController
 			else
 			{
 				strReturnValue = "User has No Email Id";
+			}
+
+			return strReturnValue;
+		}
+		catch (javax.mail.MessagingException e)
+		{
+			e.printStackTrace();
+			logger.info(e);
+			return e.toString();
+		}
+
+	}
+	
+	public @ResponseBody String doSendReservationEmail(String strReservationNo,String strMessege,HttpServletRequest request) throws JRException
+	{
+		// takes input from e-mail form
+		try
+		{
+			String subject ="Reservation Confirmation From "+request.getSession().getAttribute("locationName").toString();
+			
+			/*String message = "Purchase Order Slip";*/
+			String strReturnValue = "Email Send SuccessFully";
+
+			String clientCode = request.getSession().getAttribute("clientCode").toString();
+			String propertyCode = request.getSession().getAttribute("propertyCode").toString();
+			String userCode = request.getSession().getAttribute("usercode").toString();
+			
+		
+			String strEmailId="sachinm555@gmail.com";
+			/*String sql="select b.strEmailId from tblreservationdtl a ,tblguestmaster b where "
+					+ "a.strReservationNo='"+strReservationNo+"' and a.strGuestCode=b.strGuestCode ";*//*="SELECT CONCAT(ifnull(b.strEmail,''),',',ifnull(c.strEmail,''),',',ifnull(d.strEmail,''))EmailIds "
+			+"FROM tblpurchaseorderhd a "
+					+"left outer join tblpartymaster b on a.strSuppCode=b.strPCode "
+					+"left outer join tbluserhd c on a.strUserModified=c.strUserCode "
+					+"left outer join tblpropertysetup d on a.strPropCode=d.strPropertyCode  "
+					+"WHERE  a.strPOCode='"+strPOCode+"'  "
+					+"AND c.strUserCode='"+userCode+"'  "
+					+"AND d.strPropertyCode='"+propertyCode+"'";*/
+			//List list = objGlobalFunctionsService.funGetList(sql, "sql");
+			//if (list != null && !list.isEmpty())
+			if (strEmailId!=null)
+			{
+				/*String recipientAddress = list.get(0).toString();
+
+				String []receipientsArr = recipientAddress.split(",");
+                for(int i=0;i<receipientsArr.length;i++)
+                {
+                	if(receipientsArr[i].toString().trim().length()>0)
+                	{*/
+                	
+                		logger.info("To: " + strEmailId);
+        				logger.info("Subject: " + subject);
+        				logger.info("Message: " + strMessege);
+        			
+        				
+        				
+        				
+        				MimeMessageHelper helper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
+
+        				helper.setTo(strEmailId);
+        				helper.setSubject(subject);
+        				//helper.addAttachment("PO Slip.pdf", aAttachment);
+        				helper.setText(strMessege);
+        				mailSender.send(helper.getMimeMessage());
+                	//}                	
+                //}
+				
+
+			}
+			else
+			{
+				strReturnValue = "Supplier has No Email Id";
 			}
 
 			return strReturnValue;

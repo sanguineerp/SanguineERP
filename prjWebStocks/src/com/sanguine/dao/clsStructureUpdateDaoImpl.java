@@ -2983,6 +2983,17 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql = "ALTER TABLE `tblpropertysetup`	ADD COLUMN `strHSCCode` VARCHAR(100) NOT NULL DEFAULT '' AFTER `strPanNo`;";
 		funExecutePMSQuery(sql);
 		
+		
+		sql = "ALTER TABLE `tblpropertysetup` "
+				+ "ADD COLUMN `strCheckInEmailContent` VARCHAR(255) NULL DEFAULT NULL AFTER `strPanNo`;";
+		funExecutePMSQuery(sql);
+		
+		
+		sql = "ALTER TABLE `tblpropertysetup`"
+				+ "ADD COLUMN `strReservationEmailContent` VARCHAR(255) "
+				+ "NULL DEFAULT NULL AFTER `strCheckOutEmailContent`;";
+		funExecutePMSQuery(sql);
+		
 		// For PMS Form Of Tree master Start///
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
 

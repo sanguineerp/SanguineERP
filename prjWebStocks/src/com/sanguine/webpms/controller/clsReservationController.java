@@ -17,7 +17,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.hibernate.SessionFactory;
+import net.sf.jasperreports.engine.JRException;
+
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -33,10 +34,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.base.service.intfBaseService;
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.controller.clsSendEmailController;
 import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsPropertyMasterService;
+import com.sanguine.util.clsClientDetails;
 import com.sanguine.webpms.bean.clsGuestMasterBean;
 import com.sanguine.webpms.bean.clsReservationBean;
 import com.sanguine.webpms.bean.clsReservationDetailsBean;
@@ -108,6 +111,9 @@ public class clsReservationController {
 	
 	@Autowired
 	private intfBaseService objBaseService;
+	
+	@Autowired
+	private clsSendEmailController objSendEmail;
 	
 	// Open Reservation
 	@RequestMapping(value = "/frmReservation", method = RequestMethod.GET)
@@ -409,7 +415,13 @@ public class clsReservationController {
 			String bookingTypeDesc = (String) list.get(0);
 			
 			objReservationService.funAddUpdateReservationHd(objHdModel, bookingTypeDesc);	
-//			funSendSMSReservation(objHdModel.getStrReservationNo(), clientCode, propCode);
+			funSendSMSReservation(objHdModel.getStrReservationNo(), clientCode, propCode);
+			try {
+				funSendEmailReservation(objHdModel.getStrReservationNo(), clientCode, propCode,req);
+			} catch (JRException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			
 			if(null!=objBean.getListRoomPackageDtl() && objBean.getListRoomPackageDtl().size()>0  )
@@ -559,6 +571,75 @@ public class clsReservationController {
 		}
 	}
 
+	private void funSendEmailReservation(String strReservationNo,
+			String clientCode, String propCode,HttpServletRequest req) throws JRException {
+
+		clsReservationHdModel objModel = objReservationService.funGetReservationList(strReservationNo, clientCode, propCode);
+		
+		clsPropertySetupHdModel objPropertySetupModel= objPropertySetupService.funGetPropertySetup(propCode, clientCode);
+		
+		String strReservationMessege = objPropertySetupModel.getStrReservationEmailContent();
+		
+		List<clsReservationDtlModel> listReservationmodel = objModel.getListReservationDtlModel();
+
+		if (listReservationmodel.size() > 0) {
+			for (int i = 0; i < listReservationmodel.size(); i++) {
+				clsReservationDtlModel objDtl = listReservationmodel.get(i);
+				if (objDtl.getStrPayee().equals("Y")) {
+
+					List list = objGuestService.funGetGuestMaster(objDtl.getStrGuestCode(), clientCode);
+					clsGuestMasterHdModel objGuestModel = null;
+					if (list.size() > 0) {
+						objGuestModel = (clsGuestMasterHdModel) list.get(0);
+		
+		
+		if (strReservationMessege.contains("%%CompanyName")) {
+			List<clsCompanyMasterModel> listCompanyModel = objPropertySetupService.funGetListCompanyMasterModel(clientCode);
+			strReservationMessege = strReservationMessege.replace("%%CompanyName", listCompanyModel.get(0).getStrCompanyName()+" ");
+			
+		}
+		if (strReservationMessege.contains("%%PropertyName")) {
+			clsPropertyMaster objProperty = objPropertyMasterService.funGetProperty(propCode, clientCode);
+			strReservationMessege = strReservationMessege.replace("%%PropertyName", objProperty.getPropertyName()+" ");
+			
+		}
+
+		if (strReservationMessege.contains("%%RNo")) {
+			strReservationMessege = strReservationMessege.replace("%%RNo", strReservationNo+" ");
+			
+		}
+
+		if (strReservationMessege.contains("%%RDate")) {
+			strReservationMessege = strReservationMessege.replace("%%RDate", objGlobal.funGetDate("dd-MM-yyyy", objModel.getDteReservationDate()+" "));
+			
+		}
+
+		if (strReservationMessege.contains("%%NoNights")) {
+			strReservationMessege = strReservationMessege.replace("%%NoNights", String.valueOf(objModel.getIntNoOfNights())+" ");
+			
+		}
+		
+		if (strReservationMessege.contains("%%GuestName")) {
+			strReservationMessege = strReservationMessege.replace("%%GuestName", objGuestModel.getStrFirstName() + " " + objGuestModel.getStrMiddleName() + " " + objGuestModel.getStrLastName());
+		}
+
+		if (strReservationMessege.contains("%%RoomNo")) {
+			clsRoomMasterModel roomNo = objRoomMaster.funGetRoomMaster(objDtl.getStrRoomNo(), clientCode);
+			strReservationMessege = strReservationMessege.replace("%%RoomNo", roomNo.getStrRoomDesc());
+		}
+		
+					}
+				}
+			}
+		}
+		
+		objSendEmail.doSendReservationEmail(strReservationNo,strReservationMessege,req);
+		
+		
+		
+
+	}
+
 	// Convert bean to model function
 	private clsReservationHdModel funPrepareHdModel(clsReservationBean objBean, String userCode, String clientCode, HttpServletRequest request, String propertyCode) {
 
@@ -663,23 +744,28 @@ public class clsReservationController {
 		if (!smsAPIUrl.equals("")) {
 			if (smsContent.contains("%%CompanyName")) {
 				List<clsCompanyMasterModel> listCompanyModel = objPropertySetupService.funGetListCompanyMasterModel(clientCode);
-				smsContent = smsContent.replace("%%CompanyName", listCompanyModel.get(0).getStrCompanyName());
+				smsContent = smsContent.replace("%%CompanyName", listCompanyModel.get(0).getStrCompanyName()+" ");
+				smsAPIUrl = smsAPIUrl.replace(" ", "%20");
 			}
 			if (smsContent.contains("%%PropertyName")) {
 				clsPropertyMaster objProperty = objPropertyMasterService.funGetProperty(propCode, clientCode);
-				smsContent = smsContent.replace("%%PropertyName", objProperty.getPropertyName());
+				smsContent = smsContent.replace("%%PropertyName", objProperty.getPropertyName()+" ");
+				smsAPIUrl = smsAPIUrl.replace(" ", "%20");
 			}
 
 			if (smsContent.contains("%%RNo")) {
-				smsContent = smsContent.replace("%%RNo", reservationNo);
+				smsContent = smsContent.replace("%%RNo", reservationNo+" ");
+				smsAPIUrl = smsAPIUrl.replace(" ", "%20");
 			}
 
 			if (smsContent.contains("%%RDate")) {
-				smsContent = smsContent.replace("%%RDate", objGlobal.funGetDate("dd-MM-yyyy", objModel.getDteReservationDate()));
+				smsContent = smsContent.replace("%%RDate", objGlobal.funGetDate("dd-MM-yyyy", objModel.getDteReservationDate()+" "));
+				smsAPIUrl = smsAPIUrl.replace(" ", "%20");
 			}
 
 			if (smsContent.contains("%%NoNights")) {
-				smsContent = smsContent.replace("%%NoNights", String.valueOf(objModel.getIntNoOfNights()));
+				smsContent = smsContent.replace("%%NoNights", String.valueOf(objModel.getIntNoOfNights())+" ");
+				smsAPIUrl = smsAPIUrl.replace(" ", "%20");
 			}
 
 			List<clsReservationDtlModel> listReservationmodel = objModel.getListReservationDtlModel();
@@ -704,16 +790,29 @@ public class clsReservationController {
 							smsContent = smsContent.replace("%%RoomNo", roomNo.getStrRoomDesc());
 						}
 
-						if (smsAPIUrl.contains("ReceiverNo")) {
+						if (smsAPIUrl.contains("<PHONE>")) {
 
-							smsAPIUrl = smsAPIUrl.replace("ReceiverNo", String.valueOf(objGuestModel.getLngMobileNo()));
+							smsAPIUrl = smsAPIUrl.replace("<PHONE>", String.valueOf(objGuestModel.getLngMobileNo()));
 							strMobileNo = String.valueOf(objGuestModel.getLngMobileNo());
 						}
-						if (smsAPIUrl.contains("MsgContent")) {
-							smsAPIUrl = smsAPIUrl.replace("MsgContent", smsContent);
+						if (smsAPIUrl.contains("MSG")) {
+							smsAPIUrl = smsAPIUrl.replace("MSG", smsContent);
 							smsAPIUrl = smsAPIUrl.replace(" ", "%20");
 						}
-
+						
+						if (smsAPIUrl.contains("<USERNAME>")) {
+							smsAPIUrl = smsAPIUrl.replace("<USERNAME>", "SanguineERP");
+							smsAPIUrl = smsAPIUrl.replace(" ", "%20");
+						}
+						if (smsAPIUrl.contains("<PASSWORD>")) {
+							smsAPIUrl = smsAPIUrl.replace("<PASSWORD>", "2017@SanguineERP@2017");
+							smsAPIUrl = smsAPIUrl.replace(" ", "%20");
+						}
+						if (smsAPIUrl.contains("<SENDERID>")) {
+							smsAPIUrl = smsAPIUrl.replace("<SENDERID>", "SANPOS");
+							smsAPIUrl = smsAPIUrl.replace(" ", "%20");
+						}
+						
 						URL url;
 						HttpURLConnection uc = null;
 						StringBuilder output = new StringBuilder();

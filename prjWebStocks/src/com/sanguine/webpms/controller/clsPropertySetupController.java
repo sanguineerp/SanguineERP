@@ -70,6 +70,8 @@ public class clsPropertySetupController {
 			model.put("BranchName", "");
 			model.put("bankAcName", "");
 			model.put("", "");
+			model.put("SmsApi", "");
+			model.put("ReservationEmail", "");
 		} else {
 			model.put("checkInTime", objModel.getTmeCheckInTime());
 			model.put("checkOutTime", objModel.getTmeCheckOutTime());
@@ -81,8 +83,8 @@ public class clsPropertySetupController {
 			model.put("BranchName", objModel.getStBranchName());
 			model.put("bankAcName", objModel.getStrBankAcName());
 			model.put("RoomLimit", objModel.getStrRoomLimit());
-			
-
+			model.put("SmsApi", objModel.getStrSMSAPI());
+			model.put("ReservationEmail", objModel.getStrReservationEmailContent());
 		}
 		
 		String sql = "select count(1) from tblroom a where a.strClientCode='" + clientCode + "' ";
@@ -450,6 +452,8 @@ public class clsPropertySetupController {
 		objPropertySetupModel.setStBranchName(objBean.getStBranchName().toString());
 		objPropertySetupModel.setStrPanNo(objBean.getStrPanNo().toString());
 		objPropertySetupModel.setStrHscCode(objBean.getStrHscCode().toString());
+		objPropertySetupModel.setStrReservationEmailContent(objBean.getStrReservationEmailContent());
+		objPropertySetupModel.setStrCheckInEmailContent(objBean.getStrCheckInEmailContent());
 		
 		
 		return objPropertySetupModel;

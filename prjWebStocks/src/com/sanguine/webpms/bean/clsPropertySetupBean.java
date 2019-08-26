@@ -36,7 +36,8 @@ public class clsPropertySetupBean {
 	private String stBranchName;
 	private String strPanNo;
 	private String strHscCode;
-	
+	private String strCheckInEmailContent;
+	private String strReservationEmailContent;
 	
 
 	public String getStrGSTNo() {
@@ -198,6 +199,22 @@ public class clsPropertySetupBean {
 
 	public void setStrHscCode(String strHscCode) {
 		this.strHscCode = strHscCode;
+	}
+
+	public String getStrCheckInEmailContent() {
+		return strCheckInEmailContent;
+	}
+
+	public void setStrCheckInEmailContent(String strCheckInEmailContent) {
+		this.strCheckInEmailContent = strCheckInEmailContent;
+	}
+
+	public String getStrReservationEmailContent() {
+		return strReservationEmailContent;
+	}
+
+	public void setStrReservationEmailContent(String strReservationEmailContent) {
+		this.strReservationEmailContent = strReservationEmailContent;
 	}
 
 	

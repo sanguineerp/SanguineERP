@@ -88,7 +88,14 @@ public class clsPropertySetupHdModel implements Serializable {
 	private String strAdvAmtSMSContent;
 	@Column(name = "strCheckOutSMSContent")
 	private String strCheckOutSMSContent;
+	
+	@Column(name = "strReservationEmailContent")
+	private String strReservationEmailContent;
+	
 
+	@Column(name = "strCheckInEmailContent")
+	private String strCheckInEmailContent;
+	
 	// SMS setUp Tab End
 
 	// Setter-Getter Methods
@@ -247,6 +254,23 @@ public class clsPropertySetupHdModel implements Serializable {
 		this.strHscCode = strHscCode;
 	}
 
+	public String getStrReservationEmailContent() {
+		return strReservationEmailContent;
+	}
+
+	public void setStrReservationEmailContent(String strReservationEmailContent) {
+		this.strReservationEmailContent = strReservationEmailContent;
+	}
+
+	public String getStrCheckInEmailContent() {
+		return strCheckInEmailContent;
+	}
+
+	public void setStrCheckInEmailContent(String strCheckInEmailContent) {
+		this.strCheckInEmailContent = strCheckInEmailContent;
+	}
+
+	
 	
 
 }
