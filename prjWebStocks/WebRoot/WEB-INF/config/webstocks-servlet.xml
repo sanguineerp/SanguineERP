@@ -576,6 +576,7 @@
 					<value>com.sanguine.webpms.model.clsVoidBillHdModel</value>
 					<value>com.sanguine.webpms.model.clsBlockRoomModel</value>
 					<value>com.sanguine.webpms.model.clsPMSSettlementTaxMasterModel</value>
+					<value>com.sanguine.webpms.model.clsFolioDtlBackupModel</value>
 					
 						
 				</list>

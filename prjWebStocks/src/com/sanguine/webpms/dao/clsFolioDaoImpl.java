@@ -1,12 +1,15 @@
 package com.sanguine.webpms.dao;
 
 import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.sanguine.webpms.model.clsFolioDtlBackupModel;
 import com.sanguine.webpms.model.clsFolioHdModel;
 
 @Repository("clsFolioDao")
@@ -26,6 +29,17 @@ public class clsFolioDaoImpl implements clsFolioDao {
 		//webPMSSessionFactory.getCurrentSession().update(objHdModel);
 	}
 
+	
+	@Override
+	@Transactional(value = "WebPMSTransactionManager")
+	public void funAddUpdateFolioBackupDtl(clsFolioDtlBackupModel objHdModel) {
+		
+		webPMSSessionFactory.getCurrentSession().saveOrUpdate(objHdModel);
+		
+		
+		//webPMSSessionFactory.getCurrentSession().update(objHdModel);
+	}
+	
 	@Override
 	@Transactional(value = "WebPMSTransactionManager")
 	public clsFolioHdModel funGetFolioList(String folioNo, String clientCode, String propertyCode) {

@@ -145,6 +145,7 @@ public class clsFolioPostingController {
 			}
 
 			objFolioHdModel.setListFolioDtlModel(listFolioDtlModels);
+			objPMSUtility.funInsertFolioDtlBackup(objFolioHdModel.getStrFolioNo());
 			objFolioHdModel.setListFolioTaxDtlModel(listFolioTaxDtl);
 			objFolioService.funAddUpdateFolioHd(objFolioHdModel);
 			req.getSession().setAttribute("success", true);

@@ -368,7 +368,7 @@ public class clsPostRoomTerrifController {
 	    		{
 	    			flgDupExtraBed=true;
 	    			flgDupRoomTerrif=true;
-	    			obFolioDtlModel.setDblDebitAmt(roomTerrif+obFolioDtlModel.getDblDebitAmt());
+	    			obFolioDtlModel.setDblDebitAmt(obFolioDtlModel.getDblDebitAmt());
 	    			obFolioDtlModel.setDblBalanceAmt(objBean.getDblOriginalPostingAmt()-roomTerrif);
 	    			break;
 	    		}
@@ -458,6 +458,7 @@ public class clsPostRoomTerrifController {
 	}
 		//objWebPMSUtility.funExecuteUpdate("delete from tblfoliodtl where strFolioNo='"+objFolioHd.getStrFolioNo()+"' and strRevenueType='Room' or strRevenueType='Package' and strClientCode='"+clientCode+"'", "sql");
 		objFolioHd.setListFolioDtlModel(listFolioDtl);
+		objPMSUtility.funInsertFolioDtlBackup(objFolioHd.getStrFolioNo());
 		objFolioHd.setListFolioTaxDtlModel(listFolioTaxDtl);
 		objFolioService.funAddUpdateFolioHd(objFolioHd);
 

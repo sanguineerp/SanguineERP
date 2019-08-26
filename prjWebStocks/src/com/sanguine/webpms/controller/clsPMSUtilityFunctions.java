@@ -7,13 +7,21 @@ import java.util.List;
 import java.util.Map;
 
 
+
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.webpms.bean.clsFolioDtlBean;
 import com.sanguine.webpms.bean.clsTaxCalculation;
 import com.sanguine.webpms.bean.clsTaxProductDtl;
 import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
+import com.sanguine.webpms.model.clsFolioDtlBackupModel;
+import com.sanguine.webpms.model.clsFolioDtlModel;
+import com.sanguine.webpms.service.clsFolioService;
 
 @Controller
 public class clsPMSUtilityFunctions {
@@ -23,6 +31,9 @@ public class clsPMSUtilityFunctions {
 
 	@Autowired
 	clsWebPMSDBUtilityDao objWebPMSUtility;
+	
+	@Autowired
+	clsFolioService objFolioService;
 
 	public Map<String, List<clsTaxCalculation>> funCalculatePMSTax(List<clsTaxProductDtl> listTaxProdDtl, String taxOnType) {
 		Map<String, List<clsTaxCalculation>> hmTaxCalDtl = new HashMap<String, List<clsTaxCalculation>>();
@@ -333,6 +344,37 @@ public class clsPMSUtilityFunctions {
 		}
 
 		return docNo;
+	}
+	
+	public void funInsertFolioDtlBackup(String folioNo)
+	{
+		if(!folioNo.isEmpty())
+		{
+			
+			//String sql = "insert into tblfoliobckp (select * from tblfoliodtl where strFolioNo='"+folioNo+"')";
+			//objWebPMSUtility.funExecuteUpdate(sql, "sql");
+			
+			/*for(int i=0;i<list.size();i++)
+			{
+				clsFolioDtlModel objModel = list.get(i);
+				
+				clsFolioDtlBackupModel objBackupModel = new clsFolioDtlBackupModel();
+				
+				objBackupModel.setDblBalanceAmt(objModel.getDblBalanceAmt());
+				objBackupModel.setDblCreditAmt(objModel.getDblCreditAmt());
+				objBackupModel.setDblDebitAmt(objModel.getDblDebitAmt());
+				objBackupModel.setDblQuantity(objModel.getDblQuantity());
+				objBackupModel.setDteDocDate(objModel.getDteDocDate());
+				objBackupModel.setStrDocNo(objModel.getStrDocNo());
+				objBackupModel.setStrPerticulars(objModel.getStrPerticulars());
+				objBackupModel.setStrRevenueCode(objModel.getStrRevenueCode());
+				objBackupModel.setStrRevenueType(objModel.getStrRevenueType());
+				
+				
+				//objFolioService.funAddUpdateFolioBackupDtl(objBackupModel);
+				
+			}*/
+		}
 	}
 
 }

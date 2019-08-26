@@ -112,6 +112,7 @@ public class clsCheckOutDiscountMasterController {
 			objFolioDtlModel.setStrRevenueCode("");
 			listFolioDtlModels.add(objFolioDtlModel);
 			objFolioHdModel.setListFolioDtlModel(listFolioDtlModels);
+			objPMSUtility.funInsertFolioDtlBackup(objFolioHdModel.getStrFolioNo());
 			objFolioService.funAddUpdateFolioHd(objFolioHdModel);
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Folio No. : ".concat(objFolioHdModel.getStrFolioNo()));

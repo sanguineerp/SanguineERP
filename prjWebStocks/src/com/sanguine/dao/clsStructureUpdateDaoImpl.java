@@ -2773,6 +2773,23 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecutePMSQuery(sql);
 		
+		sql = "CREATE TABLE IF NOT EXISTS `tblfoliobckp` ("
+				+ " `strFolioNo` varchar(15) NOT NULL,"
+				+ " `dteDocDate` datetime NOT NULL,"
+				+ " `strDocNo` varchar(15) NOT NULL,"
+				+ " `strPerticulars` varchar(200) NOT NULL,"
+				+ " `dblDebitAmt` decimal(18,2) NOT NULL,"
+				+ " `dblCreditAmt` decimal(18,2) NOT NULL,"
+				+ " `dblBalanceAmt` decimal(18,2) NOT NULL,"
+				+ " `strRevenueType` varchar(100) NOT NULL,"
+				+ " `strRevenueCode` varchar(15) NOT NULL,"
+				+ " `strClientCode` varchar(10) NOT NULL,"
+				+ " `dblQuantity` decimal(18,4) NOT NULL DEFAULT '0.0000'"
+				+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8; ";
+		
+		funExecutePMSQuery(sql);
+		
+		
 		sql = " ALTER TABLE `tblroomcancelation` " + "	CHANGE COLUMN `strReservationNo` `strReservationNo` VARCHAR(12) NOT NULL FIRST;  ";
 
 		funExecutePMSQuery(sql);

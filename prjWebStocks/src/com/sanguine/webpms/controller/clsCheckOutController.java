@@ -318,7 +318,12 @@ public class clsCheckOutController {
 					String sqlUpdateCheckOutDate ="UPDATE tblcheckinhd a SET a.dteDepartureDate= CONCAT('"+PMSDate+"',' ','00:00:00') "
 					+ "WHERE a.strCheckInNo='"+objBillHdModel.getStrCheckInNo()+"'";
 					
+					
 					objWebPMSUtility.funExecuteUpdate(sqlUpdateCheckOutDate, "sql");
+					
+					String sql = "insert into tblfoliobckp (select * from tblfoliodtl where strFolioNo='"+objFolioHdModel.getStrFolioNo()+"')";
+					objWebPMSUtility.funExecuteUpdate(sql, "sql");
+					
 					
 					objCheckOutService.funSaveCheckOut(objFolioHdModel, objBillHdModel);
 					

@@ -76,6 +76,11 @@
 		funLoadBillData(billNo);
 	}	
 	
+	function funSetBillNoForCheckIn(billNo)
+	{
+		$("#strBillNo").val(billNo);
+		funLoadBillDataForCheckIn(billNo);
+	}
 	/**
 	* Success Message After Saving Record
 	**/
@@ -153,7 +158,7 @@
 				break;
 				
 			case "checkInForBill":
-				funSetBillNo(code);
+				funSetBillNoForCheckIn(code);
 				break;
 		}
 	}
@@ -183,6 +188,43 @@
 	
 	function funLoadBillData(code){
 		var searchUrl=getContextPath()+ "/loadBillDetails.html?strBillNo=" + code;;
+		$.ajax({
+			type :"GET",
+			url : searchUrl,
+			dataType : "json",
+			async: false,
+			success: function(response){
+				funRemoveRows();
+				$.each(response, function(i,item)
+				{
+					funFillBillTable(response[i].strFolioNo,response[i].strDocNo,response[i].strMenuHead,response[i].dblIncomeHeadPrice,response[i].strRevenueCode);
+				});
+				
+			},
+			error : function(jqXHR, exception)
+			{
+				if (jqXHR.status === 0) {
+					alert('Not connect.n Verify Network.');
+				} else if (jqXHR.status == 404) {
+					alert('Requested page not found. [404]');
+				} else if (jqXHR.status == 500) {
+					alert('Internal Server Error [500].');
+				} else if (exception === 'parsererror') {
+					alert('Requested JSON parse failed.');
+				} else if (exception === 'timeout') {
+					alert('Time out error.');
+				} else if (exception === 'abort') {
+					alert('Ajax request aborted.');
+				} else {
+					alert('Uncaught Error.n' + jqXHR.responseText);
+				}
+			}
+
+		});
+	}
+
+	function funLoadBillDataForCheckIn(code){
+		var searchUrl=getContextPath()+ "/loadBillDetailsForCheckin.html?strBillNo=" + code;;
 		$.ajax({
 			type :"GET",
 			url : searchUrl,

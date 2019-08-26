@@ -2959,7 +2959,7 @@ public class clsSearchFormController {
 			columnNames = " d.strRoomCode,d.strRoomDesc,a.strCheckInNo,a.strReservationNo,a.strRegistrationNo,CONCAT(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName) ";
 			tableName = "  from tblcheckinhd a,tblcheckindtl b ,tblfoliohd c,tblroom d,tblguestmaster e"
 					  + " where a.strCheckInNo=c.strCheckInNo and a.strCheckInNo=b.strCheckInNo"
-					  + " and c.strRoomNo=d.strRoomCode and b.strGuestCode=e.strGuestCode and b.strPayee='Y' group by a.strCheckInNo ";
+					  + " and c.strRoomNo=d.strRoomCode and b.strGuestCode=e.strGuestCode and b.strPayee='Y' ";
 			listColumnNames = " Room No.,Room Desc.,CheckIn No,Reservation No.,Registration No.,Guest Name ";
 			idColumnName = " strRoomCode";
 			flgQuerySelection = true;

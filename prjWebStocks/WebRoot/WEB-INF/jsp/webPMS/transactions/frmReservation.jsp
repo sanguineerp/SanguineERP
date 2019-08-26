@@ -1260,6 +1260,34 @@
 		window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 		//window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
 	}
+	
+	function funHelp1(transactionName,row)
+	{
+		gridHelpRow=row;
+		fieldName=transactionName;
+		var condition = $("#txtRoomTypeCode").val();
+		if(condition=='')
+			{
+			alert("Please Select Room Type")
+			}
+		else
+			{
+			if(transactionName=="roomByRoomType" && condition!=" ")
+			{
+				window.open("searchform.html?formname="+fieldName+"&strRoomTypeCode="+condition+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+			
+			}
+			else
+			{
+				if(condition==" ")
+				{
+					alert("Please Select Room Type !!!");
+				}
+				//window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+			}
+			}
+		
+	}
 		
 	
 	function funValidateForm()
@@ -2055,7 +2083,7 @@
 				<td><input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" /></td>
 				
 			    <td><label id="lblRoomNo">Room</label></td>
-			    <td><input type="text" id="txtRoomNo" name="txtRoomNo" path="strRoomNo" ondblclick="funHelp('roomCode')" Class="searchTextBox"/></td> 
+			    <td><input type="text" id="txtRoomNo" name="txtRoomNo" path="strRoomNo" ondblclick="funHelp1('roomByRoomType')" Class="searchTextBox"/></td> 
 				 
 				<td><label id="lblExtraBed">Extra Bed</label></td>
 				<td><input type="text" id="txtExtraBed" name="txtExtraBed" Class="searchTextBox" ondblclick="funHelp('extraBed')" /></td>

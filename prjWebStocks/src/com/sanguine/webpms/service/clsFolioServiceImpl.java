@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sanguine.webpms.dao.clsFolioDao;
+import com.sanguine.webpms.model.clsFolioDtlBackupModel;
 import com.sanguine.webpms.model.clsFolioDtlModel;
 import com.sanguine.webpms.model.clsFolioHdModel;
 
@@ -19,6 +20,11 @@ public class clsFolioServiceImpl implements clsFolioService {
 	@Override
 	public void funAddUpdateFolioHd(clsFolioHdModel objHdModel) {
 		objFolioDao.funAddUpdateFolioHd(objHdModel);
+	}
+	
+	@Override
+	public void funAddUpdateFolioBackupDtl(clsFolioDtlBackupModel objHdModel) {
+		objFolioDao.funAddUpdateFolioBackupDtl(objHdModel);
 	}
 
 	@Override
