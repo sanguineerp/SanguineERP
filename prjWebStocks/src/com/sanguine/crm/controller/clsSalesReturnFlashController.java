@@ -559,7 +559,7 @@ public class clsSalesReturnFlashController {
 		detailList.add(listofSalesRetSummary);
 		//detailList.add("Summary");
 		
-		 sql="SELECT SUM((a.dblTotalAmt-a.dblTaxAmt)), SUM(a.dblTaxAmt), SUM(a.dblTotalAmt)"
+		 sql="SELECT SUM(a.dblSubTotal-a.dblTaxAmt), SUM(a.dblTaxAmt), SUM(a.dblSubTotal)"
 					+ " FROM tblsalesreturnhd a"
 					+ " LEFT OUTER JOIN tblpartymaster b ON a.strCustCode=b.strPCode"
 					+ " LEFT OUTER JOIN tbllocationmaster d ON a.strLocCode=d.strLocCode"
@@ -886,7 +886,7 @@ public class clsSalesReturnFlashController {
 			JRDesignDataset taxSumDataset = (JRDesignDataset) datasetMap.get("dsProductWiseSRData");
 			
 			taxSumDataset.setQuery(prodWiseSR);
-			String sql="SELECT SUM((a.dblTotalAmt-a.dblTaxAmt)), SUM(a.dblTaxAmt), SUM(a.dblTotalAmt)"
+			String sql="SELECT SUM(a.dblSubTotal-a.dblTaxAmt), SUM(a.dblTaxAmt), SUM(a.dblSubTotal)"
 						+ " FROM tblsalesreturnhd a"
 						+ " LEFT OUTER JOIN tblpartymaster b ON a.strCustCode=b.strPCode"
 						+ " LEFT OUTER JOIN tbllocationmaster d ON a.strLocCode=d.strLocCode"

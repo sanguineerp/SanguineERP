@@ -351,7 +351,7 @@
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="8" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Sub Total ]]></text>
+								<text><![CDATA[Total ]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:tableFooter style="Table_TD" height="15" rowSpan="1">
