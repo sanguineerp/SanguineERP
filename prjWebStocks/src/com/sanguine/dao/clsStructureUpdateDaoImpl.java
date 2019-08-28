@@ -2793,8 +2793,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ " `strRevenueType` varchar(100) NOT NULL,"
 				+ " `strRevenueCode` varchar(15) NOT NULL,"
 				+ " `strClientCode` varchar(10) NOT NULL,"
-				+ " `dblQuantity` decimal(18,4) NOT NULL DEFAULT '0.0000'"
-				+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8; ";
+				+ " `dblQuantity` decimal(18,4) NOT NULL DEFAULT '0.0000',"
+				+ " `dteDateEdited` datetime NOT NULL DEFAULT '1900-01-01 00:00:00',"
+				+ " `strTransactionType` varchar(50) NOT NULL DEFAULT '',"
+				+ " `strUserEdited` varchar(50) NOT NULL DEFAULT ''"
+				+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 		
 		funExecutePMSQuery(sql);
 		
@@ -2994,14 +2997,29 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		
 		sql = "ALTER TABLE `tblpropertysetup` "
-				+ "ADD COLUMN `strCheckInEmailContent` VARCHAR(255) NULL DEFAULT NULL AFTER `strPanNo`;";
+				+ "ADD COLUMN `strCheckInEmailContent` VARCHAR(255) NOT NULL DEFAULT '' AFTER `strPanNo`;";
 		funExecutePMSQuery(sql);
 		
 		
 		sql = "ALTER TABLE `tblpropertysetup`"
 				+ "ADD COLUMN `strReservationEmailContent` VARCHAR(255) "
-				+ "NULL DEFAULT NULL AFTER `strCheckOutEmailContent`;";
+				+ "NOT NULL DEFAULT '' AFTER `strCheckInEmailContent`;";
 		funExecutePMSQuery(sql);
+		
+		sql = "ALTER TABLE `tblfoliodtl`"
+				+ "ADD COLUMN `strUserEdited` VARCHAR(50) NOT NULL DEFAULT '' AFTER `dblQuantity`,"
+				+ "ADD COLUMN `dteDateEdited` DATETIME NOT NULL DEFAULT '1900-01-01 00:00:00' AFTER `strUserEdited`,"
+				+ "ADD COLUMN `strTransactionType` VARCHAR(50) NOT NULL DEFAULT '' AFTER `dteDateEdited`;";
+		funExecutePMSQuery(sql);
+		
+		
+		sql = "ALTER TABLE `tblbilldtl`"
+				+ "	ADD COLUMN `strUserEdited` VARCHAR(255) NOT NULL DEFAULT '' AFTER `strClientCode`,"
+				+ "ADD COLUMN `dteDateEdited` DATETIME NOT NULL DEFAULT '1900-01-01 00:00:00' AFTER `strUserEdited`,"
+				+ "ADD COLUMN `strTransactionType` VARCHAR(255) NOT NULL DEFAULT '' AFTER `dteDateEdited`;";
+		funExecutePMSQuery(sql);
+		
+		
 		
 		// For PMS Form Of Tree master Start///
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "

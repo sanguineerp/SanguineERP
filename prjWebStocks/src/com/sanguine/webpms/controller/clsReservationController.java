@@ -329,6 +329,7 @@ public class clsReservationController {
 			Map<Long, String> hmGuestMbWithCode = new HashMap<Long, String>();
 			List<clsReservationDetailsBean> listResDtlBean = objBean.getListReservationDetailsBean();
 			String strGSTNo = "";
+			String strEmailAddress = "";
 			for (clsReservationDetailsBean objResDtlBean : listResDtlBean) 
 			{
 				if (null != objResDtlBean.getStrGuestCode())
@@ -341,6 +342,7 @@ public class clsReservationController {
 					{
 						clsGuestMasterHdModel obj = (clsGuestMasterHdModel) listGuestData.get(0);
 						strGSTNo = obj.getStrGSTNo().toString();
+						strEmailAddress = obj.getStrEmailId();
 					}
 					
 					
@@ -371,6 +373,7 @@ public class clsReservationController {
 					objGuestMasterBean.setIntMobileNo(objResDtlBean.getLngMobileNo());
 					objGuestMasterBean.setStrAddress(objResDtlBean.getStrAddress());
 					objGuestMasterBean.setStrGSTNo(strGSTNo);
+					objGuestMasterBean.setStrEmailId(strEmailAddress);
 					///////
 					clsGuestMasterHdModel objGuestMasterModel = objGuestMasterService.funPrepareGuestModel(objGuestMasterBean, clientCode, userCode);
 					objGuestMasterDao.funAddUpdateGuestMaster(objGuestMasterModel);

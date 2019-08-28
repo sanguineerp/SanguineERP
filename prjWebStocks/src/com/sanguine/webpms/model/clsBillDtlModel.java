@@ -30,6 +30,15 @@ public class clsBillDtlModel implements Serializable, Comparable {
 	private String strRevenueType;
 
 	private String strRevenueCode;
+	
+	
+	private String strUserEdited;
+	
+	
+	private String dteDateEdited;
+	
+	
+	private String strTransactionType;
 
 	// Setter-Getter Methods
 	public String getStrFolioNo() {
@@ -123,6 +132,30 @@ public class clsBillDtlModel implements Serializable, Comparable {
 	public int compareTo(Object o) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public String getStrUserEdited() {
+		return strUserEdited;
+	}
+
+	public void setStrUserEdited(String strUserEdited) {
+		this.strUserEdited = strUserEdited;
+	}
+
+	public String getDteDateEdited() {
+		return dteDateEdited;
+	}
+
+	public void setDteDateEdited(String dteDateEdited) {
+		this.dteDateEdited = dteDateEdited;
+	}
+
+	public String getStrTransactionType() {
+		return strTransactionType;
+	}
+
+	public void setStrTransactionType(String strTransactionType) {
+		this.strTransactionType = strTransactionType;
 	}
 
 }

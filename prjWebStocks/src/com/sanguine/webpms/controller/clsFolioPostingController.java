@@ -88,6 +88,8 @@ public class clsFolioPostingController {
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
 
+			String strTransactionType = "Folio Posting";
+			
 			clsFolioHdModel objFolioHdModel = objFolioService.funGetFolioList(objBean.getStrFolioNo(), clientCode, "");
 			List<clsFolioDtlModel> listFolioDtlModels = objFolioHdModel.getListFolioDtlModel();
 			List<clsFolioTaxDtl> listFolioTaxDtl = objFolioHdModel.getListFolioTaxDtlModel();
@@ -115,6 +117,10 @@ public class clsFolioPostingController {
 				objFolioDtlModel.setStrRevenueType("Income Head");
 				objFolioDtlModel.setStrRevenueCode(listIncomeHeadBeans.get(ih).getStrIncomeHeadCode());
 				objFolioDtlModel.setDblQuantity(objBean.getDblQuantity());
+				objFolioDtlModel.setStrTransactionType(strTransactionType);
+				objFolioDtlModel.setStrUserEdited(userCode);
+				objFolioDtlModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+
 				listFolioDtlModels.add(objFolioDtlModel);
 
 				clsTaxProductDtl objTaxProductDtl = new clsTaxProductDtl();

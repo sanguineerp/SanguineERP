@@ -82,11 +82,13 @@ public class clsDayEndController {
 	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsDayEndBean objBean, BindingResult result, HttpServletRequest req)
 	{
 		ModelAndView model=new ModelAndView("frmDayEnd");
+		
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String PMSDate = req.getSession().getAttribute("PMSDate").toString();
 		String sqlStart="";
 		String[] newDate=PMSDate.split("-");
 		String date=newDate[2]+"-"+newDate[1]+"-"+newDate[0];
+		String strTransactionType = "Day End";
 		// Check POS Day End Table in PMS
 		
 		String[] arrSpDate = objBean.getDtePMSDate().split("-");
@@ -244,7 +246,7 @@ public class clsDayEndController {
 				}
 				objPostRoomTerrifBean.setStrFolioType("Room");
 				String folioNo = arrObjRoom[0].toString();
-				String docNo = objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean, objGlobal.funGetDate("yyyy-MM-dd", PMSDate), arrObjRoom[3].toString());
+				String docNo = objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean, objGlobal.funGetDate("yyyy-MM-dd", PMSDate), arrObjRoom[3].toString(),strTransactionType,userCode);
 				listRoomTerrifDocNo.add(docNo);
 				if(Double.valueOf(arrObjRoom[7].toString())>0)
 				{   
@@ -256,7 +258,7 @@ public class clsDayEndController {
 					objPostRoomTerrifBean.setDblOriginalPostingAmt(dblRoomRate);
 					objPostRoomTerrifBean.setStrFolioType("Package");
 					folioNo = arrObjRoom[0].toString();
-					docNo=objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean, objGlobal.funGetDate("yyyy-MM-dd", PMSDate), arrObjRoom[3].toString());	
+					docNo=objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean, objGlobal.funGetDate("yyyy-MM-dd", PMSDate), arrObjRoom[3].toString(),strTransactionType,userCode);	
 					listRoomTerrifDocNo.add(docNo);
 				}
 				

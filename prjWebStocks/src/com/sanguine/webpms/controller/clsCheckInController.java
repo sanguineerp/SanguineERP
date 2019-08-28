@@ -1157,7 +1157,7 @@ public class clsCheckInController {
 			}
 		
 			
-			funPostRoomTarrif(objHdModel.getStrCheckInNo(),clientCode,PMSDate,propCode);
+			funPostRoomTarrif(objHdModel.getStrCheckInNo(),clientCode,PMSDate,propCode,userCode);
 			
 			funSendSMSCheckIn(objHdModel.getStrCheckInNo(), clientCode, propCode);
 			req.getSession().setAttribute("success", true);
@@ -1171,7 +1171,7 @@ public class clsCheckInController {
 		}
 	}
 
-	private void funPostRoomTarrif(String strCheckInNo,String clientCode,String strpmsDate,String propCode) 
+	private void funPostRoomTarrif(String strCheckInNo,String clientCode,String strpmsDate,String propCode,String userCode) 
 	{
 		String[] arrSpDate = strpmsDate.split("-");
 		Date dtNextDate = new Date(Integer.parseInt(arrSpDate[0]), Integer.parseInt(arrSpDate[1]), Integer.parseInt(arrSpDate[2]));
@@ -1180,7 +1180,7 @@ public class clsCheckInController {
 		cal.add(Calendar.DATE, 1);
 		String newStartDate = cal.getTime().getYear() + "-" + (cal.getTime().getMonth()) + "-" + (cal.getTime().getDate());
 		List<String> listRoomTerrifDocNo = new ArrayList<String>();
-		
+		String strTransactionType = "Check In";
 		String sqlPostRoom = "SELECT a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode, "
 				+ "IFNULL(a.strReservationNo,''), IFNULL(a.strWalkInNo,''),c.strRoomTypeCode, "
 				+ "IFNULL(SUM(d.dblIncomeHeadAmt),0), IFNULL(e.strComplimentry,'N') "
@@ -1262,7 +1262,7 @@ public class clsCheckInController {
 			}
 			objPostRoomTerrifBean.setStrFolioType("Room");
 			String folioNo = arrObjRoom[0].toString();
-			String docNo = objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean,  strpmsDate, arrObjRoom[3].toString());
+			String docNo = objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean,  strpmsDate, arrObjRoom[3].toString(),strTransactionType,userCode);
 			listRoomTerrifDocNo.add(docNo);
 			if(Double.valueOf(arrObjRoom[7].toString())>0)
 			{   
@@ -1274,7 +1274,7 @@ public class clsCheckInController {
 				objPostRoomTerrifBean.setDblOriginalPostingAmt(dblRoomRate);
 				objPostRoomTerrifBean.setStrFolioType("Package");
 				folioNo = arrObjRoom[0].toString();
-				docNo=objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean,strpmsDate, arrObjRoom[3].toString());	
+				docNo=objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean,strpmsDate, arrObjRoom[3].toString(),strTransactionType,userCode);	
 				listRoomTerrifDocNo.add(docNo);
 			}
 			

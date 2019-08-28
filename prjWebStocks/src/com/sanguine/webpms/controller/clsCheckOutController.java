@@ -280,6 +280,12 @@ public class clsCheckOutController {
 						objBillDtlModel.setDblDebitAmt(objFolioDtlModel.getDblDebitAmt());
 						objBillDtlModel.setStrRevenueType(objFolioDtlModel.getStrRevenueType());
 						objBillDtlModel.setStrRevenueCode(objFolioDtlModel.getStrRevenueCode());
+						objBillDtlModel.setStrUserEdited(objFolioDtlModel.getStrUserEdited());
+						objBillDtlModel.setDteDateEdited(objFolioDtlModel.getDteDateEdited());
+						objBillDtlModel.setStrTransactionType(objFolioDtlModel.getStrTransactionType());
+						
+						
+						
 						grandTotal += objFolioDtlModel.getDblDebitAmt();
 						listBillDtlModel.add(objBillDtlModel);
 						// setBillDtlModel.add(objBillDtlModel);

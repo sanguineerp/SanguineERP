@@ -23,6 +23,13 @@ public class clsFolioDtlBean {
 
 	private double dblQuantity;
 	
+	private String strUserEdited;
+	
+	private String dteDateEdited;
+
+	private String strTransactionType;
+
+	
 	private List<clsIncomeHeadMasterBean> listIncomeHeadBeans;
 
 	// getters and setters
@@ -104,6 +111,30 @@ public class clsFolioDtlBean {
 
 	public void setDblQuantity(double dblQuantity) {
 		this.dblQuantity = dblQuantity;
+	}
+
+	public String getStrUserEdited() {
+		return strUserEdited;
+	}
+
+	public void setStrUserEdited(String strUserEdited) {
+		this.strUserEdited = strUserEdited;
+	}
+
+	public String getDteDateEdited() {
+		return dteDateEdited;
+	}
+
+	public void setDteDateEdited(String dteDateEdited) {
+		this.dteDateEdited = dteDateEdited;
+	}
+
+	public String getStrTransactionType() {
+		return strTransactionType;
+	}
+
+	public void setStrTransactionType(String strTransactionType) {
+		this.strTransactionType = strTransactionType;
 	}
 
 }

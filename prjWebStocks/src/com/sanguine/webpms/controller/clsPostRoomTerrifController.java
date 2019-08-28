@@ -154,6 +154,7 @@ public class clsPostRoomTerrifController {
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String propCode = req.getSession().getAttribute("propertyCode").toString();
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
+			String strTransactionType = "Post Room Terrif";
 
 			String sql = "SELECT a.strFolioNo,a.strExtraBedCode,b.strComplimentry" + " FROM tblfoliohd a,tblcheckinhd b " + " WHERE a.strRoomNo='" + objBean.getStrRoomNo() + "' and a.strCheckInNo=b.strCheckInNo and  a.strRegistrationNo='" + objBean.getStrRegistrationNo() + "' " + " AND a.strClientCode='" + clientCode + "'";
 			List listFolio = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
@@ -193,7 +194,7 @@ public class clsPostRoomTerrifController {
 											objBean.setStrFolioType("Package");
 											objBean.setDblRoomTerrif(totalPakageAmt);
 											objBean.setDblOriginalPostingAmt(totalPakageAmt);
-											docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+											docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);
 											
 											if((actualPostingAmt-totalPakageAmt)>0)
 											{
@@ -203,7 +204,7 @@ public class clsPostRoomTerrifController {
 												objBean.setStrRoomNo(roomNo);
 												objBean.setDblRoomTerrif(actualPostingAmt-totalPakageAmt);
 												objBean.setDblOriginalPostingAmt(totalRoomTarrif);
-												docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);		
+												docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);		
 											}
 											
 										}
@@ -212,7 +213,7 @@ public class clsPostRoomTerrifController {
 											objBean.setStrFolioType("Package");
 											objBean.setDblRoomTerrif(totalPakageAmt-actualPostingAmt);
 											objBean.setDblOriginalPostingAmt(totalPakageAmt);
-											docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);	
+											docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);	
 										}
 										
 									}
@@ -220,7 +221,7 @@ public class clsPostRoomTerrifController {
 									{
 										objBean.setStrFolioType("Room");
 										objBean.setDblRoomTerrif(actualPostingAmt);
-										docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+										docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);
 									}
 								}
 							}
@@ -230,7 +231,7 @@ public class clsPostRoomTerrifController {
 								objBean.setStrFolioType("Room");
 								objBean.setDblRoomTerrif(actualPostingAmt);
 								extraBedCode="";
-								docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+								docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);
 							}
 							//String docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
 					
@@ -261,7 +262,7 @@ public class clsPostRoomTerrifController {
 								objBean.setStrFolioType("Package");
 								objBean.setDblRoomTerrif(totalPakageAmt);
 								objBean.setDblOriginalPostingAmt(totalPakageAmt);
-								docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+								docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);
 								
 								if((actualPostingAmt-totalPakageAmt)>0)
 								{
@@ -271,7 +272,7 @@ public class clsPostRoomTerrifController {
 									objBean.setStrRoomNo(roomNo);
 									objBean.setDblRoomTerrif(actualPostingAmt-totalPakageAmt);
 									objBean.setDblOriginalPostingAmt(totalRoomTarrif);
-									docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);		
+									docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);		
 								}
 								
 							}
@@ -280,7 +281,7 @@ public class clsPostRoomTerrifController {
 								objBean.setStrFolioType("Package");
 								objBean.setDblRoomTerrif(totalPakageAmt-actualPostingAmt);
 								objBean.setDblOriginalPostingAmt(totalPakageAmt);
-								docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);	
+								docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);	
 							}
 							
 						}
@@ -288,7 +289,7 @@ public class clsPostRoomTerrifController {
 						{
 							objBean.setStrFolioType("Room");
 							objBean.setDblRoomTerrif(actualPostingAmt);
-							docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+							docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);
 						}
 					}
 				}
@@ -298,7 +299,7 @@ public class clsPostRoomTerrifController {
 					objBean.setStrFolioType("Room");
 					objBean.setDblRoomTerrif(actualPostingAmt);
 					extraBedCode="";
-					docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
+					docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode,strTransactionType,userCode);
 				}
 				//String docNo = funInsertFolioRecords(folioNo, clientCode, propCode, objBean, PMSDate, extraBedCode);
 		
@@ -311,7 +312,7 @@ public class clsPostRoomTerrifController {
 		}
 	}
 
-	public String funInsertFolioRecords(String folioNo, String clientCode, String propCode, clsPostRoomTerrifBean objBean, String PMSDate, String extraBedCode) {
+	public String funInsertFolioRecords(String folioNo, String clientCode, String propCode, clsPostRoomTerrifBean objBean, String PMSDate, String extraBedCode,String strTransType,String strUserCode) {
 		clsFolioHdModel objFolioHd = objFolioService.funGetFolioList(folioNo, clientCode, propCode);
 		System.out.println(objFolioHd.getListFolioDtlModel().size());
 		// long nextDocNo=objGlobalFunctionsService.funGetNextNo("tblfoliodtl",
@@ -360,6 +361,7 @@ public class clsPostRoomTerrifController {
 		boolean flgDupRoomTerrif=false;
 		boolean flgDupExtraBed=false;
 
+		
 	    if(null!=objFolioHd.getListFolioDtlModel() && objFolioHd.getListFolioDtlModel().size()>0)
 	    {
 	    	for(clsFolioDtlModel obFolioDtlModel:objFolioHd.getListFolioDtlModel())
@@ -388,6 +390,9 @@ public class clsPostRoomTerrifController {
 			objFolioDtl.setDblDebitAmt(roomTerrif);
 			objFolioDtl.setDblBalanceAmt(objBean.getDblOriginalPostingAmt()-roomTerrif);
 			objFolioDtl.setDblCreditAmt(0);
+			objFolioDtl.setStrTransactionType(strTransType);
+			objFolioDtl.setStrUserEdited(strUserCode);
+			objFolioDtl.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			if(objBean.getStrFolioType().equals("Room"))
 			{
 				objFolioDtl.setStrPerticulars("Room Tariff");
@@ -397,7 +402,10 @@ public class clsPostRoomTerrifController {
 				objFolioDtl.setStrPerticulars("Package");
 			}
 			objFolioDtl.setStrRevenueType(objBean.getStrFolioType());
+			objFolioDtl.setStrTransactionType(strTransType);
 			objFolioDtl.setStrRevenueCode(objBean.getStrRoomNo());
+			objFolioDtl.setStrUserEdited(strUserCode);
+			objFolioDtl.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			listFolioDtl.add(objFolioDtl);
 	    }
 
@@ -432,6 +440,9 @@ public class clsPostRoomTerrifController {
 			objFolioDtl.setStrPerticulars("Extra Bed Charges");
 			objFolioDtl.setStrRevenueType("ExtraBed");
 			objFolioDtl.setStrRevenueCode(objExtraBedMaster.getStrExtraBedTypeCode());
+			objFolioDtl.setStrTransactionType(strTransType);
+			objFolioDtl.setStrUserEdited(strUserCode);
+			objFolioDtl.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			listFolioDtl.add(objFolioDtl);
 
 			objTaxProductDtl = new clsTaxProductDtl();

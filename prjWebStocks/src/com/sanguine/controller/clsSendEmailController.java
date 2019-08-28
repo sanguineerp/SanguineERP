@@ -484,19 +484,19 @@ public class clsSendEmailController
 		// takes input from e-mail form
 		try
 		{
-			String subject ="Reservation Confirmation From "+request.getSession().getAttribute("locationName").toString();
+			String subject ="Reservation Confirmation From "+request.getSession().getAttribute("companyName").toString();
 			
 			/*String message = "Purchase Order Slip";*/
 			String strReturnValue = "Email Send SuccessFully";
-
+			String companyName = request.getSession().getAttribute("companyName").toString();
 			String clientCode = request.getSession().getAttribute("clientCode").toString();
 			String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 			String userCode = request.getSession().getAttribute("usercode").toString();
 			
 		
-			String strEmailId="sachinm555@gmail.com";
-			/*String sql="select b.strEmailId from tblreservationdtl a ,tblguestmaster b where "
-					+ "a.strReservationNo='"+strReservationNo+"' and a.strGuestCode=b.strGuestCode ";*//*="SELECT CONCAT(ifnull(b.strEmail,''),',',ifnull(c.strEmail,''),',',ifnull(d.strEmail,''))EmailIds "
+			//String strEmailId="sachinm555@gmail.com";
+			String sql="select b.strEmailId from tblreservationdtl a ,tblguestmaster b where "
+					+ "a.strReservationNo='"+strReservationNo+"' and a.strGuestCode=b.strGuestCode ";/*="SELECT CONCAT(ifnull(b.strEmail,''),',',ifnull(c.strEmail,''),',',ifnull(d.strEmail,''))EmailIds "
 			+"FROM tblpurchaseorderhd a "
 					+"left outer join tblpartymaster b on a.strSuppCode=b.strPCode "
 					+"left outer join tbluserhd c on a.strUserModified=c.strUserCode "
@@ -504,19 +504,18 @@ public class clsSendEmailController
 					+"WHERE  a.strPOCode='"+strPOCode+"'  "
 					+"AND c.strUserCode='"+userCode+"'  "
 					+"AND d.strPropertyCode='"+propertyCode+"'";*/
-			//List list = objGlobalFunctionsService.funGetList(sql, "sql");
-			//if (list != null && !list.isEmpty())
-			if (strEmailId!=null)
+			List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+			if (list != null && !list.isEmpty())
 			{
-				/*String recipientAddress = list.get(0).toString();
+				String recipientAddress = list.get(0).toString();
 
 				String []receipientsArr = recipientAddress.split(",");
                 for(int i=0;i<receipientsArr.length;i++)
                 {
                 	if(receipientsArr[i].toString().trim().length()>0)
-                	{*/
+                	{
                 	
-                		logger.info("To: " + strEmailId);
+                		logger.info("To: " + receipientsArr[i].toString());
         				logger.info("Subject: " + subject);
         				logger.info("Message: " + strMessege);
         			
@@ -525,13 +524,13 @@ public class clsSendEmailController
         				
         				MimeMessageHelper helper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
 
-        				helper.setTo(strEmailId);
+        				helper.setTo(receipientsArr[i].toString());
         				helper.setSubject(subject);
         				//helper.addAttachment("PO Slip.pdf", aAttachment);
         				helper.setText(strMessege);
         				mailSender.send(helper.getMimeMessage());
-                	//}                	
-                //}
+                	}                	
+                }
 				
 
 			}

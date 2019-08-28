@@ -40,6 +40,18 @@ public class clsFolioDtlModel implements Serializable {
 	@Column(name = "dblQuantity",columnDefinition = "DECIMAL(18,4) NOT NULL default '0.0000'")
 	private double dblQuantity;
 
+	
+	@Column(name = "strUserEdited",columnDefinition = "VARCHAR(50) NOT NULL DEFAULT ''")
+	private String strUserEdited;
+	
+	@Column(name = "dteDateEdited",columnDefinition = "DATETIME NOT NULL DEFAULT '1900-01-01 00:00:00'")
+	private String dteDateEdited;
+	
+	@Column(name = "strTransactionType",columnDefinition = "VARCHAR(50) NOT NULL DEFAULT ''")
+	private String strTransactionType;
+	
+	
+	
 	// Setter-Getter Methods
 	public String getDteDocDate() {
 		return dteDocDate;
@@ -126,6 +138,30 @@ public class clsFolioDtlModel implements Serializable {
 		} else {
 			return defaultValue;
 		}
+	}
+
+	public String getStrUserEdited() {
+		return strUserEdited;
+	}
+
+	public void setStrUserEdited(String strUserEdited) {
+		this.strUserEdited = strUserEdited;
+	}
+
+	public String getDteDateEdited() {
+		return dteDateEdited;
+	}
+
+	public void setDteDateEdited(String dteDateEdited) {
+		this.dteDateEdited = dteDateEdited;
+	}
+
+	public String getStrTransactionType() {
+		return strTransactionType;
+	}
+
+	public void setStrTransactionType(String strTransactionType) {
+		this.strTransactionType = strTransactionType;
 	}
 
 	

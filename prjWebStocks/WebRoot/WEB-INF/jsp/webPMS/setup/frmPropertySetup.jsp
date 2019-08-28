@@ -16,6 +16,9 @@
 <script type="text/javascript">
 	var fieldName;
 	var acBrandrow;
+	var reservationMessage;
+	var smsAPI;
+	var smsContentForReservation;
 	$(document).ready(function() {
 
 		funTaxLinkUpData('Tax');
@@ -154,6 +157,17 @@
 		<%
 		}}%>
 
+		
+		reservationMessage=value="${ReservationEmail}"
+		$('#txtReservationEmailContent').val(reservationMessage);
+		
+		smsAPI=value="${SmsApi}";
+		$('#txtSMSAPI').val(smsAPI);
+		
+		
+		smsContentForReservation=value="${smsContentForReservatiojn}"
+		$('#txtReservationSMSContent').val(smsContentForReservation);
+		
 	});
 	/**
 		* Success Message After Saving Record
@@ -1295,7 +1309,7 @@
 							 </td>
 							 
 							<td><input type="button" value="Add" class="smallButton" onclick="funCreateEmail1();" id=btnAddEmail1 /></td>
-									<td><s:textarea cssStyle="width: 373px; height: 101px;" id="txtReservationEmailContent" path="strReservationEmailContent"  /></td>
+									<td><s:textarea cssStyle="width: 373px; height: 101px;" id="txtReservationEmailContent" value="${ReservationEmail}" path="strReservationEmailContent"  /></td>
 							</tr> 
 							
 							
