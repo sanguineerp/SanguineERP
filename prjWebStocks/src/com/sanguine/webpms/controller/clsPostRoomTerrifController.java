@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -476,4 +477,42 @@ public class clsPostRoomTerrifController {
 		return docNo;
 	}
 
+	
+	@RequestMapping(value = "/cleanRoomStatus", method = RequestMethod.GET)
+	public @ResponseBody ModelAndView funChangeStatus(@RequestParam("checkInNo") String checkInNo,HttpServletRequest request) {
+
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
+		String PMSDate = request.getSession().getAttribute("PMSDate").toString();
+		String urlHits ="1";
+		
+		String sqlDirtyRoomCheck = "SELECT b.strStatus ,a.strRoomNo "
+				+ "FROM tblcheckindtl a,tblroom b "
+				+ "WHERE a.strCheckInNo='"+checkInNo+"' AND a.strRoomNo=b.strRoomCode "
+				+ "AND a.strClientCode='"+clientCode+"'";
+		
+		
+		List listDirtyRoomCheck = objGlobalFunctionsService.funGetListModuleWise(sqlDirtyRoomCheck, "sql");
+		if(listDirtyRoomCheck!=null && listDirtyRoomCheck.size()>0)
+		{
+			for(int i=0;i<listDirtyRoomCheck.size();i++)
+			{
+				Object[] arr = (Object[]) listDirtyRoomCheck.get(0);
+				String strStatus = arr[0].toString();
+				String strRoomNo = arr[1].toString();
+				
+				if(strStatus.equalsIgnoreCase("Dirty"))
+				{
+					String sqlChangeStatus = "update tblroom a set a.strStatus='Free' where a.strRoomCode='"+strRoomNo+"' "
+							+ "and a.strClientCode='"+clientCode+"'";
+					
+					objWebPMSUtility.funExecuteUpdate(sqlChangeStatus, "sql");
+				}
+				
+			}
+			
+		}
+		
+		return new ModelAndView("redirect:/frmRoomStatusDiary.html");
+	}
 }

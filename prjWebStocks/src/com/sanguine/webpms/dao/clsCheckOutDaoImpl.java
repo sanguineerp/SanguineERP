@@ -84,7 +84,7 @@ public class clsCheckOutDaoImpl implements clsCheckOutDao {
 		webPMSSessionFactory.getCurrentSession().delete(objFolioHdModel);
 		webPMSSessionFactory.getCurrentSession().saveOrUpdate(objBillHdModel);
 
-		String sql = "update tblroom set strStatus='Free' " + " where strRoomCode='" + objBillHdModel.getStrRoomNo() + "' and strClientCode='" + objBillHdModel.getStrClientCode() + "'";
+		String sql = "update tblroom set strStatus='Dirty' " + " where strRoomCode='" + objBillHdModel.getStrRoomNo() + "' and strClientCode='" + objBillHdModel.getStrClientCode() + "'";
 		webPMSSessionFactory.getCurrentSession().createSQLQuery(sql).executeUpdate();
 	}
 

@@ -229,7 +229,10 @@
 		{
 			color='Olive';
 		}
-		
+		else if(roomStatus=='Dirty')
+		{
+			color='Orange';
+		}
 		/*if(response.strReservationNo!=null)
 		{
 			//toolTipText=response.strReservationNo;
@@ -679,7 +682,7 @@
 	    }
 	    else
 	    	{
-	    	x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width:90%; \" value='"+dayValue1+"' onClick='funOnClick(this)' >";
+	    	x1.innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"width:90%; \" value='"+toolTipText1+"' onClick='funOnClick(this)' >";
 	    	x1.width="100px";
 	    	} 
 		if(day1!='')
@@ -987,6 +990,20 @@
 
 				  break;
 				  
+			case 'rgb(255, 165, 0)'://Orange-->Dirty
+				  code=obj.value;
+				  //code=code.split(',')[2].trim();
+				  var temp=code.trim();
+				  var finalTemp=temp.indexOf("0");
+				  var nextFinalTemp = temp.substring(finalTemp,finalTemp+12);
+				  var isDirtyOk=confirm("Do You want to mark this room as Clean ?");
+				  if(isDirtyOk)
+					{						
+						window.open(getContextPath() + "/cleanRoomStatus.html?checkInNo=" +nextFinalTemp);
+					}
+
+				  break;
+				  
 			/* case 'rgba(0, 0, 0, 0)'://GREEN-->CONFIRM
 				  code=obj.value;
 				  //code=code.split(',')[1].trim();
@@ -1147,6 +1164,8 @@
 					<td bgcolor=Olive>Blocked</td>
 					<td></td>
 					<td bgcolor=Gray>Checked Out</td>
+					<td></td>
+					<td bgcolor=Orange>Dirty</td>
 					<td></td>
 				</tr>
 			</table>

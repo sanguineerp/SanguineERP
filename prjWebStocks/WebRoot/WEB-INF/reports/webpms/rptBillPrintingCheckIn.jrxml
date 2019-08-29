@@ -479,17 +479,17 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="127">
+		<band height="52">
 			<property name="com.jaspersoft.studio.layout"/>
 			<textField>
-				<reportElement x="20" y="83" width="524" height="21" uuid="831a448f-d4b4-4826-ad0b-0a9e4a51c7d7"/>
+				<reportElement x="20" y="2" width="524" height="21" uuid="831a448f-d4b4-4826-ad0b-0a9e4a51c7d7"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pstrIssue}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="20" y="106" width="524" height="21" uuid="a710fe49-6666-4db8-b306-344dc19fd22c"/>
+				<reportElement x="20" y="25" width="524" height="21" uuid="a710fe49-6666-4db8-b306-344dc19fd22c"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
