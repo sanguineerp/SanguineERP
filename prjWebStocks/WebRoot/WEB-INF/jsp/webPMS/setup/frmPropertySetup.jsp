@@ -19,6 +19,9 @@
 	var reservationMessage;
 	var smsAPI;
 	var smsContentForReservation;
+	var emailContentForCheckIn;
+	var emailContentForReservation;
+	
 	$(document).ready(function() {
 
 		funTaxLinkUpData('Tax');
@@ -167,6 +170,13 @@
 		
 		smsContentForReservation=value="${smsContentForReservatiojn}"
 		$('#txtReservationSMSContent').val(smsContentForReservation);
+		
+		emailContentForCheckIn=value="${emailContentForCheckIn}"
+		$('#txtCheckINEmailContent').val(emailContentForCheckIn);
+		
+		emailContentForReservation=value="${emailContentForReservation}"
+		$('#txtReservationEmailContent').val(emailContentForReservation);
+			
 		
 	});
 	/**
@@ -1330,6 +1340,8 @@
 							 
 									<td><input type="button" value="Add" class="smallButton" onclick="funCreateEmail2();" id=btnAddEmail2 /></td>
 									<td><s:textarea cssStyle="width: 373px; height: 101px;" id="txtCheckINEmailContent" path="strCheckInEmailContent"  /></td>
+									<%-- <td><s:textarea cssStyle="width: 200px; height: 50px;" id="txtSMSContent" path="strInvNote"  /></td> --%>
+									
 							</tr>
 							
 	

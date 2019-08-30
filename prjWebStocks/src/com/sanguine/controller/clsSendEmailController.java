@@ -479,12 +479,20 @@ public class clsSendEmailController
 
 	}
 	
-	public @ResponseBody String doSendReservationEmail(String strReservationNo,String strMessege,HttpServletRequest request) throws JRException
+	public @ResponseBody String doSendReservationEmail(String strReservationNo,String strMessege,String strModuleName,HttpServletRequest request) throws JRException
 	{
 		// takes input from e-mail form
 		try
 		{
-			String subject ="Reservation Confirmation From "+request.getSession().getAttribute("companyName").toString();
+			String subject = "";
+			if(strModuleName.equalsIgnoreCase("dayEnd"))
+			{
+				subject ="Check in remainder mail from "+request.getSession().getAttribute("companyName").toString();
+			}
+			else
+			{
+				subject ="Reservation Confirmation From "+request.getSession().getAttribute("companyName").toString();
+			}
 			
 			/*String message = "Purchase Order Slip";*/
 			String strReturnValue = "Email Send SuccessFully";

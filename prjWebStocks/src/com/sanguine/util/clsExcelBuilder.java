@@ -68,7 +68,7 @@ public class clsExcelBuilder extends AbstractExcelView {
 				if (null != arrObj.get(Count) && arrObj.get(Count).toString().length() > 0) {
 
 					if (isNumeric(arrObj.get(Count).toString())) {
-						aRow.createCell(Count).setCellValue(Double.parseDouble(arrObj.get(Count).toString()));
+						aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
 					} else {
 						aRow.createCell(Count).setCellValue(arrObj.get(Count).toString());
 					}

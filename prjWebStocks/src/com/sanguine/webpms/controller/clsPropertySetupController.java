@@ -73,6 +73,8 @@ public class clsPropertySetupController {
 			model.put("SmsApi", "");
 			model.put("ReservationEmail", "");
 			model.put("smsContentForReservatiojn", "");
+			model.put("emailContentForCheckIn", "");
+			model.put("emailContentForReservation", "");
 		} else {
 			model.put("checkInTime", objModel.getTmeCheckInTime());
 			model.put("checkOutTime", objModel.getTmeCheckOutTime());
@@ -87,6 +89,8 @@ public class clsPropertySetupController {
 			model.put("SmsApi", objModel.getStrSMSAPI());
 			model.put("ReservationEmail", objModel.getStrReservationEmailContent());
 			model.put("smsContentForReservatiojn", objModel.getStrReservationSMSContent());
+			model.put("emailContentForCheckIn", objModel.getStrCheckInEmailContent());
+			model.put("emailContentForReservation", objModel.getStrReservationEmailContent());
 		}
 		
 		String sql = "select count(1) from tblroom a where a.strClientCode='" + clientCode + "' ";

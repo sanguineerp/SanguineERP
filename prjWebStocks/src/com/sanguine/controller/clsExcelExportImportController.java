@@ -1386,13 +1386,12 @@ public class clsExcelExportImportController {
 		List AllGuestlist= new ArrayList();
 		List DataGuestList=null;
 		clsGuestMasterBean objBean=null;
-		String header = "Guest Code,GuestPrefix,Gender,First Name,Middle Name,Last Name,DOB,Email Id,Mobile No,Adress,City,Country,Pan No,UID";
+		String header = "Guest Code,GuestPrefix,First Name,Middle Name,Last Name,Gender,DOB,Designation,Address,City,State,Country,Nationality,PinCode,MobileNo,FaxNo,EmailId,PANNo,ArrivalFrom,ProceedingTo,Status,VisitingType,PassportNo,PassportIssueDate,PassportExpiryDate,Corporate,UserCreated,UserEdited,DateCreated,DateEdited,ClientCode,GSTNo,UIDNo,AnniversaryDate,DefaultAddr,AddressLocal,CityLocal,StateLocal,CountryLocal,PinCodeLocal,AddrPermanent,CityPermanent,StatePermanent,CountryPermanent,PinCodePermanent,AddressOfc,CityOfc,StateOfc,CountryOfc,PinCodeOfc";
 		List ExportList = new ArrayList();
 		String[] ExcelHeader = header.split(",");
 		ExportList.add(ExcelHeader);
 		try{
-		String sql="select a.strGuestCode,a.strGuestPrefix,a.strGender,a.strFirstName,a.strMiddleName,a.strLastName,"
-				+ " a.dteDOB,a.strEmailId,a.lngMobileNo,a.strAddress,a.strCity,a.strCountry,a.strPANNo,a.strUIDNo  "
+		String sql="select * "
 				+ " from tblguestmaster a where a.strClientCode='"+clientCode+"';";
 	            
 		list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
@@ -1408,7 +1407,7 @@ public class clsExcelExportImportController {
 	             DataGuestList.add(obj[3].toString());
 	             DataGuestList.add(obj[4].toString());
 	             DataGuestList.add(obj[5].toString());
-	             DataGuestList.add(objGlobalFunctions.funGetDate("yyyy-MM-dd", obj[6].toString()));
+	             DataGuestList.add(objGlobalFunctions.funGetDate("dd-MM-yyyy",obj[6].toString()));
 	             DataGuestList.add(obj[7].toString());
 	             DataGuestList.add(obj[8].toString());
 	             DataGuestList.add(obj[9].toString());
@@ -1416,6 +1415,45 @@ public class clsExcelExportImportController {
 	             DataGuestList.add(obj[11].toString());
 	             DataGuestList.add(obj[12].toString());
 	             DataGuestList.add(obj[13].toString());
+	             
+	             DataGuestList.add(obj[14].toString());
+	             DataGuestList.add(obj[15].toString());
+	             DataGuestList.add(obj[16].toString());
+	             DataGuestList.add(obj[17].toString());
+	             DataGuestList.add(obj[18].toString());
+	             DataGuestList.add(obj[19].toString());
+	             DataGuestList.add(obj[20].toString());
+	             DataGuestList.add(obj[21].toString());
+	             DataGuestList.add(obj[22].toString());
+	             DataGuestList.add(objGlobalFunctions.funGetDate("dd-MM-yyyy",obj[23].toString()));
+	             DataGuestList.add(objGlobalFunctions.funGetDate("dd-MM-yyyy",obj[24].toString()));
+	             DataGuestList.add(obj[25].toString());
+	             DataGuestList.add(obj[26].toString());
+	             DataGuestList.add(obj[27].toString());
+	             DataGuestList.add(objGlobalFunctions.funGetDate("dd-MM-yyyy",obj[28].toString()));
+	             DataGuestList.add(objGlobalFunctions.funGetDate("dd-MM-yyyy",obj[29].toString()));
+	             DataGuestList.add(obj[30].toString());
+	             DataGuestList.add(obj[31].toString());
+	             DataGuestList.add(obj[32].toString());
+	             DataGuestList.add(objGlobalFunctions.funGetDate("dd-MM-yyyy",obj[33].toString()));
+	             DataGuestList.add(obj[34].toString());
+	             DataGuestList.add(obj[35].toString());
+	             DataGuestList.add(obj[36].toString());
+	             DataGuestList.add(obj[37].toString());
+	             DataGuestList.add(obj[38].toString());
+	             DataGuestList.add(obj[39].toString());
+	             DataGuestList.add(obj[40].toString());
+	             DataGuestList.add(obj[41].toString());
+	             DataGuestList.add(obj[42].toString());
+	             DataGuestList.add(obj[43].toString());
+	             DataGuestList.add(obj[44].toString());
+	             DataGuestList.add(obj[45].toString());
+	             DataGuestList.add(obj[46].toString());
+	             DataGuestList.add(obj[47].toString());
+	             DataGuestList.add(obj[48].toString());
+	             DataGuestList.add(obj[49].toString());
+
+	             
 	             AllGuestlist.add(DataGuestList);
 			}
 		}
@@ -1455,18 +1493,61 @@ public class clsExcelExportImportController {
 				clsGuestMasterBean objGuest= new clsGuestMasterBean();
 				objGuest.setStrGuestCode(funCheckIfNullExcelData(row.getCell(0),"",row.getCell(0)));
 				objGuest.setStrGuestPrefix(funCheckIfNullExcelData(row.getCell(1),"",row.getCell(1)));
-				objGuest.setStrGender(funCheckIfNullExcelData(row.getCell(2),"",row.getCell(2)));
-				objGuest.setStrFirstName(funCheckIfNullExcelData(row.getCell(3),"",row.getCell(3)));
-				objGuest.setStrMiddleName(funCheckIfNullExcelData(row.getCell(4),"",row.getCell(4)));
-				objGuest.setStrLastName(funCheckIfNullExcelData(row.getCell(5),"",row.getCell(5)));
-			    objGuest.setDteDOB(funCheckIfNullExcelData(row.getCell(6),"",row.getCell(6)));
-				objGuest.setStrEmailId(funCheckIfNullExcelData(row.getCell(7),"",row.getCell(8)));
-				objGuest.setIntMobileNo((long)(row.getCell(8).getNumericCellValue()));
-				objGuest.setStrAddress(funCheckIfNullExcelData(row.getCell(9),"",row.getCell(9)));
-				objGuest.setStrCity(funCheckIfNullExcelData(row.getCell(10),"",row.getCell(10)));
+				objGuest.setStrFirstName(funCheckIfNullExcelData(row.getCell(2),"",row.getCell(2)));
+				objGuest.setStrMiddleName(funCheckIfNullExcelData(row.getCell(3),"",row.getCell(3)));
+				objGuest.setStrLastName(funCheckIfNullExcelData(row.getCell(4),"",row.getCell(4)));
+				objGuest.setStrGender(funCheckIfNullExcelData(row.getCell(5),"",row.getCell(5)));
+				objGuest.setDteDOB(funCheckIfNullExcelData(row.getCell(6),"",row.getCell(6)));
+				objGuest.setStrDesignation(funCheckIfNullExcelData(row.getCell(7),"",row.getCell(7)));
+				objGuest.setStrAddress(funCheckIfNullExcelData(row.getCell(8),"",row.getCell(8)));
+				objGuest.setStrCity(funCheckIfNullExcelData(row.getCell(9),"",row.getCell(9)));
+				objGuest.setStrState(funCheckIfNullExcelData(row.getCell(10),"",row.getCell(10)));
 				objGuest.setStrCountry(funCheckIfNullExcelData(row.getCell(11),"",row.getCell(11)));
-				objGuest.setStrPANNo(funCheckIfNullExcelData(row.getCell(12),"",row.getCell(12)));
-				objGuest.setStrUIDNo(funCheckIfNullExcelData(row.getCell(13),"",row.getCell(13)));
+				objGuest.setStrNationality(funCheckIfNullExcelData(row.getCell(12),"",row.getCell(12)));
+				long pinCode =new Double(Double.parseDouble(funCheckIfNullExcelData(row.getCell(13),"",row.getCell(13)))).longValue();
+				objGuest.setIntPinCode(pinCode);
+				long MobileNo =new Double(Double.parseDouble(funCheckIfNullExcelData(row.getCell(14),"",row.getCell(14)))).longValue();
+				objGuest.setIntMobileNo(MobileNo);
+				long FaxNo =new Double(Double.parseDouble(funCheckIfNullExcelData(row.getCell(15),"",row.getCell(15)))).longValue();
+				objGuest.setIntFaxNo(FaxNo);
+				objGuest.setStrEmailId(funCheckIfNullExcelData(row.getCell(16),"",row.getCell(16)));
+				objGuest.setStrPANNo(funCheckIfNullExcelData(row.getCell(17),"",row.getCell(17)));
+				objGuest.setStrArrivalFrom(funCheckIfNullExcelData(row.getCell(18),"",row.getCell(18)));
+				objGuest.setStrProceedingTo(funCheckIfNullExcelData(row.getCell(19),"",row.getCell(19)));
+				objGuest.setStrStatus(funCheckIfNullExcelData(row.getCell(20),"",row.getCell(20)));
+				objGuest.setStrVisitingType(funCheckIfNullExcelData(row.getCell(21),"",row.getCell(21)));
+				objGuest.setStrPassportNo(funCheckIfNullExcelData(row.getCell(22),"",row.getCell(22)));
+				objGuest.setDtePassportIssueDate(funCheckIfNullExcelData(row.getCell(23),"",row.getCell(23)));
+				objGuest.setDtePassportExpiryDate(funCheckIfNullExcelData(row.getCell(24),"",row.getCell(24)));
+				objGuest.setStrCorporate(funCheckIfNullExcelData(row.getCell(25),"",row.getCell(25)));
+				objGuest.setStrUserCreated(funCheckIfNullExcelData(row.getCell(26),"",row.getCell(26)));
+				objGuest.setStrUserEdited(funCheckIfNullExcelData(row.getCell(27),"",row.getCell(27)));
+				objGuest.setDteDateCreated(funCheckIfNullExcelData(row.getCell(28),"",row.getCell(28)));
+				objGuest.setDteDateEdited(funCheckIfNullExcelData(row.getCell(29),"",row.getCell(29)));
+				objGuest.setStrClientCode(funCheckIfNullExcelData(row.getCell(30),"",row.getCell(30)));
+				objGuest.setStrGSTNo(funCheckIfNullExcelData(row.getCell(31),"",row.getCell(31)));
+				objGuest.setStrUIDNo(funCheckIfNullExcelData(row.getCell(32),"",row.getCell(32)));
+				objGuest.setDteAnniversaryDate(funCheckIfNullExcelData(row.getCell(33),"",row.getCell(33)));
+				objGuest.setStrDefaultAddr(funCheckIfNullExcelData(row.getCell(34),"",row.getCell(34)));
+				objGuest.setStrAddressLocal(funCheckIfNullExcelData(row.getCell(35),"",row.getCell(35)));
+				objGuest.setStrCityLocal(funCheckIfNullExcelData(row.getCell(36),"",row.getCell(36)));
+				objGuest.setStrStateLocal(funCheckIfNullExcelData(row.getCell(37),"",row.getCell(37)));
+				objGuest.setStrCountryLocal(funCheckIfNullExcelData(row.getCell(38),"",row.getCell(38)));
+				int PinCodeLocal =new Double(Double.parseDouble(funCheckIfNullExcelData(row.getCell(39),"",row.getCell(39)))).intValue();
+				objGuest.setIntPinCodeLocal(PinCodeLocal);
+				objGuest.setStrAddrPermanent(funCheckIfNullExcelData(row.getCell(40),"",row.getCell(40)));
+				objGuest.setStrCityPermanent(funCheckIfNullExcelData(row.getCell(41),"",row.getCell(41)));
+				objGuest.setStrStatePermanent(funCheckIfNullExcelData(row.getCell(42),"",row.getCell(42)));
+				objGuest.setStrCountryPermanent(funCheckIfNullExcelData(row.getCell(43),"",row.getCell(43)));
+				int PinCodePermanent =new Double(Double.parseDouble(funCheckIfNullExcelData(row.getCell(44),"",row.getCell(44)))).intValue();
+				objGuest.setIntPinCodePermanent(PinCodePermanent);
+				objGuest.setStrAddressOfc(funCheckIfNullExcelData(row.getCell(45),"",row.getCell(45)));
+				objGuest.setStrCityOfc(funCheckIfNullExcelData(row.getCell(46),"",row.getCell(46)));
+				objGuest.setStrStateOfc(funCheckIfNullExcelData(row.getCell(47),"",row.getCell(47)));
+				objGuest.setStrCountryOfc(funCheckIfNullExcelData(row.getCell(48),"",row.getCell(48)));
+				int PinCodeOfc =new Double(Double.parseDouble(funCheckIfNullExcelData(row.getCell(49),"",row.getCell(49)))).intValue();
+				objGuest.setIntPinCodeOfc(PinCodeOfc);
+				
 
 					
 				
@@ -1498,8 +1579,9 @@ private String funCheckIfNullExcelData(Cell input,String defaultValue,Cell assig
 	if (null == input) {
 		op = defaultValue;
 	} else {
-		op = assignedValue.toString();
+		op = input.toString();
 	}
 	return op;
 }
+
 }

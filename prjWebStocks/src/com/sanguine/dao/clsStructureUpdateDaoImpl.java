@@ -3019,6 +3019,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "ADD COLUMN `strTransactionType` VARCHAR(255) NOT NULL DEFAULT '' AFTER `dteDateEdited`;";
 		funExecutePMSQuery(sql);
 		
+		sql = "ALTER TABLE `tblpropertysetup`"
+				+ "CHANGE COLUMN `tmeCheckInTime` `tmeCheckInTime` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strClientCode`,"
+				+ "CHANGE COLUMN `tmeCheckOutTime` `tmeCheckOutTime` VARCHAR(50) NOT NULL DEFAULT '' AFTER `tmeCheckInTime`;";
+		
+		funExecutePMSQuery(sql);
 		
 		
 		// For PMS Form Of Tree master Start///

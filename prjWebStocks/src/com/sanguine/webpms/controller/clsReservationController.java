@@ -577,6 +577,7 @@ public class clsReservationController {
 	private void funSendEmailReservation(String strReservationNo,
 			String clientCode, String propCode,HttpServletRequest req) throws JRException {
 
+		String strModuleName = "Reservation";
 		clsReservationHdModel objModel = objReservationService.funGetReservationList(strReservationNo, clientCode, propCode);
 		
 		clsPropertySetupHdModel objPropertySetupModel= objPropertySetupService.funGetPropertySetup(propCode, clientCode);
@@ -596,7 +597,10 @@ public class clsReservationController {
 						objGuestModel = (clsGuestMasterHdModel) list.get(0);
 		
 		
-		if (strReservationMessege.contains("%%CompanyName")) {
+		
+			if(strReservationMessege!=null)
+				{
+			if (strReservationMessege.contains("%%CompanyName")) {
 			List<clsCompanyMasterModel> listCompanyModel = objPropertySetupService.funGetListCompanyMasterModel(clientCode);
 			strReservationMessege = strReservationMessege.replace("%%CompanyName", listCompanyModel.get(0).getStrCompanyName()+" ");
 			
@@ -635,8 +639,9 @@ public class clsReservationController {
 				}
 			}
 		}
+	}
 		
-		objSendEmail.doSendReservationEmail(strReservationNo,strReservationMessege,req);
+		objSendEmail.doSendReservationEmail(strReservationNo,strReservationMessege,strModuleName,req);
 		
 		
 		

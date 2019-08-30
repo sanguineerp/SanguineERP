@@ -1,17 +1,32 @@
 package com.sanguine.webpms.controller;
 
+import net.sf.jasperreports.engine.JRException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.controller.clsSendEmailController;
+import com.sanguine.model.clsCompanyMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.webpms.bean.clsDayEndBean;
 import com.sanguine.webpms.bean.clsPostRoomTerrifBean;
 import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
 import com.sanguine.webpms.model.clsDayEndHdModel;
+import com.sanguine.webpms.model.clsGuestMasterHdModel;
+import com.sanguine.webpms.model.clsPropertySetupHdModel;
+import com.sanguine.webpms.model.clsReservationDtlModel;
+import com.sanguine.webpms.model.clsReservationHdModel;
+import com.sanguine.webpms.model.clsRoomMasterModel;
 import com.sanguine.webpms.service.clsDayEndService;
+import com.sanguine.webpms.service.clsGuestMasterService;
+import com.sanguine.webpms.service.clsPropertySetupService;
+import com.sanguine.webpms.service.clsReservationService;
+import com.sanguine.webpms.service.clsRoomMasterService;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +64,24 @@ public class clsDayEndController {
 	
 	@Autowired
 	private clsWebPMSDBUtilityDao objWebPMSUtility;
+	
+	@Autowired
+	private clsGuestMasterService objGuestService;
+	
+	@Autowired
+	private clsPropertySetupService objPropertySetupService;
+	
+	@Autowired
+	private clsReservationService objReservationService;
+	
+	@Autowired
+	clsRoomMasterService objRoomMaster;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
+	
+	@Autowired
+	private clsSendEmailController objSendEmail;
 
 	// Open DayEnd
 	@RequestMapping(value = "/frmDayEnd", method = RequestMethod.GET)
@@ -88,6 +121,7 @@ public class clsDayEndController {
 		String sqlStart="";
 		String[] newDate=PMSDate.split("-");
 		String date=newDate[2]+"-"+newDate[1]+"-"+newDate[0];
+		String propCode = req.getSession().getAttribute("propertyCode").toString();
 		String strTransactionType = "Day End";
 		// Check POS Day End Table in PMS
 		
@@ -100,6 +134,12 @@ public class clsDayEndController {
 		cal.add(Calendar.DATE, 1);
 		String newStartDate = cal.getTime().getYear() + "-" + (cal.getTime().getMonth()) + "-" + (cal.getTime().getDate());
 
+		try {
+			funSendCheckInMail(newStartDate,clientCode,propCode,req);
+		} catch (JRException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		String sqlBlockedRoom = "select a.strRoomCode,DATE(a.dteValidTo) from tblblockroom a ";
 		List listOfBlockedRoom = objGlobalFunctionsService.funGetListModuleWise(sqlBlockedRoom, "sql");
@@ -151,7 +191,7 @@ public class clsDayEndController {
 		else
 		{
 			String userCode = req.getSession().getAttribute("usercode").toString();
-			String propCode = req.getSession().getAttribute("propertyCode").toString();
+			
 			String startDate = req.getSession().getAttribute("startDate").toString();
 			List<String> listRoomTerrifDocNo = new ArrayList<String>();
 			/*String sql = "select a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode,ifnull(a.strReservationNo,''),ifnull(a.strWalkInNo,''),c.strRoomTypeCode " 
@@ -301,6 +341,99 @@ public class clsDayEndController {
 			model= new ModelAndView("redirect:/frmModuleSelection.html");
 		}
 		return model;
+	}
+
+	private void funSendCheckInMail(String newStartDate,String clientCode, String propCode,HttpServletRequest req) throws JRException {
+		
+		String strModuleName = "dayEnd";
+		
+		String sqlCheckInForNextDate="SELECT a.strReservationNo,a.strGuestcode "
+				+ "FROM tblreservationhd a "
+				+ "WHERE Date(a.dteArrivalDate)='"+newStartDate+"' AND a.strClientCode='"+clientCode+"'";
+		
+		List listNextDateCheckIn = objGlobalFunctionsService.funGetListModuleWise(sqlCheckInForNextDate, "sql");
+		{
+			if(listNextDateCheckIn!=null && listNextDateCheckIn.size()>0)
+			{
+				for(int k=0;k<listNextDateCheckIn.size();k++)
+				{
+					Object[] arrObjBlock = (Object[]) listNextDateCheckIn.get(k);
+					
+					String strReservationNo = arrObjBlock[0].toString();
+					String strGuestCode = arrObjBlock[1].toString();
+					
+					if(strGuestCode!=null){
+						
+						
+						clsReservationHdModel objModel = objReservationService.funGetReservationList(strReservationNo, clientCode, propCode);
+						
+						clsPropertySetupHdModel objPropertySetupModel= objPropertySetupService.funGetPropertySetup(propCode, clientCode);
+						
+						String strReservationMessege = objPropertySetupModel.getStrCheckInEmailContent();
+						
+						List<clsReservationDtlModel> listReservationmodel = objModel.getListReservationDtlModel();
+
+						if (listReservationmodel.size() > 0) {
+							for (int i = 0; i < listReservationmodel.size(); i++) {
+								clsReservationDtlModel objDtl = listReservationmodel.get(i);
+								if (objDtl.getStrPayee().equals("Y")) {
+
+									List list = objGuestService.funGetGuestMaster(objDtl.getStrGuestCode(), clientCode);
+									clsGuestMasterHdModel objGuestModel = null;
+									if (list.size() > 0) {
+										objGuestModel = (clsGuestMasterHdModel) list.get(0);
+						
+						
+						
+							if(strReservationMessege!=null)
+								{
+							if (strReservationMessege.contains("%%CompanyName")) {
+							List<clsCompanyMasterModel> listCompanyModel = objPropertySetupService.funGetListCompanyMasterModel(clientCode);
+							strReservationMessege = strReservationMessege.replace("%%CompanyName", listCompanyModel.get(0).getStrCompanyName()+" ");
+							
+						}
+						if (strReservationMessege.contains("%%PropertyName")) {
+							clsPropertyMaster objProperty = objPropertyMasterService.funGetProperty(propCode, clientCode);
+							strReservationMessege = strReservationMessege.replace("%%PropertyName", objProperty.getPropertyName()+" ");
+							
+						}
+
+						if (strReservationMessege.contains("%%RNo")) {
+							strReservationMessege = strReservationMessege.replace("%%RNo", strReservationNo+" ");
+							
+						}
+
+						if (strReservationMessege.contains("%%RDate")) {
+							strReservationMessege = strReservationMessege.replace("%%RDate", objGlobal.funGetDate("dd-MM-yyyy", objModel.getDteReservationDate()+" "));
+							
+						}
+
+						if (strReservationMessege.contains("%%NoNights")) {
+							strReservationMessege = strReservationMessege.replace("%%NoNights", String.valueOf(objModel.getIntNoOfNights())+" ");
+							
+						}
+						
+						if (strReservationMessege.contains("%%GuestName")) {
+							strReservationMessege = strReservationMessege.replace("%%GuestName", objGuestModel.getStrFirstName() + " " + objGuestModel.getStrMiddleName() + " " + objGuestModel.getStrLastName());
+						}
+
+						if (strReservationMessege.contains("%%RoomNo")) {
+							clsRoomMasterModel roomNo = objRoomMaster.funGetRoomMaster(objDtl.getStrRoomNo(), clientCode);
+							strReservationMessege = strReservationMessege.replace("%%RoomNo", roomNo.getStrRoomDesc());
+						}
+						
+									}
+								}
+							}
+						}
+					}
+						objSendEmail.doSendReservationEmail(strReservationNo,strReservationMessege,strModuleName,req);
+						
+						
+					}
+				}
+			}
+		}
 	}
 
 	// Convert bean to model function
