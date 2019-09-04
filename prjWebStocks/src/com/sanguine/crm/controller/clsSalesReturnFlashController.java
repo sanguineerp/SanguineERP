@@ -205,7 +205,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
 				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"'"
-				+ " group by c.strProdCode"
+				+ " group by c.strProdCode,a.dteSRDate"
 				+ " order by c.strSRCode,d.strProdName;";
 		
 		List listOfSaleRet = objGlobalService.funGetList(sql, "sql");
@@ -504,7 +504,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
 				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'  and  a.strCustCode='"+strCustCode+"' "
-				+ " group by c.strProdCode"
+				+ " group by c.strProdCode,a.dteSRDate"
 				+ " order by c.strSRCode,d.strProdName;";
 		
 		List listOfSaleRet = objGlobalService.funGetList(sql, "sql");
@@ -839,7 +839,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
 				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'  and  a.strCustCode='"+strCustCode+"' "
-				+ " group by c.strProdCode"
+				+ " group by c.strProdCode,a.dteSRDate"
 				+ " order by c.strSRCode,d.strProdName;");
 		/*	if (!settlementcode.equals("All")) {
 				sqlInvoiceFlashPDF.append(" and  a.strSettlementCode='" + settlementcode + "' ");

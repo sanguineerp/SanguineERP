@@ -133,6 +133,8 @@ public class clsGRNController {
 
 	@Autowired
 	intfBaseService objBaseService;
+	
+	
 	/**
 	 * Open GRN form
 	 * 
@@ -545,9 +547,7 @@ public class clsGRNController {
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/saveGRN", method = RequestMethod.POST)
-	public String funAddUpdate(
-			@ModelAttribute("command") @Valid clsGRNBean objBean,
-			BindingResult result, HttpServletRequest request) {
+	public String funAddUpdate(@ModelAttribute("command") @Valid clsGRNBean objBean,BindingResult result, HttpServletRequest request) {
 		String urlHits = "1";
 		String strmsg = "Update";
 		DecimalFormat df = objGlobalFunctions.funGetDecimatFormat(request);//new DecimalFormat("#.##");
@@ -556,19 +556,14 @@ public class clsGRNController {
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
-		objBean.setStrGRNCode(objGlobalFunctions.funIfNull(
-				objBean.getStrGRNCode(), "", objBean.getStrGRNCode()));
+		objBean.setStrGRNCode(objGlobalFunctions.funIfNull(objBean.getStrGRNCode(), "", objBean.getStrGRNCode()));
 		if (objBean.getStrGRNCode().trim().length() == 0) {
 			strmsg = "Inserted";
 		}
-		String clientCode = request.getSession().getAttribute("clientCode")
-				.toString();
-		String userCode = request.getSession().getAttribute("usercode")
-				.toString();
-		String startDate = request.getSession().getAttribute("startDate")
-				.toString();
-		String propCode = request.getSession().getAttribute("propertyCode")
-				.toString();
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String userCode = request.getSession().getAttribute("usercode").toString();
+		String startDate = request.getSession().getAttribute("startDate").toString();
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
 		Double stock, weightedAvg, weightedStk, weigthedvalue = 0.00;
 		clsGRNHdModel objHdModel = funPrepareModel(objBean, request);
 		double currValue = 1.0;
@@ -576,8 +571,7 @@ public class clsGRNController {
 		String grnCode = "";
 		if (!result.hasErrors()) {
 
-			clsPropertySetupModel objSetUp = objSetupMasterService
-					.funGetObjectPropertySetup(propCode, clientCode);
+			clsPropertySetupModel objSetUp = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
 			List<clsGRNDtlModel> listGRNDtl = objBean.getListGRNDtl();
 			String proprtyWiseStock = "N";
 			if (null != listGRNDtl && listGRNDtl.size() > 0) {
@@ -588,34 +582,57 @@ public class clsGRNController {
 				objGRNService.funDeleteDtl(grnCode, clientCode);
 				double totalValue = 0.00;
 				boolean flagDtlDataInserted = false;
+				double dblDis=objHdModel.getDblDisAmt();
+				double dblDisPercent=objHdModel.getDblSubTotal()/dblDis;
+				
 				List<clsGRNDtlModel> batchList = new ArrayList<clsGRNDtlModel>();
+				
 				for (clsGRNDtlModel ob : listGRNDtl) {
 					if (null != ob.getStrProdCode()) {
-						String binNo = objGlobalFunctions.funIfNull(
-								objBean.getStrBillNo(), "", ob.getStrBinNo());
-						List listProdSupp = objGRNService.funGetProdSupp(
-								objHdModel.getStrSuppCode(),
-								ob.getStrProdCode(), clientCode);
-						funAddProdSuppMaster(listProdSupp, clientCode,
-								ob.getDblUnitPrice() * currValue,
-								objHdModel.getStrSuppCode(),
+						String binNo = objGlobalFunctions.funIfNull(objBean.getStrBillNo(), "", ob.getStrBinNo());
+						List listProdSupp = objGRNService.funGetProdSupp(objHdModel.getStrSuppCode(),ob.getStrProdCode(), clientCode);
+						funAddProdSuppMaster(listProdSupp, clientCode,ob.getDblUnitPrice() * currValue,objHdModel.getStrSuppCode(),
 								ob.getStrProdCode(), userCode, binNo, grnCode);
 						ob.setStrGRNCode(grnCode);
 						ob.setStrProdChar(" ");
 						if (ob.getStrMISCode() == null) {
 							ob.setStrMISCode("");
 						}
+						ob.setDblTotalPrice(ob.getDblTotalPrice() * currValue);
+						double dblDiscount=ob.getDblTotalPrice()/dblDisPercent;
+						
+						
+						
+						double taxableAmt = 0.0;
+						double taxAmt = 0.0;
+						
+						
+						String prdDetailForTax = ob.getStrProdCode() + "," + ob.getDblUnitPrice() + ","
+								+ objHdModel.getStrSuppCode() + "," + ob.getDblQty() + "," + dblDiscount;
+						Map<String, String> hmProdTax = objGlobalFunctions.funCalculateTax(prdDetailForTax, "Purchase", objHdModel.getDtGRNDate(), "0","", request);
+                       
+						if (hmProdTax.size() > 0) 
+						{
+							for (Map.Entry<String, String> entry : hmProdTax.entrySet()) 
+							    {
+								String taxdetails = entry.getValue();
+								String[] spItem = taxdetails.split("#");
+								taxableAmt = Double.parseDouble(spItem[0].toString());
+								taxAmt =taxAmt + Double.parseDouble(spItem[5].toString());
+								}
+							
+						}
+						
 						ob.setStrClientCode(clientCode);
-						ob.setDblDiscount(currValue * ob.getDblDiscount());
+						ob.setDblDiscount(dblDiscount*currValue);
 						ob.setDblRate(ob.getDblRate() * currValue);
 						ob.setDblTax(ob.getDblTax() * currValue);
-						ob.setDblTaxableAmt(ob.getDblTaxableAmt() * currValue);
-						ob.setDblTaxAmt(ob.getDblTaxAmt() * currValue);
-						ob.setDblTotalPrice(ob.getDblTotalPrice() * currValue);
+						ob.setDblTaxableAmt(taxableAmt * currValue);
+						ob.setDblTaxAmt(taxAmt * currValue);
+						
 						ob.setDblUnitPrice(ob.getDblUnitPrice() * currValue);
 						objGRNService.funAddUpdateDtl(ob);
-						clsProductMasterModel objModel = objProductMasterService
-								.funGetObject(ob.getStrProdCode(), clientCode);
+						clsProductMasterModel objModel = objProductMasterService.funGetObject(ob.getStrProdCode(), clientCode);
 
 						if (objSetUp.getStrMultiCurrency()
 								.equalsIgnoreCase("N")) {
@@ -984,7 +1001,6 @@ public class clsGRNController {
 								sqlBuilder.toString(), "sql");
 						if (!list.isEmpty() && list != null) {
 							against = "Requisition";
-							reqCode = list.get(0).toString();
 						}
 						if (objGRNDtl.getStrMISCode().isEmpty()) {
 							strMISCode = objGlobalFunctions
@@ -1447,8 +1463,7 @@ public class clsGRNController {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private clsGRNHdModel funPrepareModel(clsGRNBean objBean,
-			HttpServletRequest request) {
+	private clsGRNHdModel funPrepareModel(clsGRNBean objBean,HttpServletRequest request) {
 		double currValue = 1.0;
 		if (objBean.getDblConversion() > 0) {
 			currValue = objBean.getDblConversion();
@@ -1463,8 +1478,7 @@ public class clsGRNController {
 		clsGRNHdModel objHdModel = new clsGRNHdModel();
 		if (objBean.getStrGRNCode().trim().length() == 0) {
 
-			strDocNo = objGlobalFunctions.funGenerateDocumentCode("frmGRN",
-					objBean.getDtGRNDate(), request);
+			strDocNo = objGlobalFunctions.funGenerateDocumentCode("frmGRN",objBean.getDtGRNDate(), request);
 			objHdModel.setStrGRNCode(strDocNo);
 			objHdModel.setIntId(lastNo);
 			objHdModel.setStrUserCreated(userCode);
@@ -2323,9 +2337,7 @@ public class clsGRNController {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/rptGRNRegisterReport", method = RequestMethod.POST)
-	private ModelAndView funCallGRNRegisterReport(
-			@ModelAttribute("command") clsReportBean objBean,
-			HttpServletResponse resp, HttpServletRequest req) {
+	private ModelAndView funCallGRNRegisterReport(@ModelAttribute("command") clsReportBean objBean,HttpServletResponse resp, HttpServletRequest req) {
 		String fromDate = objGlobalFunctions.funGetDate("yyyy-MM-dd",
 				objBean.getDtFromDate());
 		String toDate = objGlobalFunctions.funGetDate("yyyy-MM-dd",
@@ -2341,14 +2353,12 @@ public class clsGRNController {
 		String locNames = "";
 		for (int i = 0; i < tempLoc.length; i++) {
 			if (strLocCodes.length() > 0) {
-				clsLocationMasterModel objLocModel = objLocationMasterService
-						.funGetObject(tempLoc[i], clientCode);
+				clsLocationMasterModel objLocModel = objLocationMasterService.funGetObject(tempLoc[i], clientCode);
 				locNames += objLocModel.getStrLocName() + ",";
 				strLocCodes = strLocCodes + " or a.strLocCode='" + tempLoc[i]
 						+ "' ";
 			} else {
-				clsLocationMasterModel objLocModel = objLocationMasterService
-						.funGetObject(tempLoc[i], clientCode);
+				clsLocationMasterModel objLocModel = objLocationMasterService.funGetObject(tempLoc[i], clientCode);
 				locNames += objLocModel.getStrLocName() + ",";
 				strLocCodes = "a.strLocCode='" + tempLoc[i] + "' ";
 			}
@@ -2387,7 +2397,7 @@ public class clsGRNController {
 		DecimalFormat df = objGlobalFunctions.funGetDecimatFormat(req); //new DecimalFormat("#0.00");
 
 		String header = "GRNCode ,BillNumber ,GRNDate,SuppCode,SuppName,PIndicator,LocCode,LocName,ProdCode,  ProdName,  GroupCode, GroupName, "
-				+ "SGCode, SubGroupName, class,TaxCode,TaxName,TaxPer,RejQty,AcceptQty,Rate,Amount, TaxAmt,TotalAmt, ";
+				+ "SGCode, SubGroupName, class,TaxCode,TaxName,TaxPer,RejQty,AcceptQty,Rate,Amount,DiscountAmt, TaxAmt,TotalAmt, ";
 		String[] excelHeader = header.split(",");
 		exportList.add(excelHeader);
 
@@ -2400,8 +2410,8 @@ public class clsGRNController {
 						+ "  f.strSGName as SubGroupName, case c.strClass  WHEN '' THEN 'NA'  else c.strClass  end  as strClass,"
 						+ "  'TaxCode','TaxName','TaxPer',  b.dblRejected as RejQty,"
 						+ "  (b.dblQty-b.dblRejected) as AcceptQty,b.dblUnitPrice as Rate, "
-						+ "  b.dblUnitPrice*(b.dblQty-b.dblRejected) as Amount, 'TaxAmt',"
-						+ "  ifnull(a.dblTotal,'') as TotalAmt , IFNULL(a.strBillNo,'')"
+						+ "  b.dblUnitPrice*(b.dblQty-b.dblRejected) as Amount,b.dblDiscount as DiscountAmt, 'TaxAmt',"
+						+ "  ((b.dblUnitPrice*(b.dblQty-b.dblRejected))-b.dblDiscount)+b.dblTaxAmt  as GrandTotal , IFNULL(a.strBillNo,'')"
 						+ "  from tblgrnhd a ,tblgrndtl b ,tblproductmaster c,tblpartymaster d,tbllocationmaster e,tblsubgroupmaster f,tblgroupmaster g  "
 						+ "	 where a.strGRNCode=b.strGRNCode and b.strProdCode=c.strProdCode "
 						+ "  and a.strSuppCode=d.strPCode and a.strLocCode=e.strLocCode and c.strSGCode=f.strSGCode "
@@ -2441,7 +2451,7 @@ public class clsGRNController {
 			String unitPrice = ob[19].toString();
 			String suppCode = ob[2].toString();
 			String qty = ob[18].toString();
-			String disAmt = "0";
+			String disAmt = ob[21].toString();
 			String dteGRN = ob[1].toString();
 			String taxableAmt = "0";
 			String taxCode = "";
@@ -2516,9 +2526,16 @@ public class clsGRNController {
 			dataList.add(Double.parseDouble(ob[19].toString()) / currValue); // Rate
 			dataList.add(df.format(Double.parseDouble(ob[20].toString())
 					/ currValue)); // Amount
+			
+			
+			dataList.add(df.format(Double.parseDouble(ob[21].toString())));
 			dataList.add(df.format(dblTaxamt / currValue)); // TaxAmt
-			dblRowAmtTotal = Double.parseDouble(ob[20].toString());
-			dataList.add(df.format(dblRowAmtTotal / currValue)); // TotalAmt =
+			
+			dblRowAmtTotal = Double.parseDouble(ob[23].toString());
+			dataList.add(df.format(dblRowAmtTotal / currValue));  //GrandTotal=subtotal-discountAmt+taxAmt
+			
+/*			dblRowAmtTotal = Double.parseDouble(ob[20].toString());
+			dataList.add(df.format(dblRowAmtTotal / currValue));*/ // TotalAmt =
 																	// Amt +
 																	// taxAmt
 			grandToltal += dblRowAmtTotal;
@@ -2578,8 +2595,7 @@ public class clsGRNController {
 							+ toDate
 							+ "' and a.strClientCode='"
 							+ clientCode + "' and (" + grnCode + " ) ");
-			List listDis = objGlobalFunctionsService.funGetList(
-					sqlBuilderDisAmt.toString(), "sql");
+			List listDis = objGlobalFunctionsService.funGetList(sqlBuilderDisAmt.toString(), "sql");
 			double totDisAmt = 0.0;
 			double totExtraAmt = 0.0;
 			if (listDis.size() > 0) {

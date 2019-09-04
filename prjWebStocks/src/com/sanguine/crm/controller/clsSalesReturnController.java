@@ -183,6 +183,7 @@ public class clsSalesReturnController {
 			}
 			
 			clsSalesReturnHdModel objHdModel = funPrepareHdModel(objBean, userCode, clientCode, req, currConversion);
+			
 			// String date=objHdModel.getDteInvDate().split("/");
 			/*
 			 * String[] InvDate = objHdModel.getDteSRDate().split("/"); String
@@ -376,6 +377,7 @@ public class clsSalesReturnController {
 		// Double amt=objBean.getDblSubTotalAmt()+taxamt;
 		srHdModel.setDblTotalAmt(String.valueOf(Double.parseDouble(objBean.getDblTotalAmt()) * currValue));
 		srHdModel.setDblTaxAmt(objBean.getDblTaxAmt() * currValue);
+		srHdModel.setDblSubTotal(Double.parseDouble(objBean.getDblTotalAmt())-objBean.getDblTaxAmt());
 		srHdModel.setDblDiscPer(objBean.getDblDiscPer());
 		srHdModel.setDblDiscAmt(objBean.getDblDiscAmt() * currValue);
 		srHdModel.setStrCurrency(objBean.getStrCurrency());

@@ -174,7 +174,7 @@ public class clsClientDetails {
 			hmClientDtl.put("259.001", clsClientDetails.createClientDetails("259.001", "PENTAGON INDIA RETAIL PVT LTD", dFormat.parse("2018-08-24"), dFormat.parse("2019-09-02")));//POS Licence //As Per JPOs iYear Licence Renewed
 		   //260.001", "PARAG HOTELS AND RESORT PVT LTD" for POS
 			//Africa International
-			hmClientDtl.put("261.001", clsClientDetails.createClientDetails("261.001", "KIN DELICIEUX", dFormat.parse("2018-09-08"), dFormat.parse("2019-09-08")));//(AFRICA)//released on 08-09-2018 for 1 year till 08-09-2019 
+			hmClientDtl.put("261.001", clsClientDetails.createClientDetails("261.001", "KIN DELICIEUX", dFormat.parse("2018-09-08"), dFormat.parse("2019-12-31")));//(AFRICA)//Renewed on 29-08-2019  till 31-12-2019 //released on 08-09-2018 for 1 year till 08-09-2019 
 			hmClientDtl.put("262.001", clsClientDetails.createClientDetails("262.001", "COCO JAMBO", dFormat.parse("2018-09-08"), dFormat.parse("2019-09-08")));//(AFRICA)//released on 08-09-2018 for 1 year till 08-09-2019 
 			hmClientDtl.put("263.001", clsClientDetails.createClientDetails("263.001", "FIESTA CLUB", dFormat.parse("2018-09-08"), dFormat.parse("2019-09-08")));//(AFRICA)//released on 08-09-2018 for 1 year till 08-09-2019hmClientDtl.put("263.001", clsClientDetails.createClientDetails("263.001", "FIESTA CLUB", dFormat.parse("2018-09-08"), dFormat.parse("2019-09-08")));//(AFRICA)//released on 08-09-2018 for 1 year till 08-09-2019
 			// 264-266 used for POS

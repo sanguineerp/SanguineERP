@@ -66,6 +66,15 @@ public class clsSalesReturnHdModel implements Serializable {
 	@Column(name = "dblTaxAmt")
 	private double dblTaxAmt;
 	
+	@Column(name = "dblSubTotal")
+	private double dblSubTotal;
+	
+	
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Column(name="dblDiscAmt")
 	private double dblDiscAmt;
 	
@@ -229,6 +238,13 @@ public class clsSalesReturnHdModel implements Serializable {
 		this.strJVNo = strJVNo;
 	}
 	
+	public double getDblSubTotal() {
+		return dblSubTotal;
+	}
+
+	public void setDblSubTotal(double dblSubTotal) {
+		this.dblSubTotal = dblSubTotal;
+	}
 	
 
 }

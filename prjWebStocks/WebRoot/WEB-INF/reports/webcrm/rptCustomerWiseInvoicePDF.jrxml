@@ -364,7 +364,7 @@
 							</staticText>
 						</jr:tableHeader>
 						<jr:tableFooter style="Table_TD" height="15" rowSpan="1">
-							<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="90" height="15" uuid="89e84686-50a5-4887-92d1-fab92ada6282"/>
 								<box rightPadding="2"/>
 								<textElement textAlignment="Right">
@@ -374,7 +374,7 @@
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table_TD" height="15">
-							<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="90" height="15" uuid="dcc658fc-0ff6-455f-bb12-77eda28d3f59"/>
 								<box rightPadding="2"/>
 								<textElement textAlignment="Right">
