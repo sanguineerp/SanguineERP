@@ -702,7 +702,8 @@ public class clsBulkInvoiceController {
 						}
 						
 						
-					}else{
+					}
+					else{
 						
 						if (lastnoLive > lastnoAudit) {
 							invCode = propCode + "IV" + transYear + transMonth  + String.format("%05d", lastnoLive + 1);

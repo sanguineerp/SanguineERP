@@ -146,7 +146,7 @@ public class clsInvoiceFlashController {
 			}
 			
 
-			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode "
+			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode  and a.dblSubTotalAmt>0 "
 				+ "  order by a.strInvCode ");
 		}
 		else
@@ -168,7 +168,7 @@ public class clsInvoiceFlashController {
 			}
 			
 
-			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode "
+			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode and a.strNarration not like '%Entry deleted%'"
 				+ "  order by a.strInvCode ");
 		}
 		
@@ -1257,7 +1257,7 @@ public class clsInvoiceFlashController {
 			}
 			
 
-			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode "
+			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode  and a.dblSubTotalAmt>0 "
 				+ "  order by a.strInvCode ");
 		}
 		

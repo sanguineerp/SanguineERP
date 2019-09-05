@@ -649,8 +649,11 @@ public class clsInvoiceController
 						
 						String[] spDate = dateInvoice.split("-");
 						String transMonth = objGlobalFunctions.funGetAlphabet(Integer.parseInt(spDate[1])-1);
-						String sql = "select ifnull(max(MID(a.strInvCode,8,5)),'' ) " + " from tblinvoicehd a where MID(a.strInvCode,5,1) = '" + transYear + "' " + " and MID(a.strInvCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";	//and MID(a.strInvCode,6,1) = '" + transMonth + "' " + " 
+						/*String sql = "select ifnull(max(MID(a.strInvCode,8,5)),'' ) " + " from tblinvoicehd a where MID(a.strInvCode,5,1) = '" + transYear + "' " + " and MID(a.strInvCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";	//and MID(a.strInvCode,6,1) = '" + transMonth + "' " + " 
 						String sqlAudit = " select ifnull(max(MID(a.strTransCode,8,5)),'' ) " + " from tblaudithd a where MID(a.strTransCode,5,1) = '" + transYear + "' and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Invoice' ;  ";  		//" + " and MID(a.strTransCode,6,1) = '" + transMonth + "' " + "
+						*/
+						String sql = "select ifnull(max(MID(a.strInvCode,8,5)),'' ) " + " from tblinvoicehd a where MID(a.strInvCode,5,1) = '" + transYear + "' " + " and MID(a.strInvCode,6,1) = '" + transMonth + "' " + " and MID(a.strInvCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
+						String sqlAudit = " select ifnull(max(MID(a.strTransCode,8,5)),'' ) " + " from tblaudithd a where MID(a.strTransCode,5,1) = '" + transYear + "' " + " and MID(a.strTransCode,6,1) = '" + transMonth + "' " + " and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Invoice' ;  ";
 						
 						
 						List listAudit = objGlobalFunctionsService.funGetListModuleWise(sqlAudit, "sql");
