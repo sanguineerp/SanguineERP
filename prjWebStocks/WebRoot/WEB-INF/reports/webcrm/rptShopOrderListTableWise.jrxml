@@ -94,6 +94,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 		<field name="intSrNo" class="java.lang.Integer">
 			<fieldDescription><![CDATA[intSrNo]]></fieldDescription>
 		</field>
+		<field name="dblSalesReturnQty" class="java.lang.Double"/>
 		<variable name="subgroupSum" class="java.lang.Double" resetType="Group" resetGroup="strSGName" calculation="Sum">
 			<variableExpression><![CDATA[$F{dblRequiredQty}]]></variableExpression>
 			<initialValueExpression><![CDATA[new Double("0")]]></initialValueExpression>
@@ -138,6 +139,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 		<field name="intSrNo" class="java.lang.Integer">
 			<fieldDescription><![CDATA[intSrNo]]></fieldDescription>
 		</field>
+		<field name="dblSalesReturnQty" class="java.lang.Double"/>
 		<variable name="subgroupSum" class="java.lang.Double" resetType="Group" resetGroup="strSGName" calculation="Sum">
 			<variableExpression><![CDATA[$F{dblRequiredQty}]]></variableExpression>
 			<initialValueExpression><![CDATA[new Double("0")]]></initialValueExpression>
@@ -245,15 +247,15 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 	<detail>
 		<band height="129" splitType="Stretch">
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="285" y="2" width="266" height="125" uuid="e4ca2884-793c-4be1-af80-c2bf44490dc1">
+				<reportElement key="table 1" style="table 1" x="285" y="3" width="275" height="120" uuid="e4ca2884-793c-4be1-af80-c2bf44490dc1">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="dsEvenOrder" uuid="99b3b024-41d7-41e5-b4fd-1349bc739268">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{objEven})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:columnGroup width="269" uuid="5bedc731-a41b-4c5f-b071-98a4b3d333a4">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [4]"/>
+					<jr:columnGroup width="275" uuid="5bedc731-a41b-4c5f-b071-98a4b3d333a4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [5]"/>
 						<jr:groupHeader groupName="strPName">
 							<jr:cell style="table_TD" height="20" rowSpan="1">
 								<textField>
@@ -266,9 +268,9 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:cell>
 						</jr:groupHeader>
 						<jr:groupHeader groupName="strGName">
-							<jr:cell style="table_TD" height="20" rowSpan="1">
+							<jr:cell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="5" y="0" width="209" height="18" forecolor="#990000" uuid="65a68d4b-0542-4e87-bed0-b02f66f84312"/>
+									<reportElement x="0" y="0" width="275" height="18" forecolor="#990000" uuid="65a68d4b-0542-4e87-bed0-b02f66f84312"/>
 									<textElement>
 										<font fontName="Serif" size="10" isBold="true"/>
 									</textElement>
@@ -277,9 +279,9 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:cell>
 						</jr:groupHeader>
 						<jr:groupHeader groupName="strSGName">
-							<jr:cell style="table_TD" height="20" rowSpan="1">
+							<jr:cell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="5" y="0" width="209" height="18" forecolor="#009966" uuid="9c28661a-a9c5-4a1e-bd04-2073681fe22d"/>
+									<reportElement x="0" y="0" width="275" height="18" forecolor="#009966" uuid="9c28661a-a9c5-4a1e-bd04-2073681fe22d"/>
 									<textElement>
 										<font fontName="Serif" size="10" isBold="true"/>
 									</textElement>
@@ -292,17 +294,17 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="2" y="0" width="18" height="30" uuid="1c56bbad-b9df-4535-b38f-5c0c33ef85d8"/>
+									<reportElement x="0" y="0" width="20" height="30" uuid="1c56bbad-b9df-4535-b38f-5c0c33ef85d8"/>
 									<textElement>
-										<font fontName="Serif" isBold="true"/>
+										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
 									<text><![CDATA[Sr No]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:tableFooter style="table 1_TH" height="20" rowSpan="1"/>
+							<jr:tableFooter style="table 1_TH" height="2" rowSpan="1"/>
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="2" y="0" width="18" height="20" uuid="083a417f-8e6e-493c-89e8-ec27b14c6aef"/>
+									<reportElement x="0" y="0" width="20" height="20" uuid="083a417f-8e6e-493c-89e8-ec27b14c6aef"/>
 									<textElement>
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
@@ -310,22 +312,22 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="157" uuid="450de109-027c-418f-bcd0-f1f786a3da47">
+						<jr:column width="150" uuid="450de109-027c-418f-bcd0-f1f786a3da47">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="7" y="0" width="150" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
+									<reportElement x="0" y="0" width="150" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
 									<textElement>
-										<font fontName="Serif" isBold="true"/>
+										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
 									<text><![CDATA[Product Name]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:tableFooter style="table 1_TH" height="20" rowSpan="1"/>
+							<jr:tableFooter style="table 1_TH" height="2" rowSpan="1"/>
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1">
 									<staticText>
-										<reportElement x="7" y="0" width="150" height="30" uuid="585878e7-2a91-4171-94c4-9024c8cca49e"/>
+										<reportElement x="0" y="0" width="150" height="30" uuid="585878e7-2a91-4171-94c4-9024c8cca49e"/>
 										<textElement>
 											<font fontName="Serif" isBold="true"/>
 										</textElement>
@@ -335,7 +337,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:groupFooter>
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="7" y="0" width="150" height="20" uuid="b37c242e-8bb2-41e4-a0b5-d317a52c8261"/>
+									<reportElement x="0" y="0" width="150" height="20" uuid="b37c242e-8bb2-41e4-a0b5-d317a52c8261"/>
 									<textElement>
 										<font fontName="Serif" size="8"/>
 									</textElement>
@@ -343,22 +345,23 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="48" uuid="fca294e8-b631-4e8e-bc03-d10b2d65ab52">
+						<jr:column width="35" uuid="fca294e8-b631-4e8e-bc03-d10b2d65ab52">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="1" y="0" width="43" height="30" uuid="9b582deb-6612-4045-b982-5873a8e59f57"/>
-									<textElement textAlignment="Right">
-										<font fontName="Serif" isBold="true"/>
+									<reportElement x="0" y="0" width="35" height="30" uuid="d0349b3c-1ece-4fa5-aad9-d058a4d6fe34"/>
+									<box rightPadding="0"/>
+									<textElement>
+										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
-									<text><![CDATA[Required Quantity]]></text>
+									<text><![CDATA[Require Qty]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:tableFooter style="table 1_TH" height="20" rowSpan="1"/>
+							<jr:tableFooter style="table 1_TH" height="2" rowSpan="1"/>
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1">
 									<textField>
-										<reportElement x="3" y="0" width="43" height="30" uuid="404ccfa1-7f21-4094-9779-a930b8dc0af8"/>
+										<reportElement x="0" y="0" width="35" height="30" uuid="404ccfa1-7f21-4094-9779-a930b8dc0af8"/>
 										<textElement textAlignment="Right">
 											<font fontName="Serif" isBold="true"/>
 										</textElement>
@@ -368,9 +371,10 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:groupFooter>
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField pattern="#,##0.###">
-									<reportElement x="3" y="0" width="40" height="20" uuid="d7d8612d-ceaa-4fe0-81f6-e262ab3e5bd8">
+									<reportElement x="0" y="0" width="35" height="20" uuid="d7d8612d-ceaa-4fe0-81f6-e262ab3e5bd8">
 										<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 									</reportElement>
+									<box rightPadding="2"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif"/>
 									</textElement>
@@ -378,34 +382,62 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="44" uuid="fa1aeb41-adf6-4677-bef9-cf34849bc344">
+						<jr:column width="35" uuid="fa1aeb41-adf6-4677-bef9-cf34849bc344">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="2" y="0" width="40" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
+									<reportElement x="0" y="0" width="35" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
 									<textElement>
-										<font fontName="Serif" isBold="true"/>
+										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
-									<text><![CDATA[Actual Quantity]]></text>
+									<text><![CDATA[Actual Qty]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:tableFooter style="table 1_TH" height="20" rowSpan="1"/>
+							<jr:tableFooter style="table 1_TH" height="2" rowSpan="1"/>
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1"/>
 							</jr:groupFooter>
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
 						</jr:column>
+						<jr:column width="35" uuid="a61523af-cb14-4d08-8ccd-bb3ff8a665a3">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="35" height="30" uuid="45309d94-3e68-4284-81a6-ea79488d24e4"/>
+									<textElement>
+										<font fontName="Serif" size="9" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Return Qty]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:tableFooter style="table 1_TH" height="2" rowSpan="1"/>
+							<jr:groupFooter groupName="strSGName">
+								<jr:cell height="30" rowSpan="1"/>
+							</jr:groupFooter>
+							<jr:detailCell style="table 1_TD" height="20">
+								<textField pattern="#,##0.###">
+									<reportElement x="0" y="0" width="35" height="20" uuid="0316d79c-feaf-4fad-8c2e-e89974eb71d8">
+										<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+									</reportElement>
+									<box rightPadding="2"/>
+									<textElement textAlignment="Right">
+										<font fontName="Serif"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{dblSalesReturnQty}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
 					</jr:columnGroup>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 1" style="table 1" x="4" y="3" width="266" height="125" uuid="e4ca2884-793c-4be1-af80-c2bf44490dc1"/>
+				<reportElement key="table 1" style="table 1" x="4" y="3" width="275" height="120" uuid="e4ca2884-793c-4be1-af80-c2bf44490dc1"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="dsOddOrder" uuid="d537264d-cec9-462c-9e8f-87b9680ff76a">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{objOdd})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:columnGroup width="269" uuid="5bedc731-a41b-4c5f-b071-98a4b3d333a4">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [4]"/>
+					<jr:columnGroup width="275" uuid="5bedc731-a41b-4c5f-b071-98a4b3d333a4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [5]"/>
 						<jr:groupHeader groupName="strPName">
 							<jr:cell style="table_TD" height="20" rowSpan="1">
 								<textField>
@@ -418,9 +450,9 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:cell>
 						</jr:groupHeader>
 						<jr:groupHeader groupName="strGName">
-							<jr:cell style="table_TD" height="20" rowSpan="1">
+							<jr:cell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="3" y="0" width="209" height="18" forecolor="#990000" uuid="65a68d4b-0542-4e87-bed0-b02f66f84312"/>
+									<reportElement x="0" y="0" width="275" height="18" forecolor="#990000" uuid="65a68d4b-0542-4e87-bed0-b02f66f84312"/>
 									<textElement>
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
@@ -429,9 +461,9 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:cell>
 						</jr:groupHeader>
 						<jr:groupHeader groupName="strSGName">
-							<jr:cell style="table_TD" height="20" rowSpan="1">
+							<jr:cell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="3" y="0" width="209" height="18" forecolor="#009966" uuid="9c28661a-a9c5-4a1e-bd04-2073681fe22d"/>
+									<reportElement x="0" y="0" width="275" height="18" forecolor="#009966" uuid="9c28661a-a9c5-4a1e-bd04-2073681fe22d"/>
 									<textElement>
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
@@ -444,9 +476,9 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="2" y="0" width="18" height="30" uuid="4e439c76-010a-4c72-a366-21df172b087e"/>
+									<reportElement x="0" y="0" width="20" height="30" uuid="4e439c76-010a-4c72-a366-21df172b087e"/>
 									<textElement>
-										<font fontName="Serif" size="10" isBold="true"/>
+										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
 									<text><![CDATA[Sr No]]></text>
 								</staticText>
@@ -454,7 +486,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:tableFooter style="table_TD" height="20" rowSpan="1"/>
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="2" y="0" width="18" height="20" uuid="2937c4c6-394a-4c23-b680-c4b9097ec152"/>
+									<reportElement x="0" y="0" width="20" height="20" uuid="2937c4c6-394a-4c23-b680-c4b9097ec152"/>
 									<textElement>
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
@@ -462,20 +494,20 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="157" uuid="450de109-027c-418f-bcd0-f1f786a3da47">
+						<jr:column width="150" uuid="450de109-027c-418f-bcd0-f1f786a3da47">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="5" y="0" width="151" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
+									<reportElement x="0" y="0" width="150" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
 									<textElement>
-										<font fontName="Serif" size="10" isBold="true"/>
+										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
 									<text><![CDATA[Product Name]]></text>
 								</staticText>
 							</jr:tableHeader>
 							<jr:tableFooter style="table_TD" height="20" rowSpan="1">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="0" y="0" width="157" height="20" uuid="e392a263-7844-450d-a98d-4fba03649283">
+									<reportElement x="0" y="0" width="150" height="20" uuid="e392a263-7844-450d-a98d-4fba03649283">
 										<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 									</reportElement>
 									<textElement textAlignment="Left">
@@ -487,7 +519,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1">
 									<staticText>
-										<reportElement x="5" y="0" width="152" height="30" uuid="585878e7-2a91-4171-94c4-9024c8cca49e"/>
+										<reportElement x="0" y="0" width="150" height="30" uuid="585878e7-2a91-4171-94c4-9024c8cca49e"/>
 										<textElement>
 											<font fontName="Serif" size="10" isBold="true"/>
 										</textElement>
@@ -497,7 +529,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:groupFooter>
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField isStretchWithOverflow="true">
-									<reportElement x="5" y="0" width="152" height="20" uuid="b37c242e-8bb2-41e4-a0b5-d317a52c8261"/>
+									<reportElement x="0" y="0" width="150" height="20" uuid="b37c242e-8bb2-41e4-a0b5-d317a52c8261"/>
 									<textElement>
 										<font fontName="Serif" size="8"/>
 									</textElement>
@@ -505,27 +537,28 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="49" uuid="fca294e8-b631-4e8e-bc03-d10b2d65ab52">
+						<jr:column width="35" uuid="fca294e8-b631-4e8e-bc03-d10b2d65ab52">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="2" y="0" width="46" height="30" uuid="9b582deb-6612-4045-b982-5873a8e59f57"/>
+									<reportElement x="0" y="0" width="35" height="30" uuid="9b582deb-6612-4045-b982-5873a8e59f57"/>
+									<box rightPadding="1"/>
 									<textElement textAlignment="Right">
-										<font fontName="Serif" size="10" isBold="true"/>
+										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
-									<text><![CDATA[Required Quantity]]></text>
+									<text><![CDATA[Require Qty]]></text>
 								</staticText>
 							</jr:tableHeader>
 							<jr:tableFooter style="table_TD" height="20" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="49" height="20" uuid="27161084-fd0c-4ac0-bc75-700655bc707b"/>
+									<reportElement x="0" y="0" width="35" height="20" uuid="27161084-fd0c-4ac0-bc75-700655bc707b"/>
 									<text><![CDATA[Page]]></text>
 								</staticText>
 							</jr:tableFooter>
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1">
 									<textField>
-										<reportElement x="2" y="0" width="47" height="30" uuid="d11e6829-f0fb-4eba-9948-31ba980c16e6"/>
+										<reportElement x="0" y="0" width="35" height="30" uuid="d11e6829-f0fb-4eba-9948-31ba980c16e6"/>
 										<textElement textAlignment="Right">
 											<font fontName="Serif" size="10" isBold="true"/>
 										</textElement>
@@ -535,7 +568,8 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:groupFooter>
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField pattern="#,##0.###">
-									<reportElement x="2" y="0" width="47" height="20" uuid="d7d8612d-ceaa-4fe0-81f6-e262ab3e5bd8"/>
+									<reportElement x="0" y="0" width="35" height="20" uuid="d7d8612d-ceaa-4fe0-81f6-e262ab3e5bd8"/>
+									<box rightPadding="2"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif"/>
 									</textElement>
@@ -543,20 +577,20 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="43" uuid="fa1aeb41-adf6-4677-bef9-cf34849bc344">
+						<jr:column width="35" uuid="fa1aeb41-adf6-4677-bef9-cf34849bc344">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="2" y="0" width="41" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
+									<reportElement x="0" y="0" width="35" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
 									<textElement>
-										<font fontName="Serif" size="10" isBold="true"/>
+										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
-									<text><![CDATA[Actual  Quantity]]></text>
+									<text><![CDATA[Actual  Qty]]></text>
 								</staticText>
 							</jr:tableHeader>
 							<jr:tableFooter style="table_TD" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="43" height="20" uuid="b219d370-e82c-4301-bd94-34ece90662df"/>
+									<reportElement x="0" y="0" width="35" height="20" uuid="b219d370-e82c-4301-bd94-34ece90662df"/>
 									<textElement textAlignment="Right"/>
 									<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 								</textField>
@@ -565,6 +599,32 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 								<jr:cell height="30" rowSpan="1"/>
 							</jr:groupFooter>
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1"/>
+						</jr:column>
+						<jr:column width="35" uuid="c09e526f-a2a6-45e7-bb23-262289e40641">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="35" height="30" uuid="41b3d8b2-90a3-446f-9e81-c0a22f76fb4f"/>
+									<textElement>
+										<font fontName="Serif" size="9" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Return Qty]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:tableFooter style="table_TD" height="20" rowSpan="1"/>
+							<jr:groupFooter groupName="strSGName">
+								<jr:cell height="30" rowSpan="1"/>
+							</jr:groupFooter>
+							<jr:detailCell style="table 1_TD" height="20">
+								<textField pattern="#,##0.###">
+									<reportElement x="0" y="0" width="35" height="20" uuid="1fe58def-5427-41b2-bce1-c935b2bc4aa8"/>
+									<box rightPadding="2"/>
+									<textElement textAlignment="Right">
+										<font fontName="Serif"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{dblSalesReturnQty}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
 						</jr:column>
 					</jr:columnGroup>
 				</jr:table>

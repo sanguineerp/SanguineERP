@@ -264,6 +264,7 @@ public class clsSalesReturnController {
 							listSRTaxModel.add(ojInvoiceTaxDtlModel);
 						}
 						objHdModel.setDblTotalAmt(String.valueOf(totalTaxablAmt + totalTaxAmt));
+						objHdModel.setDblSubTotal(totalTaxablAmt - totalTaxAmt);
 						objSalesReturnService.funAddUpdateSalesReturnHd(objHdModel);
 					}
 					
@@ -377,7 +378,7 @@ public class clsSalesReturnController {
 		// Double amt=objBean.getDblSubTotalAmt()+taxamt;
 		srHdModel.setDblTotalAmt(String.valueOf(Double.parseDouble(objBean.getDblTotalAmt()) * currValue));
 		srHdModel.setDblTaxAmt(objBean.getDblTaxAmt() * currValue);
-		srHdModel.setDblSubTotal(Double.parseDouble(objBean.getDblTotalAmt())-objBean.getDblTaxAmt());
+		srHdModel.setDblSubTotal(Double.parseDouble(objBean.getDblTotalAmt()) - objBean.getDblTaxAmt());
 		srHdModel.setDblDiscPer(objBean.getDblDiscPer());
 		srHdModel.setDblDiscAmt(objBean.getDblDiscAmt() * currValue);
 		srHdModel.setStrCurrency(objBean.getStrCurrency());
@@ -647,7 +648,7 @@ public class clsSalesReturnController {
 			String strLocCode = req.getSession().getAttribute("locationCode").toString();
 			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 			String reportName ="";
-			if(clientCode.equals("226.001"))
+			if((clientCode.equals("226.001") ||clientCode.equals("319.001")))
 			{
 				reportName = servletContext.getRealPath("/WEB-INF/reports/webcrm/rptSalesReturnWithoutTaxSlip.jrxml");	
 				
@@ -714,7 +715,8 @@ public class clsSalesReturnController {
 			}
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			String taxSummary="";
-			if(!(clientCode.equals("226.001"))){
+			double dblTotalTax=0;
+			if(!(clientCode.equals("226.001") ||clientCode.equals("319.001"))){
 				
 			taxSummary = "select a.strTaxCode,a.strTaxDesc,a.strTaxableAmt/" + currValue + " as strTaxableAmt ,a.strTaxAmt/" + currValue + " as strTaxAmt,"
 					+ " b.dblTotalAmt/" + currValue + " as dblTotalAmt "
@@ -726,11 +728,9 @@ public class clsSalesReturnController {
 			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
 			JRDesignDataset taxSumDataset = (JRDesignDataset) datasetMap.get("dsTaxSummary");
 			taxSumDataset.setQuery(taxSummQuery);
-			
-			}
 			List list = objGlobalFunctionsService.funGetList(taxSummary, "sql");
-            double dblTotalTax=0;
-			if (list.size() > 0) {
+         
+            if (list.size() > 0 && list!=null) {
 
 				for (int i = 0; i < list.size(); i++) {
 					
@@ -738,6 +738,9 @@ public class clsSalesReturnController {
 					dblTotalTax=dblTotalTax+Double.parseDouble(obProdTax[3].toString());
 				}
 			}
+			
+			}
+			
 			
 			String sql = " select b.strProdCode, c.strProdName, b.dblQty, b.dblUnitPrice/" + currValue + " as dblPrice, "
 					+ " (b.dblPrice)/" + currValue + " as dblTotalAmt, b.strRemarks,a.dblTotalAmt/" + currValue + " as dblTotalAmt,(a.dblTotalAmt-"+dblTotalTax+") as dblSubTotal  "

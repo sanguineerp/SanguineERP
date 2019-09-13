@@ -91,7 +91,7 @@ public class clsShopOrderListReportController {
 			String propNameSql = "select a.strPropertyName  from dbwebmms.tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
 			List listPropName = objGlobalFunctionsService.funGetDataList(propNameSql, "sql");
 			String propName = "";
-			if (listPropName.size() > 0) {
+			if (listPropName!=null && listPropName.size() > 0) {
 				propName = listPropName.get(0).toString();
 			}
 
@@ -223,7 +223,6 @@ public class clsShopOrderListReportController {
 		try {
 
 			String type = objBean.getStrDocType();
-
 			Connection con = objGlobalFunctions.funGetConnection(req);
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String companyName = req.getSession().getAttribute("companyName").toString();
@@ -243,15 +242,9 @@ public class clsShopOrderListReportController {
 			String propNameSql = "select a.strPropertyName  from dbwebmms.tblpropertymaster a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' ";
 			List listPropName = objGlobalFunctionsService.funGetDataList(propNameSql, "sql");
 			String propName = "";
-			if (listPropName.size() > 0) {
+			if (listPropName!=null && listPropName.size() > 0) {
 				propName = listPropName.get(0).toString();
 			}
-
-			ArrayList fieldList = new ArrayList();
-
-			String sqlEvnQuery = " select  e.strPName,f.strGName,c.strSGName,d.strProdName,sum(b.dblQty) as dblQty  ,sum(b.dblAcceptQty) as dblAcceptQty ," + " a.strSOCode,a.strCustCode,c.intSortingNo " + " from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, tblproductmaster d ," + " tblpartymaster e ,tblgroupmaster f  " + " where a.strSOCode=b.strSOCode "
-					+ " and b.strProdCode=d.strProdCode " + " and d.strSGCode=c.strSGCode " + " and a.strCustCode=e.strPCode " + " and c.strGCode=f.strGCode " + " and a.strCustCode = '" + strCustName + "' and c.strGCode='" + strGCode + "' ";
-
 			String fromDate = objBean.getDtFromDate();
 			String toDate = objBean.getDtToDate();
 
@@ -280,9 +273,37 @@ public class clsShopOrderListReportController {
 			String dteFromFulDate = ffy + "-" + ffm + "-" + ffd;
 			String dteToFulDate = tfy + "-" + tfm + "-" + tfd;
 
+			ArrayList fieldList = new ArrayList();
+			String sqlEvnQuery="select p.custName,p.groupName,p.subGroupName,p.prodName,p.dblQty as salesq,p.dblAcceptQty,"
+					+ " p.soCode,p.custCode,p.sortNo ,IFNULL(q.dblRetQty,0)"
+					+ "from"
+					+ " (SELECT e.strPName as custName,f.strGName as groupName,c.strSGName as subGroupName,"
+					+ " d.strProdName as prodName, SUM(b.dblQty) AS dblQty, "
+					+ " SUM(b.dblAcceptQty) AS dblAcceptQty, a.strSOCode as soCode, a.strCustCode as custCode,c.intSortingNo as sortNo,b.strProdCode as prodCode"
+					+ " FROM tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f"
+					+ " WHERE a.strSOCode=b.strSOCode AND b.strProdCode=d.strProdCode "
+					+ " AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode AND c.strGCode=f.strGCode AND a.strCustCode = '" + strCustName + "' AND c.strGCode='" + strGCode + "'  and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' "
+					+ " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode"
+					+ " ORDER BY e.strPName,c.intSortingNo,d.strProdName) p"
+					+ " left outer join "
+					+ " (SELECT e.strPName as custName,f.strGName as groupName,c.strSGName as subGroupName,"
+					+ " d.strProdName as prodName, SUM(b.dblQty) AS dblRetQty, "
+					+ " '' as dblAcceptQty ,a.strCustCode as custCode,c.intSortingNo as sortNo,"
+					+ " b.strProdCode as prodCode"
+					+ " FROM tblsalesreturnhd a,tblsalesreturndtl b,tblsubgroupmaster c, tblproductmaster d, "
+					+ " tblpartymaster e,tblgroupmaster f"
+					+ " WHERE a.strSRCode=b.strSRCode AND b.strProdCode=d.strProdCode "
+					+ " AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode AND c.strGCode=f.strGCode "
+					+ " AND a.strCustCode = '" + strCustName + "' AND c.strGCode='" + strGCode + "'  and  DATE(a.dteSRDate)  between '" + dteFromDate + "' and '" + dteToDate + "' "
+					+ " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode"
+					+ " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q on p.prodCode=q.prodCode";
+			/*String sqlEvnQuery = " select  e.strPName,f.strGName,c.strSGName,d.strProdName,sum(b.dblQty) as dblQty  ,sum(b.dblAcceptQty) as dblAcceptQty ," + " a.strSOCode,a.strCustCode,c.intSortingNo " + " from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, tblproductmaster d ," + " tblpartymaster e ,tblgroupmaster f  " + " where a.strSOCode=b.strSOCode "
+					+ " and b.strProdCode=d.strProdCode " + " and d.strSGCode=c.strSGCode " + " and a.strCustCode=e.strPCode " + " and c.strGCode=f.strGCode " + " and a.strCustCode = '" + strCustName + "' and c.strGCode='" + strGCode + "' ";
+*/
+			
 			HashMap<String, String> hmCustWiseSub = new HashMap<String, String>();
 
-			sqlEvnQuery = sqlEvnQuery + " and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  " + " ORDER BY e.strPName,c.intSortingNo,d.strProdName   ";
+			//sqlEvnQuery = sqlEvnQuery + " and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  " + " ORDER BY e.strPName,c.intSortingNo,d.strProdName   ";
 
 			/*
 			 * @ listEvenProdDtl is for main product data
@@ -290,9 +311,32 @@ public class clsShopOrderListReportController {
 
 			List listEvenProdDtl = objGlobalFunctionsService.funGetDataList(sqlEvnQuery, "sql");
 
-			String sqlSubGroup = " select  e.strPName,c.strSGName from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, " + " tblproductmaster d , tblpartymaster e ,tblgroupmaster f " + " where a.strSOCode=b.strSOCode  and b.strProdCode=d.strProdCode  " + "and d.strSGCode=c.strSGCode  and a.strCustCode=e.strPCode " + "and c.strGCode=f.strGCode and a.strCustCode  =  '" + strCustName
+			/*String sqlSubGroup = " select  e.strPName,c.strSGName from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, " + " tblproductmaster d , tblpartymaster e ,tblgroupmaster f " + " where a.strSOCode=b.strSOCode  and b.strProdCode=d.strProdCode  " + "and d.strSGCode=c.strSGCode  and a.strCustCode=e.strPCode " + "and c.strGCode=f.strGCode and a.strCustCode  =  '" + strCustName
 					+ "' and c.strGCode='" + strGCode + "' " + " and date(a.dteSODate) " + " between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by d.strSGCode,a.strCustCode " + " ORDER BY e.strPName,c.intSortingNo,d.strProdName   ";
-
+*/        
+            String sqlSubGroup="select p.custName,p.groupName,p.subGroupName,p.prodName,p.dblQty as salesq,p.dblAcceptQty,"
+			+ " p.soCode,p.custCode,p.sortNo ,IFNULL(q.dblRetQty,0)"
+			+ "from"
+			+ " (SELECT e.strPName as custName,f.strGName as groupName,c.strSGName as subGroupName,"
+			+ " d.strProdName as prodName, SUM(b.dblQty) AS dblQty, "
+			+ " SUM(b.dblAcceptQty) AS dblAcceptQty, a.strSOCode as soCode, a.strCustCode as custCode,c.intSortingNo as sortNo,b.strProdCode as prodCode"
+			+ " FROM tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f"
+			+ " WHERE a.strSOCode=b.strSOCode AND b.strProdCode=d.strProdCode "
+			+ " AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode AND c.strGCode=f.strGCode AND a.strCustCode = '" + strCustName + "' AND c.strGCode='" + strGCode + "'  and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' "
+			+ " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode"
+			+ " ORDER BY e.strPName,c.intSortingNo,d.strProdName) p"
+			+ " left outer join "
+			+ " (SELECT e.strPName as custName,f.strGName as groupName,c.strSGName as subGroupName,"
+			+ " d.strProdName as prodName, SUM(b.dblQty) AS dblRetQty, "
+			+ " '' as dblAcceptQty ,a.strCustCode as custCode,c.intSortingNo as sortNo,"
+			+ " b.strProdCode as prodCode"
+			+ " FROM tblsalesreturnhd a,tblsalesreturndtl b,tblsubgroupmaster c, tblproductmaster d, "
+			+ " tblpartymaster e,tblgroupmaster f"
+			+ " WHERE a.strSRCode=b.strSRCode AND b.strProdCode=d.strProdCode "
+			+ " AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode AND c.strGCode=f.strGCode "
+			+ " AND a.strCustCode = '" + strCustName + "' AND c.strGCode='" + strGCode + "'  and  DATE(a.dteSRDate)  between '" + dteFromDate + "' and '" + dteToDate + "' "
+			+ " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode"
+			+ " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q on p.prodCode=q.prodCode";
 			List listCustSubgroup = objGlobalFunctionsService.funGetDataList(sqlSubGroup, "sql");
 			Map<String, List<String>> hmCustSG = new HashMap<String, List<String>>();
 			// Map<String,String> hmCustSG=new HashMap<String,String>();
@@ -351,6 +395,7 @@ public class clsShopOrderListReportController {
 				objShopBean.setStrProdName(obj[3].toString());
 				objShopBean.setDblRequiredQty(Double.parseDouble(obj[4].toString()));
 				objShopBean.setIntSortingNo(Integer.parseInt(obj[8].toString()));
+				objShopBean.setDblSalesReturnQty(Double.parseDouble(obj[9].toString()));
 
 				// for Even odd half half Print logic only Start
 				objShopBean.setIntSrNo(srNo);

@@ -14,6 +14,19 @@ public class clsShopOrderBean {
 	private int count;
 	private int intSrNo;
 	private int intSortingNo;
+	private double dblSalesReturnQty;
+	
+
+	public static Comparator<clsShopOrderBean> getIntSortingNoComparator() {
+		return intSortingNoComparator;
+	}
+
+	public static void setIntSortingNoComparator(
+			Comparator<clsShopOrderBean> intSortingNoComparator) {
+		clsShopOrderBean.intSortingNoComparator = intSortingNoComparator;
+	}
+
+
 
 	public clsShopOrderBean() {
 	}
@@ -27,6 +40,13 @@ public class clsShopOrderBean {
 		this.count = count;
 		this.intSrNo = intSrNo;
 		this.intSortingNo = intSortingNo;
+	}
+	public double getDblSalesReturnQty() {
+		return dblSalesReturnQty;
+	}
+
+	public void setDblSalesReturnQty(double dblSalesReturnQty) {
+		this.dblSalesReturnQty = dblSalesReturnQty;
 	}
 
 	public String getStrPName() {

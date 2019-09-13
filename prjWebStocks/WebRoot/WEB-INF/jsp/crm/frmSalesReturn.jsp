@@ -1444,6 +1444,7 @@ function funHelp1(){
 		$("#txtDblConversion").val(currValue);
 	}	
 	
+	
 </script>
 <body onload="funOnLoad();">
 	<div id="formHeading">

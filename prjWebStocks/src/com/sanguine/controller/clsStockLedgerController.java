@@ -459,7 +459,7 @@ public class clsStockLedgerController {
 
 			+ "union all "
 
-			+ "select a.dtSADate TransDate,12 TransNo, 'StkAdj Out' TransType, a.strSACode RefNo, 0 Receipt, ifnull(sum(b.dblQty),0) Issue " + ",c.strLocName Name, b.dblRate Rate " + "from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
+			+ "select a.dtSADate TransDate,12 TransNo, IF(a.strNarration like '%Sales Data%','StkAdj Out (POS Consumption)','StkAdj Out (Phy Stock)')  TransType, a.strSACode RefNo, 0 Receipt, ifnull(sum(b.dblQty),0) Issue " + ",c.strLocName Name, b.dblRate Rate " + "from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -694,7 +694,7 @@ public class clsStockLedgerController {
 
 			+ "union all "
 
-			+ "select a.dtSADate TransDate,12 TransNo, 'StkAdj Out' TransType, a.strSACode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name, b.dblRate Rate "
+			+ "select a.dtSADate TransDate,12 TransNo, IF(a.strNarration like '%Sales Data%','StkAdj Out (POS Consumption)','StkAdj Out (Phy Stock)')  TransType, a.strSACode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name, b.dblRate Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
 					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString " + " from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c, tblproductmaster d " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
@@ -1089,7 +1089,7 @@ public class clsStockLedgerController {
 
 			+ "union all "
 
-			+ "select a.dtSADate TransDate,12 TransNo, 'StkAdj Out' TransType, a.strSACode RefNo, 0 Receipt, ifnull(sum(b.dblQty),0) Issue " + ",c.strLocName Name, b.dblRate Rate " + "from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
+			+ "select a.dtSADate TransDate,12 TransNo, IF(a.strNarration like '%Sales Data%','StkAdj Out (POS Consumption)','StkAdj Out (Phy Stock)')  TransType, a.strSACode RefNo, 0 Receipt, ifnull(sum(b.dblQty),0) Issue " + ",c.strLocName Name, b.dblRate Rate " + "from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -1317,7 +1317,7 @@ public class clsStockLedgerController {
 
 			+ "union all "
 
-			+ "select a.dtSADate TransDate,12 TransNo, 'StkAdj Out' TransType, a.strSACode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name, b.dblRate Rate "
+			+ "select a.dtSADate TransDate,12 TransNo,IF(a.strNarration like '%Sales Data%','StkAdj Out (POS Consumption)','StkAdj Out (Phy Stock)')  TransType, a.strSACode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name, b.dblRate Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
 					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString " + " from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c, tblproductmaster d " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
@@ -1815,8 +1815,13 @@ public class clsStockLedgerController {
 	private void funCallJsperReport(@RequestParam("docCode") String docCode, HttpServletResponse resp, HttpServletRequest req) {
 		String[] sp = docCode.split(",");
 		docCode = sp[0];
+		String sp1=sp[1];
+		if(sp[1].contains("("))
+		{
+			sp1=sp[1].split("\\(")[0].trim();
+		}
 		String currCode = req.getSession().getAttribute("currencyCode").toString();
-		switch (sp[1]) {
+		switch (sp1) {
 		case "MIS In":
 			objMIS.funCallReport(docCode, "pdf", resp, req);
 			break;
@@ -2267,7 +2272,7 @@ public class clsStockLedgerController {
 
 			+ "union all "
 
-			+ "select a.dtSADate TransDate,12 TransNo, 'StkAdj Out' TransType, a.strSACode RefNo, 0 Receipt, ifnull(sum(b.dblQty),0) Issue " + ",c.strLocName Name, b.dblRate Rate " + "from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
+			+ "select a.dtSADate TransDate,12 TransNo, IF(a.strNarration like '%Sales Data%','StkAdj Out (POS Consumption)','StkAdj Out (Phy Stock)')  TransType, a.strSACode RefNo, 0 Receipt, ifnull(sum(b.dblQty),0) Issue " + ",c.strLocName Name, b.dblRate Rate " + "from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -2501,7 +2506,7 @@ public class clsStockLedgerController {
 
 			+ "union all "
 
-			+ "select a.dtSADate TransDate,12 TransNo, 'StkAdj Out' TransType, a.strSACode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name, b.dblRate Rate "
+			+ "select a.dtSADate TransDate,12 TransNo, IF(a.strNarration like '%Sales Data%','StkAdj Out (POS Consumption)','StkAdj Out (Phy Stock)')  TransType, a.strSACode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name, b.dblRate Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
 					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString " + " from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c, tblproductmaster d " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";

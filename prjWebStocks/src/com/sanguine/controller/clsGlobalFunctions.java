@@ -238,12 +238,14 @@ public class clsGlobalFunctions {
 				
 			}
 			
-		} else if (pattern.equals("yyyy/MM/dd")) // From Database to JSP
+		} 
+		else if (pattern.equals("yyyy/MM/dd")) // From Database to JSP
 		{
 			String[] sp = date.split(" ");
 			String[] spDate = sp[0].split("-");
 			retDate = spDate[2] + "-" + spDate[1] + "-" + spDate[0];
-		} else if (pattern.equals("dd-MM-yyyy")) // For Jasper Report show
+		}
+		else if (pattern.equals("dd-MM-yyyy")) // For Jasper Report show
 		{
 			String[] sp = date.split(" ");
 			String[] spDate = sp[0].split("-");

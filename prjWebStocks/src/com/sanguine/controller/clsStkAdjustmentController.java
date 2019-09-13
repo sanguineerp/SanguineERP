@@ -560,7 +560,7 @@ public class clsStkAdjustmentController {
 				Object[] hdArr = (Object[]) listProdHD.get(j);
 				{
 					strSACode = hdArr[0].toString();
-					dtSADate = hdArr[1].toString();
+					dtSADate = objGlobalFunctions.funGetDate("dd-MM-yyyy", hdArr[1].toString().split(" ")[0]);
 					strLocCode = hdArr[2].toString();
 					strLocName = hdArr[3].toString();
 					strNarration = hdArr[4].toString();
