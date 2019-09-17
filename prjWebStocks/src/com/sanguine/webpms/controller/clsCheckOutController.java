@@ -93,10 +93,12 @@ public class clsCheckOutController {
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
 		clsCheckOutBean objBean = new clsCheckOutBean();
 		String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", request.getSession().getAttribute("PMSDate").toString());
-		;
+		
 		// String
 		// PMSStartDay=request.getSession().getAttribute("PMSStartDay").toString();
+		
 		model.put("PMSDate", PMSDate);
+		request.getSession().setAttribute("checkOutNo", "");
 		return new ModelAndView("frmCheckOut", "command", objBean);
 	}
 
@@ -503,8 +505,15 @@ public class clsCheckOutController {
 	@RequestMapping(value = "/frmCheckOut1", method = RequestMethod.GET)
 	public ModelAndView funOpenForm1(Map<String, Object> model, HttpServletRequest request) {
 		String urlHits = "1";
-		String checkout = request.getParameter("docCode").toString();
-
+		String strFolioNo = request.getParameter("docCode").toString();
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String strRoomNo="";
+		String sqlRoomNo = "select a.strRoomNo from tblfoliohd a where a.strFolioNo='"+strFolioNo+"' and a.strClientCode='"+clientCode+"'";
+		List listRoomNo = objGlobalFunctionsService.funGetListModuleWise(sqlRoomNo, "sql");
+		if(listRoomNo!=null && listRoomNo.size()>0)
+		{
+			strRoomNo = listRoomNo.get(0).toString();
+		}
 		try {
 			urlHits = request.getParameter("saddr").toString();
 
@@ -514,7 +523,7 @@ public class clsCheckOutController {
 
 		model.put("urlHits", urlHits);
 
-		request.getSession().setAttribute("checkOutNo", checkout);
+		request.getSession().setAttribute("checkOutNo", strRoomNo);
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmCheckOut_1", "command", new clsCheckOutBean());

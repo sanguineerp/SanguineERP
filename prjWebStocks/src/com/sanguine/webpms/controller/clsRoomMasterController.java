@@ -69,6 +69,31 @@ public class clsRoomMasterController {
 
 		return objModel;
 	}
+	//Set room No
+	
+	@RequestMapping(value = "/setRoomCode", method = RequestMethod.GET)
+	public @ResponseBody clsRoomMasterModel funSetRoomData(@RequestParam("roomCode") String roomCode,@RequestParam("dteArrDate") String dteArrDate, HttpServletRequest req) {
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String arrivalDate = objGlobal.funGetDate("yyyy-MM-dd", dteArrDate);
+		clsRoomMasterModel objModel = objRoomMasterService.funGetRoomMaster(roomCode, clientCode);
+		if (objModel == null) {
+			objModel = new clsRoomMasterModel();
+			objModel.setStrRoomCode("Invalid Code");
+		}
+		else
+		{
+			String sqlROomData = "select a.strReservationNo from tblreservationdtl a ,tblreservationhd b where a.strReservationNo=b.strReservationNo and "
+					+ "'"+arrivalDate+"' between Date(b.dteArrivalDate) and Date(b.dteDepartureDate) and a.strRoomNo='"+roomCode+"' "
+					+ "and a.strClientCode='"+clientCode+"'";
+			List listRoom = objGlobalFunctionsService.funGetListModuleWise(sqlROomData, "sql");
+			if(listRoom.size()>0)
+			{
+				objModel.setStrRoomCode("Invalid");
+			}
+		}
+
+		return objModel;
+	}
 
 	// Save or Update RoomMaster
 	@RequestMapping(value = "/saveRoomMaster", method = RequestMethod.POST)

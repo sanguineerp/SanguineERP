@@ -269,6 +269,7 @@ public class clsPMSPaymentController {
 				
 				List listDiscount = objGlobalFunctionsService.funGetListModuleWise(sqlDiscount, "sql");
 				double dblDiscount=0.0;
+				double dblTotalDiscount=0.0;
 				double terrifAmt = 0.0;
 				if(listDiscount!=null)
 				{
@@ -279,13 +280,13 @@ public class clsPMSPaymentController {
 						Object[] objDiscount=(Object[])listDiscount.get(j);
 						dblDiscount=Double.parseDouble(objDiscount[0].toString());	
 						terrifAmt=Double.parseDouble(objDiscount[1].toString());	
-						dblDiscount = (terrifAmt*dblDiscount)/100;
+						dblTotalDiscount += (terrifAmt*dblDiscount)/100;
 						}
 					}
 				}
 				
 				NumberFormat formatter = new DecimalFormat("0.00");
-				double dblBal = Double.parseDouble(obj[5].toString())-(reciptAmt+advanceAmt)-dblDiscount;
+				double dblBal = Double.parseDouble(obj[5].toString())-(reciptAmt+advanceAmt)-dblTotalDiscount;
 				objPaymentReciptBean.setStrGuestCode(obj[0].toString());
 				objPaymentReciptBean.setStrFirstName(obj[1].toString());
 				objPaymentReciptBean.setStrMiddleName(obj[2].toString());

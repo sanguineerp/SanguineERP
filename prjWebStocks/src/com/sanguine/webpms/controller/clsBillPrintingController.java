@@ -79,12 +79,26 @@ public class clsBillPrintingController {
 	public ModelAndView funOpenForm(Map<String, Object> model,
 			HttpServletRequest request) {
 		String urlHits = "1";
+		String strBillNo="";
+		
+		if(request.getParameter("docCode")==null)
+		{
+			strBillNo="";
+			request.getSession().setAttribute("BillNo", strBillNo);
+		}
+		else
+		{
+			strBillNo = request.getParameter("docCode").toString();
+			request.getSession().setAttribute("BillNo", strBillNo);
+		}
+		
 		try {
 			urlHits = request.getParameter("saddr").toString();
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
 		model.put("urlHits", urlHits);
+		
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmBillPrinting_1", "command",
 					new clsBillPrintingBean());
@@ -336,7 +350,7 @@ public class clsBillPrintingController {
 							+ "IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,"
 							+ "b.dblBalanceAmt ,ifnull(a.strReservationNo,'') ,b.strPerticulars FROM tblbillhd a INNER JOIN tblbilldtl b "
 							+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo AND b.strPerticulars IN("+billNames.substring(0, billNames.length()-1)+") "
-							+ "WHERE a.strBillNo='"+billNo+"' order by b.dblCreditAmt ";
+							+ "WHERE a.strBillNo='"+billNo+"' order by b.dblCreditAmt ,b.dteDocDate";
 				}
 				
 				// + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '"
@@ -1023,12 +1037,12 @@ public class clsBillPrintingController {
 							+ arr[19].toString() + "," + arr[20].toString();
 				}
 
-				if (!arr[15].toString().equals("")) {
+				
 					GSTNo = arr[31].toString();
-				}
-				if (!arr[16].toString().equals("")) {
+				
+				
 					companyName = arr[32].toString();
-				}
+				
 				String strMobileNo = arr[33].toString();
 
 				
@@ -1131,7 +1145,7 @@ public class clsBillPrintingController {
 				
 
 				// get bill details
-				String sqlBillDtl = "SELECT date(b.dteDocDate),b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt,a.strBillNo,c.strRoomDesc,a.strFolioNo"
+				String sqlBillDtl = "SELECT date(b.dteDocDate),b.strDocNo,IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt,a.strBillNo,c.strRoomDesc,a.strFolioNo"
 						+ " FROM tblbillhd a inner join tblbilldtl b ON a.strFolioNo=b.strFolioNo ,tblroom c "
 						+ " WHERE a.strCheckInNo='"
 						+ checkInNo
@@ -1199,24 +1213,19 @@ public class clsBillPrintingController {
 							billPrintingBean = new clsBillPrintingBean();
 							billPrintingBean.setDteDocDate(objGlobal.funGetDate("dd=MM=yyyy",arrObjBillTaxDtl[0]
 									.toString()));
-							billPrintingBean.setStrDocNo(arrObjBillTaxDtl[1]
-									.toString());
-							billPrintingBean
-									.setStrPerticulars(arrObjBillTaxDtl[2]
-											.toString());
-							billPrintingBean
-									.setDblDebitAmt(Double
-											.parseDouble(arrObjBillTaxDtl[3]
-													.toString()));
-							billPrintingBean
-									.setDblCreditAmt(Double
-											.parseDouble(arrObjBillTaxDtl[4]
-													.toString()));
-							billPrintingBean
-									.setDblBalanceAmt(Double
-											.parseDouble(arrObjBillTaxDtl[5]
-													.toString()));
+							if(folioArr[7].toString().contains("POS"))
+							{
+							}
+							else
+							{
+							
+							billPrintingBean.setStrDocNo(arrObjBillTaxDtl[1].toString());
+							billPrintingBean.setStrPerticulars(arrObjBillTaxDtl[2].toString());
+							billPrintingBean.setDblDebitAmt(Double.parseDouble(arrObjBillTaxDtl[3].toString()));
+							billPrintingBean.setDblCreditAmt(Double.parseDouble(arrObjBillTaxDtl[4].toString()));
+							billPrintingBean.setDblBalanceAmt(Double.parseDouble(arrObjBillTaxDtl[5].toString()));
 							dataList.add(billPrintingBean);
+						}
 						}
 					}
 				}
@@ -1292,16 +1301,12 @@ public class clsBillPrintingController {
 							String creditAmount = paymentArr[4].toString();
 							String balance = paymentArr[5].toString();
 
-							folioPrintingBean.setDteDocDate(objGlobal
-									.funGetDate("dd-MM-yyyy", (docDate)));
+							folioPrintingBean.setDteDocDate(objGlobal.funGetDate("dd-MM-yyyy", (docDate)));
 							folioPrintingBean.setStrDocNo(docNo);
 							folioPrintingBean.setStrPerticulars(particulars);
-							folioPrintingBean.setDblDebitAmt(Double
-									.parseDouble(debitAmount));
-							folioPrintingBean.setDblCreditAmt(Double
-									.parseDouble(creditAmount));
-							folioPrintingBean.setDblBalanceAmt(Double
-									.parseDouble(balance));
+							folioPrintingBean.setDblDebitAmt(Double.parseDouble(debitAmount));
+							folioPrintingBean.setDblCreditAmt(Double.parseDouble(creditAmount));
+							folioPrintingBean.setDblBalanceAmt(Double.parseDouble(balance));
 
 							dataList.add(folioPrintingBean);
 						}

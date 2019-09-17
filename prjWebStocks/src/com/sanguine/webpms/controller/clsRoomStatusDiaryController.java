@@ -1,8 +1,10 @@
 package com.sanguine.webpms.controller;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,12 +19,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
+import com.itextpdf.text.pdf.hyphenation.TernaryTree.Iterator;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webpms.bean.clsGuestListReportBean;
+import com.sanguine.webpms.bean.clsGuestMasterBean;
 import com.sanguine.webpms.bean.clsRoomStatusDiaryBean;
 import com.sanguine.webpms.bean.clsRoomStatusDtlBean;
+import com.sanguine.webpms.model.clsFolioDtlModel;
+import com.sanguine.webpms.model.clsFolioHdModel;
 import com.sanguine.webpms.service.clsRoomMasterService;
 
 @Controller
@@ -40,14 +48,27 @@ public class clsRoomStatusDiaryController {
 	@RequestMapping(value = "/frmRoomStatusDiary", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
 		String urlHits = "1";
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		try {
 			urlHits = request.getParameter("saddr").toString();
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
+		List listRoom = new ArrayList<>();
+		
+		String sqlRoomType = "select a.strRoomTypeDesc from tblroomtypemaster a where a.strClientCode='"+clientCode+"'";
+		listRoom = objGlobalFunctionsService.funGetListModuleWise(sqlRoomType, "sql");
+		//listRoom.add("Select room type");
+		listRoom.add(0, "SELECT ROOM TYPE");
+		/*for (int cnt1 = 0; cnt1 < listRoom.size(); cnt1++) 
+		{
+			Object[] arrObjRooms = (Object[]) listRoom.get(cnt1);
+			model.put("prefix", arrObjRooms[cnt1]).toString();
+		}*/
+		model.put("prefix", listRoom);
 		model.put("urlHits", urlHits);
 
-		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		
 
 		if (urlHits.equalsIgnoreCase("1")) {
 			return new ModelAndView("frmRoomStatusDiary", "command", new clsRoomStatusDiaryBean());
@@ -89,683 +110,454 @@ public class clsRoomStatusDiaryController {
 	public @ResponseBody List funLoadRoomStatusDetails(@RequestParam("viewDate") String viewDate, HttpServletRequest request) {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
+		String PMSDate=objGlobal.funGetDate("yyyy-MM-dd",request.getSession().getAttribute("PMSDate").toString());
 		String date1 = objGlobal.funGetDate("yyyy-MM-dd", viewDate);
 		String[] arrViewDate = viewDate.split("-");
-
-		List<clsRoomStatusDtlBean> listRoomStatusBeanDtl = new ArrayList<clsRoomStatusDtlBean>();
-		String sql = "select a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc,a.strStatus " + " from tblroom a,tblroomtypemaster b " + " where a.strRoomTypeCode=b.strRoomTypeCode";
+		clsRoomStatusDtlBean objRoomStatusDtl=null;
+		clsGuestMasterBean objGuestDtl = null;
+		List objTemp = null;
+		List listRoomStatusBeanDtl = new ArrayList<>();
+		Map objRoomTypeWise = new HashMap<>();
+		Map returnObject = new HashMap<>();
+		String sql = "select a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc,a.strStatus from tblroom a,tblroomtypemaster b where a.strRoomTypeCode=b.strRoomTypeCode"
+				+ " order by b.strRoomTypeCode,a.strRoomDesc; ";
 		List listRoom = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-
-		for (int cnt1 = 0; cnt1 < listRoom.size(); cnt1++) {
-			GregorianCalendar cd = new GregorianCalendar();
-			cd.set(Integer.parseInt(arrViewDate[2]) - 1900, Integer.parseInt(arrViewDate[1]) - 1, Integer.parseInt(arrViewDate[0]));
-			Date dt = new Date(Integer.parseInt(arrViewDate[2]) - 1900, Integer.parseInt(arrViewDate[1]) - 1, Integer.parseInt(arrViewDate[0]));
-			cd.setTime(dt);
-
+		objTemp=new ArrayList<>();
+		for (int cnt1 = 0; cnt1 < listRoom.size(); cnt1++) 
+		{
+			objRoomStatusDtl = new clsRoomStatusDtlBean();
 			Object[] arrObjRooms = (Object[]) listRoom.get(cnt1);
-			clsRoomStatusDtlBean objRoomStatusDtl = new clsRoomStatusDtlBean();
 			objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
 			objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
 			objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
 			TreeMap<Integer, List<clsGuestListReportBean>> mapGuestListPerDay=new TreeMap<>();
 			List<clsGuestListReportBean> listMainGuestDetailsBean=new ArrayList<>();
-		
-			for (int cnt = 0; cnt < 7; cnt++) {
-				List<clsGuestListReportBean> listGuestDetailsBean=new ArrayList<>();
-				String day = funGetDayOfWeek(cd.getTime().getDay());
-				String transDate = (cd.getTime().getYear() + 1900) + "-" + (cd.getTime().getMonth() + 1) + "-" + cd.getTime().getDate();
-				String date = day + " " + cd.getTime().getDate() + "-" + (cd.getTime().getMonth() + 1) + "-" + (cd.getTime().getYear() + 1900);
-				// System.out.println(date);
-				cd.add(Calendar.DATE, 1);
-				
-				// New Added
-				
-				sql = "select a.strReservationNo,f.strRoomCode,f.strRoomDesc,concat(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName)" + " ,'Checked Out',DATE_FORMAT(DATE(c.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(c.dteDepartureDate),'%d-%m-%Y')" + ",a.strCheckInNo ,c.tmeArrivalTime,c.tmeDepartureTime" + " from tblbillhd a,tblcheckinhd c,tblcheckindtl d,tblguestmaster e,tblroom f "
-						+ " where a.strCheckInNo=c.strCheckInNo and c.strCheckInNo=d.strCheckInNo and d.strGuestCode=e.strGuestCode " + " and a.strRoomNo=f.strRoomCode and date(a.dteBillDate) >= '" + transDate + "' and date(c.dteArrivalDate) <= '" + transDate + "' " + " and a.strRoomNo='" + arrObjRooms[0].toString() + "'";
-				
 			
-				
-				List listCheckOutRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-				if (listCheckOutRoomDtl.size() > 0) {
-					Object[] arrObjRoomDtl = (Object[]) listCheckOutRoomDtl.get(0);
-					
-					String strCheckInTime = arrObjRoomDtl[8].toString();
-					String strCheckOutTime = arrObjRoomDtl[9].toString();
-					strCheckInTime.toLowerCase();
-					clsGuestListReportBean objGuestStatusDtl = new clsGuestListReportBean();
-					objGuestStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
-					objGuestStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString()+" "+strCheckInTime);
-					objGuestStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString()+" "+strCheckOutTime);
-					objGuestStatusDtl.setStrRoomNo(arrObjRoomDtl[0].toString());
-					
-					
-					objRoomStatusDtl.setStrReservationNo(arrObjRoomDtl[0].toString());
-					objRoomStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
-					if(objRoomStatusDtl.getStrRoomStatus()!=null && objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("")){
-						objRoomStatusDtl.setStrRoomStatus(arrObjRoomDtl[4].toString());
-					}
-					else
-					{
-						
-					}
-					objRoomStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
-					objRoomStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
-					objRoomStatusDtl.setStrCheckInNo(arrObjRoomDtl[7].toString());
-					
-					if(mapGuestListPerDay.size()>0)
-					{
-						if(mapGuestListPerDay.containsKey(cnt))
-						{
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							listGuestDetailsBean.add(objGuestStatusDtl);
-							mapGuestListPerDay.put(cnt, listGuestDetailsBean);
-						}
-						else
-						{
-							listGuestDetailsBean.add(objGuestStatusDtl);
-							mapGuestListPerDay.put(cnt, listGuestDetailsBean);
-						}
-					}
-					else
-					{
-						listGuestDetailsBean.add(objGuestStatusDtl);
-						mapGuestListPerDay.put(cnt, listGuestDetailsBean);
-					}
-
-					/*if (cnt == 0) {
-						objRoomStatusDtl.setStrDay1(arrObjRoomDtl[3].toString());
-					} else if (cnt == 1) {
-						objRoomStatusDtl.setStrDay2(arrObjRoomDtl[3].toString());
-					} else if (cnt == 2) {
-						objRoomStatusDtl.setStrDay3(arrObjRoomDtl[3].toString());
-					} else if (cnt == 3) {
-						objRoomStatusDtl.setStrDay4(arrObjRoomDtl[3].toString());
-					} else if (cnt == 4) {
-						objRoomStatusDtl.setStrDay5(arrObjRoomDtl[3].toString());
-					} else if (cnt == 5) {
-						objRoomStatusDtl.setStrDay6(arrObjRoomDtl[3].toString());
-					} else if (cnt == 6) {
-						objRoomStatusDtl.setStrDay7(arrObjRoomDtl[3].toString());
-					}*/
-					
-					if (cnt == 0) 
-					{
-						//objRoomStatusDtl.setStrDay1(arrObjRoomDtl[3].toString());
-						listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-						 StringBuilder guestDtls=new StringBuilder();
-						 for(int k=0;k<listGuestDetailsBean.size();k++)
-						 {
-							 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-							 guestDtls.append(" "+objGuest.getStrGuestName());
-						 }
-						 objRoomStatusDtl.setStrDay1(" "+guestDtls.toString());
-					} 
-					else if (cnt == 1) 
-					{
-						//objRoomStatusDtl.setStrDay2(arrObjRoomDtl[3].toString());
-						listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-						 StringBuilder guestDtls=new StringBuilder();
-						 for(int k=0;k<listGuestDetailsBean.size();k++)
-						 {
-							 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-							 guestDtls.append(" "+objGuest.getStrGuestName());
-						 }
-						 objRoomStatusDtl.setStrDay2(" "+guestDtls.toString());
-					} 
-					else if (cnt == 2) 
-					{
-						//objRoomStatusDtl.setStrDay3(arrObjRoomDtl[3].toString());
-						listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-						 StringBuilder guestDtls=new StringBuilder();
-						 for(int k=0;k<listGuestDetailsBean.size();k++)
-						 {
-							 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-							 guestDtls.append(" "+objGuest.getStrGuestName());
-						 }
-						 objRoomStatusDtl.setStrDay3(" "+guestDtls.toString());
-					} else if (cnt == 3) {
-						//objRoomStatusDtl.setStrDay4(arrObjRoomDtl[3].toString());
-						listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-						 StringBuilder guestDtls=new StringBuilder();
-						 for(int k=0;k<listGuestDetailsBean.size();k++)
-						 {
-							 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-							 guestDtls.append(" "+objGuest.getStrGuestName());
-						 }
-						 objRoomStatusDtl.setStrDay4(" "+guestDtls.toString());
-					} else if (cnt == 4) {
-						//objRoomStatusDtl.setStrDay5(arrObjRoomDtl[3].toString());
-						listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-						 StringBuilder guestDtls=new StringBuilder();
-						 for(int k=0;k<listGuestDetailsBean.size();k++)
-						 {
-							 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-							 guestDtls.append(" "+objGuest.getStrGuestName());
-						 }
-						 objRoomStatusDtl.setStrDay5(" "+guestDtls.toString());
-					} else if (cnt == 5) {
-						//objRoomStatusDtl.setStrDay6(arrObjRoomDtl[3].toString());
-						listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-						 StringBuilder guestDtls=new StringBuilder();
-						 for(int k=0;k<listGuestDetailsBean.size();k++)
-						 {
-							 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-							 guestDtls.append(" "+objGuest.getStrGuestName());
-						 }
-						 objRoomStatusDtl.setStrDay6(" "+guestDtls.toString());
-					} else if (cnt == 6) {
-						//objRoomStatusDtl.setStrDay7(arrObjRoomDtl[3].toString());
-						listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-						 StringBuilder guestDtls=new StringBuilder();
-						 for(int k=0;k<listGuestDetailsBean.size();k++)
-						 {
-							 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-							 guestDtls.append(" "+objGuest.getStrGuestName());
-						 }
-						 objRoomStatusDtl.setStrDay7(" "+guestDtls.toString());
-					}
-				}
-				
-				
-
-//				sql = "select a.strReservationNo,d.strRoomCode,d.strRoomDesc" + " ,concat(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),e.strBookingTypeDesc,DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y') " + " from tblreservationhd a,tblreservationdtl b,tblguestmaster c,tblroom d ,tblbookingtype e "
-//						+ " where a.strReservationNo=b.strReservationNo and b.strGuestCode=c.strGuestCode " + " and b.strRoomNo=d.strRoomCode and a.strBookingTypeCode=e.strBookingTypeCode " + " and date(a.dteDepartureDate) >= '" + transDate + "' and date(a.dteArrivalDate) <= '" + transDate + "' " + " and b.strRoomNo='" + arrObjRooms[0].toString() + "' "
-//						+ " and a.strReservationNo not in (select strReservationNo from tblcheckinhd) "
-//						+ " and a.strCancelReservation='N' ";
-				if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Free"))
-				{
-				sql = "select a.strReservationNo,d.strRoomCode,d.strRoomDesc" 
-						+ " ,concat(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),e.strBookingTypeDesc,DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y'),IFNULL(DATEDIFF(a.dteArrivalDate,'"+date1+"'),0) as Arrival_Date,IFNULL(DATEDIFF(a.dteDepartureDate,'"+date1+"'),0) as Departuree_Date "
-						+ " from tblreservationhd a,tblreservationdtl b,tblguestmaster c,tblroom d ,tblbookingtype e "
-						+ " where a.strReservationNo=b.strReservationNo and b.strGuestCode=c.strGuestCode " 
-						+ " and b.strRoomNo=d.strRoomCode and a.strBookingTypeCode=e.strBookingTypeCode " 
-						+ " and date(a.dteDepartureDate) >= '" + transDate + "' " 
-						+ " and b.strRoomNo='" + arrObjRooms[0].toString() + "' "
-						+ " and a.strReservationNo not in (select strReservationNo from tblcheckinhd) "
-						+ " and a.strCancelReservation='N' ";
+			sql=" SELECT IF(a.strReservationNo='',a.strCheckInNo,''),d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),d.strStatus, "
+					+ "DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y'), "
+					+ "DATEDIFF('"+PMSDate+"',DATE(a.dteDepartureDate)),LEFT(TIMEDIFF(a.tmeDepartureTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
+					+ "LEFT(TIMEDIFF(a.tmeArrivalTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeArrivalTime,a.tmeDepartureTime , DATEDIFF(DATE(a.dteArrivalDate),'"+PMSDate+"'), DATEDIFF(DATE(a.dteDepartureDate),'"+PMSDate+"')"
+					+ "FROM tblcheckinhd a,tblcheckindtl b,tblguestmaster c,tblroom d,tblfoliohd e "
+					+ "WHERE a.strCheckInNo=b.strCheckInNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode "
+					+ "AND DATE(a.dteDepartureDate) BETWEEN '"+PMSDate+"' AND DATE_ADD('"+PMSDate+"',INTERVAL 7 DAY) AND b.strRoomNo='"+arrObjRooms[0].toString()+"' AND a.strCheckInNo=e.strCheckInNo "
+					+ "AND a.strCheckInNo NOT IN (SELECT strCheckInNo FROM tblbillhd) "
+					+ "UNION "
+					+ "SELECT a.strReservationNo,d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName), "
+					+ "IFNULL(e.strBookingTypeDesc,''), DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y'), "
+					+ "DATEDIFF(DATE(a.dteDepartureDate),DATE(a.dteArrivalDate)),LEFT(TIMEDIFF(a.tmeDepartureTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
+					+ "LEFT(TIMEDIFF(a.tmeArrivalTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeArrivalTime,a.tmeDepartureTime , DATEDIFF(DATE(a.dteArrivalDate),'"+PMSDate+"'),DATEDIFF(DATE(a.dteDepartureDate),'"+PMSDate+"')"
+					+ "FROM tblreservationhd a,tblreservationdtl b,tblguestmaster c,tblroom d,tblbookingtype e "
+					+ "WHERE a.strReservationNo=b.strReservationNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode "
+					+ "AND a.strBookingTypeCode=e.strBookingTypeCode AND DATE(a.dteDepartureDate) BETWEEN '"+PMSDate+"' AND DATE_ADD('"+PMSDate+"',INTERVAL 7 DAY) AND b.strRoomNo='"+arrObjRooms[0].toString()+"' "
+					+ "AND a.strReservationNo NOT IN (SELECT strReservationNo FROM tblcheckinhd) AND a.strCancelReservation='N' "
+					+ "UNION "
+					+ "SELECT a.strWalkinNo,d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Waiting', "
+					+ "DATE_FORMAT(DATE(a.dteWalkinDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteCheckOutDate),'%d-%m-%Y'), "
+					+ "DATEDIFF('"+PMSDate+"',DATE(a.dteCheckOutDate)),LEFT(TIMEDIFF(a.tmeCheckOutTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
+					+ "LEFT(TIMEDIFF(a.tmeWalkInTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeWalkInTime,a.tmeCheckOutTime , DATEDIFF(DATE(a.dteWalkinDate),'"+PMSDate+"'),DATEDIFF(DATE(a.dteCheckOutDate),'"+PMSDate+"')"
+					+ "FROM tblwalkinhd a,tblwalkindtl b,tblguestmaster c,tblroom d "
+					+ "WHERE a.strWalkinNo=b.strWalkinNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode "
+					+ "AND DATE(a.dteCheckOutDate) BETWEEN '"+PMSDate+"' AND DATE_ADD('"+PMSDate+"',INTERVAL 7 DAY) AND b.strRoomNo='"+arrObjRooms[0].toString()+"' AND a.strWalkinNo NOT IN (SELECT strWalkinNo FROM tblcheckinhd) ";
 				List listRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-				if (listRoomDtl.size() > 0) {
+				if (listRoomDtl.size() > 0) 
+				{
 					for(int i=0;i<listRoomDtl.size();i++)
 					{
+						
+						int intArrivalCnt = 0;
+						int intDepartureCnt = 0;
+						objGuestDtl = new clsGuestMasterBean();
 						Object[] arrObjRoomDtl = (Object[]) listRoomDtl.get(i);
-						clsGuestListReportBean objGuestStatusDtl = new clsGuestListReportBean();
-						int intReservationArrivalCnt = 0;
-						int intReservationDepartureCnt = 0;
-						objGuestStatusDtl.setStrGuestName(arrObjRoomDtl[3].toString());
-						objGuestStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
-						objGuestStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
-						objGuestStatusDtl.setStrRoomNo(arrObjRoomDtl[0].toString());
+						objGuestDtl.setStrFirstName(arrObjRoomDtl[3].toString());
+						objGuestDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
+						objGuestDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
+						objGuestDtl.setStRoomNo(arrObjRoomDtl[2].toString());
+						objGuestDtl.setStrNoOfNights(arrObjRoomDtl[7].toString());
+						objGuestDtl.setTmeArrivalTime(arrObjRoomDtl[10].toString());
+						objGuestDtl.setTmeDepartureTime(arrObjRoomDtl[11].toString());
 						
-						objRoomStatusDtl.setStrReservationNo(arrObjRoomDtl[0].toString());
-						objRoomStatusDtl.setStrGuestName(arrObjRoomDtl[3].toString());
-						if(objRoomStatusDtl.getStrRoomStatus()!=null && objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("")){
-							//objRoomStatusDtl.setStrRoomStatus(arrObjRoomDtl[4].toString());
-							objRoomStatusDtl.setStrRoomStatus("Confirmed");
-						}
-						else
+						/*if(objRoomTypeWise.containsKey(arrObjRooms[2].toString()))
 						{
-							
-						}
-						objRoomStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
-						objRoomStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
-						objRoomStatusDtl.setStrRoomStatus("Confirmed");
-						if(mapGuestListPerDay.size()>0)
-						{
-							if(mapGuestListPerDay.containsKey(cnt))
-							{
-								listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-								listGuestDetailsBean.add(objGuestStatusDtl);
-								mapGuestListPerDay.put(cnt, listGuestDetailsBean);
-							}
-							else
-							{
-								listGuestDetailsBean.add(objGuestStatusDtl);
-								mapGuestListPerDay.put(cnt, listGuestDetailsBean);
-							}
-						}
-						else
-						{
-							listGuestDetailsBean.add(objGuestStatusDtl);
-							mapGuestListPerDay.put(cnt, listGuestDetailsBean);
-						}
-						
-						intReservationArrivalCnt=Integer.parseInt(arrObjRoomDtl[7].toString());
-						intReservationDepartureCnt=Integer.parseInt(arrObjRoomDtl[8].toString());
-		
-						if (intReservationArrivalCnt<=0 && 0<=intReservationDepartureCnt) 
-		
-						{
-							//objRoomStatusDtl.setStrDay1(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay1(" "+guestDtls.toString());
-						} 
-						if (intReservationArrivalCnt<=1 && 1<=intReservationDepartureCnt) 
-						{
-							//objRoomStatusDtl.setStrDay2(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay2(" "+guestDtls.toString());
-						} 
-						if (intReservationArrivalCnt<=2 && 2<=intReservationDepartureCnt) 
-						{
-							//objRoomStatusDtl.setStrDay3(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay3(" "+guestDtls.toString());
-						} if (intReservationArrivalCnt<=3 && 3<=intReservationDepartureCnt) {
-							//objRoomStatusDtl.setStrDay4(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay4(" "+guestDtls.toString());
-						} if (intReservationArrivalCnt<=4 && 4<=intReservationDepartureCnt) {
-							//objRoomStatusDtl.setStrDay5(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay5(" "+guestDtls.toString());
-						} if (intReservationArrivalCnt<=5 && 5<=intReservationDepartureCnt) {
-							//objRoomStatusDtl.setStrDay6(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay6(" "+guestDtls.toString());
-						} if (intReservationArrivalCnt<=6 && 6<=intReservationDepartureCnt) {
-							//objRoomStatusDtl.setStrDay7(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay7(" "+guestDtls.toString());
-						}
-						
-					}
-					
-				}
-			}
-				else {
-//					sql = "select a.strReservationNo,d.strRoomCode,d.strRoomDesc" + " ,concat(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Occupied',DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y')" + " ,a.strCheckInNo " + ",a.strWalkInNo from tblcheckinhd a,tblcheckindtl b,tblguestmaster c,tblroom d "
-//							+ " where a.strCheckInNo=b.strCheckInNo and b.strGuestCode=c.strGuestCode and b.strRoomNo=d.strRoomCode " + " and date(a.dteDepartureDate) >= '" + transDate + "' and date(a.dteArrivalDate) <= '" + transDate + "' " + " and b.strRoomNo='" + arrObjRooms[0].toString() + "' " + " and a.strCheckInNo not in (select strCheckInNo from tblbillhd) ";
-					
-					sql = "select a.strReservationNo,d.strRoomCode,d.strRoomDesc" 
-							+ " ,concat(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Occupied',DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y')" + " ,e.strFolioNo,a.tmeArrivalTime,a.tmeDepartureTime " 
-							+ ",a.strWalkInNo from tblcheckinhd a,tblcheckindtl b,tblguestmaster c,tblroom d,tblfoliohd e "
-							+ " where a.strCheckInNo=b.strCheckInNo and b.strGuestCode=c.strGuestCode and b.strRoomNo=d.strRoomCode " 
-							+ " and date(a.dteDepartureDate) >= '" + transDate + "'  " 
-							+ " and b.strRoomNo='" + arrObjRooms[0].toString() + "' AND a.strCheckInNo=e.strCheckInNo " 
-							+ " and a.strCheckInNo not in (select strCheckInNo from tblbillhd) ";
-					
-					List listCheckInRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-					if (listCheckInRoomDtl.size() > 0) {
-						
-						Object[] arrObjRoomDtl = (Object[]) listCheckInRoomDtl.get(0);
-						clsGuestListReportBean objGuestStatusDtl = new clsGuestListReportBean();
-						String strArrTime = arrObjRoomDtl[8].toString();
-						String strDeptTime = arrObjRoomDtl[9].toString().toLowerCase();
-						if(arrObjRoomDtl[0].toString().isEmpty())
-						{
-							objGuestStatusDtl.setStrRoomNo(arrObjRoomDtl[8].toString());
-							objRoomStatusDtl.setStrReservationNo(arrObjRoomDtl[8].toString());
-						}
-						else
-						{
-							objGuestStatusDtl.setStrRoomNo(arrObjRoomDtl[0].toString());
+							objTemp=(List)objRoomTypeWise.get(arrObjRooms[2].toString());
+							objRoomStatusDtl=new clsRoomStatusDtlBean();
+							objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
+							objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
+							objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
 							objRoomStatusDtl.setStrReservationNo(arrObjRoomDtl[0].toString());
-						}
-						objGuestStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
-						objGuestStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString()+" "+strArrTime);
-						objGuestStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString()+" "+strDeptTime);
-						
-						objRoomStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
-						
+							objRoomStatusDtl.setStrGuestName(arrObjRoomDtl[3].toString());
+							objRoomStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
+							objRoomStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
+							objRoomStatusDtl.setStrNoOfDays(arrObjRoomDtl[7].toString());
+							objRoomStatusDtl.setTmeArrivalTime(arrObjRoomDtl[10].toString());
+							objRoomStatusDtl.setTmeDepartureTime(arrObjRoomDtl[11].toString());
 							objRoomStatusDtl.setStrRoomStatus(arrObjRoomDtl[4].toString());
-						
-						
-
-						objRoomStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
-						objRoomStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
-						objRoomStatusDtl.setStrCheckInNo(arrObjRoomDtl[7].toString());
-						
-						
-						if(mapGuestListPerDay.size()>0)
-						{
-							if(mapGuestListPerDay.containsKey(cnt))
+							if(arrObjRoomDtl[8].toString().contains("-"))
 							{
-								listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-								listGuestDetailsBean.add(objGuestStatusDtl);
-								mapGuestListPerDay.put(cnt, listGuestDetailsBean);
+								if(arrObjRoomDtl[11].toString().contains("PM") || arrObjRoomDtl[11].toString().contains("pm"))
+								{
+									objRoomStatusDtl.setTmeCheckOutAMPM("PM");
+								}
+								else
+								{
+									objRoomStatusDtl.setTmeCheckInAMPM("AM");
+								}
 							}
 							else
 							{
-								listGuestDetailsBean.add(objGuestStatusDtl);
-								mapGuestListPerDay.put(cnt, listGuestDetailsBean);
+								if(arrObjRoomDtl[8].toString().equals("00:00:"))
+								{
+									if(arrObjRoomDtl[11].toString().contains("PM") || arrObjRoomDtl[11].toString().contains("pm"))
+									{
+										objRoomStatusDtl.setTmeCheckOutAMPM("PM");
+									}
+									else
+									{
+										objRoomStatusDtl.setTmeCheckOutAMPM("AM");
+									}
+								}
+								else
+								{
+									if(arrObjRoomDtl[11].toString().contains("PM") || arrObjRoomDtl[11].toString().contains("pm"))
+									{
+										objRoomStatusDtl.setTmeCheckOutAMPM("PM");
+									}
+									else
+									{
+										objRoomStatusDtl.setTmeCheckOutAMPM("AM");
+									}
+								}
 							}
-						}
-						else
-						{
-							listGuestDetailsBean.add(objGuestStatusDtl);
-							mapGuestListPerDay.put(cnt, listGuestDetailsBean);
-						}
-						
-						
-						
-						
-						if (cnt==0) 
-						{
-							//objRoomStatusDtl.setStrDay1(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName()+"/");
-							 }
-							 objRoomStatusDtl.setStrDay1(" "+guestDtls.toString());
-						} 
-						else if (cnt==1)
-						{
-							//objRoomStatusDtl.setStrDay2(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay2(" "+guestDtls.toString());
-						} 
-						else if (cnt==2) 
-						{
-							//objRoomStatusDtl.setStrDay3(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay3(" "+guestDtls.toString());
-						} else if (cnt==3){
-							//objRoomStatusDtl.setStrDay4(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay4(" "+guestDtls.toString());
-						} else if (cnt==4) {
-							//objRoomStatusDtl.setStrDay5(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay5(" "+guestDtls.toString());
-						} else if (cnt==5) {
-							//objRoomStatusDtl.setStrDay6(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay6(" "+guestDtls.toString());
-						} else if (cnt==6) {
-							//objRoomStatusDtl.setStrDay7(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay7(" "+guestDtls.toString());
-						}
-
-						/*if (cnt == 0) {
-							objRoomStatusDtl.setStrDay1(arrObjRoomDtl[3].toString());
-						} else if (cnt == 1) {
-							objRoomStatusDtl.setStrDay2(arrObjRoomDtl[3].toString());
-						} else if (cnt == 2) {
-							objRoomStatusDtl.setStrDay3(arrObjRoomDtl[3].toString());
-						} else if (cnt == 3) {
-							objRoomStatusDtl.setStrDay4(arrObjRoomDtl[3].toString());
-						} else if (cnt == 4) {
-							objRoomStatusDtl.setStrDay5(arrObjRoomDtl[3].toString());
-						} else if (cnt == 5) {
-							objRoomStatusDtl.setStrDay6(arrObjRoomDtl[3].toString());
-						} else if (cnt == 6) {
-							objRoomStatusDtl.setStrDay7(arrObjRoomDtl[3].toString());
-						}
-						*/
-					}
-				}
-
-				
-				
-				sql = " SELECT a.strWalkinNo,d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Waiting', DATE_FORMAT(DATE(a.dteWalkinDate),'%d-%m-%Y'), "
-						+ "DATE_FORMAT(DATE(a.dteCheckOutDate),'%d-%m-%Y') "
-						+ "FROM tblwalkinhd a,tblwalkindtl b,tblguestmaster c,tblroom d "
-						+ "WHERE a.strWalkinNo=b.strWalkinNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode "
-						+ "AND DATE(a.dteCheckOutDate) >= '"+transDate+"' "
-						+ " AND b.strRoomNo='"+arrObjRooms[0].toString() +"' "
-						+ " and a.strWalkinNo not in (select strWalkinNo from tblcheckinhd)  ";
-				List listRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-				if (listRoomDtl.size() > 0) {
-					for(int i=0;i<listRoomDtl.size();i++)
-					{
-						Object[] arrObjRoomDtl = (Object[]) listRoomDtl.get(i);
-						clsGuestListReportBean objGuestStatusDtl = new clsGuestListReportBean();
-						objGuestStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
-						objGuestStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
-						objGuestStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
-						objGuestStatusDtl.setStrRoomNo(arrObjRoomDtl[0].toString());
-						
-						objRoomStatusDtl.setStrReservationNo(arrObjRoomDtl[0].toString());
-						objRoomStatusDtl.setStrGuestName(" "+arrObjRoomDtl[3].toString());
-						if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Free")){
-							objRoomStatusDtl.setStrRoomStatus(arrObjRoomDtl[4].toString());
-						}
-						else
-						{
 							
-						}
-						objRoomStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
-						objRoomStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
-						if(mapGuestListPerDay.size()>0)
-						{
-							if(mapGuestListPerDay.containsKey(cnt))
+							if(arrObjRoomDtl[9].toString().contains("-"))
 							{
-								listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-								listGuestDetailsBean.add(objGuestStatusDtl);
-								mapGuestListPerDay.put(cnt, listGuestDetailsBean);
+								if(arrObjRoomDtl[10].toString().contains("PM") || arrObjRoomDtl[10].toString().contains("pm"))
+								{
+									objRoomStatusDtl.setTmeCheckInAMPM("PM");
+								}
+								else
+								{
+									objRoomStatusDtl.setTmeCheckInAMPM("AM");
+								}
 							}
 							else
 							{
-								listGuestDetailsBean.add(objGuestStatusDtl);
-								mapGuestListPerDay.put(cnt, listGuestDetailsBean);
+								if(arrObjRoomDtl[8].toString().equals("00:00:"))
+								{
+									if(arrObjRoomDtl[10].toString().contains("PM") || arrObjRoomDtl[10].toString().contains("pm"))
+									{
+										objRoomStatusDtl.setTmeCheckInAMPM("PM");
+									}
+									else
+									{
+										objRoomStatusDtl.setTmeCheckInAMPM("AM");
+									}
+								}
+								else
+								{
+									if(arrObjRoomDtl[10].toString().contains("PM") || arrObjRoomDtl[10].toString().contains("pm"))
+									{
+										objRoomStatusDtl.setTmeCheckInAMPM("PM");
+									}
+									else
+									{
+										objRoomStatusDtl.setTmeCheckInAMPM("AM");
+									}
+								}
 							}
+							objTemp.add(objRoomStatusDtl);
+							objRoomTypeWise.put(arrObjRooms[2].toString(),objTemp);
 						}
 						else
-						{
-							listGuestDetailsBean.add(objGuestStatusDtl);
-							mapGuestListPerDay.put(cnt, listGuestDetailsBean);
-						}
-						
-						if (cnt == 0) 
-						{
-							//objRoomStatusDtl.setStrDay1(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay1(" "+guestDtls.toString());
-						} 
-						else if (cnt == 1) 
-						{
-							//objRoomStatusDtl.setStrDay2(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay2(" "+guestDtls.toString());
-						} 
-						else if (cnt == 2) 
-						{
-							//objRoomStatusDtl.setStrDay3(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay3(" "+guestDtls.toString());
-						} else if (cnt == 3) {
-							//objRoomStatusDtl.setStrDay4(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay4(" "+guestDtls.toString());
-						} else if (cnt == 4) {
-							//objRoomStatusDtl.setStrDay5(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay5(" "+guestDtls.toString());
-						} else if (cnt == 5) {
-							//objRoomStatusDtl.setStrDay6(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay6(" "+guestDtls.toString());
-						} else if (cnt == 6) {
-							//objRoomStatusDtl.setStrDay7(arrObjRoomDtl[3].toString());
-							listGuestDetailsBean=mapGuestListPerDay.get(cnt);
-							 StringBuilder guestDtls=new StringBuilder();
-							 for(int k=0;k<listGuestDetailsBean.size();k++)
-							 {
-								 clsGuestListReportBean objGuest=listGuestDetailsBean.get(k);
-								 guestDtls.append(" "+objGuest.getStrGuestName());
-							 }
-							 objRoomStatusDtl.setStrDay7(" "+guestDtls.toString());
-						}
-						
+						{*/
+							String sqlFolioNo = "select a.strFolioNo from tblfoliohd a where a.strCheckInNo='"+arrObjRoomDtl[0].toString()+"'";
+							List listFolioNo = objGlobalFunctionsService.funGetListModuleWise(sqlFolioNo, "sql");
+							String strFolioNo = "";
+							if(listFolioNo!=null && listFolioNo.size()>0)
+							{
+								strFolioNo = listFolioNo.get(0).toString();
+							}
+							
+							objRoomStatusDtl=new clsRoomStatusDtlBean();
+							objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
+							objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
+							objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
+							if(arrObjRoomDtl[4].toString().equalsIgnoreCase("Occupied"))
+							{
+								objRoomStatusDtl.setStrReservationNo(strFolioNo);
+							}
+							else
+							{
+								objRoomStatusDtl.setStrReservationNo(arrObjRoomDtl[0].toString());
+							}
+							objRoomStatusDtl.setStrGuestName(arrObjRoomDtl[3].toString());
+							objRoomStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString()+" "+ arrObjRoomDtl[10].toString());
+							objRoomStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString()+" "+ arrObjRoomDtl[11].toString());
+							objRoomStatusDtl.setStrNoOfDays(arrObjRoomDtl[7].toString());
+							objRoomStatusDtl.setTmeArrivalTime(arrObjRoomDtl[10].toString());
+							objRoomStatusDtl.setTmeDepartureTime(arrObjRoomDtl[11].toString());
+							objRoomStatusDtl.setStrRoomStatus(arrObjRoomDtl[4].toString());
+							if(arrObjRoomDtl[4].toString().equals("Occupied")){
+							objRoomStatusDtl.setDblRemainingAmt(funGetDblRemainingAmt(strFolioNo,clientCode,arrObjRoomDtl[0].toString()));
+							}
+							intArrivalCnt=Integer.parseInt(arrObjRoomDtl[12].toString());
+							intDepartureCnt=Integer.parseInt(arrObjRoomDtl[13].toString());
+							
+							if (intArrivalCnt<=0 && 0<=intDepartureCnt) 
+								
+							{
+								
+								 objRoomStatusDtl.setStrDay1(" "+objRoomStatusDtl.getStrGuestName());
+							} 
+							if (intArrivalCnt<=1 && 1<=intDepartureCnt) 
+							{
+								
+								 objRoomStatusDtl.setStrDay2(" "+objRoomStatusDtl.getStrGuestName());
+							} 
+							if (intArrivalCnt<=2 && 2<=intDepartureCnt) 
+							{
+								
+								 objRoomStatusDtl.setStrDay3(" "+objRoomStatusDtl.getStrGuestName());
+							} if (intArrivalCnt<=3 && 3<=intDepartureCnt) {
+								
+								 objRoomStatusDtl.setStrDay4(" "+objRoomStatusDtl.getStrGuestName());
+							} if (intArrivalCnt<=4 && 4<=intDepartureCnt) {
+								
+								 objRoomStatusDtl.setStrDay5(" "+objRoomStatusDtl.getStrGuestName());
+							} if (intArrivalCnt<=5 && 5<=intDepartureCnt) {
+								
+								 objRoomStatusDtl.setStrDay6(" "+objRoomStatusDtl.getStrGuestName());
+							} if (intArrivalCnt<=6 && 6<=intDepartureCnt) {
+								
+								 objRoomStatusDtl.setStrDay7(" "+objRoomStatusDtl.getStrGuestName());
+							}
+							
+							if(arrObjRoomDtl[8].toString().contains("-"))
+							{
+								if(arrObjRoomDtl[11].toString().contains("PM") || arrObjRoomDtl[11].toString().contains("pm"))
+								{
+									objRoomStatusDtl.setTmeCheckOutAMPM("PM");
+								}
+								else
+								{
+									objRoomStatusDtl.setTmeCheckOutAMPM("AM");
+								}
+							}
+							else
+							{
+								if(arrObjRoomDtl[8].toString().equals("00:00:"))
+								{
+									if(arrObjRoomDtl[11].toString().contains("PM") || arrObjRoomDtl[11].toString().contains("pm"))
+									{
+										objRoomStatusDtl.setTmeCheckOutAMPM("PM");
+									}
+									else
+									{
+										objRoomStatusDtl.setTmeCheckOutAMPM("AM");
+									}
+								}
+								else
+								{
+									if(arrObjRoomDtl[11].toString().contains("PM") || arrObjRoomDtl[11].toString().contains("pm"))
+									{
+										objRoomStatusDtl.setTmeCheckOutAMPM("PM");
+									}
+									else
+									{
+										objRoomStatusDtl.setTmeCheckOutAMPM("AM");
+									}
+								}
+							}
+							
+							if(arrObjRoomDtl[9].toString().contains("-"))
+							{
+								if(arrObjRoomDtl[10].toString().contains("PM") || arrObjRoomDtl[10].toString().contains("pm"))
+								{
+									objRoomStatusDtl.setTmeCheckInAMPM("PM");
+								}
+								else
+								{
+									objRoomStatusDtl.setTmeCheckInAMPM("AM");
+								}
+							}
+							else
+							{
+								if(arrObjRoomDtl[8].toString().equals("00:00:"))
+								{
+									if(arrObjRoomDtl[10].toString().contains("PM") || arrObjRoomDtl[10].toString().contains("pm"))
+									{
+										objRoomStatusDtl.setTmeCheckInAMPM("PM");
+									}
+									else
+									{
+										objRoomStatusDtl.setTmeCheckInAMPM("AM");
+									}
+								}
+								else
+								{
+									if(arrObjRoomDtl[10].toString().contains("PM") || arrObjRoomDtl[10].toString().contains("pm"))
+									{
+										objRoomStatusDtl.setTmeCheckInAMPM("PM");
+									}
+									else
+									{
+										objRoomStatusDtl.setTmeCheckInAMPM("AM");
+									}
+								}
+							}
+							objTemp.add(objRoomStatusDtl);
+							//objRoomTypeWise.put(arrObjRooms[2].toString(),objTemp);
+						//}
 					}
-					
-				}
-				
-			}
-			
-			if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Free"))
-			{
-				String sqlBillNo="SELECT a.strBillNo FROM tblbillhd a WHERE a.strCheckInNo='"+objRoomStatusDtl.getStrCheckInNo()+"' AND a.strClientCode='"+clientCode+"'";
-				List listBillNo = objGlobalFunctionsService.funGetListModuleWise(sqlBillNo, "sql");
-				if(listBillNo.size()>0)
-				{
-				String strBillNo = listBillNo.get(0).toString();
-				objRoomStatusDtl.setStrCheckInNo(strBillNo);
-				objRoomStatusDtl.setStrRoomStatus("Checked Out");
 				}
 				else
 				{
-					
-				}
-			}
-			objRoomStatusDtl.setMapGuestListPerDay(mapGuestListPerDay);
-			if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Blocked"))
-			{
-				String sqlBlock = "select a.strReason,a.strRemark from tblblockroom a where a.strClientCode='"+clientCode+"'";
-				List listBlockRoom = objGlobalFunctionsService.funGetListModuleWise(sqlBlock, "sql");
-				if (listBlockRoom.size() > 0) {
-					for(int i=0;i<listBlockRoom.size();i++)
+					/*if(objRoomTypeWise.containsKey(arrObjRooms[2].toString()))
 					{
-						Object[] arrObjBlockRoom = (Object[]) listBlockRoom.get(i);
-						String sqlReason = "select a.strReasonDesc from tblreasonmaster a where a.strReasonCode='"+arrObjBlockRoom[0].toString()+"'";
-						List listRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sqlReason, "sql");
-						String strReason="";
-						if(listRoomDtl.size()>0)
+						objTemp=(List)objRoomTypeWise.get(arrObjRooms[2].toString());
+						objRoomStatusDtl=new clsRoomStatusDtlBean();
+						objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
+						objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
+						objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
+						
+						objTemp.add(objRoomStatusDtl);
+						objRoomTypeWise.put(arrObjRooms[2].toString(),objTemp);
+					}
+					else
+					{*/
+						//objTemp=new ArrayList<>();
+						objRoomStatusDtl=new clsRoomStatusDtlBean();
+						objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
+						objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
+						objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
+						
+						objTemp.add(objRoomStatusDtl);
+						//objRoomTypeWise.put(arrObjRooms[2].toString(),objTemp);
+					//}	
+				}
+				
+				if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Blocked"))
+				{
+					String sqlBlock = "SELECT DATEDIFF('"+PMSDate+"',b.dteValidTo) FROM tblroom a,tblblockroom b "
+							+ "WHERE a.strRoomCode=b.strRoomCode AND a.strRoomDesc='"+objRoomStatusDtl.getStrRoomNo()+"' AND a.strClientCode='"+clientCode+"' ";
+					List listBlockRoom = objGlobalFunctionsService.funGetListModuleWise(sqlBlock, "sql");
+					if (listBlockRoom.size() > 0) 
+					{
+						BigInteger diff = (BigInteger) listBlockRoom.get(0);
+						String strBlockRoomDiff=diff.toString();
+						if(strBlockRoomDiff.startsWith("-"))
 						{
-							strReason = listRoomDtl.get(0).toString();
-							/*strReason=arrObjBlockRoom[0].toString();*/
+							if(Integer.parseInt(strBlockRoomDiff.substring(1))==0)
+							{
+								objRoomStatusDtl.setStrDay1("Blocked Room");
+							}
+							else if(Integer.parseInt(strBlockRoomDiff.substring(1))>0)
+							{
+								for(int i=0;i<=Integer.parseInt(strBlockRoomDiff.substring(1));i++)
+								{
+									if(i==0)
+									{
+										i=i+1;
+									}
+									objRoomStatusDtl.setStrDay("Day"+i+"Blocked Room");
+								}
+							}
 						}
 						else
 						{
-							strReason="";
+							if(Integer.parseInt(strBlockRoomDiff)==0)
+							{
+								objRoomStatusDtl.setStrDay1("Blocked Room");
+							}
+							else if(Integer.parseInt(strBlockRoomDiff)>0)
+							{
+								for(int i=0;i<=Integer.parseInt(strBlockRoomDiff);i++)
+								{
+									if(i==0)
+									{
+										i=i+1;
+									}
+									objRoomStatusDtl.setStrDay("Day"+i+"Blocked Room");
+								}
+							}
 						}
-						
-						String remarks = arrObjBlockRoom[1].toString();
-						objRoomStatusDtl.setStrDay1("Blocked Room");
-						objRoomStatusDtl.setStrDay2("Blocked Room");
-						objRoomStatusDtl.setStrDay3("Blocked Room");
-						objRoomStatusDtl.setStrDay4("Blocked Room");
-						objRoomStatusDtl.setStrDay5("Blocked Room");
-						objRoomStatusDtl.setStrDay6("Blocked Room");
-						objRoomStatusDtl.setStrDay7("Blocked Room");
-						objRoomStatusDtl.setStrGuestName(strReason);
-						objRoomStatusDtl.setStrCheckInNo(remarks);
 					}
 				}
-			}
-			listRoomStatusBeanDtl.add(objRoomStatusDtl);
+				//objRoomTypeWise.put(objRoomStatusDtl);
+				
 		}
+		listRoomStatusBeanDtl.add(objRoomTypeWise);	
+		//returnObject.put("RoomData", listRoomStatusBeanDtl);
+			
+		return objTemp;
+			
+		
 
-		System.out.println(listRoomStatusBeanDtl);
-		return listRoomStatusBeanDtl;
+		
+	}
+
+	private double funGetDblRemainingAmt(String strFolioNo,String clintCode,String strCheckInNo) {
+		
+		NumberFormat decformat = new DecimalFormat("#0.00");
+		double dblTotalRemainingAmt = 0;
+	//for Folio Amt
+		String sqlFolioAmt = "select sum(a.dblDebitAmt) from tblfoliodtl a where a.strFolioNo='"+strFolioNo+"' and a.strClientCode='"+clintCode+"' ";
+		List listFolioAmt = objGlobalFunctionsService.funGetListModuleWise(sqlFolioAmt, "sql");
+
+		if (!listFolioAmt.isEmpty() && listFolioAmt!=null) {
+			for(int i = 0; i<listFolioAmt.size(); i++)
+			{
+				double dblFolioAmt = 0;
+				dblFolioAmt = Double.parseDouble(listFolioAmt.get(i).toString());
+				dblTotalRemainingAmt = dblTotalRemainingAmt + dblFolioAmt;
+
+			}
+		}
+		//For Walkin Discount
+		String sqlWalkinNo = "select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+strCheckInNo+"' and a.strClientCode='"+clintCode+"'";
+		List listWalkinNo = objGlobalFunctionsService.funGetListModuleWise(sqlWalkinNo, "sql");
+		if(listWalkinNo.size()>0 && listWalkinNo!=null)
+		{
+			String strWalkinNo = listWalkinNo.get(0).toString();
+			String sqlWalkinDiscount = "select a.dblDiscount from tblwalkinroomratedtl a where a.strWalkinNo='"+strWalkinNo+"' and a.strClientCode='"+clintCode+"'";
+			List listWalkinDisc = objGlobalFunctionsService.funGetListModuleWise(sqlWalkinDiscount, "sql");
+			if(listWalkinDisc.size()>0 && listWalkinDisc!=null)
+			{
+				double dblWalkinDisc = Double.parseDouble(listWalkinDisc.get(0).toString());
+				dblTotalRemainingAmt = dblTotalRemainingAmt-((dblTotalRemainingAmt*dblWalkinDisc)/100);
+			}
+		}
+		
+		//For Folio Tax Amt
+		String sqlFolioTaxAmt = "select sum(a.dblTaxAmt) from tblfoliotaxdtl a where a.strFolioNo='"+strFolioNo+"' and a.strDocNo like 'RM%' and a.strClientCode='"+clintCode+"';";
+		List listFolioTaxAmt = objGlobalFunctionsService.funGetListModuleWise(sqlFolioTaxAmt, "sql");
+
+		if (!listFolioTaxAmt.isEmpty() && listFolioTaxAmt!=null) {
+			for(int i = 0; i<listFolioTaxAmt.size(); i++)
+			{
+				double dblFolioTaxAmt = 0;
+				dblFolioTaxAmt = Double.parseDouble(listFolioTaxAmt.get(i).toString());
+				dblTotalRemainingAmt = dblTotalRemainingAmt + dblFolioTaxAmt;
+
+			}
+		}
+		
+		//For Advance Amt 
+				String sqlAdvanceAmt = "select a.dblPaidAmt from tblreceipthd a where a.strCheckInNo='"+strCheckInNo+"' and a.strAgainst='Check-In' and a.strClientCode='"+clintCode+"'";
+				List listAdvanceAmt = objGlobalFunctionsService.funGetListModuleWise(sqlAdvanceAmt, "sql");
+
+				if (!listAdvanceAmt.isEmpty() && listAdvanceAmt!=null) {
+					for(int i = 0; i<listAdvanceAmt.size(); i++)
+					{
+						double dblAdvanceAmt = 0;
+						dblAdvanceAmt = Double.parseDouble(listAdvanceAmt.get(i).toString());
+						dblTotalRemainingAmt = dblTotalRemainingAmt - dblAdvanceAmt;
+
+					}
+				}
+		
+		
+		dblTotalRemainingAmt=Double.parseDouble(decformat.format(dblTotalRemainingAmt));
+		return dblTotalRemainingAmt;
 	}
 
 	private String funGetDayOfWeek(int day) {
@@ -789,7 +581,7 @@ public class clsRoomStatusDiaryController {
 			break;
 
 		case 4:
-			dayOfWeek = "Thur";
+			dayOfWeek = "Thu";
 			break;
 
 		case 5:
@@ -802,5 +594,78 @@ public class clsRoomStatusDiaryController {
 		}
 
 		return dayOfWeek;
+	}
+	
+	@RequestMapping(value = "/getRoomTypeWiseList", method = RequestMethod.GET)
+	public @ResponseBody Map funLoadRoomTypeWiseStatus(@RequestParam("viewDate") String viewDate, HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String userCode = request.getSession().getAttribute("usercode").toString();
+		Map returnObject=new HashMap<>();
+
+		try
+		{
+		Map jObjStayViewData=new HashMap<>(); 
+		List mainArrObj = new ArrayList<>();
+		NumberFormat formatter = new DecimalFormat("#0");
+		NumberFormat decformat = new DecimalFormat("#0.00");
+		String dd = viewDate.split("-")[0]; 
+		String mm=	 viewDate.split("-")[1] ;
+		String yy= viewDate.split("-")[2];
+		
+		
+			
+			
+			Map objRoomStatusDtlBean = new HashMap<>();
+			List listRoomStatus= new ArrayList<>();
+
+			String sql="select a.strRoomTypeDesc from tblroom a group by strBedType";
+			List listRoomDesc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+			//while(listRoomDesc.size()>0)
+			for(int j=0;j<listRoomDesc.size();j++)
+			{
+				String tempPMSDate=objGlobal.funGetDate("yyyy-MM-dd", viewDate);
+				String strRoomData="";
+				sql="select count(*) from tblroom a where a.strRoomTypeDesc='"+listRoomDesc.get(j)+"'";
+				
+				List listRoomData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+				if(listRoomData.size()>0)
+				{
+					int intRoomAccupied=0;
+					for(int i=1;i<=7;i++)
+					{
+						sql=" select count(*) "
+								+ " from  tblcheckindtl a,tblroom b,tblcheckinhd c where a.strCheckInNo=c.strCheckInNo and"
+								+ " a.strRoomNo=b.strRoomCode and date(c.dteCheckInDate) <= '"+tempPMSDate+"'  "
+								+ "  and date(c.dteDepartureDate)>='"+tempPMSDate+"' and b.strRoomTypeDesc='"+listRoomDesc.get(j)+"' and b.strStatus='Occupied' ";
+						
+						List listCheckInData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+						String dd1=String.valueOf((Integer.parseInt(dd)+i));
+
+						if(listCheckInData.size()>0)
+						{
+							if(strRoomData.isEmpty())
+							{
+								strRoomData=listRoomDesc.get(j)+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);
+							}
+							else
+							{
+								strRoomData=strRoomData+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);	
+							}
+						}
+						tempPMSDate=yy+"-"+mm+"-"+dd1;
+					}
+					objRoomStatusDtlBean.put(listRoomDesc.get(j),strRoomData);
+					/*listRoomStatus.put(objRoomStatusDtlBean);*/
+					/*objRoomStatusData.put(rsRoomInfo1.getString(1), strRoomData);*/
+				}
+			}
+			returnObject.put("RoomTypeCount", objRoomStatusDtlBean);
+					}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return returnObject;
+		
 	}
 }

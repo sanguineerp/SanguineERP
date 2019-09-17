@@ -172,13 +172,13 @@
 		
 		
 		var roomNo='';
-		<%if (session.getAttribute("roomNo") != null) 
+		<%if (session.getAttribute("RoomCode") != null) 
 		{
 			%>
-			resNo='<%=session.getAttribute("roomNo").toString()%>';
-			$("#txtRoomNo").val(roomNo);
+			roomNo='<%=session.getAttribute("RoomCode").toString()%>';
+			funSetRoomNo(roomNo);
 		    <%
-		    session.removeAttribute("roomNo");
+		    session.removeAttribute("RoomCode");
 		}%>
 		
 		
@@ -252,6 +252,10 @@
 			case "roomByRoomType":
 				funSetRoomNo(code);
 			break;
+			
+			case 'roomByRoomTypeForReservation': 
+				funSetRoomNo(code);
+				break;
 			
 		}
 	}
@@ -729,11 +733,54 @@
 	        			}
 	        		else
 	        		{
+	        			funSetRoom(response.strRoomCode)
+	        		/* $("#txtRoomNo").val(response.strRoomCode);
+	        		$("#lblRoomNo").text(response.strRoomDesc);
+	        		funSetRoomType(response.strRoomTypeCode); */
+	        		}
+	        	}
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+	}
+	
+	function funSetRoom(roomCode)
+	{
+		var arrivalDate = $("#txtArrivalDate").val();
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/setRoomCode.html?roomCode=" + roomCode+"&dteArrDate="+arrivalDate,
+			dataType : "json",
+			success : function(response){ 
+				if(response.strRoomCode=='Invalid')
+	        	{
+	        		alert("This Room is booked for "+arrivalDate+" ");
+	        		$("#txtRoomNo").val('');
+	        	}
+	        	
+	        		else
+	        		{
+	        			
 	        		$("#txtRoomNo").val(response.strRoomCode);
 	        		$("#lblRoomNo").text(response.strRoomDesc);
 	        		funSetRoomType(response.strRoomTypeCode);
 	        		}
-	        	}
 			},
 			error : function(e){
 				if (jqXHR.status === 0) {
@@ -1322,7 +1369,7 @@
 			}
 		else
 			{
-			if(transactionName=="roomByRoomType" && condition!=" ")
+			if(transactionName=="roomByRoomTypeForReservation" && condition!=" ")
 			{
 				window.open("searchform.html?formname="+fieldName+"&strRoomTypeCode="+condition+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 			
@@ -2133,7 +2180,7 @@
 				<td><input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" /></td>
 				
 			    <td><label id="lblRoomNo">Room</label></td>
-			    <td><input type="text" id="txtRoomNo" name="txtRoomNo" path="strRoomNo" ondblclick="funHelp1('roomByRoomType')" Class="searchTextBox"/></td> 
+			    <td><input type="text" id="txtRoomNo" name="txtRoomNo" path="strRoomNo" ondblclick="funHelp1('roomByRoomTypeForReservation')" Class="searchTextBox"/></td> 
 				 
 				<td><label id="lblExtraBed">Extra Bed</label></td>
 				<td><input type="text" id="txtExtraBed" name="txtExtraBed" Class="searchTextBox" ondblclick="funHelp('extraBed')" /></td>
@@ -2278,6 +2325,7 @@
 			    <td><label>Amount</label></td>
 			    <td><input type="text" id="txtIncomeHeadAmt" path="" Class="BoxW124px"  /></td>
 			    <td><input type="button" value="Add"  class="smallButton" onclick='return funAddRow()'/></td>
+			    <td></td>
 	
 			</tr>
 		</table>

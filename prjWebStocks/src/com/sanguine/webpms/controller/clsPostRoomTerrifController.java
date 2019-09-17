@@ -333,7 +333,7 @@ public class clsPostRoomTerrifController {
 		// set department value here -- get department value from income head table 
 		String sql = "select a.strDeptCode from tblincomehead a where a.strIncomeHeadCode = '"+objTaxProductDtl.getStrTaxProdCode()+"'";
 		List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
-		
+		String strComp="";
 		// 
 		
 		String sqlDiscWalkIn = "select a.dblDiscount from tblwalkinroomratedtl a ,"
@@ -345,14 +345,32 @@ public class clsPostRoomTerrifController {
 		}
 		
 		
-		String sqlExtraBedAmt = "select a.dblChargePerBed from tblextrabed a where a.strExtraBedTypeCode = '"+extraBedCode+"'";
-		List listExtraBedAmt = objGlobalFunctionsService.funGetListModuleWise(sqlExtraBedAmt, "sql");
-		if(!extraBedCode.isEmpty())
+		String sqlComplimentryCheck = "SELECT a.strComplimentry "
+				+ "FROM tblcheckinhd a "
+				+ "WHERE a.strCheckInNo in (select b.strCheckInNo from tblfoliohd b where b.strFolioNo='"+folioNo+"' AND b.strClientCode='"+clientCode+"')";
+		List listComplimentryCheck = objGlobalFunctionsService.funGetListModuleWise(sqlComplimentryCheck, "sql");
 		{
-			double dblExtraBedAmt = Double.parseDouble(listExtraBedAmt.get(0).toString());
-			//dblExtraBedAmt = dblExtraBedAmt + objTaxProductDtl.getDblTaxProdAmt();
-			objTaxProductDtl.setDblTotalExtraBedAmt(dblExtraBedAmt);
+			strComp = listComplimentryCheck.get(0).toString();
+			if(strComp.equalsIgnoreCase("Y"))
+			{
+				double dblExtraBedAmt = 0.0;
+				//dblExtraBedAmt = dblExtraBedAmt + objTaxProductDtl.getDblTaxProdAmt();
+				objTaxProductDtl.setDblTotalExtraBedAmt(dblExtraBedAmt);
+			}
+			else
+			{
+				String sqlExtraBedAmt = "select a.dblChargePerBed from tblextrabed a where a.strExtraBedTypeCode = '"+extraBedCode+"'";
+				List listExtraBedAmt = objGlobalFunctionsService.funGetListModuleWise(sqlExtraBedAmt, "sql");
+				if(!extraBedCode.isEmpty())
+				{
+					double dblExtraBedAmt = Double.parseDouble(listExtraBedAmt.get(0).toString());
+					//dblExtraBedAmt = dblExtraBedAmt + objTaxProductDtl.getDblTaxProdAmt();
+					objTaxProductDtl.setDblTotalExtraBedAmt(dblExtraBedAmt);
+				}
+			}
 		}
+		
+		
 		listTaxProdDtl.add(objTaxProductDtl);
 		Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Room Night");
 
@@ -435,7 +453,14 @@ public class clsPostRoomTerrifController {
 			objFolioDtl = new clsFolioDtlModel();
 			objFolioDtl.setStrDocNo(docNo);
 			objFolioDtl.setDteDocDate(PMSDate);
-			objFolioDtl.setDblDebitAmt(objExtraBedMaster.getDblChargePerBed());
+			if(strComp.equalsIgnoreCase("Y"))
+			{
+				objFolioDtl.setDblDebitAmt(0.0);
+			}
+			else
+			{
+				objFolioDtl.setDblDebitAmt(objExtraBedMaster.getDblChargePerBed());
+			}
 			objFolioDtl.setDblBalanceAmt(0);
 			objFolioDtl.setDblCreditAmt(0);
 			objFolioDtl.setStrPerticulars("Extra Bed Charges");
@@ -449,7 +474,15 @@ public class clsPostRoomTerrifController {
 			objTaxProductDtl = new clsTaxProductDtl();
 			objTaxProductDtl.setStrTaxProdCode(objExtraBedMaster.getStrExtraBedTypeCode());
 			objTaxProductDtl.setStrTaxProdName("");
-			objTaxProductDtl.setDblTaxProdAmt(objExtraBedMaster.getDblChargePerBed());
+			if(strComp.equalsIgnoreCase("Y"))
+			{
+				objTaxProductDtl.setDblTaxProdAmt(0.0);
+			}
+			else
+			{
+				objTaxProductDtl.setDblTaxProdAmt(objExtraBedMaster.getDblChargePerBed());
+			}
+			
 			
 			List<clsTaxProductDtl> listTaxProdDtlForExtraBed = new ArrayList<clsTaxProductDtl>();
 			listTaxProdDtlForExtraBed.add(objTaxProductDtl);
@@ -479,14 +512,19 @@ public class clsPostRoomTerrifController {
 
 	
 	@RequestMapping(value = "/cleanRoomStatus", method = RequestMethod.GET)
-	public @ResponseBody ModelAndView funChangeStatus(@RequestParam("checkInNo") String checkInNo,HttpServletRequest request) {
+	public @ResponseBody String  funChangeStatus(@RequestParam("checkInNo") String checkInNo,HttpServletRequest request) {
 
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String propCode = request.getSession().getAttribute("propertyCode").toString();
 		String PMSDate = request.getSession().getAttribute("PMSDate").toString();
 		String urlHits ="1";
+		String strResponse = "Room changes Successfully";
 		
-		String sqlDirtyRoomCheck = "SELECT b.strStatus ,a.strRoomNo "
+		String sqlChangeStatus = "update tblroom a set a.strStatus='Free' where a.strRoomDesc='"+checkInNo+"' "
+				+ "and a.strClientCode='"+clientCode+"'";
+		
+		objWebPMSUtility.funExecuteUpdate(sqlChangeStatus, "sql");
+		/*String sqlDirtyRoomCheck = "SELECT b.strStatus ,a.strRoomNo "
 				+ "FROM tblcheckindtl a,tblroom b "
 				+ "WHERE a.strCheckInNo='"+checkInNo+"' AND a.strRoomNo=b.strRoomCode "
 				+ "AND a.strClientCode='"+clientCode+"'";
@@ -497,7 +535,7 @@ public class clsPostRoomTerrifController {
 		{
 			for(int i=0;i<listDirtyRoomCheck.size();i++)
 			{
-				Object[] arr = (Object[]) listDirtyRoomCheck.get(0);
+				Object[] arr = (Object[]) listDirtyRoomCheck.get(i);
 				String strStatus = arr[0].toString();
 				String strRoomNo = arr[1].toString();
 				
@@ -511,8 +549,9 @@ public class clsPostRoomTerrifController {
 				
 			}
 			
-		}
+		}*/
+		return strResponse;
 		
-		return new ModelAndView("redirect:/frmRoomStatusDiary.html");
+		//return new ModelAndView("redirect:/frmRoomStatusDiary.html");
 	}
 }

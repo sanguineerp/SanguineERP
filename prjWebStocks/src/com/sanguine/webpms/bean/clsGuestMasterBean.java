@@ -95,6 +95,20 @@ public class clsGuestMasterBean {
 
 	private int intPinCodeOfc;
 	
+	private String dteArrivalDate;
+	
+	private String dteDepartureDate;
+	
+	private String stRoomNo;
+	
+	private String tmeArrivalTime;
+	
+	private String tmeDepartureTime;
+	
+	private String strNoOfNights;
+	
+	private String strReservationNo;
+	
 	
 
 	// Setter-Getter Methods
@@ -496,6 +510,62 @@ public class clsGuestMasterBean {
 
 	public void setIntPinCodeOfc(int intPinCodeOfc) {
 		this.intPinCodeOfc = intPinCodeOfc;
+	}
+
+	public String getDteArrivalDate() {
+		return dteArrivalDate;
+	}
+
+	public void setDteArrivalDate(String dteArrivalDate) {
+		this.dteArrivalDate = dteArrivalDate;
+	}
+
+	public String getDteDepartureDate() {
+		return dteDepartureDate;
+	}
+
+	public void setDteDepartureDate(String dteDepartureDate) {
+		this.dteDepartureDate = dteDepartureDate;
+	}
+
+	public String getStRoomNo() {
+		return stRoomNo;
+	}
+
+	public void setStRoomNo(String stRoomNo) {
+		this.stRoomNo = stRoomNo;
+	}
+
+	public String getTmeArrivalTime() {
+		return tmeArrivalTime;
+	}
+
+	public void setTmeArrivalTime(String tmeArrivalTime) {
+		this.tmeArrivalTime = tmeArrivalTime;
+	}
+
+	public String getTmeDepartureTime() {
+		return tmeDepartureTime;
+	}
+
+	public void setTmeDepartureTime(String tmeDepartureTime) {
+		this.tmeDepartureTime = tmeDepartureTime;
+	}
+
+	public String getStrNoOfNights() {
+		return strNoOfNights;
+	}
+
+	public void setStrNoOfNights(String strNoOfNights) {
+		this.strNoOfNights = strNoOfNights;
+	}
+
+	public String getStrReservationNo() {
+		return strReservationNo;
+	}
+
+	public void setStrReservationNo(String strReservationNo) {
+		this.strReservationNo = strReservationNo;
 	}
 	
 	

@@ -36,6 +36,8 @@ public class clsBillDiscountBean {
 	
 	private double dblTotal;
 	
+	private String strDiscOn;
+	
 	
 	
 	public double getDblTotal() {
@@ -173,6 +175,14 @@ public class clsBillDiscountBean {
 
 	public void setStrClientCode(String strClientCode) {
 		this.strClientCode = strClientCode;
+	}
+
+	public String getStrDiscOn() {
+		return strDiscOn;
+	}
+
+	public void setStrDiscOn(String strDiscOn) {
+		this.strDiscOn = strDiscOn;
 	}
 
 }

@@ -8,13 +8,16 @@ import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.webpms.bean.clsBillDiscountBean;
+import com.sanguine.webpms.bean.clsTaxCalculation;
 import com.sanguine.webpms.bean.clsVoidBillBean;
+import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
 import com.sanguine.webpms.model.clsBillDiscountHdModel;
 import com.sanguine.webpms.model.clsBillHdModel;
 import com.sanguine.webpms.model.clsRoomMasterModel;
 import com.sanguine.webpms.model.clsVoidBillDtlModel;
 import com.sanguine.webpms.model.clsVoidBillHdModel;
 import com.sanguine.webpms.model.clsVoidBillTaxDtlModel;
+import com.sanguine.webpms.model.clsWalkinRoomRateDtlModel;
 import com.sanguine.webpms.service.clsBillDiscountService;
 import com.sanguine.webpms.service.clsBillService;
 import com.sanguine.webpms.service.clsRoomMasterService;
@@ -40,6 +43,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +80,10 @@ public class clsBillDiscountController {
 	private ServletContext servletContext;
 	@Autowired
 	private clsSetupMasterService objSetupMasterService;
+	@Autowired
+	private clsWebPMSDBUtilityDao objWebPMSUtility;
+	@Autowired
+	private clsGlobalFunctionsService objGlobalFunService;
 	Map<String,String> hmReason=new HashMap<>();
 	// Open BillDiscount
 	@RequestMapping(value = "/frmBillDiscount", method = RequestMethod.GET)
@@ -124,8 +132,136 @@ public class clsBillDiscountController {
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
 			clsBillHdModel objBillModel=objVoidBillService.funGetBillData(objBean.getStrRoomNo(), objBean.getStrBillNo(), clientCode);
+			clsBillDiscountHdModel objModel = funPrepareModel(objBean, userCode, clientCode);
 			String strBillNo="";
+			double dblSumTariffAmt=0;
+			double dblDiscAmt=0;
+			double dblGrandTotal = 0;
+			double dblRoomTariff = 0;
+			double dblTaxAmt=0;
+			double dblDiscPerDay = 0;
 			//Save in void bill
+			if(objBean.getStrDiscOn().equalsIgnoreCase("Room Tariff"))
+			{
+				String sqlRoomTariffAmt = "select a.dblDebitAmt from tblbilldtl a where a.strPerticulars='Room Tariff' and a.strBillNo='"+objBean.getStrBillNo()+"';";
+				List listRoomTariffAmt = objGlobalFunctionsService.funGetListModuleWise(sqlRoomTariffAmt, "sql");
+				if(listRoomTariffAmt!=null && listRoomTariffAmt.size()>0)
+				{
+					for(int i=0;i<listRoomTariffAmt.size();i++)
+					{
+						dblSumTariffAmt = dblSumTariffAmt + Double.parseDouble(listRoomTariffAmt.get(i).toString());
+						dblRoomTariff = Double.parseDouble(listRoomTariffAmt.get(i).toString());
+					}
+				}
+				dblGrandTotal = objBillModel.getDblGrandTotal();
+			
+				dblDiscAmt = (dblSumTariffAmt*objBean.getDblDiscPer())/100;
+				dblGrandTotal=dblGrandTotal - dblDiscAmt;
+				objModel.setDblDiscAmt(dblDiscAmt);
+				objModel.setDblGrandTotal(dblGrandTotal);
+				dblDiscPerDay = (dblRoomTariff*objBean.getDblDiscPer())/100;
+				//Logic for recalculating tax
+				
+				dblRoomTariff = dblRoomTariff-dblDiscPerDay;
+				
+				
+				Date dt = new Date();
+				String date = (dt.getYear() + 1900) + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+
+				String sqlTax = "SELECT strTaxCode,strTaxDesc,strIncomeHeadCode,"
+						+ "strTaxType,dblTaxValue,strTaxOn,strDeptCode,dblFromRate,"
+						+ "dblToRate FROM tbltaxmaster WHERE DATE(dteValidFrom)<='"+date+"' "
+						+ "and  date(dteValidTo)>='"+date+"' and strTaxOnType = 'Room Night' ";
+				
+				List listTaxDtl = objGlobalFunService.funGetListModuleWise(sqlTax, "sql");
+				double finalTax = 0.0;
+				
+				String strTaxOn="";
+				for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
+					String taxCalType = "Forward";
+					Object[] arrObjTaxDtl = (Object[]) listTaxDtl.get(cnt);
+					double taxValue = Double.parseDouble(arrObjTaxDtl[4].toString());
+					double fromRate = Double.parseDouble(arrObjTaxDtl[7].toString());
+					double toRate = Double.parseDouble(arrObjTaxDtl[8].toString());
+					String strTaxDesc = arrObjTaxDtl[1].toString();
+					
+					if(fromRate<(dblRoomTariff)&& (dblRoomTariff)<=toRate)
+					{
+						double taxAmt = 0;
+						if (taxCalType.equals("Forward")) // Forward Tax
+															// Calculation
+						{
+							taxAmt = (dblRoomTariff * taxValue) / 100;
+							dblTaxAmt = taxAmt;
+						} 
+						else // Backward Tax Calculation
+						{
+							taxAmt = dblRoomTariff * 100 / (100 + taxValue);
+							taxAmt = dblRoomTariff - taxAmt;
+						}
+						finalTax = finalTax+taxAmt;
+						
+					}
+					else
+					{
+						
+					}
+				}
+				String sqlTaxDesc = "select a.strTaxDesc from tblbilltaxdtl a where a.strBillNo='"+objBean.getStrBillNo()+"' and a.strClientCode='"+clientCode+"'";
+				List listTaxDesc = objGlobalFunService.funGetListModuleWise(sqlTaxDesc, "sql");
+				for (int cnt = 0; cnt < listTaxDesc.size(); cnt++) {
+					String strTaxDesc = listTaxDesc.get(cnt).toString();
+					if(strTaxDesc.contains("Room Rent"))
+					{
+						String sqlUpdate = "update tblbilltaxdtl a set a.dblTaxAmt='"+dblTaxAmt+"' where a.strBillNo='"+objBean.getStrBillNo()+"' and a.strClientCode='"+clientCode+"' ";
+						objWebPMSUtility.funExecuteUpdate(sqlUpdate, "sql");
+					}
+				}
+				
+				
+			}
+			else if (objBean.getStrDiscOn().equalsIgnoreCase("Income Head"))
+			{
+				dblGrandTotal = objBillModel.getDblGrandTotal();
+				String sqlBillDtl = "select * from tblbilldtl a where a.strBillNo='"+objBean.getStrBillNo()+"' and a.strClientCode='"+clientCode+"'";
+				List listTaxDtl = objGlobalFunService.funGetListModuleWise(sqlBillDtl, "sql");
+				for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
+					Object[] arrObjBillDtl = (Object[]) listTaxDtl.get(cnt);
+					
+					if(arrObjBillDtl[3].toString().contains("IN"))
+					{
+						
+						double dblIncomeHeadAmt = Double.parseDouble(arrObjBillDtl[7].toString());
+						dblDiscAmt = (dblIncomeHeadAmt*objBean.getDblDiscPer())/100;
+						dblIncomeHeadAmt=dblIncomeHeadAmt-dblDiscAmt;
+						objModel.setDblDiscAmt(dblDiscAmt);
+						
+						//Tax recalculation Logic
+						String strPericulars = arrObjBillDtl[4].toString();
+						
+						String sqlTaxOnIncomeHead = "select a.strTaxDesc, a.dblTaxValue from tbltaxmaster a where a.strTaxOnType='Department' and a.strClientCode='"+clientCode+"'";
+						List listTaxOnIncomeHead = objGlobalFunService.funGetListModuleWise(sqlTaxOnIncomeHead, "sql");
+						for(int cnt2=0;cnt2<listTaxOnIncomeHead.size();cnt2++)
+						{
+							Object[] arrObjTaxOnIncomeHead = (Object[]) listTaxOnIncomeHead.get(cnt2);
+							String strTaxDescOnIncomeHead = arrObjTaxOnIncomeHead[0].toString();
+							if(strTaxDescOnIncomeHead.contains(strPericulars))
+							{
+								double dblTaxOnIncomeHeadAmt = 0;
+								dblTaxOnIncomeHeadAmt=Double.parseDouble(arrObjTaxOnIncomeHead[1].toString());
+								double dblNewTaxAmt=(dblTaxOnIncomeHeadAmt*dblIncomeHeadAmt)/100;
+								String sqlUpdateTaxInBillTaxDtl = "update tblbilltaxdtl  a set a.dblTaxAmt='"+dblNewTaxAmt+"' where a.strBillNo='"+objBean.getStrBillNo()+"' and a.strDocNo like 'IN%' and a.strClientCode='"+clientCode+"'";
+								objWebPMSUtility.funExecuteUpdate(sqlUpdateTaxInBillTaxDtl, "sql");
+							}
+						}
+					}
+				
+				}
+				
+			}
+			else
+			{
+			
 			if(objBillModel!=null){
 				strBillNo=objBillModel.getStrBillNo();
 				clsVoidBillHdModel objVoidHdModel=new clsVoidBillHdModel();
@@ -202,12 +338,12 @@ public class clsBillDiscountController {
 				objVoidBillService.funUpdateVoidBillItemData(objBillModel,objVoidHdModel);
 				
 			}
-			
+		}
 			
 			
 			
 			//Save in to bill discount
-			clsBillDiscountHdModel objModel = funPrepareModel(objBean, userCode, clientCode);
+			
 			if (objModel != null) {
 				objBillDiscountService.funAddUpdateBillDiscount(objModel);
 			}

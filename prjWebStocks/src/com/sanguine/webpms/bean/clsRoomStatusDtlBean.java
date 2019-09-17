@@ -39,7 +39,19 @@ public class clsRoomStatusDtlBean {
 
 	private String dteDepartureDate;
 	
+	private String strNoOfDays;
 	
+	private String tmeArrivalTime;
+	
+	private String tmeDepartureTime;
+	
+	private String tmeCheckOutAMPM;
+	
+	private String tmeCheckInAMPM;
+	
+	double dblRemainingAmt = 0;
+	
+	private String strDay;
 	private TreeMap<Integer, List<clsGuestListReportBean>> mapGuestListPerDay;
 
 	public TreeMap<Integer, List<clsGuestListReportBean>> getMapGuestListPerDay() {
@@ -193,6 +205,104 @@ public class clsRoomStatusDtlBean {
 
 	public void setStrCheckOutNo(String strCheckOutNo) {
 		this.strCheckOutNo = strCheckOutNo;
+	}
+
+
+
+
+	public String getStrNoOfDays() {
+		return strNoOfDays;
+	}
+
+
+
+
+	public void setStrNoOfDays(String strNoOfDays) {
+		this.strNoOfDays = strNoOfDays;
+	}
+
+
+
+
+	public String getTmeArrivalTime() {
+		return tmeArrivalTime;
+	}
+
+
+
+
+	public void setTmeArrivalTime(String tmeArrivalTime) {
+		this.tmeArrivalTime = tmeArrivalTime;
+	}
+
+
+
+
+	public String getTmeDepartureTime() {
+		return tmeDepartureTime;
+	}
+
+
+
+
+	public void setTmeDepartureTime(String tmeDepartureTime) {
+		this.tmeDepartureTime = tmeDepartureTime;
+	}
+
+
+
+
+	public String getTmeCheckOutAMPM() {
+		return tmeCheckOutAMPM;
+	}
+
+
+
+
+	public void setTmeCheckOutAMPM(String tmeCheckOutAMPM) {
+		this.tmeCheckOutAMPM = tmeCheckOutAMPM;
+	}
+
+
+
+
+	public String getTmeCheckInAMPM() {
+		return tmeCheckInAMPM;
+	}
+
+
+
+
+	public void setTmeCheckInAMPM(String tmeCheckInAMPM) {
+		this.tmeCheckInAMPM = tmeCheckInAMPM;
+	}
+
+
+
+
+	public String getStrDay() {
+		return strDay;
+	}
+
+
+
+
+	public void setStrDay(String strDay) {
+		this.strDay = strDay;
+	}
+
+
+
+
+	public double getDblRemainingAmt() {
+		return dblRemainingAmt;
+	}
+
+
+
+
+	public void setDblRemainingAmt(double dblRemainingAmt) {
+		this.dblRemainingAmt = dblRemainingAmt;
 	}
 
 }

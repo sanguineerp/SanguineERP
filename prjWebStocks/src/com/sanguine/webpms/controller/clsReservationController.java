@@ -156,7 +156,10 @@ public class clsReservationController {
 		String reservationNo = request.getParameter("docCode").toString();
 		String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
 		String strRoomNo = request.getParameter("roomNo").toString();
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
 
+		String strRoomCode = funGetRoomCode(strRoomNo,clientCode);
+		
 		try {
 			urlHits = request.getParameter("saddr").toString();
 
@@ -170,7 +173,7 @@ public class clsReservationController {
 		model.put("urlHits", urlHits);
 
 		request.getSession().setAttribute("ResNo", reservationNo);
-		request.getSession().setAttribute("roomNo", strRoomNo);
+		request.getSession().setAttribute("RoomCode", strRoomCode);
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmReservation_1", "command", new clsReservationBean());
@@ -179,6 +182,17 @@ public class clsReservationController {
 		} else {
 			return null;
 		}
+	}
+
+	private String funGetRoomCode(String strRoomNo, String clientCode) {
+		String strRoomCode = "";
+		String sqlRoomCode = "select a.strRoomCode from tblroom a where a.strRoomDesc='"+strRoomNo+"' and a.strClientCode='"+clientCode+"'";
+		List listRoomCode = objGlobalFunctionsService.funGetListModuleWise(sqlRoomCode, "sql");
+		if(listRoomCode!=null && listRoomCode.size()>0)
+		{
+			strRoomCode = listRoomCode.get(0).toString();
+		}
+		return strRoomCode;
 	}
 
 	// Load Header Table Data On Form

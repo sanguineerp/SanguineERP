@@ -248,6 +248,18 @@
 		}}%>
 
 	});
+	
+	 function funChangeDiscType()
+	 {
+		 
+		 $("#cmbDiscountType").val('Per')
+		 document.getElementById("txtDiscAmt").readOnly = true;
+			document.getElementById("txtDiscPer").readOnly = false; 
+			$("#txtDiscAmt").val(0.0);
+			$("#txtGrandTotal").val($("#txtTotal").val());
+			document.getElementById('txtDiscPer').style.display = 'block';
+			document.getElementById('txtDiscAmt').style.display = 'none';
+	 }
 </script>
 
 </head>
@@ -302,6 +314,21 @@
 				<td>
 					<s:input type="text" readonly="true"  path="strRoomNo"  id="txtRoomNo" cssClass="BoxW124px" />
 				&nbsp;&nbsp;&nbsp;<label id="lblRoomDesc"></label>
+				</td>
+			</tr>
+			
+			
+			<tr>
+				<td>
+					<label>Disc On</label>
+				</td>
+				<td>
+    				<s:select id="cmbDiscountOn" path="strDiscOn" cssClass="BoxW124px" onchange="funChangeDiscType();"
+    				>
+ 					    <s:option value="All">All</s:option>
+				    	<s:option value="Room Tariff">Room Tariff</s:option>
+				    	<s:option value="Income Head">Income Head</s:option>
+				   </s:select>
 				</td>
 			</tr>
 			

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.controller.clsSendEmailController;
 import com.sanguine.model.clsCompanyMasterModel;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
@@ -128,14 +130,23 @@ public class clsDayEndController {
 		String[] arrSpDate = objBean.getDtePMSDate().split("-");
 		// Date dtNextDate=new
 		// Date(Integer.parseInt(arrSpDate[2]),Integer.parseInt(arrSpDate[1]),Integer.parseInt(arrSpDate[0]));
+		//Date dtNextDate = new Date(Integer.parseInt(arrSpDate[2]), Integer.parseInt(arrSpDate[1]), Integer.parseInt(arrSpDate[0]));
 		Date dtNextDate = new Date(Integer.parseInt(arrSpDate[0]), Integer.parseInt(arrSpDate[1]), Integer.parseInt(arrSpDate[2]));
+		
+		String strNewDate="";
 		GregorianCalendar cal = new GregorianCalendar();
+		try {
+			strNewDate = getNextDate(objBean.getDtePMSDate());
+		} catch (ParseException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} 
 		cal.setTime(dtNextDate);
 		cal.add(Calendar.DATE, 1);
-		String newStartDate = cal.getTime().getYear() + "-" + (cal.getTime().getMonth()) + "-" + (cal.getTime().getDate());
+		/*String newStartDate = cal.getTime().getYear()+ "-" + (cal.getTime().getMonth()) + "-" + (cal.getTime().getDate());*/
 
 		try {
-			funSendCheckInMail(newStartDate,clientCode,propCode,req);
+			funSendCheckInMail(strNewDate,clientCode,propCode,req);
 		} catch (JRException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -207,10 +218,10 @@ public class clsDayEndController {
 			
 			
 			
-			String sql="SELECT a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode, IFNULL(a.strReservationNo,''), IFNULL(a.strWalkInNo,''),"
-					+ "c.strRoomTypeCode, IFNULL(SUM(d.dblIncomeHeadAmt),0),ifnull(e.strComplimentry,'N') "
-					+ "FROM tblfoliohd a "
-					+ "LEFT OUTER JOIN tblroompackagedtl d ON a.strCheckInNo=d.strCheckInNo,tblroom b,tblroomtypemaster c,tblcheckinhd e "
+			String sql="SELECT a.strFolioNo,a.strRoomNo,c.dblRoomTerrif,a.strExtraBedCode, "
+					+ "IFNULL(a.strReservationNo,''), IFNULL(a.strWalkInNo,''),c.strRoomTypeCode,"
+					+ "IFNULL(e.strComplimentry,'N') "
+					+ "FROM tblfoliohd a ,tblroom b,tblroomtypemaster c,tblcheckinhd e "
 					+ "WHERE a.strRoomNo=b.strRoomCode AND b.strRoomTypeCode=c.strRoomTypeCode AND a.strCheckInNo=e.strCheckInNo "
 					+ "GROUP BY a.strFolioNo";
 			List listRoomInfo = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
@@ -221,13 +232,21 @@ public class clsDayEndController {
 				Object[] arrObjRoom = (Object[]) listRoomInfo.get(cnt);
 				double dblRoomRate=0.0;
 				
+				String sqlFolioENtryCheck = "select * from tblfoliodtl a where a.strFolioNo='"+arrObjRoom[0].toString()+"' and date(a.dteDocDate)='"+objGlobal.funGetDate("yyyy-MM-dd", PMSDate)+"' AND a.strDocNo like 'RM%' and a.strClientCode='"+clientCode+"'";
+				List listFolioCHeck = objGlobalFunctionsService.funGetListModuleWise(sqlFolioENtryCheck, "sql");
+				if(listFolioCHeck!=null && listFolioCHeck.size()>0)
+				{
+					
+				}
+				else
+				{
 				if(!arrObjRoom[4].toString().equals(""))
 				{
 					 String sqlRoomRate=" select a.dblRoomRate from  tblreservationroomratedtl a "
 						        +" where a.strReservationNo='"+arrObjRoom[4].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+date+"' ";
 					 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
 					 
-					 	String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+newStartDate+"' where a.strClientCode='"+clientCode+"' AND a.strReservationNo='"+arrObjRoom[4].toString()+"' ";
+					 	String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+strNewDate+"' where a.strClientCode='"+clientCode+"' AND a.strReservationNo='"+arrObjRoom[4].toString()+"' ";
 						objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql"); 
 
 					 
@@ -252,7 +271,7 @@ public class clsDayEndController {
 						        +" where a.strWalkinNo='"+arrObjRoom[5].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+date+"' ";
 					 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
 					 
-					 	String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+newStartDate+"' where a.strClientCode='"+clientCode+"' AND a.strWalkInNo='"+arrObjRoom[5].toString()+"' ";
+					 	String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+strNewDate+"' where a.strClientCode='"+clientCode+"' AND a.strWalkInNo='"+arrObjRoom[5].toString()+"' ";
 						objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql"); 
 
 					 
@@ -274,7 +293,7 @@ public class clsDayEndController {
 				objPostRoomTerrifBean = new clsPostRoomTerrifBean();
 				objPostRoomTerrifBean.setStrFolioNo(arrObjRoom[0].toString());
 				objPostRoomTerrifBean.setStrRoomNo(arrObjRoom[1].toString());
-				if(arrObjRoom[8].toString().equals("Y"))
+				if(arrObjRoom[7].toString().equals("Y"))
 				{
 					objPostRoomTerrifBean.setDblRoomTerrif(0.0);
 					objPostRoomTerrifBean.setDblOriginalPostingAmt(0.0);
@@ -288,7 +307,7 @@ public class clsDayEndController {
 				String folioNo = arrObjRoom[0].toString();
 				String docNo = objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean, objGlobal.funGetDate("yyyy-MM-dd", PMSDate), arrObjRoom[3].toString(),strTransactionType,userCode);
 				listRoomTerrifDocNo.add(docNo);
-				if(Double.valueOf(arrObjRoom[7].toString())>0)
+				/*if(Double.valueOf(arrObjRoom[7].toString())>0)
 				{   
 					dblRoomRate=Double.valueOf(arrObjRoom[7].toString())/2;
 					objPostRoomTerrifBean = new clsPostRoomTerrifBean();
@@ -300,12 +319,13 @@ public class clsDayEndController {
 					folioNo = arrObjRoom[0].toString();
 					docNo=objPostRoomTerrif.funInsertFolioRecords(folioNo, clientCode, propCode, objPostRoomTerrifBean, objGlobal.funGetDate("yyyy-MM-dd", PMSDate), arrObjRoom[3].toString(),strTransactionType,userCode);	
 					listRoomTerrifDocNo.add(docNo);
-				}
+				}*/
 				
 				
 				
 			
 			}
+		}
 
 			
 			double dayEndAmt = 0;
@@ -334,7 +354,7 @@ public class clsDayEndController {
 			objModel.setStrStartDay("Y");
 			objModel.setStrDayEnd("N");
 			objModel.setDblDayEndAmt(0);
-			objModel.setDtePMSDate(newStartDate);
+			objModel.setDtePMSDate(strNewDate);
 			objModel.setStrUserCode(userCode);
 			objDayEndService.funAddUpdateDayEndHd(objModel);
 
@@ -476,5 +496,14 @@ public class clsDayEndController {
 		objDayEndService.funAddUpdateDayEndHd(objModel);
 		return 1;
 	}
+
+	public static String getNextDate(String  curDate) throws ParseException {
+		  final SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+		  final Date date = format1.parse(curDate);
+		  final Calendar calendar = Calendar.getInstance();
+		  calendar.setTime(date);
+		  calendar.add(Calendar.DAY_OF_YEAR, 1);
+		  return format1.format(calendar.getTime()); 
+		}
 
 }

@@ -104,6 +104,26 @@
 		 var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
 		  var dte=pmsDate.split("-");
 		  $("#txtPMSDate").val(dte[2]+"-"+dte[1]+"-"+dte[0]);
+		  
+			var billNo='<%=session.getAttribute("BillNo").toString()%>';
+			if(billNo!='')
+			 {
+				 $("#strBillNo").val(billNo);
+				
+				 funSetBillNo(billNo);
+				 <%session.removeAttribute("BillNo");
+				 %>
+			 }
+			 else
+			 {
+				
+				 $("#strBillNo").val("");
+				 <%session.removeAttribute("BillNo");
+				 %>
+				 
+			 }
+			 
+		  
 
 	});
 	/**

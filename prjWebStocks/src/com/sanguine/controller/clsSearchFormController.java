@@ -2714,6 +2714,8 @@ public class clsSearchFormController {
 		String strShowTransOrder = objSetup.getStrShowTransAsc_Desc();
 		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
 		String strWebBooksDB=req.getSession().getAttribute("WebBooksDB").toString();
+		String PMSDate=objGlobalFunctions.funGetDate("yyyy-MM-dd",req.getSession().getAttribute("PMSDate").toString());
+
 		switch (formName) {
 		case "roomCode": {
 			columnNames = "a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc,a.strFloorCode,a.strBedType";
@@ -3212,6 +3214,27 @@ public class clsSearchFormController {
 			columnNames = "a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc,a.strFloorCode,a.strBedType";
 			tableName = " from tblroom a,tblroomtypemaster b " + " where a.strRoomTypeCode=b.strRoomTypeCode "
 					  + " and b.strRoomTypeCode='"+roomTypeCode+"' and a.strStatus='Free' and a.strClientCode='" + clientCode + "' ";
+			listColumnNames = "Code,Description,Type,Floor No,Bed Type,Funiture,Extra Bed";
+			idColumnName = "strRoomCode";
+			flgQuerySelection = true;
+			search_with="";
+			searchFormTitle = "Room Master";
+			break;
+		}
+		
+		case "roomByRoomTypeForReservation": {
+			if (req.getParameter("strRoomTypeCode") != null) {
+				roomTypeCode = req.getParameter("strRoomTypeCode");
+			}
+			columnNames = "main.strRoomCode,main.strRoomDesc,main.strRoomTypeDesc,main.strFloorCode,main.strBedType";
+			tableName = "from tblroom main "
+					+ "where main.strStatus='Free' and main.strClientCode='320.001' and main.strRoomCode NOT IN "
+					+ "( "
+					+ "select table1.roomNo from ( "
+					+ "select a.strRoomNo as roomNo from tblreservationdtl a,tblreservationhd b where a.strReservationNo=b.strReservationNo and "
+					+ "'"+PMSDate+"' between Date(b.dteArrivalDate) and Date(b.dteDepartureDate)) table1, "
+					+ "(select c.strRoomCode as troomNo from tblroom c where c.strStatus='Free')table2 "
+					+ "where table1.roomNo=table2.troomNo)";
 			listColumnNames = "Code,Description,Type,Floor No,Bed Type,Funiture,Extra Bed";
 			idColumnName = "strRoomCode";
 			flgQuerySelection = true;

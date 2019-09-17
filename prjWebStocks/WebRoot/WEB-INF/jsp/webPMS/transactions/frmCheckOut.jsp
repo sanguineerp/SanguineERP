@@ -255,6 +255,26 @@
 			}
 		}%>
 		
+		var roomNo='<%=session.getAttribute("checkOutNo").toString()%>';
+		if(roomNo!='')
+		 {
+			 $("#strSearchTextField").val(roomNo);
+			
+			 funSetRoomMasterData(roomNo);
+			 <%session.removeAttribute("checkOutNo");
+			 %>
+		 }
+		 else
+		 {
+			
+			 $("#strSearchTextField").val("");
+			 <%session.removeAttribute("checkOutNo");
+			 %>
+			 
+		 }
+		
+		
+		
 		 var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
 		  var dte=pmsDate.split("-");
 		  $("#txtPMSDate").val(dte[2]+"-"+dte[1]+"-"+dte[0]);

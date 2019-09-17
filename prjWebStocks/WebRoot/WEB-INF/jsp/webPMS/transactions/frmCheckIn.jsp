@@ -70,7 +70,7 @@
 		{
 			%>
 			checkInNo='<%=session.getAttribute("checkInNo").toString()%>';
-			funSetCheckInData(checkInNo);
+			funSetReservationNo(checkInNo);
 		    <%
    		 	session.removeAttribute("checkInNo");
 		}%>
