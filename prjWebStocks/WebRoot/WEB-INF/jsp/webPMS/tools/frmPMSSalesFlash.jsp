@@ -835,6 +835,7 @@ function funClick(obj)
 		<label>Sales Flash </label>
 	</div>
 	<s:form name="frmPMSSalesFlash" method="GET" action="">
+	<br />
 	<table class="transTable">
 	       <tr>
 				<td><label>From Date</label></td>
@@ -849,7 +850,7 @@ function funClick(obj)
 	       </tr>
 	</table>
 	
-	<br/><br/>
+	<br/>
 		<div id="divSettlementWise" class="dynamicTableContainer"
 			style="height: 400px;">
 			<table style="width: 100%; border: #0F0; table-layout: fixed;"
@@ -1198,7 +1199,7 @@ function funClick(obj)
 		</div>
 		
 		<div id="divValueTotal"
-			style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 50px; margin: auto; overflow-x: hidden; overflow-y: hidden; width: 94%;">
+			style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 25px; margin: auto; overflow-x: hidden; overflow-y: hidden; width: 94%;">
 			<table id="tblTotalFlash" class="transTablex"
 				style="width: 100%; font-size: 11px; font-weight: bold;">
 				<tr style="margin-left: 28px">

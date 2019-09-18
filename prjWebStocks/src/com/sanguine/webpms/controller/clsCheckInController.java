@@ -1146,10 +1146,12 @@ public class clsCheckInController {
 								+ " '"+objCheckInDtlModel.getStrGuestCode()+"','"+PMSDate+"','','"+clientCode+"') ";
 						objWebPMSUtility.funExecuteUpdate(insertChangedRoomType, "sql");
 						
+						/*sql="update tblroom a set a.strStatus='Free' where a.strRoomCode='"+oldRoomNo+"'";
+						objWebPMSUtility.funExecuteUpdate(sql, "sql");*/ 
+						
 						sql="update tblroom a set a.strStatus='Occupied' where a.strRoomCode='"+objCheckInDtlModel.getStrRoomNo()+"'";
 						objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
-						sql="update tblroom a set a.strStatus='Free' where a.strRoomCode='"+oldRoomNo+"'";
-						objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
+						
 						sql="update tblreservationdtl a set a.strRoomType='"+objCheckInDtlModel.getStrRoomType()+"' , a.strRoomNo='"+objCheckInDtlModel.getStrRoomNo()+"' where a.strReservationNo='"+objHdModel.getStrReservationNo()+"' and a.strGuestCode='"+objCheckInDtlModel.getStrGuestCode()+"' ";
 						objWebPMSUtility.funExecuteUpdate(sql, "sql"); 
 					}

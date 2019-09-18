@@ -165,9 +165,8 @@
 		var message='';
 		<%if (session.getAttribute("success") != null) {
 				if (session.getAttribute("successMessage") != null) {%>
-			            message='<%=session.getAttribute("successMessage").toString()%>
-	';
-<%session.removeAttribute("successMessage");
+			            message='<%=session.getAttribute("successMessage").toString()%>';
+						<%session.removeAttribute("successMessage");
 				}
 				boolean test = ((Boolean) session.getAttribute("success"))
 						.booleanValue();

@@ -1158,11 +1158,11 @@
 	// Reset Walkin Detail Fields
 	function funResetWalkinDetailFields()
 	{		
-	    $("#txtGuestCode").val('');
+	   /*  $("#txtGuestCode").val('');
 	    $("#txtGuestFirstName").val('');
 	    $("#txtGuestMiddleName").val('');
 	    $("#txtGuestLastName").val('');
-	    $("#txtMobileNo").val('');
+	    $("#txtMobileNo").val(''); */
 	}
 	
 	function fun1()

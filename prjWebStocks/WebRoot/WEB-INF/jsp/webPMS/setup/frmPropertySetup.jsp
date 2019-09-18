@@ -967,7 +967,7 @@
 				<tr>
 					<td>
 					
-					<div id="tab_container" style="height: 800px">
+					<div id="tab_container" style="height: 600px">
 								<ul class="tabs">
 								<li data-state="tab1">General</li>
 								

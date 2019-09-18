@@ -481,7 +481,7 @@ public class clsSendEmailController
 	
 	public @ResponseBody String doSendReservationEmail(String strReservationNo,String strMessege,String strModuleName,HttpServletRequest request) throws JRException
 	{
-		// takes input from e-mail form
+		// takes input from e-mail form.
 		try
 		{
 			String subject = "";
