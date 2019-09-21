@@ -3062,9 +3062,10 @@ public class clsSearchFormController {
 		}
 
 		case "receiptNo": {
-			columnNames = "a.strReceiptNo,date(a.dteReceiptDate),a.strAgainst,a.strCheckInNo,a.strReservationNo,a.strBillNo ";
-			tableName = "from tblreceipthd a ";
-			listColumnNames = "Receipt No,Receipt Date,Against,Check In No,Reservation No,Bill No";
+			columnNames = "a.strReceiptNo,CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName), DATE(a.dteReceiptDate),a.strAgainst,a.strCheckInNo,a.strReservationNo,a.strBillNo";
+			tableName = "from tblreceipthd a,tblcheckindtl b,tblguestmaster c "
+					+ "WHERE a.strCheckInNo=b.strCheckInNo AND b.strGuestCode=c.strGuestCode";
+			listColumnNames = "Receipt No,Guest Name,Receipt Date,Against,Check In No,Reservation No,Bill No";
 			idColumnName = "strReceiptNo";
 			flgQuerySelection = true;
 			// criteria = getCriteriaQuery(columnNames,search_with,tableName);
@@ -3228,7 +3229,7 @@ public class clsSearchFormController {
 			}
 			columnNames = "main.strRoomCode,main.strRoomDesc,main.strRoomTypeDesc,main.strFloorCode,main.strBedType";
 			tableName = "from tblroom main "
-					+ "where main.strStatus='Free' and main.strClientCode='320.001' and main.strRoomCode NOT IN "
+					+ "where main.strStatus='Free' and main.strClientCode='"+clientCode+"' and main.strRoomCode NOT IN "
 					+ "( "
 					+ "select table1.roomNo from ( "
 					+ "select a.strRoomNo as roomNo from tblreservationdtl a,tblreservationhd b where a.strReservationNo=b.strReservationNo and "

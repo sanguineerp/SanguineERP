@@ -157,7 +157,7 @@ public class clsPostRoomTerrifController {
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
 			String strTransactionType = "Post Room Terrif";
 
-			String sql = "SELECT a.strFolioNo,a.strExtraBedCode,b.strComplimentry" + " FROM tblfoliohd a,tblcheckinhd b " + " WHERE a.strRoomNo='" + objBean.getStrRoomNo() + "' and a.strCheckInNo=b.strCheckInNo and  a.strRegistrationNo='" + objBean.getStrRegistrationNo() + "' " + " AND a.strClientCode='" + clientCode + "'";
+			String sql = "SELECT a.strFolioNo,a.strExtraBedCode,b.strComplimentry" + " FROM tblfoliohd a,tblcheckinhd b " + " WHERE a.strRoomNo='" + objBean.getStrRoomNo() + "' and a.strCheckInNo=b.strCheckInNo  AND a.strClientCode='" + clientCode + "'";
 			List listFolio = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			Object[] arrObjFolioDtl = (Object[]) listFolio.get(0);
 

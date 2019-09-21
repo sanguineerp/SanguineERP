@@ -109,6 +109,40 @@ public class clsStructureUpdateController {
 		}
 
 	}
+	
+	//PMS
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/frmPMSDeleteModuleList", method = RequestMethod.GET)
+	public ModelAndView funOpenPMSListForm(Map<String, Object> model, HttpServletRequest request) {
+
+		String urlHits = "1";
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		try {
+			urlHits = request.getParameter("saddr").toString();
+		} catch (NullPointerException e) {
+			urlHits = "1";
+		}
+		model.put("urlHits", urlHits);
+		/**
+		 * Set header on form
+		 */
+		model.put("headerName", "Transaction List");
+
+		List<String> listPropertyName = new ArrayList<>();
+
+		String sqlPropertyName = request.getSession().getAttribute("propertyName").toString();
+		listPropertyName.add(sqlPropertyName);
+		model.put("listPropertyName", listPropertyName);
+
+		if ("2".equalsIgnoreCase(urlHits)) {
+			return new ModelAndView("frmPMSDeleteModuleList", "command", new clsDeleteModuleListBean());
+		} else if ("1".equalsIgnoreCase(urlHits)) {
+			return new ModelAndView("frmPMSDeleteModuleList", "command", new clsDeleteModuleListBean());
+		} else {
+			return null;
+		}
+
+	}
 
 	/**
 	 * Load Data on Form
@@ -256,6 +290,10 @@ public class clsStructureUpdateController {
 		}
 		else
 		{
+			if(propName!=null)
+			{
+				propName = req.getSession().getAttribute("propertyName").toString();
+			}
 			objStructureUpdateService.funClearTransactionByProperty(clientCode, str, propName);
 		}
 		return "Transaction Clear Successfully";

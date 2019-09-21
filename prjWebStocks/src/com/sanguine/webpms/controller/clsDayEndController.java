@@ -236,7 +236,8 @@ public class clsDayEndController {
 				List listFolioCHeck = objGlobalFunctionsService.funGetListModuleWise(sqlFolioENtryCheck, "sql");
 				if(listFolioCHeck!=null && listFolioCHeck.size()>0)
 				{
-					
+					String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+strNewDate+"' where a.strClientCode='"+clientCode+"' AND a.strWalkInNo='"+arrObjRoom[5].toString()+"' ";
+					objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql");
 				}
 				else
 				{
@@ -246,7 +247,7 @@ public class clsDayEndController {
 						        +" where a.strReservationNo='"+arrObjRoom[4].toString()+"' and a.strClientCode='"+clientCode+"' and a.strRoomType='"+arrObjRoom[6].toString()+"' and a.dtDate='"+date+"' ";
 					 List listRoomRate = objGlobalFunctionsService.funGetListModuleWise(sqlRoomRate, "sql");
 					 
-					 	String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+strNewDate+"' where a.strClientCode='"+clientCode+"' AND a.strReservationNo='"+arrObjRoom[4].toString()+"' ";
+					 	String sqlUpdateDepartureDate = "update tblcheckinhd a set a.dteDepartureDate='"+strNewDate+"' where a.strClientCode='"+clientCode+"' AND a.strWalkInNo='"+arrObjRoom[5].toString()+"' ";
 						objWebPMSUtility.funExecuteUpdate(sqlUpdateDepartureDate, "sql"); 
 
 					 

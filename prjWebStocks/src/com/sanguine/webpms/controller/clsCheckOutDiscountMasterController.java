@@ -90,7 +90,7 @@ public class clsCheckOutDiscountMasterController {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
-
+			String strTransactionType = "CheckOut Discount";
 			clsFolioHdModel objFolioHdModel = objFolioService.funGetFolioList(objBean.getStrFolioNo(), clientCode, "");
 			List<clsFolioDtlModel> listFolioDtlModels = objFolioHdModel.getListFolioDtlModel();
 			
@@ -110,6 +110,9 @@ public class clsCheckOutDiscountMasterController {
 			objFolioDtlModel.setDblBalanceAmt(0.00);
 			objFolioDtlModel.setStrRevenueType("Folio Discount");
 			objFolioDtlModel.setStrRevenueCode("");
+			objFolioDtlModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+			objFolioDtlModel.setStrTransactionType(strTransactionType);
+			objFolioDtlModel.setStrUserEdited(userCode);
 			listFolioDtlModels.add(objFolioDtlModel);
 			objFolioHdModel.setListFolioDtlModel(listFolioDtlModels);
 			objPMSUtility.funInsertFolioDtlBackup(objFolioHdModel.getStrFolioNo());

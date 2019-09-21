@@ -4994,6 +4994,15 @@
  		<put-attribute name="title" value="Sales Flash" /> 
  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/tools/frmPMSSalesFlash.jsp" /> 
  	</definition>
+ 	
+ 	<definition name="frmPMSReprintReceipt" extends="base.definition">
+	  		<put-attribute name="title" value="ReprintReceipt" /> 
+	  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/transactions/frmPMSReprintReceipt.jsp" /> 
+	  	</definition>
+		<definition name="frmPMSReprintReceipt_1" extends="base.definition4">
+	  		<put-attribute name="title" value="ReprintReceipt" /> 
+	  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/transactions/frmPMSReprintReceipt.jsp" /> 
+	  	</definition>
 	
   	
 <!-- 	End Of WebPMS Tiles Entry -->

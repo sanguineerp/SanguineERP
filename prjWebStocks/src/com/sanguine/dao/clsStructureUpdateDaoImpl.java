@@ -3117,6 +3117,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmBlockRoomReport', 'Block Room Report', 'Reports', '3', 'R', '20', '20', '5', 'imgBlockRoomReport.png', '3', '5', '5', '5', 'NO', 'NO', 'frmBlockRoomReport.html' , NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'), "
 				+ "('frmPMSSalesFlash', 'Sales Flash', 'Tools', 1, 'T', 5, 46, '1', 'imgSalesFlash.png', '3', 1, '1', '1', 'NO', 'NO', 'frmPMSSalesFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'), "
 				+ "('frmCheckInCheckOutList', 'CheckIn CheckOut List', 'Reports', '3', 'R', '4', '4', '6', 'imgCheckInCheckOutList.png', '3', '1', '1', '1', 'NO', 'NO', 'frmCheckInCheckOutList.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				
 		
 		funExecuteQuery(sql);
 		
@@ -3843,6 +3844,142 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			// //////////////////////WebCRM Master
 			// End///////////////////////////////////////////
 
+			
+			//PMSMaster Start
+			case "Agent Commision": {
+				sql = "truncate table tblagentcommision";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Agent Master": {
+				sql = "truncate table tblagentmaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Baggage Master": {
+				sql = "truncate table tblbaggagemaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "BathType Master": {
+				sql = "truncate table tblbathtypemaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Billing Instructions": {
+				sql = "truncate table tblbillinginstructions";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Booker Master": {
+				sql = "truncate table tblbookermaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Booking Type": {
+				sql = "truncate table tblbookingtype";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "BusinessSource Master": {
+				sql = "truncate table tblbusinesssource";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "ChargePosting Master": {
+				sql = "truncate table tblchargeposting";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Corporate Master": {
+				sql = "truncate table tblcorporatemaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Department Master": {
+				sql = "truncate table tbldepartmentmaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "ExtraBed Master": {
+				sql = "truncate table tblextrabed";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Floor Master": {
+				sql = "truncate table tblfloormaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Guest Master": {
+				sql = "truncate table tblguestmaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "IncomeHead Master": {
+				sql = "truncate table tblincomehead";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "MarketSource Master": {
+				sql = "truncate table tblmarketsource";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Plan Master": {
+				sql = "truncate table tblplanmaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			
+			
+			case "RoomType Master": {
+				sql = "truncate table tblroomtypemaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Room Master": {
+				sql = "truncate table tblroom";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			/*case "Settlement Master": {
+				sql = "truncate table tblsettlementmaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Tax Master": {
+				sql = "truncate table tbltaxmaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Reason Master": {
+				sql = "truncate table tblreasonmaster";
+				funExecuteQuery(sql);
+				break;
+			}*/
+			
+			
 			}
 		}
 	}

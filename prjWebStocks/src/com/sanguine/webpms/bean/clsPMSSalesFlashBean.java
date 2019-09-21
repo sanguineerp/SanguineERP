@@ -39,6 +39,14 @@ public class clsPMSSalesFlashBean implements Serializable
 	private String strArrivalTime;
 	private String dblGrandTotal;
 	
+	private String strReceiptNo;
+	private String dteReceiptDate;
+	private String strType;
+	private String strSettlement;
+	private double dblAdvanceAmount;
+	private double dblDiscount;
+	private double dblGrndTotal;
+	
 	public String getStrExportType() {
 		return strExportType;
 	}
@@ -244,6 +252,49 @@ public class clsPMSSalesFlashBean implements Serializable
 	}
 	public void setDblGrandTotal(String dblGrandTotal) {
 		this.dblGrandTotal = dblGrandTotal;
+	}
+	public String getStrReceiptNo() {
+		return strReceiptNo;
+	}
+	public void setStrReceiptNo(String strReceiptNo) {
+		this.strReceiptNo = strReceiptNo;
+	}
+	public String getDteReceiptDate() {
+		return dteReceiptDate;
+	}
+	public void setDteReceiptDate(String dteReceiptDate) {
+		this.dteReceiptDate = dteReceiptDate;
+	}
+	
+	public String getStrSettlement() {
+		return strSettlement;
+	}
+	public void setStrSettlement(String strSettlement) {
+		this.strSettlement = strSettlement;
+	}
+	public String getStrType() {
+		return strType;
+	}
+	public void setStrType(String strType) {
+		this.strType = strType;
+	}
+	public double getDblAdvanceAmount() {
+		return dblAdvanceAmount;
+	}
+	public void setDblAdvanceAmount(double dblAdvanceAmount) {
+		this.dblAdvanceAmount = dblAdvanceAmount;
+	}
+	public double getDblDiscount() {
+		return dblDiscount;
+	}
+	public void setDblDiscount(double dblDiscount) {
+		this.dblDiscount = dblDiscount;
+	}
+	public double getDblGrndTotal() {
+		return dblGrndTotal;
+	}
+	public void setDblGrndTotal(double dblGrndTotal) {
+		this.dblGrndTotal = dblGrndTotal;
 	}
 	
 	

@@ -88,6 +88,8 @@ function funShowTableGUI(divID)
 	document.all["divCancelationList"].style.display = 'none';
 	document.all["divNoShowList"].style.display = 'none';
 	document.all["divVoidBillList"].style.display = 'none';
+	document.all["divPayment"].style.display = 'none';
+	document.all["divBillPrinting"].style.display = 'none';
 	
 	
 	// for show Table GUI
@@ -704,10 +706,37 @@ function funVoidBillDetail(ProdDtl)
 	    row.insertCell(3).innerHTML= "<input name=\"strRoomDesc["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"05%\" id=\"strGuestName."+(rowCount)+"\" value='"+data.strRoomDesc+"'>";
 	    row.insertCell(4).innerHTML= "<input name=\"strPerticular["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strRoomDesc."+(rowCount)+"\" value='"+data.strPerticular+"'>";
 	    row.insertCell(5).innerHTML= "<input name=\"dblVoidDebitAmt["+(rowCount)+"]\" readonly=\"readonly\"  style=\"text-align: right;\" size=\"05%\" class=\"Box\" value="+data.dblVoidDebitAmt+">";
-	    row.insertCell(6).innerHTML= "<input name=\"strReasonDesc["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strReasonDesc."+(rowCount)+"\" value='"+data.strReasonDesc+"'>";
-	    row.insertCell(7).innerHTML= "<input name=\"strRemark["+(rowCount)+"]\" readonly=\"readonly\"  size=\"05%\" class=\"Box\" value="+data.strRemark+">";
-	    row.insertCell(8).innerHTML= "<input name=\"strVoidType["+(rowCount)+"]\" readonly=\"readonly\"  size=\"05%\" class=\"Box\" value="+data.strVoidType+">";
-	    row.insertCell(9).innerHTML= "<input name=\" strVoidUser["+(rowCount)+"]\" readonly=\"readonly\"  size=\"06%\" class=\"Box\" value="+data. strVoidUser+">";
+	   
+	    
+	    
+	    funApplyNumberValidation();
+	}
+}
+function funSetPaymentDetail(ProdDtl)
+{
+	$('#tblPayment tbody').empty();
+	for(var i=0;i<ProdDtl.length;i++)
+	{
+	 var data=ProdDtl[i];
+	 data.dblTotalAmt=parseFloat(data.dblTotalAmt).toFixed(maxQuantityDecimalPlaceLimit);
+     var table = document.getElementById("tblPayment");
+     var rowCount = table.rows.length;
+     var row = table.insertRow(rowCount);
+     
+     var receiptNo = data.strReceiptNo;
+     var date = data.dteReceiptDate;
+     var guestName = data.strGuestName;
+     var against = data.strType;
+     var settlement = data.strSettlement;
+     var amt = data.dblAmount;
+     
+    
+        row.insertCell(0).innerHTML= "<input name=\"strReceiptNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strBillNo."+(rowCount)+"\" value='"+receiptNo+"' onclick=\"funOpenSlip(this,'"+against+"')\" >";		    
+	    row.insertCell(1).innerHTML= "<input name=\"dteReceiptDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"dteBillDate."+(rowCount)+"\" value='"+date+"'>";
+	    row.insertCell(2).innerHTML= "<input name=\"strGuestName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"40%\" id=\"strAgainst."+(rowCount)+"\" value='"+guestName+"'>";
+	    row.insertCell(3).innerHTML= "<input name=\"strType["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"07%\" id=\"strGuestName."+(rowCount)+"\" value='"+against+"'>";
+	    row.insertCell(4).innerHTML= "<input name=\"strSettlement["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strRoomDesc."+(rowCount)+"\" value='"+settlement+"'>";
+	    row.insertCell(5).innerHTML= "<input name=\"dblAmount["+(rowCount)+"]\" readonly=\"readonly\"  style=\"text-align: right;\" size=\"17%\" class=\"Box\" value="+amt+">";
 	    
 	    
 	    
@@ -715,7 +744,63 @@ function funVoidBillDetail(ProdDtl)
 	}
 }
 
+function funOpenSlip(data,against)
+{
+	var receiptNumber = data.value;
+	window.open(getContextPath()+"/rptReservationPaymentRecipt.html?reciptNo="+receiptNumber+"&checkAgainst="+against+ "");
+}
 
+function funSetBillPrintingDetail(ProdDtl)
+{
+	$('#tblBillPrinting tbody').empty();
+	for(var i=0;i<ProdDtl.length;i++)
+	{
+	 var data=ProdDtl[i];
+	 data.dblTotalAmt=parseFloat(data.dblTotalAmt).toFixed(maxQuantityDecimalPlaceLimit);
+     var table = document.getElementById("tblBillPrinting");
+     var rowCount = table.rows.length;
+     var row = table.insertRow(rowCount);
+     
+     var dblDiscount = data.dblDiscount;
+     dblDiscount= dblDiscount.toFixed(2);
+     var dblGrndTotal = data.dblGrndTotal;
+     dblGrndTotal=dblGrndTotal.toFixed(2);
+     var dblTaxAmount = data.dblTaxAmount;
+     dblTaxAmount=dblTaxAmount.toFixed(2);
+     var dteBillDate = data.dteBillDate;
+     var strBillNo = data.strBillNo;
+     var strCheckInNo = data.strCheckInNo;
+     var strGuestName = data.strGuestName;
+     var strRoomDesc = data.strRoomDesc;
+     var dblAdvanceAmount = data.dblAdvanceAmount
+     dblAdvanceAmount=dblAdvanceAmount.toFixed(2);
+     var perticular = data.strPerticular;
+     
+     	row.insertCell(0).innerHTML= "<input name=\"strBillNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strBillNo."+(rowCount)+"\" value='"+strBillNo+"' onclick=\"funOpenBillPrintingSlip(this,'"+perticular+"')\">";
+	    row.insertCell(1).innerHTML= "<input name=\"dteBillDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: center;\" size=\"15%\" id=\"dteBillDate."+(rowCount)+"\" value='"+dteBillDate+"'>";
+	    row.insertCell(2).innerHTML= "<input name=\"strRoomDesc["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strRoomDesc."+(rowCount)+"\" value='"+strRoomDesc+"'>";
+	    row.insertCell(3).innerHTML= "<input name=\"strGuestName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strGuestName."+(rowCount)+"\" value='"+strGuestName+"'>";
+	    row.insertCell(4).innerHTML= "<input name=\"dblGrndTotal["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"15%\" id=\"dblGrndTotal."+(rowCount)+"\" value='"+dblGrndTotal+"'>";
+	    row.insertCell(5).innerHTML= "<input name=\"dblDiscount["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"15%\" id=\"dblDiscount."+(rowCount)+"\" value='"+dblDiscount+"' >";
+	    row.insertCell(6).innerHTML= "<input name=\"dblTaxAmount["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"15%\" id=\"dblTaxAmount."+(rowCount)+"\" value='"+dblTaxAmount+"'>";
+	    row.insertCell(7).innerHTML= "<input name=\"dblAdvanceAmount["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"15%\" id=\"dblAdvanceAmount."+(rowCount)+"\" value='"+dblAdvanceAmount+"'>";
+	   
+	    
+	    
+	    
+	    
+	    
+	    
+	    funApplyNumberValidation();
+	}
+}
+function funOpenBillPrintingSlip(data,pericular)
+{
+	var receiptNumber = data.value;
+	var frmDte1=$('#dteFromDate').val();
+    var toDte1=$('#dteToDate').val();
+	window.open(getContextPath()+"/rptBillPrinting.html?fromDate="+frmDte1+"&toDate="+toDte1+"&billNo="+receiptNumber+"&strSelectBill="+pericular+ "");
+}
 function funExportReport()
 	{
 	var frmDte1=$('#dteFromDate').val();
@@ -760,6 +845,14 @@ function funExportReport()
 	 {
 		window.location.href = getContextPath()+"/exportVoidBillWisePMSSalesFlash.html?frmDte="+frmDte1+"&toDte="+toDte1;
 	 }
+	else if(hidReportName=='divPayment')
+	 {
+		window.location.href = getContextPath()+"/exportPMSPaymentFlash.html?frmDte="+frmDte1+"&toDte="+toDte1;
+	 }
+	else if(hidReportName=='divBillPrinting')
+	 {
+		window.location.href = getContextPath()+"/exportPMSBillPrinting.html?frmDte="+frmDte1+"&toDte="+toDte1;
+	 }
 	
 	
 	
@@ -798,7 +891,111 @@ function funGetBillPerticular(billNo)
 	});
 }
 
+function funOnClickPayment( divId)
+{
+	funShowTableGUI(divId)
+	var frmDte1=$('#dteFromDate').val();
+    var toDte1=$('#dteToDate').val();
+	var searchUrl=getContextPath()+"/loadPaymentForSalesFlash.html?frmDte="+frmDte1+"&toDte="+toDte1;
+	$.ajax({
+	        type: "GET",
+	        url: searchUrl,
+		    dataType: "json",
+		    success: function(response)
+		    {
+		    	funSetPaymentDetail(response);
+		    	funCalculateTotal(response)
+		    	
+		    },
+		    error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }		            
+	        }
+	      });
+}
 
+function funCalculateTotal (data)
+{
+	var totalAmt = 0;
+	for(var i=0;i<data.length;i++)
+	{
+		var data1=data[i];
+		totalAmt = totalAmt+data1.dblAmount;
+		
+	}
+	
+	$("#txtTotValue").val(totalAmt);
+	$("#txtTaxTotValue").val("");
+	
+}
+
+function funOnClckBillPrinting( divId)
+{
+	funShowTableGUI(divId)
+	var frmDte1=$('#dteFromDate').val();
+    var toDte1=$('#dteToDate').val();
+	var searchUrl=getContextPath()+"/loadBillPrintingForSalesFlash.html?frmDte="+frmDte1+"&toDte="+toDte1;
+	$.ajax({
+	        type: "GET",
+	        url: searchUrl,
+		    dataType: "json",
+		    success: function(response)
+		    {
+		    	funSetBillPrintingDetail(response);
+		    	funCalculateBillPrintingTotal(response)
+		    	
+		    },
+		    error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }		            
+	        }
+	      });
+}
+
+function funCalculateBillPrintingTotal(data)
+{
+	var totalAmt = 0;
+	var totalTaxamt = 0;
+	for(var i=0;i<data.length;i++)
+	{
+		var data1=data[i];
+		totalAmt = totalAmt+data1.dblGrndTotal;
+		totalTaxamt = totalTaxamt+data1.dblTaxAmount;
+		
+	}
+	totalTaxamt = totalTaxamt.toFixed(2);
+	totalAmt = totalAmt.toFixed(2);
+	$("#txtTotValue").val(totalAmt);
+	$("#txtTaxTotValue").val(totalTaxamt);
+	
+	
+}
 function funClick(obj)
 {
 	var index=obj.parentNode.parentNode.rowIndex;
@@ -1198,6 +1395,86 @@ function funClick(obj)
 
 		</div>
 		
+		
+		
+		<div id="divPayment" class="dynamicTableContainer"
+			style="height: 400px;">
+			<table style="width: 100%; border: #0F0; table-layout: fixed;"
+				class="transTablex col15-center">
+				<tr bgcolor="#72BEFC">
+					<td width="2%">Receipt No </td>
+					<td width="2%">Receipt Date</td>
+					<td width="4%">Name</td>
+					<td width="2%">Type</td>
+					<td width="2%">Settlement</td>
+					<td width="2%">Amount</td>
+					
+					
+					
+				</tr>
+			</table>
+			<div
+				style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 330px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
+				<table id="tblPayment"
+					style="width: 100%; border: #0F0; table-layout: fixed;"
+					class="transTablex col15-center">
+					<tbody>
+					<col style="width: 2%">
+					<col style="width: 2%">
+					<col style="width: 4%">
+					<col style="width: 2%">
+					<col style="width: 2%">
+					<col style="width: 2%">
+					
+					</tbody>
+
+				</table>
+			</div>
+
+		</div>
+		
+		<div id="divBillPrinting" class="dynamicTableContainer"
+			style="height: 400px;">
+			<table style="width: 100%; border: #0F0; table-layout: fixed;"
+				class="transTablex col15-center">
+				<tr bgcolor="#72BEFC">
+					<td width="2%">Bill No </td>
+					<td width="2%">Bill Date</td>
+					<td width="2%">Room No</td>
+					<td width="3%">Guest Name</td>
+					<td width="2%">Bill Amount</td>
+					<td width="2%">Discount</td>
+					<td width="2%">Tax Amount</td>
+					<td width="2%">Advance Amount</td>
+					
+					
+					
+				</tr>
+			</table>
+			<div
+				style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 330px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
+				<table id="tblBillPrinting"
+					style="width: 100%; border: #0F0; table-layout: fixed;"
+					class="transTablex col15-center">
+					<tbody>
+					<col style="width: 2%">
+					<col style="width: 2%">
+					<col style="width: 2%">
+					<col style="width: 3%">
+					<col style="width: 2%">
+					<col style="width: 2%">
+					<col style="width: 2%">
+					<col style="width: 2%">
+					
+					</tbody>
+
+				</table>
+			</div>
+
+		</div>
+		
+		
+		
 		<div id="divValueTotal"
 			style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 25px; margin: auto; overflow-x: hidden; overflow-y: hidden; width: 94%;">
 			<table id="tblTotalFlash" class="transTablex"
@@ -1215,16 +1492,10 @@ function funClick(obj)
 				</tr>
 			</table>
 		</div>
-
-		
-		
-		
-		
 		
 
-		<div
-			style=" border: 1px solid #ccc; display: block; height: 30px; margin: auto;  width: 94%;">
-		<table class="transTable">
+		<div style=" border: 1px solid #ccc; display: block; height: 30px; margin: auto;  width: 94%;">
+		<table class="transTable" style="width:100%;height:30px; ">
           <tr>
 			<td ><input id="btnSettlmentWise" type="button" 
 			class="form_button" value="Settlement Wise" onclick="funOnClckSettlementWiseBtn('divSettlementWise')" style="background-size: 140px 24px; width: 150px;" /></td>
@@ -1241,12 +1512,15 @@ function funClick(obj)
 			<td colspan="9"><input id="btnExpectedDeptList" type="button"
 			class="form_button" value="Expected Departure List"  onclick="funOnClckExpectedDeptWiseBtn('divExpectedDeptList')" style="background-size: 150px 24px; width: 150px;" /></td>
 			
+			<td colspan="3"><input id="btnBillPrinting" type="button"
+			class="form_button" value="Bill Printing"  onclick="funOnClckBillPrinting('divBillPrinting')" style="background-size: 140px 24px; width: 150px;" /></td>
+			
 		</tr>
 		</table>
 		</div>
 		<div
 		style=" border: 1px solid #ccc; display: block; height: 30px; margin: auto;  width: 94%;">
-		<table class="transTable">
+		<table class="transTable" style="width:100%;height:30px; ">
 		 <tr>
 			<td><input id="btnCheckInList" type="button"
 			class="form_button" value="Check In List"  onclick="funOnClckCheckInBtn('divCheckInList')" style="background-size: 140px 24px; width: 150px;" /></td>	
@@ -1262,11 +1536,15 @@ function funClick(obj)
 			
 			<td colspan="9"><input id="btnVoidBillList" type="button"
 			class="form_button" value="Void Bill List"  onclick="funOnClckVoidBillWiseBtn('divVoidBillList')" style="background-size: 140px 24px; width: 150px;" /></td>
+			
+			<td><input id="btnPayment" type="button"
+			class="form_button" value="Payment"  onclick="funOnClickPayment('divPayment')" style="background-size: 140px 24px; width: 150px;" /></td>	
+			
 		 </tr>
 		</table>
 		</div>
 		
-
+		<br /><br />
 <div id="wait" style="display:none;width:60px;height:60px;border:0px solid black;position:absolute;top:60%;left:55%;padding:2px;">
 				<img src="../${pageContext.request.contextPath}/resources/images/ajax-loader-light.gif" width="60px" height="60px" />
 			</div>

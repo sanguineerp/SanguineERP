@@ -18,4 +18,5 @@ public interface clsStructureUpdateDao {
 	public void funClearWebBooksTransactionByProperty(String clientCode, String[] str, String propName);
 	
 	public void funClearWebBooksTransaction(String clientCode, String[] str);
+
 }

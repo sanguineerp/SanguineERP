@@ -672,7 +672,7 @@ public class clsBillPrintingController {
 							+ "d.dblSettlementAmt AS creditAmt,'0.00' AS balance "
 							+ "FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
 							+ "WHERE c.strReceiptNo=d.strReceiptNo AND d.strSettlementCode=e.strSettlementCode "
-							+ "AND c.strReservationNo='"+strResNo+"' AND d.strClientCode='320.001'";
+							+ "AND c.strReservationNo='"+strResNo+"' AND d.strClientCode='"+clientCode+"'";
 					
 					paymentDtlList = objGlobalFunctionsService.funGetDataList(sqlResPayment, "sql");
 					 for (int i = 0; i < paymentDtlList.size(); i++) {

@@ -218,12 +218,12 @@ body {
 			type : "GET",
 			url : getContextPath()+ "/getRoomStatusList.html?viewDate=" + viewDate,
 			dataType : "json",
-			/*  beforeSend : function(){
+			 beforeSend : function(){
 				 $("#wait").css("display","block");
 		    },
 		    complete: function(){
 		    	 $("#wait").css("display","none");
-		    }, */
+		    },
 			
 			success : function(response){ 
 				funRemoveHeaderTableRows();
@@ -677,9 +677,12 @@ body {
 									  //code=obj.value;
 									  code=obj.defaultValue.split(",");
 									  var subStr = code[1];
-									  url=getContextPath()+"/frmCheckOut1.html?docCode="+subStr
-									  window.open(url);
-			
+									  var isCheckOk=confirm("Do You Want to Checkout ?"); 
+										if(isCheckOk)
+										{
+									 	 url=getContextPath()+"/frmCheckOut1.html?docCode="+subStr
+									 	 window.open(url);
+										}
 		   						  break;
 			case 'rgb(128, 128, 128)'://GREY-->CHECKED-OUT
 									  
@@ -725,15 +728,21 @@ body {
 				  
 				  if(obj.parentNode.cellIndex>1)
 					  {
-						  alert("Proceed to Reservation \n\n"+message);
+					  var isCheckOk=confirm("Do You Want to go on Reservation ?"); 
+						if(isCheckOk)
+						{
 						  url=getContextPath()+"/frmReservation1.html?docCode="+code+"&roomNo="+roomNo;
 						  window.open(url);
+						}
 					  }
 				  else
 					  {
-						  alert("Proceed to Walkin \n\n"+message);
+					  var isCheckOk=confirm("Do You Want to go on Walkin ?"); 
+						if(isCheckOk)
+						{
 						  url=getContextPath()+"/frmWalkin1.html?docCode="+code+"&roomNo="+roomNo;
 						  window.open(url);
+						}
 					  }
 				  
 
