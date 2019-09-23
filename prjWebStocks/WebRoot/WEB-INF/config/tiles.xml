@@ -3455,7 +3455,14 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmWebClubSecurityShell.jsp"></put-attribute>
 	</definition>
 	
-	
+	<definition name="frmWebClubBusinessSourceMaster" extends="base.definition">
+		<put-attribute name="title" value="Business Source Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmWebClubBusinessSourceMaster.jsp"></put-attribute>
+	</definition>
+	<definition name="frmWebClubBusinessSourceMaster_1" extends="base.definition4">
+		<put-attribute name="title" value="Business Source Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmWebClubBusinessSourceMaster.jsp"></put-attribute>
+	</definition>
 	
 	
 	

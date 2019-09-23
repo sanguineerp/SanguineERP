@@ -622,7 +622,7 @@ public class clsPMSSalesFlashController {
 				if(listDisc!=null && listDisc.size()>0)
 				{
 					double dblDiscAmt = Double.parseDouble(listDisc.get(0).toString());
-					dblDiscAmt = dblDiscAmt -(dblDiscAmt*Double.parseDouble(arr2[5].toString())/100);
+					dblDiscAmt = (dblDiscAmt*Double.parseDouble(arr2[5].toString())/100);
 					objBean.setDblDiscount(dblDiscAmt);
 				}
 				

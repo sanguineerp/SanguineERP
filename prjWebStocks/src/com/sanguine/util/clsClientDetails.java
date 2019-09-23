@@ -96,7 +96,7 @@ public class clsClientDetails {
 			hmClientDtl.put("001.030", clsClientDetails.createClientDetails("001.030", "M/S.NIDO RESTAURANT & BAR", dFormat.parse("2015-08-01"), dFormat.parse("2016-08-30")));
 			hmClientDtl.put("001.031", clsClientDetails.createClientDetails("001.031", "M/S GOA PORTUGUESA REST. PVT. LTD.", dFormat.parse("2015-08-01"), dFormat.parse("2016-08-30")));
 			hmClientDtl.put("001.032", clsClientDetails.createClientDetails("001.032", "M/S. HOTEL METRO PALACE PVT. LTD.", dFormat.parse("2015-08-01"), dFormat.parse("2016-08-30")));
-			hmClientDtl.put("074.001", clsClientDetails.createClientDetails("074.001", "THE POONA CLUB LTD", dFormat.parse("2016-01-21"), dFormat.parse("2099-09-11")));
+			hmClientDtl.put("074.001", clsClientDetails.createClientDetails("074.001", "THE POONACLUB LTD", dFormat.parse("2016-01-21"), dFormat.parse("2099-09-11")));
 
 			// WebStocks Clients
 			hmClientDtl.put("000.000", clsClientDetails.createClientDetails("000.000", "Demo Company", dFormat.parse("2014-06-19"), dFormat.parse("2017-10-22")));

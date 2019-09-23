@@ -3783,6 +3783,16 @@ public class clsSearchFormController {
 			flgQuerySelection = true;
 			break;
 		}
+		
+		case "webClubBusinessSrcCode": {
+			columnNames = "a.strBusinessSrcCode,a.strBusinessSrcName,a.dblPercent";
+			tableName = "from tblbusinesssource a where a.strClientCode='" + clientCode + "'";
+			listColumnNames = "Business Source Code,Business Source Name,Percent";
+			idColumnName = "strBusinessSrcCode";
+			searchFormTitle = "Business Source Master";
+			flgQuerySelection = true;
+			break;
+		}
 		}
 
 		mainMap.put("columnNames", columnNames);

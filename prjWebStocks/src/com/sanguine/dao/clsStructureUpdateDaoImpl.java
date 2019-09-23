@@ -28,6 +28,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 	private SessionFactory webPMSSessionFactory;
 
 	@Autowired
+	private SessionFactory WebClubSessionFactory;
+	
+	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
 
 	@Autowired
@@ -2114,9 +2117,25 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 
 		/*----------------WebClub Forms Only---------------------------*/
 		sql = " INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`) VALUES "
-				+ " ('frmWebClubSecurityShellMaster', 'Security Shell', 'Master', 1, 'M', 1, 10, '1', 'default.png', '4', 1, '1', '1', 'NO', 'YES', 'frmWebClubSecurityShell.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ";
+				+ " ('frmWebClubSecurityShellMaster', 'Security Shell', 'Master', 1, 'M', 1, 10, '1', 'default.png', '4', 1, '1', '1', 'NO', 'YES', 'frmWebClubSecurityShell.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
+				+ " ('frmWebClubBusinessSourceMaster', 'Business Source Master', 'Master', '1', 'M', '1', '1', '1', 'default.png', '4', '1', '1', '1', 'NO', 'NO', 'frmWebClubBusinessSourceMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
 
 		funExecuteQuery(sql);
+		
+		sql = "CREATE TABLE `tblbusinesssource` ("
+				+ "`strBusinessSrcCode` VARCHAR(20) NOT NULL,"
+				+ "`strBusinessSrcName` VARCHAR(100) NOT NULL,"
+				+ "`dblPercent` DOUBLE NOT NULL,"
+				+ "`dteDateCreated` VARCHAR(50) NOT NULL,"
+				+ "`dteDateEdited` VARCHAR(50) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(50) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(50) NOT NULL,"
+				+ "`strClientCode` VARCHAR(50) NOT NULL,"
+				+ "PRIMARY KEY (`strClientCode`, `strBusinessSrcCode`)) "
+				+ "COLLATE='latin1_swedish_ci' "
+				+ "ENGINE=InnoDB ;";
+		
+		funExecuteWebClubQuery(sql);
 
 		/*----------------WebClub Forms End---------------------------*/
 		//
@@ -3175,6 +3194,17 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 	private int funExecutePMSQuery(String sql) {
 		try {
 			Query query = webPMSSessionFactory.getCurrentSession().createSQLQuery(sql);
+			query.executeUpdate();
+		} catch (Exception e) {
+		} finally {
+			return 0;
+		}
+	}
+	
+	@SuppressWarnings("finally")
+	private int funExecuteWebClubQuery(String sql) {
+		try {
+			Query query = WebClubSessionFactory.getCurrentSession().createSQLQuery(sql);
 			query.executeUpdate();
 		} catch (Exception e) {
 		} finally {
