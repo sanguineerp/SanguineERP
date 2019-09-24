@@ -11,6 +11,8 @@ public class clsWebClubMemberFormGenrationBean {
 	private String dteGenration;
 
 	private String dteFormIssue;
+	
+	private String strBusinessSourceCode;
 
 	public String getStrFormNo() {
 		return strFormNo;
@@ -50,6 +52,14 @@ public class clsWebClubMemberFormGenrationBean {
 
 	public void setDteFormIssue(String dteFormIssue) {
 		this.dteFormIssue = dteFormIssue;
+	}
+
+	public String getStrBusinessSourceCode() {
+		return strBusinessSourceCode;
+	}
+
+	public void setStrBusinessSourceCode(String strBusinessSourceCode) {
+		this.strBusinessSourceCode = strBusinessSourceCode;
 	}
 
 }

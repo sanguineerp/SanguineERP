@@ -71,6 +71,9 @@ public class clsWebClubMemberFormGenerationModel implements Serializable {
 
 	@Column(name = "strCategoryCode")
 	private String strCategoryCode;
+	
+	@Column(name = "strBusinessSourceCode")
+	private String strBusinessSourceCode;
 
 	// Setter-Getter Methods
 	public long getIntGId() {
@@ -206,6 +209,14 @@ public class clsWebClubMemberFormGenerationModel implements Serializable {
 		} else {
 			return defaultValue;
 		}
+	}
+
+	public String getStrBusinessSourceCode() {
+		return strBusinessSourceCode;
+	}
+
+	public void setStrBusinessSourceCode(String strBusinessSourceCode) {
+		this.strBusinessSourceCode = strBusinessSourceCode;
 	}
 
 }

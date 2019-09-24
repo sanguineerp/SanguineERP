@@ -53,6 +53,9 @@ public class clsWebClubBusinessSourceMasterModel implements Serializable{
 
 	@Column(name="strClientCode")
 	private String strClientCode;
+	
+	@Column(name = "intId", nullable = false, updatable = false)
+	private long intId;
 
 //Setter-Getter Methods
 	public String getStrBusinessSrcCode(){
@@ -129,6 +132,14 @@ public class clsWebClubBusinessSourceMasterModel implements Serializable{
 		else{
 			return defaultValue;
 		}
+	}
+
+	public long getIntId() {
+		return intId;
+	}
+
+	public void setIntId(long intId) {
+		this.intId = intId;
 	}
 
 }

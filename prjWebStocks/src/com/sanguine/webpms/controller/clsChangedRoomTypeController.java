@@ -124,7 +124,7 @@ public class clsChangedRoomTypeController
 				String sqlBillDtl = "SELECT a.strDocNo,a.strType,ifnull(b.strRoomDesc,''),CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),d.strRoomTypeDesc,a.dteToDate "
 						+ " from tblchangedroomtypedtl a left outer join tblroom b on a.strRoomNo=b.strRoomCode,tblguestmaster c,tblroomtypemaster d "
 						+ " where a.strGuestCode=c.strGuestCode and a.strRoomType=d.strRoomTypeCode "
-						+ " and a.strDocNo NOT In(select b.strReservationNo  from tblcheckinhd b )  "
+						+ " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND a.strDocNo NOT In(select b.strReservationNo  from tblcheckinhd b )  "
 						+ " order by a.strDocNo,a.dteToDate DESC ";
 			
 				List roomDtlList = objWebPMSUtility.funExecuteQuery(sqlBillDtl, "sql");
@@ -253,7 +253,7 @@ public class clsChangedRoomTypeController
 						+ "CONCAT(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName),a.strUserEdited ,e.strBedType,a.strRoomTypeCode "
 						+ "FROM tblchangeroom a,tblcheckindtl b,tblreasonmaster c,tblguestmaster d,tblroom e "
 						+ "WHERE a.strGuestCode=b.strGuestCode AND a.strReason=c.strReasonCode AND a.strGuestCode=d.strGuestCode "
-						+ "and b.strRoomNo=e.strRoomCode";
+						+ "and b.strRoomNo=e.strRoomCode AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'";
 			
 				List roomDtlList = objWebPMSUtility.funExecuteQuery(sqlBillDtl, "sql");
 				for (int i = 0; i < roomDtlList.size(); i++) 

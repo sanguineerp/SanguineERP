@@ -73,7 +73,7 @@
 				<textFieldExpression><![CDATA[$P{pContactDetails}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="183" y="89" width="157" height="20" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
+				<reportElement x="207" y="89" width="157" height="20" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
@@ -136,7 +136,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Member Name     :]]></text>
+				<text><![CDATA[Member Name   :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="341" y="58" width="94" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
@@ -157,7 +157,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Room Type          :]]></text>
+				<text><![CDATA[Room Type         :]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="98" y="115" width="161" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
@@ -192,14 +192,14 @@
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Payment Mode    :]]></text>
+				<text><![CDATA[Payment Mode  :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="136" width="97" height="14" uuid="1e307570-e77a-4e7f-ba3e-903f5a174436"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Remark                 :]]></text>
+				<text><![CDATA[Remark              :]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="437" y="96" width="115" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
@@ -312,7 +312,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Room No          :]]></text>
+				<text><![CDATA[Room No            :]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="94" y="77" width="164" height="14" uuid="c8485c6d-5c56-4f1b-b8eb-125b5085e675"/>

@@ -148,7 +148,7 @@ public class clsCheckOutListReportController {
 					+ "FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d,tblbillhd e "
 					+ "WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode "
 					+ "AND b.strGuestCode=d.strGuestCode and a.strCheckInNo=e.strCheckInNo "
-					+ "and Date(a.dteDepartureDate) between '"+fromDate+"' and '"+toDate+"'";			
+					+ "and Date(a.dteDepartureDate) between '"+fromDate+"' and '"+toDate+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'";			
 			
 			List listOfCheckOut = objGlobalFunctionsService.funGetDataList(sqlParametersCheckOutList, "sql");
 			ArrayList fieldList = new ArrayList();

@@ -143,7 +143,7 @@ public class clsBillDiscountController {
 			//Save in void bill
 			if(objBean.getStrDiscOn().equalsIgnoreCase("Room Tariff"))
 			{
-				String sqlRoomTariffAmt = "select a.dblDebitAmt from tblbilldtl a where a.strPerticulars='Room Tariff' and a.strBillNo='"+objBean.getStrBillNo()+"';";
+				String sqlRoomTariffAmt = "select a.dblDebitAmt from tblbilldtl a where a.strPerticulars='Room Tariff' and a.strBillNo='"+objBean.getStrBillNo()+" AND a.strClientCode='"+clientCode+"'';";
 				List listRoomTariffAmt = objGlobalFunctionsService.funGetListModuleWise(sqlRoomTariffAmt, "sql");
 				if(listRoomTariffAmt!=null && listRoomTariffAmt.size()>0)
 				{
@@ -171,7 +171,7 @@ public class clsBillDiscountController {
 				String sqlTax = "SELECT strTaxCode,strTaxDesc,strIncomeHeadCode,"
 						+ "strTaxType,dblTaxValue,strTaxOn,strDeptCode,dblFromRate,"
 						+ "dblToRate FROM tbltaxmaster WHERE DATE(dteValidFrom)<='"+date+"' "
-						+ "and  date(dteValidTo)>='"+date+"' and strTaxOnType = 'Room Night' ";
+						+ "and  date(dteValidTo)>='"+date+"' and strTaxOnType = 'Room Night' AND strClientCode='"+clientCode+"'";
 				
 				List listTaxDtl = objGlobalFunService.funGetListModuleWise(sqlTax, "sql");
 				double finalTax = 0.0;

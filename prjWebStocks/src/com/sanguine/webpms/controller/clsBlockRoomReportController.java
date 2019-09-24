@@ -105,7 +105,7 @@ public class clsBlockRoomReportController {
 		String sql="SELECT a.strRoomCode,b.strRoomDesc,a.dteValidFrom,a.dteValidTo,c.strReasonDesc,a.strRemark,a.strClientCode "
 				+ "FROM tblblockroom a,tblroom b,tblreasonmaster c  "
 				+ "WHERE a.strRoomCode=b.strRoomCode AND a.strClientCode=b.strClientCode "
-				+ "and a.strReason=c.strReasonCode and Date(a.dteValidFrom) between '"+fromDate+"' and '"+toDate+"' ";
+				+ "and a.strReason=c.strReasonCode and Date(a.dteValidFrom) between '"+fromDate+"' and '"+toDate+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
 		
 		
 		List listBlockRoom = objGlobalFunctionsService.funGetDataList(sql, "sql");

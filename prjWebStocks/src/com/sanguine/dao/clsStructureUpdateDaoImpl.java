@@ -2136,7 +2136,16 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "ENGINE=InnoDB ;";
 		
 		funExecuteWebClubQuery(sql);
+		
+		sql = "ALTER TABLE `tblbusinesssource` "
+				+ "ADD COLUMN `intId` BIGINT(20) NULL AFTER `strUserEdited`;";
 
+		funExecuteWebClubQuery(sql);
+		
+		sql = "ALTER TABLE `tblmemberformgeneration` "
+				+ "ADD COLUMN `strBusinessSourceCode` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strPrint`;";
+		
+		funExecuteWebClubQuery(sql);
 		/*----------------WebClub Forms End---------------------------*/
 		//
 		//

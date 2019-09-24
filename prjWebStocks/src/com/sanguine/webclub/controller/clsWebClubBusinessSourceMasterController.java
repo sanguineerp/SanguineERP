@@ -73,6 +73,8 @@ public class clsWebClubBusinessSourceMasterController{
 			String userCode=req.getSession().getAttribute("usercode").toString();
 			clsWebClubBusinessSourceMasterModel objModel = funPrepareModel(objBean,userCode,clientCode);
 			objWebClubBusinessSourceMasterService.funAddUpdateWebClubBusinessSourceMaster(objModel);
+			req.getSession().setAttribute("success", true);
+			req.getSession().setAttribute("successMessage", "Business Source Code : ".concat(objBean.getStrBusinessSrcCode()));
 			return new ModelAndView("redirect:/frmWebClubBusinessSourceMaster.html");
 		}
 		else{
@@ -89,7 +91,7 @@ public class clsWebClubBusinessSourceMasterController{
 		
 
 		if (objBean.getStrBusinessSrcCode().trim().length() == 0){
-			lastNo = objGlobalFunctionsService.funGetLastNo("tblbusinesssource", "BusinessSource Master", "strBusinessSrcCode", clientCode);
+			lastNo = objGlobalFunctionsService.funGetLastNo("tblbusinesssource", "BusinessSource Master", "intId", clientCode);
 			// lastNo=1;
 			String businessSourceCode = "BS" + String.format("%06d", lastNo);
 			objModel.setStrBusinessSrcCode(businessSourceCode);
@@ -100,6 +102,7 @@ public class clsWebClubBusinessSourceMasterController{
 			objModel.setStrClientCode(clientCode);
 			objModel.setStrUserCreated(userCode);
 			objModel.setStrUserEdited(userCode);
+			objModel.setIntId(lastNo);
 		}
 		else
 		{

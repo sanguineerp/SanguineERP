@@ -148,7 +148,7 @@ public class clsCheckInListReportController {
 					+ "FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d "
 					+ "WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode "
 					+ "AND b.strGuestCode=d.strGuestCode  "
-					+ "and Date(a.dteCheckInDate) between '"+fromDate+"' and '"+toDate+"'";
+					+ "and Date(a.dteCheckInDate) between '"+fromDate+"' and '"+toDate+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"'";
 			
 			List listOfCheckIn = objGlobalFunctionsService.funGetDataList(sqlParametersCheckInList, "sql");
 			ArrayList fieldList = new ArrayList();

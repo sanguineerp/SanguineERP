@@ -343,7 +343,7 @@ public class clsCheckInController {
 			String startDate = req.getSession().getAttribute("startDate").toString();
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
  
-			String sqlFolioNo = "select a.strFolioNo from tblfoliohd a where a.strCheckInNo='"+objBean.getStrCheckInNo()+"'";
+			String sqlFolioNo = "select a.strFolioNo from tblfoliohd a where a.strCheckInNo='"+objBean.getStrCheckInNo()+"' and a.strClientCode='"+clientCode+"'";
 			String strFolioNo="";
 			List listFolioNo  = objGlobalFunctionsService.funGetListModuleWise(sqlFolioNo, "sql");			
 			if(listFolioNo.size()>0)
@@ -1189,7 +1189,7 @@ public class clsCheckInController {
 				+ "FROM tblfoliohd a LEFT OUTER JOIN tblroompackagedtl d ON a.strCheckInNo=d.strCheckInNo,"
 				+ "tblroom b,tblroomtypemaster c,tblcheckinhd e WHERE a.strRoomNo=b.strRoomCode "
 				+ "AND b.strRoomTypeCode=c.strRoomTypeCode AND a.strCheckInNo=e.strCheckInNo "
-				+ "and e.strCheckInNo='"+strCheckInNo+"' GROUP BY a.strFolioNo ";
+				+ "and e.strCheckInNo='"+strCheckInNo+"' AND a.strClientCode='"+clientCode+"'  AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"' GROUP BY a.strFolioNo ";
 		
 		List listRoomInfo = objGlobalFunctionsService.funGetListModuleWise(sqlPostRoom, "sql");
         
@@ -1331,13 +1331,14 @@ public class clsCheckInController {
 					+ "FROM tblroomtypemaster b,tblwalkinroomratedtl c, "
 					+ "tblcheckinhd d,tblguestmaster e,tblroom f, "
 					+ "tblcheckindtl a left outer join  tblextrabed g on "
-					+ "g.strExtraBedTypeCode=a.strExtraBedCode "
+					+ "g.strExtraBedTypeCode=a.strExtraBedCode  AND g.strClientCode='"+clientCode+"'"
 					+ "WHERE a.strRoomType=b.strRoomTypeCode "
 					+ "AND c.strWalkinNo=d.strWalkInNo "
 					+ "AND a.strGuestCode=e.strGuestCode "
 					+ "AND a.strCheckInNo=d.strCheckInNo  "
 					+ "AND d.strCheckInNo = '"+reciptNo+"' "
-					+ "AND a.strRoomNo=f.strRoomCode ; ";
+					+ "AND a.strRoomNo=f.strRoomCode "
+					+ "AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"' AND f.strClientCode='"+clientCode+"'  ; ";
 			
 			List listCheckInsData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			Object[] arrObjRoomData = (Object[]) listCheckInsData.get(0);
@@ -1381,7 +1382,7 @@ public class clsCheckInController {
 			String sqlTax = "SELECT strTaxCode,strTaxDesc,strIncomeHeadCode,"
 					+ "strTaxType,dblTaxValue,strTaxOn,strDeptCode,dblFromRate,"
 					+ "dblToRate FROM tbltaxmaster WHERE DATE(dteValidFrom)<='"+date+"' "
-					+ "and  date(dteValidTo)>='"+date+"' and strTaxOnType = 'Room Night' ";
+					+ "and  date(dteValidTo)>='"+date+"' and strTaxOnType = 'Room Night' AND strClientCode = '"+clientCode+"'";
 			
 			List listTaxDtl = objGlobalFunService.funGetListModuleWise(sqlTax, "sql");
 			double finalTax = 0.0;

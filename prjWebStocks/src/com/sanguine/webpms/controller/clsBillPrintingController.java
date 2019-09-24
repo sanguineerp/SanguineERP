@@ -185,7 +185,9 @@ public class clsBillPrintingController {
 					+ " LEFT OUTER JOIN tblroom e ON e.strRoomCode=a.strRoomNo "
 					+ "where a.strBillNo='"
 					+ billNo
-					+ "' order by c.strPayee DESC ";
+					+ "' and a.strClientCode='"+clientCode+"' and b.strClientCode='"+clientCode+"' and c.strClientCode='"+clientCode+"' "
+					+ "and d.strClientCode='"+clientCode+"' and e.strClientCode='"+clientCode+"'"
+					+ " order by c.strPayee DESC ";
 
 			List listOfParametersFromBill = objFolioService
 					.funGetParametersList(sqlParametersFromBill);
@@ -200,7 +202,7 @@ public class clsBillPrintingController {
 						+ " ifnull(d.strAddrPermanent,''),ifnull(d.strCityPermanent,''),ifnull(d.strStatePermanent,''),ifnull(d.strCountryPermanent,''),IFNULL(d.intPinCodePermanent,''), "// 25
 						+ " ifnull(d.strAddressOfc,''),ifnull(d.strCityOfc,''),ifnull(d.strStateOfc,''),ifnull(d.strCountryOfc,''),IFNULL(d.intPinCodeOfc,''),IFNULL(d.strGSTNo,''),IFNULL(d.lngMobileNo,0) "
 						+ "from tblguestmaster d where d.strGuestCode=  '"
-						+ arr[15].toString() + "'";
+						+ arr[15].toString() + "' AND d.strClientCode='"+clientCode+"'";
 				List listguest = objFolioService.funGetParametersList(guestDtl);
 				// '"+arr[15].toString()+"'
 				String guestgstNO = "";
@@ -271,7 +273,7 @@ public class clsBillPrintingController {
 				
 				
 				String remark="";
-				String sql="SELECT a.strRemark FROM tblbilldiscount a WHERE a.strBillNo = '"+billNo+"'";
+				String sql="SELECT a.strRemark FROM tblbilldiscount a WHERE a.strBillNo = '"+billNo+"' AND a.strClientCode='"+clientCode+"'";
 				List listremark = objFolioService.funGetParametersList(sql);
 				if(listremark!=null && listremark.size()>0){
 					remark=listremark.get(0).toString();
@@ -279,7 +281,7 @@ public class clsBillPrintingController {
 				// String billNo = arr[14].toString();
 
 				String sqlCheckOutTime = "select TIME_FORMAT(SUBSTR(a.dteDateEdited,11),'%h:%i %p') as Checkout_Time "
-						+ "from tblbillhd a where a.strBillNo='"+billNo+"'";
+						+ "from tblbillhd a where a.strBillNo='"+billNo+"' AND a.strClientCode='"+clientCode+"'";
 				List listCheckOutTime = objFolioService.funGetParametersList(sqlCheckOutTime);
 				String chkOutTime=listCheckOutTime.get(0).toString();
 				
@@ -350,7 +352,7 @@ public class clsBillPrintingController {
 							+ "IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,"
 							+ "b.dblBalanceAmt ,ifnull(a.strReservationNo,'') ,b.strPerticulars FROM tblbillhd a INNER JOIN tblbilldtl b "
 							+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo AND b.strPerticulars IN("+billNames.substring(0, billNames.length()-1)+") "
-							+ "WHERE a.strBillNo='"+billNo+"' order by b.dblCreditAmt ,b.dteDocDate";
+							+ "WHERE a.strBillNo='"+billNo+"' AND a.strClientCode='"+clientCode+"' order by b.dblCreditAmt ,b.dteDocDate";
 				}
 				
 				// + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '"
@@ -429,7 +431,7 @@ public class clsBillPrintingController {
 							hmParticulars.put(particulars,billPrintingBean);
 						}
 						
-						String sqlSettlementPayment = "select a.strReceiptNo from tblreceipthd a where a.strBillNo='"+billNo+"'";
+						String sqlSettlementPayment = "select a.strReceiptNo from tblreceipthd a where a.strBillNo='"+billNo+"' AND a.strClientCode='"+clientCode+"'";
 						List listSettlementTaxDtl = objWebPMSUtility.funExecuteQuery(sqlSettlementPayment, "sql");
 						if(listSettlementTaxDtl !=null && listSettlementTaxDtl.size()<2)
 						{
@@ -522,7 +524,7 @@ public class clsBillPrintingController {
 								+ " FROM tblbilldtl a, tblbilltaxdtl b where a.strDocNo=b.strDocNo "
 								+ " AND a.strBillNo='"
 								+ billNo
-								+ "' and a.strDocNo='" + docNo + "' ";
+								+ "' and a.strDocNo='" + docNo + "' AND a.strClientCode='"+clientCode+"'";
 						// + " and DATE(a.dteDocDate) BETWEEN '" + fromDate +
 						// "' AND '" + toDate + "' ";
 						List listBillTaxDtl = objWebPMSUtility.funExecuteQuery(
@@ -562,7 +564,7 @@ public class clsBillPrintingController {
 						}
 						
 						String sqlCheckOutDate = "SELECT Date(a.dteBillDate) as Date "
-								+ "FROM tblbillhd a WHERE a.strBillNo='"+billNo+"'";
+								+ "FROM tblbillhd a WHERE a.strBillNo='"+billNo+"' AND a.strClientCode='"+clientCode+"'";
 						List listCheckOutDate = objWebPMSUtility.funExecuteQuery(
 								sqlCheckOutDate, "sql");
 						
@@ -626,7 +628,7 @@ public class clsBillPrintingController {
 								+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
 								+ " and c.strRegistrationNo='"
 								+ registrationNo
-								+ "' and c.strAgainst='Check-In' ";
+								+ "' and c.strAgainst='Check-In' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'";
 	
 						List checkInReceiptDtl = objFolioService
 								.funGetParametersList(sqlPaymentDtl);
@@ -662,7 +664,7 @@ public class clsBillPrintingController {
 	
 					}
 				}
-				String sqlReservationAdvPayment = "select a.strReservationNo from tblbillhd a where a.strBillNo='"+billNo+"'";
+				String sqlReservationAdvPayment = "select a.strReservationNo from tblbillhd a where a.strBillNo='"+billNo+"' AND a.strClientCode='"+clientCode+"'";
 				List listResAdvpayment = objGlobalFunctionsService.funGetDataList(sqlReservationAdvPayment, "sql");
 				String strResNo = listResAdvpayment.get(0).toString();
 				String sqlResPayment = "";
@@ -804,7 +806,7 @@ public class clsBillPrintingController {
 				String walkIn = "";
 				if(strSelectBill.contains("Room Tariff"))
 				{
-					String sqlWalkInNo = "select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+checkInNo+"'";
+					String sqlWalkInNo = "select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+checkInNo+"' AND a.strClientCode='"+clientCode+"'";
 					List listWalkIn = objFolioService.funGetParametersList(sqlWalkInNo);
 					for(int i = 0;i<listWalkIn.size();i++)
 					{
@@ -861,7 +863,7 @@ public class clsBillPrintingController {
 			}
 			
 			String sqlCheckSupportVoucher="SELECT a.strPerticulars FROM tblbilldtl a,tblbillhd b WHERE b.strBillNo=a.strBillNo "
-					+ " AND a.strBillNo ='"+billNo+"' AND a.strPerticulars!='Room Tariff' ";
+					+ " AND a.strBillNo ='"+billNo+"' AND a.strPerticulars!='Room Tariff' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'";
 			List list = objFolioService.funGetParametersList(sqlCheckSupportVoucher);
 			if(list.size()>0)
 			{
@@ -1030,7 +1032,7 @@ public class clsBillPrintingController {
 				companyName = arr[32].toString();
 				String strMobileNo = arr[33].toString();
 				String remark="";
-				String sql="SELECT a.strRemark FROM tblbilldiscount a WHERE a.strBillNo = '"+billNo+"'";
+				String sql="SELECT a.strRemark FROM tblbilldiscount a WHERE a.strBillNo = '"+billNo+"' AND a.strClientCode='"+clientCode+"'";
 				List listremark = objFolioService.funGetParametersList(sql);
 				if(listremark!=null && listremark.size()>0){
 					remark=listremark.get(0).toString();
@@ -1125,7 +1127,7 @@ public class clsBillPrintingController {
 						+ " FROM tblbillhd a inner join tblbilldtl b ON a.strFolioNo=b.strFolioNo ,tblroom c "
 						+ " WHERE a.strCheckInNo='"
 						+ checkInNo
-						+ "' and a.strBillNo=b.strBillNo and a.strRoomNo=c.strRoomCode and a.strClientCode='"+clientCode+"' ORDER BY a.strBillNo";
+						+ "' and a.strBillNo=b.strBillNo and a.strRoomNo=c.strRoomCode and a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' ORDER BY a.strBillNo";
 				//
 				// +
 				// "and a.dteBillDate between '"+fromDate+"' and '"+toDate+"' "
@@ -1171,7 +1173,7 @@ public class clsBillPrintingController {
 								+ " FROM tblbilldtl a, tblbilltaxdtl b where a.strDocNo=b.strDocNo  "
 								+ " AND a.strBillNo='"
 								+ folioArr[6].toString()
-								+ "'  and a.strDocNo='" + docNo + "' AND a.strClientCode='"+clientCode+"' ";
+								+ "'  and a.strDocNo='" + docNo + "' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'";
 						// + " and DATE(a.dteDocDate) BETWEEN '" + fromDate +
 						// "' AND '" + toDate + "' ";
 						List listBillTaxDtl = objWebPMSUtility.funExecuteQuery(
@@ -1206,7 +1208,7 @@ public class clsBillPrintingController {
 						+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
 						+ " and c.strReservationNo='"
 						+ reservationNo
-						+ "' and c.strAgainst='Reservation' AND c.strClientCode='"+clientCode+"'";
+						+ "' and c.strAgainst='Reservation' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'";
 
 				List paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
 				for (int i = 0; i < paymentDtlList.size(); i++) {
@@ -1240,7 +1242,7 @@ public class clsBillPrintingController {
 							+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
 							+ " and c.strRegistrationNo='"
 							+ registrationNo
-							+ "' and c.strAgainst='Check-In' ";
+							+ "' and c.strAgainst='Check-In' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'";
 
 					List checkInReceiptDtl = objFolioService.funGetParametersList(sqlPaymentDtl);
 					for (int i = 0; i < checkInReceiptDtl.size(); i++) {
@@ -1295,7 +1297,7 @@ public class clsBillPrintingController {
 							+ " where a.strBillNo=c.strBillNo and c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
 							+ " and a.strBillNo='"
 							+ billNo.get(cnt)
-							+ "' and c.strAgainst='Bill' AND a.strClientCode='"+clientCode+"'";
+							+ "' and c.strAgainst='Bill' AND a.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'";
 
 					List billReceitDtl = objFolioService
 							.funGetParametersList(sqlPaymentDtl);
@@ -1351,7 +1353,7 @@ public class clsBillPrintingController {
 				}
 			}
 			String walkIn="";
-			String sqlWalkInNo = "select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+checkInNo+"'";
+			String sqlWalkInNo = "select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+checkInNo+"' AND a.strClientCode='"+clientCode+"'";
 			List listWalkIn = objFolioService.funGetParametersList(sqlWalkInNo);
 			for(int i = 0;i<listWalkIn.size();i++)
 			{
@@ -1399,7 +1401,7 @@ public class clsBillPrintingController {
 			}
 			
 			String sqlCheckSupportVoucher="SELECT a.strPerticulars FROM tblbilldtl a,tblbillhd b WHERE b.strBillNo=a.strBillNo "
-					+ " AND a.strBillNo ='"+billNo+"' AND a.strPerticulars!='Room Tariff' AND a.strClientCode='"+clientCode+"'";
+					+ " AND a.strBillNo ='"+billNo+"' AND a.strPerticulars!='Room Tariff' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'";
 			List list = objFolioService.funGetParametersList(sqlCheckSupportVoucher);
 			if(list.size()>0)
 			{
@@ -1541,7 +1543,7 @@ public class clsBillPrintingController {
 					+ "IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblDebitAmt,b.dblCreditAmt,"
 					+ "b.dblBalanceAmt FROM tblbillhd a INNER JOIN tblbilldtl b "
 					+ "ON a.strFolioNo=b.strFolioNo AND a.strBillNo=b.strBillNo "
-					+ "WHERE a.strBillNo='"+billNo+"' and b.strPerticulars='Room Tariff' ";
+					+ "WHERE a.strBillNo='"+billNo+"' and b.strPerticulars='Room Tariff' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'";
 		List billDtlList = objFolioService.funGetParametersList(sqlBillDtl);
 		
 		for (int i = 0; i < billDtlList.size(); i++) {
@@ -1585,7 +1587,7 @@ public class clsBillPrintingController {
 							+ " FROM tblbilldtl a, tblbilltaxdtl b where a.strDocNo=b.strDocNo "
 							+ " AND a.strBillNo='"
 							+ billNo
-							+ "' and a.strDocNo='" + docNo + "' ";
+							+ "' and a.strDocNo='" + docNo + "' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'";
 					List listBillTaxDtl = objWebPMSUtility.funExecuteQuery(sqlBillDtl, "sql");
 					for (int cnt = 0; cnt < listBillTaxDtl.size(); cnt++) {
 						Object[] arrObjBillTaxDtl = (Object[]) listBillTaxDtl.get(cnt);
@@ -1630,7 +1632,7 @@ public class clsBillPrintingController {
 		sqlPaymentDtl = "SELECT date(c.dteReceiptDate),c.strReceiptNo,CONCAT('ADVANCE ',e.strSettlementDesc),'0.00' as debitAmt "
 					+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
 					+ " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
-					+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode AND c.strFolioNo='"+folio+"' ";
+					+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode AND c.strFolioNo='"+folio+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'";
 
 		 paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
 		 for (int i = 0; i < paymentDtlList.size(); i++) 
@@ -1666,7 +1668,7 @@ public class clsBillPrintingController {
 					+ " ,d.dblSettlementAmt as creditAmt,'0.00' as balance "
 					+ " FROM tblreceipthd c, tblreceiptdtl d, tblsettlementmaster e "
 					+ " where c.strReceiptNo=d.strReceiptNo and d.strSettlementCode=e.strSettlementCode "
-					+ " and c.strRegistrationNo='"+registrationNo+"' and c.strAgainst='Check-In' ";
+					+ " and c.strRegistrationNo='"+registrationNo+"' and c.strAgainst='Check-In' AND  c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'";
 
 			List checkInReceiptDtl = objFolioService.funGetParametersList(sqlPaymentDtl);
 			for (int i = 0; i < checkInReceiptDtl.size(); i++) 
@@ -1725,7 +1727,7 @@ public class clsBillPrintingController {
 		}
 			
 		String walkIn = "";
-		String sqlWalkInNo = "select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+checkInNo+"'";
+		String sqlWalkInNo = "select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+checkInNo+"' AND a.strClientCode='"+clientCode+"'";
 		List listWalkIn = objFolioService.funGetParametersList(sqlWalkInNo);
 		for(int i = 0;i<listWalkIn.size();i++)
 		{

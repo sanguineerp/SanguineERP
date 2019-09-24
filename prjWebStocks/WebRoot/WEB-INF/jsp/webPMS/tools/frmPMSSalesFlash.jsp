@@ -1513,7 +1513,7 @@ function funClick(obj)
 			class="form_button" value="Expected Departure List"  onclick="funOnClckExpectedDeptWiseBtn('divExpectedDeptList')" style="background-size: 150px 24px; width: 150px;" /></td>
 			
 			<td colspan="3"><input id="btnBillPrinting" type="button"
-			class="form_button" value="Bill Printing"  onclick="funOnClckBillPrinting('divBillPrinting')" style="background-size: 140px 24px; width: 150px;" /></td>
+			class="form_button" value="Bill Wise"  onclick="funOnClckBillPrinting('divBillPrinting')" style="background-size: 140px 24px; width: 150px;" /></td>
 			
 		</tr>
 		</table>

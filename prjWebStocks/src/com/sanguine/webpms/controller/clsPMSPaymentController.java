@@ -763,14 +763,14 @@ public class clsPMSPaymentController {
 						+ "IFNULL(d.strSettlementDesc,''),a.dblPaidAmt, b.strRemarks, "
 						+ "DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y'),h.strRoomDesc "
 						+ "FROM tblreceipthd a "
-						+ "LEFT OUTER JOIN tblreceiptdtl b ON a.strReceiptNo=b.strReceiptNo "
-						+ "LEFT OUTER JOIN tblcheckinhd c ON a.strRegistrationNo=c.strRegistrationNo "
-						+ "LEFT OUTER JOIN tblcheckindtl e ON a.strCheckInNo=e.strCheckInNo "
-						+ "LEFT OUTER JOIN tblroomtypemaster g ON g.strRoomTypeCode=e.strRoomType "
-						+ "LEFT OUTER JOIN tblroom h ON e.strRoomNo=h.strRoomCode "
-						+ "LEFT OUTER JOIN tblguestmaster f ON e.strGuestCode=f.strGuestCode "
-						+ "LEFT OUTER JOIN tblsettlementmaster d ON b.strSettlementCode=d.strSettlementCode "
-						+ "WHERE a.strReceiptNo='"+reciptNo+"' AND a.strClientCode='"+clientCode+"'";
+						+ "LEFT OUTER JOIN tblreceiptdtl b ON a.strReceiptNo=b.strReceiptNo AND a.strClientCode='"+clientCode+"'"
+						+ "LEFT OUTER JOIN tblcheckinhd c ON a.strRegistrationNo=c.strRegistrationNo AND b.strClientCode='"+clientCode+"'"
+						+ "LEFT OUTER JOIN tblcheckindtl e ON a.strCheckInNo=e.strCheckInNo AND c.strClientCode='"+clientCode+"'"
+						+ "LEFT OUTER JOIN tblroomtypemaster g ON g.strRoomTypeCode=e.strRoomType AND e.strClientCode='"+clientCode+"'"
+						+ "LEFT OUTER JOIN tblroom h ON e.strRoomNo=h.strRoomCode AND g.strClientCode='"+clientCode+"'"
+						+ "LEFT OUTER JOIN tblguestmaster f ON e.strGuestCode=f.strGuestCode AND h.strClientCode='"+clientCode+"'"
+						+ "LEFT OUTER JOIN tblsettlementmaster d ON b.strSettlementCode=d.strSettlementCode AND f.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"'"
+						+ "WHERE a.strReceiptNo='"+reciptNo+"'";
 				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
 
 				for (int i = 0; i < listOfPayment.size(); i++) {

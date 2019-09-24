@@ -105,7 +105,7 @@ public class clsCheckInCheckOutListController {
 					+ "a.strVisitingType, DATEDIFF(DATE(c.dteDepartureDate), DATE(c.dteArrivalDate)), DATE(c.dteArrivalDate), DATE(c.dteDepartureDate) "
 					+ "FROM tblguestmaster a,tblcheckindtl b,tblcheckinhd c "
 					+ "WHERE a.strGuestCode=b.strGuestCode and b.strCheckInNo=c.strCheckInNo "
-					+ "and Date(c.dteArrivalDate) between '"+dteArrDate+"' and '"+dteDepDate+"';";        
+					+ "and Date(c.dteArrivalDate) between '"+dteArrDate+"' and '"+dteDepDate+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"';";        
 			
 			list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			if(!list.isEmpty())

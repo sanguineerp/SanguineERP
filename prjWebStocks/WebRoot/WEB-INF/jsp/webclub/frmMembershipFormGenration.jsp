@@ -71,9 +71,58 @@
 
 			    case 'WCMemberForm':
 			    	funSetFormNo(code);
+			        break; 
+			        
+			    case 'webClubBusinessSrcCode':
+			    	funSetBusinessCodeDData(code);
 			        break;  
 			}
 		}
+	 
+	 function funSetBusinessCodeDData(code){
+		 
+		 
+		 $.ajax({
+				type : "GET",
+				url : getContextPath()+ "/loadWebClubBusinessSourceData.html?docCode="+code,
+				dataType : "json",
+				success : function(response){ 
+
+					if(response.strSCCode=='Invalid Code')
+		        	{
+		        		alert("Invalid Business Source Code");
+		        		$("#txtBusinessSrcCode").val('');
+		        	}
+		        	else
+		        	{      
+			        	$("#txtBusinessSrcCode").val(code);
+			        	$("#lblBSName").text(response[0][1]);
+			        	//$("#txtBusinessSourcePercent").val(response[0][2]);
+			        	
+			        	
+		        	}
+				},
+				error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+		  });
+			
+	 }
+	 
 	 
 	 function funSetFormNo(code)
 		{
@@ -101,7 +150,8 @@
 // 					        	$("#txtdtMemberFromDate").val(response.dteCreatedDate);
 // 					        	$("#txtdtMemberToDate").val(response.dtePrintDate);
 					        	$("#txtProspectName").focus();
-					        	
+					        	$("#txtBusinessSrcCode").val(response.strBusinessSourceCode);
+					        	funSetLabelName(response.strBusinessSourceCode)
 					        }
 						},
 						error: function(jqXHR, exception) {
@@ -124,7 +174,47 @@
 			      });
 		}
 		
-	 
+	 function funSetLabelName(code)
+	 {
+		 $.ajax({
+				type : "GET",
+				url : getContextPath()+ "/loadWebClubBusinessSourceData.html?docCode="+code,
+				dataType : "json",
+				success : function(response){ 
+
+					if(response.strSCCode=='Invalid Code')
+		        	{
+		        		alert("Invalid Business Source Code");
+		        		$("#txtBusinessSrcCode").val('');
+		        	}
+		        	else
+		        	{      
+			        	$("#lblBSName").text(response[0][1]);
+			        	
+		        	}
+				},
+				error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+		  }); 
+		 
+		 
+		 
+	 }
 	 
 	 
 	 
@@ -145,8 +235,7 @@
 					<td width="20%">From No.</td>
 				
 					<td colspan="2"><s:input type="text" id="txtFormNo" 
-						name="txtFormNo" path="strFormNo" 
-						cssStyle="width: 15%; text-transform: uppercase;" cssClass="longTextBox" ondblclick="funHelp('WCMemberForm')" /> <s:errors path=""></s:errors></td>
+						name="txtFormNo" path="strFormNo" cssClass="searchTextBox" ondblclick="funHelp('WCMemberForm')" /> <s:errors path=""></s:errors></td>
 						
 			</tr>
 			<tr>
@@ -180,6 +269,12 @@
 			
 			</tr>
 		 
+		 <tr>
+			
+				<td><label>Business SourceCode</label></td>
+				<td><s:input id="txtBusinessSrcCode" path="strBusinessSourceCode" cssClass="searchTextBox" ondblclick="funHelp('webClubBusinessSrcCode')" /></td>				
+				<td><label id ="lblBSName"></label></td>
+			</tr>
 		 
 		 </table>
 		 

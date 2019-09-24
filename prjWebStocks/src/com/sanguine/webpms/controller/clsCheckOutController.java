@@ -127,12 +127,14 @@ public class clsCheckOutController {
 		 * "sql");
 		 */
 
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+
 		String sql = "select a.strCheckInNo,a.strRegistrationNo,ifnull(a.strReservationNo,'NA'),ifnull(a.strWalkinNo,'NA') " + " ,c.strCorporateCode,d.strRoomNo,d.strFolioNo,concat(IFNULL(f.strFirstName,''),' ',IFNULL(f.strMiddleName,''),' ',IFNULL(f.strLastName,'')) as GuestName " + " ,date(a.dteArrivalDate),date(a.dteDepartureDate),ifnull(g.strCorporateCode,'NA') "
-				+ " from tblcheckinhd a left outer join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo "
-				+ " left outer join tblreservationhd c on a.strReservationNo=c.strReservationNo "
-				+ " left outer join tblfoliohd d on a.strCheckInNo=d.strCheckInNo " 
-				+ " left outer join tblguestmaster f on b.strGuestCode=f.strGuestCode " 
-				+ " left outer join tblwalkinhd g on a.strWalkInNo=g.strWalkinNo "
+				+ " from tblcheckinhd a left outer join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
+				+ " left outer join tblreservationhd c on a.strReservationNo=c.strReservationNo AND c.strClientCode='"+clientCode+"'"
+				+ " left outer join tblfoliohd d on a.strCheckInNo=d.strCheckInNo AND d.strClientCode='"+clientCode+"'" 
+				+ " left outer join tblguestmaster f on b.strGuestCode=f.strGuestCode AND f.strClientCode='"+clientCode+"'" 
+				+ " left outer join tblwalkinhd g on a.strWalkInNo=g.strWalkinNo AND g.strClientCode='"+clientCode+"'"
 				+ " where d.strRoomNo='" + roomCode + "' " + " group by d.strFolioNo ";
 		List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 
@@ -150,28 +152,28 @@ public class clsCheckOutController {
 			objCheckOutRoomDtlBean.setStrCorporate(obj[10].toString());
 			objCheckOutRoomDtlBean.setDblAmount(0);
 
-			sql = "select a.strFolioNo,sum(b.dblDebitAmt) " + " from tblfoliohd a,tblfoliodtl b " + " where a.strFolioNo=b.strFolioNo and a.strRoomNo='" + roomCode + "' " + " group by a.strFolioNo";
+			sql = "select a.strFolioNo,sum(b.dblDebitAmt) " + " from tblfoliohd a,tblfoliodtl b " + " where a.strFolioNo=b.strFolioNo and a.strRoomNo='" + roomCode + "' " + " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' group by a.strFolioNo";
 			List listFolioAmt = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			for (int cnt = 0; cnt < listFolioAmt.size(); cnt++) {
 				Object[] arrObjFolio = (Object[]) listFolioAmt.get(cnt);
 				objCheckOutRoomDtlBean.setDblAmount(objCheckOutRoomDtlBean.getDblAmount() + Double.parseDouble(arrObjFolio[1].toString()));
 			}
 
-			sql = "select sum(b.dblDebitAmt),sum(c.dblTaxAmt) " + " from tblfoliohd a,tblfoliodtl b,tblfoliotaxdtl c " + " where a.strFolioNo=b.strFolioNo and b.strFolioNo=c.strFolioNo and b.strDocNo=c.strDocNo " + " and a.strRoomNo='" + roomCode + "' " + " group by b.strFolioNo";
+			sql = "select sum(b.dblDebitAmt),sum(c.dblTaxAmt) " + " from tblfoliohd a,tblfoliodtl b,tblfoliotaxdtl c " + " where a.strFolioNo=b.strFolioNo and b.strFolioNo=c.strFolioNo and b.strDocNo=c.strDocNo " + " and a.strRoomNo='" + roomCode + "' " + " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' group by b.strFolioNo";
 			List listFolioTaxAmt = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			for (int cnt = 0; cnt < listFolioTaxAmt.size(); cnt++) {
 				Object[] arrObjFolio = (Object[]) listFolioTaxAmt.get(cnt);
 				objCheckOutRoomDtlBean.setDblAmount(objCheckOutRoomDtlBean.getDblAmount() + Double.parseDouble(arrObjFolio[1].toString()));
 			}
 
-			sql = "select a.strReceiptNo,sum(b.dblSettlementAmt) " + " from tblreceipthd a,tblreceiptdtl b " + " where a.strReceiptNo=b.strReceiptNo and a.strRegistrationNo='" + objCheckOutRoomDtlBean.getStrRegistrationNo() + "' and a.strAgainst='Check-In' " + " group by a.strReceiptNo";
+			sql = "select a.strReceiptNo,sum(b.dblSettlementAmt) " + " from tblreceipthd a,tblreceiptdtl b " + " where a.strReceiptNo=b.strReceiptNo and a.strRegistrationNo='" + objCheckOutRoomDtlBean.getStrRegistrationNo() + "' and a.strAgainst='Check-In' " + " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' group by a.strReceiptNo";
 			List listReceiptAmtAtCheckIN = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			for (int cnt = 0; cnt < listReceiptAmtAtCheckIN.size(); cnt++) {
 				Object[] arrObjFolio = (Object[]) listReceiptAmtAtCheckIN.get(cnt);
 				objCheckOutRoomDtlBean.setDblAmount(objCheckOutRoomDtlBean.getDblAmount() - Double.parseDouble(arrObjFolio[1].toString()));
 			}
 			
-			sql = "SELECT Sum(a.dblCreditAmt) from tblfoliodtl a where a.strFolioNo='"+obj[6].toString()+"'";
+			sql = "SELECT Sum(a.dblCreditAmt) from tblfoliodtl a where a.strFolioNo='"+obj[6].toString()+"' AND a.strClientCode='"+clientCode+"'";
 			List listFolioDisc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			for (int cnt = 0; cnt < listFolioDisc.size(); cnt++) {
 				objCheckOutRoomDtlBean.setDblAmount(objCheckOutRoomDtlBean.getDblAmount() - Double.parseDouble(listFolioDisc.get(cnt).toString()));
@@ -320,16 +322,16 @@ public class clsCheckOutController {
 					DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 					
 					String strCurrentTime = localTime.format(dateTimeFormatter);
-					String sqlUpdateCheckOutTime = "update tblcheckinhd a set a.tmeDepartureTime='"+strCurrentTime+"' where a.strCheckInNo='"+objBillHdModel.getStrCheckInNo()+"'";
+					String sqlUpdateCheckOutTime = "update tblcheckinhd a set a.tmeDepartureTime='"+strCurrentTime+"' where a.strCheckInNo='"+objBillHdModel.getStrCheckInNo()+"'  AND a.strClientCode='"+clientCode+"'";
 					objWebPMSUtility.funExecuteUpdate(sqlUpdateCheckOutTime, "sql");
 					
 					String sqlUpdateCheckOutDate ="UPDATE tblcheckinhd a SET a.dteDepartureDate= CONCAT('"+PMSDate+"',' ','00:00:00') "
-					+ "WHERE a.strCheckInNo='"+objBillHdModel.getStrCheckInNo()+"'";
+					+ "WHERE a.strCheckInNo='"+objBillHdModel.getStrCheckInNo()+"' AND a.strClientCode='"+clientCode+"'";
 					
 					
 					objWebPMSUtility.funExecuteUpdate(sqlUpdateCheckOutDate, "sql");
 					
-					String sql = "insert into tblfoliobckp (select * from tblfoliodtl where strFolioNo='"+objFolioHdModel.getStrFolioNo()+"')";
+					String sql = "insert into tblfoliobckp (select * from tblfoliodtl where strFolioNo='"+objFolioHdModel.getStrFolioNo()+"' AND strclientCode='"+clientCode+"')";
 					objWebPMSUtility.funExecuteUpdate(sql, "sql");
 					
 					

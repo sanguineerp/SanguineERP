@@ -120,7 +120,7 @@ public class clsCancelationReportController {
 					+ " AND d.strRoomType=f.strRoomTypeCode  "
 					+ " and a.strReasonCode=g.strReasonCode "
 					+ " AND a.strClientCode=b.strClientCode"
-					+ " and h.strRoomTypeCode=d.strRoomType "
+					+ " and h.strRoomTypeCode=d.strRoomType AND a.strClientCode='"+clientCode+"' AND a.strClientCode='"+clientCode+"' AND a.strClientCode='"+clientCode+"' AND a.strClientCode='"+clientCode+"' AND a.strClientCode='"+clientCode+"' AND a.strClientCode='"+clientCode+"' AND a.strClientCode='"+clientCode+"' AND a.strClientCode='"+clientCode+"'"
 					+ "  group by b.strReservationNo,d.strGuestCode " ;
 
 			List listOfCancelation = objGlobalFunctionsService.funGetDataList(sqlCancel, "sql");

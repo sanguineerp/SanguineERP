@@ -13,6 +13,45 @@
 	{
 	});
 
+	 $(document).ready(function()
+				{
+		var message='';
+		<%if (session.getAttribute("success") != null) {
+			            if(session.getAttribute("successMessage") != null){%>
+			            message='<%=session.getAttribute("successMessage").toString()%>';
+			            <%
+			            session.removeAttribute("successMessage");
+			            }
+						boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
+						session.removeAttribute("success");
+						if (test) {
+						%>	
+			alert("Data Save successfully\n\n"+message);
+		<%
+		}}%>
+
+	});
+	function funValidateFields()
+	{
+		var flg=true;
+		var businessSrcName =  $("#txtBusinessSourceName").val();
+		var businessSrcPer =  $("#txtBusinessSourcePercent").val();
+		
+		if ( $("#txtBusinessSourceName").val() == "")
+	    {
+	        alert("Please enter business source name");
+	        flg=false;
+	    }
+		
+		if ($("#txtBusinessSourcePercent").val()=="")
+	    {
+	        alert("Please enter business source percent");
+	        flg=false;
+	    }
+		return flg;
+	}
+	
+	
 	function funSetData(code){
 
 		switch(fieldName){
@@ -44,7 +83,7 @@
 		        	$("#txtBusinessSrcCode").val(code);
 		        	$("#txtBusinessSourceName").val(response[0][1]);
 		        	$("#txtBusinessSourcePercent").val(response[0][2]);
-		      
+		        	
 		        	
 	        	}
 			},
@@ -84,7 +123,7 @@
 <body>
 
 	<div id="formHeading">
-	<label>WebClubBusinessSourceMaster</label>
+	<label>Business Source</label>
 	</div>
 
 <br/>
@@ -95,7 +134,7 @@
 		<table class="masterTable">
 			<tr>
 			
-				<td><label>Business SourceCode</label></td>
+				<td><label>Business Source Code</label></td>
 				<td><s:input id="txtBusinessSrcCode" path="strBusinessSrcCode" cssClass="searchTextBox" ondblclick="funHelp('webClubBusinessSrcCode')" /></td>				
 				
 			</tr>
@@ -106,7 +145,7 @@
 			
 			<tr>
 			    <td><label>Business Source Percent</label></td>
-				<td><s:input id="txtBusinessSourcePercent" path="dblPercent" cssClass="longTextBox" /></td>				
+				<td><s:input id="txtBusinessSourcePercent" path="dblPercent" style = "text-align:right;" cssClass="longTextBox" /></td>				
 			</tr>
 			
 		</table>
@@ -114,8 +153,9 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
-			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
+			<input type="submit" value="Submit" tabindex="3" class="form_button"
+				onclick="return funValidateFields()" /> 
+				<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 
 	</s:form>
