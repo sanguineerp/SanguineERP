@@ -89,7 +89,7 @@ public class clsPMSDashboard {
 
 				// for Arraival Count
 				sbSql.setLength(0);
-				sbSql.append("select  ifnull(Sum(a.intNoOfAdults+a.intNoOfChild),0) as Arrived  from tblcheckinhd a " + " where date(a.dteArrivalDate) = '" + fromDate1 + "' ");
+				sbSql.append("select  ifnull(Sum(a.intNoOfAdults+a.intNoOfChild),0) as Arrived  from tblcheckinhd a " + " where date(a.dteArrivalDate) = '" + fromDate1 + "' AND a.strClientCode='"+clientCode+"'");
 				List listAvailableCount = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");// sql
 				if (listAvailableCount != null) {
 					clsWebPMSReportBean objListBean = new clsWebPMSReportBean();
@@ -100,7 +100,7 @@ public class clsPMSDashboard {
 
 				// for DueTOArrive Count
 				sbSql.setLength(0);
-				sbSql.append("select ifnull(Sum(a.intNoOfAdults+a.intNoOfChild),0) as DueTOArrive from tblreservationhd a " + " where a.strReservationNo not in(select strReservationNo from tblcheckinhd) " + " and date(a.dteArrivalDate) = '" + fromDate1 + "' ");
+				sbSql.append("select ifnull(Sum(a.intNoOfAdults+a.intNoOfChild),0) as DueTOArrive from tblreservationhd a " + " where a.strClientCode='"+clientCode+"' AND a.strReservationNo not in(select strReservationNo from tblcheckinhd WHERE strClientCode='"+clientCode+"') " + " and date(a.dteArrivalDate) = '" + fromDate1 + "' ");
 				List listDueTOArriveCount = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");
 				if (listDueTOArriveCount != null) {
 					clsWebPMSReportBean objListBean = new clsWebPMSReportBean();
@@ -111,7 +111,7 @@ public class clsPMSDashboard {
 
 				// for Walkin Count
 				sbSql.setLength(0);
-				sbSql.append(" select ifnull(Sum(a.intNoOfAdults+a.intNoOfChild) ,0) as walkin" + " from tblwalkinhd a where date(a.dteWalkinDate) = '" + fromDate1 + "' ");
+				sbSql.append(" select ifnull(Sum(a.intNoOfAdults+a.intNoOfChild) ,0) as walkin" + " from tblwalkinhd a where date(a.dteWalkinDate) = '" + fromDate1 + "' AND a.strClientCode='"+clientCode+"' ");
 				List listWalkinCount = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");
 				if (listWalkinCount != null) {
 					clsWebPMSReportBean objListBean = new clsWebPMSReportBean();
@@ -122,7 +122,7 @@ public class clsPMSDashboard {
 
 				// for DueOut Count
 				sbSql.setLength(0);
-				sbSql.append(" select ifnull(Sum(a.intNoOfAdults+a.intNoOfChild),0) as DueOut from tblcheckinhd a " + " where a.strCheckInNo not in(select strCheckInNo " + " from tblbillhd) and date(a.dteDepartureDate) >= '" + fromDate1 + "' ");
+				sbSql.append(" select ifnull(Sum(a.intNoOfAdults+a.intNoOfChild),0) as DueOut from tblcheckinhd a " + " where a.strCheckInNo not in(select strCheckInNo " + " from tblbillhd where strClientCode='"+clientCode+"') and date(a.dteDepartureDate) >= '" + fromDate1 + "' AND a.strClientCode='"+clientCode+"'");
 				List listDueOutCount = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");
 				if (listDueOutCount != null) {
 					clsWebPMSReportBean objListBean = new clsWebPMSReportBean();
@@ -133,7 +133,7 @@ public class clsPMSDashboard {
 
 				// for CheckedOut Count
 				sbSql.setLength(0);
-				sbSql.append(" select ifnull(Sum(a.intNoOfAdults+a.intNoOfChild),0) as CheckOut from tblcheckinhd a " + " where a.strCheckInNo  in(select strCheckInNo from tblbillhd) " + " and date(a.dteDepartureDate) >= '" + fromDate1 + "' ");
+				sbSql.append(" select ifnull(Sum(a.intNoOfAdults+a.intNoOfChild),0) as CheckOut from tblcheckinhd a " + " where a.strCheckInNo  in(select strCheckInNo from tblbillhd where strClientCode='"+clientCode+"') " + " and date(a.dteDepartureDate) >= '" + fromDate1 + "' AND a.strClientCode='"+clientCode+"'");
 				List listCheckedOutCount = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");
 				if (listCheckedOutCount != null) {
 					clsWebPMSReportBean objListBean = new clsWebPMSReportBean();

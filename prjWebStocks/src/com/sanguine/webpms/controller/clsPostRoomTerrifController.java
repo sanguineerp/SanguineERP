@@ -75,10 +75,10 @@ public class clsPostRoomTerrifController {
 		
 		String sql=" SELECT d.strRoomCode,d.strRoomDesc,a.strRegistrationNo,c.strFirstName,c.strMiddleName,c.strLastName,"
 				+ " e.dblRoomTerrif, IFNULL(a.strReservationNo,''), IFNULL(a.strWalkInNo,''),e.strRoomTypeCode,ifnull(sum(f.dblIncomeHeadAmt),0),a.strCheckInNo"
-				+ " FROM tblcheckinhd a left outer join tblroompackagedtl f on a.strCheckInNo=f.strCheckInNo and f.strRoomNo='',tblcheckindtl b,tblguestmaster c,tblroom d,tblroomtypemaster e"
+				+ " FROM tblcheckinhd a left outer join tblroompackagedtl f on a.strCheckInNo=f.strCheckInNo and f.strRoomNo='' AND a.strClientCode='"+clientCode+"' AND f.strClientCode='"+clientCode+"',tblcheckindtl b,tblguestmaster c,tblroom d,tblroomtypemaster e"
 				+ " WHERE a.strCheckInNo=b.strCheckInNo AND b.strGuestCode=c.strGuestCode "
 				+ " AND b.strRoomNo=d.strRoomCode AND d.strRoomTypeCode=e.strRoomTypeCode AND b.strRoomNo='"+roomNo+"' "
-				+ " AND a.strCheckInNo NOT IN (SELECT strCheckInNo FROM tblbillhd WHERE strRoomNo='"+roomNo+"' order by strCheckInNo desc) ";
+				+ " AND a.strCheckInNo NOT IN (SELECT strCheckInNo FROM tblbillhd WHERE strRoomNo='"+roomNo+"' AND strClientCode='"+clientCode+"' order by strCheckInNo desc) ";
 		
 		List listRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 		if(listRoomDtl.size()>0)
@@ -89,14 +89,14 @@ public class clsPostRoomTerrifController {
 			double dblPkgAmt=0.0;
 			dblRoomRate = Double.parseDouble(arrObjRoom[6].toString());
 			String sqlRoomCount=" select count(b.strRoomNo) from tblcheckinhd a,tblcheckindtl b"
-					+ " where a.strCheckInNo=b.strCheckInNo and a.strCheckInNo='"+arrObjRoom[11].toString()+"' ";
+					+ " where a.strCheckInNo=b.strCheckInNo and a.strCheckInNo='"+arrObjRoom[11].toString()+"'  AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' ";
 			List listRoomCnt= objGlobalFunctionsService.funGetListModuleWise(sqlRoomCount, "sql");
 			BigInteger roomCnt=new BigInteger(listRoomCnt.get(0).toString());
 			
 			String sqlCheckTerrifBalanceAmt=" SELECT b.strFolioNo,b.dblDebitAmt,b.dblBalanceAmt,b.strRevenueType "
 					+ " FROM tblfoliohd a,tblfoliodtl b "
 					+ " WHERE a.strFolioNo=b.strFolioNo  and a.strRoomNo=b.strRevenueCode AND a.strCheckInNo='"+arrObjRoom[11].toString()+"' "
-					+ " and  (b.strRevenueType='Package' or b.strRevenueType='Room')  and a.strRoomNo='"+roomNo+"' "
+					+ " and  (b.strRevenueType='Package' or b.strRevenueType='Room')  and a.strRoomNo='"+roomNo+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' "
 					+ " group by b.strRevenueType  ORDER BY b.dteDocDate DESC ";
 			 List listTerriff = objGlobalFunctionsService.funGetListModuleWise(sqlCheckTerrifBalanceAmt, "sql");
 			 if(listTerriff.size()>0)
@@ -157,7 +157,7 @@ public class clsPostRoomTerrifController {
 			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
 			String strTransactionType = "Post Room Terrif";
 
-			String sql = "SELECT a.strFolioNo,a.strExtraBedCode,b.strComplimentry" + " FROM tblfoliohd a,tblcheckinhd b " + " WHERE a.strRoomNo='" + objBean.getStrRoomNo() + "' and a.strCheckInNo=b.strCheckInNo  AND a.strClientCode='" + clientCode + "'";
+			String sql = "SELECT a.strFolioNo,a.strExtraBedCode,b.strComplimentry" + " FROM tblfoliohd a,tblcheckinhd b " + " WHERE a.strRoomNo='" + objBean.getStrRoomNo() + "' and a.strCheckInNo=b.strCheckInNo  AND a.strClientCode='" + clientCode + "' AND b.strClientCode='"+clientCode+"'";
 			List listFolio = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			Object[] arrObjFolioDtl = (Object[]) listFolio.get(0);
 
@@ -166,7 +166,7 @@ public class clsPostRoomTerrifController {
 			String strComplimentry = arrObjFolioDtl[2].toString();
 			String docNo="";
 			
-			String sqlPostRommTariffCheck = "select a.strPerticulars from tblfoliodtl a where a.strFolioNo='"+folioNo+"' and a.dteDocDate='"+PMSDate+"'";
+			String sqlPostRommTariffCheck = "select a.strPerticulars from tblfoliodtl a where a.strFolioNo='"+folioNo+"' and a.dteDocDate='"+PMSDate+"' AND a.strClientCode='"+clientCode+"'";
 			List listPostRommTariffCheck  = objGlobalFunctionsService.funGetListModuleWise(sqlPostRommTariffCheck, "sql");
 			if(!listPostRommTariffCheck.isEmpty())
 			{
@@ -331,13 +331,13 @@ public class clsPostRoomTerrifController {
 		objTaxProductDtl.setDblTaxProdAmt(roomTerrif);
 		objTaxProductDtl.setDblTotalExtraBedAmt(0);
 		// set department value here -- get department value from income head table 
-		String sql = "select a.strDeptCode from tblincomehead a where a.strIncomeHeadCode = '"+objTaxProductDtl.getStrTaxProdCode()+"'";
+		String sql = "select a.strDeptCode from tblincomehead a where a.strIncomeHeadCode = '"+objTaxProductDtl.getStrTaxProdCode()+"' AND a.strClientCode='"+clientCode+"'";
 		List<clsTaxProductDtl> listTaxProdDtl = new ArrayList<clsTaxProductDtl>();
 		String strComp="";
 		// 
 		
 		String sqlDiscWalkIn = "select a.dblDiscount from tblwalkinroomratedtl a ,"
-				+ "tblfoliohd b where a.strWalkinNo=b.strWalkInNo and b.strFolioNo='"+folioNo+"'";
+				+ "tblfoliohd b where a.strWalkinNo=b.strWalkInNo and b.strFolioNo='"+folioNo+"' AND a.strClientCode='"+clientCode+"'";
 		
 		List listDiscWalkIn = objGlobalFunctionsService.funGetListModuleWise(sqlDiscWalkIn, "sql");
 		if(listDiscWalkIn!=null &&listDiscWalkIn.size()>0){
@@ -347,7 +347,7 @@ public class clsPostRoomTerrifController {
 		
 		String sqlComplimentryCheck = "SELECT a.strComplimentry "
 				+ "FROM tblcheckinhd a "
-				+ "WHERE a.strCheckInNo in (select b.strCheckInNo from tblfoliohd b where b.strFolioNo='"+folioNo+"' AND b.strClientCode='"+clientCode+"')";
+				+ "WHERE a.strClientCode='"+clientCode+"' AND a.strCheckInNo in (select b.strCheckInNo from tblfoliohd b where b.strFolioNo='"+folioNo+"' AND b.strClientCode='"+clientCode+"')";
 		List listComplimentryCheck = objGlobalFunctionsService.funGetListModuleWise(sqlComplimentryCheck, "sql");
 		{
 			strComp = listComplimentryCheck.get(0).toString();
@@ -359,7 +359,7 @@ public class clsPostRoomTerrifController {
 			}
 			else
 			{
-				String sqlExtraBedAmt = "select a.dblChargePerBed from tblextrabed a where a.strExtraBedTypeCode = '"+extraBedCode+"'";
+				String sqlExtraBedAmt = "select a.dblChargePerBed from tblextrabed a where a.strExtraBedTypeCode = '"+extraBedCode+"' AND a.strClientCode='"+clientCode+"'";
 				List listExtraBedAmt = objGlobalFunctionsService.funGetListModuleWise(sqlExtraBedAmt, "sql");
 				if(!extraBedCode.isEmpty())
 				{

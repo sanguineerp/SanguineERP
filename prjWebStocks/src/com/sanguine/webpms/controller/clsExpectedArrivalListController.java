@@ -112,9 +112,9 @@ public class clsExpectedArrivalListController {
 
 			// get all parameters
 			String sqlParametersExpArrival = "SELECT a.strReservationNo,ifnull(h.strBookingTypeDesc,'NA'), DATE_FORMAT(a.dteDateCreated,'%d-%m-%Y'),ifnull(c.strCorporateDesc,'NA'), " + "ifnull(d.strDescription,'NA'), IFNULL(i.dblReceiptAmt,0), ifnull(e.strBookerName,'NA'),DATE_FORMAT(a.dteConfirmDate,'%d-%m-%Y'), "
-					+ "DATE_FORMAT(a.dteCancelDate,'%d-%m-%Y'),ifnull(f.strDescription,'NA'),ifnull(g.strBillingInstDesc,'NA'),concat(j.strFirstName,' ',j.strMiddleName,' ',j.strLastName) " + ",j.strGuestCode FROM tblreservationhd a left outer join tblreservationdtl b on a.strReservationNo=b.strReservationNo  " + "left outer join tblcorporatemaster c on a.strCorporateCode=c.strCorporateCode  "
-					+ "left outer join tblagentmaster d on a.strAgentCode=d.strAgentCode  " + "left outer join tblbookermaster e on a.strBookerCode=e.strBookerCode  " + "left outer join tblbusinesssource f on a.strBusinessSourceCode=f.strBusinessSourceCode " + "left outer join tblbillinginstructions g on a.strBillingInstCode=g.strBillingInstCode  "
-					+ "left outer join tblbookingtype h on a.strBookingTypeCode=h.strBookingTypeCode " + "left outer join tblreceipthd i on a.strReservationNo=i.strRegistrationNo  " + "left outer join tblguestmaster j on j.strGuestCode=b.strGuestCode  " + "WHERE DATE(a.dteArrivalDate) BETWEEN '" + fromDate + "' and '" + toDate + "'  " + "and a.strClientCode='" + clientCode
+					+ "DATE_FORMAT(a.dteCancelDate,'%d-%m-%Y'),ifnull(f.strDescription,'NA'),ifnull(g.strBillingInstDesc,'NA'),concat(j.strFirstName,' ',j.strMiddleName,' ',j.strLastName) " + ",j.strGuestCode FROM tblreservationhd a left outer join tblreservationdtl b on a.strReservationNo=b.strReservationNo  AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'" + "left outer join tblcorporatemaster c on a.strCorporateCode=c.strCorporateCode  AND c.strClientCode='"+clientCode+"' "
+					+ "left outer join tblagentmaster d on a.strAgentCode=d.strAgentCode  AND d.strClientCode='"+clientCode+"'" + "left outer join tblbookermaster e on a.strBookerCode=e.strBookerCode  AND e.strClientCode='"+clientCode+"'" + "left outer join tblbusinesssource f on a.strBusinessSourceCode=f.strBusinessSourceCode AND f.strClientCode='"+clientCode+"'" + "left outer join tblbillinginstructions g on a.strBillingInstCode=g.strBillingInstCode AND g.strClientCode='"+clientCode+"' "
+					+ "left outer join tblbookingtype h on a.strBookingTypeCode=h.strBookingTypeCode AND h.strClientCode='"+clientCode+"'" + "left outer join tblreceipthd i on a.strReservationNo=i.strRegistrationNo  AND i.strClientCode='"+clientCode+"'" + "left outer join tblguestmaster j on j.strGuestCode=b.strGuestCode  AND j.strClientCode='"+clientCode+"'" + "WHERE DATE(a.dteArrivalDate) BETWEEN '" + fromDate + "' and '" + toDate + "'  " + "and a.strClientCode='" + clientCode
 					+ "' and a.strPropertyCode='" + propertyCode + "' " + " and a.strReservationNo not in (select strReservationNo from tblcheckinhd) ";
 
 			List listOfExpArrival = objGlobalFunctionsService.funGetDataList(sqlParametersExpArrival, "sql");
@@ -169,7 +169,7 @@ public class clsExpectedArrivalListController {
 				String sqlExpectedArrivalDtl ="SELECT a.strFirstName,a.strMiddleName,a.strLastName,d.strBedType,a.strAddress,a.strArrivalFrom,a.strProceedingTo "
 						+ "FROM tblguestmaster a,tblreservationhd b,tblroom d,tblreservationdtl e WHERE "
 						+ "a.strGuestCode=b.strGuestcode AND e.strReservationNo='"+strReservationNo+"' "
-						+ "AND e.strRoomType=d.strRoomTypeCode AND b.strReservationNo=e.strReservationNo AND date(b.dteArrivalDate) between '" + fromDate + "' and '" + toDate + "'  "
+						+ "AND e.strRoomType=d.strRoomTypeCode AND b.strReservationNo=e.strReservationNo AND date(b.dteArrivalDate) between '" + fromDate + "' and '" + toDate + "'  AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'"
 						+ "group by d.strBedType";
 				
 				List expectedArrivalDtlList = objGlobalFunctionsService.funGetDataList(sqlExpectedArrivalDtl, "sql");

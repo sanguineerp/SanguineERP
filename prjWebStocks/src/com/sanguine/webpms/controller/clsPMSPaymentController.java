@@ -221,7 +221,7 @@ public class clsPMSPaymentController {
 			sql = " select d.strGuestCode,d.strFirstName,d.strMiddleName,d.strLastName, a.strCheckInNo,a.dblGrandTotal,a.strReservationNo " 
 		       + "from tblbillhd a,tblcheckinhd b,tblcheckindtl c,tblguestmaster d " 
 			   + " where a.strCheckInNo=b.strCheckInNo and b.strCheckInNo=c.strCheckInNo " 
-		       + " and c.strGuestCode=d.strGuestCode and a.strBillNo='" + docCode + "' " + " and c.strPayee='Y' ";
+		       + " and c.strGuestCode=d.strGuestCode and a.strBillNo='" + docCode + "' " + " and c.strPayee='Y' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"'";
 			List listBillData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			
 			if(listBillData.size()>0)
@@ -232,7 +232,7 @@ public class clsPMSPaymentController {
 				clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
 				String sqlRecipt="SELECT ifnull(sum(a.dblReceiptAmt),0) "
 						+ " FROM tblreceipthd a left outer join tblbillhd b on a.strBillNo=b.strBillNo "
-						+ " and a.strReservationNo and b.strReservationNo,tblreceiptdtl c "
+						+ " and a.strReservationNo and b.strReservationNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"',tblreceiptdtl c "
 						+ " WHERE a.strReceiptNo=c.strReceiptNo and b.strBillNo='" + docCode + "'  ";
 				
 				List listRecipt = objGlobalFunctionsService.funGetListModuleWise(sqlRecipt, "sql");
@@ -248,7 +248,7 @@ public class clsPMSPaymentController {
 				
 				String sqlAdvanceAmt="SELECT IFNULL(SUM(a.dblReceiptAmt),0)"
 						+ " FROM tblreceipthd a,tblreceiptdtl b WHERE a.strReceiptNo=b.strReceiptNo "
-						+ " AND a.strCheckInNo='"+obj[4].toString()+"' ";
+						+ " AND a.strCheckInNo='"+obj[4].toString()+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'";
 				
 				List listAdvanceAmt = objGlobalFunctionsService.funGetListModuleWise(sqlAdvanceAmt, "sql");
 				double advanceAmt=0.0;
@@ -265,7 +265,7 @@ public class clsPMSPaymentController {
 						+ "WHERE a.strWalkInNo=b.strWalkinNo "
 						+ "AND a.strCheckInNo='"+obj[4].toString()+"' "
 						+ "AND   c.strBillNo = '"+docCode+"' "
-						+ "AND c.strPerticulars = 'Room Tariff'";
+						+ "AND c.strPerticulars = 'Room Tariff' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
 				
 				List listDiscount = objGlobalFunctionsService.funGetListModuleWise(sqlDiscount, "sql");
 				double dblDiscount=0.0;
@@ -297,7 +297,7 @@ public class clsPMSPaymentController {
 			}
 		else 
 		{
-			sql = " select c.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName " + " from tblcheckindtl a,tblguestmaster c " + " where a.strGuestCode=c.strGuestCode " + " and a.strCheckInNo='" + docCode + "' and a.strPayee='Y'";
+			sql = " select c.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName " + " from tblcheckindtl a,tblguestmaster c " + " where a.strGuestCode=c.strGuestCode " + " and a.strCheckInNo='" + docCode + "' and a.strPayee='Y' AND a.strClientCode='"+clientCode+"' AND  c.strClientCode='"+clientCode+"'";
 			List listData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			if(listData.size()>0)
 			{
@@ -377,7 +377,7 @@ public class clsPMSPaymentController {
 			sql="select b.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName "
 				+ " from tblreservationhd a,tblreservationdtl b,tblguestmaster c "
 				+ " where a.strReservationNo=b.strReservationNo and b.strGuestCode=c.strGuestCode "
-				+ " and a.strReservationNo='"+docCode+"'";
+				+ " and a.strReservationNo='"+docCode+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' ";
 
 			
 			List listReservData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
@@ -390,7 +390,7 @@ public class clsPMSPaymentController {
 					clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
 					
 					String sqlRecipt="SELECT IFNULL(SUM(a.dblReceiptAmt),0),IFNULL(SUM(d.dblGrandTotal),0)"
-							+ " FROM tblreceipthd a left outer join tblbillhd d on a.strBillNo=d.strBillNo and a.strFolioNo=d.strFolioNo,"
+							+ " FROM tblreceipthd a left outer join tblbillhd d on a.strBillNo=d.strBillNo and a.strFolioNo=d.strFolioNo AND a.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"',"
 							+ " tblreceiptdtl b, tblreservationhd c"
 							+ " WHERE a.strReceiptNo=b.strReceiptNo AND a.strReservationNo=c.strReservationNo "
 							+ " AND c.strReservationNo='" + docCode + "' ";	
@@ -507,13 +507,13 @@ public class clsPMSPaymentController {
 			 +" a.strCheckInNo,f.strReservationNo FROM tblcheckindtl a,tblguestmaster c,tblfoliohd d,tblfoliodtl e,tblcheckinhd f "
 			 +" WHERE a.strGuestCode=c.strGuestCode AND a.strGuestCode=d.strGuestCode AND a.strCheckInNo=d.strCheckInNo  "
 			 +" AND a.strRegistrationNo =d.strRegistrationNo AND d.strFolioNo='" + docCode + "' "
-			 +" AND a.strPayee='Y' AND e.strRevenueType!='discount' AND d.strFolioNo=e.strFolioNo and a.strCheckInNo=f.strCheckInNo) AS a, ( "
+			 +" AND a.strPayee='Y' AND e.strRevenueType!='discount' AND d.strFolioNo=e.strFolioNo AND a.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"' AND f.strClientCode='"+clientCode+"' and a.strCheckInNo=f.strCheckInNo) AS a, ( "
 			 +" SELECT c.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName, SUM(e.dblDebitAmt) AS discount "
 			 +" FROM tblcheckindtl a,tblguestmaster c,tblfoliohd d,tblfoliodtl e "
 			 +" WHERE a.strGuestCode=c.strGuestCode AND a.strGuestCode=d.strGuestCode " 
 			 +" AND a.strCheckInNo=d.strCheckInNo AND a.strRegistrationNo =d.strRegistrationNo " 
 			 +" AND d.strFolioNo='" + docCode + "' AND a.strPayee='Y' AND e.strRevenueType='Discount'  "
-			 +" AND d.strFolioNo=e.strFolioNo) AS b;" ;
+			 +" AND d.strFolioNo=e.strFolioNo AND a.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"') AS b;" ;
 			
 			List listFoliaData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			
@@ -530,14 +530,14 @@ public class clsPMSPaymentController {
 				{
 				sqlRecipt = "SELECT ifnull(SUM(a.dblReceiptAmt),0) "
 						+ "FROM tblreceipthd a "
-						+ "WHERE a.strCheckInNo='"+obj[6].toString()+"' ";
+						+ "WHERE a.strCheckInNo='"+obj[6].toString()+"' AND a.strClientCode='"+clientCode+"'";
 				
 				}
 				else
 				{
 					sqlRecipt = "SELECT ifnull(SUM(a.dblReceiptAmt),0) "
 							+ "FROM tblreceipthd a "
-							+ "WHERE a.strCheckInNo='"+obj[5].toString()+"' ";
+							+ "WHERE a.strCheckInNo='"+obj[5].toString()+"' AND a.strClientCode='"+clientCode+"'";
 				}
 				List listRecipt = objGlobalFunctionsService.funGetListModuleWise(sqlRecipt, "sql");
 				double reciptAmt=0.0;
@@ -623,13 +623,13 @@ public class clsPMSPaymentController {
 						+ ",ifnull(c.strRoomType,''),DATE_FORMAT(d.dteArrivalDate,'%d-%m-%Y'),DATE_FORMAT(d.dteDepartureDate,'%d-%m-%Y'),f.strFirstName" 
 						+ ",f.strMiddleName,f.strLastName,ifnull(e.strSettlementDesc,''),a.dblPaidAmt,b.strRemarks"
 						+ ",DATE_FORMAT(a.dteReceiptDate,'%d-%m-%Y'),g.strRoomTypeDesc " 
-						+ "from tblreceipthd a left outer join  tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo " 
-						+ "left outer join  tblreservationdtl c on a.strReservationNo=c.strReservationNo "
-						+ "left outer join  tblreservationhd d on a.strReservationNo=d.strReservationNo "
-						+ "left outer join  tblsettlementmaster e on b.strSettlementCode=e.strSettlementCode " 
-						+ "left outer join  tblguestmaster f    on c.strGuestCode=f.strGuestCode,tblroomtypemaster g " 
+						+ "from tblreceipthd a left outer join  tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo AND b.strClientCode='"+clientCode+"'" 
+						+ "left outer join  tblreservationdtl c on a.strReservationNo=c.strReservationNo AND c.strClientCode='"+clientCode+"'"
+						+ "left outer join  tblreservationhd d on a.strReservationNo=d.strReservationNo  AND d.strClientCode='"+clientCode+"'"
+						+ "left outer join  tblsettlementmaster e on b.strSettlementCode=e.strSettlementCode  AND e.strClientCode='"+clientCode+"'" 
+						+ "left outer join  tblguestmaster f    on c.strGuestCode=f.strGuestCode AND f.strClientCode='"+clientCode+"',tblroomtypemaster g " 
 						+ "where c.strRoomType=g.strRoomTypeCode "
-						+ "and a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "'  ";
+						+ "and a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "'  AND g.strClientCode='"+clientCode+"'";
 				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
 
 				for (int i = 0; i < listOfPayment.size(); i++) {
@@ -708,7 +708,7 @@ public class clsPMSPaymentController {
 						+ " and c.strCheckInNo = e.strCheckInNo  and d.strRoomNo = e.strRoomNo " 
 						+ "  and d.strRoomNo = i.strRoomCode and i.strRoomTypeCode=j.strRoomTypeCode "
 						+ " and b.strSettlementCode=f.strSettlementCode and d.strGuestCode=h.strGuestCode " 
-						+ " and a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "' "
+						+ " and a.strReceiptNo='" + reciptNo + "' and a.strClientCode='" + clientCode + "'  AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'  AND f.strClientCode='"+clientCode+"' AND h.strClientCode='"+clientCode+"' AND i.strClientCode='"+clientCode+"' AND j.strClientCode='"+clientCode+"'"
 								+ " group by a.strReceiptNo ";
 
 				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");

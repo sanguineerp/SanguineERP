@@ -102,7 +102,7 @@ public class clsFolioPrintingController {
 			HashMap reportParams = new HashMap();
 
 			String sqlParametersFromFolio = "SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo " + " ,date(b.dteArrivalDate),b.tmeArrivalTime ,ifnull(date(b.dteDepartureDate),'NA'),ifnull(b.tmeDepartureTime,'NA')" + " ,d.strGuestPrefix,d.strFirstName,d.strMiddleName,d.strLastName ,b.intNoOfAdults,b.intNoOfChild,'NA',d.strGuestCode "
-					+ " FROM tblfoliohd a LEFT OUTER JOIN tblreservationhd b ON a.strReservationNo=b.strReservationNo " + " LEFT OUTER JOIN tblguestmaster d ON a.strGuestCode=d.strGuestCode " + " LEFT OUTER JOIN tblroom e ON a.strRoomNo=e.strRoomCode " + " where a.strFolioNo='" + folioNo + "' and a.strClientCode='" + clientCode + "'";
+					+ " FROM tblfoliohd a LEFT OUTER JOIN tblreservationhd b ON a.strReservationNo=b.strReservationNo AND b.strClientCode='"+clientCode+"'" + " LEFT OUTER JOIN tblguestmaster d ON a.strGuestCode=d.strGuestCode AND d.strClientCode='"+clientCode+"'" + " LEFT OUTER JOIN tblroom e ON a.strRoomNo=e.strRoomCode AND e.strClientCode='"+clientCode+"'" + " where a.strFolioNo='" + folioNo + "' and a.strClientCode='" + clientCode + "'";
 
 			String sqlFolio = "select strReservationNo,strWalkInNo from tblfoliohd where strFolioNo='" + folioNo + "' and strClientCode='" + clientCode + "' ";
 			List folioDtl = objFolioService.funGetParametersList(sqlFolio);
@@ -110,7 +110,7 @@ public class clsFolioPrintingController {
 				Object[] arrFolioDtl = (Object[]) folioDtl.get(0);
 				if (!arrFolioDtl[1].toString().isEmpty()) {
 					sqlParametersFromFolio = "SELECT a.strFolioNo,e.strRoomDesc,a.strRegistrationNo,a.strReservationNo " + " ,date(b.dteWalkinDate),b.tmeWalkinTime ,ifnull(date(b.dteCheckOutDate),'NA'),ifnull(b.tmeCheckOutTime,'NA')" + " ,d.strGuestPrefix,d.strFirstName,d.strMiddleName,d.strLastName ,b.intNoOfAdults,b.intNoOfChild,'NA',d.strGuestCode "
-							+ " FROM tblfoliohd a LEFT OUTER JOIN tblwalkinhd b ON a.strWalkinNo=b.strWalkinNo " + " LEFT OUTER JOIN tblguestmaster d ON a.strGuestCode=d.strGuestCode " + " LEFT OUTER JOIN tblroom e ON a.strRoomNo=e.strRoomCode " + " where a.strFolioNo='" + folioNo + "' and a.strClientCode='" + clientCode + "'";
+							+ " FROM tblfoliohd a LEFT OUTER JOIN tblwalkinhd b ON a.strWalkinNo=b.strWalkinNo  AND b.strClientCode='"+clientCode+"'" + " LEFT OUTER JOIN tblguestmaster d ON a.strGuestCode=d.strGuestCode AND d.strClientCode='"+clientCode+"'" + " LEFT OUTER JOIN tblroom e ON a.strRoomNo=e.strRoomCode  AND e.strClientCode='"+clientCode+"'" + " where a.strFolioNo='" + folioNo + "' and a.strClientCode='" + clientCode + "'";
 				}
 			}
 
@@ -146,7 +146,7 @@ public class clsFolioPrintingController {
 						+ "IFNULL(d.strCityOfc,''), IFNULL(d.strStateOfc,''), "
 						+ "IFNULL(d.strCountryOfc,''), IFNULL(d.intPinCodeOfc,''), "
 						+ "IFNULL(d.strGSTNo,'') FROM tblguestmaster d "
-						+ "WHERE d.strGuestCode= '"+guestCode+"'";
+						+ "WHERE d.strGuestCode= '"+guestCode+"' AND d.strClientCode='"+clientCode+"'";
 				
 				List listguest = objFolioService.funGetParametersList(sqlAddr);
 				
@@ -198,7 +198,7 @@ public class clsFolioPrintingController {
 				reportParams.put("pBillNo", billNo);
 
 				// get folio details
-				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt ,b.strPerticulars" + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " WHERE a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
+				String sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,IFNULL(SUBSTRING_INDEX(SUBSTRING_INDEX(b.strPerticulars,'(', -1),')',1),''),b.dblQuantity,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt ,b.strPerticulars" + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'" + " WHERE a.strFolioNo='" + folioNo + "' and b.strRevenueType!='Discount'"
 									+ " order by b.dteDocDate ASC";
 				List folioDtlList = objFolioService.funGetParametersList(sqlFolioDtl);
 				for (int i = 0; i < folioDtlList.size(); i++) {
@@ -227,7 +227,7 @@ public class clsFolioPrintingController {
 
 						if(!strCompletePertName.contains("POS"))
 						{
-						sqlFolioDtl = "SELECT DATE_FORMAT(date(a.dteDocDate),'%d-%m-%Y'),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblfoliodtl a,tblfoliotaxdtl b where a.strDocNo=b.strDocNo " + " and  a.strFolioNo='" + folioNo + "' and a.strDocNo='" + docNo + "'";
+						sqlFolioDtl = "SELECT DATE_FORMAT(date(a.dteDocDate),'%d-%m-%Y'),a.strDocNo,b.strTaxDesc,b.dblTaxAmt,0,0 " + " FROM tblfoliodtl a,tblfoliotaxdtl b where a.strDocNo=b.strDocNo " + " and  a.strFolioNo='" + folioNo + "' and a.strDocNo='" + docNo + "' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'";
 						List listFolioTaxDtl = objWebPMSUtility.funExecuteQuery(sqlFolioDtl, "sql");
 						for (int cnt = 0; cnt < listFolioTaxDtl.size(); cnt++) {
 							Object[] arrObjFolioTaxDtl = (Object[]) listFolioTaxDtl.get(cnt);
@@ -247,7 +247,7 @@ public class clsFolioPrintingController {
 				}
 				
 				sqlFolioDtl = "SELECT DATE_FORMAT(b.dteDocDate,'%d-%m-%Y'),b.strDocNo,b.strPerticulars,b.dblDebitAmt,b.dblCreditAmt,b.dblBalanceAmt,b.strRevenueType" 
-						+ " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " 
+						+ " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'" 
 						+ " WHERE  a.strFolioNo='" + folioNo + "' and b.strRevenueType='Discount'";
 				folioDtlList = objFolioService.funGetParametersList(sqlFolioDtl);
 				if(folioDtlList.size()>0)
@@ -275,8 +275,8 @@ public class clsFolioPrintingController {
 				/*String sqlPaymentDtl = "Select IFNULL(DATE(b.dteDocDate),''),ifnull(c.strReceiptNo,''),ifnull(e.strSettlementDesc,''),'0.00' AS debitAmt,ifnull(d.dblSettlementAmt,0.0) AS creditAmt,'0.00' AS balance" + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " left outer join tblreceipthd c on a.strFolioNo=c.strFolioNo and a.strReservationNo=c.strReservationNo "
 						+ " left outer join tblreceiptdtl d on c.strReceiptNo=d.strReceiptNo " + " left outer join tblsettlementmaster e on d.strSettlementCode=e.strSettlementCode " + " WHERE  a.strFolioNo='" + folioNo + "' " + " group by a.strFolioNo ";*/
 				
-				String sqlPaymentDtl = "SELECT date(b.dteDocDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt,d.dblSettlementAmt as creditAmt" + " ,'0.00' as balance " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo " + " left outer join tblreceipthd c on a.strFolioNo=c.strFolioNo and a.strReservationNo=c.strReservationNo "
-						+ " left outer join tblreceiptdtl d on c.strReceiptNo=d.strReceiptNo " + " left outer join tblsettlementmaster e on d.strSettlementCode=e.strSettlementCode " + " WHERE a.strFolioNo='" + folioNo + "' " + " group by a.strFolioNo ";
+				String sqlPaymentDtl = "SELECT date(b.dteDocDate),c.strReceiptNo,e.strSettlementDesc,'0.00' as debitAmt,d.dblSettlementAmt as creditAmt" + " ,'0.00' as balance " + " FROM tblfoliohd a LEFT OUTER JOIN tblfoliodtl b ON a.strFolioNo=b.strFolioNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'" + " left outer join tblreceipthd c on a.strFolioNo=c.strFolioNo and a.strReservationNo=c.strReservationNo AND c.strClientCode='"+clientCode+"'"
+						+ " left outer join tblreceiptdtl d on c.strReceiptNo=d.strReceiptNo AND d.strClientCode='"+clientCode+"'" + " left outer join tblsettlementmaster e on d.strSettlementCode=e.strSettlementCode AND e.strClientCode='"+clientCode+"'" + " WHERE a.strFolioNo='" + folioNo + "' " + " group by a.strFolioNo ";
 				
 				List paymentDtlList = objFolioService.funGetParametersList(sqlPaymentDtl);
 				if(paymentDtlList!=null && paymentDtlList.size()>1){

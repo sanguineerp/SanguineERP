@@ -99,7 +99,7 @@ public class clsComplimentryReportController {
 				+ "WHERE a.strCheckInNo=b.strCheckInNo and b.strGuestCode=c.strGuestCode "
 				+ "and b.strRoomNo=d.strRoomCode and b.strRoomTYpe=e.strRoomTypeCode "
 				+ "and a.strComplimentry='Y' and Date(a.dteCheckInDate) between '"+fromDate+"' and '"+toDate+"' "
-				+ "and a.strClientCode='"+clientCode+"' AND a.strReasonCode=f.strReasonCode";
+				+ "and a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"' AND f.strClientCode='"+clientCode+"'  AND a.strReasonCode=f.strReasonCode";
 		
 		
 		List listComplimentry = objGlobalFunctionsService.funGetDataList(sql, "sql");

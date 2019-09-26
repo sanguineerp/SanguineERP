@@ -107,8 +107,8 @@ public class clsGuestListReportController {
 			// +" and b.strPayee='Y'	";
 
 			String checkInSql = "select f.strRoomDesc ,date(a.dteArrivalDate),date(a.dteDepartureDate),ifnull(e.intNoOfNights,c.intNoOfNights),'', concat(ifnull(d.strFirstName,'')," + " ifnull(d.strMiddleName,''),ifnull(d.strLastName,'') ),ifnull(d.strPANNo,d.strPassportNo),ifnull(d.strNationality,''), "
-					+ " concat(ifnull(d.strAddress,''),ifnull(d.strCity,''),ifnull(d.strCountry,'')),a.intNoOfAdults,a.intNoOfChild,ifnull(g.strDescription,'') " + " from tblcheckinhd a " + " left  join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo and b.strPayee='Y' " + " left  join tblwalkinhd c on a.strWalkInNo=c.strWalkinNo  "
-					+ " left  join tblreservationhd e on  a.strReservationNo=e.strReservationNo " + " left  join tblguestmaster d  on b.strGuestCode=d.strGuestCode " + " left  join  tblroom f on b.strRoomNo=f.strRoomCode " + " left join tblagentmaster g on e.strAgentCode=g.strAgentCode or c.strAgentCode=g.strAgentCode " + " where a.dteArrivalDate between '" + fromDate + "' and '" + toDate + "' ";
+					+ " concat(ifnull(d.strAddress,''),ifnull(d.strCity,''),ifnull(d.strCountry,'')),a.intNoOfAdults,a.intNoOfChild,ifnull(g.strDescription,'') " + " from tblcheckinhd a " + " left  join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo and b.strPayee='Y' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'" + " left  join tblwalkinhd c on a.strWalkInNo=c.strWalkinNo  AND c.strClientCode='"+clientCode+"' "
+					+ " left  join tblreservationhd e on  a.strReservationNo=e.strReservationNo AND e.strClientCode='"+clientCode+"'" + " left  join tblguestmaster d  on b.strGuestCode=d.strGuestCode AND d.strClientCode='"+clientCode+"'" + " left  join  tblroom f on b.strRoomNo=f.strRoomCode AND f.strClientCode='"+clientCode+"'" + " left join tblagentmaster g on e.strAgentCode=g.strAgentCode or c.strAgentCode=g.strAgentCode AND g.strClientCode='"+clientCode+"'" + " where a.dteArrivalDate between '" + fromDate + "' and '" + toDate + "' ";
 
 			List listOfCheckIn = objGlobalFunctionsService.funGetDataList(checkInSql, "sql");
 			for (int i = 0; i < listOfCheckIn.size(); i++) {
@@ -161,10 +161,10 @@ public class clsGuestListReportController {
 			 * +" group by a.strCheckInNo " ;
 			 **/
 			String checkOutSql = "select  g.strRoomDesc,date(a.dteBillDate),date(a.dteDateCreated),ifnull(c.intNoOfNights,f.intNoOfNights),'', " + "  ifnull(d.strFirstName,''),ifnull(d.strMiddleName,''),ifnull(d.strLastName,'') "
-					+ " ,ifnull(d.strPANNo,d.strPassportNo),ifnull(d.strNationality,''),ifnull(d.strAddress,''),ifnull(d.strCity,''),ifnull(d.strCountry,'') ,e.intNoOfAdults,e.intNoOfChild,ifnull(h.strDescription,'')  " + " from  tblbillhd a  " + " left join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo and b.strPayee='Y' "
+					+ " ,ifnull(d.strPANNo,d.strPassportNo),ifnull(d.strNationality,''),ifnull(d.strAddress,''),ifnull(d.strCity,''),ifnull(d.strCountry,'') ,e.intNoOfAdults,e.intNoOfChild,ifnull(h.strDescription,'')  " + " from  tblbillhd a  " + " left join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo and b.strPayee='Y' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
 					// +" left join  tblreservationhd c on a.strReservationNo=c.strReservationNo  "
-					+ " left join tblguestmaster d  on b.strGuestCode=d.strGuestCode " + "left join tblcheckinhd e on a.strCheckInNo=e.strCheckInNo " + " left join tblwalkinhd f on e.strWalkInNo=f.strWalkinNo " + " left join  tblreservationhd c on e.strReservationNo=c.strReservationNo  " + " left  join  tblroom g on b.strRoomNo=g.strRoomCode "
-					+ " left join tblagentmaster h on f.strAgentCode=h.strAgentCode or c.strAgentCode=h.strAgentCode " + " where a.dteBillDate between '" + fromDate + "' and '" + toDate + "' " + " group by a.strCheckInNo ";
+					+ " left join tblguestmaster d  on b.strGuestCode=d.strGuestCode  AND d.strClientCode='"+clientCode+"" + "left join tblcheckinhd e on a.strCheckInNo=e.strCheckInNo AND e.strClientCode='"+clientCode+"'" + " left join tblwalkinhd f on e.strWalkInNo=f.strWalkinNo AND f.strClientCode='"+clientCode+"'" + " left join  tblreservationhd c on e.strReservationNo=c.strReservationNo  AND c.strClientCode='"+clientCode+"'" + " left  join  tblroom g on b.strRoomNo=g.strRoomCode AND g.strClientCode='"+clientCode+"'"
+					+ " left join tblagentmaster h on f.strAgentCode=h.strAgentCode or c.strAgentCode=h.strAgentCode AND h.strClientCode='"+clientCode+"'" + " where a.dteBillDate between '" + fromDate + "' and '" + toDate + "' " + " group by a.strCheckInNo ";
 
 			// List listOfCheckOut =
 			// objGlobalFunctionsService.funGetPMSDataDemo(fromDate,toDate,"sql");
@@ -207,11 +207,11 @@ public class clsGuestListReportController {
 					+ " IFNULL(d.strCountry,''), a.strBookingTypeCode,c.strBookingTypeDesc,a.intNoOfAdults,a.intNoOfChild, "
 					+ " IFNULL(h.strDescription,'')  "
 					+ " FROM tblreservationhd a " 
-					+ " LEFT JOIN tblreservationdtl b ON a.strReservationNo=b.strReservationNo  " 
-					+ " LEFT OUTER JOIN tblguestmaster d ON b.strGuestcode=d.strGuestCode "
-					+ " LEFT OUTER JOIN tblbookingtype c ON a.strBookingTypeCode=c.strBookingTypeCode " 
-					+ " LEFT JOIN tblroomtypemaster g ON b.strRoomType=g.strRoomTypeCode " 
-					+ " LEFT JOIN tblagentmaster h ON a.strAgentCode=h.strAgentCode " 
+					+ " LEFT JOIN tblreservationdtl b ON a.strReservationNo=b.strReservationNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' " 
+					+ " LEFT OUTER JOIN tblguestmaster d ON b.strGuestcode=d.strGuestCode AND d.strClientCode='"+clientCode+"'"
+					+ " LEFT OUTER JOIN tblbookingtype c ON a.strBookingTypeCode=c.strBookingTypeCode AND c.strClientCode='"+clientCode+"'" 
+					+ " LEFT JOIN tblroomtypemaster g ON b.strRoomType=g.strRoomTypeCode AND g.strClientCode='"+clientCode+"'" 
+					+ " LEFT JOIN tblagentmaster h ON a.strAgentCode=h.strAgentCode AND h.strClientCode='"+clientCode+"'" 
 					+ " where a.dteArrivalDate between '" + fromDate + "' and '" + toDate + "' " 
 					+ " group by a.strReservationNo " 
 					+ " order by a.strBookingTypeCode ";

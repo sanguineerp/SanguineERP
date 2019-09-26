@@ -113,8 +113,8 @@ public class clsPaxReportController {
 								+ ",a.strReservationNo,a.strWalkInNo,d.strRoomDesc,a.intNoOfAdults,a.intNoOfChild "
 								+ " from tblcheckinhd a, tblcheckindtl b,tblguestmaster c,tblroom d "
 								+ " where a.strCheckInNo=b.strCheckInNo "
-								+ " and b.strGuestCode=c.strGuestCode and b.strRoomNo=d.strRoomCode"
-								+ " and a.strCheckInNo NOT IN(select d.strCheckInNo from tblbillhd d)"
+								+ " and b.strGuestCode=c.strGuestCode and b.strRoomNo=d.strRoomCode AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"'"
+								+ " and a.strCheckInNo NOT IN(select d.strCheckInNo from tblbillhd d where strClientCode='"+clientCode+"') "
 								+ " and date(a.dteCheckInDate) between '"+fromDate+"' and '"+toDate+"'" ;
 
 			List listOfPax = objGlobalFunctionsService.funGetDataList(sqlPax, "sql");

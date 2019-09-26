@@ -119,7 +119,7 @@ public class clsReceiptReportController {
 				String sqlSettlementAmt = "SELECT c.strSettlementDesc,b.strSettlementCode,a.strAgainst, SUM(b.dblSettlementAmt) "
 						+ "FROM tblreceipthd a, tblreceiptdtl b,tblsettlementmaster c WHERE a.strReceiptNo=b.strReceiptNo AND "
 						+ "b.strSettlementCode=c.strSettlementCode AND DATE(a.dteReceiptDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' "
-						+ "AND a.strClientCode = '"+clientCode+"' GROUP BY a.strAgainst,b.strSettlementCode ";
+						+ "AND a.strClientCode = '"+clientCode+"'  AND B.strClientCode = '"+clientCode+"' AND C.strClientCode = '"+clientCode+"' GROUP BY a.strAgainst,b.strSettlementCode ";
 				List listSettlement = objGlobalFunctionsService.funGetDataList(sqlSettlementAmt, "sql");
 				String settlementType = "";
 				double settlementAmt = 0.0;

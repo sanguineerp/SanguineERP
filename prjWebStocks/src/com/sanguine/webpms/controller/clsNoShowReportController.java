@@ -79,10 +79,10 @@ public class clsNoShowReportController {
 			String sqlParametersNoShowList = "select a.strReservationNo,a.dteArrivalDate,ifnull(b.dblReceiptAmt,0)"
 											+ " ,d.strGuestcode,c.strFirstName,c.strMiddleName,c.strLastName,a.strNoRoomsBooked "
 											+ " from tblreservationhd a left outer join tblreceipthd b "
-											+ " on a.strReservationNo=b.strReservationNo,tblguestmaster c,tblreservationdtl d "
+											+ " on a.strReservationNo=b.strReservationNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"',tblguestmaster c,tblreservationdtl d "
 											+ " where  a.strReservationNo=d.strReservationNo and d.strGuestCode=c.strGuestCode "
 											+ " and date(a.dteArrivalDate) between '"+fromDate+"' and '"+toDate+"' and "
-											+ " date(a.dteDepartureDate) between '"+fromDate+"' and '"+toDate+"' "
+											+ " date(a.dteDepartureDate) between '"+fromDate+"' and '"+toDate+"' AND d.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'"
 											+ " and  a.strReservationNo Not IN(select strReservationNo from tblcheckinhd )";
 
 			List listOfNoShow = objGlobalFunctionsService.funGetDataList(sqlParametersNoShowList, "sql");
@@ -139,10 +139,10 @@ public class clsNoShowReportController {
 			String sqlParametersNoShowList = "SELECT a.strReservationNo,a.dteArrivalDate, IFNULL(b.dblReceiptAmt,0),d.strGuestcode,c.strFirstName,c.strMiddleName,c.strLastName,a.strNoRoomsBooked,a.dteReservationDate "
 						+ " FROM tblreservationhd a "
 						+ " LEFT OUTER "
-						+ " JOIN tblreceipthd b ON a.strReservationNo=b.strReservationNo,tblguestmaster c,tblreservationdtl d "
+						+ " JOIN tblreceipthd b ON a.strReservationNo=b.strReservationNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"',tblguestmaster c,tblreservationdtl d "
 						+ " WHERE a.strReservationNo=d.strReservationNo and d.strGuestCode=c.strGuestCode  "
 						+ " and DATE(a.dteArrivalDate)  between '"+fromDateToDisplay+"' and '"+toDateToDisplay+"' "
-						+ " AND DATE(a.dteDepartureDate)  between '"+fromDateToDisplay+"' and '"+toDateToDisplay+"' " 
+						+ " AND DATE(a.dteDepartureDate)  between '"+fromDateToDisplay+"' and '"+toDateToDisplay+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"'" 
 						+ " AND a.strReservationNo NOT IN( "
 						+ " SELECT strReservationNo "
 						+ " FROM tblcheckinhd)";

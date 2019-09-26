@@ -81,7 +81,7 @@ public class clsPMSSalesFlashController {
 				+ toDte
 				+ "' "
 				+ " and b.strSettlementCode=c.strSettlementCode"
-				+ " and a.strClientCode=b.strClientCode and b.strClientCode='"+strClientCode+"' "
+				+ " and a.strClientCode=b.strClientCode and b.strClientCode='"+strClientCode+"' AND c.strClientCode='"+strClientCode+"'"
 				+ " group by b.strSettlementCode;";
 
 		List listSettlementDtl = objGlobalService.funGetListModuleWise(sql,"sql");
@@ -120,20 +120,20 @@ public class clsPMSSalesFlashController {
 		String sql=" select * from  "
                   +" (select a.strRevenueType AS strRevenueType,sum(a.Amount),sum(b.TAXAMT) from (SELECT a.strBillNo,b.strDocNo ,b.strRevenueType AS strRevenueType, sum(b.dblDebitAmt) AS Amount "
                   +" FROM tblbillhd a, tblbilldtl b "
-                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
                   +" GROUP BY a.strBillNo ,b.strDocNo) a, "
                   +" (select a.strBillNo,b.strDocNo,sum(b.dblTaxAmt) AS TAXAMT  "
                   +" from tblbillhd a , tblbilltaxdtl b "
-                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
                   +" GROUP BY a.strBillNo,b.strDocNo) b "
                   +" where a.strBillNo=b.strBillNo AND a.strDocNo=b.strDocNo group by  a.strRevenueType)  c "
                   +" UNION select * from  "
                   +" (select a.strRevenueType AS strRevenueType,sum(a.Amount),sum(b.TAXAMT) from (SELECT a.strFolioNo,b.strDocNo,b.strRevenueType AS strRevenueType, SUM(b.dblDebitAmt) AS Amount "
                   +" FROM tblfoliohd a,tblfoliodtl b "
-                  +" WHERE a.strFolioNo=b.strFolioNo     AND DATE(b.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" WHERE a.strFolioNo=b.strFolioNo     AND DATE(b.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
                   +" GROUP BY b.strRevenueType)  a , "
                   +" (select a.strFolioNo,b.strDocNo,sum(b.dblTaxAmt) AS TAXAMT from tblfoliodtl a ,tblfoliotaxdtl b "
-                  +" where a.strFolioNo=b.strFolioNo and DATE(a.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" where a.strFolioNo=b.strFolioNo and DATE(a.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
                   +" GROUP BY a.strFolioNo,b.strDocNo) b "
                   +" where a.strFolioNo=b.strFolioNo and a.strDocNo=b.strDocNo group by a.strRevenueType )  d ; ";
 		
@@ -503,10 +503,10 @@ public class clsPMSSalesFlashController {
 		List<clsPMSSalesFlashBean> listofVoidBillDtl = new ArrayList<clsPMSSalesFlashBean>();
 		String sql = "SELECT a.strBillNo, DATE_FORMAT(a.dteBillDate,'%d-%m-%Y'),CONCAT(e.strGuestPrefix,\" \",e.strFirstName,\" \",e.strLastName) AS gName,d.strRoomDesc,b.strPerticulars, "
 				+ " SUM(b.dblDebitAmt), a.strReasonName,a.strRemark,a.strVoidType, a.strUserCreated "
-				+ " FROM tblvoidbillhd a inner join tblvoidbilldtl b on a.strBillNo=b.strBillNo "
-				+ " left outer join tblcheckindtl c on a.strCheckInNo=c.strCheckInNo "
-				+ " left outer join tblroom d on a.strRoomNo=d.strRoomCode "
-				+ " left outer join tblguestmaster e on c.strGuestCode=e.strGuestCode "
+				+ " FROM tblvoidbillhd a inner join tblvoidbilldtl b on a.strBillNo=b.strBillNo AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
+				+ " left outer join tblcheckindtl c on a.strCheckInNo=c.strCheckInNo AND c.strClientCode='"+strClientCode+"'"
+				+ " left outer join tblroom d on a.strRoomNo=d.strRoomCode AND d.strClientCode='"+strClientCode+"'"
+				+ " left outer join tblguestmaster e on c.strGuestCode=e.strGuestCode  AND e.strClientCode='"+strClientCode+"'"
 				+ " where c.strPayee='Y' AND a.strVoidType='fullVoid' or a.strVoidType='itemVoid' "
 				+ " AND DATE(a.dteBillDate) BETWEEN '"
 				+ fromDte
@@ -696,7 +696,7 @@ public class clsPMSSalesFlashController {
 				+ toDte
 				+ "' "
 				+ " and b.strSettlementCode=c.strSettlementCode"
-				+ " and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode "
+				+ " and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"' AND c.strClientCode='"+strClientCode+"'"
 				+ " group by b.strSettlementCode;";
 
 		List listSettlementDtl = objGlobalService.funGetListModuleWise(sql,"sql");
@@ -778,20 +778,20 @@ public class clsPMSSalesFlashController {
 		String sql=" select * from  "
                   +" (select a.strRevenueType AS strRevenueType,sum(a.Amount),sum(b.TAXAMT) from (SELECT a.strBillNo,b.strDocNo ,b.strRevenueType AS strRevenueType, sum(b.dblDebitAmt) AS Amount "
                   +" FROM tblbillhd a, tblbilldtl b "
-                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
                   +" GROUP BY a.strBillNo ,b.strDocNo) a, "
                   +" (select a.strBillNo,b.strDocNo,sum(b.dblTaxAmt) AS TAXAMT  "
                   +" from tblbillhd a , tblbilltaxdtl b "
-                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" WHERE a.strBillNo=b.strBillNo  AND DATE(a.dteBillDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
                   +" GROUP BY a.strBillNo,b.strDocNo) b "
                   +" where a.strBillNo=b.strBillNo AND a.strDocNo=b.strDocNo group by  a.strRevenueType)  c "
                   +" UNION select * from  "
                   +" (select a.strRevenueType AS strRevenueType,sum(a.Amount),sum(b.TAXAMT) from (SELECT a.strFolioNo,b.strDocNo,b.strRevenueType AS strRevenueType, SUM(b.dblDebitAmt) AS Amount "
                   +" FROM tblfoliohd a,tblfoliodtl b "
-                  +" WHERE a.strFolioNo=b.strFolioNo     AND DATE(b.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" WHERE a.strFolioNo=b.strFolioNo     AND DATE(b.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
                   +" GROUP BY b.strRevenueType)  a , "
                   +" (select a.strFolioNo,b.strDocNo,sum(b.dblTaxAmt) AS TAXAMT from tblfoliodtl a ,tblfoliotaxdtl b "
-                  +" where a.strFolioNo=b.strFolioNo and DATE(a.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' "
+                  +" where a.strFolioNo=b.strFolioNo and DATE(a.dteDocDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
                   +" GROUP BY a.strFolioNo,b.strDocNo) b "
                   +" where a.strFolioNo=b.strFolioNo and a.strDocNo=b.strDocNo group by a.strRevenueType )  d ; ";
 		
@@ -905,9 +905,9 @@ public class clsPMSSalesFlashController {
 		String sql=" SELECT  IFNULL(c.strTaxDesc,''), IFNULL(SUM(c.dblTaxableAmt),0), IFNULL(SUM(c.dblTaxAmt),0) "
 				+ " FROM tblbillhd a "
 				+ " LEFT OUTER "
-				+ " JOIN tblbilldtl b ON a.strBillNo=b.strBillNo "
+				+ " JOIN tblbilldtl b ON a.strBillNo=b.strBillNo  AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
 				+ " LEFT OUTER "
-				+ " JOIN tblbilltaxdtl c ON b.strDocNo=c.strDocNo AND b.strBillNo=c.strBillNo "
+				+ " JOIN tblbilltaxdtl c ON b.strDocNo=c.strDocNo AND b.strBillNo=c.strBillNo  AND c.strClientCode='"+strClientCode+"'"
 				+ " WHERE DATE(a.dteBillDate) BETWEEN '"
 				+ fromDte
 				+ "' AND '"
@@ -990,10 +990,10 @@ public class clsPMSSalesFlashController {
 		DecimalFormat df = new DecimalFormat("#.##");
 		String sql="SELECT a.strReservationNo,  DATE_FORMAT(a.dteDateCreated,'%d-%m-%Y'),CONCAT(e.strFirstName,' ',e.strMiddleName,' ',e.strLastName),   IFNULL(d.dblReceiptAmt,0), DATE_FORMAT(a.dteArrivalDate,'%d-%m-%Y'), DATE_FORMAT(a.dteDepartureDate,'%d-%m-%Y') "
 				+ " FROM tblreservationhd a "
-				+ " LEFT OUTER JOIN tblreservationdtl b ON a.strReservationNo=b.strReservationNo "
-				+ " LEFT OUTER JOIN tblbookingtype c ON a.strBookingTypeCode=c.strBookingTypeCode "
-				+ " LEFT OUTER JOIN tblreceipthd d ON a.strReservationNo=d.strRegistrationNo "
-				+ " LEFT OUTER JOIN tblguestmaster e ON e.strGuestCode=b.strGuestCode "
+				+ " LEFT OUTER JOIN tblreservationdtl b ON a.strReservationNo=b.strReservationNo AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
+				+ " LEFT OUTER JOIN tblbookingtype c ON a.strBookingTypeCode=c.strBookingTypeCode AND c.strClientCode='"+strClientCode+"'"
+				+ " LEFT OUTER JOIN tblreceipthd d ON a.strReservationNo=d.strRegistrationNo AND d.strClientCode='"+strClientCode+"'"
+				+ " LEFT OUTER JOIN tblguestmaster e ON e.strGuestCode=b.strGuestCode AND e.strClientCode='"+strClientCode+"'"
 				+ " WHERE DATE(a.dteArrivalDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode=b.strClientCode "
 				+ " AND a.strReservationNo NOT IN (SELECT strReservationNo FROM tblcheckinhd) ;";
 		List listArrivalDtl = objGlobalService.funGetListModuleWise(sql, "sql");
@@ -1073,7 +1073,7 @@ public class clsPMSSalesFlashController {
 				  +" CONCAT(d.strFirstName,' ',d.strMiddleName,'',d.strLastName) "
                   +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d "
                   +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode AND b.strGuestCode=d.strGuestCode "
-                  +" AND DATE(a.dteDepartureDate) BETWEEN '"+fromDte+"' AND '"+toDte+"';";
+                  +" AND DATE(a.dteDepartureDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"' AND c.strClientCode='"+strClientCode+"' AND d.strClientCode='"+strClientCode+"';";
 		List listExpectedDeptDtl=objGlobalService.funGetListModuleWise(sql,"sql");
 		if(!listExpectedDeptDtl.isEmpty())
 		{
@@ -1223,7 +1223,7 @@ public class clsPMSSalesFlashController {
 				  +" e.dblGrandTotal"
                 +" FROM tblcheckinhd a,tblcheckindtl b,tblroom c,tblguestmaster d,tblbillhd e "
                 +" WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=c.strRoomCode AND b.strGuestCode=d.strGuestCode "
-                +" AND a.strCheckInNo=e.strCheckInNo AND DATE(a.dteCheckInDate) BETWEEN '"+fromDte+"' AND '"+toDte+"';";
+                +" AND a.strCheckInNo=e.strCheckInNo AND DATE(a.dteCheckInDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"' AND c.strClientCode='"+strClientCode+"' AND d.strClientCode='"+strClientCode+"' AND e.strClientCode='"+strClientCode+"';";
 		List listCheckOutDtl = objGlobalService.funGetListModuleWise(sql, "sql");
 		if (!listCheckOutDtl.isEmpty()) {
 			for (int i = 0; i < listCheckOutDtl.size(); i++) {
@@ -1302,7 +1302,7 @@ public class clsPMSSalesFlashController {
 				+ " FROM tblroomcancelation a,tblreservationhd b,tblguestmaster c,tblreservationdtl d,tblbookingtype e,tblroom f, tblreasonmaster g,tblroomtypemaster h "
 				+ " WHERE DATE(a.dteCancelDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' AND a.strReservationNo=b.strReservationNo AND b.strCancelReservation='Y' AND b.strReservationNo=d.strReservationNo "
 				+ " AND d.strGuestCode=c.strGuestCode AND b.strBookingTypeCode = e.strBookingTypeCode AND d.strRoomType=f.strRoomTypeCode "
-				+ " AND a.strReasonCode=g.strReasonCode AND a.strClientCode=b.strClientCode AND h.strRoomTypeCode=d.strRoomType "
+				+ " AND a.strReasonCode=g.strReasonCode AND a.strClientCode=b.strClientCode AND h.strRoomTypeCode=d.strRoomType AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"' AND c.strClientCode='"+strClientCode+"' AND d.strClientCode='"+strClientCode+"' AND e.strClientCode='"+strClientCode+"' AND f.strClientCode='"+strClientCode+"' AND g.strClientCode='"+strClientCode+"' AND h.strClientCode='"+strClientCode+"'"
 				+ " GROUP BY b.strReservationNo,d.strGuestCode ;";
 		List listCancelationDtl = objGlobalService.funGetListModuleWise(sql,"sql");
 
@@ -1382,7 +1382,7 @@ public class clsPMSSalesFlashController {
 		DecimalFormat df = new DecimalFormat("#.##");
 		String sql = "SELECT CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),a.strReservationNo,a.strNoRoomsBooked, IFNULL(b.dblReceiptAmt,0) "
 				+ " from tblreservationhd a left outer join tblreceipthd b "
-				+ " on a.strReservationNo=b.strReservationNo,tblguestmaster c,tblreservationdtl d "
+				+ " on a.strReservationNo=b.strReservationNo AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"',tblguestmaster c,tblreservationdtl d "
 				+ " where  a.strReservationNo=d.strReservationNo and d.strGuestCode=c.strGuestCode "
 				+ " and date(a.dteArrivalDate) between '"
 				+ fromDte
@@ -1394,7 +1394,7 @@ public class clsPMSSalesFlashController {
 				+ "' and '"
 				+ toDte
 				+ "' "
-				+ " and  a.strReservationNo Not IN(select strReservationNo from tblcheckinhd )";
+				+ " and  a.strReservationNo Not IN(select strReservationNo from tblcheckinhd  where strClientCode='"+strClientCode+"')";
 		List listNoShowDtl = objGlobalService.funGetListModuleWise(sql, "sql");
 		if (!listNoShowDtl.isEmpty()) {
 			for (int i = 0; i < listNoShowDtl.size(); i++) {
@@ -1556,7 +1556,7 @@ public class clsPMSSalesFlashController {
 				+ "and a.strRoomNo=c.strRoomCode and a.strCheckInNo=d.strCheckInNo and d.strGuestCode=e.strGuestCode "
 				+ "and d.strCheckInNo=f.strCheckInNo "
 				+ "and f.strWalkInNo=g.strWalkinNo "
-				+ "and Date(a.dteBillDate) between '"+fromDte+"' and '"+toDte+"' and a.strClientCode='"+strClientCode+"' group by a.strBillNo";
+				+ "and Date(a.dteBillDate) between '"+fromDte+"' and '"+toDte+"' and a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"' AND c.strClientCode='"+strClientCode+"' AND d.strClientCode='"+strClientCode+"' AND e.strClientCode='"+strClientCode+"' AND f.strClientCode='"+strClientCode+"' AND g.strClientCode='"+strClientCode+"' group by a.strBillNo";
 		
 		List listVoidBill = objGlobalService.funGetListModuleWise(sql, "sql");
 		if (!listVoidBill.isEmpty()) {
@@ -1674,10 +1674,10 @@ public class clsPMSSalesFlashController {
 		
 		String sql = "SELECT a.strBillNo, DATE_FORMAT(a.dteBillDate,'%d-%m-%Y'),CONCAT(e.strGuestPrefix,\" \",e.strFirstName,\" \",e.strLastName) AS gName,d.strRoomDesc,b.strPerticulars, "
 				+ " SUM(b.dblDebitAmt), a.strReasonName,a.strRemark,a.strVoidType, a.strUserCreated "
-				+ " FROM tblvoidbillhd a inner join tblvoidbilldtl b on a.strBillNo=b.strBillNo "
-				+ " left outer join tblcheckindtl c on a.strCheckInNo=c.strCheckInNo "
-				+ " left outer join tblroom d on a.strRoomNo=d.strRoomCode "
-				+ " left outer join tblguestmaster e on c.strGuestCode=e.strGuestCode "
+				+ " FROM tblvoidbillhd a inner join tblvoidbilldtl b on a.strBillNo=b.strBillNo AND a.strClientCode='"+strClientCode+"' AND b.strClientCode='"+strClientCode+"'"
+				+ " left outer join tblcheckindtl c on a.strCheckInNo=c.strCheckInNo AND c.strClientCode='"+strClientCode+"'"
+				+ " left outer join tblroom d on a.strRoomNo=d.strRoomCode AND d.strClientCode='"+strClientCode+"'"
+				+ " left outer join tblguestmaster e on c.strGuestCode=e.strGuestCode  AND e.strClientCode='"+strClientCode+"'"
 				+ " where c.strPayee='Y' AND a.strVoidType='fullVoid' or a.strVoidType='itemVoid' "
 				+ " AND DATE(a.dteBillDate) BETWEEN '"
 				+ fromDte

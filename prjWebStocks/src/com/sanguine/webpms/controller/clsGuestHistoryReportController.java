@@ -84,11 +84,11 @@ public class clsGuestHistoryReportController {
 				+ " DATEDIFF(a.dteDepartureDate,a.dteArrivalDate),a.intNoOfAdults,a.intNoOfChild"//18
 				+ " ,ifnull(f.dblGrandTotal,0)"//19
 				+ " from tblcheckinhd a "
-				+ " left outer join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo"
-				+ " left outer join tblguestmaster c on b.strGuestCode=c.strGuestCode "
-				+ " left outer join tblroom d on b.strRoomNo=d.strRoomCode "
-				+ " left outer join tblextrabed e on b.strExtraBedCode=e.strExtraBedTypeCode "
-				+ " left outer join tblbillhd f on f.strCheckInNo=a.strCheckInNo"
+				+ " left outer join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo  AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
+				+ " left outer join tblguestmaster c on b.strGuestCode=c.strGuestCode AND c.strClientCode='"+clientCode+"'"
+				+ " left outer join tblroom d on b.strRoomNo=d.strRoomCode  AND d.strClientCode='"+clientCode+"'"
+				+ " left outer join tblextrabed e on b.strExtraBedCode=e.strExtraBedTypeCode AND e.strClientCode='"+clientCode+"'"
+				+ " left outer join tblbillhd f on f.strCheckInNo=a.strCheckInNo AND f.strClientCode='"+clientCode+"'"
 				+ " where a.dteCheckInDate between '"+dteFromDate+"' and '"+dteToDate+"'");
 					if(!strGuestCode.equals("")){
 						sql1.append(" and b.strGuestCode ='"+strGuestCode+"'");
@@ -121,8 +121,8 @@ public class clsGuestHistoryReportController {
 					objBean.setIntNoOfChild(Double.parseDouble(ob[18].toString()));
 					
 					sqlInner="select a.strReceiptNo,b.strSettlementCode,ifnull(c.strSettlementDesc,'') from tblreceipthd a "
-							+ " left outer join tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo "
-							+ " left outer join tblsettlementmaster c on b.strSettlementCode=c.strSettlementCode"
+							+ " left outer join tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
+							+ " left outer join tblsettlementmaster c on b.strSettlementCode=c.strSettlementCode AND c.strClientCode='"+clientCode+"'"
 							+ " where a.strCheckInNo='"+ob[0].toString()+"' and a.strBillNo='"+ob[1].toString()+"';";
 					listRec = objGlobalFunctionsService.funGetDataList(sqlInner, "sql");
 					String paymentType="";
@@ -172,11 +172,11 @@ public class clsGuestHistoryReportController {
 				+ " DATEDIFF(a.dteDepartureDate,a.dteArrivalDate),a.intNoOfAdults,a.intNoOfChild"//18
 				+ " ,ifnull(f.dblGrandTotal,0)"//19
 				+ " from tblcheckinhd a "
-				+ " left outer join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo"
-				+ " left outer join tblguestmaster c on b.strGuestCode=c.strGuestCode "
-				+ " left outer join tblroom d on b.strRoomNo=d.strRoomCode "
-				+ " left outer join tblextrabed e on b.strExtraBedCode=e.strExtraBedTypeCode "
-				+ " left outer join tblbillhd f on f.strCheckInNo=a.strCheckInNo"
+				+ " left outer join tblcheckindtl b on a.strCheckInNo=b.strCheckInNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
+				+ " left outer join tblguestmaster c on b.strGuestCode=c.strGuestCode  AND c.strClientCode='"+clientCode+"'"
+				+ " left outer join tblroom d on b.strRoomNo=d.strRoomCode AND d.strClientCode='"+clientCode+"'"
+				+ " left outer join tblextrabed e on b.strExtraBedCode=e.strExtraBedTypeCode AND e.strClientCode='"+clientCode+"'"
+				+ " left outer join tblbillhd f on f.strCheckInNo=a.strCheckInNo AND f.strClientCode='"+clientCode+"'"
 				+ " where a.dteCheckInDate between '"+dteFromDate+"' and '"+dteToDate+"'");
 					if(!strGuestCode.equals("")){
 						sql1.append(" and b.strGuestCode ='"+strGuestCode+"'");
@@ -226,8 +226,8 @@ public class clsGuestHistoryReportController {
 					
 					DataList.add(ob[19].toString());
 					sqlInner="select a.strReceiptNo,b.strSettlementCode,ifnull(c.strSettlementDesc,'') from tblreceipthd a "
-							+ " left outer join tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo "
-							+ " left outer join tblsettlementmaster c on b.strSettlementCode=c.strSettlementCode"
+							+ " left outer join tblreceiptdtl b on a.strReceiptNo=b.strReceiptNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
+							+ " left outer join tblsettlementmaster c on b.strSettlementCode=c.strSettlementCode AND c.strClientCode='"+clientCode+"'"
 							+ " where a.strCheckInNo='"+ob[0].toString()+"' and a.strBillNo='"+ob[1].toString()+"';";
 					listRec = objGlobalFunctionsService.funGetDataList(sqlInner, "sql");
 					String paymentType="";

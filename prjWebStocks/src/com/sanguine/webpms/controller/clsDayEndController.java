@@ -152,7 +152,7 @@ public class clsDayEndController {
 			e1.printStackTrace();
 		}
 		
-		String sqlBlockedRoom = "select a.strRoomCode,DATE(a.dteValidTo) from tblblockroom a ";
+		String sqlBlockedRoom = "select a.strRoomCode,DATE(a.dteValidTo) from tblblockroom a where a.strClientCode='"+clientCode+"'";
 		List listOfBlockedRoom = objGlobalFunctionsService.funGetListModuleWise(sqlBlockedRoom, "sql");
 		{
 			if(listOfBlockedRoom.size()>0)
@@ -222,7 +222,7 @@ public class clsDayEndController {
 					+ "IFNULL(a.strReservationNo,''), IFNULL(a.strWalkInNo,''),c.strRoomTypeCode,"
 					+ "IFNULL(e.strComplimentry,'N') "
 					+ "FROM tblfoliohd a ,tblroom b,tblroomtypemaster c,tblcheckinhd e "
-					+ "WHERE a.strRoomNo=b.strRoomCode AND b.strRoomTypeCode=c.strRoomTypeCode AND a.strCheckInNo=e.strCheckInNo "
+					+ "WHERE a.strRoomNo=b.strRoomCode AND b.strRoomTypeCode=c.strRoomTypeCode AND a.strCheckInNo=e.strCheckInNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'"
 					+ "GROUP BY a.strFolioNo";
 			List listRoomInfo = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
              
@@ -331,7 +331,7 @@ public class clsDayEndController {
 			
 			double dayEndAmt = 0;
 			for (int cnt = 0; cnt < listRoomTerrifDocNo.size(); cnt++) {
-				sql = "select sum(dblDebitAmt) from tblfoliodtl " + " where strDocNo='" + listRoomTerrifDocNo.get(cnt) + "' group by strDocNo";
+				sql = "select sum(dblDebitAmt) from tblfoliodtl " + " where strDocNo='" + listRoomTerrifDocNo.get(cnt) + "'  AND strClientCode='"+clientCode+"' group by strDocNo";
 				List listFolioAmt = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 				if(listFolioAmt.size()>0)
 				{

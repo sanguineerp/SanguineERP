@@ -106,8 +106,8 @@ public class clsRoomCancellationController {
 		String arrivalToDate = request.getParameter("arrivalToDate").toString();
 
 		String sql = "select a.strReservationNo,ifnull(c.strCorporateCode,'NA'),ifnull(c.strCorporateDesc,'NA' ) " + " ,concat(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName),f.strRoomTypeDesc,b.strGuestCode,e.strRoomCode "
-				+ " from tblreservationhd a left outer join tblreservationdtl b on a.strReservationNo=b.strReservationNo " + " left outer join tblcorporatemaster c on a.strCorporateCode=c.strCorporateCode " + " left outer join tblguestmaster d on b.strGuestCode=d.strGuestCode "
-				+ " left outer join tblroom e on b.strRoomNo=e.strRoomCode "
+				+ " from tblreservationhd a left outer join tblreservationdtl b on a.strReservationNo=b.strReservationNo AND b.strClientCode='"+clientCode+"'" + " left outer join tblcorporatemaster c on a.strCorporateCode=c.strCorporateCode AND c.strClientCode='"+clientCode+"'" + " left outer join tblguestmaster d on b.strGuestCode=d.strGuestCode AND d.strClientCode='"+clientCode+"'"
+				+ " left outer join tblroom e on b.strRoomNo=e.strRoomCode AND e.strClientCode='"+clientCode+"'"
 				+ " left outer join tblroomtypemaster f on f.strRoomTypeCode=b.strRoomType " 
 				+ " where a.strReservationNo='" + reservationNo + "' and a.strClientCode='" + clientCode + "' ";
 		List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");

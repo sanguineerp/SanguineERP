@@ -345,7 +345,7 @@ public class clsPMSTaxMasterController {
 		try{
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		
-		String sqlSettlement = "select a.strSettlementCode,a.strSettlementDesc from tblsettlementmaster a";
+		String sqlSettlement = "select a.strSettlementCode,a.strSettlementDesc from tblsettlementmaster a where a.strClientCode='"+clientCode+"'";
 		list= objGlobalFunctionsService.funGetDataList(sqlSettlement, "sql");
 			
 				

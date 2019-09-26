@@ -128,7 +128,7 @@ public class clsFolioPostingController {
 				objTaxProductDtl.setStrTaxProdName(listIncomeHeadBeans.get(ih).getStrIncomeHeadDesc());
 				objTaxProductDtl.setDblTaxProdAmt(listIncomeHeadBeans.get(ih).getDblAmount());
 				String sql = "select a.strDeptCode from tblincomehead a "
-						+ "where a.strIncomeHeadCode = '"+objTaxProductDtl.getStrTaxProdCode()+"' ";
+						+ "where a.strIncomeHeadCode = '"+objTaxProductDtl.getStrTaxProdCode()+"' AND a.strClientCode='"+clientCode+"'";
 				List list = objGlobalFunctionsService.funGetDataList(sql, "sql");
 				String strDeptCode =  list.get(0).toString();
 				objTaxProductDtl.setStrDeptCode(strDeptCode);

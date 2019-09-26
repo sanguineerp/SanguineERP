@@ -97,8 +97,8 @@ public class clsTaxReportController {
 			// get all guests by registration
 
 			sbSql.setLength(0);
-			sbSql.append("select b.strRegistrationNo,c.strGuestPrefix,c.strFirstName,c.strMiddleName,c.strLastName " + ",DATE_FORMAT(b.dteArrivalDate,'%d-%m-%Y')as CheckInDate,DATE_FORMAT(b.dteDepartureDate,'%d-%m-%Y') as CheckOutDate" + ",a.strRoomNo,e.strRoomTypeDesc " + " from tblcheckindtl a " + " left outer join tblcheckinhd b on a.strCheckInNo=b.strCheckInNo "
-					+ " left OUTER join tblguestmaster c on a.strGuestCode=c.strGuestCode " + " left outer join tblroom d on a.strRoomNo=d.strRoomCode " + " left outer join tblroomtypemaster e on d.strRoomTypeCode=e.strRoomTypeCode " + " where date(b.dteArrivalDate) between '" + fromDate + "' and '" + toDate + "' and a.strPayee='Y' ");
+			sbSql.append("select b.strRegistrationNo,c.strGuestPrefix,c.strFirstName,c.strMiddleName,c.strLastName " + ",DATE_FORMAT(b.dteArrivalDate,'%d-%m-%Y')as CheckInDate,DATE_FORMAT(b.dteDepartureDate,'%d-%m-%Y') as CheckOutDate" + ",a.strRoomNo,e.strRoomTypeDesc " + " from tblcheckindtl a " + " left outer join tblcheckinhd b on a.strCheckInNo=b.strCheckInNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
+					+ " left OUTER join tblguestmaster c on a.strGuestCode=c.strGuestCode AND c.strClientCode='"+clientCode+"'" + " left outer join tblroom d on a.strRoomNo=d.strRoomCode  AND d.strClientCode='"+clientCode+"'" + " left outer join tblroomtypemaster e on d.strRoomTypeCode=e.strRoomTypeCode AND e.strClientCode='"+clientCode+"' " + " where date(b.dteArrivalDate) between '" + fromDate + "' and '" + toDate + "' and a.strPayee='Y' ");
 			List listGuests = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");// sql
 
 			for (int g = 0; g < listGuests.size(); g++) {
@@ -205,7 +205,7 @@ public class clsTaxReportController {
 			// income head wise summary
 			List<clsTaxDtlBean> listIncomeHeadType = new ArrayList<>();
 			sbSql.setLength(0);
-			sbSql.append("select b.strRevenueType,sum(c.dblTaxAmt) " + " from tblbillhd a, tblbilldtl b, tblbilltaxdtl c " + " where a.strBillNo=b.strBillNo and b.strDocNo=c.strDocNo and b.strBillNo=c.strBillNo " + " and date(a.dteBillDate) between '" + fromDate + "' and '" + toDate + "' " + " group by b.strRevenueType ");
+			sbSql.append("select b.strRevenueType,sum(c.dblTaxAmt) " + " from tblbillhd a, tblbilldtl b, tblbilltaxdtl c " + " where a.strBillNo=b.strBillNo and b.strDocNo=c.strDocNo and b.strBillNo=c.strBillNo " + " and date(a.dteBillDate) between '" + fromDate + "' and '" + toDate + "' " + " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' group by b.strRevenueType ");
 			List listIncomeHeadSummaryForBill = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");//
 			for (int iht = 0; iht < listIncomeHeadSummaryForBill.size(); iht++) {
 				Object[] objIncomeHeaTypes = (Object[]) listIncomeHeadSummaryForBill.get(iht);
@@ -216,7 +216,7 @@ public class clsTaxReportController {
 			}
 
 			sbSql.setLength(0);
-			sbSql.append("select b.strRevenueType,sum(c.dblTaxAmt) " + " from tblfoliohd a, tblfoliodtl b, tblfoliotaxdtl c " + " where a.strFolioNo=b.strFolioNo and b.strDocNo=c.strDocNo and b.strFolioNo=c.strFolioNo " + " and date(b.dteDocDate) between '" + fromDate + "' and '" + toDate + "' " + " group by b.strRevenueType ");
+			sbSql.append("select b.strRevenueType,sum(c.dblTaxAmt) " + " from tblfoliohd a, tblfoliodtl b, tblfoliotaxdtl c " + " where a.strFolioNo=b.strFolioNo and b.strDocNo=c.strDocNo and b.strFolioNo=c.strFolioNo " + " and date(b.dteDocDate) between '" + fromDate + "' and '" + toDate + "' " + " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' group by b.strRevenueType ");
 			List listIncomeHeadSummaryForFolio = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");//
 			for (int iht = 0; iht < listIncomeHeadSummaryForFolio.size(); iht++) {
 				Object[] objIncomeHeaTypes = (Object[]) listIncomeHeadSummaryForFolio.get(iht);
@@ -231,7 +231,7 @@ public class clsTaxReportController {
 			// tax wise summary
 			List<clsTaxDtlBean> listTaxSummary = new ArrayList<>();
 			sbSql.setLength(0);
-			sbSql.append("select ifnull(c.strTaxDesc,''),ifnull(sum(c.dblTaxAmt),0) " + " from tblbillhd a left outer join tblbilldtl b on a.strBillNo=b.strBillNo " + " left outer join tblbilltaxdtl c on b.strDocNo=c.strDocNo and b.strBillNo=c.strBillNo " + " where date(a.dteBillDate) between '" + fromDate + "' and '" + toDate + "'  and c.strTaxDesc!='' " + " group by c.strTaxCode ");
+			sbSql.append("select ifnull(c.strTaxDesc,''),ifnull(sum(c.dblTaxAmt),0) " + " from tblbillhd a left outer join tblbilldtl b on a.strBillNo=b.strBillNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'" + " left outer join tblbilltaxdtl c on b.strDocNo=c.strDocNo and b.strBillNo=c.strBillNo AND c.strClientCode='"+clientCode+"'" + " where date(a.dteBillDate) between '" + fromDate + "' and '" + toDate + "'  and c.strTaxDesc!='' " + " group by c.strTaxCode ");
 			List listTaxWiseSummaryForBill = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");//
 			for (int ts = 0; ts < listTaxWiseSummaryForBill.size(); ts++) {
 				Object[] objTaxes = (Object[]) listTaxWiseSummaryForBill.get(ts);

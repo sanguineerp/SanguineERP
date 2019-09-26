@@ -129,11 +129,12 @@ public class clsGuestMasterController {
 	public @ResponseBody int funCheckGuestMobileNo(@RequestParam("mobileNo") String mobileNo, HttpServletRequest req) {
 	
 		clsGuestMasterHdModel objGuestMasterModel= new clsGuestMasterHdModel();
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		clsGuestMasterBean objGuestMasterBean = new clsGuestMasterBean();
 		objGuestMasterBean.setIntMobileNo(objGuestMasterModel.getLngMobileNo());
 		String sql = "";
 		int retunVal=0;
-		sql = "select count(1) from tblguestmaster a where a.lngMobileNo='" + mobileNo + "'";
+		sql = "select count(1) from tblguestmaster a where a.lngMobileNo='" + mobileNo + "' AND a.strClientCode='"+clientCode+"'";
 		List listGuestMaster = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 		if(!listGuestMaster.isEmpty())
 		{

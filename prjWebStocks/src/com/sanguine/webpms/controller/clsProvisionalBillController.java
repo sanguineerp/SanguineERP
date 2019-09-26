@@ -187,7 +187,7 @@ public class clsProvisionalBillController
 						+ " DATEDIFF(a.dteDepartureDate, a.dteArrivalDate), a.dteReservationDate "
 						+ " from tblreservationhd a,tblreservationdtl b,tblguestmaster c "
 						+ " where a.strReservationNo=b.strReservationNo and b.strGuestCode=c.strGuestCode "
-						+ " and a.strReservationNo='"+docNo+"' and date(a.dteDepartureDate)>='"+toDateForQuery+"'"
+						+ " and a.strReservationNo='"+docNo+"' and date(a.dteDepartureDate)>='"+toDateForQuery+"'  AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'"
 						+ " group by b.strRoomType";
 
 					
@@ -216,7 +216,7 @@ public class clsProvisionalBillController
 						
 						String sqlPaymentAmt=" SELECT IFNULL(SUM(a.dblIncomeHeadAmt),0) ,a.strRoomNo,IFNULL(b.strRoomTypeDesc,'') "
 								+ " FROM tblroompackagedtl a LEFT OUTER JOIN tblroomtypemaster b ON a.strRoomNo=b.strRoomTypeCode"
-								+ " WHERE a.strReservationNo='"+docNo+"' GROUP BY a.strRoomNo";
+								+ " WHERE a.strReservationNo='"+docNo+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' GROUP BY a.strRoomNo";
 						List listPaymentAmt = objWebPMSUtility.funExecuteQuery(sqlPaymentAmt, "sql");
 						if(listPaymentAmt.size()>0)
 						{
@@ -243,7 +243,7 @@ public class clsProvisionalBillController
 						{
 							sqlPaymentAmt="SELECT IFNULL(SUM(a.dblRoomRate),0),b.strRoomTypeCode,b.strRoomTypeDesc "
 								+ " FROM tblreservationroomratedtl a,tblroomtypemaster b "
-								+ " WHERE a.strRoomType=b.strRoomTypeCode AND a.strReservationNo='"+docNo+"'"
+								+ " WHERE a.strRoomType=b.strRoomTypeCode AND a.strReservationNo='"+docNo+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' "
 								+ " GROUP BY a.strRoomType";
 							listPaymentAmt = objWebPMSUtility.funExecuteQuery(sqlPaymentAmt, "sql");
 							if(listPaymentAmt.size()>0)
@@ -287,7 +287,7 @@ public class clsProvisionalBillController
 				String sql = "select a.strReservationNo,a.strWalkInNo,count(b.strRoomNo) "
 						+ " from tblcheckinhd a,tblcheckindtl b "
 						+ " where a.strCheckInNo=b.strCheckInNo "
-						+ " and a.strCheckInNo='"+docNo+"' and date(a.dteDepartureDate)>='"+toDateForQuery+"' group by a.strCheckInNo";
+						+ " and a.strCheckInNo='"+docNo+"' and date(a.dteDepartureDate)>='"+toDateForQuery+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' group by a.strCheckInNo";
 				List list = objWebPMSUtility.funExecuteQuery(sql, "sql");
 				if(list.size()>0)
 				{
@@ -307,10 +307,10 @@ public class clsProvisionalBillController
 						else
 						{
 							sqlBillDtl= " SELECT a.strCheckInNo,e.dblRoomRate,b.strRoomNo, DATEDIFF(a.dteDepartureDate, a.dteArrivalDate),a.dteCheckInDate,d.strRoomDesc,b.strFolioNo, CONCAT(f.strFirstName,' ',f.strMiddleName,' ',f.strLastName),ifnull(sum(g.dblIncomeHeadAmt),0),e.dtDate"
-									+ " FROM tblcheckinhd a left outer join tblroompackagedtl g on a.strCheckInNo=g.strCheckInNo and g.strRoomNo='',tblfoliohd b,tblroom d,tblwalkinroomratedtl e,tblguestmaster f"
+									+ " FROM tblcheckinhd a left outer join tblroompackagedtl g on a.strCheckInNo=g.strCheckInNo and g.strRoomNo='' AND a.strClientCode='"+clientCode+"' AND g.strClientCode='"+clientCode+"' ,tblfoliohd b,tblroom d,tblwalkinroomratedtl e,tblguestmaster f"
 									+ " WHERE a.strCheckInNo=b.strCheckInNo AND b.strRoomNo=d.strRoomCode AND a.strWalkInNo=e.strWalkInNo"
 									+ " AND d.strRoomTypeCode=e.strRoomType AND b.strGuestCode=f.strGuestCode AND a.strCheckInNo='"+docNo+"' "
-									+ " and date(a.dteDepartureDate)>='"+toDateForQuery+"'"
+									+ " and date(a.dteDepartureDate)>='"+toDateForQuery+"' AND b.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"' AND f.strClientCode='"+clientCode+"'"
 									+ " GROUP BY e.dtDate,b.strRoomNo ";
 						}
 						
@@ -356,8 +356,8 @@ public class clsProvisionalBillController
 					double pkgsAmt=0,totalRoomBill=0;
 					String sqlCheckInListDtl = " select b.strFolioNo,b.strPerticulars,b.dblDebitAmt,Date(b.dteDocDate) "
 							+ " from tblfoliohd a,tblfoliodtl b "
-							+ " where b.strFolioNo='"+billArr[6].toString()+"' and  b.strRevenueType!='Package' and b.strRevenueType!='Room' "
-							+ " group by b.strDocNo ";
+							+ " where b.strFolioNo='"+billArr[6].toString()+"' and  b.strRevenueType!='Package' and b.strRevenueType!='Room' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' "
+							+ " group by b.strFolioNo ";
 					
 					List packagesList = objWebPMSUtility.funExecuteQuery(sqlCheckInListDtl, "sql");;
 					for (int j = 0; j < packagesList.size(); j++) {

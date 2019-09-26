@@ -113,10 +113,10 @@ public class clsVoidBillController {
 		String sql=" select a.strBillNo,a.strFolioNo,a.dteBillDate,a.dblGrandTotal ," //3
 				+ " ifnull(b.strPerticulars,''),ifnull(sum(b.dblDebitAmt),0),ifnull(sum(b.dblCreditAmt),0),ifnull(b.dblBalanceAmt,0),"
 				+ " c.strGuestCode,IFNULL(d.strFirstName,''),IFNULL(d.strLastName,''),e.strRoomDesc ,IFNULL(b.strDocNo,''),a.strRoomNo,IFNULL(b.strRevenueCode,'')"
-				+ " from tblbillhd a left outer join tblbilldtl b on a.strBillNo=b.strBillNo "
-				+ " left outer join tblcheckindtl c on a.strCheckInNo=c.strCheckInNo "
-				+ " left outer join tblguestmaster d on c.strGuestCode=d.strGuestCode "
-				+ " left outer join tblroom e on c.strRoomNo=e.strRoomCode "
+				+ " from tblbillhd a left outer join tblbilldtl b on a.strBillNo=b.strBillNo  AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
+				+ " left outer join tblcheckindtl c on a.strCheckInNo=c.strCheckInNo AND c.strClientCode='"+clientCode+"'"
+				+ " left outer join tblguestmaster d on c.strGuestCode=d.strGuestCode  AND d.strClientCode='"+clientCode+"'"
+				+ " left outer join tblroom e on c.strRoomNo=e.strRoomCode AND e.strClientCode='"+clientCode+"'"
 				+ " where a.strBillNo='"+strBillNo+"' and a.strRoomNo=e.strRoomCode "
 				+ " group by b.strDocNo;";
 		
@@ -486,10 +486,10 @@ public class clsVoidBillController {
 			String sqlVoid=" SELECT a.strBillNo, DATE_FORMAT(a.dteBillDate,'%d-%m-%Y'),a.strCheckInNo,b.strPerticulars, "//3
 					+ " SUM(b.dblDebitAmt), a.strReasonName,a.strRemark,a.strUserCreated,a.strUserEdited,a.strVoidType, "//9
 					+ " d.strRoomDesc, CONCAT(e.strGuestPrefix,\" \",e.strFirstName,\" \",e.strLastName) AS gName "
-					+ " FROM tblvoidbillhd a inner join tblvoidbilldtl b on a.strBillNo=b.strBillNo "
-					+ " left outer join tblcheckindtl c on a.strCheckInNo=c.strCheckInNo "
-					+ " left outer join tblroom d on a.strRoomNo=d.strRoomCode "
-  					+ " left outer join tblguestmaster e on c.strGuestCode=e.strGuestCode " 
+					+ " FROM tblvoidbillhd a inner join tblvoidbilldtl b on a.strBillNo=b.strBillNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
+					+ " left outer join tblcheckindtl c on a.strCheckInNo=c.strCheckInNo  AND c.strClientCode='"+clientCode+"'"
+					+ " left outer join tblroom d on a.strRoomNo=d.strRoomCode  AND d.strClientCode='"+clientCode+"'"
+  					+ " left outer join tblguestmaster e on c.strGuestCode=e.strGuestCode  AND e.strClientCode='"+clientCode+"'" 
   					+ " where c.strPayee='Y' AND a.strVoidType='fullVoid' or a.strVoidType='itemVoid' " 
  					+ " AND DATE(a.dteBillDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' "
  					+ " GROUP BY a.strBillNo,b.strPerticulars " 
@@ -578,9 +578,9 @@ public class clsVoidBillController {
 					+ " a.strUserCreated,a.strUserEdited,a.strVoidType, d.strRoomDesc, "
 					+ " CONCAT(e.strGuestPrefix,\" \",e.strFirstName,\" \",e.strLastName) AS gName,a.strReasonName "
 					+ " FROM tblvoidbillhd a "
-					+ " left outer join  tblcheckindtl c on a.strCheckInNo=c.strCheckInNo "
-					+ " left outer join tblroom d on a.strRoomNo=d.strRoomCode "
-					+ " left outer join tblguestmaster e on c.strGuestCode=e.strGuestCode "
+					+ " left outer join  tblcheckindtl c on a.strCheckInNo=c.strCheckInNo  AND a.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' "
+					+ " left outer join tblroom d on a.strRoomNo=d.strRoomCode AND d.strClientCode='"+clientCode+"'"
+					+ " left outer join tblguestmaster e on c.strGuestCode=e.strGuestCode AND e.strClientCode='"+clientCode+"'"
 					+ " where c.strPayee='Y' AND a.strVoidType='itemVoid' "
  					+ " OR a.strVoidType='fullVoid' and c.strRoomNo=d.strRoomCode "
 					+ " and Date(a.dteBillDate) between '"+fromDate+"' and '"+toDate+"' "

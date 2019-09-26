@@ -76,7 +76,7 @@ public class clsReOpenFolioController
 						+ " and a.strRoomNo=e.strRoomCode "
 						//+ " and a.strBillNo  Not IN(select b.strBillNo from tblreceipthd b) and a.strFolioNo='"+objBean.getStrFolioNo()+"' "
 						+ " and a.strFolioNo='"+objBean.getStrFolioNo()+"' "
-						+ " group by a.strFolioNo";
+						+ " group by a.strFolioNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'";
 				List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 				for (int cnt = 0; cnt < list.size(); cnt++) 
 				{

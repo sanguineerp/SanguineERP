@@ -45,7 +45,7 @@ public class clsReservationFlash {
 			urlHits = "1";
 		}
 		model.put("urlHits", urlHits);
-		String sql = " select strPropertyCode,strPropertyName from "+webStockDB+".tblpropertymaster ";
+		String sql = " select strPropertyCode,strPropertyName from "+webStockDB+".tblpropertymaster where strClientCode='"+clientCode+"'";
 		List listOfProperty = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 		HashMap hmProperty = new HashMap<String, String>();
 		hmProperty.put("ALL", "ALL");
@@ -107,8 +107,8 @@ public class clsReservationFlash {
 		tDepDate = objGlobal.funGetDate("yyyy-MM-dd", tDepDate);
 
 		String sql = " select a.strReservationNo,date(a.dteArrivalDate),date(a.dteDepartureDate),CONCAT(c.strFirstName,' ',c.strLastName) " + " ,ifnull(i.strRoomDesc,''),ifnull(e.strBookerName,'') as Source,ifnull(f.strCorporateDesc,'') as Corporate " + " ,ifnull(b.dblPaidAmt,0.00) as DepositAmt,a.strUserCreated,ifnull(d.strBookingTypeDesc,'') as Booking_Status  ,ifnull(h.strRoomTypeDesc,''),h.strRoomTypeDesc  "
-				+ " from tblreservationhd a  " + " left outer join  tblreservationdtl g on a.strReservationNo=g.strReservationNo " + " left outer join  tblguestmaster c on g.strGuestcode=c.strGuestCode   " + " left outer join  tblreceipthd b on b.strReservationNo  = a.strReservationNo " + " left outer join  tblbookingtype d on a.strBookingTypeCode=d.strBookingTypeCode "
-				+ " left outer join  tblbookermaster e on a.strBookerCode =e.strBookerName " + " left outer join  tblcorporatemaster f on a.strCorporateCode=f.strCorporateCode " + " left outer join  tblroomtypemaster h on g.strRoomType=h.strRoomTypeCode " + " left outer join  tblroom i on g.strRoomNo =i.strRoomCode " + " where Date(a.dteArrivalDate) between '" + fArrDate + "' and '" + tArrDate
+				+ " from tblreservationhd a  " + " left outer join  tblreservationdtl g on a.strReservationNo=g.strReservationNo AND g.strClientCode='"+clientCode+"' " + " left outer join  tblguestmaster c on g.strGuestcode=c.strGuestCode  AND c.strClientCode='"+clientCode+"'  " + " left outer join  tblreceipthd b on b.strReservationNo  = a.strReservationNo AND b.strClientCode='"+clientCode+"' " + " left outer join  tblbookingtype d on a.strBookingTypeCode=d.strBookingTypeCode AND d.strClientCode='"+clientCode+"'  "
+				+ " left outer join  tblbookermaster e on a.strBookerCode =e.strBookerName AND e.strClientCode='"+clientCode+"' " + " left outer join  tblcorporatemaster f on a.strCorporateCode=f.strCorporateCode AND f.strClientCode='"+clientCode+"' " + " left outer join  tblroomtypemaster h on g.strRoomType=h.strRoomTypeCode AND h.strClientCode='"+clientCode+"' " + " left outer join  tblroom i on g.strRoomNo =i.strRoomCode " + " where Date(a.dteArrivalDate) between '" + fArrDate + "' and '" + tArrDate
 				+ "'   " + " and Date(a.dteDepartureDate) between '" + fDepDate + "' and '" + tDepDate + "'   ";
 		if (!propCode.equalsIgnoreCase("ALL")) {
 			sql += " and a.strPropertyCode='" + propCode + "' ";
@@ -196,8 +196,8 @@ public class clsReservationFlash {
 		listMainExp.add(ExcelHeader);
 
 		String sql = " select a.strReservationNo,date(a.dteArrivalDate),date(a.dteDepartureDate),CONCAT(c.strFirstName,' ',c.strLastName) " + " ,ifnull(i.strRoomDesc,''),ifnull(e.strBookerName,'') as Source,ifnull(f.strCorporateDesc,'') as Corporate " + " ,ifnull(b.dblPaidAmt,0.00) as DepositAmt,a.strUserCreated,ifnull(d.strBookingTypeDesc,'') as Booking_Status  ,ifnull(h.strRoomTypeDesc,''),h.strRoomTypeDesc "
-				+ " from tblreservationhd a  " + " left outer join  tblreservationdtl g on a.strReservationNo=g.strReservationNo " + " left outer join  tblguestmaster c on g.strGuestcode=c.strGuestCode   " + " left outer join  tblreceipthd b on b.strReservationNo  = a.strReservationNo " + " left outer join  tblbookingtype d on a.strBookingTypeCode=d.strBookingTypeCode "
-				+ " left outer join  tblbookermaster e on a.strBookerCode =e.strBookerName " + " left outer join  tblcorporatemaster f on a.strCorporateCode=f.strCorporateCode " + " left outer join  tblroomtypemaster h on g.strRoomType=h.strRoomTypeCode " + " left outer join  tblroom i on g.strRoomNo =i.strRoomCode " + " where Date(a.dteArrivalDate) between '" + fArrDate + "' and '" + tArrDate
+				+ " from tblreservationhd a  " + " left outer join  tblreservationdtl g on a.strReservationNo=g.strReservationNo AND g.strClientCode='"+clientCode+"'" + " left outer join  tblguestmaster c on g.strGuestcode=c.strGuestCode AND c.strClientCode='"+clientCode+"'  " + " left outer join  tblreceipthd b on b.strReservationNo  = a.strReservationNo AND b.strClientCode='"+clientCode+"'" + " left outer join  tblbookingtype d on a.strBookingTypeCode=d.strBookingTypeCode  AND d.strClientCode='"+clientCode+"'"
+				+ " left outer join  tblbookermaster e on a.strBookerCode =e.strBookerName AND e.strClientCode='"+clientCode+"'" + " left outer join  tblcorporatemaster f on a.strCorporateCode=f.strCorporateCode AND f.strClientCode='"+clientCode+"'" + " left outer join  tblroomtypemaster h on g.strRoomType=h.strRoomTypeCode  AND h.strClientCode='"+clientCode+"'" + " left outer join  tblroom i on g.strRoomNo =i.strRoomCode " + " where Date(a.dteArrivalDate) between '" + fArrDate + "' and '" + tArrDate
 				+ "'   " + " and Date(a.dteDepartureDate) between '" + fDepDate + "' and '" + tDepDate + "'   ";
 		if (!propCode.equalsIgnoreCase("ALL")) {
 			sql += " and a.strPropertyCode='" + propCode + "' ";

@@ -101,7 +101,7 @@ public class clsRevenueHeadReportController {
 
 			// income head types for booked
 			sbSql.setLength(0);
-			sbSql.append("SELECT b.strRevenueType, sum(b.dblDebitAmt),SUM(b.dblBalanceAmt) " + " FROM tblbillhd a, tblbilldtl b " + " where a.strBillNo=b.strBillNo and DATE(a.dteBillDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " GROUP BY b.strRevenueType ");
+			sbSql.append("SELECT b.strRevenueType, sum(b.dblDebitAmt),SUM(b.dblBalanceAmt) " + " FROM tblbillhd a, tblbilldtl b " + " where a.strBillNo=b.strBillNo and DATE(a.dteBillDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' GROUP BY b.strRevenueType ");
 			List listIncomeHeadsForBilled = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");
 			for (int t = 0; t < listIncomeHeadsForBilled.size(); t++) {
 				Object[] objIncomeHeadsForBilled = (Object[]) listIncomeHeadsForBilled.get(t);
@@ -114,7 +114,7 @@ public class clsRevenueHeadReportController {
 
 				// get dtl for this incomeHeadTypeName
 				sbSql.setLength(0);
-				sbSql.append("SELECT c.strTaxDesc,  sum(c.dblTaxAmt) " + " FROM tblbillhd a, tblbilldtl b,tblbilltaxdtl c " + " where a.strBillNo=b.strBillNo and b.strDocNo=c.strDocNo AND b.strBillNo=c.strBillNo " + " and DATE(a.dteBillDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " and b.strRevenueType='" + incomeHeadTypeName + "' " + " GROUP BY c.strTaxCode ");
+				sbSql.append("SELECT c.strTaxDesc,  sum(c.dblTaxAmt) " + " FROM tblbillhd a, tblbilldtl b,tblbilltaxdtl c " + " where a.strBillNo=b.strBillNo and b.strDocNo=c.strDocNo AND b.strBillNo=c.strBillNo " + " and DATE(a.dteBillDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " and b.strRevenueType='" + incomeHeadTypeName + "' " + " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' GROUP BY c.strTaxCode ");
 				List listIncomeHeadDtlsForBilled = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");
 
 				List<clsRevenueHeadDtlReportBean> listIncomeHeadTaxDtl = new ArrayList<clsRevenueHeadDtlReportBean>();
@@ -146,7 +146,7 @@ public class clsRevenueHeadReportController {
 
 			// income head types for unbooked
 			sbSql.setLength(0);
-			sbSql.append("SELECT b.strRevenueType, sum(b.dblDebitAmt) " + " FROM tblfoliohd a,tblfoliodtl b " + " where a.strFolioNo=b.strFolioNo " + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " GROUP BY b.strRevenueType ");
+			sbSql.append("SELECT b.strRevenueType, sum(b.dblDebitAmt) " + " FROM tblfoliohd a,tblfoliodtl b " + " where a.strFolioNo=b.strFolioNo " + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'  GROUP BY b.strRevenueType ");
 			List listIncomeHeadsForFolio = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");
 			for (int t = 0; t < listIncomeHeadsForFolio.size(); t++) {
 				Object[] objIncomeHeadsForBilled = (Object[]) listIncomeHeadsForFolio.get(t);
@@ -167,7 +167,7 @@ public class clsRevenueHeadReportController {
 
 				// get dtl for this incomeHeadTypeName
 				sbSql.setLength(0);
-				sbSql.append("SELECT c.strTaxDesc,  sum(c.dblTaxAmt) " + " FROM tblfoliohd a, tblfoliodtl b, tblfoliotaxdtl c " + " where a.strFolioNo=b.strFolioNo and b.strDocNo=c.strDocNo AND b.strFolioNo=c.strFolioNo " + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " and b.strRevenueType='" + incomeHeadTypeName + "' " + " GROUP BY c.strTaxCode ");
+				sbSql.append("SELECT c.strTaxDesc,  sum(c.dblTaxAmt) " + " FROM tblfoliohd a, tblfoliodtl b, tblfoliotaxdtl c " + " where a.strFolioNo=b.strFolioNo and b.strDocNo=c.strDocNo AND b.strFolioNo=c.strFolioNo " + " and DATE(b.dteDocDate) BETWEEN '" + fromDate + "' AND '" + toDate + "' " + " and b.strRevenueType='" + incomeHeadTypeName + "' " + " AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' GROUP BY c.strTaxCode ");
 				List listIncomeHeadDtlsForFolio = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");
 				List<clsRevenueHeadDtlReportBean> listIncomeHeadTaxDtl = null;
 				if (isExists) {
@@ -232,7 +232,7 @@ public class clsRevenueHeadReportController {
 			// get receipts detail
 			List<clsRevenueHeadReportBean> listAdvRecei = new ArrayList<clsRevenueHeadReportBean>();
 			sbSql.setLength(0);
-			sbSql.append("select a.strAgainst,sum(a.dblReceiptAmt) " + " from tblreceipthd a " + " where date(a.dteReceiptDate) between '" + fromDate + "' and '" + toDate + "' " + " group by a.strAgainst ");
+			sbSql.append("select a.strAgainst,sum(a.dblReceiptAmt) " + " from tblreceipthd a " + " where date(a.dteReceiptDate) between '" + fromDate + "' and '" + toDate + "' " + " AND a.strClientCode='"+clientCode+"' group by a.strAgainst ");
 			List listAdvReceipts = objGlobalFunctionsService.funGetDataList(sbSql.toString(), "sql");
 			for (int i = 0; i < listAdvReceipts.size(); i++) {
 				Object[] objAdvRecei = (Object[]) listAdvReceipts.get(i);
@@ -247,7 +247,7 @@ public class clsRevenueHeadReportController {
 
 			// get collection break ups detail
 			List<clsRevenueHeadReportBean> listCollectionBreakup = new ArrayList<clsRevenueHeadReportBean>();
-			List listCollBreakup = objGlobalFunctionsService.funGetDataList("select a.strSettlementDesc,b.dblSettlementAmt " + "from tblsettlementmaster a " + "left outer join tblreceiptdtl b  on a.strSettlementCode=b.strSettlementCode " + "left outer join tblreceipthd c on b.strReceiptNo=c.strReceiptNo " + "where date(c.dteReceiptDate) BETWEEN '" + fromDate + "' and '" + toDate + "' "
+			List listCollBreakup = objGlobalFunctionsService.funGetDataList("select a.strSettlementDesc,b.dblSettlementAmt " + "from tblsettlementmaster a " + "left outer join tblreceiptdtl b  on a.strSettlementCode=b.strSettlementCode  AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'" + "left outer join tblreceipthd c on b.strReceiptNo=c.strReceiptNo AND c.strClientCode='"+clientCode+"'" + "where date(c.dteReceiptDate) BETWEEN '" + fromDate + "' and '" + toDate + "' "
 					+ "GROUP BY a.strSettlementCode ", "sql");
 			for (int i = 0; i < listCollBreakup.size(); i++) {
 				Object[] objAdvRecei = (Object[]) listCollBreakup.get(i);
