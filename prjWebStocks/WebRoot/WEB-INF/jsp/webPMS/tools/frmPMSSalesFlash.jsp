@@ -450,14 +450,22 @@ function funCheckInDetail(ProdDtl)
 	bookingType=bookingType.replace(" ",'_');
 
 	}
-	row.insertCell(0).innerHTML= "<input name=\"strCheckInNo["+(rowCount)+"]\" readonly=\"readonly\"  class=\"Box\" size=\"25%\" id=\"strCheckInNo."+(rowCount)+"\" value='"+data.strCheckInNo+"'>";		    
+	row.insertCell(0).innerHTML= "<input name=\"strCheckInNo["+(rowCount)+"]\" readonly=\"readonly\"  class=\"Box\" size=\"25%\" id=\"strCheckInNo."+(rowCount)+"\" value='"+data.strCheckInNo+"' onclick=\"funCheckInOpenSlip(this)\">";		    
     row.insertCell(1).innerHTML= "<input name=\"strGuestName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"strGuestName."+(rowCount)+"\" value='"+data.strGuestName+"'>";
     row.insertCell(2).innerHTML= "<input name=\"dteCheckInDate["+(rowCount)+"]\" id=\"dteCheckInDate."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.dteCheckInDate+">";
     row.insertCell(3).innerHTML= "<input name=\"strRoomDesc["+(rowCount)+"]\" id=\"strRoomDesc."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+roomDesc+">";
     row.insertCell(4).innerHTML= "<input name=\"strRoomType["+(rowCount)+"]\" readonly=\"readonly\"  class=\"Box\" size=\"25%\" id=\"strRoomType."+(rowCount)+"\" value='"+data.strRoomType+"'>";
     row.insertCell(5).innerHTML= "<input name=\"strBookingType["+(rowCount)+"]\" id=\"strBookingType."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+bookingType+">";		    	   
     row.insertCell(6).innerHTML= "<input name=\"strArrivalTime["+(rowCount)+"]\" id=\"strArrivalTime."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"8%\" class=\"Box\" value="+data.strArrivalTime+">";
+ 
 	} 
+}
+
+function funCheckInOpenSlip(data,against)
+{
+	
+	var checkInNo = data.value;
+	window.open(getContextPath()+"/rptCheckInSlip.html?checkInNo="+checkInNo+"&cmbAgainst="+against+ "");
 }
 
 function funOnClckCheckOutBtn( divId)
@@ -514,7 +522,7 @@ function funCheckOutDetail(ProdDtl)
     	bookingType=bookingType.replace(" ",'_');
     	}
     
-    row.insertCell(0).innerHTML='<a href="#" onclick="funClick(this)"> <input name=\"strBillNo['+(rowCount)+']\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strBillNo.'+(rowCount)+'\" value='+data.strBillNo+'> </a> ';
+    row.insertCell(0).innerHTML='<input name=\"strBillNo['+(rowCount)+']\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strBillNo.'+(rowCount)+'\" value='+data.strBillNo+'> </a> ';
 	row.insertCell(1).innerHTML= "<input name=\"strGuestName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"strGuestName."+(rowCount)+"\" value='"+data.strGuestName+"'>";
     row.insertCell(2).innerHTML= "<input name=\"dteDepartureDate["+(rowCount)+"]\" id=\"dteDepartureDate."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.dteDepartureDate+">";
     row.insertCell(3).innerHTML= "<input name=\"strRoomDesc["+(rowCount)+"]\" id=\"strRoomDesc."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+roomDesc+">";
@@ -700,12 +708,17 @@ function funVoidBillDetail(ProdDtl)
  	 {
      reasonDesc=reasonDesc.replace(/ /ig,'_');
  	 }
-        row.insertCell(0).innerHTML= "<input name=\"strBillNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strBillNo."+(rowCount)+"\" value='"+data.strBillNo+"'>";		    
-	    row.insertCell(1).innerHTML= "<input name=\"dteBillDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"dteBillDate."+(rowCount)+"\" value='"+data.dteBillDate+"'>";
+        row.insertCell(0).innerHTML= "<input name=\"strBillNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"12%\" id=\"strBillNo."+(rowCount)+"\" value='"+data.strBillNo+"'>";		    
+	    row.insertCell(1).innerHTML= "<input name=\"dteBillDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"9%\" id=\"dteBillDate."+(rowCount)+"\" value='"+data.dteBillDate+"'>";
 	    row.insertCell(2).innerHTML= "<input name=\"strGuestName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"40%\" id=\"strAgainst."+(rowCount)+"\" value='"+data.strGuestName+"'>";
 	    row.insertCell(3).innerHTML= "<input name=\"strRoomDesc["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"05%\" id=\"strGuestName."+(rowCount)+"\" value='"+data.strRoomDesc+"'>";
 	    row.insertCell(4).innerHTML= "<input name=\"strPerticular["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strRoomDesc."+(rowCount)+"\" value='"+data.strPerticular+"'>";
-	    row.insertCell(5).innerHTML= "<input name=\"dblVoidDebitAmt["+(rowCount)+"]\" readonly=\"readonly\"  style=\"text-align: right;\" size=\"05%\" class=\"Box\" value="+data.dblVoidDebitAmt+">";
+	    row.insertCell(5).innerHTML= "<input name=\"dblVoidDebitAmt["+(rowCount)+"]\" readonly=\"readonly\"  style=\"text-align: right;\" size=\"8%\" class=\"Box\" value="+data.dblVoidDebitAmt+">";
+	    row.insertCell(6).innerHTML= "<input name=\"strReasonDesc["+(rowCount)+"]\" readonly=\"readonly\"  style=\"text-align: left;\" size=\"18%\" class=\"Box\" value="+data.strReasonDesc+">";
+	    row.insertCell(7).innerHTML= "<input name=\"strRemark["+(rowCount)+"]\" readonly=\"readonly\"  style=\"text-align: left;\" size=\"15%\" class=\"Box\" value="+data.strRemark+">";
+	    row.insertCell(8).innerHTML= "<input name=\"strVoidType["+(rowCount)+"]\" readonly=\"readonly\"  style=\"text-align: left;\" size=\"7%\" class=\"Box\" value="+data.strVoidType+">";
+	    row.insertCell(9).innerHTML= "<input name=\"strVoidUser["+(rowCount)+"]\" readonly=\"readonly\"  style=\"text-align: left;\" size=\"10%\" class=\"Box\" value="+data.strVoidUser+">";
+	    
 	   
 	    
 	    
@@ -1358,8 +1371,8 @@ function funClick(obj)
 			<table style="width: 100%; border: #0F0; table-layout: fixed;"
 				class="transTablex col15-center">
 				<tr bgcolor="#72BEFC">
-					<td width="6%">Bill No</td>
-					<td width="4%">Bil Date </td>
+					<td width="4%">Bill No</td>
+					<td width="3.5%">Bil Date </td>
 					<td width="6%">Guest Name</td>
 					<td width="3%">Room Desc</td>
 					<td width="8.8%">Particular</td>
@@ -1376,8 +1389,8 @@ function funClick(obj)
 					style="width: 100%; border: #0F0; table-layout: fixed;"
 					class="transTablex col15-center">
 					<tbody>
-					<col style="width: 7.4%">
-					<col style="width: 5.5%">
+					<col style="width: 5%">
+					<col style="width: 4%">
 					<col style="width: 7.8%">
 					<col style="width: 4%">
 					<col style="width: 10.5%">

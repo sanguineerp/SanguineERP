@@ -302,8 +302,8 @@ function funGetFormName(){
   });
 }
 
-<%-- 
-   $(document).ready(function()
+
+ <%--   $(document).ready(function()
 {
 	var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
 	  if(null!=pmsDate)

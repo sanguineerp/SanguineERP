@@ -584,7 +584,7 @@ public class clsSearchFormController {
 			}
 
 			case "opstock": {
-				columnNames = "a.strOpStkCode,b.strLocName,a.dtExpDate,a.strUserCreated,a.dtCreatedDate";
+				columnNames = "a.strOpStkCode,b.strLocName,DATE_FORMAT(a.dtExpDate,'%d-%m-%Y'),a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y')";
 				tableName = "clsInitialInventoryModel a,clsLocationMasterModel b " + "where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "'";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -892,7 +892,7 @@ public class clsSearchFormController {
 			}
 
 			case "MIS": {
-				columnNames = "a.strMISCode,a.strAgainst,b.strLocName ,c.strLocName,a.dtMISDate" + ",a.strUserCreated,a.dtCreatedDate,a.strNarration";
+				columnNames = "a.strMISCode,a.strAgainst,b.strLocName ,c.strLocName,DATE_FORMAT(a.dtMISDate,'%d-%m-%Y')" + ",a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y'),a.strNarration";
 				String sqlforNoraml = "clsMISHdModel a,clsLocationMasterModel b ,clsLocationMasterModel c" + " where a.strLocFrom=b.strLocCode and a.strLocTo=c.strLocCode " + " and a.strClientCode='" + clientCode + "' and  b.strClientCode='" + clientCode + "' and  c.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtMISDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -968,7 +968,7 @@ public class clsSearchFormController {
 			}
 			
 			case "stkpostcode": {
-				columnNames = "a.strPSCode,a.dtPSDate,b.strLocName,a.strUserCreated,a.dtCreatedDate";
+				columnNames = "a.strPSCode,DATE_FORMAT(a.dtPSDate,'%d-%m-%Y'),b.strLocName,a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y')";
 				tableName = "clsStkPostingHdModel a,clsLocationMasterModel b " + "where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtPSDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -993,7 +993,7 @@ public class clsSearchFormController {
 			}
 
 			case "stkadjcode": {
-				columnNames = "a.strSACode,a.dtSADate,b.strLocName,a.strUserCreated,a.dtCreatedDate";
+				columnNames = "a.strSACode,DATE_FORMAT(a.dtSADate,'%d-%m-%Y'),b.strLocName,DATE_FORMAT(a.strUserCreated,'%d-%m-%Y'),DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y')";
 				tableName = "clsStkAdjustmentHdModel a,clsLocationMasterModel b " + "where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtSADate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -1017,7 +1017,7 @@ public class clsSearchFormController {
 			}
 
 			case "MaterialReq": {
-				columnNames = "a.strReqCode,a.dtReqDate,b.strLocName,c.strLocName,a.strAuthorise" + ",a.strUserCreated,a.dtCreatedDate,a.strNarration";
+				columnNames = "a.strReqCode,DATE_FORMAT(a.dtReqDate,'%d-%m-%Y'),b.strLocName,c.strLocName,a.strAuthorise" + ",DATE_FORMAT(a.strUserCreated,'%d-%m-%Y'),DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y'),a.strNarration";
 				String sqlforNoraml = "clsRequisitionHdModel a,clsLocationMasterModel b,clsLocationMasterModel c " + " where a.strLocBy=b.strLocCode and a.strLocOn=c.strLocCode " + " and a.strReqCode not in (select strReqCode from clsMISHdModel) " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "' "
 						+ " and EXTRACT(YEAR FROM a.dtReqDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -1043,7 +1043,7 @@ public class clsSearchFormController {
 			}
 
 			case "MaterialReqSlip": {
-				columnNames = "a.strReqCode,a.dtReqDate,b.strLocName,c.strLocName,a.strAuthorise" + ",a.strUserCreated,a.dtCreatedDate,a.strNarration";
+				columnNames = "a.strReqCode,DATE_FORMAT(a.dtReqDate,'%d-%m-%Y'),b.strLocName,c.strLocName,a.strAuthorise" + ",a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y'),a.strNarration";
 				String sqlforNoraml = "clsRequisitionHdModel a,clsLocationMasterModel b,clsLocationMasterModel c " + " where a.strLocBy=b.strLocCode and a.strLocOn=c.strLocCode " + " and a.strReqCode not in (select strReqCode from clsMISHdModel) " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "' "
 						+ " and EXTRACT(YEAR FROM a.dtReqDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -1116,7 +1116,7 @@ public class clsSearchFormController {
 			}
 
 			case "stktransfercode": {
-				columnNames = "a.strSTCode,a.dtSTDate,b.strLocName,c.strLocName,a.strNarration,a.strUserCreated,a.dtCreatedDate";
+				columnNames = "a.strSTCode,DATE_FORMAT(a.dtSTDate,'%d-%m-%Y'),b.strLocName,c.strLocName,a.strNarration,a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y')";
 				tableName = "clsStkTransferHdModel a,clsLocationMasterModel b,clsLocationMasterModel c" + " where a.strFromLocCode=b.strLocCode and a.strToLocCode=c.strLocCode and" + " a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtSTDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 				boolean flgAuth = false;
 				if (null != req.getSession().getAttribute("hmAuthorization")) {
@@ -1140,7 +1140,7 @@ public class clsSearchFormController {
 
 			case "grncode": {
 
-				columnNames = "a.strGRNCode,a.dtGRNDate,c.strLocName,a.strAgainst,a.strPONo,b.strPName,a.strBillNo" + ",a.strPayMode,a.strUserCreated,a.dtDateCreated,a.strNarration,a.strRefNo";
+				columnNames = "a.strGRNCode,DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y'),c.strLocName,a.strAgainst,a.strPONo,b.strPName,a.strBillNo" + ",a.strPayMode,DATE_FORMAT(a.strUserCreated,'%d-%m-%Y'),DATE_FORMAT(a.dtDateCreated,'%d-%m-%Y'),a.strNarration,a.strRefNo";
 				tableName = "clsGRNHdModel a,clsSupplierMasterModel b ,clsLocationMasterModel c " + "where a.strSuppCode=b.strPCode and a.strLocCode=c.strLocCode  and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtGRNDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 					tableName = tableName + " and c.strPropertyCode='" + propCode + "' ";
@@ -1164,7 +1164,7 @@ public class clsSearchFormController {
 			
 			case "grncodeforprint": {
 
-				columnNames = "a.strGRNCode,a.dtGRNDate,c.strLocName,a.strAgainst,a.strPONo,b.strPName,a.strBillNo" + ",a.strPayMode,a.strUserCreated,a.dtDateCreated,a.strNarration,a.strRefNo";
+				columnNames = "a.strGRNCode,DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y'),c.strLocName,a.strAgainst,a.strPONo,b.strPName,a.strBillNo" + ",a.strPayMode,a.strUserCreated,DATE_FORMAT(a.dtDateCreated,'%d-%m-%Y'),a.strNarration,a.strRefNo";
 				tableName = "clsGRNHdModel a,clsSupplierMasterModel b ,clsLocationMasterModel c " + "where a.strSuppCode=b.strPCode and a.strLocCode=c.strLocCode  and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' and c.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtGRNDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 					tableName = tableName + " and c.strPropertyCode='" + propCode + "' ";
@@ -1229,7 +1229,7 @@ public class clsSearchFormController {
 			}
 
 			case "ProductionOrder": {
-				columnNames = "strOPCode,dtOPDate,strStatus,dtFulmtDate,dtfulfilled,strNarration,strUserCreated,dtDateCreated";
+				columnNames = "strOPCode,DATE_FORMAT(dtOPDate,'%d-%m-%Y'),strStatus,DATE_FORMAT(dtFulmtDate,'%d-%m-%Y'),DATE_FORMAT(dtfulfilled,'%d-%m-%Y'),strNarration,strUserCreated,DATE_FORMAT(dtDateCreated,'%d-%m-%Y')";
 				tableName = " from tblproductionorderhd where strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM dtOPDate) between '" + finYear[0] + "' and '" + finYear[1] + "' " + " and strOPCode not in ( select strSOcode from tblworkorderhd where strClientCode='" + clientCode + "' ) ";
 				boolean flgAuth = false;
 				if (null != req.getSession().getAttribute("hmAuthorization")) {
@@ -1274,7 +1274,7 @@ public class clsSearchFormController {
 			}
 
 			case "BillPassing": {
-				columnNames = "strBillPassNo,dtBillDate,strPVno,strNarration,strUserCreated,dtDateCreated";
+				columnNames = "strBillPassNo,DATE_FORMAT(dtBillDate,'%d-%m-%Y'),strPVno,strNarration,strUserCreated,DATE_FORMAT(dtDateCreated,'%d-%m-%Y')";
 				tableName = "clsBillPassHdModel where strClientCode='" + clientCode + "'";
 				boolean flgAuth = false;
 				if (null != req.getSession().getAttribute("hmAuthorization")) {
@@ -1294,7 +1294,7 @@ public class clsSearchFormController {
 			}
 
 			case "PICode": {
-				columnNames = "a.strPICode,a.dtPIDate,b.strLocName,a.strNarration,a.strUserCreated,a.dtCreatedDate";
+				columnNames = "a.strPICode,DATE_FORMAT(a.dtPIDate,'%d-%m-%Y'),b.strLocName,a.strNarration,DATE_FORMAT(a.strUserCreated,'%d-%m-%Y'),DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y')";
 				tableName = "clsPurchaseIndentHdModel a,clsLocationMasterModel b " + " where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + " and a.strPICode not in (select strSOCode from clsPurchaseOrderHdModel) ";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -1319,7 +1319,7 @@ public class clsSearchFormController {
 			}
 
 			case "purchaseorder": {
-				columnNames = "a.strPOCode,a.dtPODate,b.strPName,a.strAgainst,a.strPayMode,a.dtPayDate" + ",a.strUserCreated,a.dtDateCreated,a.strClosePO";
+				columnNames = "a.strPOCode,DATE_FORMAT(a.dtPODate,'%d-%m-%Y'),b.strPName,a.strAgainst,a.strPayMode,DATE_FORMAT(a.dtPayDate,'%d-%m-%Y')" + ",DATE_FORMAT(a.strUserCreated,'%d-%m-%Y'),DATE_FORMAT(a.dtDateCreated,'%d-%m-%Y'),a.strClosePO";
 				tableName = "clsPurchaseOrderHdModel a,clsSupplierMasterModel b " + "where a.strSuppCode=b.strPCode and a.strPOCode not in " + "(select strPONo from clsGRNHdModel) " + "and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtPODate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 				boolean flgAuth = false;
 				if (null != req.getSession().getAttribute("hmAuthorization")) {
@@ -1375,7 +1375,7 @@ public class clsSearchFormController {
 			}
 
 			case "MaterialReturn": {
-				columnNames = "strMRetCode,dtMRetDate,strAgainst,strUserCreated,dtCreatedDate";
+				columnNames = "strMRetCode,DATE_FORMAT(dtMRetDate,'%d-%m-%Y'),strAgainst,DATE_FORMAT(strUserCreated,'%d-%m-%Y'),DATE_FORMAT(dtCreatedDate,'%d-%m-%Y')";
 				tableName = "clsMaterialReturnHdModel where strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM dtMRetDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 				boolean flgAuth = false;
 				if (null != req.getSession().getAttribute("hmAuthorization")) {
@@ -1397,7 +1397,7 @@ public class clsSearchFormController {
 				break;
 			}
 			case "PurchaseReturn": {
-				columnNames = "a.strPRCode,a.dtPRDate,a.strAgainst,b.strLocName,a.strNarration,a.strUserCreated,a.dtDateCreated";
+				columnNames = "a.strPRCode,DATE_FORMAT(a.dtPRDate,'%d-%m-%Y'),a.strAgainst,b.strLocName,a.strNarration,DATE_FORMAT(a.strUserCreated,'%d-%m-%Y'),DATE_FORMAT(a.dtDateCreated,'%d-%m-%Y')";
 				tableName = "select a.strPRCode,a.dtPRDate,a.strAgainst,b.strLocName,a.strNarration,a.strUserCreated,a.dtDateCreated " + " from tblpurchasereturnhd a, tbllocationmaster b " + " where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtPRDate) between '" + finYear[0] + "' and '" + finYear[1]
 						+ "' ";
 				boolean flgAuth = false;
@@ -1844,7 +1844,7 @@ public class clsSearchFormController {
 			}
 			
 			case "MaterialReturnslip": {
-				columnNames = "strMRetCode,dtMRetDate,strAgainst,strUserCreated,dtCreatedDate";
+				columnNames = "strMRetCode,DATE_FORMAT(dtMRetDate,'%d-%m-%Y'),strAgainst,strUserCreated,DATE_FORMAT(dtCreatedDate,'%d-%m-%Y')";
 				tableName = "clsMaterialReturnHdModel where strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM dtMRetDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 				
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -1894,7 +1894,7 @@ public class clsSearchFormController {
 			}
 
 			case "ProductionOrderslip": {
-				columnNames = "strOPCode,dtOPDate,strStatus,dtFulmtDate,dtfulfilled,strNarration,strUserCreated,dtDateCreated";
+				columnNames = "strOPCode,DATE_FORMAT(dtOPDate,'%d-%m-%Y'),strStatus,DATE_FORMAT(dtFulmtDate,'%d-%m-%Y'),DATE_FORMAT(dtfulfilled,'%d-%m-%Y'),strNarration,strUserCreated,DATE_FORMAT(dtDateCreated,'%d-%m-%Y')";
 				tableName = " from tblproductionorderhd where strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM dtOPDate) between '" + finYear[0] + "' and '" + finYear[1] + "' " + " and strOPCode not in ( select strSOcode from tblworkorderhd where strClientCode='" + clientCode + "' ) ";
 				
 								
@@ -1909,7 +1909,7 @@ public class clsSearchFormController {
 			}
 
 			case "PICodeslip": {
-				columnNames = "a.strPICode,a.dtPIDate,b.strLocName,a.strNarration,a.strUserCreated,a.dtCreatedDate";
+				columnNames = "a.strPICode,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y')a.dtPIDate,b.strLocName,a.strNarration,a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y')";
 				tableName = "clsPurchaseIndentHdModel a,clsLocationMasterModel b " + " where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + " and a.strPICode not in (select strSOCode from clsPurchaseOrderHdModel) ";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -1926,7 +1926,7 @@ public class clsSearchFormController {
 			}
 
 			case "purchaseorderslip": {
-				columnNames = "a.strPOCode,a.dtPODate,b.strPName,a.strAgainst,a.strPayMode,a.dtPayDate" + ",a.strUserCreated,a.dtDateCreated,a.strClosePO";
+				columnNames = "a.strPOCode,DATE_FORMAT(a.dtPODate,'%d-%m-%Y'),b.strPName,a.strAgainst,a.strPayMode,DATE_FORMAT(a.dtPayDate,'%d-%m-%Y')" + ",a.strUserCreated,DATE_FORMAT(a.dtDateCreated,'%d-%m-%Y'),a.strClosePO";
 				tableName = "clsPurchaseOrderHdModel a,clsSupplierMasterModel b " + "where a.strSuppCode=b.strPCode and a.strPOCode not in " + "(select strPONo from clsGRNHdModel) " + "and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtPODate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 				
 									
@@ -1941,7 +1941,7 @@ public class clsSearchFormController {
 			}
 
 			case "PurchaseReturnslip": {
-				columnNames = "a.strPRCode,a.dtPRDate,a.strAgainst,b.strLocName,a.strNarration,a.strUserCreated,a.dtDateCreated";
+				columnNames = "a.strPRCode,DATE_FORMAT(a.dtDateCreated,'%d-%m-%Y')a.dtPRDate,a.strAgainst,b.strLocName,a.strNarration,a.strUserCreated,DATE_FORMAT(a.dtDateCreated,'%d-%m-%Y')";
 				tableName = "select a.strPRCode,a.dtPRDate,a.strAgainst,b.strLocName,a.strNarration,a.strUserCreated,a.dtDateCreated " + " from tblpurchasereturnhd a, tbllocationmaster b " + " where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtPRDate) between '" + finYear[0] + "' and '" + finYear[1]
 						+ "' ";
 				
@@ -1974,7 +1974,7 @@ public class clsSearchFormController {
 			}
 
 			case "stkadjcodeslip": {
-				columnNames = "a.strSACode,a.dtSADate,b.strLocName,a.strUserCreated,a.dtCreatedDate";
+				columnNames = "a.strSACode,DATE_FORMAT(a.dtSADate,'%d-%m-%Y'),b.strLocName,a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y') ,a.strNarration";
 				tableName = "clsStkAdjustmentHdModel a,clsLocationMasterModel b " + "where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtSADate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -1982,14 +1982,14 @@ public class clsSearchFormController {
 				}
 				
 				tableName = tableName + " order by a.strSACode " + ShowTransAsc_Desc + " ";
-				listColumnNames = "Stk Adjustment Code,Stk Adjustment Date,Location,User Created,Date Created";
+				listColumnNames = "Stk Adjustment Code,Stk Adjustment Date,Location,User Created,Date Created,Narration";
 				idColumnName = "strSACode";
 				searchFormTitle = "Stock Adjustment";
 				break;
 			}
 
 			case "stkpostcodeslip": {
-				columnNames = "a.strPSCode,a.dtPSDate,b.strLocName,a.strUserCreated,a.dtCreatedDate";
+				columnNames = "a.strPSCode,DATE_FORMAT(a.dtPSDate,'%d-%m-%y'),b.strLocName,a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%y')";
 				tableName = "clsStkPostingHdModel a,clsLocationMasterModel b " + "where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtPSDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -2005,7 +2005,7 @@ public class clsSearchFormController {
 
 
 			case "MISslip": {
-				columnNames = "a.strMISCode,a.strAgainst,b.strLocName ,c.strLocName,a.dtMISDate" + ",a.strUserCreated,a.dtCreatedDate,a.strNarration";
+				columnNames = "a.strMISCode,a.strAgainst,b.strLocName ,c.strLocName,DATE_FORMAT(a.dtMISDate,'%d-%m-%Y')" + ",a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y'),a.strNarration";
 				String sqlforNoraml = "clsMISHdModel a,clsLocationMasterModel b ,clsLocationMasterModel c" + " where a.strLocFrom=b.strLocCode and a.strLocTo=c.strLocCode " + " and a.strClientCode='" + clientCode + "' and  b.strClientCode='" + clientCode + "' and  c.strClientCode='" + clientCode + "' " + " and EXTRACT(YEAR FROM a.dtMISDate) between '" + finYear[0] + "' and '" + finYear[1] + "' ";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -2036,7 +2036,7 @@ public class clsSearchFormController {
 
 
 			case "opstockslip": {
-				columnNames = "a.strOpStkCode,b.strLocName,a.dtExpDate,a.strUserCreated,a.dtCreatedDate";
+				columnNames = "a.strOpStkCode,b.strLocName,DATE_FORMAT(a.dtExpDate,'%d-%m-%Y'),a.strUserCreated,DATE_FORMAT(a.dtCreatedDate,'%d-%m-%Y')";
 				tableName = "clsInitialInventoryModel a,clsLocationMasterModel b " + "where a.strLocCode=b.strLocCode and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "'";
 
 				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
@@ -2521,7 +2521,7 @@ public class clsSearchFormController {
 		}
 		case "TPCode": {
 
-			columnNames = "a.strTPCode,a.strTPNo,a.strInvoiceNo,a.strTpDate,b.strSupplierName,a.dblTotalBill,DATE_FORMAT(a.strTpDate,'%M %Y') AS transDate";
+			columnNames = "a.strTPCode,a.strTPNo,a.strInvoiceNo,a.strTpDate,b.strSupplierName,a.dblTotalBill,DATE_FORMAT(a.strTpDate,'%m %Y') AS transDate";
 			tableName = "from tbltphd a,tblsuppliermaster b " + "where a.strClientCode='" + clientCode + "' and a.strSupplierCode=b.strSupplierCode and a.strLicenceCode='" + licenceCode + "' ";
 			listColumnNames = "TP Code,TP Number,Invoice Number,Date,Supplier,Total Bill,Month OF Transaction";
 			idColumnName = "strTPCode";
@@ -2533,7 +2533,7 @@ public class clsSearchFormController {
 
 		case "SalesId": {
 
-			columnNames = "intId,dteBillDate,strClientCode,DATE_FORMAT(dteBillDate,'%M %Y') AS transDate";
+			columnNames = "intId,dteBillDate,strClientCode,DATE_FORMAT(dteBillDate,'%m %Y') AS transDate";
 			tableName = "from tblmanualsaleshd " + "where strClientCode='" + clientCode + " ' and  strLicenceCode='" + licenceCode + "'";
 			listColumnNames = "Id,Sale Date,Client Code,Month OF Transaction";
 			idColumnName = "intId";

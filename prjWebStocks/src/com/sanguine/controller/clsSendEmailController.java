@@ -504,7 +504,7 @@ public class clsSendEmailController
 		
 			//String strEmailId="sachinm555@gmail.com";
 			String sql="select b.strEmailId from tblreservationdtl a ,tblguestmaster b where "
-					+ "a.strReservationNo='"+strReservationNo+"' and a.strGuestCode=b.strGuestCode ";/*="SELECT CONCAT(ifnull(b.strEmail,''),',',ifnull(c.strEmail,''),',',ifnull(d.strEmail,''))EmailIds "
+					+ "a.strReservationNo='"+strReservationNo+"' and a.strGuestCode=b.strGuestCode AND a.strClientCode='"+clientCode+"'";/*="SELECT CONCAT(ifnull(b.strEmail,''),',',ifnull(c.strEmail,''),',',ifnull(d.strEmail,''))EmailIds "
 			+"FROM tblpurchaseorderhd a "
 					+"left outer join tblpartymaster b on a.strSuppCode=b.strPCode "
 					+"left outer join tbluserhd c on a.strUserModified=c.strUserCode "

@@ -618,7 +618,7 @@ public class clsRoomStatusDiaryController {
 			Map objRoomStatusDtlBean = new HashMap<>();
 			List listRoomStatus= new ArrayList<>();
 
-			String sql="select a.strRoomTypeDesc from tblroom a group by strBedType where a.strClientCode='"+clientCode+"'";
+			String sql="select a.strRoomTypeDesc from tblroom a where a.strClientCode='"+clientCode+"' group by strBedType ";
 			List listRoomDesc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			//while(listRoomDesc.size()>0)
 			for(int j=0;j<listRoomDesc.size();j++)

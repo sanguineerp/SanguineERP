@@ -112,12 +112,12 @@
 	    
 	    row.insertCell(0).innerHTML= "<input id=\"cbSel."+(rowCount)+"\" type=\"checkbox\"  />";
 	    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strReqCode."+(rowCount)+"\" value='"+strReqCode+"' >";
-	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"8%\" id=\"dtReqDate."+(rowCount)+"\" value='"+dtReqDate+"' >";
+	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"dtReqDate."+(rowCount)+"\" value='"+dtReqDate+"' >";
 	    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strLocBy."+(rowCount)+"\" value='"+strLocBy+"'>";		    
 	    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strLocOn."+(rowCount)+"\" value='"+strLocOn+"'>";		    
 	    row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strNarration."+(rowCount)+"\" value='"+strNarration+"'>";
 	    row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"5%\" id=\"strAuthorise."+(rowCount)+"\" value='"+strAuthorise+"'>";
-	    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"8%\" id=\"dtReqiredDate."+(rowCount)+"\" value='"+dtReqiredDate+"'>";
+	    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"dtReqiredDate."+(rowCount)+"\" value='"+dtReqiredDate+"'>";
 	    row.insertCell(8).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"8%\" id=\"strSessionCode."+(rowCount)+"\" value='"+strSessionCode+"'>";
 	    
 	}

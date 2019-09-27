@@ -163,7 +163,7 @@ public class clsPMSTaxMasterController {
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 			
 			clsPMSTaxMasterModel objModel = funPrepareModel(objBean, userCode, clientCode, propertyCode);
-			objPMSTaxMasterService.funAddUpdatePMSTaxMaster(objModel);
+				objPMSTaxMasterService.funAddUpdatePMSTaxMaster(objModel);
 			
 			//clsPMSSettlementMasterModel objModel1 = funPrepareModelSettlemet(objBean, userCode, clientCode, propertyCode);
 			//objPMSTaxMasterService.funAddUpdatePMSSettlementTaxMaster(objModel1);

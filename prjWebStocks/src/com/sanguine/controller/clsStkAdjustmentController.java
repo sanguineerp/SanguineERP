@@ -695,7 +695,10 @@ public class clsStkAdjustmentController {
 			List<clsStkAdjustmentDtlModel> listDtlBean = new ArrayList<clsStkAdjustmentDtlModel>();
 			List<clsStkAdjustmentDtlModel> listProcuredProduct = new ArrayList<clsStkAdjustmentDtlModel>();
 
-			String sqlHDQuery = "select a.strSACode as strSACode,a.dtSADate,a.strLocCode,b.strLocName,a.strNarration,a.strAuthorise " + " from tblstockadjustmenthd a,tbllocationmaster b,tblpossalesdtl c " + " where a.strSACode=c.strSACode and a.strLocCode=b.strLocCode and a.strSACode='" + stockAdjCode + "' and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "' group by a.strSACode ";
+			//String sqlHDQuery = "select a.strSACode as strSACode,a.dtSADate,a.strLocCode,b.strLocName,a.strNarration,a.strAuthorise " + " from tblstockadjustmenthd a,tbllocationmaster b,tblpossalesdtl c " + " where a.strSACode=c.strSACode and a.strLocCode=b.strLocCode and a.strSACode='" + stockAdjCode + "' and a.strClientCode='" + clientCode + "' " + "and b.strClientCode='" + clientCode + "' group by a.strSACode ";
+			String sqlHDQuery = "SELECT a.strSACode AS strSACode,a.dtSADate,a.strLocCode,b.strLocName,a.strNarration,a.strAuthorise "
+					+ "FROM tblstockadjustmenthd a,tbllocationmaster b "
+					+ "WHERE a.strLocCode=b.strLocCode AND a.strSACode='"+stockAdjCode+"' AND a.strClientCode='"+clientCode+"'";
 			logger.info(" sqlHDQuery : "+ sqlHDQuery);
 			List listProdHD = objGlobalFunctionsService.funGetDataList(sqlHDQuery, "sql");
 			for (int j = 0; j < listProdHD.size(); j++) {
@@ -864,7 +867,7 @@ public class clsStkAdjustmentController {
 			hm.put("strAuthorise", strAuthorise);
 			hm.put("listDtlBean", listDtlBean);
 			reportName = servletContext.getRealPath("/WEB-INF/reports/rptStockAdjustmentRecipeWiseSlip.jrxml");
-			hm.put("dtSADate", objGlobal.funGetDate("dd-MM-yyyy", dtSADate));
+			//hm.put("dtSADate", objGlobal.funGetDate("dd-MM-yyyy", dtSADate));
 			// hm.put("dtToSADate", objGlobal.funGetDate("dd-MM-yyyy",
 			// dtSADate));
 			hm.put("strNarration", strNarration);

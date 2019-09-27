@@ -1321,7 +1321,7 @@ public class clsCheckInController {
 			if(strAgainst.equalsIgnoreCase("Walk In")){
 			String sql = "SELECT a.strCheckInNo,a.strGuestCode,f.strRoomDesc,"
 					+ "ifnull(a.strExtraBedCode,''), b.strRoomTypeDesc,"
-					+ "b.dblRoomTerrif, IFNULL(c.dblDiscount,0.0),d.intNoOfAdults,"
+					+ "c.dblRoomRate, IFNULL(c.dblDiscount,0.0),d.intNoOfAdults,"
 					+ " DATE_FORMAT(d.dteCheckInDate,'%d-%m-%Y'),e.strGSTNo,"
 					+ "e.strPANNo, d.tmeArrivalTime,ifnull(g.dblChargePerBed,0), "
 					+ "e.strFirstName,e.strMiddleName,e.strLastName, "
