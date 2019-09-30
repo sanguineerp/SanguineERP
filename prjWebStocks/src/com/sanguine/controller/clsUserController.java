@@ -149,7 +149,7 @@ public class clsUserController {
 					String strWebClubModule = objCompanyMasterModel.getStrWebClubModule();
 					String strWebExciseModule = objCompanyMasterModel.getStrWebExciseModule();
 					String strWebPMSModule = objCompanyMasterModel.getStrWebPMSModule();
-					String strWebPOSModule = objCompanyMasterModel.getStrWebPOSModule();
+					String strWebBanquetModule = objCompanyMasterModel.getStrWebBanquetModule();
 					String strWebStockModule = objCompanyMasterModel.getStrWebStockModule();
 					Map<String, String> moduleMap = new TreeMap<String, String>();
 					if ("Yes".equalsIgnoreCase(strWebStockModule)) {
@@ -182,8 +182,8 @@ public class clsUserController {
 						strModule = "6";
 					}
 
-					if ("Yes".equalsIgnoreCase(strWebPOSModule)) {
-						moduleMap.put("7-WebPOS", "webpos_module_icon.png");
+					if ("Yes".equalsIgnoreCase(strWebBanquetModule)) {
+						moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
 						strModule = "7";
 					}
 
@@ -518,7 +518,7 @@ public class clsUserController {
 			}*/
 			
 			return new ModelAndView("redirect:/frmModuleSelection.html");
-		} else {
+		} else {/*
 			String selectedModuleName = "";
 			for (String module : moduleMap.keySet()) {
 				selectedModuleName = module;
@@ -574,8 +574,10 @@ public class clsUserController {
 //			}
 			
 			funSetModuleImage(req, selectedModuleName);
-			return new ModelAndView("redirect:/frmPropertySelection.html");
-		}
+			
+		*/}
+		
+		return new ModelAndView("redirect:/frmPropertySelection.html");
 	}
 	
 	@RequestMapping(value = "/frmModuleSelection", method = RequestMethod.GET)
@@ -744,11 +746,11 @@ public class clsUserController {
 
 			break;
 
-		case "7-WebPOS":
+		case "7-WebBanquet":
 			headerImage = "webstocks-property-header.jpg";
 			moduleTitleImage = "Sanguine_WebPOS_1.jpg";
 
-			moduleMap.put("7-WebPOS", "webpos_module_icon.png");
+			moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
 			strModule = "7";
 
 			break;
@@ -889,302 +891,7 @@ public class clsUserController {
 		return objUserHdBean;
 	}
 
-	// @SuppressWarnings("unused")
-	// @RequestMapping(value = "/frmMainMenu", method = RequestMethod.POST)
-	// public ModelAndView funValidateProperty(@ModelAttribute("command")
-	// clsPropertySelectionBean propBean,BindingResult result,HttpServletRequest
-	// req,Map<String,Object> model)
-	// {
-	// String clientCode=req.getSession().getAttribute("clientCode").toString();
-	// String userCode=req.getSession().getAttribute("usercode").toString();
-	// try
-	// {
-	// req.getSession().setAttribute("propertyCode",propBean.getStrPropertyCode());
-	// req.getSession().setAttribute("propertyName",propBean.getStrPropertyName());
-	// req.getSession().setAttribute("locationCode",propBean.getStrLocationCode());
-	// req.getSession().setAttribute("locationName",propBean.getStrLocationName());
-	// clsLocationMasterModel
-	// objLocCode=objLocationMasterService.funGetObject(propBean.getStrLocationCode(),clientCode);
-	// req.getSession().setAttribute("locationType",objLocCode.getStrType());
-	// req.getSession().setAttribute("financialYear",propBean.getStrFinancialYear());
-	//
-	// List<clsUserDesktopUtil> userDesktop=funGetUserDesktop(req);
-	// req.getSession().setAttribute("desktop",userDesktop);
-	//
-	// String propCode=propBean.getStrPropertyCode();
-	// String locCode=propBean.getStrLocationCode();
-	// String date=objGlobalFun.funGetCurrentDate("dd-MM-yyyy");
-	// String dateTime=objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
-	// String time=dateTime.split(" ")[1];
-	//
-	// clsUserLogsModel objUserLogsModel=new clsUserLogsModel();
-	// objUserLogsModel.setStrUserCode(userCode);
-	// objUserLogsModel.setStrLoggedInLocation(locCode);
-	// objUserLogsModel.setStrLoggedInProperty(propCode);
-	// objUserLogsModel.setStrClientCode(clientCode);
-	// objUserLogsModel.setDteLoginDate(dateTime);
-	// objUserLogsModel.setTmeLoginTime(time);
-	// objGlobalService.funAddUserLogEntry(objUserLogsModel);
-	//
-	// Map<String,Object> tr = funGetTreeMap(req);
-	// req.getSession().setAttribute("treeMap",tr);
-	//
-	// clsPropertySetupModel
-	// objSetup=objSetupMasterService.funGetObjectPropertySetup(propBean.getStrPropertyCode(),
-	// clientCode);
-	// if(null != objSetup)
-	// {
-	// req.getSession().setAttribute("amtDecPlace",objSetup.getIntdec());
-	// req.getSession().setAttribute("qtyDecPlace",objSetup.getIntqtydec());
-	// req.getSession().setAttribute("strNegStock",objSetup.getStrNegStock());
-	// req.getSession().setAttribute("RateFrom",
-	// objSetup.getStrRatePickUpFrom());
-	// req.getSession().setAttribute("strWorkFlowbasedAuth",
-	// objSetup.getStrWorkFlowbasedAuth());
-	// req.getSession().setAttribute("ShowReqVal", objSetup.getStrShowReqVal());
-	// req.getSession().setAttribute("ShowReqStk", objSetup.getStrShowStkReq());
-	// req.getSession().setAttribute("changeUOM",
-	// objSetup.getStrChangeUOMTrans());
-	// req.getSession().setAttribute("audit", objSetup.getStrAudit());
-	// req.getSession().setAttribute("showLocWiseProdMaster",
-	// objSetup.getStrShowProdMaster());
-	// req.getSession().setAttribute("showPrptyWiseProdDoc",
-	// objSetup.getStrShowProdDoc());
-	// req.getSession().setAttribute("ShowTransAsc_Desc",
-	// objSetup.getStrShowTransAsc_Desc());
-	// req.getSession().setAttribute("AllowDateChangeInMIS",
-	// objSetup.getStrAllowDateChangeInMIS());
-	// req.getSession().setAttribute("NameChangeInProdMast",
-	// objSetup.getStrNameChangeProdMast());
-	// req.getSession().setAttribute("NotificationTimeinterval",
-	// objSetup.getIntNotificationTimeinterval());
-	// req.getSession().setAttribute("MonthEnd", objSetup.getStrMonthEnd());
-	// req.getSession().setAttribute("showAllProdToAllLoc",
-	// objSetup.getStrShowAllProdToAllLoc());
-	// req.getSession().setAttribute("DiscEffectOnPO",
-	// objSetup.getStrEffectOfDiscOnPO());
-	// req.getSession().setAttribute("invoieFormat",
-	// objSetup.getStrInvFormat());
-	// }
-	// else
-	// {
-	// req.getSession().setAttribute("amtDecPlace",0);
-	// req.getSession().setAttribute("qtyDecPlace",0);
-	// req.getSession().setAttribute("strNegStock","N");
-	// req.getSession().setAttribute("RateFrom", "");
-	// req.getSession().setAttribute("strWorkFlowbasedAuth", "N");
-	// req.getSession().setAttribute("ShowReqVal", "N");
-	// req.getSession().setAttribute("ShowReqStk", "N");
-	// req.getSession().setAttribute("changeUOM", "N");
-	// req.getSession().setAttribute("audit", "N");
-	// req.getSession().setAttribute("showLocWiseProdMaster", "N");
-	// req.getSession().setAttribute("showPrptyWiseProdMaster","N" );
-	// req.getSession().setAttribute("showPrptyWiseProdDoc", "N");
-	// req.getSession().setAttribute("ShowTransAsc_Desc", "Asc");
-	// req.getSession().setAttribute("AllowDateChangeInMIS","N");
-	// req.getSession().setAttribute("NameChangeInProdMast", "N");
-	// req.getSession().setAttribute("NotificationTimeinterval", 1);
-	// req.getSession().setAttribute("MonthEnd", "N");
-	// req.getSession().setAttribute("showAllProdToAllLoc", 'N');
-	// req.getSession().setAttribute("DiscEffectOnPO", "Y");
-	// req.getSession().setAttribute("invoieFormat", "");
-	// }
-	//
-	//
-	// if(req.getSession().getAttribute("selectedModuleName").equals("3-WebPMS"))
-	// {
-	// String sql =
-	// "select tmeCheckInTime,tmeCheckOutTime from tblpropertysetup "
-	// + " where strPropertyCode='" + propBean.getStrPropertyCode() +
-	// "' and strClientCode='"+clientCode+"'";
-	// List listPropInfo=objGlobalService.funGetListModuleWise(sql, "sql");
-	// Object[] arrPropInfo=(Object[]) listPropInfo.get(0);
-	// req.getSession().setAttribute("PMSCheckInTime",
-	// arrPropInfo[0].toString());
-	// req.getSession().setAttribute("PMSCheckOutTime",
-	// arrPropInfo[1].toString());
-	//
-	// sql = "select count(*) from tbldayendprocess "
-	// + " where strPropertyCode='" + propBean.getStrPropertyCode() +
-	// "' and strClientCode='"+clientCode+"' "
-	// + " and strDayEnd='N' ";
-	// List listDayEnd=objGlobalService.funGetListModuleWise(sql, "sql");
-	// BigInteger count=new BigInteger(listDayEnd.get(0).toString());
-	//
-	// if(count.intValue()>0)
-	// {
-	// sql = "select date(max(dtePMSDate)),strStartDay from tbldayendprocess "
-	// + " where strPropertyCode='" + propBean.getStrPropertyCode() +
-	// "' and strClientCode='"+clientCode+"' "
-	// + " and strDayEnd='N' ";
-	// List listStartFlag=objGlobalService.funGetListModuleWise(sql, "sql");
-	// Object[] arrObjDayEnd=(Object[])listStartFlag.get(0);
-	// req.getSession().setAttribute("PMSDate", arrObjDayEnd[0].toString());
-	// req.getSession().setAttribute("PMSStartDay", arrObjDayEnd[1].toString());
-	// }
-	// else
-	// {
-	// req.getSession().setAttribute("PMSDate",
-	// objGlobalFun.funGetCurrentDate("yyyy-MM-dd"));
-	// req.getSession().setAttribute("PMSStartDay", "N");
-	//
-	// clsDayEndHdModel objDayEndModel=new clsDayEndHdModel();
-	// objDayEndModel.setStrPropertyCode(propBean.getStrPropertyCode());
-	// objDayEndModel.setStrDayEnd("N");
-	// objDayEndModel.setStrStartDay("Y");
-	// objDayEndModel.setDtePMSDate(objGlobalFun.funGetCurrentDate("yyyy-MM-dd"));
-	// objDayEndModel.setDblDayEndAmt(0);
-	// objDayEndModel.setStrUserCode(userCode);
-	// objDayEndModel.setStrClientCode(clientCode);
-	//
-	// objDayEndService.funAddUpdateDayEndHd(objDayEndModel);
-	// }
-	// }
-	//
-	// if(req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS"))
-	// {
-	// return new ModelAndView("frmWebPOSLogin");
-	// }
-	//
-	// }catch(Exception ex)
-	// {
-	//
-	// // For Handle the Code through Structure Update
-	// //
-	// if(req.getSession().getAttribute("selectedModuleName").equals("3-WebPMS"))
-	// // {
-	// //
-	// req.getSession().setAttribute("PropertyError","Please Check WebPMS PropertySetup");
-	// // }else
-	// // {
-	// //
-	// req.getSession().setAttribute("PropertyError","Please Check WebStock PropertySetup");
-	// // }
-	//
-	// // objStructureUpdateService.funUpdateStructure(clientCode);
-	// //
-	// //
-	// // clsPropertySetupModel
-	// objSetup=objSetupMasterService.funGetObjectPropertySetup(propBean.getStrPropertyCode(),
-	// clientCode);
-	// // if(null != objSetup)
-	// // {
-	// // req.getSession().setAttribute("amtDecPlace",objSetup.getIntdec());
-	// // req.getSession().setAttribute("qtyDecPlace",objSetup.getIntqtydec());
-	// //
-	// req.getSession().setAttribute("strNegStock",objSetup.getStrNegStock());
-	// // req.getSession().setAttribute("RateFrom",
-	// objSetup.getStrRatePickUpFrom());
-	// // req.getSession().setAttribute("strWorkFlowbasedAuth",
-	// objSetup.getStrWorkFlowbasedAuth());
-	// // req.getSession().setAttribute("ShowReqVal",
-	// objSetup.getStrShowReqVal());
-	// // req.getSession().setAttribute("ShowReqStk",
-	// objSetup.getStrShowStkReq());
-	// // req.getSession().setAttribute("changeUOM",
-	// objSetup.getStrChangeUOMTrans());
-	// // req.getSession().setAttribute("audit", objSetup.getStrAudit());
-	// // req.getSession().setAttribute("showLocWiseProdMaster",
-	// objSetup.getStrShowProdMaster());
-	// // req.getSession().setAttribute("showPrptyWiseProdDoc",
-	// objSetup.getStrShowProdDoc());
-	// // req.getSession().setAttribute("ShowTransAsc_Desc",
-	// objSetup.getStrShowTransAsc_Desc());
-	// // req.getSession().setAttribute("AllowDateChangeInMIS",
-	// objSetup.getStrAllowDateChangeInMIS());
-	// // req.getSession().setAttribute("NameChangeInProdMast",
-	// objSetup.getStrNameChangeProdMast());
-	// // req.getSession().setAttribute("NotificationTimeinterval",
-	// objSetup.getIntNotificationTimeinterval());
-	// // req.getSession().setAttribute("MonthEnd", objSetup.getStrMonthEnd());
-	// // req.getSession().setAttribute("showAllProdToAllLoc",
-	// objSetup.getStrShowAllProdToAllLoc());
-	// // }
-	// // else
-	// // {
-	// // req.getSession().setAttribute("amtDecPlace",0);
-	// // req.getSession().setAttribute("qtyDecPlace",0);
-	// // req.getSession().setAttribute("strNegStock","N");
-	// // req.getSession().setAttribute("RateFrom", "");
-	// // req.getSession().setAttribute("strWorkFlowbasedAuth", "N");
-	// // req.getSession().setAttribute("ShowReqVal", "N");
-	// // req.getSession().setAttribute("ShowReqStk", "N");
-	// // req.getSession().setAttribute("changeUOM", "N");
-	// // req.getSession().setAttribute("audit", "N");
-	// // req.getSession().setAttribute("showLocWiseProdMaster", "N");
-	// // req.getSession().setAttribute("showPrptyWiseProdMaster","N" );
-	// // req.getSession().setAttribute("showPrptyWiseProdDoc", "N");
-	// // req.getSession().setAttribute("ShowTransAsc_Desc", "Asc");
-	// // req.getSession().setAttribute("AllowDateChangeInMIS","N");
-	// // req.getSession().setAttribute("NameChangeInProdMast", "N");
-	// // req.getSession().setAttribute("NotificationTimeinterval", 1);
-	// // req.getSession().setAttribute("MonthEnd", "N");
-	// // req.getSession().setAttribute("showAllProdToAllLoc", 'N');
-	// // }
-	// //
-	// //
-	// //
-	// if(req.getSession().getAttribute("selectedModuleName").equals("3-WebPMS"))
-	// // {
-	// // String sql =
-	// "select tmeCheckInTime,tmeCheckOutTime from tblpropertysetup "
-	// // + " where strPropertyCode='" + propBean.getStrPropertyCode() +
-	// "' and strClientCode='"+clientCode+"'";
-	// // List listPropInfo=objGlobalService.funGetListModuleWise(sql, "sql");
-	// // Object[] arrPropInfo=(Object[]) listPropInfo.get(0);
-	// // req.getSession().setAttribute("PMSCheckInTime",
-	// arrPropInfo[0].toString());
-	// // req.getSession().setAttribute("PMSCheckOutTime",
-	// arrPropInfo[1].toString());
-	// //
-	// // sql = "select count(*) from tbldayendprocess "
-	// // + " where strPropertyCode='" + propBean.getStrPropertyCode() +
-	// "' and strClientCode='"+clientCode+"' "
-	// // + " and strDayEnd='N' ";
-	// // List listDayEnd=objGlobalService.funGetListModuleWise(sql, "sql");
-	// // BigInteger count=new BigInteger(listDayEnd.get(0).toString());
-	// //
-	// // if(count.intValue()>0)
-	// // {
-	// // sql =
-	// "select date(max(dtePMSDate)),strStartDay from tbldayendprocess "
-	// // + " where strPropertyCode='" + propBean.getStrPropertyCode() +
-	// "' and strClientCode='"+clientCode+"' "
-	// // + " and strDayEnd='N' ";
-	// // List listStartFlag=objGlobalService.funGetListModuleWise(sql, "sql");
-	// // Object[] arrObjDayEnd=(Object[])listStartFlag.get(0);
-	// // req.getSession().setAttribute("PMSDate", arrObjDayEnd[0].toString());
-	// // req.getSession().setAttribute("PMSStartDay",
-	// arrObjDayEnd[1].toString());
-	// // }
-	// // else
-	// // {
-	// // req.getSession().setAttribute("PMSDate",
-	// objGlobalFun.funGetCurrentDate("yyyy-MM-dd"));
-	// // req.getSession().setAttribute("PMSStartDay", "N");
-	// //
-	// // clsDayEndHdModel objDayEndModel=new clsDayEndHdModel();
-	// // objDayEndModel.setStrPropertyCode(propBean.getStrPropertyCode());
-	// // objDayEndModel.setStrDayEnd("N");
-	// // objDayEndModel.setStrStartDay("Y");
-	// //
-	// objDayEndModel.setDtePMSDate(objGlobalFun.funGetCurrentDate("yyyy-MM-dd"));
-	// // objDayEndModel.setDblDayEndAmt(0);
-	// // objDayEndModel.setStrUserCode(userCode);
-	// // objDayEndModel.setStrClientCode(clientCode);
-	// //
-	// // objDayEndService.funAddUpdateDayEndHd(objDayEndModel);
-	// // }
-	// // }
-	//
-	// ex.printStackTrace();
-	// //return new ModelAndView("redirect:/frmPropertySelection.html");
-	// }
-	//
-	//
-	// return new ModelAndView("frmMainMenu");
-	// }
-
+	
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/frmMainMenu", method = RequestMethod.GET)
 	public ModelAndView funValidateProperty(@ModelAttribute("command") clsPropertySelectionBean propBean, BindingResult result, HttpServletRequest req, Map<String, Object> model) {
@@ -1363,124 +1070,7 @@ public class clsUserController {
 			// }
 			ex.printStackTrace();
 			return new ModelAndView("frmStructureUpdate_2");
-
-			//
-			// clsPropertySetupModel
-			// objSetup=objSetupMasterService.funGetObjectPropertySetup(propBean.getStrPropertyCode(),
-			// clientCode);
-			// if(null != objSetup)
-			// {
-			// req.getSession().setAttribute("amtDecPlace",objSetup.getIntdec());
-			// req.getSession().setAttribute("qtyDecPlace",objSetup.getIntqtydec());
-			// req.getSession().setAttribute("strNegStock",objSetup.getStrNegStock());
-			// req.getSession().setAttribute("RateFrom",
-			// objSetup.getStrRatePickUpFrom());
-			// req.getSession().setAttribute("strWorkFlowbasedAuth",
-			// objSetup.getStrWorkFlowbasedAuth());
-			// req.getSession().setAttribute("ShowReqVal",
-			// objSetup.getStrShowReqVal());
-			// req.getSession().setAttribute("ShowReqStk",
-			// objSetup.getStrShowStkReq());
-			// req.getSession().setAttribute("changeUOM",
-			// objSetup.getStrChangeUOMTrans());
-			// req.getSession().setAttribute("audit", objSetup.getStrAudit());
-			// req.getSession().setAttribute("showLocWiseProdMaster",
-			// objSetup.getStrShowProdMaster());
-			// req.getSession().setAttribute("showPrptyWiseProdDoc",
-			// objSetup.getStrShowProdDoc());
-			// req.getSession().setAttribute("ShowTransAsc_Desc",
-			// objSetup.getStrShowTransAsc_Desc());
-			// req.getSession().setAttribute("AllowDateChangeInMIS",
-			// objSetup.getStrAllowDateChangeInMIS());
-			// req.getSession().setAttribute("NameChangeInProdMast",
-			// objSetup.getStrNameChangeProdMast());
-			// req.getSession().setAttribute("NotificationTimeinterval",
-			// objSetup.getIntNotificationTimeinterval());
-			// req.getSession().setAttribute("MonthEnd",
-			// objSetup.getStrMonthEnd());
-			// req.getSession().setAttribute("showAllProdToAllLoc",
-			// objSetup.getStrShowAllProdToAllLoc());
-			// }
-			// else
-			// {
-			// req.getSession().setAttribute("amtDecPlace",0);
-			// req.getSession().setAttribute("qtyDecPlace",0);
-			// req.getSession().setAttribute("strNegStock","N");
-			// req.getSession().setAttribute("RateFrom", "");
-			// req.getSession().setAttribute("strWorkFlowbasedAuth", "N");
-			// req.getSession().setAttribute("ShowReqVal", "N");
-			// req.getSession().setAttribute("ShowReqStk", "N");
-			// req.getSession().setAttribute("changeUOM", "N");
-			// req.getSession().setAttribute("audit", "N");
-			// req.getSession().setAttribute("showLocWiseProdMaster", "N");
-			// req.getSession().setAttribute("showPrptyWiseProdMaster","N" );
-			// req.getSession().setAttribute("showPrptyWiseProdDoc", "N");
-			// req.getSession().setAttribute("ShowTransAsc_Desc", "Asc");
-			// req.getSession().setAttribute("AllowDateChangeInMIS","N");
-			// req.getSession().setAttribute("NameChangeInProdMast", "N");
-			// req.getSession().setAttribute("NotificationTimeinterval", 1);
-			// req.getSession().setAttribute("MonthEnd", "N");
-			// req.getSession().setAttribute("showAllProdToAllLoc", 'N');
-			// }
-			//
-			//
-			// if(req.getSession().getAttribute("selectedModuleName").equals("3-WebPMS"))
-			// {
-			// String sql =
-			// "select tmeCheckInTime,tmeCheckOutTime from tblpropertysetup "
-			// + " where strPropertyCode='" + propBean.getStrPropertyCode() +
-			// "' and strClientCode='"+clientCode+"'";
-			// List listPropInfo=objGlobalService.funGetListModuleWise(sql,
-			// "sql");
-			// Object[] arrPropInfo=(Object[]) listPropInfo.get(0);
-			// req.getSession().setAttribute("PMSCheckInTime",
-			// arrPropInfo[0].toString());
-			// req.getSession().setAttribute("PMSCheckOutTime",
-			// arrPropInfo[1].toString());
-			//
-			// sql = "select count(*) from tbldayendprocess "
-			// + " where strPropertyCode='" + propBean.getStrPropertyCode() +
-			// "' and strClientCode='"+clientCode+"' "
-			// + " and strDayEnd='N' ";
-			// List listDayEnd=objGlobalService.funGetListModuleWise(sql,
-			// "sql");
-			// BigInteger count=new BigInteger(listDayEnd.get(0).toString());
-			//
-			// if(count.intValue()>0)
-			// {
-			// sql =
-			// "select date(max(dtePMSDate)),strStartDay from tbldayendprocess "
-			// + " where strPropertyCode='" + propBean.getStrPropertyCode() +
-			// "' and strClientCode='"+clientCode+"' "
-			// + " and strDayEnd='N' ";
-			// List listStartFlag=objGlobalService.funGetListModuleWise(sql,
-			// "sql");
-			// Object[] arrObjDayEnd=(Object[])listStartFlag.get(0);
-			// req.getSession().setAttribute("PMSDate",
-			// arrObjDayEnd[0].toString());
-			// req.getSession().setAttribute("PMSStartDay",
-			// arrObjDayEnd[1].toString());
-			// }
-			// else
-			// {
-			// req.getSession().setAttribute("PMSDate",
-			// objGlobalFun.funGetCurrentDate("yyyy-MM-dd"));
-			// req.getSession().setAttribute("PMSStartDay", "N");
-			//
-			// clsDayEndHdModel objDayEndModel=new clsDayEndHdModel();
-			// objDayEndModel.setStrPropertyCode(propBean.getStrPropertyCode());
-			// objDayEndModel.setStrDayEnd("N");
-			// objDayEndModel.setStrStartDay("Y");
-			// objDayEndModel.setDtePMSDate(objGlobalFun.funGetCurrentDate("yyyy-MM-dd"));
-			// objDayEndModel.setDblDayEndAmt(0);
-			// objDayEndModel.setStrUserCode(userCode);
-			// objDayEndModel.setStrClientCode(clientCode);
-			//
-			// objDayEndService.funAddUpdateDayEndHd(objDayEndModel);
-			// }
-			// }
-
-			// return new ModelAndView("redirect:/frmPropertySelection.html");
+			
 		}
 
 		if (req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS")) {
@@ -1581,7 +1171,7 @@ public class clsUserController {
 			moduleCode = "5";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			moduleCode = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
 			moduleCode = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			moduleCode = "8";
@@ -1908,7 +1498,7 @@ public class clsUserController {
 			String strWebClubModule = objCompanyMasterModel.getStrWebClubModule();
 			String strWebExciseModule = objCompanyMasterModel.getStrWebExciseModule();
 			String strWebPMSModule = objCompanyMasterModel.getStrWebPMSModule();
-			String strWebPOSModule = objCompanyMasterModel.getStrWebPOSModule();
+			String strWebBanquetModule = objCompanyMasterModel.getStrWebBanquetModule();
 			String strWebStockModule = objCompanyMasterModel.getStrWebStockModule();
 			String isSuperUser = req.getSession().getAttribute("superuser").toString();
 
@@ -1991,13 +1581,13 @@ public class clsUserController {
 					strModule = "6";
 				}
 			}
-			if ("Yes".equalsIgnoreCase(strWebPOSModule)) {
+			if ("Yes".equalsIgnoreCase(strWebBanquetModule)) {
 
 				if (isSuperUser.equalsIgnoreCase("YES")) {
-					moduleMap.put("7-WebPOS", "webpos_module_icon.png");
+					moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
 					strModule = "7";
 				} else if (null != list && list.size() > 0 && list.contains("WebPOS")) {
-					moduleMap.put("7-WebPOS", "webpos_module_icon.png");
+					moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
 					strModule = "7";
 				}
 			}
@@ -2105,140 +1695,6 @@ public class clsUserController {
 
 	}
 
-	@SuppressWarnings("unused")
-	@RequestMapping(value = "/frmWebPOSSelectionMaster", method = RequestMethod.GET)
-	/*public ModelAndView funWebPOSModuleMasterSelection(HttpServletRequest req, Map<String, Object> model) {
-		List<clsUserDesktopUtil> webPOSDesktop = null;
-		try {
-
-			ArrayList<clsWebPosPOSSelectionBean> posList = funWebPOSPOSSelection(req);
-			req.getSession().setAttribute("posList", posList);
-			req.getSession().setAttribute("webPOSModuleSelect", "M");
-
-			// webPOSDesktop = funGetPOSMenuMap("super", "117.001", "M",
-			// "Super", "P01");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// req.getSession().setAttribute("desktop",webPOSDesktop);
-		return new ModelAndView("frmPOSSelection");
-
-	}
-
-	@SuppressWarnings("unused")
-	@RequestMapping(value = "/frmGetPOSSelection", method = RequestMethod.GET)
-	public ModelAndView funWebPOSPOSSelection(@RequestParam("strPosCode") String strPOSCode, HttpServletRequest req, Map<String, Object> model) {
-		String POSDate = "", ShiftNo = "", ShiftEnd = "", DayEnd = "";
-		List<clsUserDesktopUtil> webPOSDesktop = null;
-		try {
-
-			ArrayList<clsWebPosPOSSelectionBean> posList = funWebPOSPOSSelection(req);
-			req.getSession().setAttribute("posList", posList);
-			// req.getSession().setAttribute("webPOSModuleSelect","M");
-			String posModule = req.getSession().getAttribute("webPOSModuleSelect").toString();
-			String usercode = req.getSession().getAttribute("usercode").toString();
-			String clientCode = req.getSession().getAttribute("clientCode").toString();
-			
-			 * if(usercode.equals("SANGUINE")) { usercode = "super"; }
-			 
-			webPOSDesktop = funGetPOSMenuMap(usercode, clientCode, posModule, usercode, strPOSCode);
-			JSONArray jArr = new JSONArray();
-			for (clsUserDesktopUtil obj : webPOSDesktop) {
-				JSONObject jobj = new JSONObject();
-				jobj.put("formName", obj.getStrFormName());
-				jobj.put("strFormName", obj.getStrFormName());
-				jobj.put("strFormDesc", obj.getStrFormDesc());
-				jobj.put("strImgName", obj.getStrImgName());
-				jobj.put("strRequestMapping", obj.getStrRequestMapping());
-
-				// jArr.add(obj.getStrFormName());
-				jArr.add(jobj);
-			}
-
-			req.getSession().setAttribute("formSerachlist", jArr);
-			req.getSession().setAttribute("desktop", webPOSDesktop);
-			req.getSession().setAttribute("loginPOS", strPOSCode);
-
-			String posUrl = clsPOSGlobalFunctionsController.POSWSURL + "/clsUtilityController/funGetPOSWiseDayEndData?POSCode=" + strPOSCode + "&UserCode" + usercode;
-			System.out.println(posUrl);
-			URL url = new URL(posUrl);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json");
-			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-			String output = "", op = "";
-			while ((output = br.readLine()) != null) {
-				op += output;
-			}
-			System.out.println("Obj=" + op);
-			conn.disconnect();
-			JSONParser parser = new JSONParser();
-			Object obj = parser.parse(op);
-			JSONObject jObjPOSWiseData = (JSONObject) obj;
-
-			POSDate = jObjPOSWiseData.get("startDate").toString();
-			ShiftNo = jObjPOSWiseData.get("ShiftNo").toString();
-			ShiftEnd = jObjPOSWiseData.get("ShiftEnd").toString();
-			DayEnd = jObjPOSWiseData.get("DayEnd").toString();
-
-			req.getSession().setAttribute("POSDate", POSDate);
-			req.getSession().setAttribute("POSDateForDisplay", POSDate.split("-")[2] + "-" + POSDate.split("-")[1] + "-" + POSDate.split("-")[0]);
-			req.getSession().setAttribute("ShiftEnd", ShiftEnd);
-			req.getSession().setAttribute("DayEnd", DayEnd);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return new ModelAndView("frmWebPOSMainMenu");
-
-	}
-
-	@SuppressWarnings("unused")
-	@RequestMapping(value = "/frmWebPOSSelectionReport", method = RequestMethod.GET)
-	public ModelAndView funWebPOSPOSSelectionReport(HttpServletRequest req, Map<String, Object> model) {
-		List<clsUserDesktopUtil> webPOSDesktop = null;
-		try {
-
-			ArrayList<clsWebPosPOSSelectionBean> posList = funWebPOSPOSSelection(req);
-			req.getSession().setAttribute("posList", posList);
-			req.getSession().setAttribute("webPOSModuleSelect", "R");
-
-			// webPOSDesktop = funGetPOSMenuMap("super", "117.001", "M",
-			// "Super", "P01");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// req.getSession().setAttribute("desktop",webPOSDesktop);
-		return new ModelAndView("frmPOSSelection");
-
-	}
-
-	@SuppressWarnings("unused")
-	@RequestMapping(value = "/frmWebPOSSelectionTransection", method = RequestMethod.GET)
-	public ModelAndView funWebPOSPOSSelectionTransection(HttpServletRequest req, Map<String, Object> model) {
-		List<clsUserDesktopUtil> webPOSDesktop = null;
-		try {
-
-			ArrayList<clsWebPosPOSSelectionBean> posList = funWebPOSPOSSelection(req);
-			req.getSession().setAttribute("posList", posList);
-			req.getSession().setAttribute("webPOSModuleSelect", "T");
-
-			// webPOSDesktop = funGetPOSMenuMap("super", "117.001", "M",
-			// "Super", "P01");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// req.getSession().setAttribute("desktop",webPOSDesktop);
-		return new ModelAndView("frmPOSSelection");
-
-	}
-*/
-	
 	
 	private void funCheckNewfinancial(List<clsCompanyMasterModel> listClsCompanyMasterModel, HttpServletRequest req) {
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
@@ -2315,244 +1771,6 @@ public class clsUserController {
 
 		return listCheckout;
 
-	}
-
-	private List<clsUserDesktopUtil> funGetPOSMenuMap(String userCode, String clientCode, String moduleType, String superUser, String POSCode) throws Exception {
-		boolean superUserYN = false;
-		if (superUser.equalsIgnoreCase("Super")) {
-			superUserYN = true;
-		}
-
-		String POSUrl = "http://localhost:8080/prjSanguineWebService/APOSIntegration/funGetSetupValues1?POSCode=" + POSCode;
-		URL url = new URL(POSUrl);
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		con.setRequestMethod("GET");
-		con.setRequestProperty("Accept", "application/json");
-		BufferedReader br = new BufferedReader(new InputStreamReader((con.getInputStream())));
-		String output = "", op = "";
-		while ((output = br.readLine()) != null) {
-			op += output;
-		}
-		con.disconnect();
-
-		JSONParser parse = new JSONParser();
-		Object object = parse.parse(op);
-		JSONObject jObjSetupValueList = (JSONObject) object;
-		JSONArray jArrSetupValuesList = (JSONArray) jObjSetupValueList.get("SetupValues");
-		for (int cnt = 0; cnt < jArrSetupValuesList.size(); cnt++) {
-			JSONObject jObj = (JSONObject) jArrSetupValuesList.get(cnt);
-
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ClientCode", jObj.get("ClientCode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ClientName", jObj.get("ClientName"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ClientAddressLine1", jObj.get("ClientAddressLine1"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ClientAddressLine2", jObj.get("ClientAddressLine2"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ClientAddressLine3", jObj.get("ClientAddressLine3"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("Email", jObj.get("Email"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("BillFooter", jObj.get("BillFooter"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("BillFooterStatus", jObj.get("BillFooterStatus"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("BillPaperSize", jObj.get("BillPaperSize"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("NegativeBilling", jObj.get("NegativeBilling"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DayEnd", jObj.get("DayEnd"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintMode", jObj.get("PrintMode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DiscountNote", jObj.get("DiscountNote"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CityName", jObj.get("CityName"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("State", jObj.get("State"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("Country", jObj.get("Country"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("TelephoneNo", jObj.get("TelephoneNo"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("StartDate", jObj.get("StartDate"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("TelephoneNo", jObj.get("TelephoneNo"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("StartDate", jObj.get("StartDate"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("EndDate", jObj.get("EndDate"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("NatureOfBusinnes", jObj.get("NatureOfBusinnes"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MultipleBillPrinting", jObj.get("MultipleBillPrinting"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("EnableKOT", jObj.get("EnableKOT"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintVatNo", jObj.get("PrintVatNo"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("VatNo", jObj.get("VatNo"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ShowBill", jObj.get("ShowBill"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintServiceTaxNo", jObj.get("PrintServiceTaxNo"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ServiceTaxNo", jObj.get("ServiceTaxNo"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ManualBillNo", jObj.get("ManualBillNo"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MenuItemDispSeq", jObj.get("MenuItemDispSeq"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SenderEmailId", jObj.get("SenderEmailId"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("EmailPassword", jObj.get("EmailPassword"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ConfirmEmailPassword", jObj.get("ConfirmEmailPassword"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("Body", jObj.get("Body"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("EmailServerName", jObj.get("EmailServerName"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SMSApi", jObj.get("SMSApi"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("UserCreated", jObj.get("UserCreated"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("UserEdited", jObj.get("UserEdited"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ManualBillNo", jObj.get("ManualBillNo"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DateCreated", jObj.get("DateCreated"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DateEdited", jObj.get("DateEdited"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("POSType", jObj.get("POSType"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("WebServiceLink", jObj.get("WebServiceLink"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DataSendFrequency", jObj.get("DataSendFrequency"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("HOServerDate", jObj.get("HOServerDate"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("RFID", jObj.get("RFID"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ServerName", jObj.get("ServerName"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DBUserName", jObj.get("DBUserName"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DBPassword", jObj.get("DBPassword"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DatabaseName", jObj.get("DatabaseName"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("EnableKOTForDirectBiller", jObj.get("EnableKOTForDirectBiller"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PinCode", jObj.get("PinCode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ChangeTheme", jObj.get("ChangeTheme"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MaxDiscount", jObj.get("MaxDiscount"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("AreaWisePricing", jObj.get("AreaWisePricing"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MenuItemSortingOn", jObj.get("MenuItemSortingOn"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DirectBillerAreaCode", jObj.get("DirectBillerAreaCode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ColumnSize", jObj.get("ColumnSize"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintType", jObj.get("PrintType"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("EditHomeDelivery", jObj.get("EditHomeDelivery"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SlabBasedHDCharges", jObj.get("SlabBasedHDCharges"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SkipWaiterAndPax", jObj.get("SkipWaiterAndPax"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SkipWaiter", jObj.get("SkipWaiter"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DirectKOTPrintMakeKOT", jObj.get("DirectKOTPrintMakeKOT"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SkipPax", jObj.get("SkipPax"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CRMInterface", jObj.get("CRMInterface"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("GetWebserviceURL", jObj.get("GetWebserviceURL"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PostWebserviceURL", jObj.get("PostWebserviceURL"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("OutletUID", jObj.get("OutletUID"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("POSID", jObj.get("POSID"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("StockInOption", jObj.get("StockInOption"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CustSeries", jObj.get("CustSeries"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("AdvReceiptPrintCount", jObj.get("AdvReceiptPrintCount"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("HomeDeliverySMS", jObj.get("HomeDeliverySMS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("BillSettlementSMS", jObj.get("BillSettlementSMS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("BillFormatType", jObj.get("BillFormatType"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ActivePromotions", jObj.get("ActivePromotions"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SendHomeDelSMS", jObj.get("SendHomeDelSMS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SendBillSettlementSMS", jObj.get("SendBillSettlementSMS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SMSType", jObj.get("SMSType"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintShortNameOnKOT", jObj.get("PrintShortNameOnKOT"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ShowCustHelp", jObj.get("ShowCustHelp"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintOnVoidBill", jObj.get("PrintOnVoidBill"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PostSalesDataToMMS", jObj.get("PostSalesDataToMMS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CustAreaMasterCompulsory", jObj.get("CustAreaMasterCompulsory"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PriceFrom", jObj.get("PriceFrom"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ShowPrinterErrorMessage", jObj.get("ShowPrinterErrorMessage"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("TouchScreenMode", jObj.get("TouchScreenMode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CardInterfaceType", jObj.get("CardInterfaceType"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CMSIntegrationYN", jObj.get("CMSIntegrationYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CMSWebServiceURL", jObj.get("CMSWebServiceURL"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ChangeQtyForExternalCode", jObj.get("ChangeQtyForExternalCode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PointsOnBillPrint", jObj.get("PointsOnBillPrint"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CMSPOSCode", jObj.get("CMSPOSCode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ManualAdvOrderNoCompulsory", jObj.get("ManualAdvOrderNoCompulsory"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintManualAdvOrderNoOnBill", jObj.get("PrintManualAdvOrderNoOnBill"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintModifierQtyOnKOT", jObj.get("PrintModifierQtyOnKOT"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("NoOfLinesInKOTPrint", jObj.get("NoOfLinesInKOTPrint"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MultipleKOTPrintYN", jObj.get("MultipleKOTPrintYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ItemQtyNumpad", jObj.get("ItemQtyNumpad"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("TreatMemberAsTable", jObj.get("TreatMemberAsTable"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("KOTToLocalPrinter", jObj.get("KOTToLocalPrinter"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SettleBtnForDirectBillerBill", jObj.get("SettleBtnForDirectBillerBill"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DelBoySelCompulsoryOnDirectBiller", jObj.get("DelBoySelCompulsoryOnDirectBiller"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CMSMemberForKOTJPOS", jObj.get("CMSMemberForKOTJPOS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CMSMemberForKOTMPOS", jObj.get("CMSMemberForKOTMPOS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("DontShowAdvOrderInOtherPOS", jObj.get("DontShowAdvOrderInOtherPOS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintZeroAmtModifierInBill", jObj.get("PrintZeroAmtModifierInBill"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintKOTYN", jObj.get("PrintKOTYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CreditCardSlipNoCompulsoryYN", jObj.get("CreditCardSlipNoCompulsoryYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CreditCardExpiryDateCompulsoryYN", jObj.get("CreditCardExpiryDateCompulsoryYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("SelectWaiterFromCardSwipe", jObj.get("SelectWaiterFromCardSwipe"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MultiWaiterSelectionOnMakeKOT", jObj.get("MultiWaiterSelectionOnMakeKOT"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MoveTableToOtherPOS", jObj.get("MoveTableToOtherPOS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MoveKOTToOtherPOS", jObj.get("MoveKOTToOtherPOS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CalculateTaxOnMakeKOT", jObj.get("CalculateTaxOnMakeKOT"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ReceiverEmailId", jObj.get("ReceiverEmailId"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CalculateDiscItemWise", jObj.get("CalculateDiscItemWise"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("TakewayCustomerSelection", jObj.get("TakewayCustomerSelection"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ShowItemStkColumnInDB", jObj.get("ShowItemStkColumnInDB"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ItemType", jObj.get("ItemType"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("AllowNewAreaMasterFromCustMaster", jObj.get("AllowNewAreaMasterFromCustMaster"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CustAddressSelectionForBill", jObj.get("CustAddressSelectionForBill"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MemberCodeForKotInMposByCardSwipe", jObj.get("MemberCodeForKotInMposByCardSwipe"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PrintBillPopUp", jObj.get("PrintBillPopUp"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("UseVatAndServiceTaxNoFromPOS", jObj.get("UseVatAndServiceTaxNoFromPOS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("MemberCodeForMakeBillInMPOS", jObj.get("MemberCodeForMakeBillInMPOS"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("ItemWiseKOTPrintYN", jObj.get("ItemWiseKOTPrintYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("LastPOSForDayEnd", jObj.get("LastPOSForDayEnd"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("CMSPostingType", jObj.get("CMSPostingType"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("PopUpToApplyPromotionsOnBill", jObj.get("PopUpToApplyPromotionsOnBill"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strSelectCustomerCodeFromCardSwipe", jObj.get("strSelectCustomerCodeFromCardSwipe"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strCheckDebitCardBalOnTransactions", jObj.get("strCheckDebitCardBalOnTransactions"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strSettlementsFromPOSMaster", jObj.get("strSettlementsFromPOSMaster"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strShiftWiseDayEndYN", jObj.get("strShiftWiseDayEndYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strProductionLinkup", jObj.get("strProductionLinkup"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strLockDataOnShift", jObj.get("strLockDataOnShift"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strWSClientCode", jObj.get("strWSClientCode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strPOSCode", jObj.get("strPOSCode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strEnableBillSeries", jObj.get("strEnableBillSeries"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("EnablePMSIntegrationYN", jObj.get("EnablePMSIntegrationYN"));
-			// clsPOSGlobalFunctionsController.hmPOSSetupValues.put("Status",jObj.get("Success"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strPrintTimeOnBill", jObj.get("strPrintTimeOnBill"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strPrintTDHItemsInBill", jObj.get("strPrintTDHItemsInBill"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strPrintRemarkAndReasonForReprint", jObj.get("strPrintRemarkAndReasonForReprint"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("intDaysBeforeOrderToCancel", jObj.get("intDaysBeforeOrderToCancel"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("intNoOfDelDaysForAdvOrder", jObj.get("intNoOfDelDaysForAdvOrder"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("intNoOfDelDaysForUrgentOrder", jObj.get("intNoOfDelDaysForUrgentOrder"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strSetUpToTimeForAdvOrder", jObj.get("strSetUpToTimeForAdvOrder"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strSetUpToTimeForUrgentOrder", jObj.get("strSetUpToTimeForUrgentOrder"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strUpToTimeForAdvOrder", jObj.get("strUpToTimeForAdvOrder"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strUpToTimeForUrgentOrder", jObj.get("strUpToTimeForUrgentOrder"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strEnableBothPrintAndSettleBtnForDB", jObj.get("strEnableBothPrintAndSettleBtnForDB"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strInrestoPOSIntegrationYN", jObj.get("strInrestoPOSIntegrationYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strInrestoPOSWebServiceURL", jObj.get("strInrestoPOSWebServiceURL"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strInrestoPOSId", jObj.get("strInrestoPOSId"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strInrestoPOSKey", jObj.get("strInrestoPOSKey"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strCarryForwardFloatAmtToNextDay", jObj.get("strCarryForwardFloatAmtToNextDay"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strOpenCashDrawerAfterBillPrintYN", jObj.get("strOpenCashDrawerAfterBillPrintYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strPropertyWiseSalesOrderYN", jObj.get("strPropertyWiseSalesOrderYN"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strShowItemDetailsGrid", jObj.get("strShowItemDetailsGrid"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strShowPopUpForNextItemQuantity", jObj.get("strShowPopUpForNextItemQuantity"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strJioMoneyIntegration", jObj.get("strJioMoneyIntegration"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strJioWebServiceUrl", jObj.get("strJioWebServiceUrl"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strJioMID", jObj.get("strJioMID"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strJioTID", jObj.get("strJioTID"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strJioActivationCode", jObj.get("strJioActivationCode"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strJioDeviceID", jObj.get("strJioDeviceID"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strNewBillSeriesForNewDay", jObj.get("strNewBillSeriesForNewDay"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strShowReportsPOSWise", jObj.get("strShowReportsPOSWise"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strEnableDineIn", jObj.get("strEnableDineIn"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strAutoAreaSelectionInMakeKOT", jObj.get("strAutoAreaSelectionInMakeKOT"));
-			clsPOSGlobalFunctionsController.hmPOSSetupValues.put("strConsolidatedKOTPrinterPort", jObj.get("strConsolidatedKOTPrinterPort"));
-
-		}
-
-		String posUrl = "http://localhost:8080/prjSanguineWebService/APOSIntegration/funGetMainMenu" + "?UserCode=" + userCode + "&ModuleType=" + moduleType + "&clientCode=" + clientCode + "&SuperUser=" + superUserYN + "&POSCode=" + POSCode;
-		System.out.println(posUrl);
-
-		url = new URL(posUrl);
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-		conn.setRequestProperty("Accept", "application/json");
-		br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-		output = "";
-		op = "";
-		while ((output = br.readLine()) != null) {
-			op += output;
-		}
-		System.out.println("Obj=" + op);
-		conn.disconnect();
-
-		JSONParser parser = new JSONParser();
-		Object obj = parser.parse(op);
-		JSONObject jObjPOSMenuList = (JSONObject) obj;
-		JSONArray jArrMenuList = (JSONArray) jObjPOSMenuList.get("MainMenuList");
-		List<clsUserDesktopUtil> listMenu = new ArrayList<clsUserDesktopUtil>();
-
-		for (int cnt = 0; cnt < jArrMenuList.size(); cnt++) {
-			JSONObject jObj = (JSONObject) jArrMenuList.get(cnt);
-			clsUserDesktopUtil obTreeRootItem = new clsUserDesktopUtil();
-
-			obTreeRootItem.setStrFormName(jObj.get("FormName").toString());
-			obTreeRootItem.setStrRequestMapping(jObj.get("RequestMapping").toString());
-			obTreeRootItem.setStrImgName(jObj.get("ImageName").toString() + ".png");
-			obTreeRootItem.setStrFormDesc(jObj.get("ModuleName").toString());
-			listMenu.add(obTreeRootItem);
-		}
-
-		return listMenu;
 	}
 	
 	@SuppressWarnings("unused")

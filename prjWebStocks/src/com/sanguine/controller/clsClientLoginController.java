@@ -80,7 +80,7 @@ public class clsClientLoginController {
 									String strWebClubModule = objclsCompanyMasterModel.getStrWebClubModule();
 									String strWebExciseModule = objclsCompanyMasterModel.getStrWebExciseModule();
 									String strWebPMSModule = objclsCompanyMasterModel.getStrWebPMSModule();
-									String strWebPOSModule = objclsCompanyMasterModel.getStrWebPOSModule();
+									String strWebBanquetModule = objclsCompanyMasterModel.getStrWebBanquetModule();
 									String strWebStockModule = objclsCompanyMasterModel.getStrWebStockModule();
 									Map<String, String> moduleMap = new TreeMap<String, String>();
 									if ("Yes".equalsIgnoreCase(strCRMModule)) {
@@ -103,8 +103,8 @@ public class clsClientLoginController {
 										moduleMap.put("3-WebPMS", "webpms_module_icon.png");
 										strModule = "3";
 									}
-									if ("Yes".equalsIgnoreCase(strWebPOSModule)) {
-										moduleMap.put("7-WebPOS", "webpos_module_icon.png");
+									if ("Yes".equalsIgnoreCase(strWebBanquetModule)) {
+										moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
 										strModule = "7";
 									}
 									if ("Yes".equalsIgnoreCase(strWebStockModule)) {

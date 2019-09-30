@@ -309,8 +309,8 @@ public class clsUserMasterController {
 			if (objCompanyMasterModel.getStrWebPMSModule().equalsIgnoreCase("Yes")) {
 				mmodule.add("WebPMS");
 			}
-			if (objCompanyMasterModel.getStrWebPOSModule().equalsIgnoreCase("Yes")) {
-				mmodule.add("WebPOS");
+			if (objCompanyMasterModel.getStrWebBanquetModule().equalsIgnoreCase("Yes")) {
+				mmodule.add("WebBanquet");
 			}
 			if (objCompanyMasterModel.getStrCRMModule().equalsIgnoreCase("Yes")) {
 				mmodule.add("WebCRM");

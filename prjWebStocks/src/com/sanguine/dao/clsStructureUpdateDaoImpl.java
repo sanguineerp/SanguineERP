@@ -1040,6 +1040,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+" CHANGE COLUMN `strClientCode` `strClientCode` VARCHAR(10) NOT NULL AFTER `strApplicable`;";
 		funExecuteQuery(sql);
 		
+		sql="ALTER TABLE `tblcompanymaster` CHANGE COLUMN `strWebPOSModule` `strWebBanquetModule` VARCHAR(3) NULL DEFAULT 'No' AFTER `strWebPMSModule`;";
+		funExecuteQuery(sql);
 		
 		
 		/*----------------WebStock Forms only---------------------------*/

@@ -5025,10 +5025,21 @@
 
 
 
-<!-- 	Start WebPOS Tiles Entry -->
+<!-- 	Start WebBanquet Tiles Entry -->
 
   
-<!-- 	End Of WebPOS Tiles Entry -->
+   <definition name="frmSampleMaster" extends="base.definition">
+		   <put-attribute name="title" value="Sample Master" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmSample.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmSampleMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Sample Master"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmSample.jsp" ></put-attribute>
+	  </definition>
+  
+  
+<!-- 	End Of WebBanquet Tiles Entry -->
 
 
 

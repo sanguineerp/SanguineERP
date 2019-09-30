@@ -568,7 +568,7 @@ public class clsStkAdjustmentController {
 				}
 			}
 
-			String sqlDtlQuery = "select a.strProdCode,a.strRemark,b.strProdName, " + "b.strProdType,sum(a.dblQty),b.strUOM,a.strType,a.dblRate,a.strDisplayQty,a.dblPrice from tblstockadjustmentdtl a, " + "tblproductmaster b where a.strProdCode=b.strProdCode and  a.strClientCode='" + clientCode + "' " + " and b.strClientCode='" + clientCode + "' and a.strSACode='" + stockAdjCode + "' "
+			String sqlDtlQuery = "select a.strProdCode,a.strRemark,b.strProdName, " + "b.strProdType,sum(a.dblQty),b.strUOM,a.strType,a.dblRate,a.strDisplayQty,sum(a.dblPrice) from tblstockadjustmentdtl a, " + "tblproductmaster b where a.strProdCode=b.strProdCode and  a.strClientCode='" + clientCode + "' " + " and b.strClientCode='" + clientCode + "' and a.strSACode='" + stockAdjCode + "' "
 					+ " group by a.strProdCode order by b.strProdName";
 
 			List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlDtlQuery, "sql");

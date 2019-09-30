@@ -71,8 +71,8 @@ public class clsCompanyMasterModel implements Serializable {
 	@Column(name = "strCRMModule", columnDefinition = "VARCHAR(3) default 'No'")
 	private String strCRMModule;
 
-	@Column(name = "strWebPOSModule", columnDefinition = "VARCHAR(3) default 'No'")
-	private String strWebPOSModule;
+	@Column(name = "strWebBanquetModule", columnDefinition = "VARCHAR(3) default 'No'")
+	private String strWebBanquetModule;
 
 	@Column(name = "strWebBookAPGLModule", columnDefinition = "VARCHAR(3) default 'No'")
 	private String strWebBookAPGLModule;
@@ -241,13 +241,15 @@ public class clsCompanyMasterModel implements Serializable {
 		this.strCRMModule = (String) setDefaultValue(strCRMModule, "No");
 	}
 
-	public String getStrWebPOSModule() {
-		return strWebPOSModule;
+
+	public String getStrWebBanquetModule() {
+		return strWebBanquetModule;
 	}
 
-	public void setStrWebPOSModule(String strWebPOSModule) {
-		this.strWebPOSModule = (String) setDefaultValue(strWebPOSModule, "No");
+	public void setStrWebBanquetModule(String strWebBanquetModule) {
+		this.strWebBanquetModule = (String) setDefaultValue(strWebBanquetModule, "No");
 	}
+
 
 	public String getStrWebBookAPGLModule() {
 		return strWebBookAPGLModule;

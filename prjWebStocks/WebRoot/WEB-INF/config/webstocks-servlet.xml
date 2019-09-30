@@ -515,9 +515,6 @@
 	
 <!-- 	End Of WEBBOOKs Configuration -->
 
-
-	
-	
 	
 <!--  Start of WEBPMS Configuration DataSource -->
 
@@ -600,6 +597,49 @@
 	
 <!-- 	End Of WEBPMS Configuration -->
 
+
+
+
+
+	
+<!--  Start of WEBBanquets Configuration DataSource -->
+
+    	<bean id="webBanquetDataSource"
+			class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name="driverClassName" value="${database.driver}" />
+			<property name="url" value="${database.urlWebBanquet}" />
+			<property name="username" value="${database.user}" />
+			<property name="password" value="${database.password}" />
+		</bean>
+	
+		<bean id="webBanquetSessionFactory"
+			class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+			<property name="dataSource" ref="webBanquetDataSource" />			
+			
+			<property name="annotatedClasses">
+				<list>
+					<!--Put here your models name  -->
+					<value>com.sanguine.webbanquets.model.clsSampleModel</value>
+						
+				</list>
+			</property>
+			
+			<property name="hibernateProperties">
+        	<props>
+	           <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+        	</props>
+        </property>
+	</bean>
+		
+	<tx:annotation-driven transaction-manager="WebBanquetTransactionManager"/>
+	
+    <bean id="WebBanquetTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory"><ref local="webBanquetSessionFactory"/></property>
+    </bean>
+	
+<!-- 	End Of WEBBanquets Configuration -->
 
 
 
