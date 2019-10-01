@@ -3175,11 +3175,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, "
 				+ "`strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, "
 				+ "`strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`) "
-				+ "VALUES ('frmCustomerMaster', 'Customer Master', 'Master', 1, 'M', 52, 1, '1', 'default.png','7', 1, '1', '1', 'NO', 'No', 'frmCustomerMaster.html'),"
-				+ "('frmGroupMaster', 'Group Master','Tools', 1, 'M', 1, 1, '12', 'Group_Master.png', '7',1, '1', '1', 'NO', '1', 'frmGroupMaster.html'),"
-				+ "('frmReasonMaster', 'Reason Master', 'Master', 8, 'M', 22, 10, '1', 'Reason-Master.png', '7', 1,'1', '1', 'NO', 'YES', 'frmReasonMaster.html'),"
-				+ "('frmSubGroupMaster','Sub Group Master', 'Master', 8, 'M', 27, 13, '1', 'Sub-Group-Master.png','7', 1, '1', '1', 'NO', 'YES', 'frmSubGroupMaster.html'); ";
-		funExecuteQuery(sql);
+				+ "VALUES ('frmCustomerMaster', 'Customer Master', 'Master', 1, 'M', 52, 1, '1', 'default.png', '7', 1, '1', '1', 'NO', 'No', 'frmCustomerMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmGroupMaster', 'Group Master', 'Master', 1, 'M', 1, 1, '12', 'Group_Master.png', '7', 1, '1', '1', 'NO', '1', 'frmGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmReasonMaster', 'Reason Master', 'Master', 8, 'M', 22, 10, '1', 'Reason-Master.png', '7', 1, '1', '1', 'NO', 'YES', 'frmReasonMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmSubGroupMaster', 'Sub Group Master', 'Master', 2, 'M', 2, 2, '1', 'Sub-Group-Master.png', '7', 1, '1', '1', 'NO', 'YES', 'frmSubGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'); ";
+		funExecuteBanquetQuery(sql);
 		
 		/*----------------------WebBanquetsFrom End-----------------------*/
 		
