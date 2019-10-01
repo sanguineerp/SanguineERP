@@ -3165,7 +3165,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		/*----------------------WebBanquetsFrom Start-----------------------*/
 
 
-		sql="";
+		sql="CREATE TABLE `tblbqmenuhead` (`strMenuHeadCode` VARCHAR(20) NOT NULL,`strMenuHeadName` VARCHAR(50) NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,`dteDateEdited` DATETIME NOT NULL,`strUserCreated` VARCHAR(20) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(20) NOT NULL,`strOperational` VARCHAR(5) NOT NULL,`strClientCode` VARCHAR(10) NOT NULL,"
+				+ "PRIMARY KEY (`strMenuHeadCode`, `strClientCode`)"
+				+ ")COLLATE='latin1_swedish_ci'ENGINE=InnoDB; ";
 		funExecuteBanquetQuery(sql);
 		
 		
@@ -3177,7 +3181,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmGroupMaster', 'Group Master', 'Master', 1, 'M', 1, 1, '12', 'Group_Master.png', '7', 1, '1', '1', 'NO', '1', 'frmGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmReasonMaster', 'Reason Master', 'Master', 8, 'M', 22, 10, '1', 'Reason-Master.png', '7', 1, '1', '1', 'NO', 'YES', 'frmReasonMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmSubGroupMaster', 'Sub Group Master', 'Master', 2, 'M', 2, 2, '1', 'Sub-Group-Master.png', '7', 1, '1', '1', 'NO', 'YES', 'frmSubGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'); ";
-		funExecuteBanquetQuery(sql);
+		funExecuteQuery(sql);
 		
 		/*----------------------WebBanquetsFrom End-----------------------*/
 		
