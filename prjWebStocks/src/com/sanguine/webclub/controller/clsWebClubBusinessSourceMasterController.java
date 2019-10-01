@@ -114,6 +114,7 @@ public class clsWebClubBusinessSourceMasterController{
 		objModel.setStrClientCode(clientCode);
 		objModel.setStrUserCreated(userCode);
 		objModel.setStrUserEdited(userCode);
+		
 		}
 		return objModel;
 

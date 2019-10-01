@@ -576,6 +576,10 @@
 					<value>com.sanguine.webpms.model.clsPMSSettlementTaxMasterModel</value>
 					<value>com.sanguine.webpms.model.clsFolioDtlBackupModel</value>
 					
+					<!-- Web Banquet Start -->
+					<value>com.sanguine.webbanquets.model.clsEquipmentModel</value>
+					<value>com.sanguine.webbanquets.model.clsCostCenterMasterModel</value>
+					
 						
 				</list>
 			</property>

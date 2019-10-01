@@ -3172,6 +3172,43 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ ")COLLATE='latin1_swedish_ci'ENGINE=InnoDB; ";
 		funExecuteBanquetQuery(sql);
 		
+		sql = "CREATE TABLE `tblequipment` ("
+				+ "`strEquipmentCode` VARCHAR(255) NOT NULL,"
+				+ "`strEquipmentName` VARCHAR(255) NOT NULL,"
+				+ "`intId` BIGINT(20) NOT NULL,"
+				+ "`dteDateCreated` VARCHAR(255) NOT NULL,"
+				+ "`dteDateEdited` VARCHAR(255) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(255) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(255) NOT NULL,"
+				+ "`strOperational` VARCHAR(5) NOT NULL,"
+				+ "`strClientCode` VARCHAR(255) NOT NULL,"
+				+ "PRIMARY KEY (`strClientCode`, `strEquipmentCode`)"
+				+ ") "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB "
+				+ ";";
+		
+		
+		
+		funExecuteBanquetQuery(sql);
+		
+		sql = "CREATE TABLE `tblcostcentermaster` ("
+				+ "`strCostCenterCode` VARCHAR(10) NOT NULL,"
+				+ "`strCostCenterName` VARCHAR(50) NOT NULL,"
+				+ "`intId` INT(5) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(10) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(10) NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,"
+				+ "`dteDateEdited` DATETIME NOT NULL,"
+				+ "`strOperational` VARCHAR(5) NOT NULL,"
+				+ "`strClientCode` VARCHAR(11) NOT NULL DEFAULT '',"
+				+ "PRIMARY KEY (`strCostCenterCode`, `strClientCode`)"
+				+ ") "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB"
+				+ ";";
+		
+		funExecuteBanquetQuery(sql);
 		
 		
 		//treeMaster Banquets All forms
@@ -3180,7 +3217,12 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "VALUES ('frmCustomerMaster', 'Customer Master', 'Master', 1, 'M', 52, 1, '1', 'default.png', '7', 1, '1', '1', 'NO', 'No', 'frmCustomerMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmGroupMaster', 'Group Master', 'Master', 1, 'M', 1, 1, '12', 'Group_Master.png', '7', 1, '1', '1', 'NO', '1', 'frmGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmReasonMaster', 'Reason Master', 'Master', 8, 'M', 22, 10, '1', 'Reason-Master.png', '7', 1, '1', '1', 'NO', 'YES', 'frmReasonMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmSubGroupMaster', 'Sub Group Master', 'Master', 2, 'M', 2, 2, '1', 'Sub-Group-Master.png', '7', 1, '1', '1', 'NO', 'YES', 'frmSubGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'); ";
+				+ "('frmSubGroupMaster', 'Sub Group Master', 'Master', 2, 'M', 2, 2, '1', 'Sub-Group-Master.png', '7', 1, '1', '1', 'NO', 'YES', 'frmSubGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmDepartmentMaster', 'Department Master', 'Master', '1', 'M', '10', '10', '1', 'default.png', '7', '3', '3', '3', 'NO', 'YES', 'frmDepartmentMaster.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmCostCenterMaster', 'Cost Center', 'Master', '1', 'M', '1', '1', '12', 'Attribute-Master.png', '7', '1', '1', '1', 'NO', 'NO', 'frmCostCenter.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmEquipment', 'Equipment Master', 'Master', '1', 'M', '1', '1', '12', 'Attribute-Master.png', '7', '1', '1', '1', 'NO', '1', 'frmEquipment.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBillingInstructions', 'Billing Instructions', 'Master', '1', 'M', '14', '14', '1', 'default.png', '7', '3', '3', '3', 'NO', 'NO', 'frmBillingInstructions.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+		
 		funExecuteQuery(sql);
 		
 		/*----------------------WebBanquetsFrom End-----------------------*/

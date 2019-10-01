@@ -5508,9 +5508,47 @@ public class clsSearchFormController {
 				break;
 			}
 			
+			case "BanquetequipmentCode" :
+			{
+				columnNames = "a.strEquipmentCode,a.strEquipmentName,a.dteDateCreated,a.strUserCreated,a.strOperational";
+				tableName = "from tblequipment a WHERE a.strClientCode='"+clientCode+"'";
+				listColumnNames = "Equipment No,Equipment Name,Date Created,User Created,Operational";
+				idColumnName = "strEquipmentCode,intId,strClientCode";
+				flgQuerySelection = true;
+				searchFormTitle = "Equipment";
+				break;
+	            
+			}
+			case "BanquetCostCenterCode" :
+			{
+				columnNames = "a.strCostCenterCode,a.strCostCenterName,a.strUserCreated,a.dteDateCreated,a.strOperational";
+				tableName = "from tblcostcentermaster a WHERE a.strClientCode='"+clientCode+"'";
+				listColumnNames = "Equipment No,Equipment Name,Date Created,User Created,Operational";
+				idColumnName = "strCostCenterCode,strClientCode";
+				flgQuerySelection = true;
+				searchFormTitle = "Cost Center";
+				break;
+	            
+			}
 			
-			
-			
+			case "BanquetdeptCode": {
+				columnNames = "strDeptCode,strDeptDesc,strOperational,strRevenueProducing,strDiscount,strType,strDeactivate" + ",strUserEdited,dteDateEdited";
+				tableName = "clsDepartmentMasterModel where strClientCode='" + clientCode + "'";
+				listColumnNames = "Code,Department,Operational,Revenue Producing,Discount,Type,Deactivate,Last Edited By,Updated Date";
+				idColumnName = "strDeptCode";
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Department Master";
+				break;
+			}
+			case "BanquetBillingInstCode": {
+				columnNames = "strBillingInstCode,strBillingInstDesc,strUserEdited,dteDateEdited ";
+				tableName = "clsBillingInstructionsHdModel where strClientCode='" + clientCode + "' ";
+				listColumnNames = "BillingInstructionCode,Billing Instructions,Last Edited By,Updated Date ";
+				idColumnName = "strBillingInstCode";
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				searchFormTitle = "Billing InstructionCode";
+				break;
+			}
 		
 		}
 

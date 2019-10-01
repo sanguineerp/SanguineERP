@@ -5048,6 +5048,26 @@
 	 	 <put-attribute name="title" value="Dairy"  ></put-attribute>
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmWebBanquetDiary.jsp" ></put-attribute>
 	  </definition>
+	  
+	   <definition name="frmEquipment" extends="base.definition">
+		   <put-attribute name="title" value="Equipment Master" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmEquipment.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmEquipment_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Equipment Master"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmEquipment.jsp" ></put-attribute>
+	  </definition>
+	  
+	  <definition name="frmCostCenterMaster" extends="base.definition">
+		   <put-attribute name="title" value="Cost Center Master" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmCostCenterMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmCostCenterMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Cost Center Master"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmCostCenterMaster.jsp" ></put-attribute>
+	  </definition>
   
 <!-- 	End Of WebBanquet Tiles Entry -->
 

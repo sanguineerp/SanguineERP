@@ -213,7 +213,7 @@ body {
 	function funShowRoomStatusFlash()
 	{
 		var viewDate=$("#txtViewDate").val();
-			
+				
 		$.ajax({
 			type : "GET",
 			url : getContextPath()+ "/getRoomStatusList.html?viewDate=" + viewDate,
@@ -914,11 +914,11 @@ body {
 		<div>
 			<table class="transTable">
 				<tr>
-					<td><s:input colspan="1" type="text" id="txtViewDate" disabled="true" path="dteViewDate" cssClass="calenderTextBox" /></td>
+					<td><s:input colspan="1" type="text" id="txtViewDate"  path="dteViewDate" cssClass="calenderTextBox" /></td>
 				
 			
 					<%-- <td> <s:select id="cmbGuestPrefix" path="" cssClass="BoxW124px" onchange="funShowRoomStatusFlash();">
-					
+					disabled="true"
 							<s:options items="${prefix}"/>
 				    	    </s:select></td>--%>
 					

@@ -41,7 +41,8 @@ public class clsBillingInstructionsServiceImpl implements clsBillingInstructions
 		clsBillingInstructionsHdModel objBookingTypeHdModel = new clsBillingInstructionsHdModel();
 
 		if (objBean.getStrBillingInstCode().trim().length() == 0) {
-			lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tblbillinginstructions", "BillingInstructions", "strBillingInstCode", clientCode);
+			/*lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tblbillinginstructions", "BillingInstructions", "strBillingInstCode", clientCode);*/
+			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tblbillinginstructions", "BillingInstructions","strBillingInstCode",clientCode,"3-WebPMS");
 			String billingInstCode = "BI" + String.format("%06d", lastNo);
 			objBookingTypeHdModel.setStrBillingInstCode(billingInstCode);
 			objBookingTypeHdModel.setStrUserCreated(userCode);

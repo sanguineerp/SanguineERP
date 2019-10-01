@@ -345,7 +345,7 @@ public class clsVoidBillController {
 											objTaxProductDtl.setDblTaxProdAmt(objBillDtlModel.getDblDebitAmt());
 											
 											listTaxProdDtl.add(objTaxProductDtl);
-											Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Income Head");
+											Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Room Night");
 											
 											if (hmTaxCalDtl.size() > 0) {
 												List<clsTaxCalculation> listTaxCal = hmTaxCalDtl.get(objBillDtlModel.getStrRevenueCode());
@@ -390,7 +390,7 @@ public class clsVoidBillController {
 										objTaxProductDtl.setDblTaxProdAmt(objBillDtlModel.getDblDebitAmt());
 										
 										listTaxProdDtl.add(objTaxProductDtl);
-										Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Income Head");
+										Map<String, List<clsTaxCalculation>> hmTaxCalDtl = objPMSUtility.funCalculatePMSTax(listTaxProdDtl, "Room Night");
 										
 										if (hmTaxCalDtl.size() > 0) {
 											List<clsTaxCalculation> listTaxCal = hmTaxCalDtl.get(objBillDtlModel.getStrRevenueCode());

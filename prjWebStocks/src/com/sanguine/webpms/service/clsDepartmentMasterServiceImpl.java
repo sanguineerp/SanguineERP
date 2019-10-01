@@ -23,7 +23,8 @@ public class clsDepartmentMasterServiceImpl implements clsDepartmentMasterServic
 		long lastNo = 0;
 
 		if (objDeptMasterBean.getStrDeptCode().trim().length() == 0) {
-			lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tbldepartmentmaster", "DepartmentMaster", "strDeptCode", clientCode);
+			/*lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tbldepartmentmaster", "DepartmentMaster", "strDeptCode", clientCode);*/
+			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tbldepartmentmaster", "DepartmentMaster","strDeptCode",clientCode,"3-WebPMS");
 			String deptCode = "DT" + String.format("%06d", lastNo);
 			// String deptCode="D0000001";
 			objDepartmentMasterModel.setStrDeptCode(deptCode);
