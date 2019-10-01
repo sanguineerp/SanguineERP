@@ -1,6 +1,7 @@
 package com.sanguine.webbanquets.controller;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -22,16 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
-import com.itextpdf.text.pdf.hyphenation.TernaryTree.Iterator;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webpms.bean.clsGuestListReportBean;
 import com.sanguine.webpms.bean.clsGuestMasterBean;
 import com.sanguine.webpms.bean.clsRoomStatusDiaryBean;
 import com.sanguine.webpms.bean.clsRoomStatusDtlBean;
-import com.sanguine.webpms.model.clsFolioDtlModel;
-import com.sanguine.webpms.model.clsFolioHdModel;
-import com.sanguine.webpms.service.clsRoomMasterService;
 
 @Controller
 public class clsBanquetStatusDiaryController {
@@ -57,13 +54,31 @@ public class clsBanquetStatusDiaryController {
 		model.put("urlHits", urlHits);
 
 		
-
+		
+		
+		
 		if (urlHits.equalsIgnoreCase("1")) {
 			return new ModelAndView("frmWebBanquetDiary", "command", new clsRoomStatusDiaryBean());
 		} else {
 			return new ModelAndView("frmWebBanquetDiary_1", "command", new clsRoomStatusDiaryBean());
 		}
 	}
+	
+	
+	public void funGenarateDiary(){
+		try{
+			 String myTime = "00:01";
+			 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+			 Date d = df.parse(myTime); 
+			 Calendar cal = Calendar.getInstance();
+			 cal.setTime(d);
+			 cal.add(Calendar.HOUR, 30);
+			 String newTime = df.format(cal.getTime());
+	
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		 	}
 
 	// get Room Status Data
 	@RequestMapping(value = "/getRoomStatus", method = RequestMethod.GET)
