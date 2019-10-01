@@ -3210,6 +3210,24 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
+		sql="CREATE TABLE `tblfunctionmaster` ( "
+			+" `strFunctionCode` VARCHAR(10) NOT NULL, "
+			+" `strFunctionName` VARCHAR(100) NOT NULL DEFAULT '', "
+			+" `strOperationalYN` VARCHAR(2) NOT NULL DEFAULT 'Y', " 
+			+" `strPropertyCode` VARCHAR(5) NOT NULL, "
+			+" `strClientCode` VARCHAR(10) NOT NULL, "
+			+" `strUserCreated` VARCHAR(10) NOT NULL, "
+			+" `strUserEdited` VARCHAR(10) NOT NULL, "
+			+" `strDateCreated` DATETIME NOT NULL, "
+			+" `strDateEdited` DATETIME NOT NULL, "
+			+" `intFId` BIGINT(20) NOT NULL DEFAULT '0', "
+			+" PRIMARY KEY (`strFunctionCode`, `strClientCode`) "
+		+" )"
+		+" COLLATE='utf8_general_ci'"
+		+" ENGINE=InnoDB;";
+		
+		funExecuteBanquetQuery(sql);
+		
 		
 		//treeMaster Banquets All forms
 		
@@ -3219,9 +3237,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmReasonMaster', 'Reason Master', 'Master', 8, 'M', 22, 10, '1', 'Reason-Master.png', '7', 1, '1', '1', 'NO', 'YES', 'frmReasonMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmSubGroupMaster', 'Sub Group Master', 'Master', 2, 'M', 2, 2, '1', 'Sub-Group-Master.png', '7', 1, '1', '1', 'NO', 'YES', 'frmSubGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmDepartmentMaster', 'Department Master', 'Master', '1', 'M', '10', '10', '1', 'default.png', '7', '3', '3', '3', 'NO', 'YES', 'frmDepartmentMaster.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmCostCenterMaster', 'Cost Center', 'Master', '1', 'M', '1', '1', '12', 'Attribute-Master.png', '7', '1', '1', '1', 'NO', 'NO', 'frmCostCenter.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmCostCenterMaster', 'Cost Center', 'Master', '1', 'M', '1', '1', '12', 'Attribute-Master.png', '7', '1', '1', '1', 'NO', 'NO', 'frmCostCenterMaster.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmEquipment', 'Equipment Master', 'Master', '1', 'M', '1', '1', '12', 'Attribute-Master.png', '7', '1', '1', '1', 'NO', '1', 'frmEquipment.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmBillingInstructions', 'Billing Instructions', 'Master', '1', 'M', '14', '14', '1', 'default.png', '7', '3', '3', '3', 'NO', 'NO', 'frmBillingInstructions.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmBillingInstructions', 'Billing Instructions', 'Master', '1', 'M', '14', '14', '1', 'default.png', '7', '3', '3', '3', 'NO', 'NO', 'frmBillingInstructions.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmWebBanquetDiary', 'Diary', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', '1', 'frmWebBanquetDiary.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		
 		funExecuteQuery(sql);
 		

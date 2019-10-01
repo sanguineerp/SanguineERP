@@ -579,7 +579,7 @@
 					<!-- Web Banquet Start -->
 					<value>com.sanguine.webbanquets.model.clsEquipmentModel</value>
 					<value>com.sanguine.webbanquets.model.clsCostCenterMasterModel</value>
-					
+					<value>com.sanguine.webbanquets.model.clsFunctionMasterModel</value> 
 						
 				</list>
 			</property>

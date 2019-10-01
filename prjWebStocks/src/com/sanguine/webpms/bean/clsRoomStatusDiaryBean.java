@@ -11,6 +11,7 @@ public class clsRoomStatusDiaryBean {
 
 	private List<clsRoomStatusDtlBean> listRoomStatusDtlBean = new ArrayList<clsRoomStatusDtlBean>();
 
+	
 	public List<clsRoomStatusDtlBean> getListRoomStatusDtlBean() {
 		return listRoomStatusDtlBean;
 	}

@@ -5549,6 +5549,15 @@ public class clsSearchFormController {
 				searchFormTitle = "Billing InstructionCode";
 				break;
 			}
+			
+			case "BanquetfunctionMaster": 
+				columnNames = "strFunctionCode,strFunctionName";
+				tableName = "clsFunctionMasterModel where strClientCode='" + clientCode + "'";
+				listColumnNames = "Function Code,Function Name";
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				idColumnName = "strFCode";
+				searchFormTitle = "Function Master";
+				break;	    
 		
 		}
 

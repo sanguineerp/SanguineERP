@@ -1,14 +1,11 @@
 package com.sanguine.webbanquets.controller;
 
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,14 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
-import com.sanguine.webpms.bean.clsGuestListReportBean;
-import com.sanguine.webpms.bean.clsGuestMasterBean;
-import com.sanguine.webpms.bean.clsRoomStatusDiaryBean;
+import com.sanguine.service.clsUserMasterService;
+import com.sanguine.webbanquets.bean.clsBanquetStatusDiaryBean;
 import com.sanguine.webpms.bean.clsRoomStatusDtlBean;
 
 @Controller
@@ -39,11 +34,15 @@ public class clsBanquetStatusDiaryController {
 
 	@Autowired
 	private clsGlobalFunctions objGlobal;
+	
+	@Autowired
+	private clsUserMasterService objUserMasterService;
 
 	// Open Room Status Diary
 	@RequestMapping(value = "/frmWebBanquetDiary", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
 		String urlHits = "1";
+		clsBanquetStatusDiaryBean objBanquetStatusDiaryBean=new clsBanquetStatusDiaryBean(); 
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		try {
 			urlHits = request.getParameter("saddr").toString();
@@ -51,411 +50,97 @@ public class clsBanquetStatusDiaryController {
 			urlHits = "1";
 		}
 		
+		org.json.simple.JSONArray  jsonArrForLocationButtons =new org.json.simple.JSONArray();
+		 
+		HashMap<String, String> locMap = new HashMap<String, String>();
+		String usercode = request.getSession().getAttribute("usercode").toString();
+		String propertyCode= request.getSession().getAttribute("propertyCode").toString();
+		try {
+			StringBuilder sqlBuilder = new StringBuilder("from clsLocationMasterModel where strClientCode='" + clientCode + "' ");
+			List<clsLocationMasterModel> list = objGlobalFunctionsService.funGetList(sqlBuilder.toString(), "hql");
+			
+			if(list!=null && list.size()>0){
+				for(clsLocationMasterModel obj :list){
+					jsonArrForLocationButtons.add(obj);	
+				}
+				
+			}
+			objBanquetStatusDiaryBean.setJsonArrForLocationButtons(jsonArrForLocationButtons);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			locMap.put("Invalid", "Invalid");
+		}
+		 
+	
+		
 		model.put("urlHits", urlHits);
-
-		
-		
-		
 		
 		if (urlHits.equalsIgnoreCase("1")) {
-			return new ModelAndView("frmWebBanquetDiary", "command", new clsRoomStatusDiaryBean());
+			return new ModelAndView("frmWebBanquetDiary", "command", objBanquetStatusDiaryBean);
 		} else {
-			return new ModelAndView("frmWebBanquetDiary_1", "command", new clsRoomStatusDiaryBean());
+			return new ModelAndView("frmWebBanquetDiary_1", "command", objBanquetStatusDiaryBean);
 		}
 	}
 	
 	
 	public void funGenarateDiary(){
+		List listHrTime=new ArrayList<>();
 		try{
 			 String myTime = "00:01";
 			 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 			 Date d = df.parse(myTime); 
 			 Calendar cal = Calendar.getInstance();
 			 cal.setTime(d);
-			 cal.add(Calendar.HOUR, 30);
+			 cal.add(Calendar.HOUR, 1);
 			 String newTime = df.format(cal.getTime());
+			 
+			 //listHrTime
+			 
 	
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		 	}
-
-	// get Room Status Data
-	@RequestMapping(value = "/getRoomStatus", method = RequestMethod.GET)
-	public @ResponseBody List funLoadRoomStatus(@RequestParam("viewDate") String viewDate, HttpServletRequest request) {
-		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		String userCode = request.getSession().getAttribute("usercode").toString();
-		
-		List listViewDates = new ArrayList();
-		String[] arrViewDate = viewDate.split("-");
-		GregorianCalendar cd = new GregorianCalendar();
-		cd.set(Integer.parseInt(arrViewDate[2]) - 1900, Integer.parseInt(arrViewDate[1]) - 1, Integer.parseInt(arrViewDate[0]));
-
-		Date dt = new Date(Integer.parseInt(arrViewDate[2]) - 1900, Integer.parseInt(arrViewDate[1]) - 1, Integer.parseInt(arrViewDate[0]));
-		// System.out.println(dt.getDay());
-		// System.out.println(dt);
-		cd.setTime(dt);
-		for (int cnt = 0; cnt < 7; cnt++) {
-			String day = funGetDayOfWeek(cd.getTime().getDay());
-			String transDate = (cd.getTime().getYear() + 1900) + "-" + (cd.getTime().getMonth() + 1) + "-" + cd.getTime().getDate();
-			String date = day + " " + cd.getTime().getDate() + "-" + (cd.getTime().getMonth() + 1) + "-" + (cd.getTime().getYear() + 1900);
-			System.out.println(date);
-			listViewDates.add(date);
-			cd.add(Calendar.DATE, 1);
-		}
-
-		System.out.println(listViewDates);
-		return listViewDates;
 	}
 
-	// get Room Status Data
-	@RequestMapping(value = "/getRoomStatusDtl", method = RequestMethod.GET)
-	public @ResponseBody List funLoadRoomStatusDetails(@RequestParam("viewDate") String viewDate, HttpServletRequest request) {
-		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		String userCode = request.getSession().getAttribute("usercode").toString();
-		String PMSDate=objGlobal.funGetDate("yyyy-MM-dd",request.getSession().getAttribute("PMSDate").toString());
-		String date1 = objGlobal.funGetDate("yyyy-MM-dd", viewDate);
-		String[] arrViewDate = viewDate.split("-");
-		clsRoomStatusDtlBean objRoomStatusDtl=null;
-		clsGuestMasterBean objGuestDtl = null;
-		List objTemp = null;
-		List listRoomStatusBeanDtl = new ArrayList<>();
-		Map objRoomTypeWise = new HashMap<>();
-		Map returnObject = new HashMap<>();
-		String sql = "select a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc,a.strStatus from tblroom a,tblroomtypemaster b where a.strRoomTypeCode=b.strRoomTypeCode"
-				+ " order by b.strRoomTypeCode,a.strRoomDesc; ";
-		List listRoom = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-		objTemp=new ArrayList<>();
-		for (int cnt1 = 0; cnt1 < listRoom.size(); cnt1++) 
-		{
-			objRoomStatusDtl = new clsRoomStatusDtlBean();
-			Object[] arrObjRooms = (Object[]) listRoom.get(cnt1);
-			objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
-			objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
-			objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
-			TreeMap<Integer, List<clsGuestListReportBean>> mapGuestListPerDay=new TreeMap<>();
-			List<clsGuestListReportBean> listMainGuestDetailsBean=new ArrayList<>();
+	@RequestMapping(value ="/getBanquetBookingDetails", method=RequestMethod.GET)
+	public @ResponseBody List funGetBanquetBookingDetails(@RequestParam("viewDate")String viewDate,HttpServletRequest req){
+		List listBanquetReservation=new ArrayList<>();
+		try{
 			
-			sql=" SELECT IF(a.strReservationNo='',a.strCheckInNo,''),d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),d.strStatus, "
-					+ "DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y'), "
-					+ "DATEDIFF('"+PMSDate+"',DATE(a.dteDepartureDate)),LEFT(TIMEDIFF(a.tmeDepartureTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
-					+ "LEFT(TIMEDIFF(a.tmeArrivalTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeArrivalTime,a.tmeDepartureTime , DATEDIFF(DATE(a.dteArrivalDate),'"+PMSDate+"'), DATEDIFF(DATE(a.dteDepartureDate),'"+PMSDate+"')"
-					+ "FROM tblcheckinhd a,tblcheckindtl b,tblguestmaster c,tblroom d,tblfoliohd e "
-					+ "WHERE a.strCheckInNo=b.strCheckInNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode "
-					+ "AND DATE(a.dteDepartureDate) BETWEEN '"+PMSDate+"' AND DATE_ADD('"+PMSDate+"',INTERVAL 7 DAY) AND b.strRoomNo='"+arrObjRooms[0].toString()+"' AND a.strCheckInNo=e.strCheckInNo "
-					+ "AND a.strCheckInNo NOT IN (SELECT strCheckInNo FROM tblbillhd) AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"' "
-					+ "UNION "
-					+ "SELECT a.strReservationNo,d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName), "
-					+ "IFNULL(e.strBookingTypeDesc,''), DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y'), "
-					+ "DATEDIFF(DATE(a.dteDepartureDate),DATE(a.dteArrivalDate)),LEFT(TIMEDIFF(a.tmeDepartureTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
-					+ "LEFT(TIMEDIFF(a.tmeArrivalTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeArrivalTime,a.tmeDepartureTime , DATEDIFF(DATE(a.dteArrivalDate),'"+PMSDate+"'),DATEDIFF(DATE(a.dteDepartureDate),'"+PMSDate+"')"
-					+ "FROM tblreservationhd a,tblreservationdtl b,tblguestmaster c,tblroom d,tblbookingtype e "
-					+ "WHERE a.strReservationNo=b.strReservationNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode "
-					+ "AND a.strBookingTypeCode=e.strBookingTypeCode AND DATE(a.dteDepartureDate) BETWEEN '"+PMSDate+"' AND DATE_ADD('"+PMSDate+"',INTERVAL 7 DAY) AND b.strRoomNo='"+arrObjRooms[0].toString()+"' "
-					+ "AND a.strReservationNo NOT IN (SELECT strReservationNo FROM tblcheckinhd) AND a.strCancelReservation='N' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"'"
-					+ "UNION "
-					+ "SELECT a.strWalkinNo,d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Waiting', "
-					+ "DATE_FORMAT(DATE(a.dteWalkinDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteCheckOutDate),'%d-%m-%Y'), "
-					+ "DATEDIFF('"+PMSDate+"',DATE(a.dteCheckOutDate)),LEFT(TIMEDIFF(a.tmeCheckOutTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
-					+ "LEFT(TIMEDIFF(a.tmeWalkInTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeWalkInTime,a.tmeCheckOutTime , DATEDIFF(DATE(a.dteWalkinDate),'"+PMSDate+"'),DATEDIFF(DATE(a.dteCheckOutDate),'"+PMSDate+"')"
-					+ "FROM tblwalkinhd a,tblwalkindtl b,tblguestmaster c,tblroom d "
-					+ "WHERE a.strWalkinNo=b.strWalkinNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode "
-					+ "AND DATE(a.dteCheckOutDate) BETWEEN '"+PMSDate+"' AND DATE_ADD('"+PMSDate+"',INTERVAL 7 DAY) AND b.strRoomNo='"+arrObjRooms[0].toString()+"' AND a.strWalkinNo NOT IN (SELECT strWalkinNo FROM tblcheckinhd) AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"'";
-				List listRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-				if (listRoomDtl.size() > 0) 
-				{
-					for(int i=0;i<listRoomDtl.size();i++)
-					{
-						
-						int intArrivalCnt = 0;
-						int intDepartureCnt = 0;
-						objGuestDtl = new clsGuestMasterBean();
-						Object[] arrObjRoomDtl = (Object[]) listRoomDtl.get(i);
-						objGuestDtl.setStrFirstName(arrObjRoomDtl[3].toString());
-						objGuestDtl.setDteArrivalDate(arrObjRoomDtl[5].toString());
-						objGuestDtl.setDteDepartureDate(arrObjRoomDtl[6].toString());
-						objGuestDtl.setStRoomNo(arrObjRoomDtl[2].toString());
-						objGuestDtl.setStrNoOfNights(arrObjRoomDtl[7].toString());
-						objGuestDtl.setTmeArrivalTime(arrObjRoomDtl[10].toString());
-						objGuestDtl.setTmeDepartureTime(arrObjRoomDtl[11].toString());
-						
-							String sqlFolioNo = "select a.strFolioNo from tblfoliohd a where a.strCheckInNo='"+arrObjRoomDtl[0].toString()+"' AND a.strClientCode='"+clientCode+"'";
-							List listFolioNo = objGlobalFunctionsService.funGetListModuleWise(sqlFolioNo, "sql");
-							String strFolioNo = "";
-							if(listFolioNo!=null && listFolioNo.size()>0)
-							{
-								strFolioNo = listFolioNo.get(0).toString();
-							}
-							
-							objRoomStatusDtl=new clsRoomStatusDtlBean();
-							objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
-							objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
-							objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
-							if(arrObjRoomDtl[4].toString().equalsIgnoreCase("Occupied"))
-							{
-								objRoomStatusDtl.setStrReservationNo(strFolioNo);
-							}
-							else
-							{
-								objRoomStatusDtl.setStrReservationNo(arrObjRoomDtl[0].toString());
-							}
-							objRoomStatusDtl.setStrGuestName(arrObjRoomDtl[3].toString());
-							objRoomStatusDtl.setDteArrivalDate(arrObjRoomDtl[5].toString()+" "+ arrObjRoomDtl[10].toString());
-							objRoomStatusDtl.setDteDepartureDate(arrObjRoomDtl[6].toString()+" "+ arrObjRoomDtl[11].toString());
-							objRoomStatusDtl.setStrNoOfDays(arrObjRoomDtl[7].toString());
-							objRoomStatusDtl.setTmeArrivalTime(arrObjRoomDtl[10].toString());
-							objRoomStatusDtl.setTmeDepartureTime(arrObjRoomDtl[11].toString());
-							objRoomStatusDtl.setStrRoomStatus(arrObjRoomDtl[4].toString());
-							if(arrObjRoomDtl[4].toString().equals("Occupied")){
-							objRoomStatusDtl.setDblRemainingAmt(funGetDblRemainingAmt(strFolioNo,clientCode,arrObjRoomDtl[0].toString()));
-							}
-							intArrivalCnt=Integer.parseInt(arrObjRoomDtl[12].toString());
-							intDepartureCnt=Integer.parseInt(arrObjRoomDtl[13].toString());
-							
-							if (intArrivalCnt<=0 && 0<=intDepartureCnt) 
-								
-							{
-								
-								 objRoomStatusDtl.setStrDay1(" "+objRoomStatusDtl.getStrGuestName());
-							} 
-							if (intArrivalCnt<=1 && 1<=intDepartureCnt) 
-							{
-								
-								 objRoomStatusDtl.setStrDay2(" "+objRoomStatusDtl.getStrGuestName());
-							} 
-							if (intArrivalCnt<=2 && 2<=intDepartureCnt) 
-							{
-								
-								 objRoomStatusDtl.setStrDay3(" "+objRoomStatusDtl.getStrGuestName());
-							} if (intArrivalCnt<=3 && 3<=intDepartureCnt) {
-								
-								 objRoomStatusDtl.setStrDay4(" "+objRoomStatusDtl.getStrGuestName());
-							} if (intArrivalCnt<=4 && 4<=intDepartureCnt) {
-								
-								 objRoomStatusDtl.setStrDay5(" "+objRoomStatusDtl.getStrGuestName());
-							} if (intArrivalCnt<=5 && 5<=intDepartureCnt) {
-								
-								 objRoomStatusDtl.setStrDay6(" "+objRoomStatusDtl.getStrGuestName());
-							} if (intArrivalCnt<=6 && 6<=intDepartureCnt) {
-								
-								 objRoomStatusDtl.setStrDay7(" "+objRoomStatusDtl.getStrGuestName());
-							}
-							
-							if(arrObjRoomDtl[8].toString().contains("-"))
-							{
-								if(arrObjRoomDtl[11].toString().contains("PM") || arrObjRoomDtl[11].toString().contains("pm"))
-								{
-									objRoomStatusDtl.setTmeCheckOutAMPM("PM");
-								}
-								else
-								{
-									objRoomStatusDtl.setTmeCheckOutAMPM("AM");
-								}
-							}
-							else
-							{
-								if(arrObjRoomDtl[8].toString().equals("00:00:"))
-								{
-									if(arrObjRoomDtl[11].toString().contains("PM") || arrObjRoomDtl[11].toString().contains("pm"))
-									{
-										objRoomStatusDtl.setTmeCheckOutAMPM("PM");
-									}
-									else
-									{
-										objRoomStatusDtl.setTmeCheckOutAMPM("AM");
-									}
-								}
-								else
-								{
-									if(arrObjRoomDtl[11].toString().contains("PM") || arrObjRoomDtl[11].toString().contains("pm"))
-									{
-										objRoomStatusDtl.setTmeCheckOutAMPM("PM");
-									}
-									else
-									{
-										objRoomStatusDtl.setTmeCheckOutAMPM("AM");
-									}
-								}
-							}
-							
-							if(arrObjRoomDtl[9].toString().contains("-"))
-							{
-								if(arrObjRoomDtl[10].toString().contains("PM") || arrObjRoomDtl[10].toString().contains("pm"))
-								{
-									objRoomStatusDtl.setTmeCheckInAMPM("PM");
-								}
-								else
-								{
-									objRoomStatusDtl.setTmeCheckInAMPM("AM");
-								}
-							}
-							else
-							{
-								if(arrObjRoomDtl[8].toString().equals("00:00:"))
-								{
-									if(arrObjRoomDtl[10].toString().contains("PM") || arrObjRoomDtl[10].toString().contains("pm"))
-									{
-										objRoomStatusDtl.setTmeCheckInAMPM("PM");
-									}
-									else
-									{
-										objRoomStatusDtl.setTmeCheckInAMPM("AM");
-									}
-								}
-								else
-								{
-									if(arrObjRoomDtl[10].toString().contains("PM") || arrObjRoomDtl[10].toString().contains("pm"))
-									{
-										objRoomStatusDtl.setTmeCheckInAMPM("PM");
-									}
-									else
-									{
-										objRoomStatusDtl.setTmeCheckInAMPM("AM");
-									}
-								}
-							}
-							objTemp.add(objRoomStatusDtl);
-							//objRoomTypeWise.put(arrObjRooms[2].toString(),objTemp);
-						//}
-					}
-				}
-				else
-				{
-					
-						//objTemp=new ArrayList<>();
-						objRoomStatusDtl=new clsRoomStatusDtlBean();
-						objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
-						objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
-						objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
-						
-						objTemp.add(objRoomStatusDtl);
-						//objRoomTypeWise.put(arrObjRooms[2].toString(),objTemp);
-					//}	
-				}
+			clsRoomStatusDtlBean objBean=new clsRoomStatusDtlBean();
+			
+			String stratTime="00:00",tableRowTime="";
+			for(int i=0;i<24;i++){
+				 
+				 objBean=new clsRoomStatusDtlBean();
 				
-				if(objRoomStatusDtl.getStrRoomStatus().equalsIgnoreCase("Blocked"))
-				{
-					String sqlBlock = "SELECT DATEDIFF('"+PMSDate+"',b.dteValidTo) FROM tblroom a,tblblockroom b "
-							+ "WHERE a.strRoomCode=b.strRoomCode AND a.strRoomDesc='"+objRoomStatusDtl.getStrRoomNo()+"' AND a.strClientCode='"+clientCode+"' ";
-					List listBlockRoom = objGlobalFunctionsService.funGetListModuleWise(sqlBlock, "sql");
-					if (listBlockRoom.size() > 0) 
-					{
-						BigInteger diff = (BigInteger) listBlockRoom.get(0);
-						String strBlockRoomDiff=diff.toString();
-						if(strBlockRoomDiff.startsWith("-"))
-						{
-							if(Integer.parseInt(strBlockRoomDiff.substring(1))==0)
-							{
-								objRoomStatusDtl.setStrDay1("Blocked Room");
-							}
-							else if(Integer.parseInt(strBlockRoomDiff.substring(1))>0)
-							{
-								for(int i=0;i<=Integer.parseInt(strBlockRoomDiff.substring(1));i++)
-								{
-									if(i==0)
-									{
-										i=i+1;
-									}
-									objRoomStatusDtl.setStrDay("Day"+i+"Blocked Room");
-								}
-							}
-						}
-						else
-						{
-							if(Integer.parseInt(strBlockRoomDiff)==0)
-							{
-								objRoomStatusDtl.setStrDay1("Blocked Room");
-							}
-							else if(Integer.parseInt(strBlockRoomDiff)>0)
-							{
-								for(int i=0;i<=Integer.parseInt(strBlockRoomDiff);i++)
-								{
-									if(i==0)
-									{
-										i=i+1;
-									}
-									objRoomStatusDtl.setStrDay("Day"+i+"Blocked Room");
-								}
-							}
-						}
-					}
-				}
-				//objRoomTypeWise.put(objRoomStatusDtl);
+				 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+				 Date d = df.parse(stratTime); 
+				 Calendar cal = Calendar.getInstance();
+				 cal.setTime(d);
+				 cal.add(Calendar.HOUR, 1);
+				 String newTime = df.format(cal.getTime());
+				 tableRowTime=stratTime+"-"+newTime;
+				 stratTime=newTime;
 				
-		}
-		listRoomStatusBeanDtl.add(objRoomTypeWise);	
-		//returnObject.put("RoomData", listRoomStatusBeanDtl);
-			
-		return objTemp;
-			
-		
-
-		
-	}
-
-	private double funGetDblRemainingAmt(String strFolioNo,String clintCode,String strCheckInNo) {
-		
-		NumberFormat decformat = new DecimalFormat("#0.00");
-		double dblTotalRemainingAmt = 0;
-	//for Folio Amt
-		String sqlFolioAmt = "select sum(a.dblDebitAmt) from tblfoliodtl a where a.strFolioNo='"+strFolioNo+"' and a.strClientCode='"+clintCode+"' ";
-		List listFolioAmt = objGlobalFunctionsService.funGetListModuleWise(sqlFolioAmt, "sql");
-
-		if (!listFolioAmt.isEmpty() && listFolioAmt!=null) {
-			for(int i = 0; i<listFolioAmt.size(); i++)
-			{
-				double dblFolioAmt = 0;
-				dblFolioAmt = Double.parseDouble(listFolioAmt.get(i).toString());
-				dblTotalRemainingAmt = dblTotalRemainingAmt + dblFolioAmt;
-
+				 
+				 objBean.setStrDay(tableRowTime);
+				 objBean.setStrDay1("");
+				 objBean.setStrDay2("");
+				 objBean.setStrDay3("");
+				 objBean.setStrDay4("");
+				 objBean.setStrDay5("");
+				 objBean.setStrDay6("");
+				 objBean.setStrDay7("");
+				 
+				 listBanquetReservation.add(objBean);
 			}
-		}
-		//For Walkin Discount
-		String sqlWalkinNo = "select a.strWalkInNo from tblcheckinhd a where a.strCheckInNo='"+strCheckInNo+"' and a.strClientCode='"+clintCode+"'";
-		List listWalkinNo = objGlobalFunctionsService.funGetListModuleWise(sqlWalkinNo, "sql");
-		if(listWalkinNo.size()>0 && listWalkinNo!=null)
-		{
-			String strWalkinNo = listWalkinNo.get(0).toString();
-			String sqlWalkinDiscount = "select a.dblDiscount from tblwalkinroomratedtl a where a.strWalkinNo='"+strWalkinNo+"' and a.strClientCode='"+clintCode+"'";
-			List listWalkinDisc = objGlobalFunctionsService.funGetListModuleWise(sqlWalkinDiscount, "sql");
-			if(listWalkinDisc.size()>0 && listWalkinDisc!=null)
-			{
-				double dblWalkinDisc = Double.parseDouble(listWalkinDisc.get(0).toString());
-				dblTotalRemainingAmt = dblTotalRemainingAmt-((dblTotalRemainingAmt*dblWalkinDisc)/100);
-			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		
-		//For Folio Tax Amt
-		String sqlFolioTaxAmt = "select sum(a.dblTaxAmt) from tblfoliotaxdtl a where a.strFolioNo='"+strFolioNo+"' and a.strDocNo like 'RM%' and a.strClientCode='"+clintCode+"';";
-		List listFolioTaxAmt = objGlobalFunctionsService.funGetListModuleWise(sqlFolioTaxAmt, "sql");
-
-		if (!listFolioTaxAmt.isEmpty() && listFolioTaxAmt!=null) {
-			for(int i = 0; i<listFolioTaxAmt.size(); i++)
-			{
-				double dblFolioTaxAmt = 0;
-				dblFolioTaxAmt = Double.parseDouble(listFolioTaxAmt.get(i).toString());
-				dblTotalRemainingAmt = dblTotalRemainingAmt + dblFolioTaxAmt;
-
-			}
-		}
-		
-		//For Advance Amt 
-				String sqlAdvanceAmt = "select a.dblPaidAmt from tblreceipthd a where a.strCheckInNo='"+strCheckInNo+"' and a.strAgainst='Check-In' and a.strClientCode='"+clintCode+"'";
-				List listAdvanceAmt = objGlobalFunctionsService.funGetListModuleWise(sqlAdvanceAmt, "sql");
-
-				if (!listAdvanceAmt.isEmpty() && listAdvanceAmt!=null) {
-					for(int i = 0; i<listAdvanceAmt.size(); i++)
-					{
-						double dblAdvanceAmt = 0;
-						dblAdvanceAmt = Double.parseDouble(listAdvanceAmt.get(i).toString());
-						dblTotalRemainingAmt = dblTotalRemainingAmt - dblAdvanceAmt;
-
-					}
-				}
-		
-		
-		dblTotalRemainingAmt=Double.parseDouble(decformat.format(dblTotalRemainingAmt));
-		return dblTotalRemainingAmt;
+		return listBanquetReservation;
 	}
 
 	private String funGetDayOfWeek(int day) {

@@ -31,7 +31,7 @@
 	function funValidate(data)
 	{
 		var flg=true;
-		if($("#txtCostCenterCode").val().trim().length==0)
+		if($("#txtCostCenterName").val().trim().length==0)
 			{
 			alert("Please Select Name !!");
 			 flg=false;

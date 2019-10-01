@@ -5068,6 +5068,17 @@
 	 	 <put-attribute name="title" value="Cost Center Master"  ></put-attribute>
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmCostCenterMaster.jsp" ></put-attribute>
 	  </definition>
+	  
+	  
+<definition name="frmFunctionMaster" extends="base.definition">
+		   <put-attribute name="title" value="Function Master" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmFunctionMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmFunctionMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Function Master"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmFunctionMaster.jsp" ></put-attribute>
+	  </definition>
   
 <!-- 	End Of WebBanquet Tiles Entry -->
 
