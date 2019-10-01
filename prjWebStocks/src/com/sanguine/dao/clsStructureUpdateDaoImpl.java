@@ -1043,34 +1043,6 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblcompanymaster` CHANGE COLUMN `strWebPOSModule` `strWebBanquetModule` VARCHAR(3) NULL DEFAULT 'No' AFTER `strWebPMSModule`;";
 		funExecuteQuery(sql);
 		
-		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, "
-				+ "`strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, "
-				+ "`strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`) "
-				+ "VALUES ('frmCustomerMaster', 'Customer Master', 'Master', 1, 'M', 52, 1, '1', 'default.png', "
-				+ "'7', 1, '1', '1', 'NO', 'No', 'frmCustomerMaster.html'); ";
-		funExecuteQuery(sql);
-		
-		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, "
-				+ "`strType`, `intFormKey`, `intFormNo`, `strImgSrc`,`strImgName`, `strModule`, `strTemp`, "
-				+ "`strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`) "
-				+ "VALUES ('frmGroupMaster', 'Group Master', 'Tools', 1, 'M', 1, 1, '12', 'Group_Master.png', '7', "
-				+ "1, '1', '1', 'NO', '1', 'frmGroupMaster.html'); ";
-		funExecuteQuery(sql);
-		
-		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, "
-				+ "`intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`,"
-				+ " `strProcessForm`, `strAutorisationForm`, `strRequestMapping`) "
-				+ "VALUES ('frmReasonMaster', 'Reason Master', 'Master', 8, 'M', 22, 10, '1', 'Reason-Master.png', '7', 1, "
-				+ "'1', '1', 'NO', 'YES', 'frmReasonMaster.html'); ";
-		funExecuteQuery(sql);
-		
-		sql="INSERT INTO `tbltreemast` (`strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, "
-				+ "`intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, "
-				+ "`strProcessForm`, `strAutorisationForm`, `strRequestMapping`)"
-				+ "VALUES ('frmSubGroupMaster','Sub Group Master', 'Master', 8, 'M', 27, 13, '1', 'Sub-Group-Master.png', "
-				+ "'7', 1, '1', '1', 'NO', 'YES', 'frmSubGroupMaster.html');";
-		funExecuteQuery(sql);
-		
 		
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
@@ -1390,7 +1362,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ " ('frmBulkInvoice', 'Bulk Invoice', 'Sales', 2, 'T', 95, 14, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmBulkInvoice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ " ('frmDeleteTransaction', 'Delete Transaction', 'Tools', 10, 'L', 47, 14, '1', 'delete trasaction.png', '6', 1, '1', '1', 'NO', 'NO', 'frmDeleteTransaction.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
 		funExecuteQuery(sql);
-
+		
 		}
 		
 		// //--------------------END----------------------------/////
@@ -3200,9 +3172,15 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		//treeMaster Banquets All forms
 		
+		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, "
+				+ "`strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, "
+				+ "`strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`) "
+				+ "VALUES ('frmCustomerMaster', 'Customer Master', 'Master', 1, 'M', 52, 1, '1', 'default.png','7', 1, '1', '1', 'NO', 'No', 'frmCustomerMaster.html'),"
+				+ "('frmGroupMaster', 'Group Master','Tools', 1, 'M', 1, 1, '12', 'Group_Master.png', '7',1, '1', '1', 'NO', '1', 'frmGroupMaster.html'),"
+				+ "('frmReasonMaster', 'Reason Master', 'Master', 8, 'M', 22, 10, '1', 'Reason-Master.png', '7', 1,'1', '1', 'NO', 'YES', 'frmReasonMaster.html'),"
+				+ "('frmSubGroupMaster','Sub Group Master', 'Master', 8, 'M', 27, 13, '1', 'Sub-Group-Master.png','7', 1, '1', '1', 'NO', 'YES', 'frmSubGroupMaster.html'); ";
+		funExecuteQuery(sql);
 		
-		
-
 		/*----------------------WebBanquetsFrom End-----------------------*/
 		
 	}
