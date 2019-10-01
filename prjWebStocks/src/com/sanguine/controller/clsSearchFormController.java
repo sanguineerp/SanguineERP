@@ -356,8 +356,66 @@ public class clsSearchFormController {
 			model.put("listRecords", funSetFormSearchElements(list));
 			model.put("searchFormName", searchFormName);
 			model.put("multipleSelection", multiDocCodeSelection);
-		}
+		} else if (!formName.contains("Web-Service")) {
+			flgQuerySelection = Boolean.parseBoolean((String) map.get("flgQuerySelection"));
+			columnNames = (String) map.get("columnNames");
+			tableName = (String) map.get("tableName");
+			searchFormName = formName;
+			criteria = (String) map.get("criteria");
+			String tempColmn = (String) map.get("listColumnNames");
+			listColumnNames = new ArrayList(Arrays.asList(tempColmn.split(",")));
+			String query = "";
+			model.put("listColumns", listColumnNames);
 
+			if (flgQuerySelection) {
+
+				if (tableName.contains("union")) {
+					query = "select " + columnNames + " FROM " + tableName;
+				} else {
+					if (tableName.trim().startsWith("from")) {
+						query = "select " + columnNames + " " + tableName;
+					} else {
+						query = tableName;
+					}
+				}
+
+				String grpBy = "";
+				String orderBy = "";
+				
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				// query=query+" "+ criteria+" "+grpBy+" "+orderBy;
+				query = query + " " + criteria;
+				List list = objGlobalFunctionsService.funGetDataList(query, "sql");
+				model.put("listRecords", funSetFormSearchElements(list));
+				flgQuerySelection = false;
+			} else {
+				String grpBy = "";
+				String orderBy = "";
+				if (tableName.contains("group by")) {
+					StringBuilder sb = new StringBuilder(tableName);
+					int ind = sb.indexOf("group by");
+					query = sb.substring(0, ind).toString();
+					grpBy = sb.substring(ind, sb.length()).toString();
+					tableName = sb.delete(ind, sb.length()).toString();
+				}
+
+				if (tableName.contains("order by")) {
+					StringBuilder sb = new StringBuilder(tableName);
+					int ind = sb.indexOf("order by");
+					query = sb.substring(0, ind).toString();
+					orderBy = sb.substring(ind, sb.length()).toString();
+					tableName = sb.delete(ind, sb.length()).toString();
+				}
+
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				criteria = " " + criteria + " " + grpBy + " " + orderBy;
+				query = "select new com.sanguine.bean.clsFormSearchElements(" + columnNames + ") from " + tableName + criteria;
+				List list = objGlobalFunctionsService.funGetDataList(query, "hql");
+				model.put("listRecords", list);
+				model.put("searchFormName", searchFormName);
+				model.put("multipleSelection", multiDocCodeSelection);
+			}
+		}
 		return model;
 	}
 
@@ -5341,6 +5399,7 @@ public class clsSearchFormController {
 		switch (formName) {
 		
 		case "" :
+			
 			
 		
 		}

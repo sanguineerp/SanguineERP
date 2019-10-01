@@ -169,10 +169,10 @@ body {
 	{
 		$( tblRoomType ).tooltip();
 		
-		var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
+	<%-- 	var pmsDate='<%=session.getAttribute("PMSDate").toString()%>'; --%>
 		
 		$("#txtViewDate").datepicker({ dateFormat: 'dd-mm-yy' });
-		$("#txtViewDate").datepicker('setDate', pmsDate);
+		$("#txtViewDate").datepicker('setDate', 'today');
 		
 		//funFillHeaderRows();
 	});
@@ -310,32 +310,7 @@ body {
 					itemroomType=item.strRoomType;
 					funFillRoomStatusRows(item.strRoomNo,item.strDay1,item.strDay2,item.strDay3,item.strDay4,item.strDay5,item.strDay6,item.strDay7,item.strRoomStatus,item);
 					
-					/* if(item.strRoomStatus.includes('Occupied'))
-						{
-						occupiedCnt=occupiedCnt+1;
-						$("#occupiedRoomCnt").val(occupiedCnt);
-						}
-					if(item.strRoomStatus.includes('Free'))
-					{
-					emptyCnt=emptyCnt+1;
-					$("#freeRoomCnt").val(emptyCnt);
-					}
-					
-					if(item.strRoomStatus.includes('RESERVATION'))
-					{
-					reservedCnt=reservedCnt+1;
-					$("#reservedRoomCnt").val(reservedCnt);
-					}
-					if(item.strRoomStatus.includes('Blocked'))
-					{
-					blockCnt=blockCnt+1;
-					$("#blockedRoomCnt").val(blockCnt);
-					}
-					if(item.strRoomStatus.includes('Dirty'))
-					{
-					dirtyCnt=dirtyCnt+1;
-					$("#dirtyRoomCnt").val(dirtyCnt);
-					}  */
+				
 				
 				});
 			},
@@ -850,12 +825,12 @@ body {
 <body>
 
 	<div id="formHeading">
-		<label>Room Status Diary</label>
+		<label>Banquet Diary</label>
 	</div>
 
 	<br />
 	<br />
-<div style="float: right; margin-top: -40px;margin-bottom: 10px; margin-right: 40px;">
+<!-- <div style="float: right; margin-top: -40px;margin-bottom: 10px; margin-right: 40px;">
 			<table >
 				<tr>
 					<td bgcolor="#ff4f53" style="padding-left: 5px;padding-right: 5px;">Occupied</td>
@@ -865,37 +840,32 @@ body {
 					<td></td>
 					<td></td>
 					<td bgcolor="Green" style="padding-left: 5px;padding-right: 5px;">Reservation</td>
-					<!-- <td></td>
-					<td bgcolor="Gray">Checked Out</td> -->
+					<td></td>
+					<td bgcolor="Gray">Checked Out</td>
 					<td></td>
 					<td></td>
 					<td bgcolor=Olive style="padding-left: 5px;padding-right: 5px;">Blocked</td>
 					<td></td>
 					<td></td>
-					<!-- <td bgcolor=Gray style="padding-left: 5px;padding-right: 5px;">Checked Out</td>
+					<td bgcolor=Gray style="padding-left: 5px;padding-right: 5px;">Checked Out</td>
 					<td></td>
-					<td></td> -->
+					<td></td>
 					<td bgcolor=Orange style="padding-left: 5px;padding-right: 5px;">Dirty</td>
 					<td></td>
 					<td></td>
 				</tr>
 			</table>
-		</div>
-	<s:form name="RoomStatusDiary" method="POST" action="saveRoomMaster.html">
+		</div> -->
+	<s:form name="banquetDiary" method="POST" action="ShowDiary.html">
 	
 		
 	
 		<div>
 			<table class="transTable">
 				<tr>
-					<td><s:input colspan="1" type="text" id="txtViewDate" disabled="true" path="dteViewDate" cssClass="calenderTextBox" /></td>
+					<td><s:input colspan="1" type="text" id="txtViewDate" path="dteViewDate" cssClass="calenderTextBox" /></td>
 				
-			
-					<%-- <td> <s:select id="cmbGuestPrefix" path="" cssClass="BoxW124px" onchange="funShowRoomStatusFlash();">
-					
-							<s:options items="${prefix}"/>
-				    	    </s:select></td>--%>
-					
+		
 					
 				</tr>
 			</table> 
