@@ -3161,6 +3161,15 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 
 		/*----------------WebPMS Forms End---------------------------*/
 
+		
+		
+		
+		
+		/*----------------------WebBanquetsFrom Start-----------------------*/
+
+
+		/*----------------------WebBanquetsFrom End-----------------------*/
+		
 	}
 
 	@SuppressWarnings("finally")

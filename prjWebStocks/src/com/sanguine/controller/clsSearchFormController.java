@@ -188,20 +188,16 @@ public class clsSearchFormController {
 
 			map = funGetCRMSearchDetail(formName, search_with, req);
 			strModule = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
-			// map = funGetWebPOSSearchDetail( formName, search_with, req);
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+			 map = funGetBanquetsSearchDetail( formName, search_with, req);
 			strModule = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			map = funGetWebBookSearchDetail(formName, search_with, req);
 			strModule = "8";
 		}
 
-		if (false) {/*//req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")
-			Map<String, Object> hmSearchData = funGetWebPOSSearchDetail(formName, search_with, req);
-			model.put("searchFormTitle", (String) hmSearchData.get("searchFormTitle"));
-		*/} else {
-			model.put("searchFormTitle", map.get("searchFormTitle"));
-		}
+		model.put("searchFormTitle", map.get("searchFormTitle"));
+		
 		return new ModelAndView("frmSearch");
 	}
 
@@ -229,8 +225,8 @@ public class clsSearchFormController {
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			map = funGetCRMSearchDetail(formName, search_with, req);
 			strModule = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
-			// map = funGetWebPOSSearchDetail( formName, search_with, req);
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+			 map = funGetBanquetsSearchDetail(formName, search_with, req);
 			strModule = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			map = funGetWebBookSearchDetail(formName, search_with, req);
@@ -238,19 +234,10 @@ public class clsSearchFormController {
 		}
 
 		LinkedList<String> columnName = new LinkedList<String>();
-		if (false) {//req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")
-
-			/*Map<String, Object> hmSearchData = funGetWebPOSSearchDetail(formName, search_with, req);
-			String listColumnNames[] = ((String) hmSearchData.get("listColumnNames")).split("\\,");
-			for (int i = 0; i < listColumnNames.length; i++) {
-				columnName.add(listColumnNames[i]);
-			}*/
-
-		} else {
-			String listColumnNames[] = ((String) map.get("listColumnNames")).split("\\,");
-			for (int i = 0; i < listColumnNames.length; i++) {
-				columnName.add(listColumnNames[i]);
-			}
+		
+		String listColumnNames[] = ((String) map.get("listColumnNames")).split("\\,");
+		for (int i = 0; i < listColumnNames.length; i++) {
+			columnName.add(listColumnNames[i]);
 		}
 		return columnName;
 	}
@@ -347,8 +334,8 @@ public class clsSearchFormController {
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			map = funGetCRMSearchDetail(formName, search_with, req);
 			strModule = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
-
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+			map= funGetBanquetsSearchDetail(formName, search_with, req);
 			strModule = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			map = funGetWebBookSearchDetail(formName, search_with, req);
@@ -357,19 +344,6 @@ public class clsSearchFormController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		if (false) {/*//req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")
-			Map<String, Object> hmSearchData = funGetWebPOSSearchDetail(formName, search_with, req);
-
-			String tempColmn = (String) hmSearchData.get("listColumnNames");
-			searchFormName = (String) hmSearchData.get("searchFormTitle");
-			List<String> list = (List) hmSearchData.get("listSearchData");
-
-			listColumnNames = new ArrayList(Arrays.asList(tempColmn.split(",")));
-			model.put("listColumns", listColumnNames);
-			model.put("listRecords", funSetFormSearchElements(list));
-			model.put("searchFormName", searchFormName);
-			model.put("multipleSelection", multiDocCodeSelection);
-		*/}
 		if (formName.contains("Web-Service")) {
 			Map<String, Object> hmSearchData = funGetSearchDetail(formName, search_with, req);
 
@@ -382,80 +356,6 @@ public class clsSearchFormController {
 			model.put("listRecords", funSetFormSearchElements(list));
 			model.put("searchFormName", searchFormName);
 			model.put("multipleSelection", multiDocCodeSelection);
-		} else if (!formName.contains("Web-Service") && !req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
-			flgQuerySelection = Boolean.parseBoolean((String) map.get("flgQuerySelection"));
-			columnNames = (String) map.get("columnNames");
-			tableName = (String) map.get("tableName");
-			searchFormName = formName;
-			criteria = (String) map.get("criteria");
-			String tempColmn = (String) map.get("listColumnNames");
-			listColumnNames = new ArrayList(Arrays.asList(tempColmn.split(",")));
-			String query = "";
-			model.put("listColumns", listColumnNames);
-
-			if (flgQuerySelection) {
-
-				if (tableName.contains("union")) {
-					query = "select " + columnNames + " FROM " + tableName;
-				} else {
-					if (tableName.trim().startsWith("from")) {
-						query = "select " + columnNames + " " + tableName;
-					} else {
-						query = tableName;
-					}
-				}
-
-				String grpBy = "";
-				String orderBy = "";
-				// if(tableName.contains("group by"))
-				// {
-				// StringBuilder sb=new StringBuilder(tableName);
-				// int ind=sb.indexOf("group by");
-				// query=sb.substring(0,ind).toString();
-				// grpBy=sb.substring(ind,sb.length()).toString();
-				// }
-				//
-				// if(tableName.contains("order by"))
-				// {
-				// StringBuilder sb=new StringBuilder(tableName);
-				// int ind=sb.indexOf("order by");
-				// query=sb.substring(0,ind).toString();
-				// orderBy=sb.substring(ind,sb.length()).toString();
-				// }
-
-				criteria = getCriteriaQuery(columnNames, search_with, tableName);
-				// query=query+" "+ criteria+" "+grpBy+" "+orderBy;
-				query = query + " " + criteria;
-				List list = objGlobalFunctionsService.funGetDataList(query, "sql");
-				model.put("listRecords", funSetFormSearchElements(list));
-				flgQuerySelection = false;
-			} else {
-				String grpBy = "";
-				String orderBy = "";
-				if (tableName.contains("group by")) {
-					StringBuilder sb = new StringBuilder(tableName);
-					int ind = sb.indexOf("group by");
-					query = sb.substring(0, ind).toString();
-					grpBy = sb.substring(ind, sb.length()).toString();
-					tableName = sb.delete(ind, sb.length()).toString();
-				}
-
-				if (tableName.contains("order by")) {
-					StringBuilder sb = new StringBuilder(tableName);
-					int ind = sb.indexOf("order by");
-					query = sb.substring(0, ind).toString();
-					orderBy = sb.substring(ind, sb.length()).toString();
-					tableName = sb.delete(ind, sb.length()).toString();
-				}
-
-				criteria = getCriteriaQuery(columnNames, search_with, tableName);
-				criteria = " " + criteria + " " + grpBy + " " + orderBy;
-				query = "select new com.sanguine.bean.clsFormSearchElements(" + columnNames + ") from " + tableName + criteria;
-				List list = objGlobalFunctionsService.funGetDataList(query, "hql");
-				model.put("listRecords", list);
-				model.put("searchFormName", searchFormName);
-				model.put("multipleSelection", multiDocCodeSelection);
-			}
 		}
 
 		return model;
@@ -5411,10 +5311,56 @@ public class clsSearchFormController {
 	 */
 
 	
+	
+	/**
+	 * Web Banquet Search Start
+	 * 
+	 * @param formName
+	 * @param search_with
+	 * @param req
+	 * @return
+	 */
+	private Map<String, Object> funGetBanquetsSearchDetail(String formName, String search_with, HttpServletRequest req) {
+		Map<String, Object> mainMap = new HashMap<>();
+
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String columnNames = "";
+		String tableName = "";
+		String criteria = "";
+		String listColumnNames = "";
+		String multiDocCodeSelection = "No";
+		boolean flgQuerySelection = false;
+		String idColumnName = "";
+		String searchFormTitle = "";
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+		String strShowTransOrder = objSetup.getStrShowTransAsc_Desc();
+		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+		String strWebBooksDB=req.getSession().getAttribute("WebBooksDB").toString();
+		
+		switch (formName) {
+		
+		case "" :
+			
+		
+		}
+
+		mainMap.put("columnNames", columnNames);
+		mainMap.put("tableName", tableName);
+		mainMap.put("criteria", criteria);
+		mainMap.put("multiDocCodeSelection", multiDocCodeSelection);
+		mainMap.put("listColumnNames", listColumnNames);
+		mainMap.put("flgQuerySelection", String.valueOf(flgQuerySelection));
+		mainMap.put("idColumnName", idColumnName);
+		mainMap.put("searchFormTitle", searchFormTitle);
+		return mainMap;
+	}
+
 	/*
-	 * End WebPOS Search
+	 * End Banquets Search
 	 */
 
+	
 	private JSONObject funGetIndependentWebServiceDetails(String searchFormName, String clientCode, String propCode) {
 		JSONObject jObjSearchDetails = new JSONObject();
 		String strUrl = "";

@@ -39,7 +39,7 @@ public class clsTreeMenuDaoImpl implements clsTreeMenuDao {
 			moduleCode = "5";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			moduleCode = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
 			moduleCode = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			moduleCode = "8";
@@ -68,7 +68,7 @@ public class clsTreeMenuDaoImpl implements clsTreeMenuDao {
 			moduleCode = "5";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			moduleCode = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
 			moduleCode = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			moduleCode = "8";
@@ -123,7 +123,7 @@ public class clsTreeMenuDaoImpl implements clsTreeMenuDao {
 			moduleCode = "5";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			moduleCode = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
 			moduleCode = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			moduleCode = "8";
@@ -152,7 +152,7 @@ public class clsTreeMenuDaoImpl implements clsTreeMenuDao {
 			moduleCode = "5";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			moduleCode = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
 			moduleCode = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			moduleCode = "8";
@@ -181,7 +181,7 @@ public class clsTreeMenuDaoImpl implements clsTreeMenuDao {
 			moduleCode = "5";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			moduleCode = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
 			moduleCode = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			moduleCode = "8";
@@ -222,7 +222,7 @@ public class clsTreeMenuDaoImpl implements clsTreeMenuDao {
 			moduleCode = "5";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			moduleCode = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
 			moduleCode = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			moduleCode = "8";
@@ -250,7 +250,7 @@ public class clsTreeMenuDaoImpl implements clsTreeMenuDao {
 			moduleCode = "5";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("6-WebCRM")) {
 			moduleCode = "6";
-		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebPOS")) {
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
 			moduleCode = "7";
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			moduleCode = "8";

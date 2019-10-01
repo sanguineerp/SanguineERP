@@ -518,64 +518,7 @@ public class clsUserController {
 			}*/
 			
 			return new ModelAndView("redirect:/frmModuleSelection.html");
-		} else {/*
-			String selectedModuleName = "";
-			for (String module : moduleMap.keySet()) {
-				selectedModuleName = module;
-				if (selectedModuleName.equals("7-WebPOS")) {
-					JSONObject jObjLic = objGlobalFun.funGETMethodUrlJosnObjectData(clsPOSGlobalFunctionsController.POSWSURL + "/APOSIntegration/funCheckPOSLicenceKey?clientCode=" + strClientCode);
-					JSONArray jArr = (JSONArray) jObjLic.get("CheckLicence");
-					// JSONObject jObjLic = new JSONObject();
-					// JSONArray arrObj=new JSONArray();
-					// JSONObject obj=new JSONObject();
-					// obj.put("Status", "Invalid");
-					// obj.put("Msg",
-					// "Invalid POS. Please Contact Technical Support.");
-					// arrObj.add(obj);
-					// jObjLic.put("CheckLicence", arrObj);
-
-					String posStatus = "";
-					String posMsg = "";
-					for (int i = 0; i < jArr.size(); i++) {
-						// JSONObject mJsonObject = new JSONObject();
-						JSONObject mJsonObject = (JSONObject) jArr.get(i);
-						posStatus = mJsonObject.get("Status").toString();
-						posMsg = mJsonObject.get("Msg").toString();
-					}
-					if (posStatus.equals("Expired")) {
-						req.getSession().setAttribute("posLicStatus", posStatus);
-						req.getSession().setAttribute("posLicMsg", posMsg);
-						return new ModelAndView("redirect:/frmModuleSelection.html");
-					}
-					if (posStatus.equals("Invalid")) {
-						req.getSession().setAttribute("posLicStatus", posStatus);
-						req.getSession().setAttribute("posLicMsg", posMsg);
-						return new ModelAndView("redirect:/frmModuleSelection.html");
-					}
-
-					if (posStatus.equals("MinDays")) {
-						req.getSession().setAttribute("posLicStatus", posStatus);
-						req.getSession().setAttribute("posLicMsg", posMsg);
-						return new ModelAndView("redirect:/frmPropertySelection.html");
-					}
-
-				}
-
-			}
-			String currentDate=objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
-			
-//			String sqlDbBck="select a.strDbName,a.dteDbBckkUp from tbldatabasebckup a where date(a.dteDbBckkUp)='"+currentDate.split(" ")[0]+"' ";
-//			List listSqlBckUp=objGlobalService.funGetList(sqlDbBck);
-//			if(listSqlBckUp==null){
-//				objStructureUpdateController.takeDBBackUp(req);
-//			}else if(!(listSqlBckUp.size()>0))
-//			{
-//				objStructureUpdateController.takeDBBackUp(req);		
-//			}
-			
-			funSetModuleImage(req, selectedModuleName);
-			
-		*/}
+		} 
 		
 		return new ModelAndView("redirect:/frmPropertySelection.html");
 	}
@@ -612,39 +555,7 @@ public class clsUserController {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		try {
 			selectedModuleName = req.getParameter("moduleName").toString();
-			if (selectedModuleName.equals("7-WebPOS")) {
-				JSONObject jObjLic = objGlobalFun.funGETMethodUrlJosnObjectData(clsPOSGlobalFunctionsController.POSWSURL + "/APOSIntegration/funCheckPOSLicenceKey?clientCode=" + clientCode);
-				JSONArray jArr = (JSONArray) jObjLic.get("CheckLicence");
-				String posStatus = "";
-				String posMsg = "";
-				String posClientCode = "";
-				for (int i = 0; i < jArr.size(); i++) {
-					JSONObject mJsonObject = (JSONObject) jArr.get(i);
-					posStatus = mJsonObject.get("Status").toString();
-					posMsg = mJsonObject.get("Msg").toString();
-
-					JSONObject jObjClient = objGlobalFun.funGETMethodUrlJosnObjectData(clsPOSGlobalFunctionsController.POSWSURL + "/WebPOSSetup/funGetPOSClientCode");
-					posClientCode = (String) jObjClient.get("strClientCode");
-					req.getSession().setAttribute("posClientCode", posClientCode);
-				}
-				if (posStatus.equals("Expired")) {
-					req.getSession().setAttribute("posLicStatus", posStatus);
-					req.getSession().setAttribute("posLicMsg", posMsg);
-					return new ModelAndView("redirect:/frmModuleSelection.html");
-				}
-				if (posStatus.equals("Invalid")) {
-					req.getSession().setAttribute("posLicStatus", posStatus);
-					req.getSession().setAttribute("posLicMsg", posMsg);
-					return new ModelAndView("redirect:/frmModuleSelection.html");
-				}
-
-				if (posStatus.equals("MinDays")) {
-					req.getSession().setAttribute("posLicStatus", posStatus);
-					req.getSession().setAttribute("posLicMsg", posMsg);
-					return new ModelAndView("redirect:/frmPropertySelection.html");
-				}
-
-			} else if (selectedModuleName.equals("5-WebBook")) {
+			if (selectedModuleName.equals("5-WebBook")) {
 				return new ModelAndView("redirect:/frmWebBookModuleSelection.html");
 			}
 		} catch (NullPointerException e) {
@@ -923,15 +834,10 @@ public class clsUserController {
 			req.getSession().setAttribute("financialYear", propBean.getStrFinancialYear());
 			req.getSession().setAttribute("dayEndDate", dayEndDate);
 
-			if (req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS")) {
-				// List<clsUserDesktopUtil> webPOSDesktop =
-				// funGetPOSMenuMap("super", "117.001", "M", "Super", "P01");
-				// req.getSession().setAttribute("desktop",webPOSDesktop);
-			} else {
-				List<clsUserDesktopUtil> userDesktop = funGetUserDesktop(req);
-				req.getSession().setAttribute("desktop", userDesktop);
-			}
-
+		
+			List<clsUserDesktopUtil> userDesktop = funGetUserDesktop(req);
+			req.getSession().setAttribute("desktop", userDesktop);
+		
 			String propCode = propBean.getStrPropertyCode();
 			String locCode = propBean.getStrLocationCode();
 			String date = objGlobalFun.funGetCurrentDate("dd-MM-yyyy");
@@ -947,15 +853,8 @@ public class clsUserController {
 			objUserLogsModel.setTmeLoginTime(time);
 			objGlobalService.funAddUserLogEntry(objUserLogsModel);
 
-			if (req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS")) {
-				// List<clsUserDesktopUtil> webPOSDesktop =
-				// funGetPOSMenuMap("super", "117.001", "M", "Super", "P01");
-				// req.getSession().setAttribute("treeMap",new
-				// HashMap<String,Object>());
-			} else {
-				Map<String, Object> tr = funGetTreeMap(req);
-				req.getSession().setAttribute("treeMap", tr);
-			}
+			Map<String, Object> tr = funGetTreeMap(req);
+			req.getSession().setAttribute("treeMap", tr);
 
 			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propBean.getStrPropertyCode(), clientCode);
 			if (null != objSetup) {
@@ -1047,9 +946,6 @@ public class clsUserController {
 				}
 			}
 
-			if (req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS")) {
-				// return new ModelAndView("frmWebPOSLogin");
-			}
 
 		} catch (Exception ex) {
 
@@ -1072,12 +968,7 @@ public class clsUserController {
 			return new ModelAndView("frmStructureUpdate_2");
 			
 		}
-
-		if (req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS")) {
-
-			return new ModelAndView("frmWebPOSModuleSelection");
-
-		} else if (req.getSession().getAttribute("selectedModuleName").equals("3-WebPMS")) {
+		if (req.getSession().getAttribute("selectedModuleName").equals("3-WebPMS")) {
 			return new ModelAndView("frmMainMenuPMS");
 		} 
 		else if (req.getSession().getAttribute("selectedModuleName").equals("1-WebStocks")) {
@@ -1783,15 +1674,10 @@ public class clsUserController {
 			objModel = objUserMasterService.funGetUser(userCode, clientCode);
 			String propertyCode=req.getSession().getAttribute("propertyCode").toString();
 			String locationCode=req.getSession().getAttribute("locationCode").toString();
-
-			if (req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS")) 
-			{
-				
-			} else {
-				List<clsUserDesktopUtil> userDesktop = funGetUserDesktop(req);
-				req.getSession().setAttribute("desktop", userDesktop);
-			}
-
+			
+			List<clsUserDesktopUtil> userDesktop = funGetUserDesktop(req);
+			req.getSession().setAttribute("desktop", userDesktop);
+			
 			String dateTime = objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
 			String time = dateTime.split(" ")[1];
 
@@ -1804,14 +1690,10 @@ public class clsUserController {
 			objUserLogsModel.setTmeLoginTime(time);
 			objGlobalService.funAddUserLogEntry(objUserLogsModel);
 
-			if (req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS")) 
-			{
-				
-			} else {
-				Map<String, Object> tr = funGetTreeMap(req);
-				req.getSession().setAttribute("treeMap", tr);
-			}
-
+			
+			Map<String, Object> tr = funGetTreeMap(req);
+			req.getSession().setAttribute("treeMap", tr);
+			
 			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 			if (null != objSetup) {
 				req.getSession().setAttribute("amtDecPlace", objSetup.getIntdec());
@@ -1902,9 +1784,6 @@ public class clsUserController {
 				}
 			}
 
-			if (req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS")) {
-				// return new ModelAndView("frmWebPOSLogin");
-			}
 
 		} catch (Exception ex) {
 
@@ -1912,11 +1791,7 @@ public class clsUserController {
 			return new ModelAndView("frmStructureUpdate_2");
 		}
 
-		if (req.getSession().getAttribute("selectedModuleName").equals("7-WebPOS")) {
-
-			return new ModelAndView("frmWebPOSModuleSelection");
-
-		} else if (req.getSession().getAttribute("selectedModuleName").equals("3-WebPMS")) {
+		if (req.getSession().getAttribute("selectedModuleName").equals("3-WebPMS")) {
 			return new ModelAndView("frmMainMenuPMS");
 		} 
 		else if (req.getSession().getAttribute("selectedModuleName").equals("1-WebStocks")) {

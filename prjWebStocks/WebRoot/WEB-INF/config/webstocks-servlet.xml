@@ -619,7 +619,7 @@
 			<property name="annotatedClasses">
 				<list>
 					<!--Put here your models name  -->
-					<value>com.sanguine.webbanquets.model.clsSampleModel</value>
+					<!-- <value>com.sanguine.webbanquets.model.clsSampleModel</value> -->
 						
 				</list>
 			</property>

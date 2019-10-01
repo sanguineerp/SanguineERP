@@ -5039,6 +5039,16 @@
 	  </definition>
   
   
+   <definition name="frmWebBanquetDiary" extends="base.definition">
+		   <put-attribute name="title" value="Dairy" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmWebBanquetDiary.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmWebBanquetDiary_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Dairy"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmWebBanquetDiary.jsp" ></put-attribute>
+	  </definition>
+  
 <!-- 	End Of WebBanquet Tiles Entry -->
 
 
