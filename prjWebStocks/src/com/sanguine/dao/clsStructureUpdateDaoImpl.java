@@ -3162,11 +3162,18 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		/*----------------WebPMS Forms End---------------------------*/
 
 		
-		
-		
-		
 		/*----------------------WebBanquetsFrom Start-----------------------*/
 
+
+		sql="";
+		funExecuteBanquetQuery(sql);
+		
+		
+		
+		//treeMaster Banquets All forms
+		
+		
+		
 
 		/*----------------------WebBanquetsFrom End-----------------------*/
 		
@@ -3225,6 +3232,17 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 	private int funExecuteWebClubQuery(String sql) {
 		try {
 			Query query = WebClubSessionFactory.getCurrentSession().createSQLQuery(sql);
+			query.executeUpdate();
+		} catch (Exception e) {
+		} finally {
+			return 0;
+		}
+	}
+	
+	@SuppressWarnings("finally")
+	private int funExecuteBanquetQuery(String sql) {
+		try {
+			Query query = webPMSSessionFactory.getCurrentSession().createSQLQuery(sql);
 			query.executeUpdate();
 		} catch (Exception e) {
 		} finally {

@@ -138,6 +138,9 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("3-WebPMS")) {
 			sessionFactory1 = webPMSSessionFactory;
 		}
+		else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+			sessionFactory1 = webPMSSessionFactory;
+		}
 
 		try {
 			@SuppressWarnings("rawtypes")
@@ -165,6 +168,8 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 			sessionFactory1 = sessionFactory;
 		} else if (module.equalsIgnoreCase("5-WebBookAR") || module.equalsIgnoreCase("8-WebBookAPGL") || module.equalsIgnoreCase("5-WebBook")) {
 			sessionFactory1 = webBooksSessionFactory;
+		}else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+			sessionFactory1 = webPMSSessionFactory;
 		}
 		try {
 			@SuppressWarnings("rawtypes")
@@ -697,6 +702,8 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 			sessionFactory1 = webBooksSessionFactory;
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("4-WebClub")) {
 			sessionFactory1 = WebClubSessionFactory;
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+			sessionFactory1 = webPMSSessionFactory;
 		}
 
 		if (flgQuerySelection) {
@@ -766,6 +773,8 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 				sesFacGlobal = WebClubSessionFactory;
 			} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("5-WebBookAR") || req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 				sesFacGlobal = webBooksSessionFactory;
+			}else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+				sesFacGlobal = webPMSSessionFactory;
 			}
 
 			if (queryType.equalsIgnoreCase("hql")) {
@@ -959,6 +968,8 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 			sessionFactory1 = WebClubSessionFactory;
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("5-WebBookAR") || req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 			sessionFactory1 = webBooksSessionFactory;
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+			sessionFactory1 = webPMSSessionFactory;
 		}
 
 		if (queryType.equalsIgnoreCase("hql")) {
@@ -1072,6 +1083,8 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 			sessionFactory1 = webBooksSessionFactory;
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("3-WebPMS")) {
 			sessionFactory1 = webPMSSessionFactory;
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+			sessionFactory1 = webPMSSessionFactory;
 		}
 
 		try {
@@ -1138,6 +1151,8 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("5-WebBookAR") || req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("5-WebBookAPGL")) {
 			sessionFactory1 = webBooksSessionFactory;
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("3-WebPMS")) {
+			sessionFactory1 = webPMSSessionFactory;
+		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
 			sessionFactory1 = webPMSSessionFactory;
 		}
 
@@ -1216,31 +1231,7 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 		webBooksSessionFactory.getCurrentSession().saveOrUpdate(objclsCurrentAccountBalMaodel);
 	}
 
-	// @Override
-	// public int funDeleteWebBookTempLedger(String clientCode,String
-	// userCode,String propertyCode)
-	// {
-	// Query query =
-	// webBooksSessionFactory.getCurrentSession().createQuery("delete clsTempLedgerModel where strUserCode = :userCode and strClientCode= :clientCode and strPropertyCode =:propertyCode ");
-	// query.setParameter("clientCode", clientCode);
-	// query.setParameter("userCode", userCode);
-	// query.setParameter("userCode", userCode);
-	// return query.executeUpdate();
-	// }
-	//
-	// @Override
-	// public int funAddCurrentDebtorCredtor(String clientCode,String
-	// userCode,String propertyCode)
-	// {
-	// String sql =
-	// "insert into tblcurrentledger (strDebtorCode,strDebtorName,strClientCode,strUserCode,strPropertyCode) "
-	// + " select a.strDebtorCode,a.strDebtorName,'" + clientCode + "','" +
-	// userCode + "','"+propertyCode+"' from tblsundarydebtormaster a ";
-	// Query query =
-	// webBooksSessionFactory.getCurrentSession().createSQLQuery(sql);
-	// return query.executeUpdate();
-	// }
-	//
+	
 	public int funAddTempLedger(String hql, String queryType) {
 		Query query = null;
 		int res = 0;
