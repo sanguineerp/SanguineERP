@@ -91,7 +91,9 @@ public class clsReasonMasterController {
 		clsReasonMaster objReasonMaster;
 		clsGlobalFunctions ob = new clsGlobalFunctions();
 		if (reasonBean.getStrReasonCode().trim().length() == 0) {
-			lastNo = objGlobalFunctionsService.funGetLastNo("tblreasonmaster", "ReasonMaster", "intid", clientCode);
+			/* Used for both Banquet and WebStocks */
+			//lastNo = objGlobalFunctionsService.funGetLastNo("tblreasonmaster", "ReasonMaster", "intid", clientCode);
+			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tblreasonmaster", "ReasonMaster", "intid", clientCode,"1-WebStocks");
 			String reasonCode = "R" + String.format("%07d", lastNo);
 			objReasonMaster = new clsReasonMaster(new clsReasonMaster_ID(reasonCode, clientCode));
 

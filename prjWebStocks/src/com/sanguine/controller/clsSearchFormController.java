@@ -79,7 +79,15 @@ public class clsSearchFormController {
 
 	@RequestMapping(value = "/searchform", method = RequestMethod.GET)
 	public ModelAndView funOpenSearchForm(Map<String, Object> model, @ModelAttribute("formname") String value, BindingResult result, @RequestParam(value = "formname") String formName, @RequestParam(value = "searchText") String search_with, HttpServletRequest req) {
-		req.getSession().setAttribute("formName", formName);
+		if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet"))
+		{
+			formName = "Banquet"+formName;
+			req.getSession().setAttribute("formName", formName);
+		}
+		else
+		{
+			req.getSession().setAttribute("formName", formName);
+		}
 		req.getSession().setAttribute("searchText", search_with);
 
 		showLocWiseProdMaster = req.getSession().getAttribute("showLocWiseProdMaster").toString();
@@ -5328,7 +5336,6 @@ public class clsSearchFormController {
 			break;
 		}
         
-        
 		
 	
 
@@ -5395,10 +5402,113 @@ public class clsSearchFormController {
 		String strShowTransOrder = objSetup.getStrShowTransAsc_Desc();
 		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
 		String strWebBooksDB=req.getSession().getAttribute("WebBooksDB").toString();
-		
+		String strLocCode = req.getSession().getAttribute("locationCode").toString();
+		String showAllProd = "Y";
+		if (null == req.getSession().getAttribute("showAllProdToAllLoc")) {
+			showAllProd = "N";
+		} else {
+			showAllProd = "Y";
+		}
 		switch (formName) {
 		
-		case "" :
+			case "Banquetgroup" :{
+				columnNames = "strGCode,strGName,strGDesc";
+				tableName = " select strGCode,strGName,strGDesc from "+webStockDB+".tblgroupmaster where "
+						+ "strClientCode='" + clientCode + "' ";
+				listColumnNames = "Group Code,Group Name,Group Desc";
+				idColumnName = "strGCode";
+				searchFormTitle = "Group Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			case "Banquetsubgroup": {
+				columnNames = "strSGCode,strSGName,intSGId,ifnull(strGCode,'') ";
+				tableName = " select strSGCode,strSGName,intSGId,ifnull(strGCode,'') from "+webStockDB+".tblsubgroupmaster where strClientCode='" + clientCode + "' ";
+				listColumnNames = "Sub-Group Code,Sub-Group Name,Sorting No,Group Code";
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				idColumnName = "strSGCode";
+				searchFormTitle = "Sub Group Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			case "Banquetreason": {
+				columnNames = "strReasonCode,strReasonName,strReasonDesc";
+				tableName = "select strReasonCode,strReasonName,strReasonDesc from "+webStockDB+".tblreasonmaster  "
+						+ "where strClientCode='" + clientCode + "'";
+				listColumnNames = "Reason Code,Reason Name,Reason Description";
+				idColumnName = "strReasonCode";
+				searchFormTitle = "Reason Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			case "BanquetcustMaster": {
+				columnNames = "strPCode,strPName,strMobile,strEmail,strContact,strPNHindi";
+				tableName = "select strPCode,strPName,strMobile,strEmail,strContact,strPNHindi from "+webStockDB+".tblpartymaster "
+						+ "where  strClientCode='" + clientCode + "' ORDER BY strPCode " + strShowTransOrder + " ";
+				if (!objSetup.getStrShowAllPartyToAllLoc().equalsIgnoreCase("Y")) {
+					tableName += " and strPropCode='" + propertyCode + "' ";
+				}
+				listColumnNames = "Customer Code,Customer Name,Mobile No,Email,Contact Person,Marathi Name";
+				idColumnName = "strPCode";
+				searchFormTitle = "Customer Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			case "Banquetproperty": {
+				columnNames = "strPropertyCode,strPropertyName ";
+				tableName = "select strPropertyCode,strPropertyName from "+webStockDB+".tblpropertymaster where strClientCode='" + clientCode + "'";
+				listColumnNames = "Property Code,Property Name";
+				idColumnName = "strPropertyCode";
+				searchFormTitle = "Property Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			case "Banquetlocationmaster": {
+				columnNames = "strLocCode,strLocName,strType,strLocDesc";
+				tableName = "select strLocCode,strLocName,strType,strLocDesc from "+webStockDB+".tbllocationmaster where strClientCode='" + clientCode + "'";
+				listColumnNames = "Location Code,Location Name,Type,Description";
+				idColumnName = "strLocCode";
+				searchFormTitle = "Location Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			case "Banquetproductmaster": {
+				columnNames = "a.strProdCode,a.strProdName,c.strSGName,d.strGName,a.strUOM,a.strProdType,a.strBarCode,"
+						+ "a.strSpecification,a.strCalAmtOn,a.strNonStockableItem,a.strPartNo";
+				tableName = "select a.strProdCode,a.strProdName,c.strSGName,d.strGName,a.strUOM,a.strProdType,a.strBarCode,"
+						+ "a.strSpecification,a.strCalAmtOn,a.strNonStockableItem,a.strPartNo "
+						+ "from "+webStockDB+".tblproductmaster a, "+webStockDB+".tblsubgroupmaster c, "+webStockDB+".tblgroupmaster d ";
+				if (showAllProd.equals("N")) {
+					tableName = tableName + " , "+webStockDB+".tblreorderlevel b " + " where a.strProdCode=b.strProdCode and b.strLocationCode='" + strLocCode + "' and b.strClientCode='" + clientCode + "' and ";
+				} else {
+					tableName = tableName + " where  ";
+				}
+				tableName = tableName + " a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strNotInUse='N' and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "' ";
+				listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Product Type,Code,Specification,Cal Amt On,Non Stockable,PartNo";
+				idColumnName = "a.strProdCode";
+				searchFormTitle = "Product Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			case "Banquettaxmaster": {
+				columnNames = "strTaxCode,strTaxDesc,strTaxIndicator";
+				tableName = "select strTaxCode,strTaxDesc,strTaxIndicator from "+webStockDB+".tbltaxhd where strClientCode='" + clientCode + "' "
+						+ "and strPropertyCode='" + propertyCode + "' ";
+				listColumnNames = "Tax Code,Tax Desc,Tax Indicator";
+				idColumnName = "strTaxCode";
+				searchFormTitle = "Tax Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			
 			
 			
 		

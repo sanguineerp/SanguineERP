@@ -296,7 +296,6 @@
 			<tr>
 			<%-- <td><s:input type="hidden" id="hidMarathiText" path="strMarathiText"></s:input> --%>
 			</td>
-			<td></td>
 			</tr>
 		</table>
 		<br />

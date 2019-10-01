@@ -258,7 +258,9 @@ public class clsPartyMasterController {
 		long lastNo = 0;
 		clsPartyMasterModel objModel;
 		if (objBean.getStrPCode().trim().length() == 0) {
-			lastNo = objGlobalFunctionsService.funGetLastNo("tblpartymaster", "PartyMaster", "intPid", clientCode);
+			/* Used for both Banquet and WebStocks */
+			//lastNo = objGlobalFunctionsService.funGetLastNo("tblpartymaster", "PartyMaster", "intPid", clientCode);
+			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tblpartymaster", "PartyMaster", "intPid", clientCode,"1-WebStocks");
 			String PCode = "C" + String.format("%06d", lastNo);
 			objModel = new clsPartyMasterModel(new clsPartyMasterModel_ID(PCode, clientCode));
 			objModel.setIntPId(lastNo);

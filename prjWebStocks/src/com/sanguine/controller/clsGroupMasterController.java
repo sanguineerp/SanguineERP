@@ -153,7 +153,9 @@ public class clsGroupMasterController {
 		long lastNo = 0;
 		clsGroupMasterModel group;
 		if (groupBean.getStrGCode().trim().length() == 0) {
-			lastNo = objGlobalFunctionsService.funGetLastNo("tblgroupmaster", "GroupMaster", "intGId", clientCode);
+			//lastNo = objGlobalFunctionsService.funGetLastNo("tblgroupmaster", "GroupMaster", "intGId", clientCode);
+			/* Use For Both Banquet and Web Stocks*/
+			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tblgroupmaster", "GroupMaster","intGId",clientCode,"1-WebStocks");
 			String groupCode = "G" + String.format("%06d", lastNo);
 			group = new clsGroupMasterModel(new clsGroupMasterModel_ID(groupCode, clientCode));
 			group.setIntGId(lastNo);

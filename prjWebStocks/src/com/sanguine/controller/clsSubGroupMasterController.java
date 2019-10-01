@@ -131,7 +131,9 @@ public class clsSubGroupMasterController {
 		clsSubGroupMasterModel subgroup;
 
 		if (objBean.getStrSGCode().trim().length() == 0) {
-			lastNo = objGlobalFunctionsService.funGetLastNo("tblsubgroupmaster", "SubGroupMaster", "intSGId", clientCode);
+			/*lastNo = objGlobalFunctionsService.funGetLastNo("tblsubgroupmaster", "SubGroupMaster", "intSGId", clientCode);*/
+			/* Use for both Banquet and WebStocks*/
+			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tblsubgroupmaster", "SubGroupMaster", "intSGId", clientCode,"1-WebStocks");
 			String subGroupCode = "SG" + String.format("%06d", lastNo);
 			subgroup = new clsSubGroupMasterModel(new clsSubGroupMasterModel_ID(subGroupCode, clientCode));
 			subgroup.setIntSGId(lastNo);
