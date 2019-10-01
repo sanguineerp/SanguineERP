@@ -3256,6 +3256,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		} catch (Exception e) {
 			//e.printStackTrace();
 		} finally {
+			
 			return 0;
 		}
 	}
