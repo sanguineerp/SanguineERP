@@ -686,8 +686,8 @@ body {
 		   						  break;
 			case 'rgb(128, 128, 128)'://GREY-->CHECKED-OUT
 									  
-				code=obj.defaultValue.split("-");
-				 var subStr = code[0].substring(code[0].length-14,code[0].length-3);
+			      code=obj.defaultValue.split(",");
+				  var subStr = code[1];
 				  url=getContextPath()+"/frmBillPrinting.html?docCode="+subStr
 				  window.open(url);
 									  
@@ -898,9 +898,9 @@ body {
 					<td bgcolor=Olive style="padding-left: 5px;padding-right: 5px;">Blocked</td>
 					<td></td>
 					<td></td>
-					<!-- <td bgcolor=Gray style="padding-left: 5px;padding-right: 5px;">Checked Out</td>
+					 <td bgcolor=Gray style="padding-left: 5px;padding-right: 5px;">Checked Out</td>
 					<td></td>
-					<td></td> -->
+					<td></td> 
 					<td bgcolor=Orange style="padding-left: 5px;padding-right: 5px;">Dirty</td>
 					<td></td>
 					<td></td>

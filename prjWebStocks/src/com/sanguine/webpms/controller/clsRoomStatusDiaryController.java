@@ -120,7 +120,7 @@ public class clsRoomStatusDiaryController {
 		List listRoomStatusBeanDtl = new ArrayList<>();
 		Map objRoomTypeWise = new HashMap<>();
 		Map returnObject = new HashMap<>();
-		String sql = "select a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc,a.strStatus from tblroom a,tblroomtypemaster b where a.strRoomTypeCode=b.strRoomTypeCode"
+		String sql = "select a.strRoomCode,a.strRoomDesc,b.strRoomTypeDesc,a.strStatus from tblroom a,tblroomtypemaster b where a.strRoomTypeCode=b.strRoomTypeCode AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'"
 				+ " order by b.strRoomTypeCode,a.strRoomDesc; ";
 		List listRoom = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 		objTemp=new ArrayList<>();
@@ -146,7 +146,7 @@ public class clsRoomStatusDiaryController {
 					+ "SELECT a.strReservationNo,d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName), "
 					+ "IFNULL(e.strBookingTypeDesc,''), DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y'), "
 					+ "DATEDIFF(DATE(a.dteDepartureDate),DATE(a.dteArrivalDate)),LEFT(TIMEDIFF(a.tmeDepartureTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
-					+ "LEFT(TIMEDIFF(a.tmeArrivalTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeArrivalTime,a.tmeDepartureTime , DATEDIFF(DATE(a.dteArrivalDate),'"+PMSDate+"'),DATEDIFF(DATE(a.dteDepartureDate),'"+PMSDate+"')"
+					+ "LEFT(TIMEDIFF(a.tmeArrivalTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeArrivalTime,a.tmeDepartureTime , DATEDIFF(DATE(a.dteArrivalDate),'"+viewDate+"'),DATEDIFF(DATE(a.dteDepartureDate),'"+viewDate+"')"
 					+ "FROM tblreservationhd a,tblreservationdtl b,tblguestmaster c,tblroom d,tblbookingtype e "
 					+ "WHERE a.strReservationNo=b.strReservationNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode "
 					+ "AND a.strBookingTypeCode=e.strBookingTypeCode AND DATE(a.dteDepartureDate) BETWEEN '"+viewDate+"' AND DATE_ADD('"+viewDate+"',INTERVAL 7 DAY) AND b.strRoomNo='"+arrObjRooms[0].toString()+"' "
@@ -154,11 +154,23 @@ public class clsRoomStatusDiaryController {
 					+ "UNION "
 					+ "SELECT a.strWalkinNo,d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Waiting', "
 					+ "DATE_FORMAT(DATE(a.dteWalkinDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteCheckOutDate),'%d-%m-%Y'), "
-					+ "DATEDIFF('"+PMSDate+"',DATE(a.dteCheckOutDate)),LEFT(TIMEDIFF(a.tmeCheckOutTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
-					+ "LEFT(TIMEDIFF(a.tmeWalkInTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeWalkInTime,a.tmeCheckOutTime , DATEDIFF(DATE(a.dteWalkinDate),'"+PMSDate+"'),DATEDIFF(DATE(a.dteCheckOutDate),'"+PMSDate+"')"
+					+ "DATEDIFF('"+viewDate+"',DATE(a.dteCheckOutDate)),LEFT(TIMEDIFF(a.tmeCheckOutTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
+					+ "LEFT(TIMEDIFF(a.tmeWalkInTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeWalkInTime,a.tmeCheckOutTime , DATEDIFF(DATE(a.dteWalkinDate),'"+viewDate+"'),DATEDIFF(DATE(a.dteCheckOutDate),'"+viewDate+"')"
 					+ "FROM tblwalkinhd a,tblwalkindtl b,tblguestmaster c,tblroom d "
 					+ "WHERE a.strWalkinNo=b.strWalkinNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode "
-					+ "AND DATE(a.dteCheckOutDate) BETWEEN '"+viewDate+"' AND DATE_ADD('"+viewDate+"',INTERVAL 7 DAY) AND b.strRoomNo='"+arrObjRooms[0].toString()+"' AND a.strWalkinNo NOT IN (SELECT strWalkinNo FROM tblcheckinhd) AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"'";
+					+ "AND DATE(a.dteCheckOutDate) BETWEEN '"+viewDate+"' AND DATE_ADD('"+viewDate+"',INTERVAL 7 DAY) AND b.strRoomNo='"+arrObjRooms[0].toString()+"' AND a.strWalkinNo NOT IN (SELECT strWalkinNo FROM tblcheckinhd) AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"'"
+					+ "UNION "
+					+ "SELECT e.strBillNo,d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName),'Checked Out', DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y'), DATEDIFF('"+PMSDate+"', DATE(a.dteDepartureDate)),"
+					+ "LEFT(TIMEDIFF(a.tmeDepartureTime,(SELECT a.tmeCheckOutTime "
+					+ "FROM tblpropertysetup a)),6),"
+					+ "LEFT(TIMEDIFF(a.tmeArrivalTime,("
+					+ "SELECT a.tmeCheckInTime "
+					+ "FROM tblpropertysetup a)),6),a.tmeArrivalTime,a.tmeDepartureTime,"
+					+ "DATEDIFF(DATE(a.dteArrivalDate),'"+viewDate+"'), DATEDIFF(DATE(a.dteDepartureDate),'"+viewDate+"') "
+					+ "FROM tblcheckinhd a,tblcheckindtl b,tblguestmaster c,tblroom d,tblbillhd e "
+					+ "WHERE a.strCheckInNo=b.strCheckInNo AND b.strGuestCode=c.strGuestCode AND b.strRoomNo=d.strRoomCode AND DATE(a.dteDepartureDate) BETWEEN '"+viewDate+"' AND DATE_ADD('"+viewDate+"', INTERVAL 7 DAY)"
+					+ "	AND b.strRoomNo='"+arrObjRooms[0].toString()+"' AND a.dteDepartureDate NOT IN ('"+PMSDate+"') AND a.strCheckInNo=e.strCheckInNo  AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' "
+					+ "AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' group by d.strRoomDesc ;";
 				List listRoomDtl = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 				if (listRoomDtl.size() > 0) 
 				{
@@ -601,6 +613,7 @@ public class clsRoomStatusDiaryController {
 	public @ResponseBody Map funLoadRoomTypeWiseStatus(@RequestParam("viewDate") String viewDate, HttpServletRequest request) {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
+		String PMSDate=objGlobal.funGetDate("yyyy-MM-dd",request.getSession().getAttribute("PMSDate").toString());
 		Map returnObject=new HashMap<>();
 
 		try
@@ -612,13 +625,60 @@ public class clsRoomStatusDiaryController {
 		String dd = viewDate.split("-")[0]; 
 		String mm=	 viewDate.split("-")[1] ;
 		String yy= viewDate.split("-")[2];
-		
+		String strCompDate = objGlobal.funGetDate("yyyy-MM-dd", viewDate);
 		
 			
 			
 			Map objRoomStatusDtlBean = new HashMap<>();
 			List listRoomStatus= new ArrayList<>();
 
+			if(PMSDate.equalsIgnoreCase(strCompDate))
+			{
+				String sql="select a.strRoomTypeDesc from tblroom a where a.strClientCode='"+clientCode+"' group by strBedType ";
+				List listRoomDesc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+				//while(listRoomDesc.size()>0)
+				for(int j=0;j<listRoomDesc.size();j++)
+				{
+					String tempPMSDate=objGlobal.funGetDate("yyyy-MM-dd", viewDate);
+					String strRoomData="";
+					sql="select count(*) from tblroom a where a.strRoomTypeDesc='"+listRoomDesc.get(j)+"' AND a.strClientCode='"+clientCode+"'";
+					
+					List listRoomData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+					if(listRoomData.size()>0)
+					{
+						int intRoomAccupied=0;
+						for(int i=1;i<=7;i++)
+						{
+							sql=" select count(*) "
+									+ " from  tblcheckindtl a,tblroom b,tblcheckinhd c where a.strCheckInNo=c.strCheckInNo and"
+									+ " a.strRoomNo=b.strRoomCode and date(c.dteCheckInDate) <= '"+tempPMSDate+"'  "
+									+ "  and date(c.dteDepartureDate)>='"+tempPMSDate+"' and b.strRoomTypeDesc='"+listRoomDesc.get(j)+"' and b.strStatus='Occupied' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
+							
+							List listCheckInData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+							String dd1=String.valueOf((Integer.parseInt(dd)+i));
+
+							if(listCheckInData.size()>0)
+							{
+								if(strRoomData.isEmpty())
+								{
+									strRoomData=listRoomDesc.get(j)+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);
+								}
+								else
+								{
+									strRoomData=strRoomData+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);	
+								}
+							}
+							tempPMSDate=yy+"-"+mm+"-"+dd1;
+						}
+						objRoomStatusDtlBean.put(listRoomDesc.get(j),strRoomData);
+						/*listRoomStatus.put(objRoomStatusDtlBean);*/
+						/*objRoomStatusData.put(rsRoomInfo1.getString(1), strRoomData);*/
+					}
+				}
+			}
+			else
+			{
+			
 			String sql="select a.strRoomTypeDesc from tblroom a where a.strClientCode='"+clientCode+"' group by strBedType ";
 			List listRoomDesc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			//while(listRoomDesc.size()>0)
@@ -637,7 +697,7 @@ public class clsRoomStatusDiaryController {
 						sql=" select count(*) "
 								+ " from  tblcheckindtl a,tblroom b,tblcheckinhd c where a.strCheckInNo=c.strCheckInNo and"
 								+ " a.strRoomNo=b.strRoomCode and date(c.dteCheckInDate) <= '"+tempPMSDate+"'  "
-								+ "  and date(c.dteDepartureDate)>='"+tempPMSDate+"' and b.strRoomTypeDesc='"+listRoomDesc.get(j)+"' and b.strStatus='Occupied' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
+								+ "  and date(c.dteDepartureDate)>='"+tempPMSDate+"' and b.strRoomTypeDesc='"+listRoomDesc.get(j)+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' group by b.strRoomDesc";
 						
 						List listCheckInData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 						String dd1=String.valueOf((Integer.parseInt(dd)+i));
@@ -646,12 +706,16 @@ public class clsRoomStatusDiaryController {
 						{
 							if(strRoomData.isEmpty())
 							{
-								strRoomData=listRoomDesc.get(j)+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);
+								strRoomData=listRoomDesc.get(j)+"/"+listCheckInData.size()+"-"+listRoomData.get(0);
 							}
 							else
 							{
-								strRoomData=strRoomData+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);	
+								strRoomData=strRoomData+"/"+listCheckInData.size()+"-"+listRoomData.get(0);	
 							}
+						}
+						else
+						{
+							strRoomData=strRoomData+"/"+0+"-"+listRoomData.get(0);
 						}
 						tempPMSDate=yy+"-"+mm+"-"+dd1;
 					}
@@ -659,6 +723,7 @@ public class clsRoomStatusDiaryController {
 					/*listRoomStatus.put(objRoomStatusDtlBean);*/
 					/*objRoomStatusData.put(rsRoomInfo1.getString(1), strRoomData);*/
 				}
+			}
 			}
 			returnObject.put("RoomTypeCount", objRoomStatusDtlBean);
 					}
