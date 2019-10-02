@@ -581,6 +581,8 @@
 					<value>com.sanguine.webbanquets.model.clsCostCenterMasterModel</value>
 					<value>com.sanguine.webbanquets.model.clsFunctionMasterModel</value> 
 					<value>com.sanguine.webbanquets.model.clsMenuHeadMasterModel</value> 
+					<value>com.sanguine.webbanquets.model.clsItemMasterModel</value>
+					
 						
 				</list>
 			</property>

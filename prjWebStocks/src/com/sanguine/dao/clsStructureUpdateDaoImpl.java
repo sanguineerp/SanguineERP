@@ -3228,6 +3228,29 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
+		sql="CREATE TABLE `tblbqitemmaster` ("
+				+ "`strItemCode` VARCHAR(10) NOT NULL,"
+				+ "	`strItemName` VARCHAR(50) NOT NULL,"
+				+ "	`strMenuHeadCode` VARCHAR(10) NOT NULL,"
+				+ "	`strSubGroupCode` VARCHAR(10) NOT NULL,"
+				+ "	`strDepartmentCode` VARCHAR(10) NOT NULL,"
+				+ "	`strUnit` VARCHAR(50) NOT NULL,"
+				+ "	`dblAmount` DECIMAL(10,0) NOT NULL,"
+				+ "	`dblPercent` DECIMAL(10,0) NOT NULL,"
+				+ "	`strOperational` VARCHAR(5) NOT NULL DEFAULT 'No',"
+				+ "	`dteDateCreated` DATETIME NOT NULL,"
+				+ "	`dteDateEdited` DATETIME NOT NULL,"
+				+ "	`strUserCreated` VARCHAR(25) NOT NULL,"
+				+ "	`strUserEdited` VARCHAR(25) NOT NULL,"
+				+ "	`strClientCode` VARCHAR(10) NOT NULL,"
+				+ "	PRIMARY KEY (`strItemCode`, `strClientCode`),"
+				+ "	INDEX `strMenuHeadCode` (`strMenuHeadCode`),"
+				+ "	INDEX `strSubGroupCode` (`strSubGroupCode`),"
+				+ "	INDEX `strDepartmentCode` (`strDepartmentCode`)"
+				+ ")"
+				+ "COLLATE='latin1_swedish_ci'"
+				+ "ENGINE=InnoDB;";
+		funExecuteBanquetQuery(sql);
 		
 		//treeMaster Banquets All forms
 		
@@ -3241,7 +3264,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmEquipment', 'Equipment Master', 'Master', '1', 'M', '1', '1', '12', 'Attribute-Master.png', '7', '1', '1', '1', 'NO', '1', 'frmEquipment.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBillingInstructions', 'Billing Instructions', 'Master', '1', 'M', '14', '14', '1', 'default.png', '7', '3', '3', '3', 'NO', 'NO', 'frmBillingInstructions.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmWebBanquetDiary', 'Diary', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', '1', 'frmWebBanquetDiary.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmMenuHeadMaster', 'Menu Head Master', 'Master', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmMenuHeadMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmMenuHeadMaster', 'Menu Head Master', 'Master', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmMenuHeadMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmItemMaster', 'Item Master', 'Master', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmItemMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		
 		funExecuteQuery(sql);
 		

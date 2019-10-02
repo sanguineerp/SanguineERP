@@ -16,10 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webbanquets.bean.clsEquipmentBean;
-import com.sanguine.webbanquets.bean.clsSampleBean;
 import com.sanguine.webbanquets.model.clsEquipmentModel;
 import com.sanguine.webbanquets.service.clsEquipmentService;
-import com.sanguine.webbanquets.service.clsSampleService;
 import com.sanguine.webclub.model.clsWebClubMemberProfileModel;
 import com.sanguine.webclub.model.clsWebClubRegionMasterModel;
 
@@ -35,11 +33,6 @@ public class clsEquipmentController{
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
 	private clsGlobalFunctions objGlobal=null;
-
-
-	
-	@Autowired
-	clsSampleService objSampleService;
 	
 	@RequestMapping(value = "/frmEquipment", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {

@@ -5532,9 +5532,9 @@ public class clsSearchFormController {
 			}
 			
 			case "BanquetdeptCode": {
-				columnNames = "strDeptCode,strDeptDesc,strOperational,strRevenueProducing,strDiscount,strType,strDeactivate" + ",strUserEdited,dteDateEdited";
+				columnNames = "strDeptCode,strDeptDesc,strOperational,strDiscount,strType";
 				tableName = "clsDepartmentMasterModel where strClientCode='" + clientCode + "'";
-				listColumnNames = "Code,Department,Operational,Revenue Producing,Discount,Type,Deactivate,Last Edited By,Updated Date";
+				listColumnNames = "Code,Department,Operational,Discount,Type";
 				idColumnName = "strDeptCode";
 				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
 				searchFormTitle = "Department Master";
@@ -5566,6 +5566,16 @@ public class clsSearchFormController {
 				criteria = getCriteriaQuery(columnNames, search_with, tableName);
 				idColumnName = "strMenuHeadCode";
 				searchFormTitle = "Menu Head Master";
+				break;
+			}
+			
+			case "BanquetItemCode": {
+				columnNames = "strItemCode,strItemName,strMenuHeadCode,strSubGroupCode,strDepartmentCode,strOperational ";
+				tableName = " clsItemMasterModel where strClientCode='" + clientCode + "' ";
+				listColumnNames = "Item Code,Item Name,Menu Head Code,Sub-Group Code,Department Code,Operational";
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				idColumnName = "strItemCode";
+				searchFormTitle = "Item Master";
 				break;
 			}
 		

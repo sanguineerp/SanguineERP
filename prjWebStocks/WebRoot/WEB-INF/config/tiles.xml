@@ -5078,6 +5078,16 @@
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmMenuHeadMaster.jsp" ></put-attribute>
 	  </definition>
 	  
+	  <definition name="frmItemMaster" extends="base.definition">
+		   <put-attribute name="title" value="Item Master" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmItemMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmItemMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Item Master"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmItemMaster.jsp" ></put-attribute>
+	  </definition>
+	  
 	  
   
 <!-- 	End Of WebBanquet Tiles Entry -->
