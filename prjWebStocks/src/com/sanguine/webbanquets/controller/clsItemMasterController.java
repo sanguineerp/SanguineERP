@@ -70,7 +70,7 @@ public class clsItemMasterController{
 			clsItemMasterModel objModel = funPrepareModel(objBean,userCode,clientCode);
 			objItemMasterService.funAddUpdateItemMaster(objModel);
 			req.getSession().setAttribute("success", true);
-			req.getSession().setAttribute("successMessage", "Item Code : ".concat(objModel.getStrMenuHeadCode()));
+			req.getSession().setAttribute("successMessage", "Item Code : ".concat(objModel.getStrItemCode()));
 			return new ModelAndView("redirect:/frmItemMaster.html");
 		}
 		else
