@@ -114,7 +114,7 @@ $(document).ready(function(){
 		$("#txtReasonName").focus();
     }
 	
-	function onLoadFunction()
+	$(document).ready(function()
 	{
 		var message='';
 		<%if (session.getAttribute("success") != null) {
@@ -130,8 +130,8 @@ $(document).ready(function(){
 			alert("Data Save successfully\n\n"+message);
 		<%
 		}}%>
-
-	}
+	});
+	
 	function funvalidate()
 	{
 		if($('#txtReasonCode').val()=='')
@@ -181,7 +181,7 @@ $(document).ready(function(){
 </script>
 </head>
 
-<body onload="onLoadFunction()">
+<body>
 	<div id="formHeading">
 		<label>Reason Master</label>
 	</div>
