@@ -23,13 +23,14 @@ public class clsDepartmentMasterServiceImpl implements clsDepartmentMasterServic
 		long lastNo = 0;
 
 		if (objDeptMasterBean.getStrDeptCode().trim().length() == 0) {
-			/*lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tbldepartmentmaster", "DepartmentMaster", "strDeptCode", clientCode);*/
-			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tbldepartmentmaster", "DepartmentMaster","strDeptCode",clientCode,"3-WebPMS");
+			lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tbldepartmentmaster", "DepartmentMaster", "strDeptCode", clientCode);
+			/*lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tbldepartmentmaster", "DepartmentMaster","intId",clientCode,"3-WebPMS");*/
 			String deptCode = "DT" + String.format("%06d", lastNo);
 			// String deptCode="D0000001";
 			objDepartmentMasterModel.setStrDeptCode(deptCode);
 			objDepartmentMasterModel.setStrUserCreated(userCode);
 			objDepartmentMasterModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+			
 		} else {
 			objDepartmentMasterModel.setStrDeptCode(objDeptMasterBean.getStrDeptCode());
 
@@ -40,7 +41,7 @@ public class clsDepartmentMasterServiceImpl implements clsDepartmentMasterServic
 		objDepartmentMasterModel.setStrDiscount(objDeptMasterBean.getStrDiscount());
 		objDepartmentMasterModel.setStrDeactivate(objDeptMasterBean.getStrDeactivate());
 		objDepartmentMasterModel.setStrRevenueProducing(objDeptMasterBean.getStrRevenueProducing());
-
+		
 		objDepartmentMasterModel.setStrType(objDeptMasterBean.getStrType());
 
 		objDepartmentMasterModel.setStrUserEdited(userCode);

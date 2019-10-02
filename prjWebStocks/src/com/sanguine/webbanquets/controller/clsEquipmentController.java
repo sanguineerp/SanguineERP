@@ -106,7 +106,7 @@ public class clsEquipmentController{
 		clsEquipmentModel objModel = new clsEquipmentModel();;
 		if (objBean.getStrEquipmentCode().trim().length() == 0){
 		/*lastNo = objGlobalFunctionsService.funGetLastNo("tblequipment", "Equipment Master", "intId", clientCode);*/
-		lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tblequipment", "Equipment Master","intGId",clientCode,"1-WebStocks");
+		lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tblequipment", "Equipment Master","intId",clientCode,"3-WebPMS");
 		String strEquipmentCode = "EC" + String.format("%06d", lastNo);
 		objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 		objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));

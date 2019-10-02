@@ -116,8 +116,8 @@ public class clsCostCenterMasterController{
 		
 		if (objBean.getStrCostCenterCode().trim().length() == 0){
 			/*lastNo = objGlobalFunctionsService.funGetLastNo("tblcostcentermaster", "Cost Center Master", "intId", clientCode);*/
-			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tblcostcentermaster", "Cost Center Master","intGId",clientCode,"1-WebStocks");
-			String strEquipmentCode = "EC" + String.format("%06d", lastNo);
+			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tblcostcentermaster", "Cost Center Master","intId",clientCode,"3-WebPMS");
+			String strEquipmentCode = "CC" + String.format("%06d", lastNo);
 			objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			objModel.setIntId(lastNo);

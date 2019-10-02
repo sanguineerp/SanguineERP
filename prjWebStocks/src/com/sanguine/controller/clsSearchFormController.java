@@ -5512,7 +5512,7 @@ public class clsSearchFormController {
 			{
 				columnNames = "a.strEquipmentCode,a.strEquipmentName,a.dteDateCreated,a.strUserCreated,a.strOperational";
 				tableName = "from tblequipment a WHERE a.strClientCode='"+clientCode+"'";
-				listColumnNames = "Equipment No,Equipment Name,Date Created,User Created,Operational";
+				listColumnNames = "Equipment Code,Equipment Name,Date Created,User Created,Operational";
 				idColumnName = "strEquipmentCode,intId,strClientCode";
 				flgQuerySelection = true;
 				searchFormTitle = "Equipment";

@@ -1020,6 +1020,8 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 			sessionFactory1 = webBooksSessionFactory;
 		} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("3-WebPMS")) {
 			sessionFactory1 = webPMSSessionFactory;
+		}else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet")) {
+			sessionFactory1 = webPMSSessionFactory;
 		}
 
 		try {
