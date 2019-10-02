@@ -3167,7 +3167,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 
 		sql="CREATE TABLE `tblbqmenuhead` (`strMenuHeadCode` VARCHAR(20) NOT NULL,`strMenuHeadName` VARCHAR(50) NOT NULL,"
 				+ "`dteDateCreated` DATETIME NOT NULL,`dteDateEdited` DATETIME NOT NULL,`strUserCreated` VARCHAR(20) NOT NULL,"
-				+ "`strUserEdited` VARCHAR(20) NOT NULL,`strOperational` VARCHAR(5) NOT NULL,`strClientCode` VARCHAR(10) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(20) NOT NULL,`strOperational` VARCHAR(5) NOT NULL DEFAULT 'No',`strClientCode` VARCHAR(10) NOT NULL,"
 				+ "PRIMARY KEY (`strMenuHeadCode`, `strClientCode`)"
 				+ ")COLLATE='latin1_swedish_ci'ENGINE=InnoDB; ";
 		funExecuteBanquetQuery(sql);
@@ -3240,7 +3240,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmCostCenterMaster', 'Cost Center', 'Master', '1', 'M', '1', '1', '12', 'Attribute-Master.png', '7', '1', '1', '1', 'NO', 'NO', 'frmCostCenterMaster.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmEquipment', 'Equipment Master', 'Master', '1', 'M', '1', '1', '12', 'Attribute-Master.png', '7', '1', '1', '1', 'NO', '1', 'frmEquipment.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBillingInstructions', 'Billing Instructions', 'Master', '1', 'M', '14', '14', '1', 'default.png', '7', '3', '3', '3', 'NO', 'NO', 'frmBillingInstructions.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmWebBanquetDiary', 'Diary', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', '1', 'frmWebBanquetDiary.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmWebBanquetDiary', 'Diary', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', '1', 'frmWebBanquetDiary.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmMenuHeadMaster', 'Menu Head Master', 'Master', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmMenuHeadMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		
 		funExecuteQuery(sql);
 		

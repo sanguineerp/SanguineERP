@@ -5557,7 +5557,17 @@ public class clsSearchFormController {
 				criteria = getCriteriaQuery(columnNames, search_with, tableName);
 				idColumnName = "strFCode";
 				searchFormTitle = "Function Master";
-				break;	    
+				break;	
+				
+			case "BanquetMenuHeadCode": {
+				columnNames = "strMenuHeadCode,strMenuHeadName,strOperational ";
+				tableName = " clsMenuHeadMasterModel where strClientCode='" + clientCode + "' ";
+				listColumnNames = "Menu Head Code,Menu Head Name,Operational";
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				idColumnName = "strMenuHeadCode";
+				searchFormTitle = "Menu Head Master";
+				break;
+			}
 		
 		}
 

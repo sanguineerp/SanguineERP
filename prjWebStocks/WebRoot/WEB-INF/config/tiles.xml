@@ -5027,19 +5027,7 @@
 
 <!-- 	Start WebBanquet Tiles Entry -->
 
-  
-   <definition name="frmSampleMaster" extends="base.definition">
-		   <put-attribute name="title" value="Sample Master" ></put-attribute>
-		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmSample.jsp" ></put-attribute>
-	  </definition>
-	
-	 <definition name="frmSampleMaster_1" extends="base.definition4">
-	 	 <put-attribute name="title" value="Sample Master"  ></put-attribute>
-	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmSample.jsp" ></put-attribute>
-	  </definition>
-  
-  
-   <definition name="frmWebBanquetDiary" extends="base.definition">
+  	<definition name="frmWebBanquetDiary" extends="base.definition">
 		   <put-attribute name="title" value="Dairy" ></put-attribute>
 		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmWebBanquetDiary.jsp" ></put-attribute>
 	  </definition>
@@ -5070,7 +5058,7 @@
 	  </definition>
 	  
 	  
-<definition name="frmFunctionMaster" extends="base.definition">
+	  <definition name="frmFunctionMaster" extends="base.definition">
 		   <put-attribute name="title" value="Function Master" ></put-attribute>
 		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmFunctionMaster.jsp" ></put-attribute>
 	  </definition>
@@ -5079,6 +5067,18 @@
 	 	 <put-attribute name="title" value="Function Master"  ></put-attribute>
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmFunctionMaster.jsp" ></put-attribute>
 	  </definition>
+	  
+	  <definition name="frmMenuHeadMaster" extends="base.definition">
+		   <put-attribute name="title" value="Menu Head Master" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmMenuHeadMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmMenuHeadMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Menu Head Master"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmMenuHeadMaster.jsp" ></put-attribute>
+	  </definition>
+	  
+	  
   
 <!-- 	End Of WebBanquet Tiles Entry -->
 
