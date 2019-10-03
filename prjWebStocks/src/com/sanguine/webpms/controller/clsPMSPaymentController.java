@@ -574,7 +574,18 @@ public class clsPMSPaymentController {
 				listGuestDataDtl.add(objPaymentReciptBean);
 				}
 			}
-		} 
+		}
+		/*else if(docName.equalsIgnoreCase("Banquet"))
+		{
+			clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
+			
+			String sqlPaymentLoad = "select 2000,a.strPName from bankmms.tblpartymaster a where a.strPCode='C000079'";
+			List listData=objGlobalFunctionsService.funGetList(sql, "sql");
+			objPaymentReciptBean.setStrGuestCode(listData.get(1).toString());
+			
+			objPaymentReciptBean.setDblBalanceAmount((double) listData.get(0));
+			listGuestDataDtl.add(objPaymentReciptBean);
+		}*/
 		else 
 		{
 			sql = " select c.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName " + " from tblcheckindtl a,tblguestmaster c " + " where a.strGuestCode=c.strGuestCode " + " and a.strCheckInNo='" + docCode + "' and a.strPayee='Y'";

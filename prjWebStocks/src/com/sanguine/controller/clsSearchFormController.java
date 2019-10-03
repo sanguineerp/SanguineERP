@@ -5635,6 +5635,15 @@ public class clsSearchFormController {
 				searchFormTitle = "Staff Categeory Master";
 				break;
 			}
+			case "BanquetsettlementCode": {
+				columnNames = "strSettlementCode,strSettlementType,strSettlementDesc,strApplicable";
+				tableName = "clsPMSSettlementMasterHdModel  where strClientCode='" + clientCode + "' ";
+				listColumnNames = "Settlement Code,Settlement Type,Settlement Desc,Applicable";
+				idColumnName = "strSettlementCode";
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Settlement Master";
+				break;
+			}
 
 		}
 
