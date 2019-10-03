@@ -40,6 +40,7 @@ public class clsReasonMasterController {
 			urlHits = "1";
 		}
 		model.put("urlHits", urlHits);
+		request.getSession().setAttribute("moduleName",request.getSession().getAttribute("selectedModuleName").toString());
 
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmReasonMaster_1", "command", new clsReasonMaster());

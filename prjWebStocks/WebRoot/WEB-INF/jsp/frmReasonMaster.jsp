@@ -132,6 +132,22 @@ $(document).ready(function(){
 		}}%>
 	});
 	
+	$(document).ready(function()
+	{
+		var moduleName='<%=session.getAttribute("moduleName").toString()%>';
+		if(moduleName=="7-WebBanquet")
+		{
+			$("#stockAdjust").text("Banquet");
+			$('#stockTransfer').hide();
+			$('#chkStocktra').hide();
+			$('#nonConference').hide();
+			$('#chkNonConf ').hide();
+			$('#secondRow').hide();
+			$('#thirdRow').hide();
+		}
+	});
+	
+	
 	function funvalidate()
 	{
 		if($('#txtReasonCode').val()=='')
@@ -219,55 +235,35 @@ $(document).ready(function(){
 			</tr>
 		</table>
 		
-		<table class="masterTable" >
+		<table id="bottomTable" class="masterTable" >
 			<tr>
 				<th colspan="6" align="center"><s:label path="">APPLICABLE FOR</s:label></th>
 			</tr>
 
 			<tr>
-				<td width="150px"><label>Stock Adjustment</label></td>
-				<td><s:checkbox element="li" id="chkStockAdj"
-						path="strStockAdj" value="true" /></td>
-				
-				<td width="150px"><label>Stock Transfer</label></td>
-				<td><s:checkbox element="li" id="chkStocktra"
-						path="strStocktra" value="true" /></td>
-
-				<td width="150px"><label>Non Conference</label></td>
-				<td><s:checkbox element="li" id="chkNonConf" path="strNonConf"
-						value="true" /></td>
+				<td width="130px"><label id="stockAdjust">Stock Adjustment</label></td>
+				<td><s:checkbox element="li" id="chkStockAdj" path="strStockAdj" value="true" /></td>
+				<td width="130px"><label id="stockTransfer">Stock Transfer</label></td>
+				<td><s:checkbox element="li" id="chkStocktra" path="strStocktra" value="true" /></td>
+				<td width="130px"><label id="nonConference">Non Conference</label></td>
+				<td><s:checkbox element="li" id="chkNonConf" path="strNonConf" value="true" /></td>
 			</tr>
-
-
-
-			<tr>
-				
+			<tr id="secondRow">
 				<td><label>Follow ups</label></td>
-				<td><s:checkbox element="li" id="chkFollowUps"
-						path="strFollowUps" value="true" /></td>
+				<td><s:checkbox element="li" id="chkFollowUps" path="strFollowUps" value="true" /></td>
 				<td><label>Corrective Active</label></td>
-				<td><s:checkbox element="li" id="chkCorract" path="strCorract"
-						value="true" /></td>
-
+				<td><s:checkbox element="li" id="chkCorract" path="strCorract" value="true" /></td>
 				<td><label>Preventive Action</label></td>
-				<td><s:checkbox element="li" id="chkPrevAct" path="strPrevAct"
-						value="true" /></td>
+				<td><s:checkbox element="li" id="chkPrevAct" path="strPrevAct" value="true" /></td>
 			</tr>
-
-			<tr>
+			<tr id="thirdRow">
 				<td><label>Resource Blocking</label></td>
-				<td><s:checkbox element="li" id="chkResAlloc"
-						path="strResAlloc" value="true" /></td>
+				<td><s:checkbox element="li" id="chkResAlloc" path="strResAlloc" value="true" /></td>
 				<td><label>Delivery Challan</label></td>
-				<td><s:checkbox element="li" id="tchkDelcha" path="strDelcha"
-						value="true" /></td>
+				<td><s:checkbox element="li" id="tchkDelcha" path="strDelcha" value="true" /></td>
 				<td><label>Lead Master</label></td>
-				<td><s:checkbox element="li" id="chkLeadMaster"
-						path="strLeadMaster" value="true" /></td>
+				<td><s:checkbox element="li" id="chkLeadMaster" path="strLeadMaster" value="true" /></td>
 			</tr>
-
-			
-
 		</table>
 		<br />
 		<br />
