@@ -112,6 +112,7 @@ $(document).ready(function(){
 	function funResetFields()
 	{
 		$("#txtReasonName").focus();
+		$("#chkStockAdj").attr("checked", false);
     }
 	
 	$(document).ready(function()
@@ -194,6 +195,7 @@ $(document).ready(function(){
 		//alert("flg"+flg);
 		return flg;
 	}
+	
 </script>
 </head>
 
