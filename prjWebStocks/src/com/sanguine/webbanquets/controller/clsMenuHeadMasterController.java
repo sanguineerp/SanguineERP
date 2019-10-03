@@ -76,7 +76,8 @@ public class clsMenuHeadMasterController{
 			req.getSession().setAttribute("successMessage", "Menu Head Code : ".concat(objModel.getStrMenuHeadCode()));
 			return new ModelAndView("redirect:/frmMenuHeadMaster.html");
 		}
-		else{
+		else
+		{
 			return new ModelAndView("frmMenuHeadMaster");
 		}
 	}
