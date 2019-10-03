@@ -3331,7 +3331,21 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
+		sql="ALTER TABLE `tblbqbookinghd`"
+				+ "ADD COLUMN `dblBookingAmt` DOUBLE NOT NULL AFTER `dteBookingDate`;";
 		
+		funExecuteBanquetQuery(sql);
+		
+		sql="ALTER TABLE `tblequipment`"
+				+ "ADD COLUMN `strDeptCode` VARCHAR(10) NOT NULL AFTER `intId`;";
+		
+		funExecuteBanquetQuery(sql);
+		
+		sql = "ALTER TABLE `tbldepartmentmaster`"
+				+ "ADD COLUMN `strMobileNo` VARCHAR(20) NOT NULL AFTER `strOperational`,"
+				+ "ADD COLUMN `strEmailId` VARCHAR(30) NOT NULL AFTER `strMobileNo`;";
+		
+		funExecuteBanquetQuery(sql);
 		
 		//treeMaster Banquets All forms
 		
@@ -3351,7 +3365,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmServiceMaster', 'Service Master', 'Master', 1, 'M', 1, 3, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmServiceMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetStaffMaster', 'Staff Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetStaffMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetStaffCategeoryMaster', 'Staff Categeroy Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetStaffCategeoryMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmFunctionProspectus', 'Function Prospectus', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', '1', 'frmFunctionProspectus.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmFunctionProspectus', 'Function Prospectus', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', '1', 'frmFunctionProspectus.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmPMSPayment', 'Payment', 'Master', '2', 'T', '7', '7', '15', 'imgPayment.png', '7', '3', '3', '3', 'NO', 'YES', 'frmPMSPayment.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		
 		funExecuteQuery(sql);
 		
