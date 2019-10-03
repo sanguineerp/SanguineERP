@@ -1,5 +1,6 @@
 package com.sanguine.webbanquets.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -20,12 +21,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.bean.clsProductMasterBean;
+import com.sanguine.bean.clsTaxMasterBean;
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.model.clsGroupMasterModel;
+import com.sanguine.model.clsGroupMasterModel_ID;
+import com.sanguine.model.clsTaxSettlementMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webbanquets.bean.clsFunctionMasterBean;
 import com.sanguine.webbanquets.model.clsFunctionMasterModel;
+import com.sanguine.webbanquets.model.clsFunctionMasterModel_ID;
+import com.sanguine.webbanquets.model.clsFunctionServiceModel;
 import com.sanguine.webbanquets.service.clsFunctionMasterService;
 import com.sanguine.webpms.model.clsAgentMasterHdModel;
+import com.sanguine.webpms.model.clsPMSSettlementTaxMasterModel;
 
 @Controller
 public class clsFunctionMasterController{
@@ -96,23 +104,33 @@ public class clsFunctionMasterController{
 	private clsFunctionMasterModel funPrepareModel(clsFunctionMasterBean objBean,String userCode,String clientCode,String propertyCode){
 		objGlobal=new clsGlobalFunctions();
 		long lastNo=0;
-		clsFunctionMasterModel objFunModel=new clsFunctionMasterModel();
+		clsFunctionMasterModel objFunModel;
 	   
 		if(objBean.getStrFunctionCode().trim().length() == 0)
 		{
 			lastNo=objGlobalFunctionsService.funGetLastNo("tblfunctionmaster", "FunctionMaster", "intFId", clientCode);
 			String functionCode = "FM" + String.format("%06d", lastNo);
-			objFunModel.setStrFunctionCode(functionCode);
-			objFunModel.setStrUserCreated(userCode);
+			objFunModel=new clsFunctionMasterModel(new clsFunctionMasterModel_ID(functionCode, clientCode));
+			objFunModel.setIntFId(lastNo);
+		    objFunModel.setStrUserCreated(userCode);
 			objFunModel.setStrDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			
 		}
 		else
 		{
-			objFunModel.setStrFunctionCode(objBean.getStrFunctionCode());
-			objFunModel.setStrUserCreated(userCode);
-			objFunModel.setStrDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));	
-		}
+			clsFunctionMasterModel objModel=objFunctionMasterService.funGetFunctionMaster(objBean.getStrFunctionCode(), clientCode);
+			if (null == objModel) {
+				lastNo=objGlobalFunctionsService.funGetLastNo("tblfunctionmaster", "FunctionMaster", "intFId", clientCode);
+				String functionCode = "FM" + String.format("%06d", lastNo);
+				objFunModel=new clsFunctionMasterModel(new clsFunctionMasterModel_ID(functionCode, clientCode));
+				objFunModel.setIntFId(lastNo);
+				objFunModel.setStrUserCreated(userCode);
+				objFunModel.setStrDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+			} else {
+				objFunModel = new clsFunctionMasterModel(new clsFunctionMasterModel_ID(objBean.getStrFunctionCode(), clientCode));
+			}
+			
+	     }
 	    
 	    objFunModel.setStrClientCode(clientCode);
 		objFunModel.setStrFunctionName(objBean.getStrFunctionName());
@@ -120,9 +138,45 @@ public class clsFunctionMasterController{
 		objFunModel.setStrUserEdited(userCode);
 		objFunModel.setStrDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 		objFunModel.setStrPropertyCode(propertyCode);
-	
-	    
+		
+		
+		
+		
+        List<clsFunctionServiceModel> listSetFunModel =new ArrayList();
+		
+		if(objBean.getListService()!=null && objBean.getListService().size()>0){
+			for(clsFunctionServiceModel objFunService :objBean.getListService())
+			{
+				if(objFunService.getStrApplicable()!=null ){
+					objFunService.setStrApplicable("Y");
+				}else{
+					objFunService.setStrApplicable("N");
+				}
+				listSetFunModel.add(objFunService);
+				
+			}
+		}
+		objFunModel.setListService(listSetFunModel);
+
 		return objFunModel;
 	     
 	}
+	
+	
+	@RequestMapping(value = "/loadServiceData", method = RequestMethod.GET)
+	public @ResponseBody List funLoadServiceMasterData(HttpServletRequest req)
+	{
+		List list =null;
+		try{
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String 	 sql="select a.strServiceCode,a.strServiceName  from tblservicemaster a where a.strClientCode='"+clientCode+"' ";
+			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
+			}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return list;
+	}
+
 }

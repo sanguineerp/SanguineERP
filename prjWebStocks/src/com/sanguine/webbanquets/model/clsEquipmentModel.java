@@ -57,6 +57,8 @@ public class clsEquipmentModel implements Serializable{
 	@Column(name="strOperational")
 	private String strOperational;
 
+	@Column(name="strDeptCode")
+	private String strDeptCode;
 	
 	//Setter-Getter Methods
 	public String getStrEquipmentCode(){
@@ -142,6 +144,14 @@ public class clsEquipmentModel implements Serializable{
 
 	public void setStrOperational(String strOperational) {
 		this.strOperational = strOperational;
+	}
+
+	public String getStrDeptCode() {
+		return strDeptCode;
+	}
+
+	public void setStrDeptCode(String strDeptCode) {
+		this.strDeptCode = strDeptCode;
 	}
 
 	

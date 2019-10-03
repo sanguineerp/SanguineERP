@@ -15,6 +15,12 @@ public class clsDepartmentMasterBean {
 	private String strDeactivate;
 
 	private String strType;
+	
+	private String strMobileNo;
+	
+	private String strEmailId;
+	
+
 
 	public String getStrDeptCode() {
 		return strDeptCode;
@@ -71,5 +77,23 @@ public class clsDepartmentMasterBean {
 	public void setStrOperational(String strOperational) {
 		this.strOperational = strOperational;
 	}
+
+	public String getStrMobileNo() {
+		return strMobileNo;
+	}
+
+	public void setStrMobileNo(String strMobileNo) {
+		this.strMobileNo = strMobileNo;
+	}
+
+	public String getStrEmailId() {
+		return strEmailId;
+	}
+
+	public void setStrEmailId(String strEmailId) {
+		this.strEmailId = strEmailId;
+	}
+
+	
 
 }

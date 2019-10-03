@@ -22,6 +22,12 @@ public class clsDepartmentMasterModel {
 	@Column(name = "strRevenueProducing")
 	private String strRevenueProducing;
 
+	@Column(name = "strMobileNo")
+	private String strMobileNo;
+	
+	@Column(name = "strEmailId")
+	private String strEmailId;
+	
 	@Column(name = "strDiscount")
 	private String strDiscount;
 
@@ -140,6 +146,22 @@ public class clsDepartmentMasterModel {
 
 	public void setStrOperational(String strOperational) {
 		this.strOperational = strOperational;
+	}
+
+	public String getStrMobileNo() {
+		return strMobileNo;
+	}
+
+	public void setStrMobileNo(String strMobileNo) {
+		this.strMobileNo = strMobileNo;
+	}
+
+	public String getStrEmailId() {
+		return strEmailId;
+	}
+
+	public void setStrEmailId(String strEmailId) {
+		this.strEmailId = strEmailId;
 	}
 
 }

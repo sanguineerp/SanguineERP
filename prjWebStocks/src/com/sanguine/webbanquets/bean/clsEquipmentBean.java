@@ -17,6 +17,8 @@ public class clsEquipmentBean{
 	private String strClientCode;
 	
 	private String strOperational;
+	
+	private String strDeptCode;
 
 //Setter-Getter Methods
 	public String getStrEquipmentCode(){
@@ -72,6 +74,12 @@ public class clsEquipmentBean{
 	}
 	public void setStrOperational(String strOperational) {
 		this.strOperational = strOperational;
+	}
+	public String getStrDeptCode() {
+		return strDeptCode;
+	}
+	public void setStrDeptCode(String strDeptCode) {
+		this.strDeptCode = strDeptCode;
 	}
 
 

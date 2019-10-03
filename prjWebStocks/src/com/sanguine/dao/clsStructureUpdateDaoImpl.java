@@ -3214,21 +3214,21 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblfunctionmaster` ( "
-			+" `strFunctionCode` VARCHAR(10) NOT NULL, "
-			+" `strFunctionName` VARCHAR(100) NOT NULL DEFAULT '', "
-			+" `strOperationalYN` VARCHAR(2) NOT NULL DEFAULT 'Y', " 
-			+" `strPropertyCode` VARCHAR(5) NOT NULL, "
-			+" `strClientCode` VARCHAR(10) NOT NULL, "
-			+" `strUserCreated` VARCHAR(10) NOT NULL, "
-			+" `strUserEdited` VARCHAR(10) NOT NULL, "
-			+" `strDateCreated` DATETIME NOT NULL, "
-			+" `strDateEdited` DATETIME NOT NULL, "
-			+" `intFId` BIGINT(20) NOT NULL DEFAULT '0', "
-			+" PRIMARY KEY (`strFunctionCode`, `strClientCode`) "
-		+" )"
-		+" COLLATE='utf8_general_ci'"
-		+" ENGINE=InnoDB;";
+		sql="CREATE TABLE `tblfunctionmaster` ("
+				+ "`strFunctionCode` VARCHAR(10) NOT NULL,"
+				+ "`strFunctionName` VARCHAR(100) NOT NULL DEFAULT '',"
+				+ "`strOperationalYN` VARCHAR(2) NOT NULL DEFAULT 'Y',"
+				+ "`strPropertyCode` VARCHAR(5) NOT NULL,"
+				+ "`strClientCode` VARCHAR(10) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(10) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(10) NOT NULL,"
+				+ "`strDateCreated` DATETIME NOT NULL,"
+				+ "`strDateEdited` DATETIME NOT NULL,"
+				+ "`intFId` BIGINT(20) NOT NULL DEFAULT '0',"
+				+ "PRIMARY KEY (`strFunctionCode`, `strClientCode`)"
+				+ ") "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB;";
 		
 		funExecuteBanquetQuery(sql);
 		
@@ -3270,40 +3270,65 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblservicemaster` ( "
-				+ "	`strServiceCode` VARCHAR(10) NOT NULL, "
-				+ "	`strServiceName` VARCHAR(50) NOT NULL DEFAULT '', "
-				+ "	`intSId` BIGINT(20) NOT NULL DEFAULT '0', "
-				+ "	`strPropertyCode` VARCHAR(5) NOT NULL, "
-				+ "	`strClientCode` VARCHAR(10) NOT NULL, "
-				+ "	`strUserCreated` VARCHAR(10) NOT NULL, "
-				+ "	`strUserEdited` VARCHAR(10) NOT NULL, "
-				+ "	`dteDateCreated` DATETIME NOT NULL, "
-				+ "	`dteDateEdited` DATETIME NOT NULL, "
-				+ "	`strOperationalYN` VARCHAR(2) NOT NULL DEFAULT 'Y', "
-				+ "	PRIMARY KEY (`strServiceCode`, `strClientCode`) "
-			+ "	) "
-			+ "	COLLATE='utf8_general_ci' "
-			+ "	ENGINE=InnoDB "
-			+ "	;";
+
+		sql="CREATE TABLE `tblservicemaster` ("
+				+ "`strServiceCode` VARCHAR(10) NOT NULL,"
+				+ "`strServiceName` VARCHAR(50) NOT NULL DEFAULT '',"
+				+ "`intSId` BIGINT(20) NOT NULL DEFAULT '0',"
+				+ "`strPropertyCode` VARCHAR(5) NOT NULL,"
+				+ "`strClientCode` VARCHAR(10) NOT NULL,"
+				+ "`dblRate` DECIMAL(18,4) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(10) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(10) NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,"
+				+ "`dteDateEdited` DATETIME NOT NULL,"
+				+ "`strOperationalYN` VARCHAR(2) NOT NULL DEFAULT 'Y',"
+				+ "`strDeptCode` VARCHAR(10) NOT NULL,"
+				+ "PRIMARY KEY (`strServiceCode`, `strClientCode`)"
+				+ ") "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB"
+				+ ";";
+
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblstaffmaster` ( "
-				+ "	`strStaffCode` VARCHAR(10) NOT NULL, "
-				+ "	`strStaffName` VARCHAR(50) NOT NULL, "
-				+ "	`strDeptCode` VARCHAR(10) NOT NULL, "
-				+ "	`strOperationalYN` VARCHAR(10) NOT NULL, "
-				+ "	`dtCreated` DATETIME NOT NULL, "
-				+ "	`dtEdited` DATETIME NOT NULL, "
-				+ "	`strClientCode` VARCHAR(20) NOT NULL DEFAULT '', "
-				+ "	`strUserCreated` VARCHAR(20) NOT NULL DEFAULT '', "
-				+ "	`strUserEdited` VARCHAR(20) NOT NULL DEFAULT '', "
-				+ "	`intGId` BIGINT(20) NOT NULL, "
-				+ "	PRIMARY KEY (`strStaffCode`, `strClientCode`) "
-			+ "	) "
-			+ "	COLLATE='utf8_general_ci' "
-			+ "	ENGINE=InnoDB "
-			+ "	;";
+		sql="CREATE TABLE `tblstaffmaster` ("
+				+ "`strStaffCode` VARCHAR(10) NOT NULL,"
+				+ "`strStaffName` VARCHAR(50) NOT NULL,"
+				+ "`strStaffCatCode` VARCHAR(10) NOT NULL,"
+				+ "`strOperationalYN` VARCHAR(10) NOT NULL,"
+				+ "`dtCreated` DATETIME NOT NULL,"
+				+ "`dtEdited` DATETIME NOT NULL,"
+				+ "`strClientCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strUserCreated` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strUserEdited` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`intGId` BIGINT(20) NOT NULL,"
+				+ "PRIMARY KEY (`strStaffCode`, `strClientCode`)"
+				+ ") "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB "
+				+ ";";
+		
+		funExecuteBanquetQuery(sql);
+		
+		sql ="CREATE TABLE `tblstaffcategeorymaster` ("
+				+ "`strStaffCategeoryCode` VARCHAR(10) NOT NULL,"
+				+ "`strStaffCategeoryName` VARCHAR(50) NOT NULL,"
+				+ "`strStaffCount` VARCHAR(20) NOT NULL,"
+				+ "`strOperationalYN` VARCHAR(10) NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,"
+				+ "`dteDateEdited` DATETIME NOT NULL,"
+				+ "`strClientCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strDeptCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strUserCreated` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strUserEdited` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`intGId` BIGINT(20) NOT NULL DEFAULT '0',"
+				+ "PRIMARY KEY (`strClientCode`, `strStaffCategeoryCode`)"
+				+ ") "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB "
+				+ ";";
+		
 		funExecuteBanquetQuery(sql);
 		
 		
@@ -3324,7 +3349,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmItemMaster', 'Item Master', 'Master', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmItemMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmFunctionMaster', 'Function Master', 'Master', 1, 'M', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmFunctionMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmServiceMaster', 'Service Master', 'Master', 1, 'M', 1, 3, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmServiceMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmBanquetStaffMaster', 'Staff Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetStaffMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');;";
+				+ "('frmBanquetStaffMaster', 'Staff Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetStaffMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBanquetStaffCategeoryMaster', 'Staff Categeroy Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetStaffCategeoryMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		
 		funExecuteQuery(sql);
 		

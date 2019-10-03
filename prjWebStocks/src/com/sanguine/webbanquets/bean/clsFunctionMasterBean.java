@@ -1,5 +1,10 @@
 package com.sanguine.webbanquets.bean;
 
+import java.util.List;
+
+import com.sanguine.model.clsSettlementMasterModel;
+import com.sanguine.webbanquets.model.clsFunctionServiceModel;
+
 public class clsFunctionMasterBean{
 //Variable Declaration
 	private String strFunctionCode;
@@ -21,6 +26,8 @@ public class clsFunctionMasterBean{
 	private String strDateEdited;
 	
 	private long intFId;
+	
+	private List<clsFunctionServiceModel> listService;
 
 //Setter-Getter Methods
 	public String getStrFunctionCode(){
@@ -90,6 +97,12 @@ public class clsFunctionMasterBean{
 	}
 	public void setIntFId(long intFId) {
 		this.intFId = intFId;
+	}
+	public List<clsFunctionServiceModel> getListService() {
+		return listService;
+	}
+	public void setListService(List<clsFunctionServiceModel> listService) {
+		this.listService = listService;
 	}
 
 

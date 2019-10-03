@@ -11,12 +11,12 @@
 	
 	$(function() 
 	{
-		var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
+		var pmsDate='2019-05-05'; <%-- '<%=session.getAttribute("PMSDate").toString()%>'; --%>
 		
 		$("#txtExpiryDate").datepicker({ dateFormat: 'dd-mm-yy' });
 		$("#txtExpiryDate").datepicker('setDate', pmsDate);		
 		
-		 var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
+		 var pmsDate='2019-05-05';<%-- '<%=session.getAttribute("PMSDate").toString()%>'; --%>
 		  var dte=pmsDate.split("-");
 		  $("#txtPMSDate").val(dte[2]+"-"+dte[1]+"-"+dte[0]);
 		  
@@ -35,6 +35,14 @@
 		  else{
 			  
 		  }
+		  
+		  var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
+	   		if(strIndustryType=='7-WebBanquet') 
+	   		{
+	   			$('#trGuest').hide();
+	   			
+	   		}
+		  
 	});
 
 
@@ -73,6 +81,10 @@
 			case 'guestCode' : 
 				funSetGuestCode(code);
 				break;
+				
+			case 'BillForBanquet' : 
+				funSetBanquetCode(code);
+				break;
 		}
 	}
 
@@ -80,7 +92,7 @@
 		
 		$.ajax({
 			type : "GET",
-			url : getContextPath()+ "/loadGuestCode.html?guestCode=" + code,
+			url : getContextPath()+ "/loadGuestCode.html?banquetCode=" + code,
 			dataType : "json",
 			success : function(response){ 
 				funSetGuestInfo(response);
@@ -104,7 +116,10 @@
 			}
 		});
 	}
-	
+	 function funSetBanquetCode(code){
+		
+		 $("#txtDocCode").val(code);
+	} 
 	function funSetGuestInfo(obj)
 	{
 		$("#txtCreditName").val(obj.strGuestCode);
@@ -297,6 +312,12 @@
 			funHelp("BillForPayment");
 			fieldName = "BillForPayment";
 		}
+		else if ($("#cmbAgainst").val() == "Banquet")
+		{
+			funHelp("BillForBanquet");
+			fieldName = "BillForBanquet";
+		}
+		
 	}
 	
 
@@ -560,7 +581,7 @@ function funCreateNewGuest(){
 			<td colspan="3"></td>
 		</tr>
 		
-		<tr>
+		<tr id="trGuest">
 			<td>Credit Name</td>
 		
 			<td>

@@ -54,6 +54,14 @@
 			      var st = strDName.replace(/\s{2,}/g, ' ');
 			      $('#txtDeptName').val(st);
 				});
+			
+			var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
+	   		if(strIndustryType=='3-WebPMS') 
+	   		{
+	   			$('#trEmail').hide();
+	   			$('#trMobile').hide();
+	   		}
+			
 		});
 		
 		
@@ -99,6 +107,8 @@
 					        	$("#cmdDeactivate").val(response.strDeactivate);
 					        	$("#cmbType").val(response.strType);
 					        	$("#txtDeptDesc").focus();
+					        	$("#txtEmailId").val(response.strEmailId);
+					        	$("#txtMobileNo").val(response.strMobileNo);
 				        	}
 						},
 						error: function(jqXHR, exception) {
@@ -164,13 +174,25 @@
 			</tr>
 		
 			<tr>
-			    <td><label>Department</label></td>
+			    <td style="width: 20%"><label>Department</label></td>
 				<td><s:input id="txtDeptCode" path="strDeptCode" cssClass="searchTextBox" ondblclick="funHelp('deptCode')" /></td>				
 			</tr>
 			
+			
+			
 			<tr>
 			    <td><label>Department Desc</label></td>
-				<td><s:input id="txtDeptDesc" path="strDeptDesc" cssClass="longTextBox" /></td>				
+				<td><s:input id="txtDeptDesc" path="strDeptDesc" style="width:25%" cssClass="longTextBox" /></td>				
+			</tr>
+			
+			<tr id="trEmail">
+			    <td><label>Email Id</label></td>
+				<td><s:input id="txtEmailId" path="strEmailId" cssClass="longTextBox" /></td>				
+			</tr>
+			
+			<tr id="trMobile">
+			    <td><label>Mobile No</label></td>
+				<td><s:input id="txtMobileNo" path="strMobileNo" style="width:25%" cssClass="longTextBox" /></td>				
 			</tr>
 			
 			<tr>

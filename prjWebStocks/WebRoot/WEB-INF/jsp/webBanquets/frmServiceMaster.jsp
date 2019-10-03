@@ -14,41 +14,27 @@
 		$("#txtServiceName").focus();
     }
 	
-	$(function() 
-	{
-		 /**
-		* On Blur Event on TextField
-		**/
-		$('#txtServiceCode').blur(function() 
-		{
-				var code = $('#txtServiceCode').val();
-				if (code.trim().length > 0 && code !="?" && code !="/")
-				{				
-					funSetData(code);							
-				}
-		});
-		
-		$('#txtServiceName').blur(function () {
-			 var strFunctionName=$('#txtServiceName').val();
-		      var st = strFunctionName.replace(/\s{2,}/g, ' ');
-		      $('#txtServiceName').val(st);
-			});
-		
-	});
+	
 
-	function funSetData(code){
+function funSetData(code){
 
 		switch(fieldName){
 
-			case 'ServiceName' : 
+			case 'ServiceMaster' :{
 				funSetServiceName(code);
 				break;
+		     }
+			case 'deptCode' : {
+				funSetDepartmentData(code);
+				break;
+			}
+			
 		}
 	}
 
 
 
-	function funSetData(code)
+	function funSetServiceName(code)
 	{
 		$("#txtServiceCode").val(code);
 		var searchurl=getContextPath()+ "/loadServiceMasterData.html?serviceCode=" + code;
@@ -60,15 +46,25 @@
 			{ 
 				if(response.strServiceCode=='Invalid Code')
 	        	{
-	        		alert("Invalid Function Code");
+	        		alert("Invalid Service Code");
 	        		$("#txtServiceCode").val('');
 	        	}
 				else
 				{
 					$("#txtServiceCode").val(response.strServiceCode);
 	        		$("#txtServiceName").val(response.strServiceName);
-	        		$("#txtServiceName").focus();
-	        		$("#txtOperational").val(response.strOperationalYN);
+	        		//$("#txtOperational").val(response.strOperationalYN);
+	        		$("#txtDeptCode").val(response.strDeptCode);
+	        		$("#txtRate").val(response.dblRate);
+	        		document.getElementById("txtOperational").checked = response.strOperationalYN == 'Yes' ? true
+							: false;
+	        		
+	        		if (response.strOperationalYN == 'Y') {
+						$("#txtOperational").prop('checked',
+								true);
+					} else
+						$("#txtOperational").prop('checked',
+								false);
 	        		
 				}
 			},
@@ -115,7 +111,43 @@
 
 	});
 
-
+	 function funSetDepartmentData(code)
+		{
+			$.ajax({
+				type : "GET",
+				url : getContextPath()+ "/loadDeptMasterData.html?deptCode=" + code,
+				dataType : "json",
+				success : function(response){ 
+					if(response.strDeptCode=='Invalid Code')
+		        	{
+		        		alert("Invalid Department Code");
+		        		$("#txtDeptCode").val('');
+		        	}
+		        	else
+		        	{
+		        		$("#txtDeptCode").val(response.strDeptCode);
+		        		$("#lblDepartmentName").text(response.strDeptDesc);
+		        	}
+				},
+				error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+			});
+		}
 
 
 
@@ -133,7 +165,7 @@
 <body>
 
 	<div id="formHeading">
-	<label>ServiceMaster</label>
+	<label>Service Master</label>
 	</div>
 
 <br/>
@@ -147,7 +179,7 @@
 					<label>Service Code</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" id="txtServiceCode" path="strServiceCode" cssClass="searchTextBox" ondblclick="funHelp('ServiceMaster')" />
+					<s:input colspan="3" type="text" id="txtServiceCode" path="strServiceCode" cssClass="searchTextBox jQKeyboard form-control" ondblclick="funHelp('ServiceMaster')" />
 				</td>
 			</tr>
 			<tr>
@@ -162,13 +194,29 @@
 				<td>
 					<label>Operational Y/N</label>
 				</td>
-				<!-- <td>
-					<input colspan="3" type="text" id="txtOperationalYN" cssClass="longTextBox" />
-				</td> -->
-				<td colspan="2"><s:select width="140px" path="strOperationalYN"  cssClass="BoxW62px" id="txtOperational">
-						<s:option value="Y">YES</s:option>
-						<s:option value="N">NO</s:option></s:select></td>
+				
+				<td ><s:checkbox value="true" path="strOperationalYN"  id="txtOperational"  />
+					
 			</tr>
+			<tr>
+				<td>
+				   <label>Department Code</label>
+				</td>
+				<td ><s:input colspan="3" type="text" id="txtDeptCode" path="strDeptCode"  readonly="true" cssClass="searchTextBox jQKeyboard form-control" ondblclick="funHelp('deptCode')"/>
+				&nbsp&nbsp&nbsp&nbsp<label id="lblDepartmentName"></label>		
+			</tr>
+			
+			<tr>
+				<td>
+					<label>Rate</label>
+				</td>
+				<td>
+					<s:input colspan="3" type="text" id="txtRate" path="dblRate" cssClass="decimal-places numberField" />
+				</td>
+				<!-- <td><label >Weight</label></td> -->
+				<%--  <td><s:input id="txtWeight" name="weight" path="dblWeight" cssClass="decimal-places numberField"/></td> --%>
+			</tr>
+			
 		</table>
 
 		<br />

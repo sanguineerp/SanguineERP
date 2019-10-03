@@ -5120,6 +5120,16 @@
 	 	 <put-attribute name="title" value="Dairy"  ></put-attribute>
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetStaffMaster.jsp" ></put-attribute>
 	  </definition>
+	  
+	  <definition name="frmBanquetStaffCategeoryMaster" extends="base.definition">
+		   <put-attribute name="title" value="Dairy" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetStaffCategeoryMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBanquetStaffCategeoryMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Dairy"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetStaffCategeoryMaster.jsp" ></put-attribute>
+	  </definition>
   
 <!-- 	End Of WebBanquet Tiles Entry -->
 

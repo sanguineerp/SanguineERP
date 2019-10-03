@@ -36,8 +36,8 @@ public class clsBanquetStaffMasterModel implements Serializable{
 	@Column(name="strStaffName")
 	private String strStaffName;
 
-	@Column(name="strDeptCode")
-	private String strDeptCode;
+	@Column(name="strStaffCatCode")
+	private String strStaffCatCode;
 
 	@Column(name="strOperationalYN")
 	private String strOperationalYN;
@@ -100,18 +100,18 @@ public String getDtCreated() {
 		this. strStaffName = (String) setDefaultValue( strStaffName, "");
 	}
 
-	public String getStrDeptCode(){
-		return strDeptCode;
+	public String getStrStaffCatCode(){
+		return strStaffCatCode;
 	}
-	public void setStrDeptCode(String strDeptCode){
-		this. strDeptCode = (String) setDefaultValue( strDeptCode, "");
+	public void setStrStaffCatCode(String strStaffCatCode){
+		this. strStaffCatCode = (String) setDefaultValue( strStaffCatCode, "");
 	}
 
 	public String getStrOperationalYN(){
 		return strOperationalYN;
 	}
 	public void setStrOperationalYN(String strOperationalYN){
-		this. strOperationalYN = (String) setDefaultValue( strOperationalYN, "");
+		this. strOperationalYN = (String) setDefaultValue( strOperationalYN, "N");
 	}
 
 	public String getStrClientCode(){

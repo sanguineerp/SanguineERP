@@ -6,7 +6,7 @@ public class clsBanquetStaffMasterBean{
 
 	private String strStaffName;
 
-	private String strDeptCode;
+	private String strStaffCatCode;
 
 	private String strOperationalYN;
 
@@ -43,11 +43,11 @@ public String getIntGId() {
 		this.strStaffName=strStaffName;
 	}
 
-	public String getStrDeptCode(){
-		return strDeptCode;
+	public String getStrStaffCatCode(){
+		return strStaffCatCode;
 	}
-	public void setStrDeptCode(String strDeptCode){
-		this.strDeptCode=strDeptCode;
+	public void setStrStaffCatCode(String strStaffCatCode){
+		this.strStaffCatCode=strStaffCatCode;
 	}
 
 	public String getStrOperationalYN(){

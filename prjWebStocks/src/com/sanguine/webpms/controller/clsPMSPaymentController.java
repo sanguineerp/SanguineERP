@@ -124,7 +124,10 @@ public class clsPMSPaymentController {
 	@RequestMapping(value = "/frmPMSPayment", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
 		String urlHits = "1";
+		String strModule = request.getSession().getAttribute("selectedModuleName").toString();
 
+		if(strModule.equalsIgnoreCase("3-WebPMS"))
+		{
 		List<String> listAgainst = new ArrayList<>();
 		listAgainst.add("Reservation");
 		//listAgainst.add("Check-In");
@@ -137,6 +140,21 @@ public class clsPMSPaymentController {
 		listSettlement.add("Full Settlement");
 
 		model.put("listSettlement", listSettlement);
+		
+		}
+		else
+		{
+			List<String> listAgainst = new ArrayList<>();
+			listAgainst.add("Banquet");
+			
+			model.put("listAgainst", listAgainst);
+			
+			List<String> listSettlement = new ArrayList<>();
+			listSettlement.add("Part Settlement");
+			listSettlement.add("Full Settlement");
+
+			model.put("listSettlement", listSettlement);
+		}
 		try {
 			urlHits = request.getParameter("saddr").toString();
 		} catch (NullPointerException e) {
@@ -879,8 +897,13 @@ public class clsPMSPaymentController {
 		}
 		if(AdvAmount.charAt(2)=='C'){
 			
-			String sqlCheckIn = "SELECT a.dblRoomTerrif FROM tblroomtypemaster a,tblcheckindtl  b "
-			 		+ "WHERE b.strCheckInNo = '"+AdvAmount+"' and a.strRoomTypeCode=b.strRoomType";
+			/*String sqlCheckIn = "SELECT a.dblRoomTerrif FROM tblroomtypemaster a,tblcheckindtl  b "
+			 		+ "WHERE b.strCheckInNo = '"+AdvAmount+"' and a.strRoomTypeCode=b.strRoomType";*/
+			String sqlCheckIn="SELECT ROUND(dblRoomRate-(temp2.dblRoomRate*temp2.dblDiscount)/100+ SUM(d.dblTaxAmt)) FROM "
+					+ "( SELECT temp.dblRoomRate,temp.dblDiscount,c.strFolioNo FROM ( SELECT b.dblRoomRate,b.dblDiscount,a.strCheckInNo FROM tblcheckinhd a "
+					+ "LEFT OUTER JOIN tblwalkinroomratedtl b ON b.strWalkinNo=a.strWalkInNo WHERE a.strCheckInNo='"+AdvAmount+"') temp "
+					+ ",tblfoliohd c WHERE temp.strCheckInNo=c.strCheckInNo) temp2,tblfoliotaxdtl d "
+					+ "WHERE temp2.strFolioNo=d.strFolioNo";
 			 List listResevation = objGlobalFunctionsService.funGetDataList(sqlCheckIn, "sql");
 			 if (listResevation.size()>0) 
 				{

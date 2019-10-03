@@ -1,14 +1,23 @@
 package com.sanguine.webbanquets.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Table;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.CollectionOfElements;
+
+import com.sanguine.model.clsTaxSettlementMasterModel;
 
 @Entity
 @Table(name="tblfunctionmaster")
@@ -16,18 +25,23 @@ import javax.persistence.Id;
 
 public class clsFunctionMasterModel implements Serializable{
 	private static final long serialVersionUID = 1L;
-	public clsFunctionMasterModel(){}
+	public clsFunctionMasterModel(){
+		
+	}
 
 	public clsFunctionMasterModel(clsFunctionMasterModel_ID objModelID){
 		strFunctionCode = objModelID.getStrFunctionCode();
 		strClientCode = objModelID.getStrClientCode();
 	}
 
+	
+	@CollectionOfElements(fetch = FetchType.EAGER)
+	@JoinTable(name = "tblfunctionservice", joinColumns = { @JoinColumn(name = "strClientCode"), @JoinColumn(name = "strFunctionCode") })
 	@Id
-	@AttributeOverrides({
-		@AttributeOverride(name="strFunctionCode",column=@Column(name="strFunctionCode")),
-@AttributeOverride(name="strClientCode",column=@Column(name="strClientCode"))
-	})
+	@AttributeOverrides({ @AttributeOverride(name = "strFunctionCode", column = @Column(name = "strFunctionCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")),@AttributeOverride(name = "strServiceCode", column = @Column(name = "strServiceCode")) })
+	List<clsFunctionServiceModel> listService = new ArrayList<clsFunctionServiceModel>();
+
+	
 
 //Variable Declaration
 	@Column(name="strFunctionCode")
@@ -57,7 +71,7 @@ public class clsFunctionMasterModel implements Serializable{
 	@Column(name="strDateEdited")
 	private String strDateEdited;
 	
-	@Column(name = "intFId", nullable = false, updatable = false)
+	@Column(name = "intFId", nullable = false)
 	private long intFId;
 
 //Setter-Getter Methods
@@ -125,12 +139,23 @@ public class clsFunctionMasterModel implements Serializable{
 	}
 
 
-public long getIntFId() {
+	
+
+	public long getIntFId() {
 		return intFId;
 	}
 
 	public void setIntFId(long intFId) {
 		this.intFId = intFId;
+	}
+
+	
+	public List<clsFunctionServiceModel> getListService() {
+		return listService;
+	}
+
+	public void setListService(List<clsFunctionServiceModel> listService) {
+		this.listService = listService;
 	}
 
 	//Function to Set Default Values

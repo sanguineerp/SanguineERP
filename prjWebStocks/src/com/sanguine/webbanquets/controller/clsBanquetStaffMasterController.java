@@ -60,7 +60,7 @@ public class clsBanquetStaffMasterController{
 			clsBanquetStaffMasterModel objModel = funPrepareModel(objBean,userCode,clientCode);
 			objBanquetStaffMasterService.funAddUpdateBanquetStaffMaster(objModel);
 			req.getSession().setAttribute("success", true);
-			req.getSession().setAttribute("successMessage", "Staff Saved Successfully");
+			req.getSession().setAttribute("successMessage", objModel.getStrStaffCode());
 			return new ModelAndView("redirect:/frmBanquetStaffMaster.html");
 		}
 		else{
@@ -94,7 +94,7 @@ public class clsBanquetStaffMasterController{
 				mpModel.setIntGId(lastNo);				
 				mpModel.setStrStaffCode(customerCode);
 				mpModel.setStrStaffName(objBean.getStrStaffName());
-				mpModel.setStrDeptCode(objBean.getStrDeptCode());
+				mpModel.setStrStaffCatCode(objBean.getStrStaffCatCode());
 				mpModel.setStrOperationalYN(objBean.getStrOperationalYN());
 				mpModel.setDtCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));		
 				mpModel.setDtEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));	
@@ -111,7 +111,7 @@ public class clsBanquetStaffMasterController{
 					mpModel.setIntGId(lastNo);				
 					mpModel.setStrStaffCode(customerCode);
 					mpModel.setStrStaffName(objBean.getStrStaffName());
-					mpModel.setStrDeptCode(objBean.getStrDeptCode());
+					mpModel.setStrStaffCatCode(objBean.getStrStaffCatCode());
 					mpModel.setStrOperationalYN(objBean.getStrOperationalYN());
 					mpModel.setDtCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));		
 					mpModel.setDtEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));	
@@ -123,7 +123,7 @@ public class clsBanquetStaffMasterController{
 					mpModel.setIntGId(objMemberProfile.getIntGId());				
 					mpModel.setStrStaffCode(objBean.getStrStaffCode());
 					mpModel.setStrStaffName(objBean.getStrStaffName());
-					mpModel.setStrDeptCode(objBean.getStrDeptCode());
+					mpModel.setStrStaffCatCode(objBean.getStrStaffCatCode());
 					mpModel.setStrOperationalYN(objBean.getStrOperationalYN());
 					mpModel.setDtCreated(objMemberProfile.getDtCreated());						
 					mpModel.setStrClientCode(objMemberProfile.getStrClientCode());

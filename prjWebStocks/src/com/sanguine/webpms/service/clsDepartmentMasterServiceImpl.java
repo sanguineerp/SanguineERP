@@ -30,6 +30,8 @@ public class clsDepartmentMasterServiceImpl implements clsDepartmentMasterServic
 			objDepartmentMasterModel.setStrDeptCode(deptCode);
 			objDepartmentMasterModel.setStrUserCreated(userCode);
 			objDepartmentMasterModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+			objDepartmentMasterModel.setStrMobileNo(objDeptMasterBean.getStrMobileNo());
+			objDepartmentMasterModel.setStrEmailId(objDeptMasterBean.getStrEmailId());
 			
 		} else {
 			objDepartmentMasterModel.setStrDeptCode(objDeptMasterBean.getStrDeptCode());
@@ -47,6 +49,8 @@ public class clsDepartmentMasterServiceImpl implements clsDepartmentMasterServic
 		objDepartmentMasterModel.setStrUserEdited(userCode);
 		objDepartmentMasterModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 		objDepartmentMasterModel.setStrClientCode(clientCode);
+		objDepartmentMasterModel.setStrMobileNo(objDeptMasterBean.getStrMobileNo());
+		objDepartmentMasterModel.setStrEmailId(objDeptMasterBean.getStrEmailId());
 
 		return objDepartmentMasterModel;
 

@@ -20,6 +20,8 @@ import com.sanguine.webbanquets.model.clsEquipmentModel;
 import com.sanguine.webbanquets.service.clsEquipmentService;
 import com.sanguine.webclub.model.clsWebClubMemberProfileModel;
 import com.sanguine.webclub.model.clsWebClubRegionMasterModel;
+import com.sanguine.webpms.dao.clsDepartmentMasterDao;
+import com.sanguine.webpms.model.clsDepartmentMasterModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,8 @@ public class clsEquipmentController{
 	private clsEquipmentService objEquipmentService;
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
+	@Autowired
+	private clsDepartmentMasterDao objDeptMasterDao;
 	private clsGlobalFunctions objGlobal=null;
 	
 	@RequestMapping(value = "/frmEquipment", method = RequestMethod.GET)
@@ -71,7 +75,17 @@ public class clsEquipmentController{
 		return objModel;
 	}
 
-	
+	@RequestMapping(value = "/loadDepartmentCode", method = RequestMethod.GET)
+	public @ResponseBody clsDepartmentMasterModel funFetchDeptMasterData(@RequestParam("deptCode") String deptCode, HttpServletRequest req) {
+		clsDepartmentMasterModel objDepartmentMasterModel = null;
+
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		List listDepData = objDeptMasterDao.funGetDepartmentMaster(deptCode, clientCode);
+		if(listDepData!=null&&listDepData.size()>0)
+		objDepartmentMasterModel = (clsDepartmentMasterModel) listDepData.get(0);
+
+		return objDepartmentMasterModel;
+	}
 	
 //Save or Update Equipment
 	@RequestMapping(value = "/saveEquipment", method = RequestMethod.POST)
@@ -82,7 +96,7 @@ public class clsEquipmentController{
 			clsEquipmentModel objModel = funPrepareModel(objBean,userCode,clientCode);
 			objEquipmentService.funAddUpdateEquipment(objModel);
 			req.getSession().setAttribute("success", true);
-			req.getSession().setAttribute("successMessage", "Equipment Saved Successfully");
+			req.getSession().setAttribute("successMessage", "Equipment Code : ".concat(objModel.getStrEquipmentCode()));
 			
 			return new ModelAndView("redirect:/frmEquipment.html");
 		}
@@ -110,7 +124,8 @@ public class clsEquipmentController{
 		objModel.setStrUserEdited(userCode);
 		objModel.setIntId(lastNo);
 		objModel.setStrEquipmentCode(strEquipmentCode);
-		objModel.setStrOperational(objBean.getStrOperational());
+		objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
+		objModel.setStrDeptCode(objBean.getStrDeptCode());
 		}
 		
 		else
@@ -122,7 +137,8 @@ public class clsEquipmentController{
 			objModel.setStrEquipmentName(objBean.getStrEquipmentName());
 			objModel.setStrUserCreated(userCode);
 			objModel.setStrUserEdited(userCode);
-			objModel.setStrOperational(objBean.getStrOperational());
+			objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
+			objModel.setStrDeptCode(objBean.getStrDeptCode());
 			
 		}
 		return objModel;

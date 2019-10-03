@@ -60,7 +60,15 @@ public class clsServiceMasterModel implements Serializable{
 	
 	@Column(name = "intSId", nullable = false)
 	private long intSId;
-
+    
+	@Column(name="strDeptCode")
+	private String strDeptCode;
+	
+	@Column(name="dblRate")
+	private double dblRate;
+	
+	
+	
 
 //Setter-Getter Methods
 	public String getStrServiceCode(){
@@ -134,6 +142,22 @@ public long getIntSId() {
 
 	public void setIntSId(long intSId) {
 		this.intSId = intSId;
+	}
+
+	public String getStrDeptCode() {
+		return strDeptCode;
+	}
+
+	public void setStrDeptCode(String strDeptCode) {
+		this.strDeptCode = strDeptCode;
+	}
+
+	public double getDblRate() {
+		return dblRate;
+	}
+
+	public void setDblRate(double dblRate) {
+		this.dblRate = dblRate;
 	}
 
 	//Function to Set Default Values

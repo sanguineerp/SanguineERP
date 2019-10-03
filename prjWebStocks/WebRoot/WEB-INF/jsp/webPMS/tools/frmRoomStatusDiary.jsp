@@ -188,6 +188,13 @@ body {
 			table.deleteRow(0);
 			rowCount--;
 		}
+		var table1 = document.getElementById("tblRoomType");
+		var rowCount = table1.rows.length;
+		while(rowCount>0)
+		{
+			table1.deleteRow(0);
+			rowCount--;
+		}
 		occupiedCnt=0;
 		emptyCnt=0;
 		blockCnt=0;
@@ -863,8 +870,8 @@ body {
 			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 0px;width: 85%;text-align:center;margin-top: 4px;\" value='"+valueArr[6].replace("-", "/")+"' onClick=\"funShowRoomStatusDtl1(this)\">";
 			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 0px;width: 85%;text-align:center;margin-top: 4px;\" value='"+valueArr[7].replace("-", "/")+"' onClick=\"funShowRoomStatusDtl1(this)\">";
 
-			document.getElementById('btnView').style.visibility = 'hidden';
-			document.getElementById('btnReset').style.visibility = 'hidden';
+		/* 	document.getElementById('btnView').style.visibility = 'hidden';
+			document.getElementById('btnReset').style.visibility = 'hidden'; */
 			
 		//	funShowRoomStatusDtl(key);
 			//funShowRoomStatusDtl();

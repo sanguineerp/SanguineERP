@@ -11,4 +11,5 @@ public interface clsBanquetStaffMasterDao{
 
 	public clsBanquetStaffMasterModel funGetObject(String code, String clientCode);
 
+	
 }

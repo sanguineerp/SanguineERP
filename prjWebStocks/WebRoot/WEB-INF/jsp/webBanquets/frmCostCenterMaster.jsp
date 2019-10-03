@@ -25,6 +25,8 @@
 		alert("Data Save successfully\n\n"+message);
 	<%
 	}}%>
+	
+	$("#txtOperational").attr('checked', true);
 
 });
 	
@@ -64,7 +66,17 @@
 	        	}
 	        	else
 	        	{
-	        		$("#txtOperational").val(response.strOperational);
+	        		
+	        		if(response.strOperational=='Y')
+		        	{
+		        		/* $("#txtOperational").attr('checked', true); */
+		        		document.getElementById("txtOperational").checked = response.strOperational == 'Y' ? true: false;
+		        	}
+	        		else
+		        	{
+		        		$("#txtOperational").attr('checked', false);
+		        		
+		        	}
 	        		$("#txtCostCenterName").val(response.strCostCenterName);
 	        		$("#txtCostCenterCode").val(response.strCostCenterCode);
 	        	}
@@ -103,12 +115,14 @@
 
 		<table class="masterTable">
 			<tr>
-				<td>
+				<td style="width:20%;">
 					<label>Cost Center Code</label>
 				</td>
 				<td>
-					<s:input colspan="3" type="text" path="strCostCenterCode" id="txtCostCenterCode" onclick="funHelp('CostCenterCode')" cssClass="searchTextBox jQKeyboard form-control" />
+					<s:input colspan="3" type="text" path="strCostCenterCode" id="txtCostCenterCode" ondblclick="funHelp('CostCenterCode')" cssClass="searchTextBox jQKeyboard form-control" />
 				</td>
+				
+				
 			</tr>
 			<tr>
 				<td>
@@ -119,16 +133,10 @@
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<label>Operational</label>
-				</td>
-				<td>
-					<%-- <s:input colspan="3" type="text" path="strOperational" id="txtOperational" cssClass="BoxW124px" /> --%>
-					<s:select id="txtOperational" path="strOperational" cssClass="BoxW124px">
-				    		<s:option value="Yes">Yes</s:option>
-				    		<s:option value="No">No</s:option>
-				    		</s:select>
-				</td>
+			
+			<td><label>Operational</label></td>
+				<td colspan="3"><s:checkbox id="txtOperational" path="strOperational" value="Y"/></td>
+				
 			</tr>
 		</table>
 

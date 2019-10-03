@@ -5600,6 +5600,41 @@ public class clsSearchFormController {
 							 
 				break;
 			}
+			
+			case "BanquetBillForBanquet": {
+				columnNames = "a.strBookingNo,b.strPName";
+				tableName = "from tblbqbookinghd a,"+webStockDB+".tblpartymaster b where a.strCustomerCode=b.strPCode";
+				listColumnNames = "Booking Code,Name";
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				idColumnName = "strBookingNo,'"+webStockDB+"'.strPCode,strClientCode";
+				flgQuerySelection = true;
+				searchFormTitle = "Billing";
+				break;
+				
+				/*
+				 * AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'
+				 * */
+			}
+			
+			case "BanquetStaffCode": {
+				columnNames = "strStaffCode,strStaffName,strStaffCatCode,strOperationalYN";
+				tableName = "clsBanquetStaffMasterModel where strClientCode='" + clientCode + "'";
+				listColumnNames = "Staff Code,Staff Name,Department Code ,Operational";
+				idColumnName = "strStaffCode,strClientCode";
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Staff Master";
+				break;
+			}
+			
+			case "BanquetStaffCatCode": {
+				columnNames = "strStaffCategeoryCode,strStaffCategeoryName,strStaffCount,strDeptCode,strOperationalYN";
+				tableName = "clsBanquetStaffCategeoryMasterModel where strClientCode='" + clientCode + "'";
+				listColumnNames = "Staff Categeory Code,Staff Categeory Name,Staff Count,Department Code ,Operational";
+				idColumnName = "strStaffCategeoryCode,strClientCode";
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Staff Categeory Master";
+				break;
+			}
 
 		}
 

@@ -26,7 +26,7 @@
 	<%
 	}}%>
 
-	
+	$("#strOperational").attr('checked', true);
 });
 
 	function funValidate(data)
@@ -37,6 +37,12 @@
 			alert("Please Select Name !!");
 			 flg=false;
 			}
+		
+		if($("#txtDepartmentCode").val().trim().length==0)
+		{
+		alert("Please Select Department Code !!");
+		 flg=false;
+		}
 		return flg;
 	}
 	
@@ -46,6 +52,10 @@
 
 			case 'equipmentCode' : 
 				funSetEquipmentName(code);
+				break;
+				
+			case 'deptCode' : 
+				funSetDepartmentCode(code);
 				break;
 		}
 	}
@@ -67,9 +77,18 @@
 	        	}
 	        	else
 	        	{
-	        		$("#strOperational").val(response.strOperational);
+	        		if(response.strOperational=='Y')
+		        	{
+		        		document.getElementById("strOperational").checked = response.strOperational == 'Y' ? true: false;
+		        	}
+	        		else
+		        	{
+		        		$("#strOperational").attr('checked', false);
+		        		
+		        	}
 	        		$("#txtEquipmentName").val(response.strEquipmentName);
 	        		$("#txtEquipmentCode").val(response.strEquipmentCode);
+	        		$("#txtDepartmentCode").val(response.strDeptCode);
 	        	}
 			},
 			error : function(e){
@@ -77,7 +96,30 @@
 			}
 		});
 	}
+	function funSetDepartmentCode(code){
 
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadDepartmentCode.html?deptCode=" + code,
+			dataType : "json",
+			success : function(response){ 
+
+				if(response.strDeptCode=='Invalid Code')
+	        	{
+	        		alert("Invalid Department Code");
+	        		$("#txtDepartmentCode").val('');
+	        	}
+	        	else
+	        	{
+	        	
+	        		$("#txtDepartmentCode").val(response.strDeptCode);
+	        	}
+			},
+			error : function(e){
+
+			}
+		});
+	}
 
 
 
@@ -103,7 +145,7 @@
 
 		<table class="masterTable">
 			<tr>
-				<td>
+				<td style="width:20%;">
 					<label>Equipment Code</label>
 				</td>
 				
@@ -124,16 +166,22 @@
 				</tr>
 				<tr>
 				<td>
-					<label>Operational</label>
+					<label>Department Code</label>
 				</td>
+				
+				
 				<td>
-				<%-- 	<s:input colspan="3" type="text" path="strOperational" id="strOperational" cssClass="BoxW124px" /> --%>
-					<s:select id="strOperational" path="strOperational" cssClass="BoxW124px">
-				    		<s:option value="Yes">Yes</s:option>
-				    		<s:option value="No">No</s:option>
-				    		</s:select>
+					<s:input colspan="3" type="text" id="txtDepartmentCode" path="strDeptCode" ondblclick="funHelp('deptCode')" cssClass="searchTextBox jQKeyboard form-control"  />
 				</td>
 			</tr>
+				
+				<tr>
+			
+			<td><label>Operational</label></td>
+				<td colspan="3"><s:checkbox id="strOperational" path="strOperational" value="Y"/></td>
+				
+			</tr>
+				
 		</table>
 
 		<br />

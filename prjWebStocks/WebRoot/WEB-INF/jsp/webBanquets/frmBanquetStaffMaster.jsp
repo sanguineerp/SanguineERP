@@ -28,7 +28,7 @@ var fieldName;
 					session.removeAttribute("success");
 					if (test) {
 					%>	
-		alert("\nStaff Data Save successfully");
+			alert("Data Save successfully :\t"+message);
 	<%
 	}}%>
 
@@ -45,10 +45,10 @@ var fieldName;
 			alert("Please Enter Staff Name !!");
 			 flg=false;
 			}
-		else if($("#txtDeptCode").val().trim().length==0)
+		else if($("#txtStaffCatCode").val().trim().length==0)
 			{
 			
-			alert("Please Select Department Code !!");
+			alert("Please Select Staff Categeory Code !!");
 			 flg=false;
 			
 			}
@@ -60,11 +60,11 @@ var fieldName;
 
 		switch(fieldName)
 		{		
-		   case 'staffCode':
+		   case 'StaffCode':
 		    	funSetStaffCode(code);
 		        break;
 		   
-		   case 'deptCode':
+		   case 'StaffCatCode':
 		    	funSetDeptCode(code);
 		        break;
 		
@@ -85,9 +85,20 @@ var fieldName;
 				    {
 				    	$("#txtStaffCode").val(code);
 				    	$("#txtStaffName").val(response.strStaffName);
-				    	$("#txtDeptCode").val(response.strDeptCode);
-				    	$("#cmbOperationalYN").val(response.strOperationalYN);
+				    	$("#txtStaffCatCode").val(response.strStaffCatCode);
 		        		
+				    	if(response.strOperationalYN=="Y")
+			        	{
+			        		
+			        		document.getElementById("chkOperationalYN").checked = response.strOperationalYN == 'Y' ? true: false;
+			        	}
+		        		else
+			        	{
+			        		$("#chkOperationalYN").attr('checked', false);
+			        		
+			        	}
+				    	
+				    	
 				    },
 				    error: function(jqXHR, exception) {
 			            if (jqXHR.status === 0) {
@@ -114,7 +125,7 @@ var fieldName;
 	
 	function funSetDeptCode(code)
 	{
-		$("#txtDeptCode").val(code);
+		$("#txtStaffCatCode").val(code);
 		
 	}
 	
@@ -144,7 +155,7 @@ var fieldName;
 				<td>
 					<label>Staff Code</label>
 				</td>
-				<td><s:input id="txtStaffCode" name="txtreqCode" path="strStaffCode" cssClass="searchTextBox" ondblclick="funHelp('staffCode')" readonly="true"/>
+				<td><s:input id="txtStaffCode" name="txtreqCode" path="strStaffCode" cssClass="searchTextBox" ondblclick="funHelp('StaffCode')" readonly="true"/>
 				</td>
 			</tr> 
 			<tr>
@@ -156,19 +167,18 @@ var fieldName;
 			</tr>
 			<tr>
 				<td>
-					<label>Department Code</label>
+					<label>Staff Categeory Code</label>
 				</td>								
-					<td><s:input id="txtDeptCode" name="txtDeptCode" path="strDeptCode" class="searchTextBox" ondblclick="funHelp('deptCode')" readonly="true"/>
+					<td><s:input id="txtStaffCatCode" name="txtStaffCatCode" path="strStaffCatCode" class="searchTextBox" ondblclick="funHelp('StaffCatCode')" readonly="true"/>
 					</td>					
 			</tr>
 			
 			<tr>			
-			<td><label>Operational</label></td>
-				<td><s:select id="cmbOperationalYN" name="strOperational" path="strOperationalYN" cssClass="BoxW124px"  >
- 				 <option value="Yes">Yes</option>
- 				 <option value="No">No</option>
-				</s:select></td>
+			<td><label>Operational Y/N</label></td>
 				
+				<td><s:checkbox id="chkOperationalYN" name="chkOperationalYN" path="strOperationalYN" value="Y" checked="true"/></td> 
+				
+			
 			</tr>
 		
 		</table>

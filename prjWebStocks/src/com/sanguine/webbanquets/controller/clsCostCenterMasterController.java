@@ -100,7 +100,7 @@ public class clsCostCenterMasterController{
 			clsCostCenterMasterModel objModel = funPrepareModel(objBean,userCode,clientCode);
 			objCostCenterMasterService.funAddUpdateCostCenterMaster(objModel);
 			req.getSession().setAttribute("success", true);
-			req.getSession().setAttribute("successMessage", "Coat Center Saved Successfully");
+			req.getSession().setAttribute("successMessage", "Cost Center Code : ".concat(objModel.getStrCostCenterCode()));
 			return new ModelAndView("redirect:/frmCostCenterMaster.html");
 		}
 		else{
@@ -124,9 +124,10 @@ public class clsCostCenterMasterController{
 			objModel.setStrClientCode(clientCode);
 			objModel.setStrCostCenterCode(strEquipmentCode);
 			objModel.setStrCostCenterName(objBean.getStrCostCenterName());
-			objModel.setStrOperational(objBean.getStrOperational());
+			objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
 			objModel.setStrUserCreated(userCode);
 			objModel.setStrUserEdited(userCode);
+		
 		}
 		else
 		{
@@ -136,7 +137,7 @@ public class clsCostCenterMasterController{
 			objModel.setStrClientCode(clientCode);
 			objModel.setStrCostCenterCode(objBean.getStrCostCenterCode());
 			objModel.setStrCostCenterName(objBean.getStrCostCenterName());
-			objModel.setStrOperational(objBean.getStrOperational());
+			objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
 			objModel.setStrUserCreated(userCode);
 			objModel.setStrUserEdited(userCode);
 		}

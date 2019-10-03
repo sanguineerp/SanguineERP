@@ -19,8 +19,20 @@ public class clsServiceMasterBean{
 	private String dteDateEdited;
 
 	private String strOperationalYN;
+	
+	private String strDeptCode;
+	
+	private double dblRate;
+	
+	
 
-//Setter-Getter Methods
+public double getDblRate() {
+		return dblRate;
+	}
+	public void setDblRate(double dblRate) {
+		this.dblRate = dblRate;
+	}
+	//Setter-Getter Methods
 	public String getStrServiceCode(){
 		return strServiceCode;
 	}
@@ -81,6 +93,12 @@ public class clsServiceMasterBean{
 	}
 	public void setStrOperationalYN(String strOperationalYN){
 		this.strOperationalYN=strOperationalYN;
+	}
+	public String getStrDeptCode() {
+		return strDeptCode;
+	}
+	public void setStrDeptCode(String strDeptCode) {
+		this.strDeptCode = strDeptCode;
 	}
 
 
