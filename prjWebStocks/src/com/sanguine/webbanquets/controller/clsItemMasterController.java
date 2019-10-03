@@ -1,5 +1,7 @@
 package com.sanguine.webbanquets.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsUOMService;
 import com.sanguine.webbanquets.bean.clsItemMasterBean;
 import com.sanguine.webbanquets.bean.clsMenuHeadMasterBean;
 import com.sanguine.webbanquets.model.clsItemMasterModel;
@@ -31,9 +34,12 @@ public class clsItemMasterController{
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
 	private clsGlobalFunctions objGlobal=null;
+	@Autowired
+	private clsUOMService objclsUOMService;
 
 	@RequestMapping(value = "/frmItemMaster", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request){
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String urlHits = "1";
 		try {
 			urlHits = request.getParameter("saddr").toString();
@@ -41,6 +47,9 @@ public class clsItemMasterController{
 			urlHits = "1";
 		}
 		model.put("urlHits", urlHits);
+		List<String> uomList = new ArrayList<String>();
+		uomList = objclsUOMService.funGetUOMList(clientCode);
+		model.put("uomList", uomList);
 		
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmItemMaster_1", "command", new clsItemMasterBean());

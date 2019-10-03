@@ -81,9 +81,9 @@
 	function funValidate(data)
 	{
 		var flg=true;
-		if($("#strMenuHeadName").val().trim().length==0)
+		if($("#txtMenuHeadName").val().trim().length==0)
 		{
-			alert("Please Type Name !!");
+			alert("Please Enter Menu Head Name !!");
 			flg=false;
 		}
 		return flg;
@@ -110,11 +110,11 @@
 
 		<table class="masterTable">
 			<tr>
-				<td>
+				<td style="width:20%;">
 					<label>Menu Head Code</label>
 				</td>
 				<td>
-					<s:input type="text" path="strMenuHeadCode" id="txtMenuHeadCode" onclick="funHelp('MenuHeadCode')" cssClass="searchTextBox jQKeyboard form-control" />
+					<s:input type="text" path="strMenuHeadCode" id="txtMenuHeadCode" ondblclick="funHelp('MenuHeadCode')" cssClass="searchTextBox jQKeyboard form-control" />
 				</td>
 			</tr>
 			<tr>

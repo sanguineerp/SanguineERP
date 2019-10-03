@@ -220,7 +220,22 @@
 		var flg=true;
 		if($("#txtItemName").val().trim().length==0)
 		{
-			alert("Please Type Item Name !!");
+			alert("Please Enter Item Name !!");
+			flg=false;
+		}
+		else if($("#txtMenuHeadCode").val().trim().length==0)
+		{
+			alert("Please Select Menu Head !!");
+			flg=false;
+		}
+		else if($("#txtSubGroupCode").val().trim().length==0)
+		{
+			alert("Please Select Sub Group !!");
+			flg=false;
+		}
+		else if($("#txtDepartmentCode").val().trim().length==0)
+		{
+			alert("Please Select Department !!");
 			flg=false;
 		}
 		return flg;
@@ -239,6 +254,12 @@
 		$("#lblSubGroupName").text("");
 		$("#lblDepartmentName").text("");
 	}
+	function funUOMChange(object)
+	{
+		 var index=object.parentNode.parentNode.rowIndex;
+		 var strUOM=object.value;
+		 $("#txtUnit").val(strUOM.toUpperCase());
+	}
 </script>
 
 </head>
@@ -255,11 +276,11 @@
 
 		<table class="masterTable">
 			<tr>
-				<td>
+				<td style="width:20%;">
 					<label>Item Code</label>
 				</td>
 				<td>
-					<s:input colspan="3" path="strItemCode" type="text" id="txtItemCode" cssClass="searchTextBox jQKeyboard form-control" onclick="funHelp('ItemCode')" />
+					<s:input colspan="3" path="strItemCode" type="text" id="txtItemCode" cssClass="searchTextBox jQKeyboard form-control" ondblclick="funHelp('ItemCode')" />
 				</td>
 			</tr>
 			<tr>
@@ -275,7 +296,7 @@
 					<label>Menu Head Code</label>
 				</td>
 				<td>
-					<s:input colspan="3" path="strMenuHeadCode" type="text" id="txtMenuHeadCode" cssClass="searchTextBox jQKeyboard form-control" onclick="funHelp('MenuHeadCode')" />
+					<s:input colspan="3" path="strMenuHeadCode" type="text" id="txtMenuHeadCode" cssClass="searchTextBox jQKeyboard form-control" ondblclick="funHelp('MenuHeadCode')" />
 					&nbsp&nbsp&nbsp&nbsp<label id="lblMenuHeadName"></label>
 				</td>
 			</tr>
@@ -284,7 +305,7 @@
 					<label>Sub-Group Code</label>
 				</td>
 				<td>
-					<s:input colspan="3" path="strSubGroupCode" type="text" id="txtSubGroupCode" cssClass="searchTextBox jQKeyboard form-control" onclick="funHelp('subgroup')" />
+					<s:input colspan="3" path="strSubGroupCode" type="text" id="txtSubGroupCode" cssClass="searchTextBox jQKeyboard form-control" ondblclick="funHelp('subgroup')" />
 					&nbsp&nbsp&nbsp&nbsp<label id="lblSubGroupName"></label>
 				</td>
 			</tr>
@@ -293,7 +314,7 @@
 					<label>Department Code</label>
 				</td>
 				<td>
-					<s:input colspan="3" path="strDepartmentCode" type="text" id="txtDepartmentCode" cssClass="searchTextBox jQKeyboard form-control" onclick="funHelp('deptCode')"/>
+					<s:input colspan="3" path="strDepartmentCode" type="text" id="txtDepartmentCode" cssClass="searchTextBox jQKeyboard form-control" ondblclick="funHelp('deptCode')"/>
 					&nbsp&nbsp&nbsp&nbsp<label id="lblDepartmentName"></label>
 				</td>
 			</tr>
@@ -302,7 +323,8 @@
 					<label>Unit</label>
 				</td>
 				<td>
-					<s:input colspan="3" path="strUnit" type="text" id="txtUnit" cssClass="longTextBox" />
+					<s:select colspan="3" path="strUnit" type="text" id="txtUnit" cssClass="BoxW124px"
+						items="${uomList}" onchange="funUOMChange(this)" />
 				</td>
 			</tr>
 			<tr>
