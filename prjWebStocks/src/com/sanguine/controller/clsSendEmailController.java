@@ -90,7 +90,7 @@ public class clsSendEmailController
 	 * @return
 	 * @throws JRException
 	 */
-	@SuppressWarnings("rawtypes")
+	/*@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/sendPOEmail", method = RequestMethod.GET)
 	public @ResponseBody String doSendEmail(HttpServletRequest request) throws JRException
 	{
@@ -162,7 +162,86 @@ public class clsSendEmailController
 		}
 
 	}
-	
+	*/
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/sendPOEmail", method = RequestMethod.GET)
+	public @ResponseBody String doSendEmail(HttpServletRequest request) throws JRException
+	{
+		// takes input from e-mail form
+		try
+		{
+			String strPOCode = request.getParameter("strPOCode");
+		    String subject=request.getParameter("strSubject");
+		    String message=request.getParameter("strMessage");
+			//String subject ="Purchase Order Generated From "+request.getSession().getAttribute("locationName").toString();
+			//String message = "Purchase Order Slip";
+		    if(subject==null || message==null)
+		    {
+		    	subject ="Purchase Order Generated From "+request.getSession().getAttribute("locationName").toString();
+		    	message = "Purchase Order Slip";
+		    }
+			String strReturnValue = "Email Send SuccessFully";
+
+			String clientCode = request.getSession().getAttribute("clientCode").toString();
+			String propertyCode = request.getSession().getAttribute("propertyCode").toString();
+			String userCode = request.getSession().getAttribute("usercode").toString();
+			
+		
+			String sql="SELECT CONCAT(ifnull(b.strEmail,''),',',ifnull(c.strEmail,''),',',ifnull(d.strEmail,''))EmailIds "
+			+"FROM tblpurchaseorderhd a "
+					+"left outer join tblpartymaster b on a.strSuppCode=b.strPCode "
+					+"left outer join tbluserhd c on a.strUserModified=c.strUserCode "
+					+"left outer join tblpropertysetup d on a.strPropCode=d.strPropertyCode  "
+					+"WHERE  a.strPOCode='"+strPOCode+"'  "
+					+"AND c.strUserCode='"+userCode+"'  "
+					+"AND d.strPropertyCode='"+propertyCode+"'";
+			List list = objGlobalFunctionsService.funGetList(sql, "sql");
+			if (list != null && !list.isEmpty())
+			{
+				String recipientAddress = list.get(0).toString();
+
+				String []receipientsArr = recipientAddress.split(",");
+                for(int i=0;i<receipientsArr.length;i++)
+                {
+                	if(receipientsArr[i].toString().trim().length()>0)
+                	{
+                	
+                		logger.info("To: " + receipientsArr[i].toString());
+        				logger.info("Subject: " + subject);
+        				logger.info("Message: " + message);
+        			
+        				JasperPrint p = funCallRangePrintReport(strPOCode, request);// Calling
+        																			// Attachment
+        				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        				JasperExportManager.exportReportToPdfStream(p, baos);
+        				DataSource aAttachment = new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
+        				MimeMessageHelper helper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
+
+        				helper.setTo(receipientsArr[i].toString());
+        				helper.setSubject(subject);
+        				helper.addAttachment("PO Slip.pdf", aAttachment);
+        				helper.setText(message);
+        				mailSender.send(helper.getMimeMessage());
+                	}                	
+                }
+				
+
+			}
+			else
+			{
+				strReturnValue = "Supplier has No Email Id";
+			}
+
+			return strReturnValue;
+		}
+		catch (javax.mail.MessagingException e)
+		{
+			e.printStackTrace();
+			logger.info(e);
+			return e.toString();
+		}
+
+	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public JasperPrint funCallReport(String POcode, HttpServletRequest req) throws MessagingException
 	{

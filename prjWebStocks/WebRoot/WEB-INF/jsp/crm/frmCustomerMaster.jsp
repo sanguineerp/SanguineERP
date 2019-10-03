@@ -229,6 +229,7 @@ var listProductData;
 		        type: "GET",
 		        url: gurl+code,
 		        dataType: "json",
+		    
 		        success: function(response)
 		        {		        	
 		        		if('Invalid Code' == response.strPCode){
@@ -321,7 +322,7 @@ var listProductData;
 				        	}
 							
 							funSetCustomerTaxDtl(code);
-							funPartyProdData(code);
+							//funPartyProdData(code);
 		        		}
 				},
 				error: function(jqXHR, exception) {
@@ -353,6 +354,7 @@ var listProductData;
 		        type: "GET",
 		        url: gurl+code,
 		        dataType: "json",
+		      
 		        success: function(response)
 		        {
 		        	$.each(response, function(i, item) 
@@ -388,6 +390,7 @@ var listProductData;
 		        type: "GET",
 		        url: gurl+code,
 		        dataType: "json",
+		      
 		        success: function(response)
 		        {
 					$("#txtProdCode").val(response.strProdCode);
@@ -492,9 +495,10 @@ var listProductData;
 	   			}
 			 }
 	    }
-		
+	
 		function funInsertProdRow()
 		{
+			var prodCode='', amount='' ,itemName='', margin='', installationDate='', amcAmount='',warrInDays='',standingOrder='';
 			
 			if(!funCheckNull($("#txtProdCode").val(),"Product Code"))
 			{
@@ -514,34 +518,36 @@ var listProductData;
 					return false;
 				}
 			 
-			var prodCode = $("#txtProdCode").val();
-		    var amount = $("#txtAmount").val();
-		    var itemName = $("#lblProdName").text();
-		    var margin = $("#txtMargin").val();
-		    var standingOrder = $("#txtStandingOrder").val();
-		    var amcAmount = $("#txtAMCAmount").val();
-		    var installationDate = $("#txtInstallationDate").val();
-		    var warrInDays = $("#txtWarrInDays").val();
+			prodCode = $("#txtProdCode").val();
+		    amount = $("#txtAmount").val();
+		    itemName = $("#lblProdName").text();
+		    margin = $("#txtMargin").val();
+		    standingOrder = $("#txtStandingOrder").val();
+		    amcAmount = $("#txtAMCAmount").val();
+		    installationDate = $("#txtInstallationDate").val();
+		    warrInDays = $("#txtWarrInDays").val();
 		    
 		    var table = document.getElementById("tblProdDet1");
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
+		    rowCount=listRow;
 // 		    rowCount=listRow;
 		    row.insertCell(0).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";		    
 		    row.insertCell(1).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\" value='"+itemName+"'/>";
 		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"9%\" class=\"decimal-places-amt\" value="+amount+">";
-		    row.insertCell(3).innerHTML = "<input  size=\"8%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"   name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\"   value='"+amcAmount+"' />";
+		    row.insertCell(3).innerHTML = "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\"  required = \"required\"  size=\"8%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"    value='"+amcAmount+"' />";
 			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"10%\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+installationDate+"' />";
 			row.insertCell(5).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].intWarrantyDays\" id=\"intWarrantyDays."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+warrInDays+"' />";
 		    row.insertCell(6).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt\" value="+standingOrder+">";
 		    row.insertCell(7).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt\" value="+margin+">";
 		    row.insertCell(8).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
 		   
+		   
+		    listRow++;
 		    
+		 //   funApplyNumberValidation();
 		    
-		    
-		    funApplyNumberValidation();
-		    rowCount++;
+		    //rowCount++;
 		    return false;
 		}
 		 
@@ -581,7 +587,7 @@ var listProductData;
 		    row.insertCell(3).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+amount+">";
 		    row.insertCell(4).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"5%\" class=\"decimal-places-amt\" value="+margin+">";
 		    row.insertCell(5).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
-		    funApplyNumberValidation();
+		   // funApplyNumberValidation();
 		    listRow++;
 		    return false;
 		}
@@ -695,15 +701,31 @@ var listProductData;
 		    var rowCount = table.rows.length;		   
 		    var flag=true;
 		    if(rowCount > 0)
-		    	{
-				    $('#tblProdDetPg tr').each(function()
-				    {
-					    if(strProdCode==$(this).find('input').val())// `this` is TR DOM element
-	    				{
-					    	alert("Product Already added "+ strProdCode);
-		    				flag=false;
-	    				}
-					});
+		    {
+		    	    if(clientCode=='141.001'){
+		    	    	  $('#tblProdDet1 tr').each(function()
+		    					    {
+		    						    if(strProdCode==$(this).find('input').val())// `this` is TR DOM element
+		    		    				{
+		    						    	alert("Product Already added "+ strProdCode);
+		    			    				flag=false;
+		    		    				}
+		    						});
+		    	    	
+		    	    }
+		    	    else
+		    	    {
+		    	    	  $('#tblProdDetPg tr').each(function()
+		    					    {
+		    						    if(strProdCode==$(this).find('input').val())// `this` is TR DOM element
+		    		    				{
+		    						    	alert("Product Already added "+ strProdCode);
+		    			    				flag=false;
+		    		    				}
+		    						});
+		    	    	
+		             }  	
+				  
 				    
 		    	}
 		    return flag;
@@ -714,7 +736,7 @@ var listProductData;
 		    var clientCode='<%=session.getAttribute("clientCode").toString()%>';
 			if(clientCode=='141.001'){
 				 var index = obj.parentNode.parentNode.rowIndex;
-				    var table = document.getElementById("tblProdDet");
+				    var table = document.getElementById("tblProdDet1");
 				    table.deleteRow(index);
 				
 			}
@@ -746,6 +768,7 @@ var listProductData;
 			        type: "GET",
 			        url: searchUrl,
 				    dataType: "json",
+				    async: false,
 				    success: function(response)
 				    {
 				    	if(clientCode!='141.001'){
@@ -831,14 +854,14 @@ var listProductData;
 		    row.insertCell(0).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";		    
 		    row.insertCell(1).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"txtProdName."+(rowCount)+"\" value='"+itemName+"'/>";
 		    row.insertCell(2).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblLastCost\" id=\"txtAmount."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"9%\" class=\"decimal-places-amt\" value="+amount+">";
-		    row.insertCell(3).innerHTML = "<input readonly=\"readonly\" size=\"8%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"  style=\"text-align: right;\" name=\"listSundryDetorItemDetailModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+amcAmount+"' />";
+		    row.insertCell(3).innerHTML = "<input  size=\"8%\" style=\" text-align: right; padding-right: 4px;\" class=\"decimal-places-amt\"  style=\"text-align: right;\" name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblAMCAmt\" id=\"dblAMCAmt."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+amcAmount+"' />";
 			row.insertCell(4).innerHTML = "<input readonly=\"readonly\" size=\"10%\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].dteInstallation\" id=\"dteInstallation."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+installationDate+"' />";
 			row.insertCell(5).innerHTML = "<input readonly=\"readonly\" size=\"10%\" style=\"text-align: right; padding-right: 4px;\"  class=\"Box\"  name=\"listclsProdSuppMasterModel["+(rowCount)+"].intWarrantyDays\" id=\"intWarrantyDays."+(rowCount)+"\" style=\"text-align: left;  height:20px;\"  value='"+warrInDays+"' />";
 		    row.insertCell(6).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblStandingOrder\" id=\"txtStandingOrder."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt\" value="+standingOrder+">";
 		    row.insertCell(7).innerHTML= "<input name=\"listclsProdSuppMasterModel["+(rowCount)+"].dblMargin\" id=\"txtMargin."+(rowCount)+"\" required = \"required\" style=\"text-align: right;\" size=\"7%\" class=\"decimal-places-amt\" value="+margin+">";
 		    row.insertCell(8).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowForProd(this)">';
 		   
-		    funApplyNumberValidation();
+		  //  funApplyNumberValidation();
 		    return false;
 		}
 		
@@ -922,6 +945,17 @@ var listProductData;
 					    return false;
              }
 		
+		function funOnClickProdTab() {
+			var strCustCode=$("#txtPartyCode").val();
+			if(strCustCode!='')
+			{
+				funPartyProdData(strCustCode);
+				
+			}
+			
+			
+		}
+		
 		function funPartyProdData(code)
 		{
 			var clientCode='<%=session.getAttribute("clientCode").toString()%>';
@@ -933,6 +967,13 @@ var listProductData;
 			        type: "GET",
 			        url: searchUrl,
 				    dataType: "json",
+				    async:false,
+				    beforeSend : function(){
+						 $("#wait").css("display","block");
+				    },
+				    complete: function(){
+				    	 $("#wait").css("display","none");
+				    },
 				    success: function(response)
 				    {
 				    	if(clientCode!='141.001'){
@@ -1007,6 +1048,7 @@ var listProductData;
 			        type: "GET",
 			        url: getContextPath()+"/loadLocationMasterData.html?locCode="+code,
 			        dataType: "json",
+			
 			        success: function(response)
 			        {
 				       	if(response.strLocCode=='Invalid Code')
@@ -1100,7 +1142,7 @@ var listProductData;
 			        type: "GET",
 			        url: getContextPath()+"/loadGetCustomerLocationProperty.html?locCode="+code+"&propCode="+propCode,
 			        dataType: "json",
-			        async:false,
+			        
 			        success: function(response)
 			        {
 				       	
@@ -1154,7 +1196,7 @@ var listProductData;
 							<ul class="tabs">
 								<li class="active" data-state="tab1" style="width: 100px;padding-left: 55px">General</li>
 								<li data-state="tab2"  style="width: 100px;padding-left: 55px">Address</li>
-								<li data-state="tab3"  style="width: 100px;padding-left: 55px">Products</li>
+								<li data-state="tab3"  style="width: 100px;padding-left: 55px " onclick="funOnClickProdTab()">Products</li>
 								<li data-state="tab4"  style="width: 100px;padding-left: 55px">Tax</li>
 								<li data-state="tab5"  style="width: 100px;padding-left: 55px">Addtional Info/Linkup</li>
 							</ul>

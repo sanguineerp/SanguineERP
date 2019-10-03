@@ -517,7 +517,7 @@ public class clsDeleteTransController {
 				List listSalRet= objBaseService.funGetListModuleWise(sqlSalsRet ,"hql",  "WebStocks");
 				if(null!=listSalRet && listSalRet.size()>0)
 				{
-					objDelTransService.funDeleteRecord("update tblsalesreturnhd a set a.dblTotalAmt=0 ,a.dblTaxAmt=0,a.dblDiscAmt=0,a.dblDiscPer=0,strDCCode=''  where a.strSRCode='" + listSalRet.get(0).toString() + "'  and a.strClientCode='" + clientCode + "'", "sql");
+					objDelTransService.funDeleteRecord("update tblsalesreturnhd a set a.dblSubTotal=0,a.dblTotalAmt=0,a.dblTaxAmt=0,a.dblDiscAmt=0,a.dblDiscPer=0,strDCCode=''  where a.strSRCode='" + listSalRet.get(0).toString() + "'  and a.strClientCode='" + clientCode + "'", "sql");
 					objDelTransService.funDeleteRecord("delete from clsSalesReturnDtlModel where strSRCode='" + listSalRet.get(0).toString() + "'  and strClientCode='" + clientCode + "'", "hql");
 					objDelTransService.funDeleteRecord("delete from clsSalesRetrunTaxModel where strSRCode='" + listSalRet.get(0).toString() + "'  and strClientCode='" + clientCode + "'", "hql");
 					

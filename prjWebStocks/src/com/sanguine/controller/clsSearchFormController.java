@@ -5577,8 +5577,18 @@ public class clsSearchFormController {
 				idColumnName = "strItemCode";
 				searchFormTitle = "Item Master";
 				break;
+				
+				
 			}
-		
+			case "BanquetPropertyWiseLocation": {
+				columnNames = "a.strLocCode,a.strLocName,a.strLocDesc,a.strType,b.strPropertyName ";
+				tableName = "from "+webStockDB+".tbllocationmaster a, "+webStockDB+".tblpropertymaster  b  where a.strPropertyCode=b.strPropertyCode and " + "  a.strActive='Y'  and a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' ";
+				listColumnNames = "Location Code,Location Name,Location Desc,Location Type,Property Name";
+				idColumnName = "strLocCode";
+				searchFormTitle = "Location Master";
+				flgQuerySelection = true;
+				break;
+			}
 		}
 
 		mainMap.put("columnNames", columnNames);

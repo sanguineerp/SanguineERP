@@ -74,6 +74,10 @@ public class clsStockFlashModel {
 	private String strLastGRNDate_Qty;
 
 	private String strLastISDate_Qty;
+	
+	private String dblPriceAmt;
+	
+	
 
 	public String getStrPropertyCode() {
 		return strPropertyCode;
@@ -369,5 +373,13 @@ public class clsStockFlashModel {
 
 	public void setStrLastISDate_Qty(String strLastISDate_Qty) {
 		this.strLastISDate_Qty = strLastISDate_Qty;
+	}
+
+	public String getDblPriceAmt() {
+		return dblPriceAmt;
+	}
+
+	public void setDblPriceAmt(String dblPriceAmt) {
+		this.dblPriceAmt = dblPriceAmt;
 	}
 }

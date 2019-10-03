@@ -567,6 +567,7 @@ public class clsSetupMasterController {
 		bean.setStrSettlementWiseInvSer(objSetup.getStrSettlementWiseInvSer());
 		bean.setStrGRNProdPOWise(objSetup.getStrGRNProdPOWise());
 		bean.setStrPORateEditable(objSetup.getStrPORateEditable());
+		bean.setStrRecipeListPrice(objSetup.getStrRecipeListPrice());
 		/*
 		 * Bank Tab
 		 */
@@ -1106,7 +1107,7 @@ public class clsSetupMasterController {
 				bean.getStrRoundOffFinalAmtOnTransaction(), "N", bean.getStrRoundOffFinalAmtOnTransaction()));
 		objPropertySetupModel.setStrPOSTRoundOffAmtToWebBooks(objGlobal.funIfNull(
 				bean.getStrPOSTRoundOffAmtToWebBooks(), "N", bean.getStrPOSTRoundOffAmtToWebBooks()));		
-
+       
 		/*
 		 * if(bean.isStrShowAllPropCustomer()==true) {
 		 * objPropertySetupModel.setStrShowAllPropCustomer("Y"); }else {
@@ -1136,7 +1137,8 @@ public class clsSetupMasterController {
 		objPropertySetupModel.setStrPOSlipFormat(bean.getStrPOSlipFormat());
 		objPropertySetupModel.setStrSRSlipFormat(bean.getStrSRSlipFormat());
 		objPropertySetupModel.setStrWeightedAvgCal(bean.getStrWeightedAvgCal());
-
+		 objPropertySetupModel.setStrRecipeListPrice(bean.getStrRecipeListPrice());
+		 
 		/*
 		 * Bank Tab
 		 */

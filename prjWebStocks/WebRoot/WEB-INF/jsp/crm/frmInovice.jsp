@@ -463,6 +463,7 @@
 	
 	function funSetProduct(code)
 	{
+		var clientCode='<%=session.getAttribute("clientCode").toString()%>';
 		var searchUrl="";
 		var locCode = $("#txtLocCode").val();
 		var custCode=$("#txtCustCode").val();
@@ -489,6 +490,9 @@
 					$("#txtProdName").val(response[0][1]);
 					$("#txtPrice").val(parseFloat((response[0][3])/parseFloat(currValue)).toFixed(maxQuantityDecimalPlaceLimit));
 					$("#hidUnitPrice").val(parseFloat((response[0][3])/parseFloat(currValue)).toFixed(maxQuantityDecimalPlaceLimit));
+					if(clientCode=='141.001'){
+						$("#hidUnitPrice").val(parseFloat((response[0][9])/parseFloat(currValue)).toFixed(maxQuantityDecimalPlaceLimit));
+					}
 					
 					$("#txtWeight").val(response[0][7]);
 					$("#hidProdType").val(response[0][6]);
@@ -2676,7 +2680,7 @@ function funChangeCombo() {
 										class="transTablex col15-center">
 									<tr bgcolor="#72BEFC">
 										
-										<td style="width:10.3%;">Product Code</td>
+										<td style="width:10.3%;"> Code</td>
 									<!--  COl1   -->
 										<td style="width:33%;">Product  Name</td>
 									<!--  COl2   -->

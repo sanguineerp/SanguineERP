@@ -4973,7 +4973,7 @@ public class clsReportsController {
 
 	}
 
-	private JasperPrint funCallStkTransferFlashReport(String param1, String fDate, String tDate, HttpServletRequest req, HttpServletResponse resp) {
+	/*private JasperPrint funCallStkTransferFlashReport(String param1, String fDate, String tDate, HttpServletRequest req, HttpServletResponse resp) {
 		JasperPrint jp = null;
 		try {
 			List listStockFlashModel = new ArrayList<clsStockFlashModel>();
@@ -5001,6 +5001,91 @@ public class clsReportsController {
 				objStkTransferFlashModel.setDblIssue(arrObj[2].toString());
 				objStkTransferFlashModel.setStrGroupName(arrObj[3].toString());
 				objStkTransferFlashModel.setStrSubGroupName(arrObj[4].toString());
+				listStockTransferFlashModel.add(objStkTransferFlashModel);
+
+			}
+			clsLocationMasterModel objFromLocCode = objLocationMasterService.funGetObject(fromLocCode, clientCode);
+			clsLocationMasterModel objToLocCode = objLocationMasterService.funGetObject(toLocCode, clientCode);
+			String propCode = req.getSession().getAttribute("propertyCode").toString();
+			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+			if (objSetup == null) {
+				objSetup = new clsPropertySetupModel();
+			}
+			String suppName = "";
+
+			// String reportName =
+			// servletContext.getRealPath("/WEB-INF/reports/webcrm/rptShopOrderList.jrxml");
+			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptStockTransferFlashReport.jrxml");
+			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+
+			String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+			String propNameSql = "select a.strPropertyName  from "+webStockDB+".tblpropertymaster a where a.strPropertyCode='" + propCode + "' and a.strClientCode='" + clientCode + "' ";
+			List listPropName = objGlobalFunctionsService.funGetDataList(propNameSql, "sql");
+			String propName = "";
+			if (listPropName.size() > 0) {
+				propName = listPropName.get(0).toString();
+			}
+			String companyName = req.getSession().getAttribute("companyName").toString();
+
+			HashMap hm = new HashMap();
+			hm.put("strCompanyName", companyName);
+			hm.put("strUserCode", userCode);
+			hm.put("strImagePath", imagePath);
+			hm.put("strAddr1", objSetup.getStrAdd1());
+			hm.put("strAddr2", objSetup.getStrAdd2());
+			hm.put("strCity", objSetup.getStrCity());
+			hm.put("strState", objSetup.getStrState());
+			hm.put("strCountry", objSetup.getStrCountry());
+			hm.put("strPin", objSetup.getStrPin());
+			hm.put("dteFromDate", fDate);
+			hm.put("dteToDate", tDate);
+			hm.put("stkTransferFlashList", listStockTransferFlashModel);
+			hm.put("strFromLocName", objFromLocCode.getStrLocName());
+			hm.put("strToLocName", objToLocCode.getStrLocName());
+
+			JasperDesign jd = JRXmlLoader.load(reportName);
+			JasperReport jr = JasperCompileManager.compileReport(jd);
+
+			jp = JasperFillManager.fillReport(jr, hm, new JREmptyDataSource());
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			return jp;
+		}
+
+	}*/
+	
+
+	private JasperPrint funCallStkTransferFlashReport(String param1, String fDate, String tDate, HttpServletRequest req, HttpServletResponse resp) {
+		JasperPrint jp = null;
+		try {
+			List listStockFlashModel = new ArrayList<clsStockFlashModel>();
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String userCode = req.getSession().getAttribute("usercode").toString();
+			String[] spParam1 = param1.split(",");
+			String fromLocCode = spParam1[1];
+			String toLocCode = spParam1[2];
+
+			String fromDate = objGlobalFunctions.funGetDate("yyyy-MM-dd", fDate);
+			String toDate = objGlobalFunctions.funGetDate("yyyy-MM-dd", tDate);
+
+			String sql = "  select b.strProdCode,c.strProdName,sum(b.dblQty),d.strGName,e.strSGName ,(c.dblCostRM*sum(b.dblQty)) AS costRM" + "  from tblstocktransferhd a,tblstocktransferdtl b,tblproductmaster c " + " ,tblgroupmaster d,tblsubgroupmaster e  where a.strSTCode=b.strSTCode  " + "  and a.strFromLocCode='" + fromLocCode + "' and a.strToLocCode='" + toLocCode + "' " + " and Date(a.dtSTDate)  between '" + fromDate
+					+ "' and '" + toDate + "' " + "  and b.strProdCode=c.strProdCode  and c.strSGCode=e.strSGCode and d.strGCode=e.strGCode " + " group by b.strProdCode  order by e.intSortingNo  ";
+
+			System.out.println(sql);
+			List list = objGlobalService.funGetList(sql);
+			List listStockTransferFlashModel = new ArrayList<clsStockFlashModel>();
+
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				Object[] arrObj = (Object[]) list.get(cnt);
+				clsStockFlashModel objStkTransferFlashModel = new clsStockFlashModel();
+				objStkTransferFlashModel.setStrProdCode(arrObj[0].toString());
+				objStkTransferFlashModel.setStrProdName(arrObj[1].toString());
+				objStkTransferFlashModel.setDblIssue(arrObj[2].toString());
+				objStkTransferFlashModel.setStrGroupName(arrObj[3].toString());
+				objStkTransferFlashModel.setStrSubGroupName(arrObj[4].toString());
+				objStkTransferFlashModel.setDblPriceAmt(arrObj[5].toString());
 				listStockTransferFlashModel.add(objStkTransferFlashModel);
 
 			}

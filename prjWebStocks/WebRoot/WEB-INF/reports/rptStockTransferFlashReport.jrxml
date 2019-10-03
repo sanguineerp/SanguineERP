@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.2.1.final using JasperReports Library version 6.2.1  -->
-<!-- 2016-07-22T19:14:39 -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptStockTransferFlashReport" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="742ef197-00f2-4607-abe0-b4afc8718546">
 	<property name="ireport.zoom" value="1.3310000000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="webstocks"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -293,9 +292,24 @@
 		<field name="dblIssue" class="java.lang.String">
 			<fieldDescription><![CDATA[dblIssue]]></fieldDescription>
 		</field>
+		<field name="dblPriceAmt" class="java.lang.String">
+			<fieldDescription><![CDATA[dblPriceAmt]]></fieldDescription>
+		</field>
 		<variable name="count" class="java.lang.Integer" calculation="Count">
 			<variableExpression><![CDATA[$F{strProdCode}]]></variableExpression>
 			<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+		</variable>
+		<variable name="dblQtyTotal" class="java.lang.Double" resetType="Group" resetGroup="strSGName" calculation="Sum">
+			<variableExpression><![CDATA[Double.valueOf($F{dblIssue})]]></variableExpression>
+		</variable>
+		<variable name="dblGrandTotal" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$V{dblQtyTotal}]]></variableExpression>
+		</variable>
+		<variable name="dblPriceTotal" class="java.lang.Double" resetType="Group" resetGroup="strSGName" calculation="Sum">
+			<variableExpression><![CDATA[Double.valueOf($F{dblPriceAmt})]]></variableExpression>
+		</variable>
+		<variable name="dbGrandPriceTotal" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$V{dblPriceTotal}]]></variableExpression>
 		</variable>
 		<group name="strGName">
 			<groupExpression><![CDATA[$F{strGroupName}]]></groupExpression>
@@ -414,7 +428,7 @@
 			</staticText>
 			<textField>
 				<reportElement x="429" y="98" width="111" height="13" uuid="b270ce99-7f6c-447a-bbaa-32bf8efce6d7"/>
-				<textFieldExpression><![CDATA[$P{strFromLocName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{strToLocName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="328" y="98" width="98" height="13" uuid="57beb68f-63a5-4c29-8d86-21158b4e16e1"/>
@@ -434,17 +448,21 @@
 	<detail>
 		<band height="96" splitType="Stretch">
 			<componentElement>
-				<reportElement key="table 7" style="table 7" x="6" y="2" width="540" height="88" uuid="10b3fd28-b4c5-46fa-9240-0cb382fbd828"/>
+				<reportElement key="table 7" style="Table 1_TD" x="6" y="2" width="540" height="88" uuid="10b3fd28-b4c5-46fa-9240-0cb382fbd828">
+					<property name="com.jaspersoft.studio.table.style.table_header" value="table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 4_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 4_TD"/>
+				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="dsStockTransferFlash" uuid="468174a4-9240-4b00-8d23-ad7681df14ca">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{stkTransferFlashList})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:columnGroup width="540" uuid="806283a0-302f-4df7-ae2a-d60e931d6adf">
+					<jr:columnGroup width="440" uuid="806283a0-302f-4df7-ae2a-d60e931d6adf">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [4]"/>
 						<jr:groupHeader groupName="strGName">
-							<jr:cell style="table 7_TD" height="21" rowSpan="1">
+							<jr:cell height="21" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="450" height="19" uuid="707b6714-5ff9-4a1d-acf1-d931deef0b05"/>
+									<reportElement x="0" y="0" width="440" height="21" uuid="707b6714-5ff9-4a1d-acf1-d931deef0b05"/>
 									<textElement>
 										<font fontName="Serif" size="10" isBold="true"/>
 									</textElement>
@@ -453,9 +471,9 @@
 							</jr:cell>
 						</jr:groupHeader>
 						<jr:groupHeader groupName="strSGName">
-							<jr:cell style="table 7_TD" height="19" rowSpan="1">
+							<jr:cell height="19" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="450" height="18" uuid="54286c81-9f33-44e7-91df-51f569c952a9"/>
+									<reportElement x="0" y="0" width="440" height="19" uuid="54286c81-9f33-44e7-91df-51f569c952a9"/>
 									<textElement>
 										<font fontName="Serif" size="10" isBold="true"/>
 									</textElement>
@@ -463,6 +481,9 @@
 								</textField>
 							</jr:cell>
 						</jr:groupHeader>
+						<jr:groupFooter groupName="strSGName">
+							<jr:cell height="2" rowSpan="1"/>
+						</jr:groupFooter>
 						<jr:column width="50" uuid="79548a4a-3dde-4fff-b21f-0c6c45b80789">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 							<jr:tableHeader style="table_TH" height="30" rowSpan="1">
@@ -474,13 +495,26 @@
 									<text><![CDATA[  Sr No]]></text>
 								</staticText>
 							</jr:tableHeader>
+							<jr:groupFooter groupName="strSGName">
+								<jr:cell height="30" rowSpan="1">
+									<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+									<line>
+										<reportElement x="0" y="0" width="50" height="1" forecolor="#000000" uuid="d7e2bba5-3f9e-463f-9676-00b38694d6a1">
+											<property name="com.jaspersoft.studio.unit.width" value="px"/>
+										</reportElement>
+										<graphicElement>
+											<pen lineWidth="1.0"/>
+										</graphicElement>
+									</line>
+								</jr:cell>
+							</jr:groupFooter>
 							<jr:detailCell height="21" rowSpan="1">
 								<textField>
 									<reportElement x="0" y="0" width="50" height="21" uuid="b694e548-e456-4143-b212-1fed6e927ba0"/>
-									<textElement>
+									<textElement textAlignment="Center">
 										<font fontName="Serif" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[  $V{count}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$V{count}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -495,34 +529,73 @@
 									<text><![CDATA[  Product Code]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:detailCell style="table 7_TD" height="21" rowSpan="1">
+							<jr:groupFooter groupName="strSGName">
+								<jr:cell height="30" rowSpan="1">
+									<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+									<line>
+										<reportElement x="0" y="0" width="84" height="1" forecolor="#000000" uuid="ff7a9255-5497-461c-aeb4-4acd362ceb7e">
+											<property name="com.jaspersoft.studio.unit.width" value="px"/>
+										</reportElement>
+										<graphicElement>
+											<pen lineWidth="1.0"/>
+										</graphicElement>
+									</line>
+								</jr:cell>
+							</jr:groupFooter>
+							<jr:detailCell height="21" rowSpan="1">
 								<textField>
 									<reportElement x="0" y="0" width="84" height="21" uuid="6806a4a9-4ef0-4dc9-997a-b59cc639363e"/>
 									<textElement>
 										<font fontName="Serif" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[  $F{strProdCode}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{strProdCode}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="316" uuid="b084dbc3-d163-4735-a6ef-86ba49f569b1">
+						<jr:column width="216" uuid="b084dbc3-d163-4735-a6ef-86ba49f569b1">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 							<jr:tableHeader style="table_TH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="316" height="30" uuid="bbdbf8a9-7011-452f-ac3c-f04134844607"/>
+									<reportElement x="0" y="0" width="216" height="30" uuid="bbdbf8a9-7011-452f-ac3c-f04134844607"/>
 									<textElement>
 										<font fontName="Serif" size="10" isBold="true"/>
 									</textElement>
 									<text><![CDATA[  Product Name]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:detailCell style="table 7_TD" height="21" rowSpan="1">
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+								<staticText>
+									<reportElement positionType="Float" x="0" y="2" width="216" height="27" uuid="38a61279-0cbb-4d8d-b43f-837618a7b131"/>
+									<text><![CDATA[Total]]></text>
+								</staticText>
+								<line>
+									<reportElement positionType="Float" x="3" y="0" width="209" height="1" uuid="463ee02a-f521-41a2-a76a-d317a7ea19ab"/>
+								</line>
+							</jr:tableFooter>
+							<jr:groupFooter groupName="strSGName">
+								<jr:cell height="30" rowSpan="1">
+									<frame>
+										<reportElement x="0" y="0" width="216" height="30" uuid="ee87c03c-30f3-42a7-a5c4-e8c4269aee19">
+											<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+										</reportElement>
+										<staticText>
+											<reportElement positionType="Float" x="0" y="2" width="216" height="27" uuid="7b85d532-7917-4775-9f5e-0f7d8ec63ea9"/>
+											<text><![CDATA[Group Total]]></text>
+										</staticText>
+										<line>
+											<reportElement positionType="Float" x="0" y="0" width="216" height="1" uuid="a9146d34-82f0-4b2d-ab27-92c0bc1b9c79"/>
+										</line>
+									</frame>
+								</jr:cell>
+							</jr:groupFooter>
+							<jr:detailCell height="21" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="316" height="21" uuid="1f8d3650-b252-4fde-9120-b1e73f43bda0"/>
+									<reportElement x="0" y="0" width="216" height="21" uuid="1f8d3650-b252-4fde-9120-b1e73f43bda0"/>
 									<textElement>
 										<font fontName="Serif" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[  $F{strProdName}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{strProdName}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -537,17 +610,89 @@
 									<text><![CDATA[ Transfer Quantity  ]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:detailCell style="table 7_TD" height="21" rowSpan="1">
-								<textField>
+							<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+								<textField pattern="#,##0.00">
+									<reportElement x="0" y="0" width="90" height="30" uuid="549616c0-63b3-487b-ac62-63035ceea38f"/>
+									<textElement textAlignment="Right"/>
+									<textFieldExpression><![CDATA[$V{dblGrandTotal}]]></textFieldExpression>
+								</textField>
+							</jr:tableFooter>
+							<jr:groupFooter groupName="strSGName">
+								<jr:cell height="30" rowSpan="1">
+									<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+									<textField pattern="#,##0.00#">
+										<reportElement x="0" y="0" width="90" height="30" uuid="495901c3-cfe3-49cb-933b-d73c63fdbe83"/>
+										<textElement textAlignment="Right"/>
+										<textFieldExpression><![CDATA[$V{dblQtyTotal}]]></textFieldExpression>
+									</textField>
+									<line>
+										<reportElement x="0" y="0" width="90" height="1" forecolor="#000000" uuid="23ba4734-c9f4-45ae-afe7-7fe9e0e15539">
+											<property name="com.jaspersoft.studio.unit.width" value="px"/>
+										</reportElement>
+										<graphicElement>
+											<pen lineWidth="1.0"/>
+										</graphicElement>
+									</line>
+								</jr:cell>
+							</jr:groupFooter>
+							<jr:detailCell height="21" rowSpan="1">
+								<textField pattern="#,##0.#">
 									<reportElement x="0" y="0" width="90" height="21" uuid="b511d6de-bea2-4a8b-8ccc-2f5cc883bff3"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif" size="8"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{dblIssue}  ]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{dblIssue}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 					</jr:columnGroup>
+					<jr:column width="100" uuid="00080fe2-5654-4d5f-8d6d-57e9ab5355ed">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="19f35db1-83c3-4c70-ac52-40158ddd8d4c"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Amount]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="30" rowSpan="1">
+							<textField pattern="#,##0.00">
+								<reportElement x="0" y="0" width="100" height="30" uuid="0a02b54a-dc61-4219-ae2a-fe41222d6324"/>
+								<textElement textAlignment="Right"/>
+								<textFieldExpression><![CDATA[$V{dbGrandPriceTotal}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:groupFooter groupName="strGName">
+							<jr:cell height="30" rowSpan="1"/>
+						</jr:groupFooter>
+						<jr:groupFooter groupName="strSGName">
+							<jr:cell height="32" rowSpan="2">
+								<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+								<textField pattern="#,##0.00">
+									<reportElement x="0" y="0" width="100" height="29" uuid="1c9ff833-7c54-42b9-afd1-8babf30048d6"/>
+									<textElement textAlignment="Right"/>
+									<textFieldExpression><![CDATA[$V{dblPriceTotal}]]></textFieldExpression>
+								</textField>
+								<line>
+									<reportElement x="0" y="0" width="99" height="1" forecolor="#000000" uuid="3e436188-3c9d-4953-b1b4-2ea004a25730">
+										<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									</reportElement>
+									<graphicElement>
+										<pen lineWidth="1.0"/>
+									</graphicElement>
+								</line>
+							</jr:cell>
+						</jr:groupFooter>
+						<jr:detailCell height="21">
+							<textField pattern="#,##0.00">
+								<reportElement x="0" y="0" width="100" height="21" uuid="35aa38c1-fc48-4833-90f6-a70e8d7a9f2a"/>
+								<textElement textAlignment="Right"/>
+								<textFieldExpression><![CDATA[Double.valueOf($F{dblPriceAmt})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
 				</jr:table>
 			</componentElement>
 		</band>

@@ -136,7 +136,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tblsalesreturndtl c on a.strSRCode=c.strSRCode"
 				+ " left outer join tblpartymaster b on a.strCustCode=b.strPCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'  and a.strCustCode='"+strCustCode+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'  and a.strCustCode='"+strCustCode+"' and a.dblTotalAmt>0 "
 				+ " group by c.strSRCode;";
 		
 		List listOfSaleRet = objGlobalService.funGetList(sql, "sql");
@@ -204,7 +204,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tblproductmaster d on c.strProdCode=d.strProdCode"
 				+ " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"' and a.dblTotalAmt>0 "
 				+ " group by c.strProdCode,a.dteSRDate"
 				+ " order by c.strSRCode,d.strProdName;";
 		
@@ -214,6 +214,7 @@ public class clsSalesReturnFlashController {
 			StringBuilder sqlLoc=new StringBuilder("");
 			List list =null; 
 			for (int i = 0; i < listOfSaleRet.size(); i++) {
+				
 				Object[] objRet = (Object[]) listOfSaleRet.get(i);
 				clsSalesReturnBean objBean = new clsSalesReturnBean();
 				objBean.setStrSRCode(objRet[0].toString());
@@ -265,7 +266,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tblsalesreturndtl c on a.strSRCode=c.strSRCode"
 				+ " left outer join tblpartymaster b on a.strCustCode=b.strPCode left outer join tbllocationmaster d on a.strLocCode=d.strLocCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and  a.strCustCode='"+strCustCode+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and  a.strCustCode='"+strCustCode+"' and a.dblTotalAmt>0 "
 				
 				+ " group by b.strPCode"
 				+ " order by b.strPName";
@@ -321,7 +322,7 @@ public class clsSalesReturnFlashController {
 				+ " Left outer join tblsubgroupmaster f on d.strSGCode=f.strSGCode"
 				+ " Left outer join tblgroupmaster g on f.strGCode=g.strGCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"' and a.dblTotalAmt>0 "
 				+ " GROUP BY  g.strGCode,f.strSGCode "
 				+ " ORDER BY g.strGName;";
 		
@@ -400,7 +401,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tblsalesreturndtl c on a.strSRCode=c.strSRCode"
 				+ " left outer join tblpartymaster b on a.strCustCode=b.strPCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"' and  a.dblTotalAmt>0"
 				+ " group by c.strSRCode;";
 		
 		List listOfSaleRet = objGlobalService.funGetList(sql, "sql");
@@ -503,7 +504,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tblproductmaster d on c.strProdCode=d.strProdCode"
 				+ " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'  and  a.strCustCode='"+strCustCode+"' "
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'  and  a.strCustCode='"+strCustCode+"' and a.dblTotalAmt>0 "
 				+ " group by c.strProdCode,a.dteSRDate"
 				+ " order by c.strSRCode,d.strProdName;";
 		
@@ -633,7 +634,7 @@ public class clsSalesReturnFlashController {
 		String sql=" SELECT b.strPCode,b.strPName,DATE_FORMAT(Date(a.dteSRDate),'%d-%m-%Y'),d.strLocName,sum((a.dblTotalAmt-a.dblTaxAmt)),sum(a.dblTaxAmt),sum(a.dblTotalAmt)"
 				+ " from tblsalesreturnhd a "
 				+ " left outer join tblpartymaster b on a.strCustCode=b.strPCode left outer join tbllocationmaster d on a.strLocCode=d.strLocCode"
-				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' and a.strCustCode='"+strCustCode+"'"
+				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' and a.strCustCode='"+strCustCode+"' and a.dblTotalAmt>0 "
 				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'"
 				+ " group by b.strPCode"
 				+ " order by b.strPName";
@@ -728,7 +729,7 @@ public class clsSalesReturnFlashController {
 				+ " Left outer join tblsubgroupmaster f on d.strSGCode=f.strSGCode"
 				+ " Left outer join tblgroupmaster g on f.strGCode=g.strGCode "
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"'"
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"' and a.strCustCode='"+strCustCode+"' and  a.dblTotalAmt>0 "
 				+ " GROUP BY  g.strGCode,f.strSGCode "
 				+ " ORDER BY g.strGName;";
 		
@@ -838,7 +839,7 @@ public class clsSalesReturnFlashController {
 				+ " left outer join tblproductmaster d on c.strProdCode=d.strProdCode"
 				+ " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode"
 				+ " where a.strLocCode='"+locCode+"' and a.strClientCode='"+strClientCode+"' "
-				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'  and  a.strCustCode='"+strCustCode+"' "
+				+ " and date(a.dteSRDate) BETWEEN '"+fromDate+"' and '"+toDate+"'  and  a.strCustCode='"+strCustCode+"' and a.dblTotalAmt>0 "
 				+ " group by c.strProdCode,a.dteSRDate"
 				+ " order by c.strSRCode,d.strProdName;");
 		/*	if (!settlementcode.equals("All")) {
@@ -886,7 +887,7 @@ public class clsSalesReturnFlashController {
 			JRDesignDataset taxSumDataset = (JRDesignDataset) datasetMap.get("dsProductWiseSRData");
 			
 			taxSumDataset.setQuery(prodWiseSR);
-			String sql="SELECT SUM(a.dblSubTotal-a.dblTaxAmt), SUM(a.dblTaxAmt), SUM(a.dblSubTotal)"
+		/*	String sql="SELECT SUM(a.dblSubTotal-a.dblTaxAmt), SUM(a.dblTaxAmt), SUM(a.dblSubTotal)"
 						+ " FROM tblsalesreturnhd a"
 						+ " LEFT OUTER JOIN tblpartymaster b ON a.strCustCode=b.strPCode"
 						+ " LEFT OUTER JOIN tbllocationmaster d ON a.strLocCode=d.strLocCode"
@@ -905,7 +906,7 @@ public class clsSalesReturnFlashController {
 				
 					
 				}
-			}
+			}*/
 				
 			
 			
@@ -923,9 +924,9 @@ public class clsSalesReturnFlashController {
 			hm.put("strState", objSetup.getStrState());
 			hm.put("strCountry", objSetup.getStrCountry());
 			hm.put("strPin", objSetup.getStrPin());
-			hm.put("pSubTotal",dblSubTotal);
-			hm.put("pTaxTotal",dblTaxTotal);
-			hm.put("pTotal",dblTotal);
+			//hm.put("pSubTotal",dblSubTotal);
+			//hm.put("pTaxTotal",dblTaxTotal);
+			//hm.put("pTotal",dblTotal);
 			/*hm.put("srCode", srCode);
 			hm.put("locationCode", locationCode);
 			hm.put("locationName", locationName);

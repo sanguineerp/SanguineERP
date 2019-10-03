@@ -402,14 +402,21 @@ public class clsRecipeMasterController {
 			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 			
 			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
-
+        
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptRecipesList.jrxml");
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+			
+			String recipeListPrice=objSetup.getStrRecipeListPrice();
+			String strReceipePriceClmn="ifnull(cp.dblCostRM/cp.dblRecipeConversion,0)";
+			if(recipeListPrice.equalsIgnoreCase("Received"))
+			{
+				strReceipePriceClmn="ifnull(cp.dblCostRM/cp.dblReceiveConversion,0)";
+			}
 			
 			String sqlDtlQuery = "SELECT   h.strBOMCode as strBOMCode,h.strParentCode as strParentCode, " 
 					+ "h.strprocesscode as strprocesscode,h.dblQty as ParentDdlQty,h.strUOM as ParentstrUOM, " 
 					+ "p.strProdName as ParentProdName,ifnull(lp.strlocname,'') as parentLocation, d.strChildCode, "
-					+ "ifnull(cp.strProdName,'')  as childProductName,ifnull(cp.strRecipeUOM,'') as childUOM, d.dblQty,ifnull(cp.dblCostRM/cp.dblRecipeConversion,0) as  price, "
+					+ "ifnull(cp.strProdName,'')  as childProductName,ifnull(cp.strRecipeUOM,'') as childUOM, d.dblQty,"+strReceipePriceClmn+" as  price, "
 					+ "IFNULL(pr.strprocessname,'') as strprocessname,ifnull(cl.strlocname,'') as childLocation  ,"
 					+ "date(h.dtCreatedDate) as dtCreatedDate,date(h.dtValidFrom) as dtValidFrom," 
 					+ "date(h.dtValidTo) as dtValidTo, h.strUserCreated as strUserCreated ,ifnull((cp.dblCostRM /cp.dblRecipeConversion)*d.dblQty,0) as value,d.dblQty"

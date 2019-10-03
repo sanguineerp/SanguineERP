@@ -190,11 +190,9 @@
 		</variable>
 		<variable name="subtot" class="java.lang.Double" calculation="Sum">
 			<variableExpression><![CDATA[(((($F{dblQty}-$F{dblRejected})*$F{dblUnitPrice})-$F{dblDiscount})+$F{dblPackForw})]]></variableExpression>
-			<initialValueExpression><![CDATA[new Double("0.00")]]></initialValueExpression>
 		</variable>
 		<variable name="stdAmtTotal" class="java.lang.Double" calculation="Sum">
 			<variableExpression><![CDATA[$F{stdAmt}]]></variableExpression>
-			<initialValueExpression><![CDATA[new Double(0.00)]]></initialValueExpression>
 		</variable>
 	</subDataset>
 	<subDataset name="dsTaxDtl" uuid="8345be8b-d494-4322-8238-72a9f90a23c6">
@@ -580,13 +578,12 @@
 						</jr:tableHeader>
 						<jr:columnHeader style="table 2_TH" height="28" rowSpan="1"/>
 						<jr:detailCell style="table 2_TD" height="22">
-							<textField>
+							<textField pattern="#,##0.00#">
 								<reportElement x="0" y="0" width="32" height="22" uuid="f5df8f26-d475-4265-b187-5bd59a0c219f"/>
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{stdRate}]]></textFieldExpression>
-								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -699,7 +696,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="table 2_TD" height="22" rowSpan="1">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-							<textField>
+							<textField pattern="#,##0.00#">
 								<reportElement x="0" y="0" width="26" height="22" uuid="945489ba-46a5-4fc8-8709-4145f4443ec2"/>
 								<textElement textAlignment="Center">
 									<font fontName="Serif" size="7"/>
@@ -754,18 +751,16 @@ $F{dblWeight}]]></textFieldExpression>
 									<font size="8" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{subtot}]]></textFieldExpression>
-								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="table 2_TD" height="22" rowSpan="1">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-							<textField pattern="#,##0.00#;(#,##0.00#-)">
+							<textField pattern="#,##0.00#">
 								<reportElement x="0" y="0" width="50" height="22" uuid="976967b7-5b0b-417d-9593-451dc24908c4"/>
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[(((($F{dblQty}-$F{dblRejected})*$F{dblUnitPrice})-$F{dblDiscount})+$F{dblPackForw})]]></textFieldExpression>
-								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -782,23 +777,21 @@ $F{dblWeight}]]></textFieldExpression>
 						</jr:tableHeader>
 						<jr:columnHeader style="table 2_TH" height="28" rowSpan="1"/>
 						<jr:columnFooter style="Table 2_TD" height="30" rowSpan="1">
-							<textField pattern="#,##0.00">
+							<textField pattern="#,##0.00#">
 								<reportElement x="0" y="0" width="38" height="30" uuid="ddff9952-1f6d-481c-902f-9d1d9df22f2f"/>
 								<textElement textAlignment="Right">
 									<font size="8" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{stdAmtTotal}]]></textFieldExpression>
-								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="table 2_TD" height="22">
-							<textField pattern="#,##0.00#;(#,##0.00#-)">
+							<textField pattern="#,##0.00#">
 								<reportElement x="0" y="0" width="38" height="22" uuid="2580395c-5b04-4214-b2b4-b06d8c51c04e"/>
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{stdAmt}]]></textFieldExpression>
-								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -956,29 +949,26 @@ $F{dblWeight}]]></textFieldExpression>
 				<textFieldExpression><![CDATA[$F{dblDisAmt}]]></textFieldExpression>
 				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#" isBlankWhenNull="true">
 				<reportElement x="379" y="43" width="52" height="15" uuid="afd49cf1-0665-404b-853e-2fb0027bebe0"/>
 				<textElement textAlignment="Right">
 					<font fontName="Serif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblExtra}]]></textFieldExpression>
-				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#" isBlankWhenNull="true">
 				<reportElement x="379" y="101" width="52" height="19" uuid="1093f7ed-6054-4ecb-a809-ea8f8a0ccb53"/>
 				<textElement textAlignment="Right">
 					<font fontName="Serif" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblTotal}]]></textFieldExpression>
-				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="###0.00" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#" isBlankWhenNull="true">
 				<reportElement x="379" y="64" width="52" height="15" uuid="75acd584-ffc4-42f5-bbd7-dd393f21bbf2"/>
 				<textElement textAlignment="Right">
 					<font fontName="Serif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblLessAmt}]]></textFieldExpression>
-				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="0" y="311" width="550" height="103" uuid="1a8d97fc-cc77-4c6b-aec0-ce6edb5e91f9"/>
@@ -1049,13 +1039,12 @@ $F{dblWeight}]]></textFieldExpression>
 				</textElement>
 				<text><![CDATA[Tax Amount]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00#" isBlankWhenNull="true">
 				<reportElement x="379" y="82" width="52" height="15" uuid="48378e35-e665-4401-a9b6-4ea5a875cd3d"/>
 				<textElement textAlignment="Right">
 					<font fontName="Serif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblTaxAmt}]]></textFieldExpression>
-				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
 			<componentElement>
 				<reportElement x="6" y="2" width="189" height="118" uuid="4f7be17d-6012-4d15-8f06-cd81db1519c2">
@@ -1111,13 +1100,12 @@ $F{dblWeight}]]></textFieldExpression>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table 2_TD" height="14">
-							<textField>
+							<textField pattern="#,##0.00#">
 								<reportElement x="0" y="0" width="60" height="14" uuid="b20f3953-5dd5-4115-9fe7-3068afa56a70"/>
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="8" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{strTaxAmt}]]></textFieldExpression>
-								<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -1129,7 +1117,6 @@ $F{dblWeight}]]></textFieldExpression>
 					<font fontName="Serif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblDisRate}]]></textFieldExpression>
-				<patternExpression><![CDATA[$P{decimalFormaterForDoubleValue}]]></patternExpression>
 			</textField>
 			<staticText>
 				<reportElement x="207" y="26" width="162" height="15" uuid="06bd0332-7f13-4453-ad0b-f4b9f2537649"/>

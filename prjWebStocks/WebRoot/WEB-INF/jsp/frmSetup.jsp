@@ -1471,6 +1471,14 @@
 										<td>
 											<s:checkbox path="strPOSTRoundOffAmtToWebBooks" value="Y"/> 
 										</td>
+										<td>Recipe List Price By</td>
+										<td>
+										<s:select path="strRecipeListPrice" id="strReceipeListPrice"
+												cssClass="BoxW48px" cssStyle="width:50%">
+												<s:option value="Received">Received</s:option>
+												<s:option value="Recipe">Recipe</s:option>
+										</s:select>
+										</td>
 									</tr>
 									
 									

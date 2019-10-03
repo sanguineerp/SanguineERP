@@ -187,7 +187,7 @@ public class clsProductMasterServiceImpl implements clsProductMasterService {
 	}
 
 	@Override
-	public int funDeleteSuppProds(String suppCode, String clientCode) {
+	public int funDeleteSuppProds(String suppCode,String clientCode) {
 		return objProductMasterDao.funDeleteSuppProds(suppCode, clientCode);
 	}
 

@@ -110,6 +110,7 @@ public class clsCreditorTrailBalanceFlash {
 				String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 				double conversionRate=1;
 				String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+				String strWebBooksDB=req.getSession().getAttribute("WebBooksDB").toString();
 				StringBuilder sbSql = new StringBuilder();
 				sbSql.append("select dblConvToBaseCurr from "+webStockDB+".tblcurrencymaster where strCurrencyCode='"+currencyCode+"' and strClientCode='"+clientCode+"' ");
 				try
@@ -146,7 +147,7 @@ public class clsCreditorTrailBalanceFlash {
 				String sunCrAccountCode = glCode;
 				String sql="";
 				StringBuilder sbSqllink=new StringBuilder();
-				sbSqllink.append(" select a.strAccountCode,a.strMasterDesc from "+webStockDB+".tbllinkup a where a.strWebBookAccCode='"+glCode+"' and a.strPropertyCode='"+propertyCode+"' and a.strClientCode='"+clientCode+"' ");
+				sbSqllink.append(" SELECT a.strCreditorCode,a.strCreditorFullName FROM "+strWebBooksDB+".tblsundarycreditormaster a WHERE a.strAccountCode='"+glCode+"' and a.strPropertyCode='"+propertyCode+"' and a.strClientCode='"+clientCode+"' ");
 				 List listDebtor = objBaseService.funGetListModuleWise(sbSqllink, "sql", "WebStocks");	 
 				 if (listDebtor.size() > 0 && listDebtor != null) {
 					for (int i = 0; i < listDebtor.size(); i++) {

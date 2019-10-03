@@ -202,7 +202,13 @@
 			        type: "GET",
 			        url: gurl,
 			        dataType: "json",
-			        async:false,
+			        beforeSend : function(){
+						 $("#wait").css("display","block");
+				    },
+				    complete: function(){
+				    	 $("#wait").css("display","none");
+				    },
+			      
 			        success: function(response)
 			        {		        	
 			        		if(null == response.strSOCode){
@@ -383,7 +389,7 @@
 					type : "GET",
 					url : searchUrl,
 					dataType : "json",
-					 async:false,
+					
 					success : function(response) 
 					{
 						funRemoveTaxRows();
@@ -898,6 +904,7 @@
 	
 	$(document).ready(function() {
 		var message='';
+		// $("#wait").css("display","none");
 		<%if (session.getAttribute("success") != null) {
 			            if(session.getAttribute("successMessage") != null){%>
 			            message='<%=session.getAttribute("successMessage").toString()%>';
@@ -944,6 +951,9 @@
 	
 	function funCallFormAction(actionName,object) 
 	{
+		 $("#wait").css("display","block");
+			
+		
 		var flg=true;
 		var table = document.getElementById("tblProdDet");
 		var rowCount = table.rows.length;	
@@ -1000,7 +1010,7 @@
 			return true;
 			
 		}
-	  
+	   
 	
 	}
 	

@@ -190,8 +190,65 @@ public class clsStockTranferFlashController {
 		return strVal;
 	}
 
-	@RequestMapping(value = "/downloadStockTransferExcel", method = RequestMethod.GET)
-	public ModelAndView downloadExcel(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, HttpServletRequest req) {
+	  @RequestMapping(value = "/downloadStockTransferExcel", method = RequestMethod.GET)
+       public ModelAndView downloadExcel(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, HttpServletRequest req) {
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String userCode = req.getSession().getAttribute("usercode").toString();
+		DecimalFormat df = new DecimalFormat("#.##");
+		String[] spParam1 = param1.split(",");
+		String fromLocCode = spParam1[1];
+		String toLocCode = spParam1[2];
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		List totalsList = new ArrayList();
+	
+
+		String fromDate = objGlobal.funGetDate("yyyy-MM-dd", fDate);
+		String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
+		List listStock = new ArrayList();
+     	
+		String[] ExcelHeader = { "Product Code", "Product Name", "Transfer Qty", "Amount" };
+		listStock.add(ExcelHeader);
+
+		//String sql = " select b.strProdCode,c.strProdName,sum(b.dblQty),(c.dblCostRM*b.dblQty) AS costRM from tblstocktransferhd a,tblstocktransferdtl b,tblproductmaster c " + " where a.strSTCode=b.strSTCode " + " and a.strFromLocCode='" + fromLocCode + "' and a.strToLocCode='" + toLocCode + "' " + " and Date(a.dtSTDate) between '" + fromDate + "' and '" + toDate + "'  " + " and b.strProdCode=c.strProdCode "
+			//	+ " group by b.strProdCode " + " order by c.strProdName ";
+		String sql="SELECT b.strProdCode,c.strProdName, SUM(b.dblQty),(c.dblCostRM* SUM(b.dblQty)) AS costRM FROM tblstocktransferhd a,tblstocktransferdtl b,tblproductmaster c,tblgroupmaster d,tblsubgroupmaster e " 
+                + " WHERE a.strSTCode=b.strSTCode AND a.strFromLocCode='"+fromLocCode+"' AND a.strToLocCode='"+toLocCode+"' "
+                + " AND DATE(a.dtSTDate) BETWEEN '"+fromDate+"' AND '"+toDate+"' AND b.strProdCode=c.strProdCode "
+                + " AND c.strSGCode=e.strSGCode AND d.strGCode=e.strGCode "
+                + " GROUP BY b.strProdCode " 
+                + " ORDER BY e.intSortingNo " ;
+
+
+		System.out.println(sql);
+		List list = objGlobalService.funGetList(sql);
+
+		List listStockFlashModel = new ArrayList();
+		for (int cnt = 0; cnt < list.size(); cnt++) {
+			Object[] arrObj = (Object[]) list.get(cnt);
+			List DataList = new ArrayList<>();
+			DataList.add(arrObj[0].toString());
+			DataList.add(arrObj[1].toString());
+			DataList.add(arrObj[2].toString());
+			DataList.add(df.format(Double.parseDouble(arrObj[3].toString())));
+			dblTotalValue = new BigDecimal(Double.parseDouble(arrObj[3].toString())).add(dblTotalValue);
+			listStockFlashModel.add(DataList);
+			
+			}
+		totalsList.add("Total");
+		totalsList.add("");
+		totalsList.add("");
+		totalsList.add(df.format(dblTotalValue));
+		listStockFlashModel.add(totalsList);
+		listStock.add(listStockFlashModel);
+		// return a view which will be resolved by an excel view resolver
+		return new ModelAndView("excelView", "stocklist", listStock);
+
+	}
+
+}
+//@RequestMapping(value = "/downloadStockTransferExcel", method = RequestMethod.GET)
+
+	/*public ModelAndView downloadExcel(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, HttpServletRequest req) {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String[] spParam1 = param1.split(",");
@@ -224,4 +281,4 @@ public class clsStockTranferFlashController {
 
 	}
 
-}
+}*/

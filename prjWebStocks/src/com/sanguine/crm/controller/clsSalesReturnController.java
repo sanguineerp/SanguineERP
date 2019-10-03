@@ -302,6 +302,7 @@ public class clsSalesReturnController {
 						objSalesReturnService.funAddUpdateSalesReturnHd(objHdModel);
 					}
 					req.getSession().setAttribute("JVGen", flgJVPosting);
+				
 					req.getSession().setAttribute("JVGenMessage", JVGenMessage);
 				}
 			}

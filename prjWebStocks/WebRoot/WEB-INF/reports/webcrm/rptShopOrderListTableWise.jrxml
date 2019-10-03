@@ -99,6 +99,10 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 			<variableExpression><![CDATA[$F{dblRequiredQty}]]></variableExpression>
 			<initialValueExpression><![CDATA[new Double("0")]]></initialValueExpression>
 		</variable>
+		<variable name="returnQtySum" class="java.lang.Double" resetType="Group" resetGroup="strSGName" calculation="Sum">
+			<variableExpression><![CDATA[$F{dblSalesReturnQty}]]></variableExpression>
+			<initialValueExpression><![CDATA[new Double("0")]]></initialValueExpression>
+		</variable>
 		<group name="strPName">
 			<groupExpression><![CDATA[$F{strPName}]]></groupExpression>
 		</group>
@@ -142,6 +146,10 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 		<field name="dblSalesReturnQty" class="java.lang.Double"/>
 		<variable name="subgroupSum" class="java.lang.Double" resetType="Group" resetGroup="strSGName" calculation="Sum">
 			<variableExpression><![CDATA[$F{dblRequiredQty}]]></variableExpression>
+			<initialValueExpression><![CDATA[new Double("0")]]></initialValueExpression>
+		</variable>
+		<variable name="returnQtySum" class="java.lang.Double" resetType="Group" resetGroup="strSGName" calculation="Sum">
+			<variableExpression><![CDATA[$F{dblSalesReturnQty}]]></variableExpression>
 			<initialValueExpression><![CDATA[new Double("0")]]></initialValueExpression>
 		</variable>
 		<group name="strPName">
@@ -305,6 +313,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField>
 									<reportElement x="0" y="0" width="20" height="20" uuid="083a417f-8e6e-493c-89e8-ec27b14c6aef"/>
+									<box leftPadding="2"/>
 									<textElement>
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
@@ -338,6 +347,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField isStretchWithOverflow="true">
 									<reportElement x="0" y="0" width="150" height="20" uuid="b37c242e-8bb2-41e4-a0b5-d317a52c8261"/>
+									<box leftPadding="2"/>
 									<textElement>
 										<font fontName="Serif" size="8"/>
 									</textElement>
@@ -360,8 +370,9 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:tableFooter style="table 1_TH" height="2" rowSpan="1"/>
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1">
-									<textField>
+									<textField pattern="#,##0">
 										<reportElement x="0" y="0" width="35" height="30" uuid="404ccfa1-7f21-4094-9779-a930b8dc0af8"/>
+										<box rightPadding="2"/>
 										<textElement textAlignment="Right">
 											<font fontName="Serif" isBold="true"/>
 										</textElement>
@@ -387,6 +398,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
 									<reportElement x="0" y="0" width="35" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
+									<box leftPadding="1"/>
 									<textElement>
 										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
@@ -404,6 +416,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
 									<reportElement x="0" y="0" width="35" height="30" uuid="45309d94-3e68-4284-81a6-ea79488d24e4"/>
+									<box leftPadding="1"/>
 									<textElement>
 										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
@@ -412,7 +425,16 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:tableHeader>
 							<jr:tableFooter style="table 1_TH" height="2" rowSpan="1"/>
 							<jr:groupFooter groupName="strSGName">
-								<jr:cell height="30" rowSpan="1"/>
+								<jr:cell height="30" rowSpan="1">
+									<textField pattern="#,##0">
+										<reportElement x="0" y="0" width="35" height="30" uuid="38b374f7-d19a-49aa-a8ec-401c16816ae8"/>
+										<box rightPadding="2"/>
+										<textElement textAlignment="Right">
+											<font fontName="Serif" isBold="true"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$V{returnQtySum}]]></textFieldExpression>
+									</textField>
+								</jr:cell>
 							</jr:groupFooter>
 							<jr:detailCell style="table 1_TD" height="20">
 								<textField pattern="#,##0.###">
@@ -487,6 +509,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField>
 									<reportElement x="0" y="0" width="20" height="20" uuid="2937c4c6-394a-4c23-b680-c4b9097ec152"/>
+									<box leftPadding="2"/>
 									<textElement>
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
@@ -530,6 +553,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
 								<textField isStretchWithOverflow="true">
 									<reportElement x="0" y="0" width="150" height="20" uuid="b37c242e-8bb2-41e4-a0b5-d317a52c8261"/>
+									<box leftPadding="2"/>
 									<textElement>
 										<font fontName="Serif" size="8"/>
 									</textElement>
@@ -557,8 +581,9 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:tableFooter>
 							<jr:groupFooter groupName="strSGName">
 								<jr:cell height="30" rowSpan="1">
-									<textField>
+									<textField pattern="#,##0">
 										<reportElement x="0" y="0" width="35" height="30" uuid="d11e6829-f0fb-4eba-9948-31ba980c16e6"/>
+										<box rightPadding="2"/>
 										<textElement textAlignment="Right">
 											<font fontName="Serif" size="10" isBold="true"/>
 										</textElement>
@@ -582,6 +607,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
 									<reportElement x="0" y="0" width="35" height="30" uuid="b725f31d-e260-49fa-acab-510feecdb1e9"/>
+									<box leftPadding="1"/>
 									<textElement>
 										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
@@ -605,6 +631,7 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							<jr:tableHeader style="table 1_TH" height="30" rowSpan="1">
 								<staticText>
 									<reportElement x="0" y="0" width="35" height="30" uuid="41b3d8b2-90a3-446f-9e81-c0a22f76fb4f"/>
+									<box leftPadding="1"/>
 									<textElement>
 										<font fontName="Serif" size="9" isBold="true"/>
 									</textElement>
@@ -613,7 +640,16 @@ ORDER BY e.strPName,f.strGName,c.strSGName,d.strProdName  ) as cnt where cnt.ser
 							</jr:tableHeader>
 							<jr:tableFooter style="table_TD" height="20" rowSpan="1"/>
 							<jr:groupFooter groupName="strSGName">
-								<jr:cell height="30" rowSpan="1"/>
+								<jr:cell height="30" rowSpan="1">
+									<textField pattern="#,##0">
+										<reportElement x="0" y="0" width="35" height="30" uuid="a2f47273-e015-4ea7-8393-20165cf44354"/>
+										<box rightPadding="2"/>
+										<textElement textAlignment="Right">
+											<font fontName="Serif" size="10" isBold="true"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$V{returnQtySum}]]></textFieldExpression>
+									</textField>
+								</jr:cell>
 							</jr:groupFooter>
 							<jr:detailCell style="table 1_TD" height="20">
 								<textField pattern="#,##0.###">

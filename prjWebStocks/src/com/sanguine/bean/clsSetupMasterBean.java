@@ -109,7 +109,7 @@ public class clsSetupMasterBean {
 	private String strMultiCurrency;
 	private String strShowAllPartyToAllLoc;
 	private String strPORateEditable;
-	
+	private String strRecipeListPrice;
 
 	// BAnk Dtl Tab
 	private String strBankName;
@@ -1378,6 +1378,7 @@ public class clsSetupMasterBean {
 		this.strPORateEditable = strPORateEditable;
 	}
 
+	
 	public String getStrCurrentDateForTransaction() {
 		return StrCurrentDateForTransaction;
 	}
@@ -1401,6 +1402,14 @@ public class clsSetupMasterBean {
 
 	public void setStrPOSTRoundOffAmtToWebBooks(String strPOSTRoundOffAmtToWebBooks) {
 		this.strPOSTRoundOffAmtToWebBooks = strPOSTRoundOffAmtToWebBooks;
+	}
+
+	public String getStrRecipeListPrice() {
+		return strRecipeListPrice;
+	}
+
+	public void setStrRecipeListPrice(String strRecipeListPrice) {
+		this.strRecipeListPrice = strRecipeListPrice;
 	}
 
 	

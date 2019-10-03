@@ -350,11 +350,12 @@ public class clsProductMasterDaoImpl implements clsProductMasterDao {
 	}
 
 	@Override
-	public int funDeleteSuppProds(String suppCode, String clientCode) {
-		String hql = "delete clsProdSuppMasterModel where strSuppCode = :suppCode and strClientCode= :clientCode ";
+	public int funDeleteSuppProds(String suppCode,String clientCode) {
+		String hql = "delete clsProdSuppMasterModel where strSuppCode = :suppCode and strClientCode= :clientCode";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("suppCode", suppCode);
 		query.setParameter("clientCode", clientCode);
+		
 		return query.executeUpdate();
 	}
 

@@ -78,8 +78,27 @@
 	function funSendEmail()
 	{
 		var form = $('#frmEmail');
+	    var code=$("#txtPOCode").val();
+		var subject=$("#txtsubject").val();
+		var message=$("#txtmessage").val();
+		var form = $('#frmEmail');
+		var searchUrl = "";
+		searchUrl = getContextPath()+ "/sendPOEmail.html?strPOCode=" + code+"&strSubject=" + subject+"&strMessage="+message;
 		$.ajax({
-				type: "POST",
+			type : "GET",
+			url : searchUrl,
+	            async: false,
+			    context: document.body,
+			    dataType: "text", 
+			    success: function(response)
+		        {
+		        	alert(response);
+		        	window.close();
+				},
+			   
+		/* var form = $('#frmEmail');
+		$.ajax({
+				type: "GET",
 			    url: $("#frmEmailSending").attr("action"),
 			    data:$("#frmEmailSending").serialize(),
 			    async: false,
@@ -89,7 +108,7 @@
 		        {
 		        	alert(response);
 		        	window.close();
-				},
+				}, */
 				error: function(jqXHR, exception) {
 		            if (jqXHR.status === 0) {
 		                alert('Not connect.n Verify Network.');
@@ -113,6 +132,12 @@
 	{
 		window.close();
 	}
+	
+	function getContextPath() 
+	{
+		return window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
+	}
+	
 </script>
 </head>
 <body onload="funOnLoad();">
@@ -120,7 +145,7 @@
 		<label>Send E-mail</label>
 	</div>
 	<br>
-        <form method="post" name="frmEmailSending" id="frmEmailSending" action="sendPOEmail.html" >
+        <form method="GET" name="frmEmailSending" id="frmEmailSending" action="sendPOEmail.html" >
             <table class="transTable">
                 <tr>
                     <td width="100px"><label>PO Code</label></td>

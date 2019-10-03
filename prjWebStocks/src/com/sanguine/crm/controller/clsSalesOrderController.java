@@ -453,7 +453,7 @@ public class clsSalesOrderController
 		SOHDModel.setDteFulmtDate(objBean.getDteFulmtDate());
 		SOHDModel.setStrAgainst(objBean.getStrAgainst());
 		SOHDModel.setStrCode(objBean.getStrCode());
-		SOHDModel.setStrCurrency(objBean.getStrCurrency());
+		SOHDModel.setStrCurrency(objGlobalFunctions.funIfNull(objBean.getStrCurrency(), "INR", objBean.getStrCurrency()));
 		SOHDModel.setIntwarmonth(objBean.getIntwarmonth());
 		SOHDModel.setStrPayMode(objBean.getStrPayMode());
 		SOHDModel.setDblSubTotal(objBean.getDblSubTotal()*currRate);

@@ -2178,7 +2178,7 @@ public class clsGRNController {
 
 	}
 
-	@SuppressWarnings({ "finally", "rawtypes", "unchecked" })
+	/*@SuppressWarnings({ "finally", "rawtypes", "unchecked" })
 	public JasperPrint funCallRangePrintReport(String grnCode,
 			HttpServletResponse resp, HttpServletRequest req) {
 
@@ -2285,7 +2285,115 @@ public class clsGRNController {
 			return p;
 		}
 	}
+*/
 
+@SuppressWarnings({ "finally", "rawtypes", "unchecked" })
+	public JasperPrint funCallRangePrintReport(String grnCode,
+			HttpServletResponse resp, HttpServletRequest req) {
+
+		Connection con = objGlobalFunctions.funGetConnection(req);
+		JasperPrint p = null;
+		try {
+			String clientCode = req.getSession().getAttribute("clientCode")
+					.toString();
+			String companyName = req.getSession().getAttribute("companyName")
+					.toString();
+			String propertyCode = req.getSession().getAttribute("propertyCode")
+					.toString();
+			String userCode = req.getSession().getAttribute("usercode")
+					.toString();
+			clsPropertySetupModel objSetup = objSetupMasterService
+					.funGetObjectPropertySetup(propertyCode, clientCode);
+			if (objSetup == null) {
+				objSetup = new clsPropertySetupModel();
+			}
+			String reportName = servletContext
+					.getRealPath("/WEB-INF/reports/rptGrnDtlSlip.jrxml");
+			String imagePath = servletContext
+					.getRealPath("/resources/images/company_Logo.png");
+			StringBuilder sqlBuilder = new StringBuilder();
+			sqlBuilder.setLength(0);
+			sqlBuilder
+					.append(" SELECT g.strGRNCode, DATE_FORMAT(g.dtGRNDate,'%d-%m-%Y') as dtGRNDate, g.strSuppCode, g.strAgainst, g.strPONo, g.strBillNo, DATE_FORMAT(g.dtBillDate,'%d-%m-%Y') as dtBillDate, DATE_FORMAT(g.dtDueDate,'%d-%m-%Y') "
+							+ " as dtDueDate, g.strPayMode, g.dblSubTotal, g.dblDisRate, g.dblDisAmt, g.dblTaxAmt, g.dblExtra, g.dblTotal, "
+							+ " g.strNarration, g.strLocCode, s.strPCode, s.strPName, s.strBAdd1, s.strBAdd2, s.strBCity, s.strBPin, "
+							+ " s.strBState, s.strBCountry, g.strNo,g.strRefNo, DATE_FORMAT(g.dtRefDate,'%d-%m-%Y') as dtRefDate,g.dblLessAmt,dblTaxAmt ,g.dblDisRate,g.strNarration ,g.strVehNo "
+							+ ",g.strUserCreated,g.strAuthLevel1,g.strAuthLevel2 "
+							+ " FROM tblgrnhd AS g INNER JOIN tblpartymaster AS s ON g.strSuppCode = s.strPCode and s.strClientCode='"
+							+ clientCode
+							+ "'"
+							/*+ "	Left outer join tblgrntaxdtl as t on t.strGRNCode=g.strGRNCode and t.strClientCode='"
+							+ clientCode
+							+ "'"*/
+							+ " WHERE g.strGRNCode = '"
+							+ grnCode
+							+ "' and g.strClientCode='"
+							+ clientCode
+							+ "'");
+
+			JasperDesign jd = JRXmlLoader.load(reportName);
+			JRDesignQuery newQuery = new JRDesignQuery();
+			newQuery.setText(sqlBuilder.toString());
+			jd.setQuery(newQuery);
+			sqlBuilder.setLength(0);
+			sqlBuilder
+					.append("select g.strGRNCode,g.strProdCode,p.strProdName,ifnull(p.strReceivedUOM,'') as strReceivedUOM,g.dblQty,g.dblRejected,g.dblDiscount,"
+							+ " g.strTaxType,g.dblTaxableAmt,g.dblTax,dblTaxAmt, g.dblUnitPrice,g.dblWeight,g.strProdChar,g.dblDCQty,"
+							+ " g.dblDCWt,g.strRemarks,g.dblQtyRbl,g.strGRNProdChar,g.dblPOWeight,g.strCode, g.dblRework,g.dblPackForw,"
+							+ " g.dblRate,g.dblValue,p.strPartNo ,p.dblUnitPrice as stdRate,p.dblUnitPrice*(g.dblQty-g.dblRejected) as stdAmt  from tblgrndtl g,tblproductmaster p "
+							+ " where g.strProdCode=p.strProdCode and g.strGRNCode='"
+							+ grnCode
+							+ "' and g.strClientCode='"
+							+ clientCode
+							+ "' and p.strClientCode='"
+							+ clientCode
+							+ "' order by p.strProdName ");
+			JRDesignQuery subQuery = new JRDesignQuery();
+			subQuery.setText(sqlBuilder.toString());
+			Map<String, JRDataset> datasetMap = jd.getDatasetMap();
+			JRDesignDataset subDataset = (JRDesignDataset) datasetMap
+					.get("dsGrnDtl");
+			subDataset.setQuery(subQuery);
+			sqlBuilder.setLength(0);
+			sqlBuilder
+					.append("select a.strTaxDesc,a.strTaxAmt from tblgrntaxdtl a where strGRNCode='"
+							+ grnCode
+							+ "' and strClientCode='"
+							+ clientCode
+							+ "'");
+
+			JRDesignQuery taxQuery = new JRDesignQuery();
+			taxQuery.setText(sqlBuilder.toString());
+			JRDesignDataset taxDataset = (JRDesignDataset) datasetMap
+					.get("dsTaxDtl");
+			taxDataset.setQuery(taxQuery);
+			JasperReport jr = JasperCompileManager.compileReport(jd);
+			HashMap hm = new HashMap();
+			hm.put("strCompanyName", companyName);
+			hm.put("strUserCode", userCode);
+			hm.put("strImagePath", imagePath);
+			hm.put("strGRN Code", grnCode);
+			hm.put("strAddr1", objSetup.getStrAdd1());
+			hm.put("strAddr2", objSetup.getStrAdd2());
+			hm.put("strCity", objSetup.getStrCity());
+			hm.put("strState", objSetup.getStrState());
+			hm.put("strCountry", objSetup.getStrCountry());
+			hm.put("strPin", objSetup.getStrPin());
+			p = JasperFillManager.fillReport(jr, hm, con);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			}
+			return p;
+		}
+	}
 	@RequestMapping(value = "/frmGRNRegisterReport", method = RequestMethod.GET)
 	public ModelAndView funOpenReportForm(Map<String, Object> model,
 			HttpServletRequest request) {

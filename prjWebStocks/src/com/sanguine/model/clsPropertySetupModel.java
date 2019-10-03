@@ -209,7 +209,10 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	
 	@Column(name = "strPOSTRoundOffAmtToWebBooks", columnDefinition = "VARCHAR(1) default 'Y'")
 	private String strPOSTRoundOffAmtToWebBooks;
-
+    
+	@Column(name = "strRecipeListPrice", columnDefinition = "VARCHAR(10) default ''")
+	private String strRecipeListPrice;
+    
 	
 	
 	// BAnk Dtl Tab
@@ -1250,6 +1253,15 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 		this.strPOSTRoundOffAmtToWebBooks = (String) setDefaultValue(strPOSTRoundOffAmtToWebBooks, "Y");;
 	}
 
+	public String getStrRecipeListPrice() {
+		return strRecipeListPrice;
+	}
+
+	public void setStrRecipeListPrice(String strRecipeListPrice) {
+		this.strRecipeListPrice = strRecipeListPrice;
+	}
+
+	
 
 	
 	

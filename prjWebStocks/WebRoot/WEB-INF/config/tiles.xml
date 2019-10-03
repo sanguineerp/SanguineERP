@@ -5087,7 +5087,16 @@
 	 	 <put-attribute name="title" value="Item Master"  ></put-attribute>
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmItemMaster.jsp" ></put-attribute>
 	  </definition>
-	  
+	     
+     <definition name="frmBanquetBooking" extends="base.definition">
+		   <put-attribute name="title" value="Banquet Booking" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetBooking.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBanquetBooking_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Banquet Booking"  ></put-attribute>
+	  	 <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetBooking.jsp" ></put-attribute>
+	  </definition>
 	  
   
 <!-- 	End Of WebBanquet Tiles Entry -->
