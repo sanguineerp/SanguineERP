@@ -14,6 +14,15 @@
 <script type="text/javascript">
 var strcheckboxStatus="N";
 	$(document).ready(function() {
+		
+		
+		var strIndustryType='<%=session.getAttribute("strIndustryType").toString()%>';
+   		if(strIndustryType=='MilkFederation') 
+   		{
+			$("#lblSupplierName").text('Farmer Name ');
+			$("#lblSupplierCode").text('Farmer Code ');
+   		}
+   		
 
 		$(".tab_content").hide();
 		$(".tab_content:first").show();
@@ -719,7 +728,7 @@ var strcheckboxStatus="N";
 					    
 				    	<tr>
 				        	<td width="140px">
-				        		<label>Supplier Code </label>
+				        		<label id="lblSupplierCode">Supplier Code </label>
 				        	</td>
 				        	<td  width="15%">
 				        		<s:input id="txtPartyCode" name="txtPartyCode"  path="strPCode" ondblclick="funHelp('suppcode')"   cssClass="searchTextBox"/>
@@ -733,7 +742,7 @@ var strcheckboxStatus="N";
 				   		</tr>
 				    	
 				    	<tr>
-				        	<td><label>Name  </label></td>
+				        	<td><label id="lblSupplierName">Name  </label></td>
 				        	<td colspan="3">
 				        		<s:input size="80px" type="text" id="txtPartyName" autocomplete="off" name="txtPartyName" path="strPName" cssStyle="text-transform: uppercase;" cssClass="longTextBox" required="true"/>
 				        	</td>

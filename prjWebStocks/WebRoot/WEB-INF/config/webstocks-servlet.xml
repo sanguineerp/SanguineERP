@@ -582,7 +582,8 @@
 					<value>com.sanguine.webbanquets.model.clsFunctionMasterModel</value> 
 					<value>com.sanguine.webbanquets.model.clsMenuHeadMasterModel</value> 
 					<value>com.sanguine.webbanquets.model.clsItemMasterModel</value>
-					<value>com.sanguine.webbanquets.model.clsBanquetBookingModelHd</value>
+					<value>com.sanguine.webbanquets.model.clsServiceMasterModel</value>
+					<value>com.sanguine.webbanquets.model.clsBanquetStaffMasterModel</value>
 					
 						
 				</list>

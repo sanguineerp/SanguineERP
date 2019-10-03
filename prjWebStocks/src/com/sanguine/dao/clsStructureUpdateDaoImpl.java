@@ -1043,9 +1043,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblcompanymaster` CHANGE COLUMN `strWebPOSModule` `strWebBanquetModule` VARCHAR(3) NULL DEFAULT 'No' AFTER `strWebPMSModule`;";
 		funExecuteQuery(sql);
 		
+
 		sql=" ALTER TABLE `tblpropertysetup` ADD COLUMN `strRecipeListPrice` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strPOSTRoundOffAmtToWebBooks`;";
-		
 		funExecuteQuery(sql);
+		
+		
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
 		List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();
@@ -1364,7 +1366,6 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ " ('frmBulkInvoice', 'Bulk Invoice', 'Sales', 2, 'T', 95, 14, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmBulkInvoice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ " ('frmDeleteTransaction', 'Delete Transaction', 'Tools', 10, 'L', 47, 14, '1', 'delete trasaction.png', '6', 1, '1', '1', 'NO', 'NO', 'frmDeleteTransaction.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
 		funExecuteQuery(sql);
-		
 		
 		}
 		
@@ -3255,6 +3256,58 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "ENGINE=InnoDB;";
 		funExecuteBanquetQuery(sql);
 		
+		
+		sql="CREATE TABLE `tblfunctionservice` ("
+				+ "	`strFunctionCode` VARCHAR(10) NOT NULL, "
+				+ "	`strServiceCode` VARCHAR(10) NOT NULL, " 
+				+ "	`strServiceName` VARCHAR(10) NOT NULL, "
+				+ "	`strClientCode` VARCHAR(10) NOT NULL, "
+				+ "	`strApplicable` VARCHAR(10) NOT NULL "
+				+ "	) "
+			+ "	COLLATE='utf8_general_ci' "
+			+ "	ENGINE=InnoDB "
+			+ "	;";
+		
+		funExecuteBanquetQuery(sql);
+		
+		sql="CREATE TABLE `tblservicemaster` ( "
+				+ "	`strServiceCode` VARCHAR(10) NOT NULL, "
+				+ "	`strServiceName` VARCHAR(50) NOT NULL DEFAULT '', "
+				+ "	`intSId` BIGINT(20) NOT NULL DEFAULT '0', "
+				+ "	`strPropertyCode` VARCHAR(5) NOT NULL, "
+				+ "	`strClientCode` VARCHAR(10) NOT NULL, "
+				+ "	`strUserCreated` VARCHAR(10) NOT NULL, "
+				+ "	`strUserEdited` VARCHAR(10) NOT NULL, "
+				+ "	`dteDateCreated` DATETIME NOT NULL, "
+				+ "	`dteDateEdited` DATETIME NOT NULL, "
+				+ "	`strOperationalYN` VARCHAR(2) NOT NULL DEFAULT 'Y', "
+				+ "	PRIMARY KEY (`strServiceCode`, `strClientCode`) "
+			+ "	) "
+			+ "	COLLATE='utf8_general_ci' "
+			+ "	ENGINE=InnoDB "
+			+ "	;";
+		funExecuteBanquetQuery(sql);
+		
+		sql="CREATE TABLE `tblstaffmaster` ( "
+				+ "	`strStaffCode` VARCHAR(10) NOT NULL, "
+				+ "	`strStaffName` VARCHAR(50) NOT NULL, "
+				+ "	`strDeptCode` VARCHAR(10) NOT NULL, "
+				+ "	`strOperationalYN` VARCHAR(10) NOT NULL, "
+				+ "	`dtCreated` DATETIME NOT NULL, "
+				+ "	`dtEdited` DATETIME NOT NULL, "
+				+ "	`strClientCode` VARCHAR(20) NOT NULL DEFAULT '', "
+				+ "	`strUserCreated` VARCHAR(20) NOT NULL DEFAULT '', "
+				+ "	`strUserEdited` VARCHAR(20) NOT NULL DEFAULT '', "
+				+ "	`intGId` BIGINT(20) NOT NULL, "
+				+ "	PRIMARY KEY (`strStaffCode`, `strClientCode`) "
+			+ "	) "
+			+ "	COLLATE='utf8_general_ci' "
+			+ "	ENGINE=InnoDB "
+			+ "	;";
+		funExecuteBanquetQuery(sql);
+		
+		
+		
 		//treeMaster Banquets All forms
 		
 		sql=" INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`,`strInvoice`,`strDeliverySchedule`,`strFormAccessYN`)"
@@ -3268,7 +3321,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmBillingInstructions', 'Billing Instructions', 'Master', '1', 'M', '14', '14', '1', 'default.png', '7', '3', '3', '3', 'NO', 'NO', 'frmBillingInstructions.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmWebBanquetDiary', 'Diary', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', '1', 'frmWebBanquetDiary.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmMenuHeadMaster', 'Menu Head Master', 'Master', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmMenuHeadMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmItemMaster', 'Item Master', 'Master', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmItemMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmItemMaster', 'Item Master', 'Master', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmItemMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmFunctionMaster', 'Function Master', 'Master', 1, 'M', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmFunctionMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmServiceMaster', 'Service Master', 'Master', 1, 'M', 1, 3, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmServiceMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBanquetStaffMaster', 'Staff Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetStaffMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');;";
 		
 		funExecuteQuery(sql);
 		

@@ -5589,6 +5589,18 @@ public class clsSearchFormController {
 				flgQuerySelection = true;
 				break;
 			}
+			
+			case "BanquetServiceMaster": {
+				columnNames = "strServiceCode,strServiceName";
+				tableName = "clsServiceMasterModel where strClientCode='" + clientCode + "'";
+				listColumnNames = "Service Code,Service Name";
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				idColumnName = "strSCode";
+				searchFormTitle = "Service Master";
+							 
+				break;
+			}
+
 		}
 
 		mainMap.put("columnNames", columnNames);

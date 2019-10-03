@@ -5098,6 +5098,28 @@
 	  	 <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetBooking.jsp" ></put-attribute>
 	  </definition>
 	  
+	  	  
+ <definition name="frmServiceMaster" extends="base.definition">
+		   <put-attribute name="title" value="Service Master" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmServiceMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmServiceMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Service Master"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmServiceMaster.jsp" ></put-attribute>
+	  </definition>
+   
+  
+  
+    <definition name="frmBanquetStaffMaster" extends="base.definition">
+		   <put-attribute name="title" value="Dairy" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetStaffMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBanquetStaffMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Dairy"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetStaffMaster.jsp" ></put-attribute>
+	  </definition>
   
 <!-- 	End Of WebBanquet Tiles Entry -->
 

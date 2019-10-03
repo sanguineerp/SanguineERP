@@ -87,6 +87,10 @@
    						document.getElementById("pageTop").className = "pagetopMenufactureing";
    				break;
    			
+   		case 'MilkFederation' :
+   						document.getElementById("pageTop").className = "pagetopMenuMilkFederation";
+				break;//headerimageMilkFederation
+   			
    		default :
    			document.getElementById("pageTop").className = "pagetop";
    			break;

@@ -50,6 +50,20 @@ a:HOVER {
 
 }
 
+.pagetopMenuMilkFederation{
+	
+  background-image: url(../images/headerimageMilkFederation.jpg); 
+  background-repeat:round;
+	 overflow:hidden;
+	
+	background-position: left;
+	width: auto;
+	height: 100px;
+	background-size: cover;
+
+
+}
+
 .pagetop {
 	/* background-color: #FFF;
 	background-image: url(../images/webstocks.jpg);

@@ -109,33 +109,52 @@ public class clsBanquetStatusDiaryController {
 		try{
 			
 			clsRoomStatusDtlBean objBean=new clsRoomStatusDtlBean();
-			
 			String stratTime="00:00",tableRowTime="";
-			for(int i=0;i<24;i++){
-				 
-				 objBean=new clsRoomStatusDtlBean();
+			
+			String sqlDiary="select * from tblbqbookinghd a where date(a.dteFromDate) >='2019-10-02' and date(a.dteToDate) <='2019-10-08';";
+			List listBooking=objGlobalFunctionsService.funGetListModuleWise(sqlDiary, "sql");
+			if(listBooking!=null && listBooking.size()>0){
+			
+				for(int k=0;k<listBooking.size();k++){
 				
-				 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-				 Date d = df.parse(stratTime); 
-				 Calendar cal = Calendar.getInstance();
-				 cal.setTime(d);
-				 cal.add(Calendar.HOUR, 1);
-				 String newTime = df.format(cal.getTime());
-				 tableRowTime=stratTime+"-"+newTime;
-				 stratTime=newTime;
-				
-				 
-				 objBean.setStrDay(tableRowTime);
-				 objBean.setStrDay1("");
-				 objBean.setStrDay2("");
-				 objBean.setStrDay3("");
-				 objBean.setStrDay4("");
-				 objBean.setStrDay5("");
-				 objBean.setStrDay6("");
-				 objBean.setStrDay7("");
-				 
-				 listBanquetReservation.add(objBean);
+					Object obj[]=(Object[])listBooking.get(k);
+					for(int i=0;i<24;i++){
+						 
+						 objBean=new clsRoomStatusDtlBean();
+						
+						 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+						 Date dTimeLimStart = df.parse(stratTime); 
+						 Calendar cal = Calendar.getInstance();
+						 cal.setTime(dTimeLimStart);
+						 cal.add(Calendar.HOUR, 1);
+						 String newTime = df.format(cal.getTime());
+						 Date dTimeLimStop = df.parse(newTime); 
+						 
+						 tableRowTime=stratTime+"-"+newTime;
+						 stratTime=newTime;
+						 
+						 Date dfromTme = df.parse(obj[6].toString()); 
+						 Date dtoTme = df.parse(obj[7].toString());
+						 
+						 
+						 objBean.setStrDay(tableRowTime);
+						 objBean.setStrDay1("");
+						 objBean.setStrDay2("");
+						 objBean.setStrDay3("");
+						 objBean.setStrDay4("");
+						 objBean.setStrDay5("");
+						 objBean.setStrDay6("");
+						 objBean.setStrDay7("");
+						 
+						 listBanquetReservation.add(objBean);
+					}
+				}
 			}
+			
+			
+			
+			
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}

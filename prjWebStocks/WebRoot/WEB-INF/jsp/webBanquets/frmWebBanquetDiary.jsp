@@ -20,6 +20,7 @@ body {
 }
 
 
+
 .table>tbody>tr.active>td,
 .table>tbody>tr.active>th,
 .table>tbody>tr>td.active,
@@ -76,36 +77,14 @@ body {
 }
 
 .table tr:not(.header) {
-  display: none;
+  display: block;
     
 }
 
 /* .Box { background: inherit; border: 0px solid #060006; outline:0; padding-left: 00px;  font-size:11px;
 	font-weight: bold; font-family: trebuchet ms,Helvetica,sans-serif; } */
 .table .header td:after {
-  /* content: "\002b"; 
-  position: absolute;
-  font-family: trebuchet ms,Helvetica,sans-serif;
-  background: inherit;
-  top: 0px;
-  width:0px;
-  height:0px;
-  display: inline-block;
-  border: 0px;
-  font-style: Bold;
-  outline:0;
-  font-size:0px;
-  font-weight: Bold;
-  line-height: 20px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  float: right;
-  color: #999;
-  text-align: center;
-  padding: 2px;
-  padding-left: 00px;
-  transition: opacity 0.15s linear 0s;
-  -webkit-transition: -webkit-transform .25s linear; */
+
   content: "\002b";
   position: relative;
   top: 1px;
@@ -170,9 +149,9 @@ body {
 	{
 		var table = document.getElementById(table);
 		var rowCount = table.rows.length;
-		while(rowCount>0)
+		while(rowCount>1)
 		{
-			table.deleteRow(0);
+			table.deleteRow(1);
 			rowCount--;
 		}
 	}
@@ -194,7 +173,7 @@ body {
 		    },
 			
 			success : function(response){ 
-				funRemoveTableRows("tblHeaders");
+				//funRemoveTableRows("tblBanquetInfo");
 				funFillHeaderRows(response);
 			},
 			error : function(e){
@@ -268,21 +247,22 @@ body {
 		var rowCount=table.rows.length;
 		var row=table.insertRow();
 		
-		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+time+"' >";
-		row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+strDay1+"' >";
-	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+strDay2+"' >";
-		row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+strDay3+"' >";
-		row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+strDay4+"' >";
-		row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+strDay5+"' >";
-		row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+strDay6+"' >";
-		row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+strDay7+"' >";
+		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;\" value='"+time+"' >";
+		row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay1+"' >";
+	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay2+"' >";
+		row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay3+"' >";
+		row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay4+"' >";
+		row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay5+"' >";
+		row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay6+"' >";
+		row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay7+"' >";
 		
 		
 	}
 		
 	function funFillHeaderRows(obj)
 	{
-		var table=document.getElementById("tblHeaders");
+		var table=document.getElementById("tblBanquetInfo");
+		table.setAttribute("class", "table table-bordered");
 		var rowCount=table.rows.length;
 		var row=table.insertRow();
 		
@@ -302,7 +282,27 @@ body {
 	
 	function funAreaOptionSelected(strLocCode,strLocName){
 		funShowDiary();
+		funShowRoomStatusDtl1();
 	}
+	
+	function funShowRoomStatusDtl1(row)
+	{
+		$(document).ready(function() {
+			  //Fixing jQuery Click Events for the iPad
+			  var ua = navigator.userAgent,
+			    event = (ua.match(/iPad/i)) ? "touchstart" : "click";
+			  if ($('.table').length > 0) {
+			    $('.table .header').on(event, function() {
+			      $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
+			        return this.style.display === 'table-row' ? 'none' : 'table-row';
+			      });
+			    });
+			  }
+			})
+		 
+	
+	}
+	
 		
 	</script>
 
@@ -319,7 +319,20 @@ body {
 		<div style="height: 100%;">
 			<table class="transTable">
 				<tr>
-					<td><s:input colspan="1" type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></td>
+					<td>
+					<table>
+						<tr>
+							<td><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></td>
+							<td bgcolor="#ff4f53" style="padding-left: 5px;padding-right: 5px;">Confirm</td>
+							<td bgcolor="Yellow" style="padding-left: 5px;padding-right: 5px;">Waitlisted</td>
+							<td bgcolor="Green" style="padding-left: 5px;padding-right: 5px;">Provisinal</td>
+							
+						</tr>
+					</table>
+					
+						<%-- <span><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></span> --%>
+						<%-- <span><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></span> --%>
+					</td>
 				</tr>
 				<tr>
 				<td>
@@ -339,12 +352,12 @@ body {
 			</table> 
 		
 			
-		
+		<!-- 
 			<table id="tblHeaders"  style="padding-left: 30px;" class="transTable">
 					
-			</table>
+			</table> -->
 			<br>
-			<table id="tblBanquetInfo" class="transTable" class="collapse show" >
+			<table id="tblBanquetInfo" class="table table-bordered" >
 			</table>
 			
 		</div>
