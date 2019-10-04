@@ -3,6 +3,7 @@ package com.sanguine.webbanquets.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,58 +103,109 @@ public class clsBanquetStatusDiaryController {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@SuppressWarnings({ "rawtypes", "deprecation" })
+	@RequestMapping(value ="/getBanquetDiaryHeader", method=RequestMethod.GET)
+	public @ResponseBody List funLoadRoomStatus(@RequestParam("viewDate") String viewDate,@RequestParam("viewType") String viewType, HttpServletRequest request) {
+		
+		List listViewDates = new ArrayList();
+		String[] arrViewDate = viewDate.split("-");
+		GregorianCalendar cd = new GregorianCalendar();
+		cd.set(Integer.parseInt(arrViewDate[2]) - 1900, Integer.parseInt(arrViewDate[1]) - 1, Integer.parseInt(arrViewDate[0]));
+		Date dt = new Date(Integer.parseInt(arrViewDate[2]) - 1900, Integer.parseInt(arrViewDate[1]) - 1, Integer.parseInt(arrViewDate[0]));
+		cd.setTime(dt);
+		if(viewType.equalsIgnoreCase("normal")){
+			for (int cnt = 0; cnt < 7; cnt++) {
+				String day = funGetDayOfWeek(cd.getTime().getDay());
+				String date = day + " " + cd.getTime().getDate() + "-" + (cd.getTime().getMonth() + 1) + "-" + (cd.getTime().getYear() + 1900);
+				listViewDates.add(date);
+				cd.add(Calendar.DATE, 1);
+			}
+		}else if(viewType.equalsIgnoreCase("cancel")){
+			for (int cnt = 0; cnt < 7; cnt++) {
+				String day = funGetDayOfWeek(cd.getTime().getDay());
+				String date = day + " " + cd.getTime().getDate() + "-" + (cd.getTime().getMonth() + 1) + "-" + (cd.getTime().getYear() + 1900);
+				listViewDates.add(date);
+				cd.add(Calendar.DATE, 1);
+			}
+		}else if(viewType.equalsIgnoreCase("day")){
+			for (int cnt = 0; cnt < 7; cnt++) {
+				String day = funGetDayOfWeek(cd.getTime().getDay());
+				String date = day + " " + cd.getTime().getDate() + "-" + (cd.getTime().getMonth() + 1) + "-" + (cd.getTime().getYear() + 1900);
+				listViewDates.add(date);
+				cd.add(Calendar.DATE, 1);
+			}
+		}
+		
+		
+		
+		return listViewDates;
+	}
+	
 	@RequestMapping(value ="/getBanquetBookingDetails", method=RequestMethod.GET)
-	public @ResponseBody List funGetBanquetBookingDetails(@RequestParam("viewDate")String viewDate,HttpServletRequest req){
+	public @ResponseBody List funGetBanquetBookingDetails(@RequestParam("viewDate")String viewDate,@RequestParam("viewType")String viewType,HttpServletRequest req){
 		List listBanquetReservation=new ArrayList<>();
 		try{
 			
 			clsRoomStatusDtlBean objBean=new clsRoomStatusDtlBean();
-			String stratTime="00:00",tableRowTime="";
 			
-			String sqlDiary="select * from tblbqbookinghd a where date(a.dteFromDate) >='2019-10-02' and date(a.dteToDate) <='2019-10-08';";
+			viewDate=viewDate.split("-")[2] +"-"+viewDate.split("-")[1]+"-"+viewDate.split("-")[0];
+			String stratTime="00:00",tableRowTime="";
+			for(int i=0;i<24;i++){
+				
+				 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+				 Date dTimeLimStart = df.parse(stratTime); 
+				 Calendar cal = Calendar.getInstance();
+				 cal.setTime(dTimeLimStart);
+				 if(i==23){
+					 cal.add(Calendar.MINUTE, 59);
+				 }else{
+					 cal.add(Calendar.HOUR, 1);	 
+				 }
+				 
+				 String newTime = df.format(cal.getTime());
+				 Date dTimeLimStop = df.parse(newTime); 
+				 
+				 tableRowTime=stratTime+"-"+newTime;
+				
+			 
+				 objBean=new clsRoomStatusDtlBean();
+				 objBean.setStrDay(tableRowTime);
+				 
+			String sqlDiary="select a.strBookingNo,DATEDIFF(a.dteFromDate,'"+viewDate+"') dayDiff,a.strBookingStatus,"
+					+ "a.dteBookingDate,a.dteFromDate,a.dteToDate,a.strCustomerCode from tblbqbookinghd a where " 
+				 +" date(a.dteFromDate) >='"+viewDate+"' and date(a.dteToDate) <= DATE_ADD('"+viewDate+"',INTERVAL 7 DAY) "
+				 +" and time(a.tmeFromTime) <= '"+stratTime+":00'"
+				 +" and time(a.tmeToTime) >= '"+newTime+":00';";
+
+			 stratTime=newTime;
+			 
 			List listBooking=objGlobalFunctionsService.funGetListModuleWise(sqlDiary, "sql");
 			if(listBooking!=null && listBooking.size()>0){
-			
 				for(int k=0;k<listBooking.size();k++){
-				
+					
 					Object obj[]=(Object[])listBooking.get(k);
-					for(int i=0;i<24;i++){
-						 
-						 objBean=new clsRoomStatusDtlBean();
-						
-						 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-						 Date dTimeLimStart = df.parse(stratTime); 
-						 Calendar cal = Calendar.getInstance();
-						 cal.setTime(dTimeLimStart);
-						 cal.add(Calendar.HOUR, 1);
-						 String newTime = df.format(cal.getTime());
-						 Date dTimeLimStop = df.parse(newTime); 
-						 
-						 tableRowTime=stratTime+"-"+newTime;
-						 stratTime=newTime;
-						 
-						 Date dfromTme = df.parse(obj[6].toString()); 
-						 Date dtoTme = df.parse(obj[7].toString());
-						 
-						 
-						 objBean.setStrDay(tableRowTime);
-						 objBean.setStrDay1("");
-						 objBean.setStrDay2("");
-						 objBean.setStrDay3("");
-						 objBean.setStrDay4("");
-						 objBean.setStrDay5("");
-						 objBean.setStrDay6("");
-						 objBean.setStrDay7("");
-						 
-						 listBanquetReservation.add(objBean);
+					
+					if(Double.parseDouble(obj[1].toString())==0){
+						objBean.setStrDay1(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+					}else if(Double.parseDouble(obj[1].toString())==1){
+						objBean.setStrDay2(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+					}else if(Double.parseDouble(obj[1].toString())==2){
+						objBean.setStrDay3(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+					}else if(Double.parseDouble(obj[1].toString())==3){
+						objBean.setStrDay4(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+					}else if(Double.parseDouble(obj[1].toString())==4){
+						objBean.setStrDay5(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+					}else if(Double.parseDouble(obj[1].toString())==5){
+						objBean.setStrDay6(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+					}else if(Double.parseDouble(obj[1].toString())==6){
+						objBean.setStrDay7(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
 					}
+					
 				}
 			}
-			
-			
-			
-			
+			listBanquetReservation.add(objBean);
+		}
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -162,6 +214,7 @@ public class clsBanquetStatusDiaryController {
 		return listBanquetReservation;
 	}
 
+	
 	private String funGetDayOfWeek(int day) {
 		String dayOfWeek = "Sun";
 
@@ -197,79 +250,6 @@ public class clsBanquetStatusDiaryController {
 
 		return dayOfWeek;
 	}
-	/*
-	@RequestMapping(value = "/getRoomTypeWiseList", method = RequestMethod.GET)
-	public @ResponseBody Map funLoadRoomTypeWiseStatus(@RequestParam("viewDate") String viewDate, HttpServletRequest request) {
-		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		String userCode = request.getSession().getAttribute("usercode").toString();
-		Map returnObject=new HashMap<>();
 
-		try
-		{
-		Map jObjStayViewData=new HashMap<>(); 
-		List mainArrObj = new ArrayList<>();
-		NumberFormat formatter = new DecimalFormat("#0");
-		NumberFormat decformat = new DecimalFormat("#0.00");
-		String dd = viewDate.split("-")[0]; 
-		String mm=	 viewDate.split("-")[1] ;
-		String yy= viewDate.split("-")[2];
-		
-		
-			
-			
-			Map objRoomStatusDtlBean = new HashMap<>();
-			List listRoomStatus= new ArrayList<>();
-
-			String sql="select a.strRoomTypeDesc from tblroom a where a.strClientCode='"+clientCode+"' group by strBedType ";
-			List listRoomDesc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-			//while(listRoomDesc.size()>0)
-			for(int j=0;j<listRoomDesc.size();j++)
-			{
-				String tempPMSDate=objGlobal.funGetDate("yyyy-MM-dd", viewDate);
-				String strRoomData="";
-				sql="select count(*) from tblroom a where a.strRoomTypeDesc='"+listRoomDesc.get(j)+"' AND a.strClientCode='"+clientCode+"'";
-				
-				List listRoomData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-				if(listRoomData.size()>0)
-				{
-					int intRoomAccupied=0;
-					for(int i=1;i<=7;i++)
-					{
-						sql=" select count(*) "
-								+ " from  tblcheckindtl a,tblroom b,tblcheckinhd c where a.strCheckInNo=c.strCheckInNo and"
-								+ " a.strRoomNo=b.strRoomCode and date(c.dteCheckInDate) <= '"+tempPMSDate+"'  "
-								+ "  and date(c.dteDepartureDate)>='"+tempPMSDate+"' and b.strRoomTypeDesc='"+listRoomDesc.get(j)+"' and b.strStatus='Occupied' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
-						
-						List listCheckInData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-						String dd1=String.valueOf((Integer.parseInt(dd)+i));
-
-						if(listCheckInData.size()>0)
-						{
-							if(strRoomData.isEmpty())
-							{
-								strRoomData=listRoomDesc.get(j)+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);
-							}
-							else
-							{
-								strRoomData=strRoomData+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);	
-							}
-						}
-						tempPMSDate=yy+"-"+mm+"-"+dd1;
-					}
-					objRoomStatusDtlBean.put(listRoomDesc.get(j),strRoomData);
-					listRoomStatus.put(objRoomStatusDtlBean);
-					objRoomStatusData.put(rsRoomInfo1.getString(1), strRoomData);
-				}
-			}
-			returnObject.put("RoomTypeCount", objRoomStatusDtlBean);
-					}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		return returnObject;
-		
-	}
-
-*/
+	
 }
