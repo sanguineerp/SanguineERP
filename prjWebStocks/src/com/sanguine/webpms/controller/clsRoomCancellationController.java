@@ -70,23 +70,41 @@ public class clsRoomCancellationController {
 		if (!result.hasErrors()) {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
-			String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
-			clsReservationHdModel objHdModel = objRoomCancellationService.funGetReservationModel(objBean.getStrReservationNo(), clientCode);
-			objHdModel.setStrCancelReservation("Y");
-			objHdModel.setStrUserEdited(userCode);
-			objHdModel.setDteCancelDate(PMSDate);
-			objHdModel.setDteDateEdited(PMSDate);
-
-			clsRoomCancellationModel objModel = funPrepardBean(objBean, req, objHdModel);
-			objRoomCancellationService.funAddUpdateRoomCancellation(objModel);
-
-			List<clsReservationDtlModel> list = objHdModel.getListReservationDtlModel();
-
-			objRoomCancellationService.funAddUpdateRoomCancellationReservationTable(objHdModel);
+			String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
+			if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
+			{
+				clsReservationHdModel objHdModel = objRoomCancellationService.funGetReservationModel(objBean.getStrReservationNo(), clientCode);
+				
+				objHdModel.setStrCancelReservation("Y");
+				objHdModel.setStrUserEdited(userCode);
+				objHdModel.setDteCancelDate(objGlobal.funGetCurrentDate("yyyy-MM-dd"));
+				
+				clsRoomCancellationModel objModel = funPrepardBean(objBean, req, objHdModel);
+				objRoomCancellationService.funAddUpdateRoomCancellationReservationTable(objHdModel);
+			}
 			
-			String sql = "update tblroom set strStatus='Free' " + " where strRoomCode='" + objBean.getStrRoomCode()+ "' and strClientCode='" + objHdModel.getStrClientCode() + "'";
-			//webPMSSessionFactory.getCurrentSession().createSQLQuery(sql).executeUpdate();
-			objRoomCancellationService.funUpdateRoomStatus(sql);
+			else
+			{
+				String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", req.getSession().getAttribute("PMSDate").toString());
+				clsReservationHdModel objHdModel = objRoomCancellationService.funGetReservationModel(objBean.getStrReservationNo(), clientCode);
+				objHdModel.setStrCancelReservation("Y");
+				objHdModel.setStrUserEdited(userCode);
+				objHdModel.setDteCancelDate(PMSDate);
+				objHdModel.setDteDateEdited(PMSDate);
+
+				clsRoomCancellationModel objModel = funPrepardBean(objBean, req, objHdModel);
+				objRoomCancellationService.funAddUpdateRoomCancellation(objModel);
+
+				List<clsReservationDtlModel> list = objHdModel.getListReservationDtlModel();
+
+				objRoomCancellationService.funAddUpdateRoomCancellationReservationTable(objHdModel);
+				
+				String sql = "update tblroom set strStatus='Free' " + " where strRoomCode='" + objBean.getStrRoomCode()+ "' and strClientCode='" + objHdModel.getStrClientCode() + "'";
+				//webPMSSessionFactory.getCurrentSession().createSQLQuery(sql).executeUpdate();
+				objRoomCancellationService.funUpdateRoomStatus(sql);
+			}
+			
+			
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Reservation No. : ".concat(objBean.getStrReservationNo()));
 
@@ -99,18 +117,33 @@ public class clsRoomCancellationController {
 	@RequestMapping(value = "/loadReservationDataForCheckIn", method = RequestMethod.GET)
 	public @ResponseBody List funLoadHdData(HttpServletRequest request) {
 
+		String strModuleName = request.getSession().getAttribute("selectedModuleName").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String propCode = request.getSession().getAttribute("propertyCode").toString();
-		String reservationNo = request.getParameter("reservationNo").toString();
-		String arrivalFromDate = request.getParameter("arrivalFromDate").toString();
-		String arrivalToDate = request.getParameter("arrivalToDate").toString();
+		String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
+		List list = new ArrayList<>();
+		if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
+		{
+			String reservationNo = request.getParameter("reservationNo").toString();
+			String sql="select a.strBookingNo, b.strPName "
+					+ "from tblbqbookinghd a ,"+webStockDB+".tblpartymaster b where a.strBookingNo='"+reservationNo+"' AND a.strCustomerCode=b.strPCode and a.strClientCode='"+clientCode+"'";
+			
+			list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		}
+		else
+		{
+			String reservationNo = request.getParameter("reservationNo").toString();
+			String arrivalFromDate = request.getParameter("arrivalFromDate").toString();
+			String arrivalToDate = request.getParameter("arrivalToDate").toString();
 
-		String sql = "select a.strReservationNo,ifnull(c.strCorporateCode,'NA'),ifnull(c.strCorporateDesc,'NA' ) " + " ,concat(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName),f.strRoomTypeDesc,b.strGuestCode,e.strRoomCode "
-				+ " from tblreservationhd a left outer join tblreservationdtl b on a.strReservationNo=b.strReservationNo AND b.strClientCode='"+clientCode+"'" + " left outer join tblcorporatemaster c on a.strCorporateCode=c.strCorporateCode AND c.strClientCode='"+clientCode+"'" + " left outer join tblguestmaster d on b.strGuestCode=d.strGuestCode AND d.strClientCode='"+clientCode+"'"
-				+ " left outer join tblroom e on b.strRoomNo=e.strRoomCode AND e.strClientCode='"+clientCode+"'"
-				+ " left outer join tblroomtypemaster f on f.strRoomTypeCode=b.strRoomType " 
-				+ " where a.strReservationNo='" + reservationNo + "' and a.strClientCode='" + clientCode + "' ";
-		List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+			String sql = "select a.strReservationNo,ifnull(c.strCorporateCode,'NA'),ifnull(c.strCorporateDesc,'NA' ) " + " ,concat(d.strFirstName,' ',d.strMiddleName,' ',d.strLastName),f.strRoomTypeDesc,b.strGuestCode,e.strRoomCode "
+					+ " from tblreservationhd a left outer join tblreservationdtl b on a.strReservationNo=b.strReservationNo AND b.strClientCode='"+clientCode+"'" + " left outer join tblcorporatemaster c on a.strCorporateCode=c.strCorporateCode AND c.strClientCode='"+clientCode+"'" + " left outer join tblguestmaster d on b.strGuestCode=d.strGuestCode AND d.strClientCode='"+clientCode+"'"
+					+ " left outer join tblroom e on b.strRoomNo=e.strRoomCode AND e.strClientCode='"+clientCode+"'"
+					+ " left outer join tblroomtypemaster f on f.strRoomTypeCode=b.strRoomType " 
+					+ " where a.strReservationNo='" + reservationNo + "' and a.strClientCode='" + clientCode + "' ";
+			list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		}
+		
 
 		return list;
 	}

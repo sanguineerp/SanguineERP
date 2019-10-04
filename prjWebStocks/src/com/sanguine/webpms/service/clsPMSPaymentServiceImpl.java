@@ -143,7 +143,7 @@ public class clsPMSPaymentServiceImpl implements clsPMSPaymentService {
 		}
 
 		//objModel.setDteReceiptDate(PMSDate);
-		objModel.setDteReceiptDate(objGlobal.funGetCurrentDate("yyyy-MM-dd"));
+		objModel.setDteReceiptDate(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 		objModel.setStrCheckInNo(checkInNo);
 		objModel.setStrBillNo(billNo);
 		objModel.setStrRegistrationNo(registrationNo);

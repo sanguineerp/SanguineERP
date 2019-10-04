@@ -638,7 +638,13 @@ public class clsInvoiceController
 					String dateInvoice = invDate[2] + "-" + invDate[1] + "-" + invDate[0];
 					String invCode ="";
 				
-						
+					clsSettlementMasterModel objModel = objSttlementMasterService.funGetObject(objBean.getStrSettlementCode(), clientCode);
+
+                    String strInvColumn1="ifnull(max(MID(a.strInvCode,8,5)),'' )";
+					if(objSetup.getStrSettlementWiseInvSer().equals("Yes"))
+					{
+						strInvColumn1="IFNULL(MAX(MID(a.strInvCode,-5,7)),'')";
+					}
 						
 						String transYear="A";
 						List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();
@@ -674,7 +680,7 @@ public class clsInvoiceController
 						}
 
 						
-						clsSettlementMasterModel objModel = objSttlementMasterService.funGetObject(objBean.getStrSettlementCode(), clientCode);
+						/*clsSettlementMasterModel objModel = objSttlementMasterService.funGetObject(objBean.getStrSettlementCode(), clientCode);*/
 						if(objSetup.getStrSettlementWiseInvSer().equals("Yes"))
 						{
 							

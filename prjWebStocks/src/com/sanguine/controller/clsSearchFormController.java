@@ -5657,6 +5657,18 @@ public class clsSearchFormController {
 				searchFormTitle = "Payment Receipt";
 				break;
 			}
+			
+			case "BanquetBookingNo": {
+				columnNames = "a.strBookingNo,b.strPName,DATE_FORMAT(a.dteBookingDate,'%d-%m-%Y')";
+				tableName = "from tblbqbookinghd a ,"+webStockDB+".tblpartymaster b "
+						+ "where a.strCustomerCode=b.strPCode and a.strClientCode='"+clientCode+"'";
+				listColumnNames = "Booking No,Guest Name,Booking Date";
+				idColumnName = "strBookingNo,strClientCode";
+				flgQuerySelection = true;
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Payment Receipt";
+				break;
+			}
 
 		}
 

@@ -583,7 +583,11 @@ public class clsGRNController {
 				double totalValue = 0.00;
 				boolean flagDtlDataInserted = false;
 				double dblDis=objHdModel.getDblDisAmt();
-				double dblDisPercent=objHdModel.getDblSubTotal()/dblDis;
+				double dblDisPercent=0;
+				if(dblDis>0)
+				{
+					dblDisPercent=objHdModel.getDblSubTotal()/dblDis;
+				}
 				
 				List<clsGRNDtlModel> batchList = new ArrayList<clsGRNDtlModel>();
 				
@@ -599,8 +603,11 @@ public class clsGRNController {
 							ob.setStrMISCode("");
 						}
 						ob.setDblTotalPrice(ob.getDblTotalPrice() * currValue);
-						double dblDiscount=ob.getDblTotalPrice()/dblDisPercent;
-						
+						double dblDiscount=0;
+						if(dblDiscount>0)
+						{
+							dblDiscount=ob.getDblTotalPrice()/dblDisPercent;
+						}
 						
 						
 						double taxableAmt = 0.0;
