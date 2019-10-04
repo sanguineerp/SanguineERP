@@ -183,7 +183,7 @@ public class clsUserController {
 					}
 
 					if ("Yes".equalsIgnoreCase(strWebBanquetModule)) {
-						moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
+						moduleMap.put("7-WebBanquet", "webbanquet_module_icon.png");
 						strModule = "7";
 					}
 
@@ -661,7 +661,7 @@ public class clsUserController {
 			headerImage = "webstocks-property-header.jpg";
 			moduleTitleImage = "Sanguine_WebPOS_1.jpg";
 
-			moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
+			moduleMap.put("7-WebBanquet", "webbanquet_module_icon.png");
 			strModule = "7";
 
 			break;
@@ -1475,10 +1475,10 @@ public class clsUserController {
 			if ("Yes".equalsIgnoreCase(strWebBanquetModule)) {
 
 				if (isSuperUser.equalsIgnoreCase("YES")) {
-					moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
+					moduleMap.put("7-WebBanquet", "webbanquet_module_icon.png");
 					strModule = "7";
 				} else if (null != list && list.size() > 0 && list.contains("WebPOS")) {
-					moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
+					moduleMap.put("7-WebBanquet", "webbanquet_module_icon.png");
 					strModule = "7";
 				}
 			}

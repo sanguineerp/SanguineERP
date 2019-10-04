@@ -135,7 +135,19 @@ var strViewType="normal";
 		funGetHeaderData();
 	});
 	
+	$(function() {
 
+		  $("#dialog").dialog({
+		     autoOpen: false,
+		     modal: true
+		   });
+
+		  $("#myButton").on("click", function(e) {
+		      e.preventDefault();
+		      $("#dialog").dialog("open");
+		  });
+
+		});
 	
 	
 	function funRemoveTableRows(table)
@@ -397,15 +409,11 @@ var strViewType="normal";
 		row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[5]+"' >";
 		row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[6]+"' >";
 		
-		//funGetRoomTypeAndStatus();
-		
-		//funShowRoomStatusDtl();
 	}
 	
 	function funAreaOptionSelected(strLocCode,strLocName){
 		funGetHeaderData();
 		funShowDiary();
-		//funShowRoomStatusDtl1();
 	}
 	
 	function funShowRoomStatusDtl1(row)
@@ -422,13 +430,10 @@ var strViewType="normal";
 			    });
 			  }
 			})
-		 
-	
 	}
 	
 	function funDiaryView(viewName){
 		strViewType=viewName;
-		/* alert(viewName); */
 	}
 	
 	</script>
@@ -450,7 +455,7 @@ var strViewType="normal";
 					<table>
 						<tr>
 							<td><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></td>
-							<td style="width :400px;"> </td>
+							<td style="width :400px;"> <button id="myButton">click!</button></td>
 							<td bgcolor="ff0000" style="padding-left: 5px;padding-right: 5px;">Confirm</td>
 							<td bgcolor="Yellow" style="padding-left: 5px;padding-right: 5px;">Waitlisted</td>
 							<td bgcolor="Green" style="padding-left: 5px;padding-right: 5px;">Provisinal</td>
@@ -465,9 +470,6 @@ var strViewType="normal";
 							</td>
 						</tr>
 					</table>
-					
-						<%-- <span><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></span> --%>
-						<%-- <span><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></span> --%>
 					</td>
 				</tr>
 				<tr>
@@ -510,6 +512,18 @@ var strViewType="normal";
 			<img
 				src="../${pageContext.request.contextPath}/resources/images/ajax-loader-light.gif"
 				width="60px" height="60px" />
+		</div>
+		
+		<div id="dialog" title="Booking Details">
+			  <table id="tblAreaButtons"  cellpadding="0" cellspacing="2"  >				 																																	
+								<tr>							
+									<c:forEach var="objAreaButtons" items="${command.jsonArrForLocationButtons}"  varStatus="varAreaButtons">
+											<td style="padding-right: 3px;">
+												<input  type="button" id="${objAreaButtons.strLocCode}"  value="${objAreaButtons.strLocName}" tabindex="${varAreaButtons.getIndex()}" onclick="funAreaOptionSelected('${objAreaButtons.strLocCode}','${objAreaButtons.strLocName}')" class="button"/>
+											</td>
+									</c:forEach>																						
+							    </tr>																																				 									   				   									   									   						
+						</table>	
 		</div>
 
 	</s:form>

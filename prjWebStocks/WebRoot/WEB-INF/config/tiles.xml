@@ -5151,6 +5151,16 @@
 	  	 <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetBooking.jsp" ></put-attribute>
 	  </definition>
   
+  
+ <definition name="frmBookingFlash" extends="base.definition">
+		   <put-attribute name="title" value="Booking Flash" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBookingFlash.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBookingFlash_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Booking Flash"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBookingFlash.jsp" ></put-attribute>
+	  </definition>
 <!-- 	End Of WebBanquet Tiles Entry -->
 
 

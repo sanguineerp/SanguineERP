@@ -64,6 +64,69 @@ a:HOVER {
 
 }
 
+.pagetopMenuWebPMS{
+	
+  background-image: url(../images/headerimagewebPMS.jpg); 
+  background-repeat:round;
+	 overflow:hidden;
+	
+	background-position: left;
+	width: auto;
+	height: 100px;
+	background-size: cover;
+
+
+}
+
+.pagetopMenuWebCRM{
+	
+  background-image: url(../images/headerimagewebCRM.jpg); 
+  background-repeat:round;
+	 overflow:hidden;
+	
+	background-position: left;
+	width: auto;
+	height: 100px;
+	background-size: cover;
+}
+
+.pagetopMenuWebBanquet{
+	
+  background-image: url(../images/headerimagewebBanquet.jpg); 
+  background-repeat:round;
+	 overflow:hidden;
+	
+	background-position: left;
+	width: auto;
+	height: 100px;
+	background-size: cover;
+}
+
+.pagetopMenuWebBook{
+	
+  background-image: url(../images/headerimagewebBooks.jpg); 
+  background-repeat:round;
+	 overflow:hidden;
+	
+	background-position: left;
+	width: auto;
+	height: 100px;
+	background-size: cover;
+}
+
+.pagetopMenuWebClub{
+	
+  background-image: url(../images/headerimagewebClub.jpg); 
+  background-repeat:round;
+	 overflow:hidden;
+	
+	background-position: left;
+	width: auto;
+	height: 100px;
+	background-size: cover;
+}
+
+
 .pagetop {
 	/* background-color: #FFF;
 	background-image: url(../images/webstocks.jpg);
