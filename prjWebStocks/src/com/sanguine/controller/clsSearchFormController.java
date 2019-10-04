@@ -5644,6 +5644,19 @@ public class clsSearchFormController {
 				searchFormTitle = "Settlement Master";
 				break;
 			}
+			
+			case "BanquetreceiptNo": {
+				columnNames = "a.strReceiptNo,b.strPName,DATE_FORMAT(Date(a.dteDateCreated),'%d-%m-%Y'),a.strAgainst,c.strBookingNo";
+				tableName = "from tblreceipthd a,"+webStockDB+".tblpartymaster b,tblbqbookinghd c "
+						+ "WHERE a.strReservationNo=c.strBookingNo AND b.strPCode=c.strCustomerCode "
+						+ "AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
+				listColumnNames = "Receipt No,Guest Name,Receipt Date,Against,Booking No";
+				idColumnName = "strReceiptNo";
+				flgQuerySelection = true;
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Payment Receipt";
+				break;
+			}
 
 		}
 

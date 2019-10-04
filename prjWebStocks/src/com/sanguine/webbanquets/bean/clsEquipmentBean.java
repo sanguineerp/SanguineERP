@@ -19,6 +19,8 @@ public class clsEquipmentBean{
 	private String strOperational;
 	
 	private String strDeptCode;
+	
+	private double dblEquipmentRate;
 
 //Setter-Getter Methods
 	public String getStrEquipmentCode(){
@@ -80,6 +82,12 @@ public class clsEquipmentBean{
 	}
 	public void setStrDeptCode(String strDeptCode) {
 		this.strDeptCode = strDeptCode;
+	}
+	public double getDblEquipmentRate() {
+		return dblEquipmentRate;
+	}
+	public void setDblEquipmentRate(double dblEquipmentRate) {
+		this.dblEquipmentRate = dblEquipmentRate;
 	}
 
 

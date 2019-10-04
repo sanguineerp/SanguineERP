@@ -60,6 +60,9 @@ public class clsEquipmentModel implements Serializable{
 	@Column(name="strDeptCode")
 	private String strDeptCode;
 	
+	@Column(name="dblEquipmentRate")
+	private double dblEquipmentRate;
+	
 	//Setter-Getter Methods
 	public String getStrEquipmentCode(){
 		return strEquipmentCode;
@@ -152,6 +155,14 @@ public class clsEquipmentModel implements Serializable{
 
 	public void setStrDeptCode(String strDeptCode) {
 		this.strDeptCode = strDeptCode;
+	}
+
+	public double getDblEquipmentRate() {
+		return dblEquipmentRate;
+	}
+
+	public void setDblEquipmentRate(double dblEquipmentRate) {
+		this.dblEquipmentRate = dblEquipmentRate;
 	}
 
 	

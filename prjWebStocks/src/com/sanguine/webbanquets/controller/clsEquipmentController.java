@@ -126,6 +126,7 @@ public class clsEquipmentController{
 		objModel.setStrEquipmentCode(strEquipmentCode);
 		objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
 		objModel.setStrDeptCode(objBean.getStrDeptCode());
+		objModel.setDblEquipmentRate(objBean.getDblEquipmentRate());
 		}
 		
 		else
@@ -139,6 +140,7 @@ public class clsEquipmentController{
 			objModel.setStrUserEdited(userCode);
 			objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
 			objModel.setStrDeptCode(objBean.getStrDeptCode());
+			objModel.setDblEquipmentRate(objBean.getDblEquipmentRate());
 			
 		}
 		return objModel;
