@@ -19,7 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.webbanquets.model.clsBanquetBookingModelHd;
 import com.sanguine.webpms.bean.clsRoomCancellationBean;
+import com.sanguine.webpms.model.clsBookingTypeHdModel;
 import com.sanguine.webpms.model.clsReservationDtlModel;
 import com.sanguine.webpms.model.clsReservationHdModel;
 import com.sanguine.webpms.model.clsRoomCancellationModel;
@@ -73,14 +75,18 @@ public class clsRoomCancellationController {
 			String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
 			if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
 			{
-				clsReservationHdModel objHdModel = objRoomCancellationService.funGetReservationModel(objBean.getStrReservationNo(), clientCode);
 				
-				objHdModel.setStrCancelReservation("Y");
-				objHdModel.setStrUserEdited(userCode);
-				objHdModel.setDteCancelDate(objGlobal.funGetCurrentDate("yyyy-MM-dd"));
 				
-				clsRoomCancellationModel objModel = funPrepardBean(objBean, req, objHdModel);
-				objRoomCancellationService.funAddUpdateRoomCancellationReservationTable(objHdModel);
+				clsRoomCancellationModel objModel = funPrepardBeanForBanquetBooking(objBean, req);
+				objRoomCancellationService.funAddUpdateRoomCancellation(objModel);
+				
+				String strUpdate = "update tblbqbookinghd a set a.strBookingStatus='Cancel'  where a.strBookingNo='"+objBean.getStrReservationNo()+"' and a.strClientCode='"+clientCode+"'";
+				objGlobalFunctionsService.funUpdateAllModule(strUpdate, "sql");
+				
+				req.getSession().setAttribute("success", true);
+				req.getSession().setAttribute("successMessage", "Booking No. : ".concat(objBean.getStrReservationNo()));
+
+
 			}
 			
 			else
@@ -102,16 +108,47 @@ public class clsRoomCancellationController {
 				String sql = "update tblroom set strStatus='Free' " + " where strRoomCode='" + objBean.getStrRoomCode()+ "' and strClientCode='" + objHdModel.getStrClientCode() + "'";
 				//webPMSSessionFactory.getCurrentSession().createSQLQuery(sql).executeUpdate();
 				objRoomCancellationService.funUpdateRoomStatus(sql);
+				
+				req.getSession().setAttribute("success", true);
+				req.getSession().setAttribute("successMessage", "Reservation No. : ".concat(objBean.getStrReservationNo()));
+
 			}
 			
 			
-			req.getSession().setAttribute("success", true);
-			req.getSession().setAttribute("successMessage", "Reservation No. : ".concat(objBean.getStrReservationNo()));
-
+			
 			return new ModelAndView("redirect:/frmRoomCancellation.html");
 		} else {
 			return new ModelAndView("frmRoomCancellation");
 		}
+	}
+
+	
+	private clsRoomCancellationModel funPrepardBeanForBanquetBooking(
+			clsRoomCancellationBean objBean, HttpServletRequest req) {
+		
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String userCode = req.getSession().getAttribute("usercode").toString();
+		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+		clsRoomCancellationModel objModel = new clsRoomCancellationModel();
+		List listProperty = objGlobalFunctionsService.funGetDataList("select strPropertyCode from "+webStockDB+".tblpropertymaster where strPropertyName='" + objBean.getStrPropertyCode() + "' ", "sql");
+		String strPropertyCode = listProperty.get(0).toString();
+
+		objModel.setStrReservationNo(objBean.getStrReservationNo());
+		objModel.setStrGuestCode(objBean.getStrGuestCode());
+		objModel.setStrPropertyCode(strPropertyCode);
+		objModel.setDteArrivalFromDate(objGlobal.funGetDate("yyyy-MM-dd", objBean.getDteArrivalFromDate()));
+		objModel.setDteArrivalToDate(objGlobal.funGetDate("yyyy-MM-dd", objBean.getDteArrivalToDate()));
+		objModel.setDteCancelDate(objGlobal.funGetCurrentDate("yyyy-MM-dd"));
+		objModel.setStrUserCreated(userCode);
+		objModel.setStrUserEdited(userCode);
+		objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+		objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+		objModel.setStrClientCode(clientCode);
+		objModel.setStrRemarks(objBean.getStrRemarks());
+		objModel.setStrReasonCode(objBean.getStrReasonCode());
+		
+		
+		return objModel;
 	}
 
 	@RequestMapping(value = "/loadReservationDataForCheckIn", method = RequestMethod.GET)
@@ -125,7 +162,7 @@ public class clsRoomCancellationController {
 		if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
 		{
 			String reservationNo = request.getParameter("reservationNo").toString();
-			String sql="select a.strBookingNo, b.strPName "
+			String sql="select a.strBookingNo, b.strPName,b.strPCode "
 					+ "from tblbqbookinghd a ,"+webStockDB+".tblpartymaster b where a.strBookingNo='"+reservationNo+"' AND a.strCustomerCode=b.strPCode and a.strClientCode='"+clientCode+"'";
 			
 			list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");

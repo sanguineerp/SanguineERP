@@ -125,6 +125,15 @@
 		
 		function funHelp(transactionName)
 		{
+			var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
+			if(strIndustryType=='7-WebBanquet') 
+	   		{
+				if(transactionName.includes('deliveryChallan'))
+					{
+					transactionName='BookingNo';	
+					}
+			}
+			
 			fieldName = transactionName;
 		//	window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
 		window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500,left=500")	
@@ -174,8 +183,17 @@
 				    	funSetSubGroup(code);
 				        break;
 				        
+				  case 'BookingNo':
+				    	funSetBookingNo(code);
+				        break;  
 				}
 			}
+		 	
+		 	function funSetBookingNo(code)
+		 	{
+		 		$("#txtSOCode").val(code);
+		 	}
+		 	
 		 	function funSetSubGroup(code)
 			{
 				$("#hidSubGroupCode").val(code);
@@ -929,6 +947,11 @@
 				document.all["txtSOCode"].style.display = 'block';
 				document.all["btnFill"].style.display = 'none'; 		
 				}
+			if(agianst=="Banquet")
+			{
+			document.all["txtSOCode"].style.display = 'block';
+			document.all["btnFill"].style.display = 'block'; 		
+			}
 				else{
 					document.all["txtSOCode"].style.display = 'block';
 					document.all["btnFill"].style.display = 'block';

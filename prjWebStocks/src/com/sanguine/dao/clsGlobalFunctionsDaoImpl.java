@@ -920,6 +920,8 @@ public class clsGlobalFunctionsDaoImpl implements clsGlobalFunctionsDao {
 				sesFacGlobal = WebClubSessionFactory;
 			} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("5-WebBookAR") || req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("8-WebBookAPGL")) {
 				sesFacGlobal = webBooksSessionFactory;
+			} else if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet"))  {
+				sesFacGlobal = webPMSSessionFactory;
 			}
 
 			if (queryType.equalsIgnoreCase("sql")) {

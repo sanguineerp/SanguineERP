@@ -123,6 +123,7 @@ public class clsProFormaInvoice {
 	public ModelAndView funInvoice(Map<String, Object> model, HttpServletRequest request) {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 
+		String strModuleName = request.getSession().getAttribute("selectedModuleName").toString();
 		
 		dataSG = new ArrayList<clsSubGroupMasterModel>();
 		@SuppressWarnings("rawtypes")
@@ -138,7 +139,30 @@ public class clsProFormaInvoice {
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
-		
+		if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
+		{
+			List<String> strAgainst = new ArrayList<>();
+			strAgainst.add("All");
+			strAgainst.add("Banquet");
+			model.put("againstList", strAgainst);
+			
+			Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
+			model.put("settlementList", settlementList);
+			
+			String authorizationInvoiceCode = "";
+			boolean flagOpenFromAuthorization = true;
+			try {
+				authorizationInvoiceCode = request.getParameter("authorizationInvoiceCode").toString();
+			} catch (NullPointerException e) {
+				flagOpenFromAuthorization = false;
+			}
+			model.put("flagOpenFromAuthorization", flagOpenFromAuthorization);
+			if (flagOpenFromAuthorization) {
+				model.put("authorizationInvoiceCode", authorizationInvoiceCode);
+			}
+		}
+		else
+		{
 		HashMap<String,clsUserDtlModel> hmUserPrivileges = (HashMap)request.getSession().getAttribute("hmUserPrivileges");
 		model.put("urlHits", urlHits);
 			
@@ -161,6 +185,7 @@ public class clsProFormaInvoice {
 		model.put("flagOpenFromAuthorization", flagOpenFromAuthorization);
 		if (flagOpenFromAuthorization) {
 			model.put("authorizationInvoiceCode", authorizationInvoiceCode);
+		}
 		}
 		
 		if ("2".equalsIgnoreCase(urlHits)) {

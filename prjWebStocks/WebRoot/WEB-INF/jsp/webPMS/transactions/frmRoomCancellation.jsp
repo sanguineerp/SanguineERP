@@ -66,7 +66,7 @@
 	        		$("#lblCorporateName").text(response[0][2]);
 	        		$("#txtGuestName").val(response[0][1]);
 	        		$("#lblRoomNo").text(response[0][4]);
-	        		$("#txtGuestCode").val(response[0][5]);
+	        		$("#txtGuestCode").val(response[0][2]);
 	        		$("#txtRemarks").text(response[0][6]);
 	        		$("#txtRoomNo").val(response[0][6]);
 	        	}
@@ -131,6 +131,10 @@
 	   			$('#trDate').hide(); 
 	   			$('#txtCorporate').hide();
 	   			$('#lblCorporate').hide();
+	   			document.title = 'Booking Cancellation';
+
+
+	   			
 	   		}
 	   		else
    			{
@@ -391,7 +395,7 @@
 			<tr>
 			    <td><label>Guest Name</label></td>
 				<td><s:input id="txtGuestName" path="strGuestName"  readonly="true" cssClass="longTextBox"  placeholder="last"  /></td>
-				<%-- <td><s:input id="txtGuestCode" path="strGuestCode" type="hidden" readonly="true" cssClass="longTextBox" placeholder="last"  /></td> --%>
+			     
 				
 				<td><label>Reason Code</label></td>
 				<td>
@@ -411,6 +415,7 @@
 				<td>
 				       <s:input type="text" id="txtRemarks" path="strRemarks" cssClass="longTextBox" />
 				</td>
+				<td><s:input id="txtGuestCode" path="strGuestCode" type="hidden" readonly="true" cssClass="longTextBox" placeholder="last"  /></td>
 				<td colspan="1"></td>
 				<td colspan="1"></td>
 				<td colspan="1"></td>
