@@ -345,7 +345,7 @@ FROM dual]]>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="331" splitType="Stretch">
+		<band height="134" splitType="Stretch">
 			<componentElement>
 				<reportElement key="" x="6" y="3" width="273" height="45" isPrintInFirstWholeBand="true" uuid="39c890d1-3b43-4667-9c46-9edb8507dbee">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>

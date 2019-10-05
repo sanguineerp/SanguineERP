@@ -28,7 +28,7 @@ public class clsFunctionProspectusBean{
 
 	private String strEmailID;
 
-	private long intMinPaxNo;
+	private long intMinPaxNo; 
 
 	private long intMaxPaxNo;
 

@@ -14,12 +14,12 @@
 		switch(fieldName){
 
 		case 'BillForBanquet' : 
-			funSetBillForBanquetCode(code);
+			funSetFunctionProspectusCode(code);
 			break;
 		}
 	}
 	
-	function funSetBillForBanquetCode(code)
+	function funSetFunctionProspectusCode(code)
 	{
 		$("#txtBookingNo").val(code);	
 	}
