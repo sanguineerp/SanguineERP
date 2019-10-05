@@ -182,6 +182,13 @@ public class clsDeliveryChallanController {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		clsDeliveryChallanBean objBeanDC = new clsDeliveryChallanBean();
 
+		String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
+		if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
+		{
+			
+		}
+		else
+		{
 		List<Object> objDC = objDeliveryChallanHdService.funGetDeliveryChallan(dcCode, clientCode);
 		clsDeliveryChallanHdModel objDeliveryChallanHdModel = null;
 		clsLocationMasterModel objLocationMasterModel = null;
@@ -228,7 +235,7 @@ public class clsDeliveryChallanController {
 			objBeanDC.setListclsInvoiceBean(listPreviousInv);
 			objBeanDC.setListclsDeliveryChallanModelDtl(listDCDtl);
 		}
-		
+		}
 		
 		return objBeanDC;
 	}
