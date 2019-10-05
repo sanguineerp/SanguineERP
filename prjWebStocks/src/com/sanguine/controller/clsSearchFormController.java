@@ -5635,6 +5635,40 @@ public class clsSearchFormController {
 				searchFormTitle = "Staff Categeory Master";
 				break;
 			}
+			case "BanquetsettlementCode": {
+				columnNames = "strSettlementCode,strSettlementType,strSettlementDesc,strApplicable";
+				tableName = "clsPMSSettlementMasterHdModel  where strClientCode='" + clientCode + "' ";
+				listColumnNames = "Settlement Code,Settlement Type,Settlement Desc,Applicable";
+				idColumnName = "strSettlementCode";
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Settlement Master";
+				break;
+			}
+			
+			case "BanquetreceiptNo": {
+				columnNames = "a.strReceiptNo,b.strPName,DATE_FORMAT(Date(a.dteDateCreated),'%d-%m-%Y'),a.strAgainst,c.strBookingNo";
+				tableName = "from tblreceipthd a,"+webStockDB+".tblpartymaster b,tblbqbookinghd c "
+						+ "WHERE a.strReservationNo=c.strBookingNo AND b.strPCode=c.strCustomerCode "
+						+ "AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
+				listColumnNames = "Receipt No,Guest Name,Receipt Date,Against,Booking No";
+				idColumnName = "strReceiptNo";
+				flgQuerySelection = true;
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Payment Receipt";
+				break;
+			}
+			
+			case "BanquetBookingNo": {
+				columnNames = "a.strBookingNo,b.strPName,DATE_FORMAT(a.dteBookingDate,'%d-%m-%Y')";
+				tableName = "from tblbqbookinghd a ,"+webStockDB+".tblpartymaster b "
+						+ "where a.strCustomerCode=b.strPCode and a.strClientCode='"+clientCode+"'";
+				listColumnNames = "Booking No,Guest Name,Booking Date";
+				idColumnName = "strBookingNo,strClientCode";
+				flgQuerySelection = true;
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Payment Receipt";
+				break;
+			}
 
 		}
 

@@ -19,42 +19,9 @@
 		}
 	}
 	
-	function funSetBillForBanquetCode(code){
-
-		$.ajax({
-			type : "GET",
-			url : getContextPath()+ "/loadBookingCode.html?docCode=" + code,
-			dataType : "json",
-			success : function(response){ 
-				if(response.strMenuHeadCode=='Invalid Code')
-	        	{
-	        		alert("Invalid Cost Center Code");
-	        		$("#txtMenuHeadCode").val('');
-	        	}
-	        	else
-	        	{
-	        		$("#txtMenuHeadName").val(response.strMenuHeadName);
-	        		$("#txtMenuHeadCode").val(response.strMenuHeadCode);
-	        	}
-			},
-			error: function(jqXHR, exception) {
-	            if (jqXHR.status === 0) {
-	                alert('Not connect.n Verify Network.');
-	            } else if (jqXHR.status == 404) {
-	                alert('Requested page not found. [404]');
-	            } else if (jqXHR.status == 500) {
-	                alert('Internal Server Error [500].');
-	            } else if (exception === 'parsererror') {
-	                alert('Requested JSON parse failed.');
-	            } else if (exception === 'timeout') {
-	                alert('Time out error.');
-	            } else if (exception === 'abort') {
-	                alert('Ajax request aborted.');
-	            } else {
-	                alert('Uncaught Error.n' + jqXHR.responseText);
-	            }		            
-	        }
-		});
+	function funSetBillForBanquetCode(code)
+	{
+		$("#txtBookingNo").val(code);	
 	}
 	
 	function funValidateFields()
@@ -104,7 +71,7 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funValidateFields(this)" />
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 

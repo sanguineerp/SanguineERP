@@ -1,5 +1,7 @@
 package com.sanguine.webbanquets.bean;
 
+import java.util.List;
+
 public class clsFunctionProspectusBean{
 //Variable Declaration
 	private String strBookingNo;
@@ -39,6 +41,14 @@ public class clsFunctionProspectusBean{
 	private String strFunctionCode;
 
 	private String strBillingInstructionCode;
+	
+	private String strCustomerName;
+	
+	private String strServiceType;
+	
+	private String strService;
+	
+	private List listOfServices;
 
 //Setter-Getter Methods
 	public String getStrBookingNo(){
@@ -172,6 +182,30 @@ public class clsFunctionProspectusBean{
 	}
 	public void setStrBillingInstructionCode(String strBillingInstructionCode){
 		this.strBillingInstructionCode=strBillingInstructionCode;
+	}
+	public String getStrCustomerName() {
+		return strCustomerName;
+	}
+	public void setStrCustomerName(String strCustomerName) {
+		this.strCustomerName = strCustomerName;
+	}
+	public String getStrServiceType() {
+		return strServiceType;
+	}
+	public void setStrServiceType(String strServiceType) {
+		this.strServiceType = strServiceType;
+	}
+	public String getStrService() {
+		return strService;
+	}
+	public void setStrService(String strService) {
+		this.strService = strService;
+	}
+	public List getListOfServices() {
+		return listOfServices;
+	}
+	public void setListOfServices(List listOfServices) {
+		this.listOfServices = listOfServices;
 	}
 
 
