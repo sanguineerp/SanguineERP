@@ -88,7 +88,7 @@
    				break;
    			
    		case 'MilkFederation' :
-   						document.getElementById("pageTop").className = "pagetopMenuMilkFederation";
+   						document.getElementById("pageTop").className = "pagetopMenufactureing";
 				break;//headerimageMilkFederation
    			
    		default :
@@ -96,9 +96,36 @@
    			break;
    		}
    		
-
-   			
-    	//alert("hii");
+   		
+   			var strModule='<%=session.getAttribute("selectedModuleName").toString()%>';
+   			switch(strModule){
+   			case '1-WebStocks' :
+   				document.getElementById("pageTop").className = "pagetopMenufactureing";
+					//	$("#pageTop").css("background-image", 'url(.../resources/images/headerimagewebPMS.jpg)');
+					break;
+   			case '2-WebExcise' :
+   				document.getElementById("pageTop").className = "pagetopMenufactureing";
+			break;
+   			case '3-WebPMS' :
+   				document.getElementById("pageTop").className = "pagetopMenuWebPMS";
+			break;
+   			case '6-WebCRM' :
+   				document.getElementById("pageTop").className = "pagetopMenuWebCRM";
+			break;
+   			case '4-WebClub' :
+   				document.getElementById("pageTop").className = "pagetopMenuWebClub";
+			break;
+   			case '5-WebBook' :
+   				document.getElementById("pageTop").className = "pagetopMenuWebBook";
+			break;
+   			case '7-WebBanquet' :
+   				document.getElementById("pageTop").className = "pagetopMenuWebBanquet";
+			break;
+					
+			default :
+				document.getElementById("pageTop").className = "pagetopMenufactureing";
+   			}
+    	
        
    });
    	
@@ -118,13 +145,8 @@ function stopRKey(evt) {
 	
   	</head>
 		<body>
-<!-- 		<div> -->
 		 <div id="pageTop"   >		
 		
-		<!-- <h3 style="font-size:35px;font-weight: bold;color: white;padding-left:30px;font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;">web stocks</h3> -->
 		</div>
-<!-- 		 <div id="pageTopClientLogo"  class="pageTopClientLogo"  > -->
-<!-- 		 </div> -->
-<!-- 		 </div> -->
 		</body>
 </html>

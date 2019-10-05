@@ -83,7 +83,7 @@
 				break;
 				
 			case 'BillForBanquet' : 
-				funSetBanquetCode(code);
+				funSetPaymentGuestData(code,"Banquet");
 				break;
 		}
 	}

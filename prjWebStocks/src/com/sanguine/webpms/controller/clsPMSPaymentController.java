@@ -188,9 +188,15 @@ public class clsPMSPaymentController {
 
 		} else if (objPaymentModel.getStrAgainst().equals("Check-In")) {
 			objPaymentRecBean.setStrDocNo(objPaymentModel.getStrCheckInNo());
-		} else {
+		}
+		else if (objPaymentModel.getStrAgainst().equals("Banquet")) {
+			objPaymentRecBean.setStrDocNo(objPaymentModel.getStrReservationNo());
+
+		}
+		else {
 			objPaymentRecBean.setStrDocNo(objPaymentModel.getStrBillNo());
 		}
+		
 		objPaymentRecBean.setStrFolioNo(objPaymentModel.getStrFolioNo());
 		objPaymentRecBean.setStrRegistrationNo(objPaymentModel.getStrRegistrationNo());
 		objPaymentRecBean.setStrFlagOfAdvAmt(objPaymentModel.getStrFlagOfAdvAmt());
@@ -574,7 +580,34 @@ public class clsPMSPaymentController {
 				listGuestDataDtl.add(objPaymentReciptBean);
 				}
 			}
-		} 
+		}
+		else if(docName.equalsIgnoreCase("Banquet"))
+		{
+			clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
+			
+			String sqlPaymentLoad = "select b.strPCode,b.strPName,a.dblBookingAmt "
+					+ "from tblbqbookinghd a,bankmms.tblpartymaster b "
+					+ "where a.strCustomerCode=b.strPCode and a.strClientCode='"+clientCode+"' "
+					+ "and b.strClientCode='"+clientCode+"' and a.strBookingNo='"+docCode+"'";
+			List listData=objGlobalFunctionsService.funGetListModuleWise(sqlPaymentLoad, "sql");
+			if(listData.size()>0 && listData!=null)
+			{
+				for(int i=0;i<listData.size();i++)
+				{
+					Object[] obj = (Object[])listData.get(i);
+					
+					objPaymentReciptBean.setStrGuestCode(obj[0].toString());
+					objPaymentReciptBean.setStrFirstName(obj[1].toString());
+					objPaymentReciptBean.setDblBalanceAmount(Double.parseDouble(obj[2].toString()));
+					objPaymentReciptBean.setStrMiddleName("");
+					objPaymentReciptBean.setStrLastName("");
+				}
+				
+			}
+			
+			
+			listGuestDataDtl.add(objPaymentReciptBean);
+		}
 		else 
 		{
 			sql = " select c.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName " + " from tblcheckindtl a,tblguestmaster c " + " where a.strGuestCode=c.strGuestCode " + " and a.strCheckInNo='" + docCode + "' and a.strPayee='Y'";
@@ -688,7 +721,38 @@ public class clsPMSPaymentController {
 					objPaymentReciptBean.setDteModifiedDate(dteModifiedDate);
 					datalist.add(objPaymentReciptBean);
 				}
-			} else if (checkAgainst.equalsIgnoreCase("Bill")) {
+			} else if (checkAgainst.equalsIgnoreCase("Banquet")) {
+				reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptBanquetPaymentRecipt.jrxml");
+				
+
+				String sqlPayment = "SELECT a.strReceiptNo,c.strBookingNo,b.strPName,e.strSettlementDesc,a.dblPaidAmt, DATE_FORMAT(DATE(a.dteReceiptDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDateEdited),'%d-%m-%Y') "
+						+ "FROM tblreceipthd a,"+webStockDB+".tblpartymaster b,tblbqbookinghd c,tblreceiptdtl d,tblsettlementmaster e "
+						+ "WHERE a.strReceiptNo='"+reciptNo+"' AND b.strPCode=c.strCustomerCode AND a.strReservationNo=c.strBookingNo AND a.strReceiptNo=d.strReceiptNo AND d.strSettlementCode=e.strSettlementCode AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
+				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
+
+				for (int i = 0; i < listOfPayment.size(); i++) {
+					Object PaymentData[] = (Object[]) listOfPayment.get(i);
+
+					String strReceiptNo = PaymentData[0].toString();
+					String strBookingNo = PaymentData[1].toString();
+					String strFirstName = PaymentData[2].toString();
+					String strSettlementDesc = PaymentData[3].toString();
+					String dblPaidAmt = PaymentData[4].toString();
+					String dteReciptDate = PaymentData[5].toString();
+					String dteModifiedDate = PaymentData[5].toString();
+
+					clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
+					objPaymentReciptBean.setStrReceiptNo(strReceiptNo);
+					objPaymentReciptBean.setStrFirstName(strFirstName+" ");
+					objPaymentReciptBean.setStrSettlementDesc(strSettlementDesc);
+					objPaymentReciptBean.setDblPaidAmt(dblPaidAmt);
+					objPaymentReciptBean.setDteReciptDate(dteReciptDate);
+					objPaymentReciptBean.setDteModifiedDate(dteModifiedDate);
+					objPaymentReciptBean.setStrReservationNo(strBookingNo);
+					datalist.add(objPaymentReciptBean);
+				}
+			} 
+			else if (checkAgainst.equalsIgnoreCase("Bill")) {
 				reportName = servletContext.getRealPath("/WEB-INF/reports/webpms/rptBillNoPaymentRecipt.jrxml");
 				/*
 				 * String sqlPayment=
@@ -770,7 +834,8 @@ public class clsPMSPaymentController {
 					objPaymentReciptBean.setStrBillNo(strBillNo);
 					datalist.add(objPaymentReciptBean);
 				}
-			} else {
+			}
+			else {
 				reportName = servletContext.getRealPath("/WEB-INF/reports/webpms/rptCheckInPaymentRecipt.jrxml");
 
 				String sqlPayment = "SELECT a.strReceiptNo, IFNULL(c.intNoOfAdults,''), "

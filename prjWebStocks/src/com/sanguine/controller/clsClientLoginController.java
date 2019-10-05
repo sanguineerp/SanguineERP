@@ -104,7 +104,7 @@ public class clsClientLoginController {
 										strModule = "3";
 									}
 									if ("Yes".equalsIgnoreCase(strWebBanquetModule)) {
-										moduleMap.put("7-WebBanquet", "webpos_module_icon.png");
+										moduleMap.put("7-WebBanquet", "webbanquet_module_icon.png");
 										strModule = "7";
 									}
 									if ("Yes".equalsIgnoreCase(strWebStockModule)) {

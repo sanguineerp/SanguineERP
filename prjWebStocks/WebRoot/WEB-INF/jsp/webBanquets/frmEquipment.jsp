@@ -89,6 +89,7 @@
 	        		$("#txtEquipmentName").val(response.strEquipmentName);
 	        		$("#txtEquipmentCode").val(response.strEquipmentCode);
 	        		$("#txtDepartmentCode").val(response.strDeptCode);
+	        		$("#dblEquipmentRate").val(response.dblEquipmentRate);
 	        	}
 			},
 			error : function(e){
@@ -164,6 +165,18 @@
 					
 				</td>
 				</tr>
+				
+				<tr>
+				<td>
+					<label>Equipment Rate</label>
+				</td>
+				<td colspan="4">
+				
+					<s:input colspan="3" type="text" value="0" path="dblEquipmentRate" id="dblEquipmentRate" style="width:17%;text-align:right;" cssClass="longTextBox" /> 
+					
+				</td>
+				</tr>
+				
 				<tr>
 				<td>
 					<label>Department Code</label>

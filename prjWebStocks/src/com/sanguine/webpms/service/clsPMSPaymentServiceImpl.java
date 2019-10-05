@@ -43,8 +43,8 @@ public class clsPMSPaymentServiceImpl implements clsPMSPaymentService {
 		String folioNo = "";
 		String checkInNo = "";
 		String billNo = "";
-		String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", request.getSession().getAttribute("PMSDate").toString());
-		;
+		//String PMSDate = objGlobal.funGetDate("yyyy-MM-dd", request.getSession().getAttribute("PMSDate").toString());
+		
 
 		clsPMSPaymentHdModel objModel = new clsPMSPaymentHdModel();
 
@@ -105,18 +105,14 @@ public class clsPMSPaymentServiceImpl implements clsPMSPaymentService {
 		}
 		
 		else if (objPaymentBean.getStrAgainst().equals("Banquet")) {
-			String sql = " select b.strCheckInNo,a.strRegistrationNo,b.strReservationNo,b.strFolioNo " + " from tblcheckinhd a,tblfoliohd b " + " where a.strCheckInNo=b.strCheckInNo and b.strFolioNo='" + objPaymentBean.getStrDocNo() + "' ";
-			List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-			if (list.size() > 0) {
-				for (int cnt = 0; cnt < list.size(); cnt++) {
-					Object[] arrObj = (Object[]) list.get(cnt);
-					checkInNo = arrObj[0].toString();
-					registrationNo = arrObj[1].toString();
-					reservationNo = arrObj[2].toString();
-					folioNo = arrObj[3].toString();
+			
+				
+					checkInNo = "";
+					registrationNo = "";
+					reservationNo = objPaymentBean.getStrDocNo();
+					folioNo = "";
 					billNo = "";
-				}
-			}
+				
 		}
 
 		else {
@@ -146,7 +142,8 @@ public class clsPMSPaymentServiceImpl implements clsPMSPaymentService {
 			}
 		}
 
-		objModel.setDteReceiptDate(PMSDate);
+		//objModel.setDteReceiptDate(PMSDate);
+		objModel.setDteReceiptDate(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 		objModel.setStrCheckInNo(checkInNo);
 		objModel.setStrBillNo(billNo);
 		objModel.setStrRegistrationNo(registrationNo);

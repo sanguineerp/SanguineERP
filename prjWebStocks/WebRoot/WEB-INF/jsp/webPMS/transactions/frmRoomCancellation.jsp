@@ -62,9 +62,9 @@
 	        	else
 	        	{
 	        		$("#txtReservationNo").val(response[0][0]);
-	        		$("#txtCorporateCode").val(response[0][1]);
+	        		$("#txtCorporateCode").val(response[0][3]);
 	        		$("#lblCorporateName").text(response[0][2]);
-	        		$("#txtGuestName").val(response[0][3]);
+	        		$("#txtGuestName").val(response[0][1]);
 	        		$("#lblRoomNo").text(response[0][4]);
 	        		$("#txtGuestCode").val(response[0][5]);
 	        		$("#txtRemarks").text(response[0][6]);
@@ -111,17 +111,33 @@
 //set date
 	$(document).ready(function(){
 		
-		var pmsDate='<%=session.getAttribute("PMSDate").toString()%>';
+		<%-- var pmsDate='<%=session.getAttribute("PMSDate").toString()%>'; --%>
 		
-		$("#txtArrivalFromDate").datepicker({dateFormat : 'dd-mm-yy'});
-		$("#txtArrivalFromDate").datepicker('setDate', pmsDate);
+		 $("#txtArrivalFromDate").datepicker({dateFormat : 'dd-mm-yy'}); 
+		 $("#txtArrivalFromDate").datepicker('setDate', '04-10-2019'); 
 		
-		$("#txtArrivalToDate").datepicker({dateFormat : 'dd-mm-yy'});
-		$("#txtArrivalToDate").datepicker('setDate', pmsDate);
+		 $("#txtArrivalToDate").datepicker({dateFormat : 'dd-mm-yy'}); 
+		 $("#txtArrivalToDate").datepicker('setDate', '04-10-2019'); 
 		
 <%-- 		 var pmsDate='<%=session.getAttribute("PMSDate").toString()%>'; --%>
 // 		  var dte=pmsDate.split("-");
 // 		  $("#txtPMSDate").val(dte[2]+"-"+dte[1]+"-"+dte[0]);
+
+			var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
+	   		if(strIndustryType=='7-WebBanquet') 
+	   		{
+	   			$('#lblFormName').text('Booking Cancellation');
+	   			$('#lblNo').text('Booking No.');
+	   			$('#trDate').hide(); 
+	   			$('#txtCorporate').hide();
+	   			$('#lblCorporate').hide();
+	   		}
+	   		else
+   			{
+	   			$('#lblFormName').text('Reservation Cancellation');
+	   			$('#lblNo').text('Reservation No.');
+	   			
+   			}
 	});
 	
 	/**
@@ -167,11 +183,33 @@
 			case 'roomCode' : 
 				funSetRoomNo(code);
 			break;
+			
+			case 'BookingNo' : 
+				funSetReservationData(code);
+			break;
+			
+			case 'reason' : 
+				funSetReasonNo(code);
+			break;
 		}
 	}
 	
 	function funHelp(transactionName)
 	{
+		var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
+		if(strIndustryType=='7-WebBanquet') 
+   		{
+			if(transactionName.includes('reasonPMS'))
+				{
+				transactionName='reason';	
+				}
+			else if(transactionName.includes('ReservationNo'))
+				{
+					transactionName='BookingNo';
+				}
+			
+		}
+   		
 		fieldName=transactionName;
 		window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 		//window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
@@ -180,6 +218,15 @@
 	/**
 	* Get and Set data from help file and load data Based on Selection Passing Value(Reason Code)
 	**/
+	function funSetBookingNo(code)
+	{
+		$("#txtReservationNo").val(code);
+	}
+	
+	 function funSetReasonNo(code)
+	{
+		$("#txtReasonCode").val(code);
+	} 
 	
 	function funSetReasonData(code)
 	{
@@ -307,7 +354,7 @@
 <body>
 
 	<div id="formHeading">
-	<label>Reservation Cancellation</label>
+	<label id="lblFormName"></label>
 	</div>
 
 <br/>
@@ -322,12 +369,12 @@
 			<tr>
 			    <td  style="width: 100px;"><label>Property</label></td>
 				<td><s:select id="strPropertyCode" path="strPropertyCode" items="${listOfProperty}" required="true" cssClass="BoxW200px"></s:select></td>
-				<td style="width: 100px;"><label>Reservation No.</label></td>
+				<td style="width: 100px;"><label id="lblNo"></label></td>
 			    <td><s:input id="txtReservationNo" path="strReservationNo" readonly="true"  ondblclick="funHelp('ReservationNo')" cssClass="searchTextBox"/></td>
 				<td colspan="2">
 			</tr>
 			
-			<tr>
+			<tr id="trDate">
 				<td><label >Arrival From Date</label></td>
 				<td><s:input type="text" id="txtArrivalFromDate" path="dteArrivalFromDate" required="true" class="calenderTextBox" /></td>
 				<td><label >Arrival To Date</label></td>
@@ -344,7 +391,7 @@
 			<tr>
 			    <td><label>Guest Name</label></td>
 				<td><s:input id="txtGuestName" path="strGuestName"  readonly="true" cssClass="longTextBox"  placeholder="last"  /></td>
-				<td><s:input id="txtGuestCode" path="strGuestCode" type="hidden" readonly="true" cssClass="longTextBox" placeholder="last"  /></td>
+				<%-- <td><s:input id="txtGuestCode" path="strGuestCode" type="hidden" readonly="true" cssClass="longTextBox" placeholder="last"  /></td> --%>
 				
 				<td><label>Reason Code</label></td>
 				<td>
@@ -355,15 +402,17 @@
 			</tr>
 			
 			<tr>
-			    <td><label>Corporate</label></td>
-				<td><s:input id="txtCorporateCode" path="strCorporate" readonly="true" cssClass="longTextBox"  /></td>
-				<td><label id="lblCorporateName"></label></td>
+			    <td id="lblCorporate"><label>Corporate</label></td>
+				<td id="txtCorporate"><s:input id="txtCorporateCode" path="strCorporate" readonly="true" cssClass="longTextBox"  /></td>
+				<!-- <td><label id="lblCorporateName"></label></td> -->
 				<td>
 						<label>Remarks</label>
 				</td>
 				<td>
 				       <s:input type="text" id="txtRemarks" path="strRemarks" cssClass="longTextBox" />
 				</td>
+				<td colspan="1"></td>
+				<td colspan="1"></td>
 				<td colspan="1"></td>
 				
 			</tr>

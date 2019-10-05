@@ -52,7 +52,7 @@ body {
 .table-bordered > thead > tr > td,
 .table-bordered > thead > tr > td{
   border-color: #e4e5e7;
-  border-bottom: 1px solid #dbd9d9;
+  border: 0.5px solid #dbd9d9; 
 },
 .table-bordered > thead {
   background-color: #a3d0f7;
@@ -83,7 +83,7 @@ body {
 
 /* .Box { background: inherit; border: 0px solid #060006; outline:0; padding-left: 00px;  font-size:11px;
 	font-weight: bold; font-family: trebuchet ms,Helvetica,sans-serif; } */
-.table .header td:after {
+/* .table .header td:after {
 
   content: "\002b";
   position: relative;
@@ -102,36 +102,29 @@ body {
   transition: transform .25s linear;
   -webkit-transition: -webkit-transform .25s linear;
 
-}
+} */
 
 .table .header.active td:after {
   content: "\2212";
   
 }
 
+.button {
+  background-color: #73cae4;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 100px;height: 28px; white-space: normal;
+}
+
 </style>
 <script type="text/javascript">
 	
-	var fieldName;
-	var occupiedCnt=0;
-	var emptyCnt=0;
-	var blockCnt=0;
-	var dirtyCnt=0;
-	var reservedCnt=0;
-	var mapRoomType={};
-	var lightRed = '#ff4f53';
-	$(document).ready(function() {
-		  //Fixing jQuery Click Events for the iPad
-		  var ua = navigator.userAgent,
-		    event = (ua.match(/iPad/i)) ? "touchstart" : "click";
-		  if ($('.table').length > 0) {
-		    $('.table .header').on(event, function() {
-		      $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
-		        return this.style.display === 'table-row' ? 'none' : 'table-row';
-		      });
-		    });
-		  }
-		});
+var strViewType="normal";
 	
 	$(function() 
 	{
@@ -142,7 +135,19 @@ body {
 		funGetHeaderData();
 	});
 	
+	$(function() {
 
+		  $("#dialog").dialog({
+		     autoOpen: false,
+		     modal: true
+		   });
+
+		  $("#myButton").on("click", function(e) {
+		      e.preventDefault();
+		      $("#dialog").dialog("open");
+		  });
+
+		});
 	
 	
 	function funRemoveTableRows(table)
@@ -155,7 +160,16 @@ body {
 			rowCount--;
 		}
 	}
-	
+	function funRemoveAllRows(table)
+	{
+		var table = document.getElementById(table);
+		var rowCount = table.rows.length;
+		while(rowCount>0)
+		{
+			table.deleteRow(0);
+			rowCount--;
+		}
+	}
 	
 	function funGetHeaderData()
 	{
@@ -163,7 +177,7 @@ body {
 			
 		$.ajax({
 			type : "GET",
-			url : getContextPath()+ "/getRoomStatusList.html?viewDate=" + viewDate,
+			url : getContextPath()+ "/getBanquetDiaryHeader.html?viewDate=" + viewDate+"&viewType="+strViewType,
 			dataType : "json",
 			 beforeSend : function(){
 				 $("#wait").css("display","block");
@@ -173,7 +187,7 @@ body {
 		    },
 			
 			success : function(response){ 
-				//funRemoveTableRows("tblBanquetInfo");
+				funRemoveAllRows('tblBanquetInfo');
 				funFillHeaderRows(response);
 			},
 			error : function(e){
@@ -202,7 +216,7 @@ body {
 			
 		$.ajax({
 			type : "GET",
-			url : getContextPath()+ "/getBanquetBookingDetails.html?viewDate=" + viewDate,
+			url : getContextPath()+ "/getBanquetBookingDetails.html?viewDate=" + viewDate+"&viewType="+strViewType,
 			dataType : "json",
 			 beforeSend : function(){
 				 $("#wait").css("display","block");
@@ -246,19 +260,139 @@ body {
 		var table=document.getElementById("tblBanquetInfo");
 		var rowCount=table.rows.length;
 		var row=table.insertRow();
+		strDay1=funCheckNull(strDay1);
+		strDay2=funCheckNull(strDay2);
+		strDay3=funCheckNull(strDay3);
+		strDay4=funCheckNull(strDay4);
+		strDay5=funCheckNull(strDay5);
+		strDay6=funCheckNull(strDay6);
+		strDay7=funCheckNull(strDay7);
 		
-		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;\" value='"+time+"' >";
-		row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay1+"' >";
-	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay2+"' >";
-		row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay3+"' >";
-		row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay4+"' >";
-		row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay5+"' >";
-		row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay6+"' >";
-		row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%; height: 20px;cursor: pointer;\" value='"+strDay7+"' >";
+		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 95%; height: 20px;background: #cfe8e8;\" value='"+time+"' >";
+		var style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay1!=''){
+			var data=strDay1.split("#");
+			 style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+			if(data[1]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[1]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[1]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+		}else{
+			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay2!=''){
+			var data=strDay2.split("#");
+			
+			if(data[1]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[1]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[1]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+		}else{
+			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay3!=''){
+			var data=strDay3.split("#");
+			 
+			if(data[1]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[1]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[1]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+		}else{
+			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+		}
 		
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay4!=''){
+			var data=strDay4.split("#");
+			 
+			if(data[1]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[1]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[1]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+		}else{
+			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay5!=''){
+			var data=strDay5.split("#");
+			
+			if(data[1]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[1]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[1]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+		}else{
+			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay6!=''){
+			var data=strDay6.split("#");
+			
+			if(data[1]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[1]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[1]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+		}else{
+			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay7!=''){
+			var data=strDay7.split("#");
+			
+			
+			if(data[1]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[1]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[1]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+		}else{
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+		}
+	    
 		
 	}
 		
+	function funCheckNull(strData){
+		if(strData==null){
+			strData='';
+		}
+		return strData;
+	}
 	function funFillHeaderRows(obj)
 	{
 		var table=document.getElementById("tblBanquetInfo");
@@ -266,23 +400,20 @@ body {
 		var rowCount=table.rows.length;
 		var row=table.insertRow();
 		
-		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='Time' >";
-		row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+obj[0]+"' >";
-	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+obj[1]+"' >";
-		row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+obj[2]+"' >";
-		row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+obj[3]+"' >";
-		row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+obj[4]+"' >";
-		row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+obj[5]+"' >";
-		row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;\" value='"+obj[6]+"' >";
+		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='Time' >";
+		row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[0]+"' >";
+	    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[1]+"' >";
+		row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[2]+"' >";
+		row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[3]+"' >";
+		row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[4]+"' >";
+		row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[5]+"' >";
+		row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[6]+"' >";
 		
-		//funGetRoomTypeAndStatus();
-		
-		//funShowRoomStatusDtl();
 	}
 	
 	function funAreaOptionSelected(strLocCode,strLocName){
+		funGetHeaderData();
 		funShowDiary();
-		funShowRoomStatusDtl1();
 	}
 	
 	function funShowRoomStatusDtl1(row)
@@ -299,11 +430,12 @@ body {
 			    });
 			  }
 			})
-		 
-	
 	}
 	
-		
+	function funDiaryView(viewName){
+		strViewType=viewName;
+	}
+	
 	</script>
 
 
@@ -323,25 +455,31 @@ body {
 					<table>
 						<tr>
 							<td><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></td>
-							<td bgcolor="#ff4f53" style="padding-left: 5px;padding-right: 5px;">Confirm</td>
+							<td style="width :400px;"> <button id="myButton">click!</button></td>
+							<td bgcolor="ff0000" style="padding-left: 5px;padding-right: 5px;">Confirm</td>
 							<td bgcolor="Yellow" style="padding-left: 5px;padding-right: 5px;">Waitlisted</td>
 							<td bgcolor="Green" style="padding-left: 5px;padding-right: 5px;">Provisinal</td>
-							
+							<td style="width :100px;"> </td>
+							<td style="background: white;">
+							<span>
+								<img  src="../${pageContext.request.contextPath}/resources/images/banquet/normalView.png" title="HOME" height="20px" width="20px" onclick="funDiaryView('normal');">	&nbsp;&nbsp;
+								<img  src="../${pageContext.request.contextPath}/resources/images/banquet/dayView.png" title="HOME" height="20px" width="20px" onclick="funDiaryView('day');">	&nbsp;&nbsp;
+								<img  src="../${pageContext.request.contextPath}/resources/images/banquet/cancel.png" title="HOME" height="20px" width="20px" onclick="funDiaryView('cancel');"> 	&nbsp;&nbsp;
+								<img  src="../${pageContext.request.contextPath}/resources/images/banquet/weekend.png" title="HOME" height="20px" width="20px" onclick="funDiaryView('weekend');">	&nbsp;&nbsp;
+							</span>
+							</td>
 						</tr>
 					</table>
-					
-						<%-- <span><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></span> --%>
-						<%-- <span><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></span> --%>
 					</td>
 				</tr>
 				<tr>
 				<td>
-				<div id="divAreaButtons" style="text-align: right; height:50px; overflow-x: auto; overflow-y: auto; width: 100%;">
+				<div id="divAreaButtons" style="text-align: right; height:40px; overflow-x: auto; overflow-y: hidden; width: 100%;">
 					 	<table id="tblAreaButtons"  cellpadding="0" cellspacing="2"  >				 																																	
 								<tr>							
 									<c:forEach var="objAreaButtons" items="${command.jsonArrForLocationButtons}"  varStatus="varAreaButtons">
 											<td style="padding-right: 3px;">
-												<input  type="button" id="${objAreaButtons.strLocCode}"  value="${objAreaButtons.strLocName}" tabindex="${varAreaButtons.getIndex()}"  style="width: 100px;height: 30px; white-space: normal;"   onclick="funAreaOptionSelected('${objAreaButtons.strLocCode}','${objAreaButtons.strLocName}')" class="btn btn-outline-secondary"/>
+												<input  type="button" id="${objAreaButtons.strLocCode}"  value="${objAreaButtons.strLocName}" tabindex="${varAreaButtons.getIndex()}" onclick="funAreaOptionSelected('${objAreaButtons.strLocCode}','${objAreaButtons.strLocName}')" class="button"/>
 											</td>
 									</c:forEach>																						
 							    </tr>																																				 									   				   									   									   						
@@ -362,18 +500,30 @@ body {
 			
 		</div>
 		
-		<div style="position: fixed;">
+		<!-- <div style="position: fixed;">
 		 <p align="center" >
 			<input type="button" value="View" id="btnView" tabindex="3" class="form_button" onclick="funShowDiary();"/>
 			<input type="reset" value="Reset" id="btnReset" class="form_button" onclick="funResetFields()"/>
 		</p>
 		</div>
-	
+	 -->
 		<div id="wait"
 			style="display: none; width: 60px; height: 60px; border: 0px solid black; position: absolute; top: 60%; left: 55%; padding: 2px;">
 			<img
 				src="../${pageContext.request.contextPath}/resources/images/ajax-loader-light.gif"
 				width="60px" height="60px" />
+		</div>
+		
+		<div id="dialog" title="Booking Details">
+			  <table id="tblAreaButtons"  cellpadding="0" cellspacing="2"  >				 																																	
+								<tr>							
+									<c:forEach var="objAreaButtons" items="${command.jsonArrForLocationButtons}"  varStatus="varAreaButtons">
+											<td style="padding-right: 3px;">
+												<input  type="button" id="${objAreaButtons.strLocCode}"  value="${objAreaButtons.strLocName}" tabindex="${varAreaButtons.getIndex()}" onclick="funAreaOptionSelected('${objAreaButtons.strLocCode}','${objAreaButtons.strLocName}')" class="button"/>
+											</td>
+									</c:forEach>																						
+							    </tr>																																				 									   				   									   									   						
+						</table>	
 		</div>
 
 	</s:form>

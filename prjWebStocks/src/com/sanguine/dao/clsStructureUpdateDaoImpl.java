@@ -3331,7 +3331,73 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
+		sql="CREATE TABLE `tblbqbookingdtl` ("
+				+ "`strBookingNo` VARCHAR(10) NOT NULL,"
+				+ "`strType` VARCHAR(20) NOT NULL DEFAULT ' ',"
+				+ "`strDocNo` VARCHAR(10) NOT NULL DEFAULT ' ',"
+				+ "`strDocName` VARCHAR(50) NOT NULL DEFAULT '',"
+				+ "`strClientCode` VARCHAR(10) NOT NULL,"
+				+ "`strBookingDate` DATETIME NOT NULL"
+				+ ") "
+				+ "COLLATE='latin1_swedish_ci' "
+				+ "ENGINE=InnoDB;";
 		
+		funExecuteBanquetQuery(sql);
+		
+		sql="CREATE TABLE `tblbqbookinghd` ("
+				+ "`strBookingNo` VARCHAR(20) NOT NULL,"
+				+ "`strPropertyCode` VARCHAR(20) NOT NULL,"
+				+ "`strBookingStatus` VARCHAR(20) NOT NULL,"
+				+ "`dteBookingDate` DATETIME NOT NULL,"
+				+ "`dteFromDate` DATETIME NOT NULL,"
+				+ "`dteToDate` DATETIME NOT NULL,"
+				+ "`tmeFromTime` VARCHAR(10) NOT NULL,"
+				+ "`tmeToTime` VARCHAR(10) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(25) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(25) NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,"
+				+ "`dteDateEdited` DATETIME NOT NULL,"
+				+ "`strCustomerCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strEmailID` VARCHAR(30) NOT NULL DEFAULT '',"
+				+ "`intMinPaxNo` INT(11) NOT NULL DEFAULT '0',"
+				+ "`intMaxPaxNo` INT(11) NOT NULL DEFAULT '0',"
+				+ "`strClientCode` VARCHAR(20) NOT NULL,"
+				+ "`strEventCoordinatorCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strAreaCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strFunctionCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strBillingInstructionCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "PRIMARY KEY (`strBookingNo`, `strClientCode`)"
+				+ ") "
+				+ "COLLATE='latin1_swedish_ci' "
+				+ "ENGINE=InnoDB;";
+		
+		funExecuteBanquetQuery(sql);
+		
+		sql="ALTER TABLE `tblbqbookinghd`"
+				+ "ADD COLUMN `dblBookingAmt` DOUBLE NOT NULL AFTER `dteBookingDate`;";
+		
+		funExecuteBanquetQuery(sql);
+		
+		sql="ALTER TABLE `tblequipment`"
+				+ "ADD COLUMN `strDeptCode` VARCHAR(10) NOT NULL AFTER `intId`;";
+		
+		funExecuteBanquetQuery(sql);
+		
+		sql = "ALTER TABLE `tbldepartmentmaster`"
+				+ "ADD COLUMN `strMobileNo` VARCHAR(20) NOT NULL AFTER `strOperational`,"
+				+ "ADD COLUMN `strEmailId` VARCHAR(30) NOT NULL AFTER `strMobileNo`;";
+		
+		funExecuteBanquetQuery(sql);
+		
+		sql = "ALTER TABLE `tblbqbookinghd`"
+				+ "ADD COLUMN `dblBookingAmt` DOUBLE NOT NULL AFTER `strBookingStatus`;";
+		
+		funExecuteBanquetQuery(sql);
+		
+		sql="ALTER TABLE `tblequipment`"
+				+ "ADD COLUMN `dblEquipmentRate` DECIMAL(18,4) NOT NULL DEFAULT '0.0' AFTER `strDeptCode`;";
+		
+		funExecuteBanquetQuery(sql);
 		
 		//treeMaster Banquets All forms
 		
@@ -3351,7 +3417,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmServiceMaster', 'Service Master', 'Master', 1, 'M', 1, 3, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmServiceMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetStaffMaster', 'Staff Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetStaffMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetStaffCategeoryMaster', 'Staff Categeroy Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetStaffCategeoryMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmFunctionProspectus', 'Function Prospectus', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', '1', 'frmFunctionProspectus.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmFunctionProspectus', 'Function Prospectus', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', '1', 'frmFunctionProspectus.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmPMSPayment', 'Payment', 'Master', '2', 'T', '7', '7', '15', 'imgPayment.png', '7', '3', '3', '3', 'NO', 'YES', 'frmPMSPayment.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBanquetBooking', 'Banquet Booking', 'Transaction', 1, 'T', 1, 1, '1', 'default.png', '7', 1, '1', '1', 'No', 'No', 'frmBanquetBooking.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmRoomCancellation', 'Booking Cancellation', 'Transaction', '2', 'T', '6', '6', '1', 'imgReservationCancellation.png', '7', '3', '3', '3', 'NO', 'NO', 'frmRoomCancellation.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBookingFlash', 'Booking Flash', 'Report', 1, 'R', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmBookingFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		
 		funExecuteQuery(sql);
 		
