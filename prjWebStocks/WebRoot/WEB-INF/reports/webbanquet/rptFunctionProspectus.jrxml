@@ -156,6 +156,7 @@
 	<parameter name="listStaff" class="java.util.List"/>
 	<parameter name="listService" class="java.util.List"/>
 	<parameter name="listEquipment" class="java.util.List"/>
+	<parameter name="listMenu" class="java.util.List"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT 1
 FROM dual]]>
@@ -468,6 +469,50 @@ FROM dual]]>
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 							<textField isStretchWithOverflow="true">
 								<reportElement positionType="Float" x="20" y="0" width="330" height="15" uuid="d881f346-441b-438b-a3c5-ecdd396d2221"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font size="9"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{strService}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement key="" positionType="Float" x="281" y="58" width="273" height="45" isPrintInFirstWholeBand="true" uuid="6e88763a-aa63-49fb-9826-23c324032c1d">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 5_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 5_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 5_TD"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Dataset1" uuid="cfca9865-ff9f-4d02-91c5-ad4d7f4dadd4">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listMenu})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="350" uuid="c2622712-2d89-4d23-b8e2-30222214ad5e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+							<textField>
+								<reportElement x="8" y="1" width="332" height="28" isPrintWhenDetailOverflows="true" uuid="85bdeb61-cb16-4360-a8c2-df0601eb17ee"/>
+								<textElement verticalAlignment="Middle" rotation="None">
+									<font size="12" isBold="true" pdfEncoding=""/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{strServiceType}]]></textFieldExpression>
+							</textField>
+							<line>
+								<reportElement positionType="Float" mode="Transparent" x="1" y="25" width="200" height="1" uuid="776b2767-078f-4de5-bc6a-63b2987099cd">
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+								</reportElement>
+							</line>
+						</jr:columnHeader>
+						<jr:detailCell height="15">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+							<textField isStretchWithOverflow="true">
+								<reportElement positionType="Float" x="20" y="0" width="330" height="15" uuid="fd777705-5d32-480d-a899-794d4ed1231f"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font size="9"/>
 									<paragraph lineSpacing="Single"/>

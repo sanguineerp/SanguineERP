@@ -5669,6 +5669,17 @@ public class clsSearchFormController {
 				searchFormTitle = "Payment Receipt";
 				break;
 			}
+			
+			case "BanquetCustomerInfo": {
+				columnNames = "a.strPCode,a.strPName,a.strEmail,a.strMobile";
+				tableName = "from "+webStockDB+".tblpartymaster a where a.strClientCode='"+clientCode+"'";
+				listColumnNames = "Guest No,Guest Name,Email ID,Mobile No";
+				idColumnName = ""+webStockDB+".strPCode,"+webStockDB+".strClientCode";
+				flgQuerySelection = true;
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Payment Receipt";
+				break;
+			}
 
 		}
 
