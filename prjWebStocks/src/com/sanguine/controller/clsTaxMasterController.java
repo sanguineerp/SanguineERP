@@ -42,11 +42,21 @@ public class clsTaxMasterController {
 	@RequestMapping(value = "/frmTaxMaster", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
 		
-		List<String> listTaxOnSP = new ArrayList<>();
-		listTaxOnSP.add("Sales");
-		listTaxOnSP.add("Purchase");
-		model.put("taxOnSPList", listTaxOnSP);
-
+		String strModuleName = request.getSession().getAttribute("selectedModuleName").toString();
+		if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
+		{
+			List<String> listTaxOnSP = new ArrayList<>();
+			listTaxOnSP.add("Banquet");
+			
+			model.put("taxOnSPList", listTaxOnSP);
+		}
+		else
+		{
+			List<String> listTaxOnSP = new ArrayList<>();
+			listTaxOnSP.add("Sales");
+			listTaxOnSP.add("Purchase");
+			model.put("taxOnSPList", listTaxOnSP);
+		}
 		/*
 		 * List<String> listTaxType = new ArrayList<>();
 		 * listTaxType.add("Percent"); listTaxType.add("Slab");
@@ -174,7 +184,7 @@ public class clsTaxMasterController {
 		long lastNo = 0;
 		clsTaxHdModel objModel;
 		if (objBean.getStrTaxCode().trim().length() == 0) {
-			lastNo = objGlobalFunctionsService.funGetLastNo("tbltaxhd", "TaxMaster", "intId", clientCode);
+			lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tbltaxhd", "TaxMaster", "intId", clientCode, "1-WebStocks");
 			String code = "T" + String.format("%07d", lastNo);
 			objModel = new clsTaxHdModel(new clsTaxHdModel_ID(code, clientCode));
 			objModel.setIntId(lastNo);
@@ -183,7 +193,7 @@ public class clsTaxMasterController {
 		} else {
 			clsTaxHdModel objModel1 = objTaxMasterService.funGetObject(objBean.getStrTaxCode(), clientCode);
 			if (null == objModel1) {
-				lastNo = objGlobalFunctionsService.funGetLastNo("tbltaxhd", "TaxMaster", "intId", clientCode);
+				lastNo = objGlobalFunctionsService.funGetLastNoModuleWise("tbltaxhd", "TaxMaster", "intId", clientCode, "1-WebStocks");
 				String code = "T" + String.format("%07d", lastNo);
 				objModel = new clsTaxHdModel(new clsTaxHdModel_ID(code, clientCode));
 				objModel.setIntId(lastNo);

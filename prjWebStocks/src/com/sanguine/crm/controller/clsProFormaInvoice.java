@@ -3023,7 +3023,7 @@ public class clsProFormaInvoice {
 				if (objSetup == null) {
 					objSetup = new clsPropertySetupModel();
 				}
-				String reportName = servletContext.getRealPath("/WEB-INF/reports/webcrm/rptProFormaInvoiceSlipFormat5Report.jrxml");
+				String reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptProFormaInvoiceSlipFormat5ReportForBanquet.jrxml");
 				String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 				HashMap hm = new HashMap();
 				ArrayList fieldList = new ArrayList();
@@ -3082,6 +3082,42 @@ public class clsProFormaInvoice {
 				String[] date = dteInvDate.split("-");
 				dteInvDate = date[2] + "-" + date[1] + "-" + date[0];
 
+				String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
+				String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+				if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
+				{
+					double taxAmt = 0.00;
+					String sqlDetailQ = "SELECT  b.dblQty,c.strDocName,c.strType,b.dblPrice,b.dblQty *b.dblPrice AS amount,b.strProdCode,a.dblDiscountAmt,a.dblGrandTotal "
+							+ "FROM "+webStockDB+".tblproformainvoicehd a "
+							+ "LEFT OUTER "
+							+ "JOIN "+webStockDB+".tblproformainvoicedtl b ON a.strInvCode=b.strInvCode "
+							+ "LEFT OUTER "
+							+ "JOIN tblbqbookingdtl c ON b.strProdCode=c.strBookingNo "
+							+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"'";
+					
+						list = objGlobalFunctionsService.funGetListModuleWise(sqlDetailQ, "sql");
+						if (!list.isEmpty()) {
+							for (int i = 0; i < list.size(); i++) {
+								Object[] arrObj = (Object[]) list.get(i);
+								clsInvoiceBean objBean = new clsInvoiceBean();
+								objBean.setDblQty(Double.parseDouble(arrObj[0].toString()));
+								objBean.setStrProdName(arrObj[1].toString());
+								objBean.setStrUOM(arrObj[2].toString());
+								objBean.setDblUnitPrice(Double.parseDouble(arrObj[3].toString()));
+								objBean.setDblSubTotalAmt(Double.parseDouble(arrObj[4].toString()));
+								objBean.setStrProdCode(arrObj[5].toString());
+								objBean.setDblDiscountAmt(Double.parseDouble(arrObj[6].toString()));
+								objBean.setDblTotalAmt(Double.parseDouble(arrObj[3].toString())*Double.parseDouble(arrObj[0].toString()));
+								objBean.setDblGrandTotal(Double.parseDouble(arrObj[7].toString()));
+								
+								fieldList.add(objBean);
+								objBean.setDblTaxAmt(taxAmt);
+
+							}
+						}
+				}
+				else
+				{
 				String sqlDetailQ = "select  b.dblQty,c.strProdName,c.strUOM,b.dblPrice,b.dblQty *b.dblPrice as amount ,b.strProdCode"
 					+ ",a.dblDiscountAmt,a.dblGrandTotal "
 					+ " from tblproformainvoicehd a left outer join tblproformainvoicedtl b  on a.strInvCode=b.strInvCode " 
@@ -3116,6 +3152,7 @@ public class clsProFormaInvoice {
 						fieldList.add(objBean);
 
 					}
+				}
 				}
 
 				hm.put("strPoNo", strPoNo);

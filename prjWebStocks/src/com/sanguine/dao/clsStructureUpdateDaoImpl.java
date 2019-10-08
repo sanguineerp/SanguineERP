@@ -3197,20 +3197,21 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteBanquetQuery(sql);
 		
 		sql = "CREATE TABLE `tblequipment` ("
-				+ "`strEquipmentCode` VARCHAR(255) NOT NULL,"
-				+ "`strEquipmentName` VARCHAR(255) NOT NULL,"
-				+ "`intId` BIGINT(20) NOT NULL,"
-				+ "`dteDateCreated` VARCHAR(255) NOT NULL,"
-				+ "`dteDateEdited` VARCHAR(255) NOT NULL,"
-				+ "`strUserCreated` VARCHAR(255) NOT NULL,"
-				+ "`strUserEdited` VARCHAR(255) NOT NULL,"
-				+ "`strOperational` VARCHAR(5) NOT NULL,"
 				+ "`strClientCode` VARCHAR(255) NOT NULL,"
+				+ "`strEquipmentCode` VARCHAR(255) NOT NULL,"
+				+ "`dteDateCreated` VARCHAR(255) NULL DEFAULT NULL,"
+				+ "`dteDateEdited` VARCHAR(255) NULL DEFAULT NULL,"
+				+ "`intId` BIGINT(20) NULL DEFAULT NULL,"
+				+ "`strEquipmentName` VARCHAR(255) NULL DEFAULT NULL,"
+				+ "`strOperational` VARCHAR(255) NULL DEFAULT NULL,"
+				+ "`strUserCreated` VARCHAR(255) NULL DEFAULT NULL,"
+				+ "`strUserEdited` VARCHAR(255) NULL DEFAULT NULL,"
+				+ "`strDeptCode` VARCHAR(255) NULL DEFAULT NULL,"
+				+ "`dblEquipmentRate` DOUBLE NULL DEFAULT NULL,"
 				+ "PRIMARY KEY (`strClientCode`, `strEquipmentCode`)"
 				+ ") "
-				+ "COLLATE='utf8_general_ci' "
-				+ "ENGINE=InnoDB "
-				+ ";";
+				+ "COLLATE='latin1_swedish_ci' "
+				+ "ENGINE=InnoDB;";
 		
 		
 		
@@ -3395,10 +3396,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		+" ENGINE=InnoDB;";
 		funExecuteBanquetQuery(sql);
 		
-		
-		
-		sql="ALTER TABLE `tblequipment`"
-				+ "ADD COLUMN `strDeptCode` VARCHAR(10) NOT NULL AFTER `intId`;";
+		sql="ALTER TABLE `tblbqbookinghd`"
+				+ "ADD COLUMN `dblBookingAmt` DOUBLE NOT NULL AFTER `dteBookingDate`;";
 		
 		funExecuteBanquetQuery(sql);
 		
@@ -3456,7 +3455,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmRoomCancellation', 'Booking Cancellation', 'Transaction', '2', 'T', '6', '6', '1', 'imgReservationCancellation.png', '7', '3', '3', '3', 'NO', 'NO', 'frmRoomCancellation.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBookingFlash', 'Booking Flash', 'Report', 1, 'R', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmBookingFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmProFormaInvoice', 'ProForma Invoice', 'Transaction', '2', 'T', '70', '11', '1', 'default.png', '7', '1', '1', '1', 'NO', 'NO', 'frmProFormaInvoice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmBanquetWeekendMaster', 'Weekend Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetWeekendMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmBanquetWeekendMaster', 'Weekend Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetWeekendMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmTaxMaster', 'Tax Master', 'Master', '8', 'M', '29', '15', '1', 'imgTaxMaster.png', '7', '1', '1', '1', 'NO', 'YES', 'frmTaxMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		
 		funExecuteQuery(sql);
 		

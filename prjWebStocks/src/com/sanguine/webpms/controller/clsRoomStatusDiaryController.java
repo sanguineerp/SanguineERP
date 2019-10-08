@@ -282,7 +282,7 @@ public class clsRoomStatusDiaryController {
 						}
 						else
 						{*/
-							String sqlFolioNo = "select a.strFolioNo from tblfoliohd a where a.strCheckInNo='"+arrObjRoomDtl[0].toString()+"' AND a.strClientCode='"+clientCode+"'";
+							String sqlFolioNo = "select a.strFolioNo from tblfoliohd a where a.strCheckInNo='"+arrObjRoomDtl[0].toString()+"' AND a.strRoomNo='"+arrObjRoomDtl[1].toString()+"' AND a.strClientCode='"+clientCode+"'";
 							List listFolioNo = objGlobalFunctionsService.funGetListModuleWise(sqlFolioNo, "sql");
 							String strFolioNo = "";
 							if(listFolioNo!=null && listFolioNo.size()>0)
