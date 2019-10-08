@@ -505,7 +505,7 @@ public class clsUserController {
 
 		@SuppressWarnings("unchecked")
 		Map<String, String> moduleMap = (Map<String, String>) req.getSession().getAttribute("moduleMap");
-		if (moduleMap.size() > 1) {
+		if (true) {//moduleMap.size() > 1
 			String currentDate=objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
 			
 			/*String sqlDbBck="select a.strDbName,a.dteDbBckkUp from tbldatabasebckup a where date(a.dteDbBckkUp)='"+currentDate.split(" ")[0]+"' ";

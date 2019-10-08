@@ -1,9 +1,7 @@
 package com.sanguine.dao;
 
 import java.util.List;
-import java.util.Map;
 
-import com.sanguine.model.clsGroupMasterModel;
 import com.sanguine.model.clsTCMasterModel;
 
 public interface clsTCMasterDao {

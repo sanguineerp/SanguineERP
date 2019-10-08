@@ -2,7 +2,6 @@ package com.sanguine.dao;
 
 import java.util.List;
 
-import com.sanguine.model.clsMISDtlModel;
 import com.sanguine.model.clsMRPIDtl;
 import com.sanguine.model.clsProductStandardModel;
 import com.sanguine.model.clsRequisitionDtlModel;

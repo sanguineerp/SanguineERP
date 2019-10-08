@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sanguine.model.clsRouteMasterModel;
 import com.sanguine.model.clsRouteMasterModel_ID;
-import com.sanguine.model.clsVehicleMasterModel;
 
 @Repository("clsRouteMasterDao")
 public class clsRouteMasterDaoImpl implements clsRouteMasterDao {

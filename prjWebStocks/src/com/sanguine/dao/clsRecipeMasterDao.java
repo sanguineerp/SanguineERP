@@ -2,10 +2,8 @@ package com.sanguine.dao;
 
 import java.util.List;
 
-import com.sanguine.bean.clsParentDataForBOM;
 import com.sanguine.model.clsBomDtlModel;
 import com.sanguine.model.clsBomHdModel;
-import com.sanguine.model.clsTaxHdModel;
 
 
 public interface clsRecipeMasterDao {

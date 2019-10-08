@@ -1,8 +1,6 @@
 package com.sanguine.dao;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +19,6 @@ import com.sanguine.model.clsProdSuppMasterModel_ID;
 import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsProductMasterModel_ID;
 import com.sanguine.model.clsProductReOrderLevelModel;
-import com.sanguine.model.clsSubGroupMasterModel;
 
 @Repository("clsProductMasterDao")
 public class clsProductMasterDaoImpl implements clsProductMasterDao {

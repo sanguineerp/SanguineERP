@@ -1,8 +1,6 @@
 package com.sanguine.dao;
 
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;

@@ -586,7 +586,7 @@
 					<value>com.sanguine.webbanquets.model.clsBanquetStaffMasterModel</value>
 					<value>com.sanguine.webbanquets.model.clsBanquetStaffCategeoryMasterModel</value>
 					<value>com.sanguine.webbanquets.model.clsBanquetBookingModelHd</value>
-					
+					<value>com.sanguine.webbanquets.model.clsBanquetWeekendMasterModel</value>
 					
 						
 				</list>
@@ -615,7 +615,7 @@
 
 	
 <!--  Start of WEBBanquets Configuration DataSource -->
-
+<!-- 
     	<bean id="webBanquetDataSource"
 			class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 			<property name="driverClassName" value="${database.driver}" />
@@ -630,8 +630,8 @@
 			
 			<property name="annotatedClasses">
 				<list>
-					<!--Put here your models name  -->
-					<!-- <value>com.sanguine.webbanquets.model.clsSampleModel</value> -->
+					Put here your models name 
+					<value>com.sanguine.webbanquets.model.clsSampleModel</value>
 						
 				</list>
 			</property>
@@ -649,7 +649,7 @@
 	
     <bean id="WebBanquetTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory"><ref local="webBanquetSessionFactory"/></property>
-    </bean>
+    </bean> -->
 	
 <!-- 	End Of WEBBanquets Configuration -->
 

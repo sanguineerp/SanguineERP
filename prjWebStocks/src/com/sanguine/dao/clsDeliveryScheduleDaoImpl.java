@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.sanguine.model.clsDeliveryScheduleModulehd;
 import com.sanguine.model.clsDeliveryScheduleModulehd_ID;
-import com.sanguine.model.clsGroupMasterModel;
-import com.sanguine.model.clsGroupMasterModel_ID;
 
 @Repository("clsDeliveryScheduleDao")
 public class clsDeliveryScheduleDaoImpl implements clsDeliveryScheduleDao {

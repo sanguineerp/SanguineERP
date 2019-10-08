@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.sanguine.model.clsMRPIDtl;
 import com.sanguine.model.clsProductReOrderLevelModel;
 import com.sanguine.model.clsPurchaseIndentDtlModel;
 import com.sanguine.model.clsPurchaseIndentHdModel;

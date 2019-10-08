@@ -2,8 +2,6 @@ package com.sanguine.dao;
 
 import java.util.List;
 
-import com.sanguine.model.clsRateContractDtlModel;
-import com.sanguine.model.clsRateContractHdModel;
 import com.sanguine.model.clsStkPostingDtlModel;
 import com.sanguine.model.clsStkPostingHdModel;
 

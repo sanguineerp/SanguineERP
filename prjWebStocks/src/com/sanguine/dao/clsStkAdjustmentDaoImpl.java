@@ -3,18 +3,14 @@ package com.sanguine.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sanguine.model.clsStkAdjustmentDtlModel;
 import com.sanguine.model.clsStkAdjustmentHdModel;
 import com.sanguine.model.clsStkAdjustmentHdModel_ID;
-import com.sanguine.webclub.model.clsWebClubGroupMasterModel;
-import com.sanguine.webclub.model.clsWebClubGroupMasterModel_ID;
 
 @Repository("clsStkAdjustmentDao")
 public class clsStkAdjustmentDaoImpl implements clsStkAdjustmentDao {

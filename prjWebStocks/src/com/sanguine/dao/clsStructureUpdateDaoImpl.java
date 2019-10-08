@@ -3,7 +3,6 @@ package com.sanguine.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Query;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sanguine.model.clsCompanyMasterModel;
-import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
 
@@ -2152,6 +2150,28 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "ADD COLUMN `strBusinessSourceCode` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strPrint`;";
 		
 		funExecuteWebClubQuery(sql);
+		
+		sql="CREATE TABLE `tblfacilitymaster` ( "
+				+" `strFacilityCode` VARCHAR(20) NOT NULL, "
+				+" `strFacilityName` VARCHAR(30) NOT NULL, "
+				+" 	`dteDateCreated` VARCHAR(20) NOT NULL, "
+				+" `dteDateEdited` VARCHAR(20) NOT NULL, "
+				+" `strUserCreated` VARCHAR(20) NOT NULL, "
+				+" `strUserEdited` VARCHAR(20) NOT NULL, "
+				+" `strClientCode` VARCHAR(20) NOT NULL, "
+				+" `strOperationalNY` VARCHAR(5) NOT NULL DEFAULT 'N', "
+				+" PRIMARY KEY (`strFacilityCode`, `strClientCode`) "
+			+" ) "
+			+" ENGINE=InnoDB;";
+		
+		funExecuteWebClubQuery(sql);
+		
+		
+		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`, `strInvoice`, `strDeliverySchedule`, `strFormAccessYN`) VALUES"
+				+ " ('frmWebClubFacilityMaster', 'Facility Master', 'Master', 1, 'M', 1, 3, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmWebClubFacilityMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+
+		funExecuteQuery(sql);
+		
 		/*----------------WebClub Forms End---------------------------*/
 		//
 		//
@@ -3399,6 +3419,23 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
+		
+		sql="CREATE TABLE `tblweekendmaster` ( "
+				+" `strDayNo` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" `strDay` VARCHAR(20) NOT NULL DEFAULT '', " 
+				+" `dtDteCreated` DATETIME NOT NULL, "
+				+" `dtDteEdited` DATETIME NOT NULL, "
+				+" `strUserCreated` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" `strUserEdited` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" `strClientCode` VARCHAR(20) NOT NULL, "
+				+" PRIMARY KEY (`strDayNo`, `strClientCode`) "
+			+" ) "
+			+" COLLATE='utf8_general_ci' "
+			+" ENGINE=InnoDB ";
+		
+		funExecuteBanquetQuery(sql);
+		
+		
 		//treeMaster Banquets All forms
 		
 		sql=" INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`,`strInvoice`,`strDeliverySchedule`,`strFormAccessYN`)"
@@ -3422,7 +3459,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmBanquetBooking', 'Banquet Booking', 'Transaction', 1, 'T', 1, 1, '1', 'default.png', '7', 1, '1', '1', 'No', 'No', 'frmBanquetBooking.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmRoomCancellation', 'Booking Cancellation', 'Transaction', '2', 'T', '6', '6', '1', 'imgReservationCancellation.png', '7', '3', '3', '3', 'NO', 'NO', 'frmRoomCancellation.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBookingFlash', 'Booking Flash', 'Report', 1, 'R', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmBookingFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmProFormaInvoice', 'ProForma Invoice', 'Transaction', '2', 'T', '70', '11', '1', 'default.png', '7', '1', '1', '1', 'NO', 'NO', 'frmProFormaInvoice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmProFormaInvoice', 'ProForma Invoice', 'Transaction', '2', 'T', '70', '11', '1', 'default.png', '7', '1', '1', '1', 'NO', 'NO', 'frmProFormaInvoice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBanquetWeekendMaster', 'Weekend Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetWeekendMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		
 		funExecuteQuery(sql);
 		

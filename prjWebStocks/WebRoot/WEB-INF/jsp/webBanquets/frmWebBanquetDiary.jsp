@@ -268,7 +268,7 @@ var strViewType="normal";
 		strDay6=funCheckNull(strDay6);
 		strDay7=funCheckNull(strDay7);
 		
-		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 95%; height: 20px;background: #cfe8e8;\" value='"+time+"' >";
+		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 95%; height: 20px;background: #cfe8e8;\" value='"+time+"' onClick='funCellOnClick(this)'>";
 		var style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
 		if(strDay1!=''){
 			var data=strDay1.split("#");
@@ -281,9 +281,9 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  onClick='funCellOnClick(this)'>";
 		}else{
-			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
 		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
 		if(strDay2!=''){
@@ -297,9 +297,9 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  onClick='funCellOnClick(this)'>";
 		}else{
-			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
 		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
 		if(strDay3!=''){
@@ -313,9 +313,9 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  onClick='funCellOnClick(this)'>";
 		}else{
-			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
 		
 		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
@@ -330,9 +330,9 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  onClick='funCellOnClick(this)'>";
 		}else{
-			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
 		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
 		if(strDay5!=''){
@@ -346,9 +346,9 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' onClick='funCellOnClick(this)' >";
 		}else{
-			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
 		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
 		if(strDay6!=''){
@@ -362,9 +362,9 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' onClick='funCellOnClick(this)'>";
 		}else{
-			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
 		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
 		if(strDay7!=''){
@@ -379,14 +379,32 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' >";
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' onClick='funCellOnClick(this)' >";
 		}else{
-			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' >";
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
-	    
-		
 	}
-		
+	
+	function funCellOnClick(objCell){
+		var bookingColor=objCell.style.backgroundColor;
+		var customer =objCell.value;
+		if(bookingColor=='red') //confirm
+		{
+			alert('confirm');
+		}
+		else if(bookingColor=='green') //provisional
+		{
+			alert('provisional');
+		}
+		else if(bookingColor=='yellow') //waitlisted
+		{
+			alert('waitlisted');
+		}else{
+			alert('open');
+		}
+	}
+	
+	
 	function funCheckNull(strData){
 		if(strData==null){
 			strData='';
@@ -436,6 +454,9 @@ var strViewType="normal";
 		strViewType=viewName;
 	}
 	
+	function funDialogButtonclick(){
+		
+	}
 	</script>
 
 
@@ -489,11 +510,6 @@ var strViewType="normal";
 				</tr>
 			</table> 
 		
-			
-		<!-- 
-			<table id="tblHeaders"  style="padding-left: 30px;" class="transTable">
-					
-			</table> -->
 			<br>
 			<table id="tblBanquetInfo" class="table table-bordered" >
 			</table>
@@ -515,15 +531,18 @@ var strViewType="normal";
 		</div>
 		
 		<div id="dialog" title="Booking Details">
-			  <table id="tblAreaButtons"  cellpadding="0" cellspacing="2"  >				 																																	
-								<tr>							
-									<c:forEach var="objAreaButtons" items="${command.jsonArrForLocationButtons}"  varStatus="varAreaButtons">
-											<td style="padding-right: 3px;">
-												<input  type="button" id="${objAreaButtons.strLocCode}"  value="${objAreaButtons.strLocName}" tabindex="${varAreaButtons.getIndex()}" onclick="funAreaOptionSelected('${objAreaButtons.strLocCode}','${objAreaButtons.strLocName}')" class="button"/>
-											</td>
-									</c:forEach>																						
-							    </tr>																																				 									   				   									   									   						
-						</table>	
+			  <table id="tblBookingDetails"  cellpadding="0" cellspacing="2"  >				 																																	
+						<tr>
+						<td>
+							<input  type="button" id="btnCancelBooking" value ="Cancle" onclick="funDialogButtonclick(this)" class="button" />
+							<input  type="button" id="btnPayment" value ="payment" onclick="funDialogButtonclick(this)" class="button" />
+							<input  type="button" id="btnProspect" value ="FP" onclick="funDialogButtonclick(this)" class="button" />
+							<input  type="button" id="btnConfirm" value ="Cancle" onclick="funDialogButtonclick(this)" class="button" />
+							<input  type="button" id="btnConfirm" value ="Cancle" onclick="funDialogButtonclick(this)" class="button" />
+						</td>
+						</tr>		
+																																				 									   				   									   									   						
+			</table>	
 		</div>
 
 	</s:form>

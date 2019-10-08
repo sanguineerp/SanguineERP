@@ -75,17 +75,7 @@
 	    $("#strLocationName").val(locationName);
 	    $("#strFinancialYear").val(financialYear);
 	    
-	  	var  moduleName='<%=session.getAttribute("selectedModuleName").toString()%>';
-	    if(moduleName=="3-WebPMS")
-	    	{
-	    //	window.open("frmShowTodayCheckOutRooms.html", "Today's Checkout List", "scrollbars=1,width=530,height=350");
-	    //	window.open("searchform.html?formname="+transactionName+"&POCode="+POCode+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;top=500,left=500")
-	    	return true;
-	    	}else
-		 	{
-		    		 return true;		
-		 	}
-	    
+	  	
 	   
 	 	}
 	}

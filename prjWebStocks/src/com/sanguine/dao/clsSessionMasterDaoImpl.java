@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.sanguine.model.clsGroupMasterModel;
 import com.sanguine.model.clsSessionMasterModel;
 import com.sanguine.model.clsSessionMasterModel_ID;
 

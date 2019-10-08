@@ -942,7 +942,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblCGSTAmt}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="47" y="-1" width="109" height="11" isPrintWhenDetailOverflows="true" uuid="0b0e1fdd-ca2c-4e73-b4dc-f6e5b8206e57">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>

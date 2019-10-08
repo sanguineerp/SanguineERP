@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.sanguine.model.clsBillPassingTaxDtlModel;
 import com.sanguine.model.clsPOTaxDtlModel;
 import com.sanguine.model.clsPurchaseOrderDtlModel;
 import com.sanguine.model.clsPurchaseOrderHdModel;

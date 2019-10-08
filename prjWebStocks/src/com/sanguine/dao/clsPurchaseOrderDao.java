@@ -2,8 +2,6 @@ package com.sanguine.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
-
 import com.sanguine.model.clsPOTaxDtlModel;
 import com.sanguine.model.clsPurchaseOrderDtlModel;
 import com.sanguine.model.clsPurchaseOrderHdModel;

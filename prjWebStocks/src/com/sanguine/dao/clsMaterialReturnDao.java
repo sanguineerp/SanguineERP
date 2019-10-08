@@ -2,8 +2,6 @@ package com.sanguine.dao;
 
 import java.util.List;
 
-import com.sanguine.model.clsMISDtlModel;
-import com.sanguine.model.clsMISHdModel;
 import com.sanguine.model.clsMaterialReturnDtlModel;
 import com.sanguine.model.clsMaterialReturnHdModel;
 

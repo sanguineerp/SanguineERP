@@ -9,6 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 <script type="text/javascript">
+var activeClick='';
 $(document).ready(function() 
 		{		
 		
@@ -51,6 +52,8 @@ function funShowTableGUI(divID)
            
 function funOnClckWaitingBtn( divId)
 {
+	
+	activeClick=$('#btnWaitingList').val();
 	funShowTableGUI(divId)
 	var report=$('#btnWaitingList').val();
 	var frmDte1=$('#dteFromDate').val();
@@ -88,6 +91,7 @@ function funOnClckWaitingBtn( divId)
 
 function funOnClckBookingBtn( divId)
 {
+	activeClick=$('#btnConfirmBooking').val();
 	funShowTableGUI(divId)
 	var report=$('#btnConfirmBooking').val();
 	var frmDte1=$('#dteFromDate').val();
@@ -126,6 +130,7 @@ function funOnClckBookingBtn( divId)
 
 function funOnClckProvisionalBtn( divId)
 {
+	activeClick=$('#btnProvisionalList').val();
 	funShowTableGUI(divId)
 	var report=$('#btnProvisionalList').val();
 	var frmDte1=$('#dteFromDate').val();
@@ -159,10 +164,12 @@ function funOnClckProvisionalBtn( divId)
 	            }		            
 	        }
 	      });
+	
 }
 
 function funOnClckCancelBtn( divId)
 {
+	activeClick=$('#btnCancelList').val();
 	funShowTableGUI(divId)
 	var report=$('#btnCancelList').val();
 	var frmDte1=$('#dteFromDate').val();
@@ -196,6 +203,7 @@ function funOnClckCancelBtn( divId)
 	            }		            
 	        }
 	      });
+	
 }
 
 
@@ -225,19 +233,13 @@ function funBookingDetail(ProdDtl)
 
 function funExportReport()
 {
-
-var frmDte1=$('#dteFromDate').val();
-var toDte1=$('#dteToDate').val();
- if(hidReportName=='divBookingDtl')
- {
-	var report;
-	if($('#btnConfirmBooking').val())
-		{
-		report=$('#btnConfirmBooking').val();
-	    window.location.href = getContextPath()+"/exportBookingFlashDtl.html?frmDte="+frmDte1+"&toDte="+toDte1+"&reportType="+report;
-		}
-	
- }
+	var  click=activeClick;
+	var frmDte1=$('#dteFromDate').val();
+	var toDte1=$('#dteToDate').val();
+	if(hidReportName=='divBookingDtl')
+	{
+		window.location.href = getContextPath()+"/exportBookingFlashDtl.html?frmDte="+frmDte1+"&toDte="+toDte1+"&reportType="+click;
+	}
 }	
 
 </script>
@@ -246,7 +248,7 @@ var toDte1=$('#dteToDate').val();
 </head>
 <body>
 <div id="formHeading">
-		<label>Booking Flash </label>
+		<label>Banquets Flash </label>
 	</div>
 	
 <s:form name="frmBookingFlash" method="GET" action="">

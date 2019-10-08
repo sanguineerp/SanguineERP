@@ -2,8 +2,6 @@ package com.sanguine.dao;
 
 import java.util.List;
 
-import com.sanguine.model.clsProcessMasterModel;
-import com.sanguine.model.clsProdProcessModel;
 import com.sanguine.model.clsWorkOrderDtlModel;
 import com.sanguine.model.clsWorkOrderHdModel;
 

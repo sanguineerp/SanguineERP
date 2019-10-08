@@ -47,7 +47,7 @@ public class clsFunctionMasterModel implements Serializable{
 	@Column(name="strFunctionCode")
 	private String strFunctionCode;
 
-	@Column(name="strFunctionName")
+	@Column(name="strFunctionName",columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String strFunctionName;
 
 	@Column(name="strOperationalYN")
@@ -59,16 +59,16 @@ public class clsFunctionMasterModel implements Serializable{
 	@Column(name="strClientCode")
 	private String strClientCode;
 
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated", nullable = false, updatable = false, columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited", columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String strUserEdited;
 
-	@Column(name="strDateCreated")
+	@Column(name="strDateCreated",  nullable = false, updatable = false, columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String strDateCreated;
 
-	@Column(name="strDateEdited")
+	@Column(name="strDateEdited",  columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String strDateEdited;
 	
 	@Column(name = "intFId", nullable = false)

@@ -3465,7 +3465,14 @@
 	</definition>
 	
 	
-	
+	<definition name="frmWebClubFacilityMaster" extends="base.definition">
+		<put-attribute name="title" value="facility Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmWebClubFacilityMaster.jsp"></put-attribute>
+	</definition>
+	<definition name="frmWebClubFacilityMaster_1" extends="base.definition4">
+		<put-attribute name="title" value="facility Master"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmWebClubFacilityMaster.jsp"></put-attribute>
+	</definition>
 	
 	
 	
@@ -5161,6 +5168,20 @@
 	 	 <put-attribute name="title" value="Booking Flash"  ></put-attribute>
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBookingFlash.jsp" ></put-attribute>
 	  </definition>
+	  
+	  
+	   <definition name="frmBanquetWeekendMaster" extends="base.definition">
+		   <put-attribute name="title" value="Dairy" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetWeekendMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBanquetWeekendMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Dairy"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetWeekendMaster.jsp" ></put-attribute>
+	  </definition>
+	  
+	  
+	  
 <!-- 	End Of WebBanquet Tiles Entry -->
 
 

@@ -33,7 +33,7 @@ public class clsServiceMasterModel implements Serializable{
 	@Column(name="strServiceCode")
 	private String strServiceCode;
 	
-	@Column(name="strServiceName")
+	@Column(name="strServiceName", columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String strServiceName;
 	
 
@@ -43,16 +43,16 @@ public class clsServiceMasterModel implements Serializable{
 	@Column(name="strClientCode")
 	private String strClientCode;
 
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated", nullable = false, updatable = false, columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited", columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String strUserEdited;
 
-	@Column(name="dteDateCreated")
+	@Column(name="dteDateCreated", nullable = false, updatable = false, columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String dteDateCreated;
 
-	@Column(name="dteDateEdited")
+	@Column(name="dteDateEdited", columnDefinition = "VARCHAR(255) NOT NULL default ''")
 	private String dteDateEdited;
 
 	@Column(name="strOperationalYN")

@@ -2,8 +2,6 @@ package com.sanguine.dao;
 
 import java.util.List;
 
-import com.sanguine.model.clsStkAdjustmentDtlModel;
-import com.sanguine.model.clsStkAdjustmentHdModel;
 import com.sanguine.model.clsStkTransferDtlModel;
 import com.sanguine.model.clsStkTransferHdModel;
 

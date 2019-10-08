@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sanguine.model.clsWSCountryMasterModel_ID;
 import com.sanguine.model.clsWSCountryMasterModel;
+import com.sanguine.model.clsWSCountryMasterModel_ID;
 
 @Repository("clsWSCountryMasterDao")
 public class clsWSCountryMasterDaoImpl implements clsWSCountryMasterDao {

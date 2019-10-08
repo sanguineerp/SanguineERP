@@ -8,12 +8,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sanguine.model.clsVehicleMasterModel;
 import com.sanguine.model.clsVehicleMasterModel_ID;
 import com.sanguine.model.clsVehicleRouteModel;
-import com.sanguine.webbooks.model.clsWebBooksAccountMasterModel;
 
 @Repository("clsVehicleMasterDao")
 public class clsVehicleMasterDaoImpl implements clsVehicleMasterDao {

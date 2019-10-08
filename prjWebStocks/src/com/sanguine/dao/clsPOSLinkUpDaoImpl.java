@@ -3,7 +3,6 @@ package com.sanguine.dao;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sanguine.model.clsPOSLinkUpModel;
 import com.sanguine.model.clsPOSLinkUpModel_ID;
