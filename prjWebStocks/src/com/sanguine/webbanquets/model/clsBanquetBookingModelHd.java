@@ -1,14 +1,23 @@
 package com.sanguine.webbanquets.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Table;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.CollectionOfElements;
+
+import com.sanguine.webpms.model.clsBillDtlModel;
 
 @Entity
 @Table(name="tblbqbookinghd")
@@ -22,13 +31,19 @@ public class clsBanquetBookingModelHd implements Serializable{
 		strBookingNo = objModelID.getStrBookingNo();
 		strClientCode = objModelID.getStrClientCode();
 	}
-
+	
+	@CollectionOfElements(fetch = FetchType.LAZY)
+	@JoinTable(name = "tblbqbookingdtl", joinColumns = { @JoinColumn(name = "strBookingNo"), @JoinColumn(name = "strClientCode") })
 	@Id
 	@AttributeOverrides({
-		@AttributeOverride(name="strBookingNo",column=@Column(name="strBookingNo")),
-@AttributeOverride(name="strClientCode",column=@Column(name="strClientCode"))
+		@AttributeOverride(name="strBookingNo",column=@Column(name="strBookingNo")),@AttributeOverride(name="strClientCode",column=@Column(name="strClientCode"))
 	})
-
+	private List<clsBanquetBookingModelDtl> listBanquetBookingDtlModels = new ArrayList<clsBanquetBookingModelDtl>();
+	
+	/*@Id
+	@AttributeOverrides({ @AttributeOverride(name = "strBillNo", column = @Column(name = "strBillNo")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })
+	//private List<clsBillDtlModel> listBillDtlModels = new ArrayList<clsBillDtlModel>();
+*/
 //Variable Declaration
 	@Column(name="strBookingNo")
 	private String strBookingNo;
@@ -250,6 +265,15 @@ public class clsBanquetBookingModelHd implements Serializable{
 
 	public void setStrBookingStatus(String strBookingStatus) {
 		this.strBookingStatus = strBookingStatus;
+	}
+
+	public List<clsBanquetBookingModelDtl> getListBanquetBookingDtlModels() {
+		return listBanquetBookingDtlModels;
+	}
+
+	public void setListBanquetBookingDtlModels(
+			List<clsBanquetBookingModelDtl> listBanquetBookingDtlModels) {
+		this.listBanquetBookingDtlModels = listBanquetBookingDtlModels;
 	}
 
 	//Function to Set Default Values

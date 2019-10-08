@@ -75,8 +75,7 @@ public class clsSearchFormController {
 
 	// Variable For CRM
 	private String strSubConCode = "";
-	private  String strCustCode="";
-
+	private  String strCustCode="",strFunctionCode = "";
 	@RequestMapping(value = "/searchform", method = RequestMethod.GET)
 	public ModelAndView funOpenSearchForm(Map<String, Object> model, @ModelAttribute("formname") String value, BindingResult result, @RequestParam(value = "formname") String formName, @RequestParam(value = "searchText") String search_with, HttpServletRequest req) {
 		if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet"))
@@ -87,6 +86,11 @@ public class clsSearchFormController {
 		else
 		{
 			req.getSession().setAttribute("formName", formName);
+		}
+		
+		if (req.getParameter("functionCode") != null) {
+			strFunctionCode = req.getParameter("functionCode");
+
 		}
 		req.getSession().setAttribute("searchText", search_with);
 
@@ -5694,6 +5698,16 @@ public class clsSearchFormController {
 				
 				flgQuerySelection = true;/*criteria = getCriteriaQuery(columnNames, search_with, tableName);*/
 				searchFormTitle = "Invoice";
+				break;
+			}
+			
+			case "BanquetFunctionService": {
+				columnNames = "a.strServiceCode,a.strServiceName,a.strApplicable ";
+				tableName = " from tblfunctionservice  a where  a.strFunctionCode='"+ strFunctionCode+"' and a.strApplicable='Y' and a.strClientCode='"+ clientCode + "'";
+	            listColumnNames = "Service Code,Service Name,Applicable";
+				idColumnName = "strServiceCode";
+				searchFormTitle = "Function Service";
+				flgQuerySelection = true;
 				break;
 			}
 

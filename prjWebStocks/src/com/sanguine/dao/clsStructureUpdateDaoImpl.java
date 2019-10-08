@@ -3351,52 +3351,51 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblbqbookingdtl` ("
-				+ "`strBookingNo` VARCHAR(10) NOT NULL,"
-				+ "`strType` VARCHAR(20) NOT NULL DEFAULT ' ',"
-				+ "`strDocNo` VARCHAR(10) NOT NULL DEFAULT ' ',"
-				+ "`strDocName` VARCHAR(50) NOT NULL DEFAULT '',"
-				+ "`strClientCode` VARCHAR(10) NOT NULL,"
-				+ "`strBookingDate` DATETIME NOT NULL"
-				+ ") "
-				+ "COLLATE='latin1_swedish_ci' "
-				+ "ENGINE=InnoDB;";
-		
+		sql="CREATE TABLE `tblbqbookingdtl` ( "
+			+" `strBookingNo` VARCHAR(25) NOT NULL, "
+			+" `strType` VARCHAR(20) NOT NULL DEFAULT ' ', "
+			+" `strDocNo` VARCHAR(20) NOT NULL DEFAULT ' ', "
+			+" `strDocName` VARCHAR(50) NOT NULL DEFAULT '', "
+			+" `strClientCode` VARCHAR(20) NOT NULL, "
+			+" `strBookingDate` DATETIME NOT NULL, "
+			+" `dblDocQty` DOUBLE NOT NULL DEFAULT '0', "
+			+" `dblDocRate` DOUBLE NOT NULL DEFAULT '0', " 
+			+" `dblDocTotalAmt` DOUBLE NOT NULL DEFAULT '0' "
+				+" ) "
+		+" COLLATE='latin1_swedish_ci' "
+		+" ENGINE=InnoDB;";
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblbqbookinghd` ("
-				+ "`strBookingNo` VARCHAR(20) NOT NULL,"
-				+ "`strPropertyCode` VARCHAR(20) NOT NULL,"
-				+ "`strBookingStatus` VARCHAR(20) NOT NULL,"
-				+ "`dteBookingDate` DATETIME NOT NULL,"
-				+ "`dteFromDate` DATETIME NOT NULL,"
-				+ "`dteToDate` DATETIME NOT NULL,"
-				+ "`tmeFromTime` VARCHAR(10) NOT NULL,"
-				+ "`tmeToTime` VARCHAR(10) NOT NULL,"
-				+ "`strUserCreated` VARCHAR(25) NOT NULL,"
-				+ "`strUserEdited` VARCHAR(25) NOT NULL,"
-				+ "`dteDateCreated` DATETIME NOT NULL,"
-				+ "`dteDateEdited` DATETIME NOT NULL,"
-				+ "`strCustomerCode` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`strEmailID` VARCHAR(30) NOT NULL DEFAULT '',"
-				+ "`intMinPaxNo` INT(11) NOT NULL DEFAULT '0',"
-				+ "`intMaxPaxNo` INT(11) NOT NULL DEFAULT '0',"
-				+ "`strClientCode` VARCHAR(20) NOT NULL,"
-				+ "`strEventCoordinatorCode` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`strAreaCode` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`strFunctionCode` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`strBillingInstructionCode` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "PRIMARY KEY (`strBookingNo`, `strClientCode`)"
-				+ ") "
-				+ "COLLATE='latin1_swedish_ci' "
-				+ "ENGINE=InnoDB;";
-		
+		sql="CREATE TABLE `tblbqbookinghd` ( "
+			+" `strBookingNo` VARCHAR(30) NOT NULL, "
+			+" `strClientCode` VARCHAR(20) NOT NULL, "
+			+" `dteBookingDate` DATETIME NOT NULL, "
+			+" `dblBookingAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.0000', "
+			+" `dteDateCreated` DATETIME NOT NULL, "
+			+" `dteDateEdited` DATETIME NOT NULL, "
+			+" `dteFromDate` DATETIME NOT NULL, "
+			+" `dteToDate` DATETIME NOT NULL, "
+			+" `intMaxPaxNo` BIGINT(20) NOT NULL, "
+			+" `intMinPaxNo` BIGINT(20) NOT NULL, "
+			+" `strAreaCode` VARCHAR(20) NOT NULL, "
+			+" `strBillingInstructionCode` VARCHAR(20) NOT NULL, "
+			+" `strBookingStatus` VARCHAR(20) NOT NULL, "
+			+" `strCustomerCode` VARCHAR(20) NOT NULL, "
+			+" `strEmailID` VARCHAR(50) NOT NULL, "
+			+" `strEventCoordinatorCode` VARCHAR(20) NOT NULL, "
+			+" `strFunctionCode` VARCHAR(20) NOT NULL, "
+			+" `strPropertyCode` VARCHAR(20) NOT NULL, " 
+			+" `strUserCreated` VARCHAR(30) NOT NULL, "
+			+" `strUserEdited` VARCHAR(30) NOT NULL, "
+			+" `tmeFromTime` VARCHAR(15) NOT NULL, "
+			+" `tmeToTime` VARCHAR(15) NOT NULL, "
+			+" PRIMARY KEY (`strBookingNo`, `strClientCode`) "
+		+" ) "
+		+" COLLATE='utf8_general_ci' "
+		+" ENGINE=InnoDB;";
 		funExecuteBanquetQuery(sql);
 		
-		sql="ALTER TABLE `tblbqbookinghd`"
-				+ "ADD COLUMN `dblBookingAmt` DOUBLE NOT NULL AFTER `dteBookingDate`;";
 		
-		funExecuteBanquetQuery(sql);
 		
 		sql="ALTER TABLE `tblequipment`"
 				+ "ADD COLUMN `strDeptCode` VARCHAR(10) NOT NULL AFTER `intId`;";
@@ -3409,10 +3408,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql = "ALTER TABLE `tblbqbookinghd`"
-				+ "ADD COLUMN `dblBookingAmt` DOUBLE NOT NULL AFTER `strBookingStatus`;";
 		
-		funExecuteBanquetQuery(sql);
 		
 		sql="ALTER TABLE `tblequipment`"
 				+ "ADD COLUMN `dblEquipmentRate` DECIMAL(18,4) NOT NULL DEFAULT '0.0' AFTER `strDeptCode`;";

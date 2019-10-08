@@ -179,4 +179,22 @@ public class clsFunctionMasterController{
 		return list;
 	}
 
+	@RequestMapping(value = "/loadFunctionServiceData", method = RequestMethod.GET)
+	public @ResponseBody List funLoadFunctionServiceMasterData(@RequestParam("functionCode") String funCode,@RequestParam("ServiceCode") String ServiceCode,HttpServletRequest req)
+	{
+		List list =null;
+		try{
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String 	 sql="select a.strServiceCode,a.strServiceName,b.dblRate from tblfunctionservice a,tblservicemaster b where "
+					+ " a.strServiceCode=b.strServiceCode and   a.strFunctionCode='"+funCode+"' and a.strServiceCode='"+ServiceCode+"' and a.strClientCode='"+clientCode+"' ";
+			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
+			}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return list;
+	}
+
+
 }

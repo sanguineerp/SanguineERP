@@ -147,7 +147,7 @@ public class clsClientDetails {
 			hmClientDtl.put("175.001", clsClientDetails.createClientDetails("175.001", "COPPER STORY PRIVATE LIMITED", dFormat.parse("2017-06-06"), dFormat.parse("2019-06-12")));//Renewed on 06-02-2019 for 15 days till 20-02-2019 //renewed licence and rename TJS to Copper story privated limited till 01-02-2019 //renewed on 6-10-18 till 15-10-18 //renewed on 22-9-2018 for 8 days till 30-9-2018 //renewed on 8-9-2018 for 8 days till 15-09-2018//renewed on 03-07-2018 for 7 days till 10-07-2018
 			hmClientDtl.put("178.001", clsClientDetails.createClientDetails("178.001", "UNWIND", dFormat.parse("2017-07-27"), dFormat.parse("2020-06-25")));//renewd for 1 year on 27-06-2019 till 2020-06-25
 			hmClientDtl.put("181.001", clsClientDetails.createClientDetails("181.001", "RMV COMMUNICATION PVT LTD", dFormat.parse("2017-06-20"), dFormat.parse("2017-07-20")));
-			hmClientDtl.put("184.001", clsClientDetails.createClientDetails("184.001", "BALAJI TRADERS PVT LTD", dFormat.parse("2017-07-03"), dFormat.parse("2018-01-07")));
+			hmClientDtl.put("184.001", clsClientDetails.createClientDetails("184.001", "BALAJI TRADERS PVT LTD", dFormat.parse("2017-07-03"), dFormat.parse("2020-01-07")));
 			hmClientDtl.put("189.001", clsClientDetails.createClientDetails("189.001", "CLASSIC BANGLES", dFormat.parse("2017-08-31"), dFormat.parse("2018-08-10"))); // for demo
 			hmClientDtl.put("193.001", clsClientDetails.createClientDetails("193.001", "PRECISION FOOD WORKS", dFormat.parse("2017-08-25"), dFormat.parse("2019-09-04")));//renewed on 24-09-2018 for 1 year 
 			hmClientDtl.put("194.001", clsClientDetails.createClientDetails("194.001", "SWIG", dFormat.parse("2017-09-11"), dFormat.parse("2020-09-08"))); // Name

@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
 
-	var fieldName,listRow=0;
+	var fieldName,listServiceRow=0,listEquipRow=0,listStaffRow=0,listItemRow=0;
 	var totalTerrAmt = 0.0;
 	  $(document).ready(function(){
 		    
@@ -185,11 +185,29 @@
 		
 		
 	});
-	
+	 var functionCode=""
 	function funHelp(transactionName)
 	{
 		fieldName=transactionName;
-		window.open("searchform.html?formname="+transactionName+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+		functionCode=$("#txtFunctionCode").val();
+		if(transactionName =="FunctionService")
+		{
+			if(functionCode.length >0)
+			{
+				window.open("searchform.html?formname="+transactionName+"&functionCode="+functionCode+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+			}
+			else
+			{
+				alert("Please Select Function code");
+			}		
+			
+		}
+		else
+		{
+			window.open("searchform.html?formname="+transactionName+"&functionCode="+functionCode+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
+			
+		}	
+		
 		//window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;");
 	}
 
@@ -197,7 +215,10 @@
 	function funSetData(code){
 
 		switch(fieldName){
-
+		
+		    case 'custMaster' : 
+		    	funSetCustomer(code);
+				break;
 			case 'PropertyWiseLocation' : 
 				funSetAreaCode(code);
 				break;
@@ -206,7 +227,26 @@
 				break;
 			case 'BillingInstCode' : 
 				funSetBillingInstCode(code);
-				break;	
+				break;
+			case 'FunctionService' : 
+				 funSetServiceData(code);
+				 break;
+			case 'equipmentCode' : 
+				 funSetEquipmentName(code);
+			     break;
+			case 'ItemCode' : 
+				 funSetItemData(code);
+				 break;
+			
+			case 'StaffCatCode' : 
+				funSetCatData(code);
+				 break;
+		    case 'StaffCode' : 
+				funSetStaffData(code);
+				 break;
+				 
+			
+				
 				
 			/* case 'PropertyCode' : 
 				funSetPropertyCode(code);
@@ -274,7 +314,48 @@
 			
 		} 
 	}
-
+	function funSetCustomer(code)
+	{
+		gurl=getContextPath()+"/loadPartyMasterData.html?partyCode=";
+		$.ajax({
+	        type: "GET",
+	        url: gurl+code,
+	        dataType: "json",
+	    
+	        success: function(response)
+	        {		        	
+	        		if('Invalid Code' == response.strPCode){
+	        			alert("Invalid Customer Code");
+	        			$("#txtCustomerCode").val('');
+	        			$("#txtCustomerCode").focus();
+	        			  
+	        		}else{
+	        			$("#txtCustomerCode").val(response.strPCode);
+						$("#txtCustomerName").val(response.strPName);
+						$("#txtMobileNo").val(response.strMobile);
+						
+	        		}
+			},
+			error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }		            
+	        }
+      });
+	}
+	
 	function funSetAreaCode(code){
 
 		$.ajax({
@@ -342,7 +423,7 @@
 		});
 	}
 
-
+	// 
 	function funSetStaffCode(code)
 	{
 			var searchUrl="";
@@ -380,6 +461,41 @@
 	}
 	
 	
+	function funSetStaffData(code)
+	{
+			var searchUrl="";
+			searchUrl=getContextPath()+"/loadStaffMasterData.html?staffCode="+code;			
+			$.ajax({
+			        type: "GET",
+			        url: searchUrl,
+				    dataType: "json",
+				    success: function(response)
+				    { 
+				    	$("#txtEventCoordinatorCode").val(code);
+				    	$("#lblEventCoordinatorCode").val(response.strStaffName);
+				    	
+				    },
+				    error: function(jqXHR, exception) {
+			            if (jqXHR.status === 0) {
+			               alert('Not connect.n Verify Network.');
+			            } else if (jqXHR.status == 404) {
+			               alert('Requested page not found. [404]');
+			            } else if (jqXHR.status == 500) {
+			               alert('Internal Server Error [500].');
+			            } else if (exception === 'parsererror') {
+			               alert('Requested JSON parse failed.');
+			            } else if (exception === 'timeout') {
+			               alert('Time out error.');
+			            } else if (exception === 'abort') {
+			               alert('Ajax request aborted.');
+			            } else {
+			               alert('Uncaught Error.n' + jqXHR.responseText);
+			            }		            
+			        }
+			      });
+		
+		
+	}
 	
 	
 	
@@ -403,7 +519,7 @@
 				{
 					$("#txtFunctionCode").val(response.strFunctionCode);
 	        		$("#lblFunctionName").text(response.strFunctionName);
-	        		funSetServiceData(response.strFunctionCode)
+	        		
 	        		
 				}
 
@@ -429,26 +545,21 @@
 		});
 	}
 	
-	function funSetServiceData(code)
+	function funSetServiceData(ServiceCode)
 	{
-		
-		var searchurl=getContextPath()+ "/loadFunctionMasterData.html?functionCode=" + code;
+		var funcode=$("#txtFunctionCode").val();
+		var searchurl=getContextPath()+ "/loadFunctionServiceData.html?functionCode=" + funcode +"&ServiceCode="+ServiceCode;
 		$.ajax({
 			type : "GET",
 			url : searchurl,
 			dataType : "json",
 			success : function(response)
 			{ 
-        		if(response.listService.length>0)
-        			{
-        			funRemAllRows("tblService");
-        			$.each(response.listService, function(i,item)
-        		       {
-        				    funfillServiceRow(response.listService[i].strServiceCode,response.listService[i].strServiceName,response.listService[i].strApplicable);
-        			   });
-        			}
-				
-
+				$.each(response, function(i,item)
+	                {
+				funfillServiceRow(response[i][0],response[i][1],response[i][2]);
+			    });
+	        	
 			},
 			error : function(jqXHR, exception){
 				if (jqXHR.status === 0) {
@@ -470,25 +581,9 @@
 			}
 		});
 	}
-	function funfillServiceRow(ServiceCode,ServiceName,applicable)
-    {
-			
-			var checked=true;
-			var table = document.getElementById("tblServiceDtl");
-		    var rowCount = table.rows.length;
-		    var row = table.insertRow(rowCount);
-		    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listServiceDtl["+(rowCount)+"].strServiceCode\"  id=\"txtServiceCode."+(rowCount)+"\" value='"+ServiceCode+"' />";
-		    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listServiceDtl["+(rowCount)+"].strServiceName\"  id=\"txtServiceName."+(rowCount)+"\" value='"+ServiceName+"'/>";
-		    if(applicable=='Y'){
-		    	row.insertCell(2).innerHTML= "<input id=\"chkApplicable."+(rowCount)+"\" style=\"text-align:right;\" type=\"checkbox\" class=\"GCheckBoxClass\"  name=\"listServiceDtl["+(rowCount)+"].strApplicable\" checked=\"checked\"  value='"+checked+"' />"; /*  checked=\"checked\"  */
-		    }else{
-		    	row.insertCell(2).innerHTML= "<input id=\"chkApplicable."+(rowCount)+"\" style=\"text-align:right;\" type=\"checkbox\" class=\"GCheckBoxClass\"  name=\"listServiceDtl["+(rowCount)+"].strApplicable\"  value=\"false\" />"; /*  checked=\"checked\"  */	
-		    }
-		     
-		    
-	 }
+	//  
 	
-	function funSetEquipmentDtl(code){
+	function funSetEquipmentName(code){
 
 		$.ajax({
 			type : "GET",
@@ -496,22 +591,193 @@
 			dataType : "json",
 			success : function(response){ 
 
-				if(response.strEquipmentCode=='Invalid Code')
-	        	{
-	        		alert("Invalid Equipment No");
-	        		$("#txtEquipmentCode").val('');
-	        	}
-	        	else
-	        	{
-	        		$("#strOperational").val(response.strOperational);
-	        		$("#txtEquipmentName").val(response.strEquipmentName);
-	        		$("#txtEquipmentCode").val(response.strEquipmentCode);
-	        	}
+				
+				funfillEquipmentDtlRow(response.strEquipmentCode,response.strEquipmentName,response.dblEquipmentRate);
+	        		
+	        	
 			},
-			error : function(e){
+			error : function(jqXHR, exception){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }			
 
 			}
 		});
+	
+	}
+	//
+	function funSetCatData(code)
+	{
+			var searchUrl="";
+			searchUrl=getContextPath()+"/loadStaffCategeoryMasterData.html?staffCatCode="+code;			
+			$.ajax({
+			        type: "GET",
+			        url: searchUrl,
+				    dataType: "json",
+				    success: function(response)
+				    {
+				    	funfillStaffCatRow(response.strStaffCategeoryCode,response.strStaffCategeoryName);
+				    	
+				    },
+				    error: function(jqXHR, exception) {
+			            if (jqXHR.status === 0) {
+			               alert('Not connect.n Verify Network.');
+			            } else if (jqXHR.status == 404) {
+			               alert('Requested page not found. [404]');
+			            } else if (jqXHR.status == 500) {
+			               alert('Internal Server Error [500].');
+			            } else if (exception === 'parsererror') {
+			               alert('Requested JSON parse failed.');
+			            } else if (exception === 'timeout') {
+			               alert('Time out error.');
+			            } else if (exception === 'abort') {
+			               alert('Ajax request aborted.');
+			            } else {
+			               alert('Uncaught Error.n' + jqXHR.responseText);
+			            }		            
+			        }
+			      });
+		
+		
+	}
+
+
+	function funSetItemData(code)
+	{
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadItemCode.html?docCode=" + code,
+			dataType : "json",
+			success : function(response){ 
+				
+					funfillMenuItemDtlRow(response.strMenuHeadCode,response.strItemCode,response.strItemName,response.dblAmount);
+	        		
+			    },
+			error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }		            
+	        }
+		});
+	}
+
+	function funfillServiceRow(ServiceCode,ServiceName,Rate)
+	{
+		
+		var checked=true;
+		var table = document.getElementById("tblServiceDtl");
+	    var rowCount = table.rows.length;
+	    var row = table.insertRow(rowCount);
+	    rowCount=listServiceRow;
+	    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"15%\" name=\"listSeriveDtl["+(rowCount)+"].strDocNo\"  id=\"txtServiceCode."+(rowCount)+"\" value='"+ServiceCode+"' />";
+	    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"40%\" name=\"listSeriveDtl["+(rowCount)+"].strDocName\"  id=\"txtServiceName."+(rowCount)+"\" value='"+ServiceName+"'/>";
+	    row.insertCell(2).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"25%\" style=\"padding-right: 5px;text-align: right;\"  name=\"listSeriveDtl["+(rowCount)+"].dblDocRate\"  id=\"txtServiceRate."+(rowCount)+"\" value='"+Rate+"'/>";
+	    row.insertCell(3).innerHTML= '<input type="button" class="deletebutton" value = "Delete"  onClick="Javacsript:funDeleteRow(this)">';	   
+	    listServiceRow++;
+	     
+	    
+	}
+
+	function funfillEquipmentDtlRow(EquipCode,EquipName,EquipRate)
+	{
+		
+		var checked=true;
+		var table = document.getElementById("tblEquipDtl");
+	    var rowCount = table.rows.length;
+	    rowCount=listEquipRow;
+	    var row = table.insertRow(rowCount);
+	    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listEquipDtl["+(rowCount)+"].strDocNo\"  id=\"txtEquipCode."+(rowCount)+"\" value='"+EquipCode+"' />";
+	    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listEquipDtl["+(rowCount)+"].strDocName\"  id=\"txtEquipName."+(rowCount)+"\" value='"+EquipName+"'/>";
+	    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listEquipDtl["+(rowCount)+"].dblDocQty\"  id=\"txtEquipQty."+(rowCount)+"\" value='1'/>";
+	    row.insertCell(3).innerHTML= "<input  readonly=\"readonly\" class=\"Box \" style=\"padding-right: 5px;text-align: right;\" size=\"25%\" name=\"listEquipDtl["+(rowCount)+"].dblDocRate\"  id=\"txtEquipRate."+(rowCount)+"\" value='"+EquipRate+"'/>";
+	    row.insertCell(4).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRow(this)">';		    
+	    listEquipRow++;
+	     
+	    
+	}
+	
+	function funfillStaffCatRow(StaffCatCode,StaffCatName)
+	{
+		var checked=true;
+		var table = document.getElementById("tblStaffCatDtl");
+	    var rowCount = table.rows.length;
+	    rowCount=listStaffRow;
+	    var row = table.insertRow(rowCount);
+	    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocNo\"  id=\"txtStaffCatCode."+(rowCount)+"\" value='"+StaffCatCode+"' />";
+	    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocName\"  id=\"txtStaffCatName."+(rowCount)+"\" value='"+StaffCatName+"'/>";
+	    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listStaffCatDtl["+(rowCount)+"].dblDocQty\"  id=\"txtStaffCatNumber."+(rowCount)+"\" value='0'/>";
+	    row.insertCell(3).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRow(this)">';		    
+	    listStaffRow++;
+	    
+	}
+	function funfillMenuItemDtlRow(MenuCode,ItemCode,ItemName,ItemRate)
+	{
+		var table = document.getElementById("tblMenuDtl");
+	    var rowCount = table.rows.length;
+	    rowCount=listItemRow;
+	    var row = table.insertRow(rowCount);
+	    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\"   id=\"txtMenuCode."+(rowCount)+"\" value='"+MenuCode+"' />";
+	    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listMenuItemDtl["+(rowCount)+"].strDocNo\"  id=\"txtItemCode."+(rowCount)+"\" value='"+ItemCode+"'/>";
+	    row.insertCell(2).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listMenuItemDtl["+(rowCount)+"].strDocName\"  id=\"txtItemName."+(rowCount)+"\" value='"+ItemName+"'/>";
+	    row.insertCell(3).innerHTML= "<input  class=\"decimal-places-amt\" size=\"5%\" name=\"listMenuItemDtl["+(rowCount)+"].dblDocQty\"  id=\"txtItemQty."+(rowCount)+"\" value='1'/>";
+	    row.insertCell(4).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"15%\" style=\"padding-right: 5px;text-align: right;\"  name=\"listMenuItemDtl["+(rowCount)+"].dblDocRate\"  id=\"txtServiceName."+(rowCount)+"\" value='"+ItemRate+"'/>";
+	    row.insertCell(5).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRow(this)">';	
+
+	    listItemRow++;
+	     
+	    
+	}
+	function funDeleteRow(obj)
+	{
+		
+		switch('tblServiceDtl'){
+		
+	    case 'tblServiceDtl' : 
+	    	 var index = obj.parentNode.parentNode.rowIndex;
+	 	     var table = document.getElementById("tblServiceDtl");
+	 	     table.deleteRow(index);
+			 break;
+		case 'tblEquipDtl' : 
+			 var index = obj.parentNode.parentNode.rowIndex;
+			 var table = document.getElementById("tblEquipDtl");
+			 table.deleteRow(index);
+			 break;
+		case 'tblStaffCatDtl' : 	
+			 var index = obj.parentNode.parentNode.rowIndex;
+			 var table = document.getElementById("tblStaffCatDtl");
+			 table.deleteRow(index);
+			 break;
+		case 'tblMenuDtl' : 
+			 var index = obj.parentNode.parentNode.rowIndex;
+			 var table = document.getElementById("tblMenuDtl");
+			 table.deleteRow(index);
+			 break;
+	   
+	}
 	}
 <%-- 	
 	function funSetReservationNo(code){
@@ -2246,6 +2512,7 @@
 					<li data-state="tab2" style="width: 8%; padding-left: 1%">Service</li>
 			   	    <li data-state="tab3" style="width: 8%; padding-left: 1%">Equipment</li>
 			   	    <li data-state="tab4" style="width: 8%; padding-left: 1%">Staff Category</li>
+			   	    <li data-state="tab5" style="width: 8%; padding-left: 1%">Menu</li>
 					
 				
 				</ul>
@@ -2400,7 +2667,7 @@
 			<tr>
 				<td><label>Event Co-Ordinator</label></td>
 				<td>
-					<s:input  type="text" id="txtEventCoordinatorCode" path="strEventCoordinatorCode" cssClass="searchTextBox" ondblclick="funHelp('marketsource');"/>
+					<s:input  type="text" id="txtEventCoordinatorCode" path="strEventCoordinatorCode" cssClass="searchTextBox" ondblclick="funHelp('StaffCode');"/>
 						&nbsp;&nbsp;&nbsp;<label id="lblEventCoordinatorCode"></label>
 				</td>
 			
@@ -2425,11 +2692,13 @@
 			<table class="transTable">
 				
 				<tr>
-					<td><label>Mobile No</label></td>
-					<td><input type="text" id="txtMobileNo" class="longTextBox" /></td>
+				<td><label>Customer Code</label></td>
+					<td><s:input  type="text" id="txtCustomerCode"  path="strCustomerCode" ondblclick="funHelp('custMaster');" class="searchTextBox" /></td>
 					
-					<td><label>Customer Code</label></td>
-					<td><input id="txtCustomerCode"  path="strCustomerCode" ondblclick="funHelp('guestCode');" class="searchTextBox" /></td>
+					
+					<td><label id="lblGFirstName"> Name</label></td>
+					<td><input type="text" id="txtCustomerName" class="longTextBox" /></td>
+					
 					<td>
 					<input type="Button" value="New Costomer" onclick="return funCreateNewGuest()" class="form_button" />
 					</td>
@@ -2437,14 +2706,9 @@
 				</tr>
 				
 				<tr>
-					<td><label id="lblGFirstName">First Name</label></td>
-					<td><input type="text" id="txtGFirstName" class="longTextBox" /></td>
-					
-					<td><label id="lblGMiddleName">Middle Name</label></td>
-					<td><input type="text" id="txtGMiddleName" class="longTextBox" /></td>
-					
-					<td><label id="lblGLastName">Last Name</label></td>
-					<td><input type="text" id="txtGLastName" class="longTextBox" /></td>
+					<td><label>Mobile No</label></td>
+					<td><input type="text" id="txtMobileNo" class="longTextBox" /></td>
+			
 					<td colspan="1"></td>
 				</tr>
 				<!-- <tr>
@@ -2527,21 +2791,41 @@
 
 	<div id="tab3" class="tab_content" style="height: 400px">
 	<!-- Generate Dynamic Table   -->		
-	<br/><br/><br/>
+	<br/><br/>
+	<table class="transTable">
+	 	   <tr>
+	 	   <td width="100px"><label>Equipment Code</label></td>
+			   <!--  <td><label>Function Code</label></td> -->
+			    <td><s:input id="txtEquipmentCode" path=""  readonly="true"  ondblclick="funHelp('equipmentCode')" cssClass="searchTextBox"/>
+			     <label id="lblEquipmentCode"></label>
+			    </td>
+			      
+		</tr>
+			  
+		</table>
+		<br/>
 		<div class="dynamicTableContainer" style="height: 400px; width: 80%">
 			<table style="height: 28px; border: #0F0; width: 100%;font-size:11px; font-weight: bold;">
 				<tr bgcolor="#72BEFC" style="height: 24px;">
 					<!-- col1   -->
-					<td align="center" style="width: 20%">Equipment Code</td>
+					<td align="center" style="width: 15%">Equipment Code</td>
 					<!-- col1   -->
 					
 					<!-- col2   -->
-					<td align="center" style="width: 60%">Equipment Name</td>
+					<td align="center" style="width: 40%">Equipment Name</td>
 					<!-- col2   -->
 					
 					<!-- col3   -->
-					<td align="center"">Select</td>
+					<td align="center" style="width: 10%">Qty</td>
 					<!-- col3   -->
+					
+					<!-- col4   -->
+					<td align="center" style="width: 20%">Rate</td>
+					<!-- col4   -->
+					
+					<!-- col5   -->
+					<td align="center"">Delete</td>
+					<!-- col5   -->
 					
 													
 				</tr>
@@ -2550,16 +2834,24 @@
 				<table id="tblEquipDtl" style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll" class="transTablex col3-center">
 					<tbody>
 						<!-- col1   -->
-						<col width="100%">
+						<col width="16%">
 						<!-- col1   -->
 						
 						<!-- col2   -->
-						<col width="100%" >
+						<col width="42.5%" >
 						<!-- col2   -->
 						
-						<!-- col2   -->
-						<col width="100%" >
-						<!-- col2   -->
+						<!-- col3   -->
+						<col width="10.5%" >
+						<!-- col3   -->
+						
+						<!-- col4   -->
+						<col width="21.5%" >
+						<!-- col4   -->
+						
+						<!-- col5   -->
+						<col width="14%" >
+						<!-- col5   -->
 						
 					</tbody>
 				</table>
@@ -2586,7 +2878,11 @@
 			   <!--  <td><label>Function Code</label></td> -->
 			    <td><s:input id="txtFunctionCode" path="strFunctionCode"  readonly="true"  ondblclick="funHelp('functionMaster')" cssClass="searchTextBox"/>
 			     <label id="lblFunctionName"></label>
-			    </td>		    
+			    </td>
+			    <td><label>Service Code</label></td>
+				<td><s:input type="text" id="txtSeriveCode" path="" cssClass="searchTextBox" ondblclick="funHelp('FunctionService');"/>
+				<label id="lblSeriveName"></label></td>
+				<td colspan="2"></td>		    
 		</tr>
 			  <%--   <td><label>Package Name</label></td>
 			    <td><s:input id="txtPackageName" path="strPackageName" class="longTextBox" /></td> --%>
@@ -2616,11 +2912,15 @@
 					<!-- col1   -->
 					
 					<!-- col2   -->
-					<td align="center" style="width: 60%">Service Name</td>
+					<td align="center" style="width: 50%">Service Name</td>
+					<!-- col2   -->
+					
+						<!-- col2   -->
+					<td align="center" style="width: 20%">Rate</td>
 					<!-- col2   -->
 					
 					<!-- col3   -->
-					<td align="center"">Select</td>
+					<td align="center"">Delete</td>
 					<!-- col3   -->
 					
 													
@@ -2629,18 +2929,19 @@
 			<div style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 400px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
 				<table id="tblServiceDtl" style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll" class="transTablex col3-center">
 					<tbody>
+						<col width="35%">
 						<!-- col1   -->
-						<col width="100%">
-						<!-- col1   -->
 						
 						<!-- col2   -->
-						<col width="100%" >
+						<col width="90%">
+						<!-- col2   -->
+							<!-- col2   -->
+						<col width="35%">
 						<!-- col2   -->
 						
 						<!-- col2   -->
-						<col width="100%" >
+						<col width="15%">
 						<!-- col2   -->
-						
 					</tbody>
 				</table>
 			</div>			
@@ -2652,7 +2953,19 @@
 	 
 	 <div id="tab4" class="tab_content" style="height: 400px">
 	<!-- Generate Dynamic Table   -->		
-	<br/><br/><br/>
+	<br/><br/>
+	<table class="transTable">
+	 	   <tr>
+	 	   <td width="130px"><label>Staff Category Code</label></td>
+			   <!--  <td><label>Function Code</label></td> -->
+			    <td><s:input id="txtStaffCatCode" path=""  readonly="true"  ondblclick="funHelp('StaffCatCode')" cssClass="searchTextBox"/>
+			     <label id="lblStaffCatCode"></label>
+			    </td>
+			      
+		</tr>
+			  
+		</table>
+		<br/>
 		<div class="dynamicTableContainer" style="height: 400px; width: 80%">
 			<table style="height: 28px; border: #0F0; width: 100%;font-size:11px; font-weight: bold;">
 				<tr bgcolor="#72BEFC" style="height: 24px;">
@@ -2661,11 +2974,15 @@
 					<!-- col1   -->
 					
 					<!-- col2   -->
-					<td align="center" style="width: 60%">Staff Category Name</td>
+					<td align="center" style="width: 45%">Staff Category Name</td>
+					<!-- col2   -->
+					
+					<!-- col2   -->
+					<td align="center" style="width: 20%">Number</td>
 					<!-- col2   -->
 					
 					<!-- col3   -->
-					<td align="center"">Number</td>
+					<td align="center"">Delete</td>
 					<!-- col3   -->
 					
 													
@@ -2675,15 +2992,106 @@
 				<table id="tblStaffCatDtl" style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll" class="transTablex col3-center">
 					<tbody>
 						<!-- col1   -->
-						<col width="100%">
+						<col width="19%">
 						<!-- col1   -->
 						
 						<!-- col2   -->
-						<col width="100%" >
+						<col width="43%" >
 						<!-- col2   -->
 						
 						<!-- col2   -->
-						<col width="100%" >
+						<col width="20%" >
+						<!-- col2   -->
+						
+						<!-- col2   -->
+						<col width="13%" >
+						<!-- col2   -->
+						
+					</tbody>
+				</table>
+			</div>			
+	
+	
+	</div>
+	<%-- <div style="margin:auto;width: 25%; float:right; margin-right:100px; ">
+	<label>Total</label>
+	<td><s:input id="txtTotalAmt" path=""  readonly="true" cssClass="shortTextBox"/></td>
+	</div> --%>
+	</div>
+	
+	 <div id="tab5" class="tab_content" style="height: 400px">
+	<!-- Generate Dynamic Table   -->		
+	<br/><br/>
+	<table class="transTable">
+	 	   <tr>
+	 	   <td width="130px"><label>Item Code</label></td>
+			   <!--  <td><label>Function Code</label></td> -->
+			    <td><s:input id="txtItemCode" path=""  readonly="true"  ondblclick="funHelp('ItemCode')" cssClass="searchTextBox"/>
+			     <label id="lblItemCode"></label>
+			    </td>
+			      
+		</tr>
+			  
+		</table>
+		<br/>
+		<div class="dynamicTableContainer" style="height: 400px; width: 80%">
+			<table style="height: 28px; border: #0F0; width: 100%;font-size:11px; font-weight: bold;">
+				<tr bgcolor="#72BEFC" style="height: 24px;">
+					<!-- col1   -->
+					<td align="center" style="width: 15%">Menu Code</td>
+					<!-- col1   -->
+					
+					<!-- col1   -->
+					<td align="center" style="width: 15%">Item Code</td>
+					<!-- col1   -->
+					
+					
+					<!-- col2   -->
+					<td align="center" style="width: 30%">Item Name</td>
+					<!-- col2   -->
+					
+					<!-- col2   -->
+					<td align="center" style="width: 12%">Qty</td>
+					<!-- col2   -->
+					
+					<!-- col2   -->
+					<td align="center" style="width: 15%">Rate</td>
+					<!-- col2   -->
+					
+					<!-- col3   -->
+					<td align="center"">Delete</td>
+					
+					<!-- col3   -->
+					
+													
+				</tr>
+			</table>
+			<div style="background-color: #a4d7ff; border: 1px solid #ccc; display: block; height: 400px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
+				<table id="tblMenuDtl" style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll" class="transTablex col3-center">
+					<tbody>
+						<!-- col1   -->
+						<col width="20%">
+						<!-- col1   -->
+						
+						<!-- col2   -->
+						<col width="20%" >
+						<!-- col2   -->
+						
+						<!-- col2   -->
+						<col width="40%" >
+						<!-- col2   -->
+						
+						<!-- col2   -->
+						<col width="10%" >
+						<!-- col2   -->
+						
+						
+						<!-- col2   -->
+						<col width="20%" >
+						<!-- col2   -->
+						
+						<!-- col2   -->
+						<col width="15%" >
 						<!-- col2   -->
 						
 					</tbody>
