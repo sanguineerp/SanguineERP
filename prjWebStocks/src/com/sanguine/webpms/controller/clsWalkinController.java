@@ -331,7 +331,7 @@ public class clsWalkinController {
 	}
 
 	// Save or Update Walkin
-	@RequestMapping(value = "/saveWalkin", method = RequestMethod.GET)
+	@RequestMapping(value = "/saveWalkin", method = RequestMethod.POST)
 	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsWalkinBean objBean, BindingResult result, HttpServletRequest req) {
 		if (!result.hasErrors()) {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();

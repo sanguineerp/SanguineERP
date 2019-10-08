@@ -208,77 +208,142 @@ public class clsProFormaInvoice {
 			clsLocationMasterModel objLocationMasterModel = null;
 			clsPartyMasterModel objPartyMasterModel = null;
 
-			if(objDC!=null)
+			String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
+			if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
 			{
-				for (int i = 0; i < objDC.size(); i++) {
-					Object[] ob = (Object[]) objDC.get(i);
-					objInvoiceHdModel = (clsProFormaInvoiceHdModel) ob[0];
-					objLocationMasterModel = (clsLocationMasterModel) ob[1];
-					objPartyMasterModel = (clsPartyMasterModel) ob[2];
+				String sqlData = "select * from tblproformainvoicehd a where a.strInvCode='"+invCode+"' and a.strClientCode='"+clientCode+"'";
+				
+				List SOHelpList = objGlobalFunctionsService.funGetList(sqlData, "sql");
+				for (int k=0;k<SOHelpList.size();k++) {
+					Object[] objArr = (Object[]) SOHelpList.get(k);
+					
+					objBeanInv.setStrInvCode(objArr[0].toString());
+					objBeanInv.setIntid(Integer.parseInt(objArr[1].toString()));
+					objBeanInv.setDteInvDate(objArr[2].toString());
+					objBeanInv.setStrAgainst(objArr[3].toString());
+					objBeanInv.setStrSOCode(objArr[4].toString());
+					objBeanInv.setStrCustCode(objArr[5].toString());
+					objBeanInv.setStrPONo(objArr[6].toString());
+					objBeanInv.setStrNarration(objArr[7].toString());
+					objBeanInv.setStrPackNo(objArr[8].toString());
+					
+					objBeanInv.setStrLocCode(objArr[9].toString());
+					objBeanInv.setStrVehNo(objArr[10].toString());
+					objBeanInv.setStrMInBy(objArr[11].toString());
+					objBeanInv.setStrTimeInOut(objArr[12].toString());
+					objBeanInv.setStrUserCreated(objArr[13].toString());
+					objBeanInv.setDteCreatedDate(objArr[14].toString());
+					objBeanInv.setStrUserModified(objArr[15].toString());
+					objBeanInv.setDteLastModified(objArr[16].toString());
+					objBeanInv.setStrAuthorise(objArr[17].toString());
+					objBeanInv.setStrDktNo(objArr[18].toString());
+					objBeanInv.setStrSAdd1(objArr[19].toString());
+					objBeanInv.setStrSAdd2(objArr[20].toString());
+					objBeanInv.setStrSCity(objArr[21].toString());
+					objBeanInv.setStrSState(objArr[22].toString());
+					objBeanInv.setStrSCountry(objArr[23].toString());
+					objBeanInv.setStrSPin(objArr[24].toString());
+					objBeanInv.setStrInvNo(objArr[25].toString());
+					objBeanInv.setStrReaCode(objArr[26].toString());
+					objBeanInv.setStrSerialNo(objArr[27].toString());
+					objBeanInv.setStrWarrPeriod(objArr[28].toString());
+					objBeanInv.setStrWarraValidity(objArr[29].toString());
+					objBeanInv.setStrClientCode(objArr[30].toString());					
+					objBeanInv.setDblTaxAmt(Double.parseDouble(objArr[31].toString()));
+					objBeanInv.setDblTotalAmt(Double.parseDouble(objArr[32].toString()));
+					objBeanInv.setDblSubTotalAmt(Double.parseDouble(objArr[33].toString()));
+					objBeanInv.setDblDiscount(Double.parseDouble(objArr[34].toString()));
+					objBeanInv.setDblDiscountAmt(Double.parseDouble(objArr[35].toString()));
+					objBeanInv.setStrExciseable(objArr[36].toString());
+//					/objBeanInv.setstrd;
+					objBeanInv.setDblGrandTotal(Double.parseDouble(objArr[38].toString()));
+					
+					
+					
+					
+					
+					
+					
+					
 				}
+					
 
-				objBeanInv = funPrepardHdBean(objInvoiceHdModel, objLocationMasterModel, objPartyMasterModel, currValue);
-				objBeanInv.setStrCustName(objPartyMasterModel.getStrPName());
-				objBeanInv.setStrLocName(objLocationMasterModel.getStrLocName());
-				List<clsProFormaInvoiceModelDtl> listDCDtl = new ArrayList<clsProFormaInvoiceModelDtl>();
-				clsProFormaInvoiceHdModel objInvHDModelList = objProFormaInvoiceHdService.funGetProFormaInvoiceDtl(invCode, clientCode);
-	//
-				List<clsProFormaInvoiceModelDtl> listInvDtlModel = objInvHDModelList.getListInvDtlModel();
-				List<clsInvoiceDtlBean> listInvDtlBean = new ArrayList();
-				for (int i = 0; i < listInvDtlModel.size(); i++) {
-					clsInvoiceDtlBean objBeanInvoice = new clsInvoiceDtlBean();
-
-					clsProFormaInvoiceModelDtl obj = listInvDtlModel.get(i);
-					clsProductMasterModel objProdModle = objProductMasterService.funGetObject(obj.getStrProdCode(), clientCode);
-
-					objBeanInvoice.setStrProdCode(obj.getStrProdCode());
-					objBeanInvoice.setStrProdName(objProdModle.getStrProdName());
-					objBeanInvoice.setStrProdType(obj.getStrProdType());
-					objBeanInvoice.setDblQty(obj.getDblQty());
-					objBeanInvoice.setDblWeight(obj.getDblWeight());
-					objBeanInvoice.setDblUnitPrice(obj.getDblUnitPrice() / currValue);
-					objBeanInvoice.setStrPktNo(obj.getStrPktNo());
-					objBeanInvoice.setStrRemarks(obj.getStrRemarks());
-					objBeanInvoice.setStrInvoiceable(obj.getStrInvoiceable());
-					objBeanInvoice.setStrSerialNo(obj.getStrSerialNo());
-					objBeanInvoice.setStrCustCode(obj.getStrCustCode());
-					objBeanInvoice.setStrSOCode(obj.getStrSOCode());
-					objBeanInvoice.setDblDisAmt(obj.getDblProdDiscAmount());
-					String sqlHd = "select b.dteInvDate,a.dblUnitPrice,b.strInvCode  from tblproformainvoicedtl a,tblproformainvoicehd b " + " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode " + " and a.strCustCode='" + objBeanInv.getStrCustName() + "' and  b.dteInvDate=(SELECT MAX(b.dteInvDate) from tblproformainvoicedtl a,tblproformainvoicehd b "
-							+ " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode  " + " and a.strCustCode='" + objBeanInv.getStrCustCode() + "')";
-
-					List listPrevInvData = objGlobalFunctionsService.funGetList(sqlHd, "sql");
-
-					if (listPrevInvData.size() > 0) {
-						Object objInv[] = (Object[]) listPrevInvData.get(0);
-						objBeanInvoice.setPrevUnitPrice(Double.parseDouble(objInv[1].toString()) / currValue);
-						objBeanInvoice.setPrevInvCode(objInv[2].toString());
-
-					} else {
-						objBeanInvoice.setPrevUnitPrice(0.0);
-						objBeanInvoice.setPrevInvCode(" ");
+			}
+			else
+			{
+				if(objDC!=null)
+				{
+					for (int i = 0; i < objDC.size(); i++) {
+						Object[] ob = (Object[]) objDC.get(i);
+						objInvoiceHdModel = (clsProFormaInvoiceHdModel) ob[0];
+						objLocationMasterModel = (clsLocationMasterModel) ob[1];
+						objPartyMasterModel = (clsPartyMasterModel) ob[2];
 					}
 
-					listInvDtlBean.add(objBeanInvoice);
+					objBeanInv = funPrepardHdBean(objInvoiceHdModel, objLocationMasterModel, objPartyMasterModel, currValue);
+					objBeanInv.setStrCustName(objPartyMasterModel.getStrPName());
+					objBeanInv.setStrLocName(objLocationMasterModel.getStrLocName());
+					List<clsProFormaInvoiceModelDtl> listDCDtl = new ArrayList<clsProFormaInvoiceModelDtl>();
+					clsProFormaInvoiceHdModel objInvHDModelList = objProFormaInvoiceHdService.funGetProFormaInvoiceDtl(invCode, clientCode);
+		//
+					List<clsProFormaInvoiceModelDtl> listInvDtlModel = objInvHDModelList.getListInvDtlModel();
+					List<clsInvoiceDtlBean> listInvDtlBean = new ArrayList();
+					for (int i = 0; i < listInvDtlModel.size(); i++) {
+						clsInvoiceDtlBean objBeanInvoice = new clsInvoiceDtlBean();
 
+						clsProFormaInvoiceModelDtl obj = listInvDtlModel.get(i);
+						clsProductMasterModel objProdModle = objProductMasterService.funGetObject(obj.getStrProdCode(), clientCode);
+
+						objBeanInvoice.setStrProdCode(obj.getStrProdCode());
+						objBeanInvoice.setStrProdName(objProdModle.getStrProdName());
+						objBeanInvoice.setStrProdType(obj.getStrProdType());
+						objBeanInvoice.setDblQty(obj.getDblQty());
+						objBeanInvoice.setDblWeight(obj.getDblWeight());
+						objBeanInvoice.setDblUnitPrice(obj.getDblUnitPrice() / currValue);
+						objBeanInvoice.setStrPktNo(obj.getStrPktNo());
+						objBeanInvoice.setStrRemarks(obj.getStrRemarks());
+						objBeanInvoice.setStrInvoiceable(obj.getStrInvoiceable());
+						objBeanInvoice.setStrSerialNo(obj.getStrSerialNo());
+						objBeanInvoice.setStrCustCode(obj.getStrCustCode());
+						objBeanInvoice.setStrSOCode(obj.getStrSOCode());
+						objBeanInvoice.setDblDisAmt(obj.getDblProdDiscAmount());
+						String sqlHd = "select b.dteInvDate,a.dblUnitPrice,b.strInvCode  from tblproformainvoicedtl a,tblproformainvoicehd b " + " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode " + " and a.strCustCode='" + objBeanInv.getStrCustName() + "' and  b.dteInvDate=(SELECT MAX(b.dteInvDate) from tblproformainvoicedtl a,tblproformainvoicehd b "
+								+ " where a.strProdCode='" + obj.getStrProdCode() + "' and a.strClientCode='" + clientCode + "' and b.strInvCode=a.strInvCode  " + " and a.strCustCode='" + objBeanInv.getStrCustCode() + "')";
+
+						List listPrevInvData = objGlobalFunctionsService.funGetList(sqlHd, "sql");
+
+						if (listPrevInvData.size() > 0) {
+							Object objInv[] = (Object[]) listPrevInvData.get(0);
+							objBeanInvoice.setPrevUnitPrice(Double.parseDouble(objInv[1].toString()) / currValue);
+							objBeanInvoice.setPrevInvCode(objInv[2].toString());
+
+						} else {
+							objBeanInvoice.setPrevUnitPrice(0.0);
+							objBeanInvoice.setPrevInvCode(" ");
+						}
+
+						listInvDtlBean.add(objBeanInvoice);
+
+					}
+					objBeanInv.setListclsInvoiceModelDtl(listInvDtlBean);
+
+					String sql = "select strTaxCode,strTaxDesc,dblTaxableAmt,dblTaxAmt from tblproformainvtaxdtl " + "where strInvCode='" + invCode + "' and strClientCode='" + clientCode + "'";
+					List list = objGlobalFunctionsService.funGetList(sql, "sql");
+					List<clsInvoiceTaxDtlBean> listInvTaxDtl = new ArrayList<clsInvoiceTaxDtlBean>();
+					for (int cnt = 0; cnt < list.size(); cnt++) {
+						clsInvoiceTaxDtlBean objTaxDtl = new clsInvoiceTaxDtlBean();
+						Object[] arrObj = (Object[]) list.get(cnt);
+						objTaxDtl.setStrTaxCode(arrObj[0].toString());
+						objTaxDtl.setStrTaxDesc(arrObj[1].toString());
+						objTaxDtl.setStrTaxableAmt(Double.parseDouble(arrObj[2].toString()));
+						objTaxDtl.setStrTaxAmt(Double.parseDouble(arrObj[3].toString()));
+
+						listInvTaxDtl.add(objTaxDtl);
+					}
+					objBeanInv.setListInvoiceTaxDtl(listInvTaxDtl);
 				}
-				objBeanInv.setListclsInvoiceModelDtl(listInvDtlBean);
-
-				String sql = "select strTaxCode,strTaxDesc,dblTaxableAmt,dblTaxAmt from tblproformainvtaxdtl " + "where strInvCode='" + invCode + "' and strClientCode='" + clientCode + "'";
-				List list = objGlobalFunctionsService.funGetList(sql, "sql");
-				List<clsInvoiceTaxDtlBean> listInvTaxDtl = new ArrayList<clsInvoiceTaxDtlBean>();
-				for (int cnt = 0; cnt < list.size(); cnt++) {
-					clsInvoiceTaxDtlBean objTaxDtl = new clsInvoiceTaxDtlBean();
-					Object[] arrObj = (Object[]) list.get(cnt);
-					objTaxDtl.setStrTaxCode(arrObj[0].toString());
-					objTaxDtl.setStrTaxDesc(arrObj[1].toString());
-					objTaxDtl.setStrTaxableAmt(Double.parseDouble(arrObj[2].toString()));
-					objTaxDtl.setStrTaxAmt(Double.parseDouble(arrObj[3].toString()));
-
-					listInvTaxDtl.add(objTaxDtl);
-				}
-				objBeanInv.setListInvoiceTaxDtl(listInvTaxDtl);
 			}
+			
 			
 			
 			return objBeanInv;
@@ -390,6 +455,7 @@ public class clsProFormaInvoice {
 				objHDModel.setStrUserCreated(userCode);
 				objHDModel.setDteCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
 				objHDModel.setStrClientCode(clientCode);
+				objHDModel.setStrCustCode(objBean.getStrCustCode());
 
 				objHDModel.setStrMobileNo(objBean.getStrMobileNoForSettlement());
 				double taxamt = 0.0;
@@ -449,9 +515,15 @@ public class clsProFormaInvoice {
 					if (!(objInvDtl.getDblQty() == 0)) {
 						List list = objGlobalFunctionsService.funGetList("select strExciseable,strPickMRPForTaxCal from tblproductmaster " + " where strProdCode='" + objInvDtl.getStrProdCode() + "' ", "sql");
 
-						Object[] arrProdDtl = (Object[]) list.get(0);
-						String excisable = arrProdDtl[0].toString();
-						String pickMRP = arrProdDtl[1].toString();
+						String excisable="N";
+						String pickMRP="N";
+						if(list!=null && list.size()>0)
+						{
+							Object[] arrProdDtl = (Object[]) list.get(0);
+							excisable = arrProdDtl[0].toString();
+							pickMRP = arrProdDtl[1].toString();
+						}
+						
 						String key = objInvDtl.getStrCustCode() + "!" + excisable;
 
 						if (hmInvCustDtl.containsKey(key)) {
@@ -479,8 +551,17 @@ public class clsProFormaInvoice {
 						objInvDtlModel.setDblBillRate(objInvDtl.getDblBillRate() * dblCurrencyConv);
 						objInvDtlModel.setStrSOCode(objInvDtl.getStrSOCode());
 						objInvDtlModel.setStrCustCode(objInvDtl.getStrCustCode());
-						objInvDtlModel.setStrUOM(objProdTempUom.getStrReceivedUOM());
-						objInvDtlModel.setDblUOMConversion(objProdTempUom.getDblReceiveConversion());
+						if(objProdTempUom!=null)
+						{
+							objInvDtlModel.setStrUOM(objProdTempUom.getStrReceivedUOM());
+							objInvDtlModel.setDblUOMConversion(objProdTempUom.getDblReceiveConversion());
+						}
+						else
+						{
+							objInvDtlModel.setStrUOM("");
+							objInvDtlModel.setDblUOMConversion(1);
+						}
+						
 						objInvDtlModel.setDblProdDiscAmount(objInvDtl.getDblDisAmt());
 						List<clsProFormaInvoiceProdTaxDtl> listInvProdTaxDtl = null;
 						if (hmInvProdTaxDtl.containsKey(key)) {
@@ -500,7 +581,7 @@ public class clsProFormaInvoice {
 						sqlQuery.setLength(0);
 						sqlQuery.append("select a.dblMargin,a.strProdCode from tblprodsuppmaster a " + " where a.strSuppCode='" + objInvDtl.getStrCustCode() + "' and a.strProdCode='" + objInvDtl.getStrProdCode() + "' " + " and a.strClientCode='" + clientCode + "' ");
 						List listProdMargin = objGlobalFunctionsService.funGetList(sqlQuery.toString(), "sql");
-						if (listProdMargin.size() > 0) {
+						if (listProdMargin!=null && listProdMargin.size() > 0) {
 							Object[] arrObjProdMargin = (Object[]) listProdMargin.get(0);
 							marginePer = Double.parseDouble(arrObjProdMargin[0].toString());
 							marginAmt = prodMRP * (marginePer / 100);
@@ -517,8 +598,12 @@ public class clsProFormaInvoice {
 						sqlQuery.setLength(0);
 						sqlQuery.append("select a.dblDiscount from tblpartymaster a " + " where a.strPCode='" + objInvDtl.getStrCustCode() + "' and a.strPType='Cust' ");
 						List listproddiscount = objGlobalFunctionsService.funGetList(sqlQuery.toString(), "sql");
-						Object objproddiscount = (Object) listproddiscount.get(0);
-						double discPer = Double.parseDouble(objproddiscount.toString());
+						double discPer = 0.0;
+						if(listproddiscount!=null && listproddiscount.size()>0){
+							Object objproddiscount = (Object) listproddiscount.get(0);
+							discPer = Double.parseDouble(objproddiscount.toString());
+						}
+						
 						double discAmt = billRate * (discPer / 100) * dblCurrencyConv;
 						billRate = billRate - discAmt;
 						System.out.println(billRate);
@@ -671,7 +756,7 @@ public class clsProFormaInvoice {
 							String sqlAudit = " select ifnull(max(MID(a.strTransCode,9,5)),'' ) " + " from tblaudithd a where MID(a.strTransCode,6,1) = '" + transYear + "' " + " and MID(a.strTransCode,7,1) = '" + transMonth + "' " + " and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Invoice' ;  ";
 					
 							
-							List listAudit = objGlobalFunctionsService.funGetListModuleWise(sqlAudit, "sql");
+							List listAudit = objGlobalFunctionsService.funGetList(sqlAudit, "sql");
 							long lastnoAudit;
 							if (listAudit != null && !listAudit.isEmpty() && !listAudit.contains("")) {
 								lastnoAudit = Integer.parseInt(listAudit.get(0).toString());
@@ -679,7 +764,7 @@ public class clsProFormaInvoice {
 							} else {
 								lastnoAudit = 0;
 							}
-							List list = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+							List list = objGlobalFunctionsService.funGetList(sql, "sql");
 							long lastnoLive;
 							if (list != null && !list.isEmpty() && !list.contains("")) {
 								lastnoLive = Integer.parseInt(list.get(0).toString());
@@ -729,17 +814,27 @@ public class clsProFormaInvoice {
 					String exciseable = entry.getKey().substring(entry.getKey().length() - 1, entry.getKey().length());
 
 					objHDModel.setStrExciseable(exciseable);
+					if(!custCode.equals(""))
+					{
 					objHDModel.setStrCustCode(custCode);
+					}
 					objHDModel.setListInvDtlModel(listInvoiceDtlModel);
-
+					double dblMrp=0.0;
+					String pickMRP="N";
+					String excisable="N";
 					double subTotal = 0, taxAmt = 0, totalAmt = 0, totalExcisableAmt = 0;
 					for (clsProFormaInvoiceModelDtl objInvItemDtl : listInvoiceDtlModel) {
 						List list = objGlobalFunctionsService.funGetList("select strExciseable,strPickMRPForTaxCal,dblMRP from tblproductmaster " + " where strProdCode='" + objInvItemDtl.getStrProdCode() + "' ", "sql");
 						// String excisable=list.get(0).toString();
-						Object[] arrProdDtl = (Object[]) list.get(0);
-						String excisable = arrProdDtl[0].toString();
-						String pickMRP = arrProdDtl[1].toString();
-						double dblMrp = Double.parseDouble(arrProdDtl[2].toString()) * dblCurrencyConv;
+						if(list!=null && list.size()>0)
+						{	
+							Object[] arrProdDtl = (Object[]) list.get(0);
+							excisable	 = arrProdDtl[0].toString();
+							pickMRP = arrProdDtl[1].toString();
+						 dblMrp = Double.parseDouble(arrProdDtl[2].toString()) * dblCurrencyConv;
+							
+						}
+					
 						String key = custCode + "!" + excisable;
 						if (pickMRP.equals("Y")) {
 							List<clsProFormaInvoiceProdTaxDtl> listInvProdTaxDtl = hmInvProdTaxDtl.get(key);
@@ -805,7 +900,7 @@ public class clsProFormaInvoice {
 						List list = objGlobalFunctionsService.funGetList(sqlTaxDtl, "sql");
 						if (list.size() > 0) {
 							for (int cntExTax = 0; cntExTax < list.size(); cntExTax++) {
-								String excisable = list.get(cntExTax).toString();
+								excisable = list.get(cntExTax).toString();
 								if (excisable.equalsIgnoreCase("Y")) {
 									excisableTaxAmt += entryTaxDtl.getValue().getDblTaxAmt();
 								}
@@ -1087,11 +1182,145 @@ public class clsProFormaInvoice {
 		@SuppressWarnings({ "unchecked", "rawtypes", "unused", "finally" })
 		private JasperPrint funCallReportInvoiceReport(String InvCode, String type, HttpServletResponse resp, HttpServletRequest req) {
 
+			String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
 			JasperPrint jprintlist = null;
 			Connection con = objGlobalFunctions.funGetConnection(req);
 			try {
 
-				String strInvCode = "";
+				if(strModuleName.equalsIgnoreCase("7-WebBanquet")){
+				
+					String dteInvDate = "";
+					String strSOCode = "";
+					String strPName = "";
+					String dblTotalAmt = "";
+					String dblSubTotalAmt = "";
+					String strInvCode =InvCode;
+					
+					String sqlData = "select DATE_FORMAT(b.dteInvDate,'%d-%m%Y'),b.strSOCode,c.strPName,b.dblTotalAmt,b.dblSubTotalAmt "
+							+ "from tblproformainvoicedtl a ,tblproformainvoicehd b ,tblpartymaster c "
+							+ "where a.strInvCode=b.strInvCode and a.strInvCode='"+InvCode+"' and b.strCustCode=c.strPCode";
+					List listData = objGlobalFunctionsService.funGetList(sqlData, "sql");
+					if(listData!=null && listData.size()>0)
+					{
+						for(int i=0;i<listData.size();i++)
+						{
+							Object[] obj = (Object[]) listData.get(i);
+							
+							dteInvDate = obj[0].toString();
+							strSOCode = obj[1].toString();
+							strPName = obj[2].toString();
+							dblTotalAmt = obj[3].toString();
+							dblSubTotalAmt = obj[4].toString();
+							strInvCode =InvCode;
+						}
+					}
+					
+					String strVAT = "";
+					String strCST = "";
+					String strVehNo = "";
+					String dblTaxAmt = "";
+					String time = "";
+					String strRangeAdd = "";
+					String strDivision = "";
+					String strRegNo = "";
+					String strSAdd1 = "";
+					String strSAdd2 = "";
+					String strSCity = "";
+					String strSPin = "";
+					String strSState = "";
+					String strSCountry = "";
+					String strNarration = "";
+					String strCustPONo = "";
+					String dteCPODate = "";
+					
+					
+					double totalInvVal = 0.0;
+					double totalInvoicefrieght = 0.0;
+					double dblfeightTaxAmt = 0.0;
+					double totalvatInvfright = 0.0;
+					double exciseTax = 0.0;
+					double exciseTaxAmt1 = 0.0;
+					double totalAmt = 0.0;
+					clsNumberToWords obj = new clsNumberToWords();
+					ArrayList fieldList = new ArrayList();
+
+					String clientCode = req.getSession().getAttribute("clientCode").toString();
+					String companyName = req.getSession().getAttribute("companyName").toString();
+					String userCode = req.getSession().getAttribute("usercode").toString();
+					String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+
+					clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+					if (objSetup == null) {
+						objSetup = new clsPropertySetupModel();
+					}
+					String reportName = servletContext.getRealPath("/WEB-INF/reports/webcrm/rptProFormaInvoiceSlip.jrxml");
+					String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+
+					String sql = "select a.strVAT,a.strCST,a.strRangeAdd,a.strDivision,a.strRegNo from tblpropertysetup a where a.strPropertyCode='" + propertyCode + "' and a.strClientCode='" + clientCode + "'  ";
+					List listofvat = objGlobalFunctionsService.funGetList(sql, "sql");
+
+					if (!(listofvat.isEmpty())) {
+						Object[] arrObj = (Object[]) listofvat.get(0);
+						strVAT = arrObj[0].toString();
+						strCST = arrObj[1].toString();
+						strRangeAdd = arrObj[2].toString();
+						strDivision = arrObj[3].toString();
+						strRegNo = arrObj[4].toString();
+
+					}
+				
+					HashMap hm = new HashMap();
+					
+					
+					hm.put("strCompanyName", companyName);
+					hm.put("strUserCode", userCode);
+					hm.put("strImagePath", imagePath);
+					hm.put("strAddr1", objSetup.getStrAdd1());
+					hm.put("strAddr2", objSetup.getStrAdd2());
+					hm.put("strCity", objSetup.getStrCity());
+					hm.put("strState", objSetup.getStrState());
+					hm.put("strCountry", objSetup.getStrCountry());
+					hm.put("strPin", objSetup.getStrPin());
+					hm.put("strPName", strPName);
+					hm.put("strSAdd1", strSAdd1);
+					hm.put("strSAdd2", strSAdd2);
+					hm.put("strSCity", strSCity);
+					hm.put("strSState", strSState);
+					hm.put("strSCountry", strSCountry);
+					hm.put("strSPin", strSPin);
+					hm.put("strInvCode", strInvCode);
+					hm.put("dteInvDate", dteInvDate);
+					hm.put("strVAT", strVAT);
+					hm.put("strCST", strCST);
+					hm.put("totalAmt", totalAmt);
+					hm.put("strVehNo", strVehNo);
+					hm.put("dblSubTotalAmt", dblSubTotalAmt);
+					hm.put("dblTotalAmt", dblTotalAmt);
+					hm.put("dblTaxAmt", dblTaxAmt);
+					hm.put("time", time);
+					hm.put("strRangeAdd", strRangeAdd);
+					hm.put("strDivision", strDivision);
+					hm.put("strRangeDiv", objSetup.getStrRangeDiv());
+					hm.put("strDivisionAdd", objSetup.getStrDivisionAdd());
+
+					hm.put("strRegNo", strRegNo);
+					hm.put("totalInvoicefrieght", totalInvoicefrieght);
+					hm.put("totalvatInvfright", totalvatInvfright);
+					hm.put("exciseTax", exciseTax);
+					hm.put("exciseTaxAmt", exciseTaxAmt1);
+				
+
+					JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);
+					hm.put("ItemDataSource", beanCollectionDataSource);
+					JasperDesign jd = JRXmlLoader.load(reportName);
+					JasperReport jr = JasperCompileManager.compileReport(jd);
+					jprintlist = JasperFillManager.fillReport(jr, hm, new JREmptyDataSource());
+					
+					
+				}
+				else
+				{
+				String strInvCode =InvCode;
 				String dteInvDate = "";
 				String strSOCode = "";
 				String strPName = "";
@@ -1450,6 +1679,7 @@ public class clsProFormaInvoice {
 				JasperReport jr = JasperCompileManager.compileReport(jd);
 				jprintlist = JasperFillManager.fillReport(jr, hm, new JREmptyDataSource());
 
+			}
 			} catch (Exception e) {
 				e.printStackTrace();
 

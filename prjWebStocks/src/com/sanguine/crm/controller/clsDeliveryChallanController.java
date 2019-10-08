@@ -62,6 +62,7 @@ import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.service.clsUOMService;
 import com.sanguine.util.clsReportBean;
+import com.sanguine.webbanquets.model.clsBanquetBookingModelHd;
 
 @Controller
 public class clsDeliveryChallanController {
@@ -181,10 +182,84 @@ public class clsDeliveryChallanController {
 	public @ResponseBody clsDeliveryChallanBean funAssignFields(@RequestParam("dcCode") String dcCode, HttpServletRequest req) {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		clsDeliveryChallanBean objBeanDC = new clsDeliveryChallanBean();
-
+		
+		List<clsInvoiceBean> listPreviousInv = new ArrayList<clsInvoiceBean>();
+		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
 		String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
 		if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
 		{
+			String sqlDtlData = "select a.strDocNo,a.strDocName,a.dblDocQty,a.dblDocRate,a.dblDocTotalAmt,b.strUserCreated,b.strUserEdited,b.dteDateCreated,b.dteDateEdited,b.strCustomerCode,b.strEmailID,b.intMinPaxNo,b.intMaxPaxNo,b.strAreaCode,a.strType"
+					+ " from tblbqbookingdtl a,tblbqbookinghd b,"+webStockDB+".tblpartymaster c "
+					+ "where b.strCustomerCode=c.strPCode  and  a.strBookingNo=b.strBookingNo and a.strBookingNo='"+dcCode+"'";
+			
+			List listDtlData = objGlobalFunctionsService.funGetListModuleWise(sqlDtlData, "sql");
+			for (int i = 0; i < listDtlData.size(); i++) {
+				Object[] arr = (Object[]) listDtlData.get(i);
+				clsInvoiceBean objInvBean = new clsInvoiceBean();
+				
+				
+				objBeanDC.setStrPONo(arr[0].toString());
+				objBeanDC.setStrCustName(arr[1].toString());
+				objInvBean.setDblUnitPrice(Double.parseDouble(arr[3].toString()));
+				objInvBean.setDblQty(Double.parseDouble(arr[2].toString()));
+				objInvBean.setDblTotalAmt(Double.parseDouble(arr[4].toString()));
+				objBeanDC.setStrUserCreated(arr[5].toString());
+				objBeanDC.setStrUserModified(arr[6].toString());
+				objBeanDC.setDteCreatedDate(arr[7].toString());
+				objBeanDC.setDteLastModified(arr[8].toString());
+				objBeanDC.setStrCustCode(arr[9].toString());
+				objBeanDC.setStrLocCode(arr[13].toString());
+				objBeanDC.setStrAgainst("Banquet");
+				listPreviousInv.add(objInvBean);
+				objBeanDC.setListclsInvoiceBean(listPreviousInv);
+				objBeanDC.setStrAuthorise("");
+				objBeanDC.setStrClientCode(clientCode);
+				objBeanDC.setStrLocName("");
+				objBeanDC.setStrMInBy("");
+				objBeanDC.setStrNarration("");
+				objBeanDC.setStrPackNo("");
+				objBeanDC.setStrProdType(arr[14].toString());
+				objBeanDC.setStrReaCode("");
+				objBeanDC.setStrSAdd1("");
+				objBeanDC.setStrSAdd2("");
+				objBeanDC.setStrSCity("");
+				objBeanDC.setStrSCountry("");
+				objBeanDC.setStrSCtry("");
+				objBeanDC.setStrSerialNo("");
+				objBeanDC.setStrSettlementCode("");
+				objBeanDC.setStrSOCode("");
+				objBeanDC.setStrSPin("");
+				objBeanDC.setStrSState("");
+				objBeanDC.setStrTimeInOut("");
+				objBeanDC.setStrUserCreated("");
+				objBeanDC.setStrUserModified("");
+				objBeanDC.setStrVehNo("");
+				objBeanDC.setStrWarraValidity("");
+				objBeanDC.setStrWarrPeriod("");
+				objBeanDC.setDteDCDate(objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd"));
+				
+				/*
+				
+				
+				
+				
+				
+				
+			
+				
+				
+				
+				
+				
+				
+				
+			
+				
+				
+				*/
+				
+			}
+			
 			
 		}
 		else
@@ -207,7 +282,7 @@ public class clsDeliveryChallanController {
 			objBeanDC.setStrCustName(objPartyMasterModel.getStrPName());
 			objBeanDC.setStrLocName(objLocationMasterModel.getStrLocName());
 			List<clsDeliveryChallanModelDtl> listDCDtl = new ArrayList<clsDeliveryChallanModelDtl>();
-			List<clsInvoiceBean> listPreviousInv = new ArrayList<clsInvoiceBean>();
+			
 			List<Object> objDCDtlModelList = objDeliveryChallanHdService.funGetDeliveryChallanDtl(dcCode, clientCode);
 			for (int i = 0; i < objDCDtlModelList.size(); i++) {
 				Object[] ob = (Object[]) objDCDtlModelList.get(i);

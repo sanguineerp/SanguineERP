@@ -82,15 +82,16 @@
 								
  							if(invoiceformat=="Format 1")
  								{
-		 						window.open(getContextPath()+"/openRptProFormaInvoiceSlip.html?rptInvCode="+code,'_blank');
-		 						window.open(getContextPath()+"/openRptProFormaInvoiceProductSlip.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
-		 						window.open(getContextPath()+"/rptProFormaTradingInvoiceSlip.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
+ 								window.open(getContextPath()+"/rptProFormaInvoiceSlipFormat5Report.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
+		 						//window.open(getContextPath()+"/openRptProFormaInvoiceSlip.html?rptInvCode="+code,'_blank');
+		 						/* window.open(getContextPath()+"/openRptProFormaInvoiceProductSlip.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
+		 						window.open(getContextPath()+"/rptProFormaTradingInvoiceSlip.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank'); */
 								}
 							else{
 								if(invoiceformat=="Format 2")
 								{
 								window.open(getContextPath()+"/rptProFormaInvoiceSlipFromat2.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
-								window.open(getContextPath()+"/rptProFormaInvoiceSlipNonExcisableFromat2.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
+								//window.open(getContextPath()+"/rptProFormaInvoiceSlipNonExcisableFromat2.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
 								//window.open(getContextPath()+"/rptDeliveryChallanInvoiceSlip.html?strDocCode="+dccode,'_blank');
 								}else if(invoiceformat=="Format 5")
 								{
@@ -132,6 +133,15 @@
 					{
 					transactionName='BookingNo';	
 					}
+				else if(transactionName.includes('custMasterActive'))
+				{
+					transactionName='CustomerInfo';
+				}
+				
+				else if(transactionName.includes('proformaInvoice'))
+				{
+					transactionName='proformaInvoice';
+				}
 			}
 			
 			fieldName = transactionName;
@@ -186,8 +196,17 @@
 				  case 'BookingNo':
 				    	funSetBookingNo(code);
 				        break;  
+				        
+				  case 'CustomerInfo':
+				    	funSetCustNo(code);
+				        break;    
 				}
 			}
+		 	
+		 	function funSetCustNo(code)
+		 	{
+		 		$("#txtCustCode").val(code);
+		 	}
 		 	
 		 	function funSetBookingNo(code)
 		 	{
@@ -1469,11 +1488,58 @@
 				var custCode = $('#txtCustCode').val();
 				funOpenInvoiceHelp(locCode,dtFullfilled,custCode);
 				return false;
-			}else{
+			} else if ($("#cmbAgainst").val() == "Banquet") 
+			{
+				if($("#txtCustCode").val()=="")
+				{
+					alert("Please Customer");
+					$("#txtCustCode").focus();
+					return false;
+				}
+				var date = $('#txtDCDate').val();
+				var array = new Array();
+			
+				array = date.split('-');
+
+			
+				var dtFullfilled = (array[2] + "-" + array[1] + "-" + array[0]);
+				var locCode = $('#txtLocCode').val();
+				var custCode = $('#txtCustCode').val();
+				funOpenInvoiceHelpForBanquet(locCode,dtFullfilled,custCode);
+				return false;
+			}
+			
+			else{
 				funHelp('deliveryChallan');
 			}
 		}
+		// Against  From and Set  Code in combo box
 		
+		 function funOpenInvoiceHelpForBanquet(locCode,dtFullfilled,custCode) {
+
+			var retval = window.open("frmInvoiceSale.html?strlocCode="+locCode+"&dtFullFilled="+dtFullfilled+"&strCustCode="+custCode,"",
+					"dialogHeight:600px;dialogWidth:500px;dialogLeft:400px;");
+				
+			var timer = setInterval(function ()
+			    {
+				if(retval.closed)
+					{
+						if (retval.returnValue != null)
+						{
+							strVal = retval.returnValue.split("#")
+							$("#txtSOCode").val(strVal[0]);
+							funRemRows();
+							funSetSalesOrderDtl();
+							var SOCodes=strVal[0].split(",");
+						}
+						clearInterval(timer);
+					}
+			    }, 500);
+			
+			
+		
+			
+		}
 		//Open Against  From and Set  Code in combo box
 		function funOpenInvoiceHelp(locCode,dtFullfilled,custCode) {
 

@@ -1471,7 +1471,7 @@
 <br/>
 
 
-	<s:form name="Walkin" method="GET" action="saveWalkin.html">
+	<s:form name="Walkin" method="POST" action="saveWalkin.html">
 	
 			<div id="tab_container" style="height: 580px">
 			<ul class="tabs">
@@ -1662,7 +1662,7 @@
 					</tr>
 				</table>
 				
-				<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 250px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
+				<div style="background-color: #C0E2FE; border: 1px solid #ccc; display: block; height: 150px; margin: auto; overflow-x: hidden; overflow-y: scroll; width: 100%;">
 					<table id="tblwalkindtl"
 						style="width: 100%; border: #0F0; table-layout: fixed; overflow: scroll"
 						class="transTablex col8-center">

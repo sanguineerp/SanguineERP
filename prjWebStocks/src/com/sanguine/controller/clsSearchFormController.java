@@ -5680,6 +5680,22 @@ public class clsSearchFormController {
 				searchFormTitle = "Payment Receipt";
 				break;
 			}
+			
+			case "BanquetproformaInvoice": {
+
+				columnNames = "a.strInvCode,a.strSOCode,a.dteInvDate,b.strPName,c.strLocName,a.strAuthorise";
+				tableName = "from "+webStockDB+".tblproformainvoicehd a, "+webStockDB+".tblpartymaster b,"+webStockDB+".tbllocationmaster c " + " where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode " + "and a.strInvCode like '%IV%' ";
+				if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+					tableName += " and a.strInvCode like '" + propertyCode + "%' ";
+				}
+
+				listColumnNames = "InvoiceCode,SO Code,DC Date,Party Name,Location Name, Authorise";
+				idColumnName = "a.strInvCode";
+				
+				flgQuerySelection = true;/*criteria = getCriteriaQuery(columnNames, search_with, tableName);*/
+				searchFormTitle = "Invoice";
+				break;
+			}
 
 		}
 

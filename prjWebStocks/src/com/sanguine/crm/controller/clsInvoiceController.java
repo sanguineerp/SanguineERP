@@ -2526,14 +2526,29 @@ public class clsInvoiceController
 	public @ResponseBody List funLoadPOforGRN(HttpServletRequest request)
 	{
 		// String strSuppCode=request.getParameter("strSuppCode").toString();
-		String propCode = request.getSession().getAttribute("propertyCode").toString();
-		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		String locCode = request.getParameter("strlocCode");
-		String dtfullfilled = request.getParameter("dtFullFilled");
-		String custCode = request.getParameter("strCustCode");
-		// dtfullfilled=objGlobalFunctions.funGetDate("yyyy-MM-dd",dtfullfilled);
-		List SOHelpList = objInvoiceHdService.funListSOforInvoice(locCode, dtfullfilled, clientCode, custCode);
-		return SOHelpList;
+				String propCode = request.getSession().getAttribute("propertyCode").toString();
+				String clientCode = request.getSession().getAttribute("clientCode").toString();
+				String locCode = request.getParameter("strlocCode");
+				String dtfullfilled = request.getParameter("dtFullFilled");
+				String custCode = request.getParameter("strCustCode");
+				// dtfullfilled=objGlobalFunctions.funGetDate("yyyy-MM-dd",dtfullfilled);
+				String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
+				String strModuleName = request.getSession().getAttribute("selectedModuleName").toString();
+				List SOHelpList = new ArrayList<>();
+				if(strModuleName.equalsIgnoreCase("7-WebBanquet")){
+					
+					String sqlData ="select a.strBookingNo,DATE_FORMAT(b.dteDateCreated,'%d-%m-%Y'),a.strType,c.strPName,c.strLocCode "
+							+ "from tblbqbookingdtl a ,tblbqbookinghd b ,"+webStockDB+".tblpartymaster c "
+							+ "where a.strBookingNo=b.strBookingNo and b.strCustomerCode=c.strPCode AND c.strPCode='"+custCode+"' and a.strClientCode='"+clientCode+"'";
+					SOHelpList = objGlobalFunctionsService.funGetListModuleWise(sqlData, "sql");
+				}
+				else
+				{
+					SOHelpList = objInvoiceHdService.funListSOforInvoice(locCode, dtfullfilled, clientCode, custCode);
+				}
+				
+				return SOHelpList;
+
 
 	}
 	@SuppressWarnings({ "rawtypes", "unused" })
@@ -2547,6 +2562,55 @@ public class clsInvoiceController
 
 		String[] SOCode = codes.split(",");
 
+		String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
+		String strModuleName = request.getSession().getAttribute("selectedModuleName").toString();
+		if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
+		{
+			
+			List objSales = funPrepareBean(SOCode, clientCode);
+			for (int i = 0; i < objSales.size(); i++)
+			{
+				Object[] obj = (Object[]) objSales.get(i);
+				clsSalesOrderDtl saleDtl = new clsSalesOrderDtl();
+				
+				saleDtl.setDblAcceptQty(3);
+				saleDtl.setDblAvalaibleStk(50.0);
+				saleDtl.setDblAvgQty(2);
+				saleDtl.setDblConversion(3);
+				saleDtl.setDblDiscount(10);
+				saleDtl.setDblQty(Double.parseDouble(obj[2].toString()));
+				saleDtl.setDblRequiredQty(10.0);
+				saleDtl.setDblTax(30);
+				saleDtl.setDblTaxableAmt(500);
+				saleDtl.setDblTaxAmt(30);
+				saleDtl.setDblTotalPrice(300);
+				saleDtl.setDblUnitPrice(Double.parseDouble(obj[3].toString()));
+				saleDtl.setDblWeight(6); 
+				saleDtl.setIntId(3);
+				saleDtl.setIntindex(1);
+				saleDtl.setPrevInvCode("");
+				saleDtl.setPrevUnitPrice(30);
+				saleDtl.setStrClientCode(clientCode);
+				saleDtl.setStrCurrency("");
+				saleDtl.setStrCustCode("");
+				saleDtl.setStrCustNmae("");
+				saleDtl.setStrPartNo("");
+				saleDtl.setStrProdChar("");
+				saleDtl.setStrProdCode(obj[0].toString());
+				saleDtl.setStrProdName(obj[1].toString());
+				saleDtl.setStrProdType("");
+				saleDtl.setStrRemarks(""); 
+				saleDtl.setStrSOCode("");
+				saleDtl.setStrStatus("");
+				saleDtl.setStrTaxType("");
+				saleDtl.setStrUOM("");
+				
+				listSaleDtl.add(saleDtl);
+			}
+		}
+		
+		else
+		{
 		List objSales = objSalesOrderService.funGetMultipleSODtlForInvoice(SOCode, clientCode);
 		if (null != objSales)
 		{
@@ -2590,10 +2654,25 @@ public class clsInvoiceController
 				listSaleDtl.add(saleDtl);
 			}
 		}
+		}
 		return listSaleDtl;
 	}
 
 
+
+	private List funPrepareBean(String[] sOCode, String clientCode) {
+		
+		List listDtlData = new ArrayList<>();
+		for(int i=0;i<sOCode.length;i++)
+		{
+		String sqlData = "select a.strDocNo,a.strDocName,a.dblDocQty,a.dblDocRate "
+				+ "from tblbqbookingdtl a "
+				+ "where  a.strBookingNo='"+sOCode[i].toString()+"' and a.strClientCode='"+clientCode+"'";
+		
+		listDtlData = objGlobalFunctionsService.funGetListModuleWise(sqlData, "sql");
+		}
+		return listDtlData;
+	}
 
 	@SuppressWarnings({ "rawtypes", "unused" })
 	@RequestMapping(value = "/loadSOTaxDtlforInvoice", method = RequestMethod.GET)

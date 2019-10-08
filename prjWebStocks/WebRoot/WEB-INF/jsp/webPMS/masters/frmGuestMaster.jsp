@@ -254,7 +254,28 @@ function funSetGuestCode(code)
 								alert("Enter Valid PAN No!!");
 								flg=false;
 							}
-						}	
+						}
+					        
+					        if($("#txtUIDNo").val()=="")
+							{
+					        	
+					        	alert("Enter UID Number!");
+								flg=false;
+							}
+							else
+							{
+								var panVal = $('#txtUIDNo').val();
+								var regpan = /^(([0-9]){12})/;
+								if(regpan.test(panVal))
+								{
+								   flg=true;
+								}
+								else // invalid pan card number
+								{
+									alert("Enter Valid AADHAR No!!");
+									flg=false;
+								}
+							}
 					}
 					else
 					{
