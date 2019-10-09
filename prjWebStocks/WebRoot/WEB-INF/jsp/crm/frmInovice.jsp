@@ -179,6 +179,24 @@
 		
 		function funHelp(transactionName)
 		{
+			var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
+			if(strIndustryType=='7-WebBanquet') 
+	   		{
+				if(transactionName.includes('deliveryChallan'))
+					{
+					transactionName='BookingNo';	
+					}
+				else if(transactionName.includes('custMasterActive'))
+				{
+					transactionName='CustomerInfo';
+				}
+				
+				else if(transactionName.includes('proformaInvoice'))
+				{
+					transactionName='proformaInvoice';
+				}
+			}
+			
 			fieldName = transactionName;
 		//	window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
 		window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500,left=500")	

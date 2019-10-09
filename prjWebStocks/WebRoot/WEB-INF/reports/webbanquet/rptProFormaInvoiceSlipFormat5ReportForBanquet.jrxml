@@ -418,10 +418,10 @@
 				<textFieldExpression><![CDATA[$P{strCountry}+", "+$P{strPin}]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement x="20" y="113" width="260" height="29" uuid="80ec00a4-4c36-4cff-9d41-bef7ef8e3272"/>
+				<reportElement x="2" y="113" width="278" height="29" uuid="80ec00a4-4c36-4cff-9d41-bef7ef8e3272"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="40" y="112" width="220" height="30" uuid="9d139d99-2dc7-41d9-8044-95e8e2ded934"/>
+				<reportElement x="19" y="112" width="220" height="30" uuid="9d139d99-2dc7-41d9-8044-95e8e2ded934"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[Invoice To]]></text>
 			</staticText>
@@ -473,7 +473,7 @@
 				<textFieldExpression><![CDATA[$P{InvCode}]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement x="20" y="142" width="260" height="80" uuid="3f09774b-c829-4657-a1dc-b607f1d36638"/>
+				<reportElement x="2" y="142" width="278" height="80" uuid="3f09774b-c829-4657-a1dc-b607f1d36638"/>
 			</rectangle>
 			<rectangle>
 				<reportElement x="292" y="142" width="260" height="80" uuid="8dcaf139-ff70-4cf4-8a33-79cbbbdd2e4d"/>
@@ -491,21 +491,21 @@
 				<reportElement x="470" y="28" width="1" height="52" uuid="7799f977-4de6-4cf8-a9f0-9daccbc73a41"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="294" y="144" width="158" height="15" uuid="67ac0831-7566-4d5f-ade1-1511f5c892a1"/>
+				<reportElement x="317" y="144" width="158" height="15" uuid="67ac0831-7566-4d5f-ade1-1511f5c892a1"/>
 				<textElement textAlignment="Left">
 					<font fontName="Serif" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{strSAdd1}+", "+$P{strSAdd2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="294" y="159" width="158" height="18" uuid="191a7584-bded-44db-8e72-9920d13eb485"/>
+				<reportElement x="317" y="159" width="158" height="18" uuid="191a7584-bded-44db-8e72-9920d13eb485"/>
 				<textElement textAlignment="Left">
 					<font fontName="Serif" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{strSCity}+", "+$P{strSState}+","]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="294" y="177" width="158" height="20" uuid="621cf13e-46b7-4743-afec-48409acd4b34"/>
+				<reportElement x="317" y="177" width="158" height="20" uuid="621cf13e-46b7-4743-afec-48409acd4b34"/>
 				<textFieldExpression><![CDATA[$P{strSCountry}+", "+$P{strSPin}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -655,10 +655,12 @@
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 							<staticText>
 								<reportElement x="0" y="27" width="60" height="27" uuid="04ac5c37-d1fd-4ed5-bf14-f72b9fb10703"/>
+								<textElement textAlignment="Center"/>
 								<text><![CDATA[GrandTotal]]></text>
 							</staticText>
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="27" uuid="2bfbe7f7-5876-4ee4-bc4f-b5bd87742c86"/>
+								<textElement textAlignment="Center"/>
 								<text><![CDATA[Discount]]></text>
 							</staticText>
 						</jr:tableFooter>

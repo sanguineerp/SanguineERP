@@ -208,16 +208,6 @@ public class clsInvoiceController
 	public ModelAndView funInvoice(Map<String, Object> model, HttpServletRequest request)
 	{
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
-
-		dataSG = new ArrayList<clsSubGroupMasterModel>();
-		@SuppressWarnings("rawtypes")
-		List list = objSubGroupService.funGetList();
-		for (Object objSG : list)
-		{
-			clsSubGroupMasterModel sgModel = (clsSubGroupMasterModel) objSG;
-			dataSG.add(sgModel);
-		}
-
 		String urlHits = "1";
 		String propCode = request.getSession().getAttribute("propertyCode").toString();
 		try
@@ -228,6 +218,73 @@ public class clsInvoiceController
 		{
 			urlHits = "1";
 		}
+
+		String strModuleName = request.getSession().getAttribute("selectedModuleName").toString();
+		String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
+		if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
+		{
+			
+
+			dataSG = new ArrayList<clsSubGroupMasterModel>();
+			@SuppressWarnings("rawtypes")
+			List list = objSubGroupService.funGetList();
+			for (Object objSG : list)
+			{
+				clsSubGroupMasterModel sgModel = (clsSubGroupMasterModel) objSG;
+				dataSG.add(sgModel);
+			}
+
+			
+
+			HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap) request.getSession().getAttribute("hmUserPrivileges");
+			model.put("urlHits", urlHits);
+
+			List<String> strAgainst = new ArrayList<>();
+			
+			strAgainst.add("Banquet");
+			model.put("againstList", strAgainst);
+
+			Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
+			model.put("settlementList", settlementList);
+
+			Map<String, String> hmCurrency = objCurrencyMasterService.funCurrencyListToDisplay(clientCode);
+			if (hmCurrency.isEmpty()) {
+				hmCurrency.put("", "");
+			}
+			model.put("currencyList", hmCurrency);
+			
+			String authorizationInvoiceCode = "";
+			boolean flagOpenFromAuthorization = true;
+			try
+			{
+				authorizationInvoiceCode = request.getParameter("authorizationInvoiceCode").toString();
+			}
+			catch (NullPointerException e)
+			{
+				flagOpenFromAuthorization = false;
+			}
+			model.put("flagOpenFromAuthorization", flagOpenFromAuthorization);
+			if (flagOpenFromAuthorization)
+			{
+				model.put("authorizationInvoiceCode", authorizationInvoiceCode);
+			}
+
+			clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+			model.put("prodPriceEditable",objSetup.getStrInvoiceRateEditable());
+			
+		}
+		else
+		{
+		dataSG = new ArrayList<clsSubGroupMasterModel>();
+		@SuppressWarnings("rawtypes")
+		List list = objSubGroupService.funGetList();
+		for (Object objSG : list)
+		{
+			clsSubGroupMasterModel sgModel = (clsSubGroupMasterModel) objSG;
+			dataSG.add(sgModel);
+		}
+
+		
 
 		HashMap<String, clsUserDtlModel> hmUserPrivileges = (HashMap) request.getSession().getAttribute("hmUserPrivileges");
 		model.put("urlHits", urlHits);
@@ -265,6 +322,7 @@ public class clsInvoiceController
 
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
 		model.put("prodPriceEditable",objSetup.getStrInvoiceRateEditable());
+		}
 		if ("2".equalsIgnoreCase(urlHits))
 		{
 			return new ModelAndView("frmInovice_1", "command", new clsInvoiceBean());
@@ -2539,7 +2597,7 @@ public class clsInvoiceController
 					
 					String sqlData ="select a.strBookingNo,DATE_FORMAT(b.dteDateCreated,'%d-%m-%Y'),a.strType,c.strPName,c.strLocCode "
 							+ "from tblbqbookingdtl a ,tblbqbookinghd b ,"+webStockDB+".tblpartymaster c "
-							+ "where a.strBookingNo=b.strBookingNo and b.strCustomerCode=c.strPCode AND c.strPCode='"+custCode+"' and a.strClientCode='"+clientCode+"'";
+							+ "where a.strBookingNo=b.strBookingNo and b.strCustomerCode=c.strPCode AND c.strPCode='"+custCode+"' and a.strClientCode='"+clientCode+"'  group by a.strBookingNo ";
 					SOHelpList = objGlobalFunctionsService.funGetListModuleWise(sqlData, "sql");
 				}
 				else
@@ -2667,7 +2725,7 @@ public class clsInvoiceController
 		{
 		String sqlData = "select a.strDocNo,a.strDocName,a.dblDocQty,a.dblDocRate "
 				+ "from tblbqbookingdtl a "
-				+ "where  a.strBookingNo='"+sOCode[i].toString()+"' and a.strClientCode='"+clientCode+"'";
+				+ "where  a.strBookingNo='"+sOCode[i].toString()+"' and a.strClientCode='"+clientCode+"' group by a.strBookingNo";
 		
 		listDtlData = objGlobalFunctionsService.funGetListModuleWise(sqlData, "sql");
 		}

@@ -3082,6 +3082,7 @@ public class clsProFormaInvoice {
 				String[] date = dteInvDate.split("-");
 				dteInvDate = date[2] + "-" + date[1] + "-" + date[0];
 
+				
 				String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
 				String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
 				if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
@@ -3092,8 +3093,8 @@ public class clsProFormaInvoice {
 							+ "LEFT OUTER "
 							+ "JOIN "+webStockDB+".tblproformainvoicedtl b ON a.strInvCode=b.strInvCode "
 							+ "LEFT OUTER "
-							+ "JOIN tblbqbookingdtl c ON b.strProdCode=c.strBookingNo "
-							+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"'";
+							+ "JOIN tblbqbookingdtl c ON b.strProdCode=c.strDocNo "
+							+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"' group by c.strDocNo";
 					
 						list = objGlobalFunctionsService.funGetListModuleWise(sqlDetailQ, "sql");
 						if (!list.isEmpty()) {

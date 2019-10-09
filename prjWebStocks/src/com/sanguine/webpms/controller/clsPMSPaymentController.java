@@ -584,9 +584,9 @@ public class clsPMSPaymentController {
 		else if(docName.equalsIgnoreCase("Banquet"))
 		{
 			clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
-			
+			String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
 			String sqlPaymentLoad = "select b.strPCode,b.strPName,a.dblBookingAmt "
-					+ "from tblbqbookinghd a,bankmms.tblpartymaster b "
+					+ "from tblbqbookinghd a,"+webStockDB+".tblpartymaster b "
 					+ "where a.strCustomerCode=b.strPCode and a.strClientCode='"+clientCode+"' "
 					+ "and b.strClientCode='"+clientCode+"' and a.strBookingNo='"+docCode+"'";
 			List listData=objGlobalFunctionsService.funGetListModuleWise(sqlPaymentLoad, "sql");
