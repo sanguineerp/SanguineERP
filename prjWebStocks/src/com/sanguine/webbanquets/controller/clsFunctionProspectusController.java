@@ -83,7 +83,7 @@ public class clsFunctionProspectusController
 			String fromDate="",toDate="";
 			String strServiceType="";
 			HashMap reportParams = new HashMap();
-			List<clsFunctionProspectusBean> dataList = new ArrayList<clsFunctionProspectusBean>();
+			//List<clsFunctionProspectusBean> dataList = new ArrayList<clsFunctionProspectusBean>();
 			clsFunctionProspectusBean objBean=null;
 			List listStaff = new ArrayList<>();
 			List listEquipment = new ArrayList<>();
@@ -103,7 +103,8 @@ public class clsFunctionProspectusController
 					+ "tblstaffmaster d ON d.strStaffCode=a.strEventCoordinatorCode LEFT OUTER "
 					+ "JOIN "+webStockDB+".tblpartymaster e ON e.strPCode=a.strCustomerCode LEFT OUTER JOIN "
 					+ "tblfunctionmaster f ON f.strFunctionCode=a.strFunctionCode WHERE a.strBookingNo=b.strBookingNo "
-					+ "AND a.strBookingNo='"+objFunctionProspectusBean.getStrBookingNo()+"' AND a.strClientCode='"+clientCode+"'";
+					+ "AND a.strBookingNo='"+objFunctionProspectusBean.getStrBookingNo()+"' AND a.strClientCode='"+clientCode+"' "
+					+ "GROUP BY b.strType";
 			
 			/*sql="SELECT a.strBookingNo,b.strType,b.strDocNo,b.strDocName,a.dteBookingDate,a.strAreaCode,a.strFunctionCode,"
 					+ "a.intMinPaxNo,a.intMaxPaxNo,a.tmeFromTime,a.tmeToTime,a.strEventCoordinatorCode "
@@ -116,28 +117,6 @@ public class clsFunctionProspectusController
 				strServiceType=obj[1].toString();
 				reportParams.put("pArea", obj[4].toString());
 				reportParams.put("pEventCoordinator", obj[10].toString());
-				/*if(obj[5].toString().startsWith("L"))
-				{
-					sql="SELECT a.strLocCode,a.strLocName FROM tbllocationmaster a WHERE a.strLocCode='"+obj[5].toString()+"' "
-							+ "AND a.strPropertyCode='"+propertyCode+"' AND a.strClientCode='"+clientCode+"'";
-					List listLocation = objGlobalFunctionsService.funGetList(sql, "sql");
-					for(int j=0;j<listLocation.size();j++)
-					{
-						Object[] objLocation = (Object[])listLocation.get(j);
-						reportParams.put("pArea", objLocation[1].toString());
-					}	
-				}
-				if(obj[11].toString().startsWith("S"))
-				{
-					sql="SELECT a.strStaffCode,a.strStaffName,a.strOperationalYN FROM tblstaffmaster a "
-						+ "WHERE a.strStaffCode='"+obj[11].toString()+"' AND a.strOperationalYN='Y' AND a.strClientCode='"+clientCode+"'";
-					List listFunction = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-					for(int k=0;k<listFunction.size();k++)
-					{
-						Object[] objEvent = (Object[])listFunction.get(k);
-						reportParams.put("pEventCoordinator", objEvent[1].toString());
-					}
-				}*/
 				if(obj[2].toString().startsWith("C"))
 				{
 					sql="SELECT a.strPCode,a.strPName,a.strOperational FROM tblpartymaster a WHERE a.strPCode='"+obj[2].toString()+"' "
@@ -151,40 +130,42 @@ public class clsFunctionProspectusController
 				}
 				if(obj[5].toString().startsWith("FM"))
 				{
-					sql="SELECT a.strFunctionCode,a.strFunctionName,b.strServiceCode,b.strServiceName FROM tblfunctionmaster a, "
-							+ "tblfunctionservice b WHERE a.strFunctionCode=b.strFunctionCode AND a.strFunctionCode='"+obj[5].toString()+"' AND a.strOperationalYN='Y' "
-							+ "AND b.strApplicable='Y' AND a.strPropertyCode='"+propertyCode+"' AND a.strClientCode='"+clientCode+"';";
+					sql="SELECT b.strType,b.strDocName,c.strFunctionName FROM tblbqbookinghd a LEFT OUTER JOIN tblbqbookingdtl b "
+							+ "ON b.strBookingNo=a.strBookingNo LEFT OUTER JOIN tblfunctionmaster c ON "
+							+ "c.strFunctionCode=a.strFunctionCode WHERE a.strBookingNo='"+objFunctionProspectusBean.getStrBookingNo()+"' "
+							+ "AND c.strFunctionCode='"+obj[5].toString()+"' AND c.strOperationalYN='Y' AND b.strType='"+strServiceType+"' AND a.strPropertyCode='"+propertyCode+"' "
+							+ "AND a.strClientCode='"+clientCode+"';";
 						List listFunction = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 						for(int k=0;k<listFunction.size();k++)
 						{
 							Object[] objFunction = (Object[])listFunction.get(k);
-							reportParams.put("pFunction", objFunction[1].toString());
+							reportParams.put("pFunction", objFunction[2].toString());
 							if(strServiceType.equals("Staff"))
 							{
 								objBean = new clsFunctionProspectusBean();
 								objBean.setStrServiceType(strServiceType);
-								objBean.setStrService(objFunction[3].toString());
+								objBean.setStrService(objFunction[1].toString());
 								listStaff.add(objBean);
 							}
 							else if(strServiceType.equals("Service"))
 							{
 								objBean = new clsFunctionProspectusBean();
 								objBean.setStrServiceType(strServiceType);
-								objBean.setStrService(objFunction[3].toString());
+								objBean.setStrService(objFunction[1].toString());
 								listService.add(objBean);
 							}
 							else if(strServiceType.equals("Equipment"))
 							{
 								objBean = new clsFunctionProspectusBean();
 								objBean.setStrServiceType(strServiceType);
-								objBean.setStrService(objFunction[3].toString());
+								objBean.setStrService(objFunction[1].toString());
 								listEquipment.add(objBean);
 							}
 							else if(strServiceType.equals("Menu"))
 							{
 								objBean = new clsFunctionProspectusBean();
 								objBean.setStrServiceType(strServiceType);
-								objBean.setStrService(objFunction[3].toString());
+								objBean.setStrService(objFunction[1].toString());
 								listMenu.add(objBean);
 							}
 						}
@@ -192,10 +173,10 @@ public class clsFunctionProspectusController
 				
 				reportParams.put("pBookingNo", obj[0].toString());
 				reportParams.put("pDate", obj[3].toString().substring(0,obj[3].toString().indexOf(" ")).split("-")[2]+"-"+obj[3].toString().substring(0,obj[3].toString().indexOf(" ")).split("-")[1]+"-"+obj[3].toString().substring(0,obj[3].toString().indexOf(" ")).split("-")[0]);
-				reportParams.put("pTime", obj[3].toString().substring(obj[3].toString().indexOf(" "),obj[3].toString().length()-5));
+				reportParams.put("pTime", obj[3].toString().substring(obj[3].toString().indexOf(" "),obj[3].toString().length()-3));
 				reportParams.put("pPAX", obj[6].toString()+" - "+obj[7].toString());
 				reportParams.put("pDuration", obj[8].toString()+" - "+obj[9].toString());
-				dataList.add(objBean);
+				//dataList.add(objBean);
 			}
 			reportParams.put("pCompanyName", companyName);
 			reportParams.put("pAddress1", objSetup.getStrAdd1() + "," + objSetup.getStrAdd2() + "," + objSetup.getStrCity());
@@ -206,7 +187,7 @@ public class clsFunctionProspectusController
 			reportParams.put("listEquipment", listEquipment);
 			reportParams.put("listService", listService);
 			reportParams.put("listMenu", listMenu);
-			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(dataList);
+			//JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(dataList);
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			JasperPrint jp = JasperFillManager.fillReport(jr, reportParams,new JREmptyDataSource());
