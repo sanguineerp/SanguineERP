@@ -5607,7 +5607,7 @@ public class clsSearchFormController {
 			
 			case "BanquetBillForBanquet": {
 				columnNames = "a.strBookingNo,b.strPName,DATE_FORMAT(a.dteBookingDate,'%d-%m-%Y'),a.tmeFromTime,a.tmeToTime,c.strFunctionName";
-				tableName = "tblbqbookinghd a,"+webStockDB+".tblpartymaster b,tblfunctionmaster c where a.strCustomerCode=b.strPCode and a.strFunctionCode=c.strFunctionCode";
+				tableName = "from tblbqbookinghd a,"+webStockDB+".tblpartymaster b,tblfunctionmaster c where a.strCustomerCode=b.strPCode and a.strFunctionCode=c.strFunctionCode";
 				listColumnNames = "Booking Code,Name,Booking Date,From Time,To Time,Function Name";
 				criteria = getCriteriaQuery(columnNames, search_with, tableName);
 				idColumnName = "strBookingNo,'"+webStockDB+"'.strPCode,strClientCode";
