@@ -3197,21 +3197,20 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteBanquetQuery(sql);
 		
 		sql = "CREATE TABLE `tblequipment` ("
-				+ "`strClientCode` VARCHAR(255) NOT NULL,"
 				+ "`strEquipmentCode` VARCHAR(255) NOT NULL,"
-				+ "`dteDateCreated` VARCHAR(255) NULL DEFAULT NULL,"
-				+ "`dteDateEdited` VARCHAR(255) NULL DEFAULT NULL,"
-				+ "`intId` BIGINT(20) NULL DEFAULT NULL,"
-				+ "`strEquipmentName` VARCHAR(255) NULL DEFAULT NULL,"
-				+ "`strOperational` VARCHAR(255) NULL DEFAULT NULL,"
-				+ "`strUserCreated` VARCHAR(255) NULL DEFAULT NULL,"
-				+ "`strUserEdited` VARCHAR(255) NULL DEFAULT NULL,"
-				+ "`strDeptCode` VARCHAR(255) NULL DEFAULT NULL,"
-				+ "`dblEquipmentRate` DOUBLE NULL DEFAULT NULL,"
+				+ "`strEquipmentName` VARCHAR(255) NOT NULL,"
+				+ "`intId` BIGINT(20) NOT NULL,"
+				+ "`dteDateCreated` VARCHAR(255) NOT NULL,"
+				+ "`dteDateEdited` VARCHAR(255) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(255) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(255) NOT NULL,"
+				+ "`strOperational` VARCHAR(5) NOT NULL,"
+				+ "`strClientCode` VARCHAR(255) NOT NULL,"
 				+ "PRIMARY KEY (`strClientCode`, `strEquipmentCode`)"
 				+ ") "
-				+ "COLLATE='latin1_swedish_ci' "
-				+ "ENGINE=InnoDB;";
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB "
+				+ ";";
 		
 		
 		
@@ -3313,42 +3312,42 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblstaffmaster` ("
-				+ "`strStaffCode` VARCHAR(10) NOT NULL,"
-				+ "`strStaffName` VARCHAR(50) NOT NULL,"
-				+ "`strStaffCatCode` VARCHAR(10) NOT NULL,"
-				+ "`strOperationalYN` VARCHAR(10) NOT NULL,"
-				+ "`dtCreated` DATETIME NOT NULL,"
-				+ "`dtEdited` DATETIME NOT NULL,"
-				+ "`strClientCode` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`strUserCreated` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`strUserEdited` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`intGId` BIGINT(20) NOT NULL,"
-				+ "PRIMARY KEY (`strStaffCode`, `strClientCode`)"
-				+ ") "
-				+ "COLLATE='utf8_general_ci' "
-				+ "ENGINE=InnoDB "
-				+ ";";
+		
+		
+		sql="CREATE TABLE `tblstaffmaster` ( "
+				+" `intSTId` BIGINT(20) NOT NULL, "
+				+" `strStaffCode` VARCHAR(10) NOT NULL, "
+				+" `strStaffName` VARCHAR(50) NOT NULL, "
+				+" `strStaffCatCode` VARCHAR(10) NOT NULL , "
+				+" `strOperationalYN` VARCHAR(10) NOT NULL, "
+				+" `strUserCreated` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" `strUserEdited` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" `dtCreated` DATETIME NOT NULL, "
+				+" `dtEdited` DATETIME NOT NULL, "
+				+" `strClientCode` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" PRIMARY KEY (`strStaffCode`, `strClientCode`) "
+			+" ) "
+			+" COLLATE='utf8_general_ci' "
+			+" ENGINE=InnoDB;";
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql ="CREATE TABLE `tblstaffcategeorymaster` ("
-				+ "`strStaffCategeoryCode` VARCHAR(10) NOT NULL,"
-				+ "`strStaffCategeoryName` VARCHAR(50) NOT NULL,"
-				+ "`strStaffCount` VARCHAR(20) NOT NULL,"
-				+ "`strOperationalYN` VARCHAR(10) NOT NULL,"
-				+ "`dteDateCreated` DATETIME NOT NULL,"
-				+ "`dteDateEdited` DATETIME NOT NULL,"
-				+ "`strClientCode` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`strDeptCode` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`strUserCreated` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`strUserEdited` VARCHAR(20) NOT NULL DEFAULT '',"
-				+ "`intGId` BIGINT(20) NOT NULL DEFAULT '0',"
-				+ "PRIMARY KEY (`strClientCode`, `strStaffCategeoryCode`)"
-				+ ") "
-				+ "COLLATE='utf8_general_ci' "
-				+ "ENGINE=InnoDB "
-				+ ";";
+		sql ="CREATE TABLE `tblstaffcategeorymaster` ( "
+				+" `intSCId` BIGINT(20) NOT NULL DEFAULT '0', "
+				+" `strStaffCategeoryCode` VARCHAR(10) NOT NULL, "
+				+" `strStaffCategeoryName` VARCHAR(50) NOT NULL, "
+				+" `strDeptCode` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" `strStaffCount` VARCHAR(20) NOT NULL, "
+				+" `strOperationalYN` VARCHAR(10) NOT NULL, "
+				+" `strUserCreated` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" `strUserEdited` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" `dteDateCreated` DATETIME NOT NULL, "
+				+" `dteDateEdited` DATETIME NOT NULL, "
+				+" `strClientCode` VARCHAR(20) NOT NULL DEFAULT '',	 "
+				+" PRIMARY KEY (`strClientCode`, `strStaffCategeoryCode`) "
+			+" ) "
+			+" COLLATE='utf8_general_ci' "
+			+" ENGINE=InnoDB;";
 		
 		funExecuteBanquetQuery(sql);
 		
@@ -3396,8 +3395,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		+" ENGINE=InnoDB;";
 		funExecuteBanquetQuery(sql);
 		
-		sql="ALTER TABLE `tblbqbookinghd`"
-				+ "ADD COLUMN `dblBookingAmt` DOUBLE NOT NULL AFTER `dteBookingDate`;";
+		
+		
+		sql="ALTER TABLE `tblequipment`"
+				+ "ADD COLUMN `strDeptCode` VARCHAR(10) NOT NULL AFTER `intId`;";
 		
 		funExecuteBanquetQuery(sql);
 		
@@ -3456,8 +3457,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmBookingFlash', 'Booking Flash', 'Report', 1, 'R', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmBookingFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmProFormaInvoice', 'ProForma Invoice', 'Transaction', '2', 'T', '70', '11', '1', 'default.png', '7', '1', '1', '1', 'NO', 'NO', 'frmProFormaInvoice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetWeekendMaster', 'Weekend Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetWeekendMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBanquetSetup', 'Banquet Setup', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmBanquetSetup.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmStructureUpdateBanquet', 'Structure Update', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'No', 'NO', 'frmStructureUpdate.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmTaxMaster', 'Tax Master', 'Master', '8', 'M', '29', '15', '1', 'imgTaxMaster.png', '7', '1', '1', '1', 'NO', 'YES', 'frmTaxMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmInovice', 'Invoice', 'Transaction', '2', 'T', '69', '10', '1', 'default.png', '7', '1', '1', '1', 'NO', 'NO', 'frmInovice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmInovice', 'Invoice', 'Transaction', '2', 'T', '69', '10', '1', 'default.png', '7', '1', '1', '1', 'NO', 'NO', 'frmInovice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBanquetSettlmentMaster', 'Settlement Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmSettlementMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		
 		funExecuteQuery(sql);
 		

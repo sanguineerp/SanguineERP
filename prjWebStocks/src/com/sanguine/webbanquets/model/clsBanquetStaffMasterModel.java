@@ -57,16 +57,16 @@ public class clsBanquetStaffMasterModel implements Serializable{
 	@Column(name="dtEdited")
 	private String dtEdited;
 	
-	@Column(name="IntGId")
-	private long intGId;
+	@Column(name="IntSTId")
+	private long intSTId;
 	
 
-public long getIntGId() {
-		return intGId;
+public long getIntSTId() {
+		return intSTId;
 	}
 
-	public void setIntGId(long intGId) {
-		this.intGId = intGId;
+	public void setIntSTId(long intSTId) {
+		this.intSTId = intSTId;
 	}
 
 public String getDtCreated() {

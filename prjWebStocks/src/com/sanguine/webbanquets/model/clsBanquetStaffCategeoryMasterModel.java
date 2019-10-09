@@ -60,8 +60,8 @@ public class clsBanquetStaffCategeoryMasterModel implements Serializable{
 	@Column(name="strUserEdited")
 	private String strUserEdited;
 
-	@Column(name="intGId")
-	private long intGId;
+	@Column(name="intSCId")
+	private long intSCId;
 
 //Setter-Getter Methods
 	public String getStrStaffCategeoryCode(){
@@ -134,11 +134,11 @@ public class clsBanquetStaffCategeoryMasterModel implements Serializable{
 		this. strUserEdited = (String) setDefaultValue( strUserEdited, "");
 	}
 
-	public long getIntGId(){
-		return intGId;
+	public long getIntSCId(){
+		return intSCId;
 	}
-	public void setIntGId(long intGId){
-		this. intGId = (Long) setDefaultValue( intGId, "");
+	public void setIntSCId(long intSCId){
+		this. intSCId = (Long) setDefaultValue( intSCId, "");
 	}
 
 

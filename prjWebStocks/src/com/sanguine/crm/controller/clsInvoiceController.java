@@ -6782,7 +6782,355 @@ private double funGetExistenceProduct(double voidedQty,List<clsInvoiceModelDtl> 
 	   return voidedQty;
 }
 
+@RequestMapping(value = "/rptInvoiceSlipFormat8Report", method = RequestMethod.GET)
+public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String InvCode, String type, HttpServletResponse resp, HttpServletRequest req)
+{
 
+	// String InvCode=req.getParameter("rptInvCode").toString();
+	req.getSession().removeAttribute("rptInvCode");
+	type = "pdf";
+	String[] arrInvCode = InvCode.split(",");
+	req.getSession().removeAttribute("rptInvCode");
+
+	InvCode = arrInvCode[0].toString();
+	Connection con = objGlobalFunctions.funGetConnection(req);
+	String clientCode = req.getSession().getAttribute("clientCode").toString();
+	String companyName = req.getSession().getAttribute("companyName").toString();
+	String userCode = req.getSession().getAttribute("usercode").toString();
+	String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+	clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+	if (objSetup == null)
+	{
+		objSetup = new clsPropertySetupModel();
+	}
+	String suppName = "";
+
+	String reportName = servletContext.getRealPath("/WEB-INF/reports/webcrm/rptInvoiceFormat8GSTWithSubgroup.jrxml");
+	String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+
+	String challanDate = "";
+	String PONO = "";
+	String InvDate = "";
+	String CustName = "";
+	String dcCode = "";
+	List listGSTSummary=new ArrayList();
+
+/*	String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
+			// + "c.dblCostRM,"
+			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblBillRate,0.00)"
+			+ " AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),"
+			+ " ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,c.strHSNCode,b.dblProdDiscAmount as discAmt,IFNULL(d.strBAdd1,''),"
+			+ " IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') "
+			+ ", ifNull(strCST,''),b.dblProdDiscAmount,if(b.dblWeight=0,1,b.dblWeight),f.strSGName  "//26
+			+ " from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  "
+			+ " on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + ""
+			+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + ""
+			+ " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
+*/
+	String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
+			// + "c.dblCostRM,"
+			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblBillRate,0.00)"
+			+ " AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),"
+			+ " ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,c.strHSNCode,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),"
+			+ " IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') "
+			+ ",IFNULL(d.strGSTNo,''),b.dblProdDiscAmount,b.dblWeight,f.strSGName,IFNULL(d.strEmail,''), IFNULL(d.strMobile,''),f.intSortingNo  "//29
+			+ " from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  "
+			+ " on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + ""
+			+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + ""
+			+ " left outer join tblinvprodtaxdtl  g on a.strInvCode=g.strInvCode and a.strCustCode=g.strCustCode  and b.dblWeight=g.dblWeight  " + " and b.strProdCode=g.strProdCode and g.strDocNo='Disc'   " + ""
+			+ " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "'"
+			+ " ORDER BY f.intSortingNo,f.strSGName,c.strProdName; ";
+	String bAddress = "";
+	String bState = "";
+	String bPin = "";
+	String sAddress = "";
+	String sState = "";
+	String sPin = "";
+	String custGSTNo = "";
+	String custEmailID="",custMobileNo="";
+	double totalInvoiceValue = 0.0;
+	double grandTotal=0.0;
+	List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlProdDtl, "sql");
+	List<clsInvoiceDtlBean> dataList = new ArrayList<clsInvoiceDtlBean>();
+	Map<Double, Double> hmCGSTCalculateTax = new HashMap<Double, Double>();
+	Map<Double, Double> hmSGSTCalculateTax = new HashMap<Double, Double>();
+	  Map<String,clsInvoiceDtlBean> mapGSTSummary=new HashMap<>();
+	if (listProdDtl.size() > 0)
+	{
+		for (int i = 0; i < listProdDtl.size(); i++)
+		{
+			Object[] obj = (Object[]) listProdDtl.get(i);
+			clsInvoiceDtlBean objDtlBean = new clsInvoiceDtlBean();
+			objDtlBean.setStrProdName(obj[0].toString());
+			
+			objDtlBean.setStrProdNamemarthi(obj[1].toString());
+			objDtlBean.setDblQty(Double.parseDouble(obj[2].toString()));
+			objDtlBean.setDblCostRM(Double.parseDouble(obj[3].toString()));
+			if(Double.parseDouble(obj[24].toString())>0){
+				objDtlBean.setDblCostRM(Double.parseDouble(obj[3].toString())*Double.parseDouble(obj[24].toString()));
+			}
+			
+			objDtlBean.setDblMRP(Double.parseDouble(obj[4].toString()));
+			objDtlBean.setDblPrice(Double.parseDouble(obj[5].toString()));
+			InvDate = objGlobalFunctions.funGetDate("dd-MM-yyyy", obj[6].toString());
+			CustName = obj[7].toString();
+			challanDate = obj[9].toString();
+			PONO = obj[10].toString();
+			dcCode = obj[8].toString();
+			objDtlBean.setStrHSN(obj[12].toString());
+			objDtlBean.setStrProdCode(obj[11].toString());
+		
+			objDtlBean.setStrSubGroupName(obj[25].toString());
+			// objDtlBean.setDblDisAmt(Double.parseDouble(obj[13].toString())*Double.parseDouble(obj[2].toString()));
+			bAddress = obj[14].toString() + " " + obj[15].toString();
+			bState = obj[16].toString();
+			bPin = obj[17].toString();
+			objDtlBean.setDblDisAmt(Double.parseDouble(obj[13].toString()));
+			sAddress = obj[18].toString() + " " + obj[19].toString();
+			sState = obj[20].toString();
+			sPin = obj[21].toString();
+			custGSTNo = obj[22].toString();
+			custEmailID=obj[26].toString();
+			custMobileNo=obj[27].toString();
+			objDtlBean.setDblWeight(Double.parseDouble(obj[24].toString()));
+			double qty=Double.parseDouble(obj[2].toString());
+			double rate=Double.parseDouble(obj[5].toString());
+			double subTotal=qty*rate;
+			double discAmt=Double.parseDouble(obj[23].toString());								
+			double netTotal=subTotal-discAmt;
+			totalInvoiceValue = totalInvoiceValue + netTotal;
+
+			String sqlQuery = " select b.strTaxCode,b.dblPercent,a.dblValue,b.strShortName,a.dblTaxableAmt ,b.dblAbatement " + " "
+					+ " from tblinvprodtaxdtl a,tbltaxhd b " + ""
+					+ " where a.strDocNo=b.strTaxCode and a.strInvCode='" + InvCode + "' " + " and  a.strProdCode='" + obj[11].toString() + "' and a.strClientCode='" + clientCode + "'  and a.dblWeight='"+obj[24].toString()+"' ";
+
+			List listProdGST = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
+			boolean isTaxAbatement = false;
+			if (listProdGST.size() > 0)
+			{
+				for (int j = 0; j < listProdGST.size(); j++)
+				{
+					double cGStAmt = 0.0;
+					double sGStAmt = 0.0;
+					Object[] objGST = (Object[]) listProdGST.get(j);
+					if(Double.parseDouble(objGST[5].toString())>0){
+						isTaxAbatement=true;
+					}
+					if (objGST[3].toString().equalsIgnoreCase("CGST"))
+					{
+						objDtlBean.setDblCGSTPer(Double.parseDouble(objGST[1].toString()));
+						objDtlBean.setDblCGSTAmt(Double.parseDouble(objGST[2].toString()));
+						objDtlBean.setDblTaxableAmt(Double.parseDouble(objGST[4].toString()));
+						
+					//	totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
+					}
+					else if (objGST[3].toString().equalsIgnoreCase("SGST"))
+					{
+						objDtlBean.setDblSGSTPer(Double.parseDouble(objGST[1].toString()));
+						objDtlBean.setDblSGSTAmt(Double.parseDouble(objGST[2].toString()));
+						objDtlBean.setDblTaxableAmt(Double.parseDouble(objGST[4].toString()));
+					//	totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
+					}
+					else
+					{
+						objDtlBean.setDblNonGSTTaxPer(Double.parseDouble(objGST[1].toString()));
+						objDtlBean.setDblNonGSTTaxAmt(Double.parseDouble(objGST[2].toString()));
+						objDtlBean.setDblTaxableAmt(Double.parseDouble(objGST[4].toString()));
+					//	totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
+					}
+				}
+			}
+			DecimalFormat decFormat = new DecimalFormat("#.##");
+			objDtlBean.setDblTotalAmt(Double.parseDouble(decFormat.format(objDtlBean.getDblTaxableAmt()+objDtlBean.getDblSGSTAmt()+objDtlBean.getDblCGSTAmt())));
+			// if abatement amount is greater than zero then tax not added in GT
+			if(isTaxAbatement){
+				grandTotal=totalInvoiceValue;
+			}else{
+				grandTotal=Double.parseDouble(decFormat.format(totalInvoiceValue+objDtlBean.getDblSGSTAmt()+objDtlBean.getDblCGSTAmt()));
+			}
+			
+			dataList.add(objDtlBean);
+
+		}
+		
+		String sqlGSTSummary="select a.strDocNo,sum(a.dblTaxableAmt),sum(a.dblValue),b.strHSNCode,c.strTaxDesc,c.dblPercent,c.dblAbatement,c.strShortName"
+				+ " from tblinvprodtaxdtl a,tblproductmaster b ,tbltaxhd c "
+				+ " where a.strProdCode=b.strProdCode  and a.strDocNo=c.strTaxCode and a.strInvCode='" + InvCode + "' "
+				+ " group by b.strHSNCode,a.strDocNo";
+	    List listProdGST = objGlobalFunctionsService.funGetDataList(sqlGSTSummary, "sql");
+      
+		if (listProdGST.size() > 0)
+		{
+			clsInvoiceDtlBean objDtlBean = new clsInvoiceDtlBean();
+			for (int j = 0; j < listProdGST.size(); j++)
+			{
+				Object[] objGST = (Object[]) listProdGST.get(j);
+				
+				if(mapGSTSummary.containsKey(objGST[3].toString()+""+objGST[1].toString())){
+					objDtlBean =mapGSTSummary.get(objGST[3].toString()+""+objGST[1].toString());
+					objDtlBean.setDblGSTAmt(objDtlBean.getDblGSTAmt()+Double.parseDouble(objGST[2].toString()));
+					if (objGST[7].toString().equalsIgnoreCase("SGST"))
+					 {
+						 objDtlBean.setDblSGSTPer(Double.parseDouble(objGST[5].toString()));
+						 objDtlBean.setDblSGSTAmt(Double.parseDouble(objGST[2].toString()));	
+					 }
+					if (objGST[7].toString().equalsIgnoreCase("CGST"))
+					 {
+						 objDtlBean.setDblCGSTPer(Double.parseDouble(objGST[5].toString()));
+						 objDtlBean.setDblCGSTAmt(Double.parseDouble(objGST[2].toString()));
+					 }
+					
+					 
+				}else{
+					 objDtlBean = new clsInvoiceDtlBean();
+					 objDtlBean.setStrHSN(objGST[3].toString());
+					 objDtlBean.setDblTaxableAmt(Double.parseDouble(objGST[1].toString()));
+					 objDtlBean.setDblGSTPer(Double.parseDouble(objGST[6].toString()));
+					 objDtlBean.setDblGSTAmt(Double.parseDouble(objGST[2].toString()));
+					 if (objGST[7].toString().equalsIgnoreCase("CGST"))
+					 {
+						 objDtlBean.setDblCGSTPer(Double.parseDouble(objGST[5].toString()));
+						 objDtlBean.setDblCGSTAmt(Double.parseDouble(objGST[2].toString()));
+						 	 
+					 }
+					 if (objGST[7].toString().equalsIgnoreCase("SGST"))
+					 {
+						 objDtlBean.setDblSGSTPer(Double.parseDouble(objGST[5].toString()));
+						 objDtlBean.setDblSGSTAmt(Double.parseDouble(objGST[2].toString()));	
+					 }
+					 
+					// objDtlBean.setDblTotalAmt(Double.parseDouble(objGST[1].toString()));
+					 
+					 mapGSTSummary.put(objGST[3].toString()+""+objGST[1].toString(), objDtlBean);
+				}
+				 
+				 	 
+			}
+		}
+		
+	}
+	listGSTSummary.clear();
+	for(Map.Entry<String,clsInvoiceDtlBean> entry : mapGSTSummary.entrySet()){
+		clsInvoiceDtlBean objDtlBean =entry.getValue();
+		objDtlBean.setDblTotalAmt(objDtlBean.getDblTaxableAmt()+objDtlBean.getDblGSTAmt());
+		listGSTSummary.add(entry.getValue());
+		
+	}
+
+	try
+	{
+		
+		String shortName = " Paisa";
+		String currCode = req.getSession().getAttribute("currencyCode").toString();
+		clsCurrencyMasterModel objCurrModel = objCurrencyMasterService.funGetCurrencyMaster(currCode, clientCode);
+		if (objCurrModel != null)
+		{
+			shortName = objCurrModel.getStrShortName();
+		}
+
+		clsNumberToWords obj1 = new clsNumberToWords();
+		//DecimalFormat decFormat = new DecimalFormat("#");
+		String totalInvoiceValueInWords = obj1.getNumberInWorld(Math.round(grandTotal), shortName);
+
+		HashMap hm = new HashMap();
+		hm.put("strCompanyName", companyName);
+		hm.put("strUserCode", userCode);
+		hm.put("strImagePath", imagePath);
+
+		hm.put("strAddr1", objSetup.getStrAdd1());
+		hm.put("strAddr2", objSetup.getStrAdd2());
+		hm.put("strCity", objSetup.getStrCity());
+		hm.put("strState", objSetup.getStrState());
+		hm.put("strCountry", objSetup.getStrCountry());
+		hm.put("strPin", objSetup.getStrPin());
+		hm.put("InvCode", InvCode);
+		hm.put("InvDate", InvDate);
+		hm.put("challanDate", challanDate);
+		hm.put("PONO", PONO);
+		hm.put("CustName", CustName);
+		hm.put("PODate", challanDate);
+		hm.put("dcCode", dcCode);
+		hm.put("dataList", dataList);
+		hm.put("bAddress", bAddress);
+		hm.put("bState", bState);
+		hm.put("bPin", bPin);
+		hm.put("sAddress", sAddress);
+		hm.put("sState", sState);
+		hm.put("sPin", sPin);
+		hm.put("totalInvoiceValueInWords", totalInvoiceValueInWords);
+		hm.put("totalInvoiceValue", totalInvoiceValue);
+		hm.put("strGSTNo.", objSetup.getStrCST());
+		hm.put("custGSTNo", custGSTNo);
+		hm.put("custMobileNo", custMobileNo);
+		hm.put("custEmailID", custEmailID);
+		hm.put("listGSTSummary", listGSTSummary);
+		hm.put("strAccountNo",objSetup.getStrBankAccountNo() );
+		hm.put("strBankName",objSetup.getStrBankName());
+		hm.put("strBranchName", objSetup.getStrBranchName());
+		hm.put("strBankIFSC", objSetup.getStrSwiftCode());
+
+		// ////////////
+
+		JasperDesign jd = JRXmlLoader.load(reportName);
+		JasperReport jr = JasperCompileManager.compileReport(jd);
+		JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(dataList);
+		JasperPrint jp = JasperFillManager.fillReport(jr, hm, beanCollectionDataSource);
+		List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
+		jprintlist.add(jp);
+
+		if (jp != null)
+		{
+
+			ServletOutputStream servletOutputStream = resp.getOutputStream();
+			if (type.trim().equalsIgnoreCase("pdf"))
+			{
+
+				JRExporter exporter = new JRPdfExporter();
+				resp.setContentType("application/pdf");
+				exporter.setParameter(JRPdfExporterParameter.JASPER_PRINT_LIST, jprintlist);
+				exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM, servletOutputStream);
+				exporter.setParameter(JRPdfExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+				resp.setHeader("Content-Disposition", "inline;filename=rptTaxInvoiceRetail" + userCode + ".pdf");
+				exporter.exportReport();
+				servletOutputStream.flush();
+				servletOutputStream.close();
+
+			}
+			else
+			{
+
+				// code for Exporting FLR 3 in ExcelSheet
+
+				JRExporter exporter = new JRXlsExporter();
+				resp.setContentType("application/xls");
+				exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.FALSE);
+				exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, jprintlist);
+				exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, servletOutputStream);
+				resp.setHeader("Content-Disposition", "attachment;filename=" + "rptTaxInvoiceRetail" + userCode + ".xlsx");
+				exporter.exportReport();
+
+			}
+
+		}
+
+		// ///////////////
+
+	}
+	catch (Exception e)
+	{
+		e.printStackTrace();
+	}
+
+}
+
+
+
+
+
+
+
+
+/*
 @RequestMapping(value = "/rptInvoiceSlipFormat8Report", method = RequestMethod.GET)
 public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String InvCode, String type, HttpServletResponse resp, HttpServletRequest req)
 {
@@ -6816,7 +7164,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 	String dcCode = "";
 	List listGSTSummary=new ArrayList();
 
-/*	String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
+	String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
 			// + "c.dblCostRM,"
 			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblBillRate,0.00)"
 			+ " AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),"
@@ -6827,7 +7175,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			+ " on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + ""
 			+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + ""
 			+ " where a.strInvCode='" + InvCode + "' and a.strClientCode='" + clientCode + "' ";
-*/
+
 	String sqlProdDtl = " select  c.strProdName,c.strProdNameMarathi,b.dblQty,"
 			// + "c.dblCostRM,"
 			+ " IFNULL(b.dblPrice,0.00),c.dblMRP, IFNULL(b.dblBillRate,0.00)"
@@ -7109,7 +7457,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 
 }
 
-
+*/
 
 
 

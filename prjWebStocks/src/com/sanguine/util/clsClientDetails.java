@@ -216,7 +216,9 @@ public class clsClientDetails {
 			hmClientDtl.put("331.001", clsClientDetails.createClientDetails("331.001", "DMPRS HOSPITALITY LLP", dFormat.parse("2019-09-09"), dFormat.parse("2019-11-08")));//(Mumbai)//Released on 09-09-2019 for 1 MONTH till 08-10-2019 for 8 SPOS ,4 APOS, WebStocks,No SMS Pack,No Bill Deletion.", "Mr.RAVI", "7738332591", "bythebae.versova@gmail.com", "No Bill Deletion","santesting"));
 			
 			hmClientDtl.put("336.001", clsClientDetails.createClientDetails("336.001", "SHAH SPORTS ACADEMY PRIVATE LIMITED", dFormat.parse("2019-10-05"), dFormat.parse("2019-11-05")));//
-			
+			hmClientDtl.put("337.001", clsClientDetails.createClientDetails("337.001", "Symbiosis University", dFormat.parse("2019-10-08"), dFormat.parse("2019-11-08")));//Abhijit Rege  9112299043 headhospitality@symbiosis.ac.in regeabhijit@gmail.com
+
+			//
 			
 		} catch (Exception e) {
 			e.printStackTrace();

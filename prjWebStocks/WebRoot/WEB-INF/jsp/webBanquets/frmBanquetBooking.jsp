@@ -41,33 +41,22 @@
 		 --%>
 		$('#txtFromTime').timepicker();
 		$('#txtToTime').timepicker();
-		
-		$('#txtFromTime').timepicker({
-		        'timeFormat':'H:i:s'
-		});
-		$('#txtFromTime').timepicker({
-		        'timeFormat':'H:i:s'
-		});
-		
-		
-		$("#txtFromTime").timepicker();
-		$("#txtToTime").timepicker();
 		  
 		
 		$('#txtFromTime').timepicker({
 	        'timeFormat':'H:i:s'
 		});
+		
 		$('#txtToTime').timepicker({
-			        'timeFormat':'H:i:s'
+	        'timeFormat':'H:i:s'
 		});
+		
+		
+		/* $('#txtToTime').timepicker({
+			        'timeFormat':'HH:i:ss'
+		}); */
 			
 		$('#txtFromTime').timepicker('setTime', new Date());
-		//$('#txtDepartureTime').timepicker('setTime', new Date());
-		//$('#txtDepartureTime').val("${tmeCheckOutPropertySetupTime}");
-		
-		$('#txtFromTime').timepicker();
-		$('#txtToTime').timepicker();
-		
 		
 		/* 
 		$('#txtPickUpTime').timepicker();

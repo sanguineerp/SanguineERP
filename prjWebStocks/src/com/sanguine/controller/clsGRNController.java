@@ -2616,7 +2616,7 @@ public class clsGRNController {
 
 			List dataList = new ArrayList<>();
 			dataList.add(ob[0].toString()); // GRNCode
-			billNo = ob[23].toString();
+			billNo = ob[24].toString();
 			dataList.add(billNo);
 			dataList.add(ob[1].toString()); // GRNDate
 			dataList.add(ob[2].toString()); // SuppCode

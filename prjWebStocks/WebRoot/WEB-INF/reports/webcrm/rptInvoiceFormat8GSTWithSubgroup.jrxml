@@ -157,6 +157,10 @@
 	</parameter>
 	<parameter name="custEmailID" class="java.lang.String"/>
 	<parameter name="custMobileNo" class="java.lang.String"/>
+	<parameter name="strAccountNo" class="java.lang.String"/>
+	<parameter name="strBankName" class="java.lang.String"/>
+	<parameter name="strBranchName" class="java.lang.String"/>
+	<parameter name="strBankIFSC" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select 1 from dual]]>
 	</queryString>
@@ -554,8 +558,8 @@
 				<textFieldExpression><![CDATA[$P{sState}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="3" y="201" width="57" height="16" uuid="f7663cea-6cd7-4b72-ac68-d970aa8994ec"/>
-				<textElement textAlignment="Right">
+				<reportElement x="2" y="201" width="57" height="16" uuid="f7663cea-6cd7-4b72-ac68-d970aa8994ec"/>
+				<textElement textAlignment="Left">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[StateCode]]></text>
@@ -586,7 +590,7 @@
 				<textFieldExpression><![CDATA[$P{sPin}]]></textFieldExpression>
 			</textField>
 			<image onErrorType="Blank">
-				<reportElement x="10" y="2" width="170" height="80" uuid="91676a90-0c75-4ffd-95d6-ac6cd07ca609"/>
+				<reportElement x="1" y="2" width="179" height="127" uuid="91676a90-0c75-4ffd-95d6-ac6cd07ca609"/>
 				<imageExpression><![CDATA[$P{strImagePath}]]></imageExpression>
 			</image>
 			<staticText>
@@ -942,7 +946,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dblCGSTAmt}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField>
 				<reportElement x="47" y="-1" width="109" height="11" isPrintWhenDetailOverflows="true" uuid="0b0e1fdd-ca2c-4e73-b4dc-f6e5b8206e57">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1085,7 +1089,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="306" splitType="Stretch">
+		<band height="300" splitType="Stretch">
 			<staticText>
 				<reportElement positionType="FixRelativeToBottom" x="310" y="124" width="180" height="12" isRemoveLineWhenBlank="true" uuid="7ede5ebf-dbfd-40a5-aeb1-6997b89f6b71">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -1236,7 +1240,7 @@
 				</reportElement>
 			</line>
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="4" y="239" width="567" height="1" isPrintInFirstWholeBand="true" uuid="42420c60-51ce-48f9-9370-1f4ce8b9916c">
+				<reportElement positionType="FixRelativeToBottom" x="293" y="242" width="278" height="1" isPrintInFirstWholeBand="true" uuid="42420c60-51ce-48f9-9370-1f4ce8b9916c">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 			</line>
@@ -1262,7 +1266,7 @@
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="7" y="176" width="62" height="15" isRemoveLineWhenBlank="true" uuid="aa6fe684-7bb8-40a5-93ab-1e6d1012515b">
+				<reportElement positionType="FixRelativeToBottom" x="7" y="171" width="62" height="15" isRemoveLineWhenBlank="true" uuid="aa6fe684-7bb8-40a5-93ab-1e6d1012515b">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -1273,29 +1277,29 @@
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="6" y="197" width="98" height="15" isRemoveLineWhenBlank="true" uuid="a432d84d-bbf9-40a3-ae97-daecac867696">
+				<reportElement positionType="FixRelativeToBottom" x="6" y="189" width="98" height="15" isRemoveLineWhenBlank="true" uuid="a432d84d-bbf9-40a3-ae97-daecac867696">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Bank Account No   :
+				<text><![CDATA[Account No           
 
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="7" y="219" width="96" height="15" isRemoveLineWhenBlank="true" uuid="40b895ee-0459-47dd-81bf-f12e7cc33e6d">
+				<reportElement positionType="FixRelativeToBottom" x="7" y="209" width="96" height="15" isRemoveLineWhenBlank="true" uuid="40b895ee-0459-47dd-81bf-f12e7cc33e6d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Bank Branch IFSC :
+				<text><![CDATA[Name             
 
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="6" y="277" width="96" height="15" isRemoveLineWhenBlank="true" uuid="61d0016e-6755-40d5-a2aa-b437cb026f11">
+				<reportElement positionType="FixRelativeToBottom" x="6" y="280" width="96" height="15" isRemoveLineWhenBlank="true" uuid="61d0016e-6755-40d5-a2aa-b437cb026f11">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -1306,7 +1310,7 @@
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="110" y="277" width="74" height="15" isRemoveLineWhenBlank="true" uuid="97a39268-8a27-4639-a838-473ce36958b3">
+				<reportElement positionType="FixRelativeToBottom" x="112" y="280" width="74" height="15" isRemoveLineWhenBlank="true" uuid="97a39268-8a27-4639-a838-473ce36958b3">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -1971,6 +1975,52 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 			</line>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="113" y="189" width="119" height="15" uuid="15d1e425-df15-4c09-935c-737b8dee77d1"/>
+				<textFieldExpression><![CDATA[$P{strAccountNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="113" y="210" width="118" height="15" uuid="6f52159c-772c-407a-9d94-9a11ed3f662d"/>
+				<textFieldExpression><![CDATA[$P{strBankName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="170" width="211" height="16" uuid="dcd9f137-c6a2-426f-9e68-f60952758d4b"/>
+				<text><![CDATA[       ]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="4" y="271" width="288" height="1" isPrintInFirstWholeBand="true" uuid="c58cee24-23a5-4beb-ab28-bd0cc9b32f80">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="6" y="230" width="96" height="15" uuid="3b2f8385-f7eb-4892-bf76-e23889b353ed">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Branch           ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="7" y="251" width="96" height="15" uuid="68d43780-3cc6-403d-9cb7-a9ae20049a94">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IFSC               
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="113" y="231" width="119" height="15" uuid="031f16b2-e3bc-467d-9a11-f807f3cc7212"/>
+				<textFieldExpression><![CDATA[$P{strBranchName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="113" y="251" width="122" height="14" uuid="6e005a42-839c-4f75-88b8-3c4c7e5b27fb"/>
+				<textFieldExpression><![CDATA[$P{strBankIFSC}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

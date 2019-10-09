@@ -42,7 +42,7 @@ public class clsBanquetStaffCategeoryMasterController{
 		objGlobal=new clsGlobalFunctions();
 		String sql="";
 		String clientCode=request.getSession().getAttribute("clientCode").toString();
-		String userCode=request.getSession().getAttribute("userCode").toString();
+		String userCode=request.getSession().getAttribute("usercode").toString();
 		clsBanquetStaffCategeoryMasterBean objBean=new clsBanquetStaffCategeoryMasterBean();
 		String docCode=request.getParameter("docCode").toString();
 		List listModel=objGlobalFunctionsService.funGetList(sql);
@@ -88,10 +88,10 @@ public class clsBanquetStaffCategeoryMasterController{
 		clsBanquetStaffCategeoryMasterModel objModel = null;		
 		clsBanquetStaffCategeoryMasterModel mpModel;
 			if (objBean.getStrStaffCategeoryCode().trim().length() == 0) {
-				lastNo = objGlobalFunctionsService.funGetLastNo("tblstaffcategeorymaster", "MemberProfile", "intGId", clientCode);
-				String customerCode = "S" + String.format("%06d", lastNo);
+				lastNo = objGlobalFunctionsService.funGetLastNo("tblstaffcategeorymaster", "MemberProfile", "intSCId", clientCode);
+				String customerCode = "SC" + String.format("%06d", lastNo);
 				mpModel = new clsBanquetStaffCategeoryMasterModel(new clsBanquetStaffCategeoryMasterModel_ID(customerCode, clientCode));
-				mpModel.setIntGId(lastNo);				
+				mpModel.setIntSCId(lastNo);				
 				mpModel.setStrStaffCategeoryCode(customerCode);
 				mpModel.setStrStaffCategeoryName(objBean.getStrStaffCategeoryName());
 				mpModel.setStrStaffCount(objBean.getStrStaffCount());
@@ -105,10 +105,10 @@ public class clsBanquetStaffCategeoryMasterController{
 			} else {				
 				clsBanquetStaffCategeoryMasterModel objMemberProfile = objBanquetStaffCategeoryMasterService.funGetBanquetStaffCategeoryMaster(objBean.getStrStaffCategeoryCode(), clientCode);
 				if (null == objMemberProfile) {
-					lastNo = objGlobalFunctionsService.funGetLastNo("tblstaffcategeorymaster", "MemberProfile", "intGId", clientCode);
-					String customerCode = "S" + String.format("%06d", lastNo);
+					lastNo = objGlobalFunctionsService.funGetLastNo("tblstaffcategeorymaster", "MemberProfile", "intSCId", clientCode);
+					String customerCode = "SC" + String.format("%06d", lastNo);
 					mpModel = new clsBanquetStaffCategeoryMasterModel(new clsBanquetStaffCategeoryMasterModel_ID(customerCode, clientCode));
-					mpModel.setIntGId(lastNo);				
+					mpModel.setIntSCId(lastNo);				
 					mpModel.setStrStaffCategeoryCode(customerCode);
 					mpModel.setStrStaffCategeoryName(objBean.getStrStaffCategeoryName());
 					mpModel.setStrStaffCount(objBean.getStrStaffCount());					
@@ -121,7 +121,7 @@ public class clsBanquetStaffCategeoryMasterController{
 					mpModel.setStrUserEdited(userCode);		
 				} else {
 					mpModel = new clsBanquetStaffCategeoryMasterModel(new clsBanquetStaffCategeoryMasterModel_ID(objBean.getStrStaffCategeoryCode(), clientCode));	
-					mpModel.setIntGId(objMemberProfile.getIntGId());				
+					mpModel.setIntSCId(objMemberProfile.getIntSCId());				
 					mpModel.setStrStaffCategeoryCode(objBean.getStrStaffCategeoryCode());
 					mpModel.setStrStaffCategeoryName(objBean.getStrStaffCategeoryName());
 					mpModel.setStrStaffCount(objBean.getStrStaffCount());	

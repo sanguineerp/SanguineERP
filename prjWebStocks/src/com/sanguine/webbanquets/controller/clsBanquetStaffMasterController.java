@@ -88,10 +88,10 @@ public class clsBanquetStaffMasterController{
 		clsBanquetStaffMasterModel objModel = null;		
 		clsBanquetStaffMasterModel mpModel;
 			if (objBean.getStrStaffCode().trim().length() == 0) {
-				lastNo = objGlobalFunctionsService.funGetLastNo("tblstaffmaster", "MemberProfile", "intGId", clientCode);
-				String customerCode = "S" + String.format("%06d", lastNo);
+				lastNo = objGlobalFunctionsService.funGetLastNo("tblstaffmaster", "MemberProfile", "intSTId", clientCode);
+				String customerCode = "ST" + String.format("%06d", lastNo);
 				mpModel = new clsBanquetStaffMasterModel(new clsBanquetStaffMasterModel_ID(customerCode, clientCode));
-				mpModel.setIntGId(lastNo);				
+				mpModel.setIntSTId(lastNo);				
 				mpModel.setStrStaffCode(customerCode);
 				mpModel.setStrStaffName(objBean.getStrStaffName());
 				mpModel.setStrStaffCatCode(objBean.getStrStaffCatCode());
@@ -105,10 +105,10 @@ public class clsBanquetStaffMasterController{
 				
 				clsBanquetStaffMasterModel objMemberProfile = objBanquetStaffMasterService.funGetBanquetStaffMaster(objBean.getStrStaffCode(), clientCode);
 				if (null == objMemberProfile) {
-					lastNo = objGlobalFunctionsService.funGetLastNo("tblstaffmaster", "MemberProfile", "intGId", clientCode);
-					String customerCode = "S" + String.format("%06d", lastNo);
+					lastNo = objGlobalFunctionsService.funGetLastNo("tblstaffmaster", "MemberProfile", "intSTId", clientCode);
+					String customerCode = "ST" + String.format("%06d", lastNo);
 					mpModel = new clsBanquetStaffMasterModel(new clsBanquetStaffMasterModel_ID(customerCode, clientCode));
-					mpModel.setIntGId(lastNo);				
+					mpModel.setIntSTId(lastNo);				
 					mpModel.setStrStaffCode(customerCode);
 					mpModel.setStrStaffName(objBean.getStrStaffName());
 					mpModel.setStrStaffCatCode(objBean.getStrStaffCatCode());
@@ -120,7 +120,7 @@ public class clsBanquetStaffMasterController{
 					mpModel.setStrUserEdited(userCode);	
 				} else {
 					mpModel = new clsBanquetStaffMasterModel(new clsBanquetStaffMasterModel_ID(objBean.getStrStaffCode(), clientCode));	
-					mpModel.setIntGId(objMemberProfile.getIntGId());				
+					mpModel.setIntSTId(objMemberProfile.getIntSTId());				
 					mpModel.setStrStaffCode(objBean.getStrStaffCode());
 					mpModel.setStrStaffName(objBean.getStrStaffName());
 					mpModel.setStrStaffCatCode(objBean.getStrStaffCatCode());

@@ -8,27 +8,21 @@
 <title></title>
 <script type="text/javascript">
 
-var fieldName;
-
-	$(function() 
-	{
-	});
-	
-
+	var fieldName;
 	$(document).ready(function()
-			{
-	var message='';
-	<%if (session.getAttribute("success") != null) {
-		            if(session.getAttribute("successMessage") != null){%>
-		            message='<%=session.getAttribute("successMessage").toString()%>';
-		            <%
-		            session.removeAttribute("successMessage");
-		            }
-					boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
-					session.removeAttribute("success");
-					if (test) {
-					%>	
-			alert("Data Save successfully :\t"+message);
+	{
+		var message='';
+		<%if (session.getAttribute("success") != null) {
+			            if(session.getAttribute("successMessage") != null){%>
+			            message='<%=session.getAttribute("successMessage").toString()%>';
+			            <%
+			            session.removeAttribute("successMessage");
+			            }
+						boolean test = ((Boolean) session.getAttribute("success")).booleanValue();
+						session.removeAttribute("success");
+						if (test) {
+						%>	
+				alert("Data Save successfully :\t"+message);
 	<%
 	}}%>
 

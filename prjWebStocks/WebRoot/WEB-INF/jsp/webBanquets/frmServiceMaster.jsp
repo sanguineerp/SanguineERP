@@ -195,7 +195,7 @@ function funSetData(code){
 					<label>Operational Y/N</label>
 				</td>
 				
-				<td ><s:checkbox value="true" path="strOperationalYN"  id="txtOperational"  />
+				<td ><s:checkbox value="true" path="strOperationalYN"  id="txtOperational"  checked="true" />
 					
 			</tr>
 			<tr>

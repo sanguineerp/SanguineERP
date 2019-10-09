@@ -125,7 +125,7 @@ public class clsServiceMasterController{
 	    objModel.setStrClientCode(clientCode);
 	    objModel.setStrDeptCode(objBean.getStrDeptCode());
 	    objModel.setStrServiceName(objBean.getStrServiceName());
-	    objModel.setStrOperationalYN(objBean.getStrOperationalYN());
+	    objModel.setStrOperationalYN(objGlobal.funIfNull(objBean.getStrOperationalYN(), "N", "Y"));
 	    objModel.setStrUserEdited(userCode);
 	    objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 	    objModel.setStrPropertyCode(propertyCode);

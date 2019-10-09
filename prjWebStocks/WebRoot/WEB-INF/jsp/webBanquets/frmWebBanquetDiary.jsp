@@ -210,13 +210,13 @@ var strViewType="normal";
 		});
 	}
 	
-	function funShowDiary()
+	function funShowDiary(strAreaCode)
 	{
 		var viewDate=$("#txtViewDate").val();
 			
 		$.ajax({
 			type : "GET",
-			url : getContextPath()+ "/getBanquetBookingDetails.html?viewDate=" + viewDate+"&viewType="+strViewType,
+			url : getContextPath()+ "/getBanquetBookingDetails.html?viewDate=" + viewDate+"&viewType="+strViewType+"&areaCode="+strAreaCode,
 			dataType : "json",
 			 beforeSend : function(){
 				 $("#wait").css("display","block");
@@ -431,7 +431,7 @@ var strViewType="normal";
 	
 	function funAreaOptionSelected(strLocCode,strLocName){
 		funGetHeaderData();
-		funShowDiary();
+		funShowDiary(strLocCode);
 	}
 	
 	function funShowRoomStatusDtl1(row)

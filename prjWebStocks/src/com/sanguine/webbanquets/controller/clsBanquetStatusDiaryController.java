@@ -143,7 +143,7 @@ public class clsBanquetStatusDiaryController {
 	}
 	
 	@RequestMapping(value ="/getBanquetBookingDetails", method=RequestMethod.GET)
-	public @ResponseBody List funGetBanquetBookingDetails(@RequestParam("viewDate")String viewDate,@RequestParam("viewType")String viewType,HttpServletRequest req){
+	public @ResponseBody List funGetBanquetBookingDetails(@RequestParam("viewDate")String viewDate,@RequestParam("viewType")String viewType,@RequestParam("areaCode") String areaCode,HttpServletRequest req){
 		List listBanquetReservation=new ArrayList<>();
 		try{
 			
@@ -172,8 +172,11 @@ public class clsBanquetStatusDiaryController {
 				 objBean=new clsRoomStatusDtlBean();
 				 objBean.setStrDay(tableRowTime);
 				 
+				 String webStockDB=req.getSession().getAttribute("WebStockDB").toString(); 
 			String sqlDiary="select a.strBookingNo,DATEDIFF(a.dteFromDate,'"+viewDate+"') dayDiff,a.strBookingStatus,"
-					+ "a.dteBookingDate,a.dteFromDate,a.dteToDate,a.strCustomerCode from tblbqbookinghd a where " 
+					+ "a.dteBookingDate,a.dteFromDate,a.dteToDate,a.strCustomerCode,p.strPName"
+					+ " from tblbqbookinghd a left outer join `"+webStockDB+"`.tblpartymaster p on a.strCustomerCode=p.strPCode "
+					+ " WHERE a.strAreaCode='"+areaCode+"' and  " 
 				 +" date(a.dteFromDate) >='"+viewDate+"' and date(a.dteToDate) <= DATE_ADD('"+viewDate+"',INTERVAL 7 DAY) "
 				 +" and time(a.tmeFromTime) <= '"+stratTime+":00'"
 				 +" and time(a.tmeToTime) >= '"+newTime+":00';";
@@ -187,19 +190,19 @@ public class clsBanquetStatusDiaryController {
 					Object obj[]=(Object[])listBooking.get(k);
 					
 					if(Double.parseDouble(obj[1].toString())==0){
-						objBean.setStrDay1(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+						objBean.setStrDay1(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
 					}else if(Double.parseDouble(obj[1].toString())==1){
-						objBean.setStrDay2(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+						objBean.setStrDay2(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
 					}else if(Double.parseDouble(obj[1].toString())==2){
-						objBean.setStrDay3(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+						objBean.setStrDay3(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
 					}else if(Double.parseDouble(obj[1].toString())==3){
-						objBean.setStrDay4(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+						objBean.setStrDay4(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
 					}else if(Double.parseDouble(obj[1].toString())==4){
-						objBean.setStrDay5(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+						objBean.setStrDay5(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
 					}else if(Double.parseDouble(obj[1].toString())==5){
-						objBean.setStrDay6(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+						objBean.setStrDay6(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
 					}else if(Double.parseDouble(obj[1].toString())==6){
-						objBean.setStrDay7(obj[6].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+						objBean.setStrDay7(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
 					}
 					
 				}
