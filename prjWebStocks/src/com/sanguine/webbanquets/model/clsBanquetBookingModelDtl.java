@@ -34,6 +34,12 @@ public class clsBanquetBookingModelDtl  implements Serializable {
 		
 		@Column(name="strBookingDate")
 		private String strBookingDate;
+		
+		@Column(name="dblDocDiscAmt")
+		private double dblDocDiscAmt;
+		
+		@Column(name="dblDocTaxAmt")
+		private double dblDocTaxAmt;
 
 		public String getStrType() {
 			return strType;
@@ -89,6 +95,22 @@ public class clsBanquetBookingModelDtl  implements Serializable {
 
 		public void setStrBookingDate(String strBookingDate) {
 			this.strBookingDate = strBookingDate;
+		}
+
+		public double getDblDocDiscAmt() {
+			return dblDocDiscAmt;
+		}
+
+		public void setDblDocDiscAmt(double dblDocDiscAmt) {
+			this.dblDocDiscAmt = dblDocDiscAmt;
+		}
+
+		public double getDblDocTaxAmt() {
+			return dblDocTaxAmt;
+		}
+
+		public void setDblDocTaxAmt(double dblDocTaxAmt) {
+			this.dblDocTaxAmt = dblDocTaxAmt;
 		}
 
 }

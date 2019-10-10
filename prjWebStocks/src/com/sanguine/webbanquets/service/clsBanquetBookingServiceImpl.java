@@ -19,10 +19,14 @@ public class clsBanquetBookingServiceImpl implements clsBanquetBookingService{
 		objBanquetBookingDao.funAddUpdateBanquetBookingHd(objHdModel);
 	}
 
-	/*public void funAddUpdateBanquetBookingDtl(clsBanquetBookingModelDtl objDtlModel){
-		objBanquetBookingDao.funAddUpdateBanquetBookingDtl(objDtlModel);
-	}*/
-
-
-
+	
+	public clsBanquetBookingModelHd funGetBookingData(String strBookingCode,String strClientCode) {
+		return objBanquetBookingDao.funGetBookingData(strBookingCode,strClientCode);
+	}
+	
+	public void funDeleteRecord(String query,String queryType)
+	{
+	   objBanquetBookingDao.funDeleteRecord(query,queryType);
+	}
+	
 }

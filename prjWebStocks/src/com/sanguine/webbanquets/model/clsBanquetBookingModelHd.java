@@ -32,7 +32,7 @@ public class clsBanquetBookingModelHd implements Serializable{
 		strClientCode = objModelID.getStrClientCode();
 	}
 	
-	@CollectionOfElements(fetch = FetchType.LAZY)
+	@CollectionOfElements(fetch = FetchType.EAGER)
 	@JoinTable(name = "tblbqbookingdtl", joinColumns = { @JoinColumn(name = "strBookingNo"), @JoinColumn(name = "strClientCode") })
 	@Id
 	@AttributeOverrides({
@@ -110,6 +110,17 @@ public class clsBanquetBookingModelHd implements Serializable{
 	private String strBookingStatus;
 	
 	
+	@Column(name="dblSubTotal")
+	private double dblSubTotal;
+
+	@Column(name="dblDiscAmt")
+	private double dblDiscAmt;
+	
+	@Column(name="dblTaxAmt")
+	private double dblTaxAmt;
+	
+	@Column(name="dblGrandTotal")
+	private double dblGrandTotal;
 
 	//Setter-Getter Methods
 	public String getStrBookingNo(){
@@ -274,6 +285,37 @@ public class clsBanquetBookingModelHd implements Serializable{
 	public void setListBanquetBookingDtlModels(
 			List<clsBanquetBookingModelDtl> listBanquetBookingDtlModels) {
 		this.listBanquetBookingDtlModels = listBanquetBookingDtlModels;
+	}
+	public double getDblSubTotal() {
+		return dblSubTotal;
+	}
+
+	public void setDblSubTotal(double dblSubTotal) {
+		this.dblSubTotal = dblSubTotal;
+	}
+
+	public double getDblDiscAmt() {
+		return dblDiscAmt;
+	}
+
+	public void setDblDiscAmt(double dblDiscAmt) {
+		this.dblDiscAmt = dblDiscAmt;
+	}
+
+	public double getDblTaxAmt() {
+		return dblTaxAmt;
+	}
+
+	public void setDblTaxAmt(double dblTaxAmt) {
+		this.dblTaxAmt = dblTaxAmt;
+	}
+
+	public double getDblGrandTotal() {
+		return dblGrandTotal;
+	}
+
+	public void setDblGrandTotal(double dblGrandTotal) {
+		this.dblGrandTotal = dblGrandTotal;
 	}
 
 	//Function to Set Default Values

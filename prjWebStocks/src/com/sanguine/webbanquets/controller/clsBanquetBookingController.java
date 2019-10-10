@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,6 +25,7 @@ import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.webbanquets.bean.clsBanquetBookingBean;
 import com.sanguine.webbanquets.model.clsBanquetBookingModelDtl;
 import com.sanguine.webbanquets.model.clsBanquetBookingModelHd;
+import com.sanguine.webbanquets.model.clsFunctionMasterModel;
 import com.sanguine.webbanquets.service.clsBanquetBookingService;
 import com.sanguine.webpms.bean.clsReservationBean;
 import com.sanguine.webpms.model.clsPropertySetupHdModel;
@@ -44,6 +46,8 @@ public class clsBanquetBookingController{
 
 
 //Open BanquetBooking
+	
+	
 	@RequestMapping(value = "/frmBanquetBooking", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request){
 
@@ -58,15 +62,7 @@ public class clsBanquetBookingController{
 		List listOfProperty = objGlobalFunctionsService.funGetList("select strPropertyName from "+webStockDB+".tblpropertymaster where strPropertyCode='" + propCode + "' ");
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		model.put("listOfProperty", listOfProperty);
-
 		model.put("urlHits", urlHits);
-	
-
-//		clsPropertySetupHdModel objPropertySetupModel = objPropertySetupService.funGetPropertySetup(propCode, clientCode);
-//		String noOfRoom = objPropertySetupModel.getStrRoomLimit();
-//		
-//		model.put("noOfRoom", noOfRoom);
-
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmBanquetBooking_1", "command", new clsBanquetBookingBean());
 		} else if ("1".equalsIgnoreCase(urlHits)) {
@@ -78,32 +74,21 @@ public class clsBanquetBookingController{
 		
 	}
 //Load Header Table Data On Form
-	@RequestMapping(value = "/loadBanquetBookingHd", method = RequestMethod.POST)
-	public @ResponseBody clsBanquetBookingModelHd funLoadHdData(HttpServletRequest request){
+	@RequestMapping(value = "/loadBanquetBookingHd", method = RequestMethod.GET)
+	public @ResponseBody clsBanquetBookingModelHd funLoadHdData(@RequestParam("bookingCode") String bookingCode,HttpServletRequest request){
 		
 		String sql="";
 			String clientCode=request.getSession().getAttribute("clientCode").toString();
-			String userCode=request.getSession().getAttribute("userCode").toString();
-			clsBanquetBookingBean objBean=new clsBanquetBookingBean();
-			String docCode=request.getParameter("docCode").toString();
-			List listHdModel=objGlobalFunctionsService.funGetList(sql);
-			clsBanquetBookingModelHd objBanquetBooking = new clsBanquetBookingModelHd();
-			return objBanquetBooking;
+			String userCode=request.getSession().getAttribute("usercode").toString();
+			clsBanquetBookingModelHd objHDModel=objBanquetBookingService.funGetBookingData(bookingCode, clientCode);
+			if (null == objHDModel) {
+				objHDModel = new clsBanquetBookingModelHd();
+				objHDModel.setStrBookingNo("Invalid Code");
+			}
+			return objHDModel;
 	}
 
-//Load Dtl Table Data On Form
-	/*@RequestMapping(value = "/loadBanquetBookingDtl", method = RequestMethod.POST)
-	public @ResponseBody clsBanquetBookingDtlModelHd funLoadDtlData(HttpServletRequest request){
-		objGlobal=new clsGlobalFunctions();
-		String sql=""
-			String clientCode=request.getSession().getAttribute("clientCode").toString();
-			String userCode=request.getSession().getAttribute("userCode").toString();
-		clsBanquetBookingBean objBean=new clsBanquetBookingBean();
-		String docCode=req.getParameter("docCode").toString();
-		List listDtlModel=objGlobalFunctionsService.funGetList(sql);
-	clsBanquetBookingDtlModel objBanquetBookingDtl = new clsBanquetBookingDtlModel();
-	return objBanquetBookingDtl;
-	}*/
+
 
 //Save or Update BanquetBooking
 	/**
@@ -124,21 +109,23 @@ public class clsBanquetBookingController{
 			
 			objBanquetBookingService.funAddUpdateBanquetBookingHd(objHdModel);
 			
+			
 			if(objBean.getListSeriveDtl()!=null && !objBean.getListSeriveDtl().isEmpty())
 			{
 				List<clsBanquetBookingModelDtl>list=objBean.getListSeriveDtl();
 				for(int i=0;i<list.size();i++)
 				{
 					clsBanquetBookingModelDtl objDtl=list.get(i);
-					objDtl.setStrType("Service");
-					objDtl.setDblDocQty(1);
-					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
-					objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
-					listBookingDtl.add(objDtl);
-					
-				}
-			
+					if(objDtl.getStrType()!=null)
+					{
+						objDtl.setStrType("Service");
+						objDtl.setDblDocQty(1);
+						objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
+						objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
+						listBookingDtl.add(objDtl);	
+					}
 				
+				}
 				
 			}
 			if(objBean.getListEquipDtl()!=null && !objBean.getListEquipDtl().isEmpty())
@@ -151,10 +138,8 @@ public class clsBanquetBookingController{
 					objDtl.setStrType("Equipment");
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 					objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
-					listBookingDtl.add(objDtl);
-					
-				}
-				
+					listBookingDtl.add(objDtl);	
+				}	
 			}
 			if(objBean.getListStaffCatDtl()!=null && !objBean.getListStaffCatDtl().isEmpty())
 			{
@@ -165,9 +150,7 @@ public class clsBanquetBookingController{
 					
 					objDtl.setStrType("Staff");
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
-				//	objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
-					listBookingDtl.add(objDtl);
-					
+					listBookingDtl.add(objDtl);					
 				}
 				
 			}
@@ -181,13 +164,13 @@ public class clsBanquetBookingController{
 					objDtl.setStrType("Menu");
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 					objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
-					listBookingDtl.add(objDtl);
-					
-				}
-				
+					listBookingDtl.add(objDtl);					
+				}				
 			}
 			objHdModel.setListBanquetBookingDtlModels(listBookingDtl);
 			objBanquetBookingService.funAddUpdateBanquetBookingHd(objHdModel);
+			req.getSession().setAttribute("success", true);
+			req.getSession().setAttribute("successMessage", "Booking No : ".concat(objHdModel.getStrBookingNo()));
 			
 			return new ModelAndView("redirect:/frmBanquetBooking.html");
 		}
@@ -208,7 +191,6 @@ public class clsBanquetBookingController{
 			String dateBook = bookDate[2] + "-" + bookDate[1] + "-" + bookDate[0];
 			String bookCode ="";
 		
-				
 				String transYear="A";
 				List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();
 				if (listClsCompanyMasterModel.size() > 0) {
@@ -218,9 +200,6 @@ public class clsBanquetBookingController{
 				
 				String[] spDate = dateBook.split("-");
 				String transMonth = objGlobalFunctions.funGetAlphabet(Integer.parseInt(spDate[1])-1);
-				/*String sql = "select ifnull(max(MID(a.strInvCode,8,5)),'' ) " + " from tblinvoicehd a where MID(a.strInvCode,5,1) = '" + transYear + "' " + " and MID(a.strInvCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";	//and MID(a.strInvCode,6,1) = '" + transMonth + "' " + " 
-				String sqlAudit = " select ifnull(max(MID(a.strTransCode,8,5)),'' ) " + " from tblaudithd a where MID(a.strTransCode,5,1) = '" + transYear + "' and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Invoice' ;  ";  		//" + " and MID(a.strTransCode,6,1) = '" + transMonth + "' " + "
-				*/
 				String sql = "select ifnull(max(MID(a.strBookingNo,8,5)),'' )" + " from tblbqbookinghd a where MID(a.strBookingNo,5,1) = '" + transYear + "' " + " and MID(a.strBookingNo,6,1) = '" + transMonth + "' " + " and MID(a.strBookingNo,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' ";
 				String sqlAudit = " select ifnull(max(MID(a.strTransCode,8,5)),'' ) " + " from "+webStockDB+".tblaudithd a where MID(a.strTransCode,5,1) = '" + transYear + "' " + " and MID(a.strTransCode,6,1) = '" + transMonth + "' " + " and MID(a.strTransCode,1,2) = '" + propCode + "' and strClientCode='" + clientCode + "' " + "and a.strTransType='Invoice' ;  ";
 				
@@ -241,11 +220,6 @@ public class clsBanquetBookingController{
 				} else {
 					lastnoLive = 0;
 				}
-
-				
-				/*clsSettlementMasterModel objModel = objSttlementMasterService.funGetObject(objBean.getStrSettlementCode(), clientCode);*/
-			
-				
 				if (lastnoLive > lastnoAudit) {
 					bookCode = propCode + "BK" + transYear + transMonth  + String.format("%05d", lastnoLive + 1);
 				} else {
@@ -257,6 +231,9 @@ public class clsBanquetBookingController{
 		}
 		else // Update
 		{
+			objBanquetBookingService.funDeleteRecord("delete from clsBanquetBookingModelHd where strBookingNo='" + objBean.getStrBookingNo() + "'  and strClientCode='" + clientCode + "'","hql");
+			objBanquetBookingService.funDeleteRecord("delete from tblbqbookingdtl  where strBookingNo='" + objBean.getStrBookingNo() + "'  and strClientCode='" + clientCode + "';","sql");
+		
 			objHDModel.setStrBookingNo(objBean.getStrBookingNo());
 			
 		}
@@ -283,5 +260,41 @@ public class clsBanquetBookingController{
 		return objHDModel;
 
 	}
-
+	
+	@RequestMapping(value = "/loadBookingFunServiceData", method = RequestMethod.GET)
+	public @ResponseBody List funLoadBookingFunServiceData(@RequestParam("functionCode") String funCode,@RequestParam("bookingCode") String  bookingCode, HttpServletRequest req)
+	{
+		List list =null;
+		try{
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String 	 sql="select  a.strServiceCode,a.strServiceName ,s.dblRate, if(ifnull(b.strDocNo,'')='','N','Y')"
+					+ " from tblservicemaster s , tblfunctionservice a left outer join tblbqbookingdtl b on a.strServiceCode=b.strDocNo and b.strBookingNo='"+bookingCode+"'"
+					+ "where  a.strFunctionCode='"+funCode+"' and s.strServiceCode=a.strServiceCode  and s.strClientCode='"+clientCode+"' group by  a.strServiceCode;";
+			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
+			}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return list;
+	}
+	
+	@RequestMapping(value = "/loadPropertyCode", method = RequestMethod.GET)
+	public @ResponseBody List funLoadPropertyCode(@RequestParam("docCode") String docCode,HttpServletRequest req)
+	{
+		List list =null;
+		try{
+			String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String 	 sql="select a.strPropertyName from "+webStockDB+".tblpropertymaster a where a.strPropertyCode='"+docCode+"' and a.strClientCode='"+clientCode+"'";
+			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
+			}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return list;
+	}
+	
+	  
 }
