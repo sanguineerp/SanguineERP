@@ -266,7 +266,7 @@
 					
 					<tr>
 					<td><label>Operational Y/N</label></td>
-					<td ><s:checkbox path="strOperationalYN" id="txtOperational" value="Y" />
+					<td ><s:checkbox path="strOperationalYN" id="txtOperational" value="Y" checked="true" />
 								<%-- <s:option value="Y">YES</s:option>
 								<s:option value="N">NO</s:option></s:select></td> --%>
 					</tr>

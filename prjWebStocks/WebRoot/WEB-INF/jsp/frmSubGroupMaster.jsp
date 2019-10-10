@@ -145,7 +145,7 @@ $(document).ready(function(){
 			        	else
 			        		{
 				        	$("#txtSubgroupName").val(response.strSGName);
-				        	$("#txtSubgroupDesc").val(response.strSGCode);
+				        	$("#txtSubgroupDesc").val(response.strSGDesc);
 				        	$("#txtGroupCode").val(response.strGCode);
 				        	$("#txtChapterNo").val(response.strExciseChapter);
 				        	if(response.strExciseable=='Y')

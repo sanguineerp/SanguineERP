@@ -348,7 +348,7 @@
 					<label>Operational</label>
 				</td>
 				<td>
-					<s:checkbox value="true" element="li" id="chkOperational" path="strOperational"  />
+					<s:checkbox value="true" element="li" id="chkOperational" path="strOperational"  checked="true"/>
 				</td>
 			</tr>
 		</table>

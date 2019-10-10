@@ -3189,14 +3189,14 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		/*----------------------WebBanquetsFrom Start-----------------------*/
 
 
-		sql="CREATE TABLE `tblbqmenuhead` (`strMenuHeadCode` VARCHAR(20) NOT NULL,`strMenuHeadName` VARCHAR(50) NOT NULL,"
+		sql="CREATE TABLE IF NOT EXISTS  `tblbqmenuhead` (`strMenuHeadCode` VARCHAR(20) NOT NULL,`strMenuHeadName` VARCHAR(50) NOT NULL,"
 				+ "`dteDateCreated` DATETIME NOT NULL,`dteDateEdited` DATETIME NOT NULL,`strUserCreated` VARCHAR(20) NOT NULL,"
 				+ "`strUserEdited` VARCHAR(20) NOT NULL,`strOperational` VARCHAR(5) NOT NULL DEFAULT 'No',`strClientCode` VARCHAR(10) NOT NULL,"
 				+ "PRIMARY KEY (`strMenuHeadCode`, `strClientCode`)"
 				+ ")COLLATE='latin1_swedish_ci'ENGINE=InnoDB; ";
 		funExecuteBanquetQuery(sql);
 		
-		sql = "CREATE TABLE `tblequipment` ("
+		sql = "CREATE TABLE IF NOT EXISTS  `tblequipment` ("
 				+ "`strEquipmentCode` VARCHAR(255) NOT NULL,"
 				+ "`strEquipmentName` VARCHAR(255) NOT NULL,"
 				+ "`intId` BIGINT(20) NOT NULL,"
@@ -3216,7 +3216,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql = "CREATE TABLE `tblcostcentermaster` ("
+		sql = "CREATE TABLE IF NOT EXISTS  `tblcostcentermaster` ("
 				+ "`strCostCenterCode` VARCHAR(10) NOT NULL,"
 				+ "`strCostCenterName` VARCHAR(50) NOT NULL,"
 				+ "`intId` INT(5) NOT NULL,"
@@ -3234,7 +3234,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblfunctionmaster` ("
+		sql="CREATE TABLE IF NOT EXISTS  `tblfunctionmaster` ("
 				+ "`strFunctionCode` VARCHAR(10) NOT NULL,"
 				+ "`strFunctionName` VARCHAR(100) NOT NULL DEFAULT '',"
 				+ "`strOperationalYN` VARCHAR(2) NOT NULL DEFAULT 'Y',"
@@ -3252,7 +3252,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblbqitemmaster` ("
+		sql="CREATE TABLE IF NOT EXISTS  `tblbqitemmaster` ("
 				+ "`strItemCode` VARCHAR(10) NOT NULL,"
 				+ "	`strItemName` VARCHAR(50) NOT NULL,"
 				+ "	`strMenuHeadCode` VARCHAR(10) NOT NULL,"
@@ -3277,21 +3277,21 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteBanquetQuery(sql);
 		
 		
-		sql="CREATE TABLE `tblfunctionservice` ("
-				+ "	`strFunctionCode` VARCHAR(10) NOT NULL, "
-				+ "	`strServiceCode` VARCHAR(10) NOT NULL, " 
-				+ "	`strServiceName` VARCHAR(10) NOT NULL, "
-				+ "	`strClientCode` VARCHAR(10) NOT NULL, "
-				+ "	`strApplicable` VARCHAR(10) NOT NULL "
-				+ "	) "
-			+ "	COLLATE='utf8_general_ci' "
-			+ "	ENGINE=InnoDB "
-			+ "	;";
+		sql="CREATE TABLE IF NOT EXISTS `tblfunctionservice` ( "
+				+ "`strFunctionCode` VARCHAR(10) NOT NULL, "
+				+ " `strServiceCode` VARCHAR(10) NOT NULL, "
+				+ " `strServiceName` VARCHAR(70) NOT NULL, " 
+				+ " `strClientCode` VARCHAR(10) NOT NULL, "
+				+ " `strApplicable` VARCHAR(10) NOT NULL, "
+				+ " INDEX `FKA6E5DC5F1AE1AC01` (`strClientCode`, `strFunctionCode`) "
+			+ " ) "
+			+ " COLLATE='utf8_general_ci' "
+			+ " ENGINE=InnoDB;";
 		
 		funExecuteBanquetQuery(sql);
 		
 
-		sql="CREATE TABLE `tblservicemaster` ("
+		sql="CREATE TABLE IF NOT EXISTS  `tblservicemaster` ("
 				+ "`strServiceCode` VARCHAR(10) NOT NULL,"
 				+ "`strServiceName` VARCHAR(50) NOT NULL DEFAULT '',"
 				+ "`intSId` BIGINT(20) NOT NULL DEFAULT '0',"
@@ -3314,7 +3314,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		
 		
-		sql="CREATE TABLE `tblstaffmaster` ( "
+		sql="CREATE TABLE IF NOT EXISTS  `tblstaffmaster` ( "
 				+" `intSTId` BIGINT(20) NOT NULL, "
 				+" `strStaffCode` VARCHAR(10) NOT NULL, "
 				+" `strStaffName` VARCHAR(50) NOT NULL, "
@@ -3332,7 +3332,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql ="CREATE TABLE `tblstaffcategeorymaster` ( "
+		sql ="CREATE TABLE IF NOT EXISTS  `tblstaffcategeorymaster` ( "
 				+" `intSCId` BIGINT(20) NOT NULL DEFAULT '0', "
 				+" `strStaffCategeoryCode` VARCHAR(10) NOT NULL, "
 				+" `strStaffCategeoryName` VARCHAR(50) NOT NULL, "
@@ -3351,7 +3351,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblbqbookingdtl` ( "
+		sql="CREATE TABLE IF NOT EXISTS  `tblbqbookingdtl` ( "
 			+" `strBookingNo` VARCHAR(25) NOT NULL, "
 			+" `strType` VARCHAR(20) NOT NULL DEFAULT ' ', "
 			+" `strDocNo` VARCHAR(20) NOT NULL DEFAULT ' ', "
@@ -3366,7 +3366,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		+" ENGINE=InnoDB;";
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE `tblbqbookinghd` ( "
+		sql="CREATE TABLE IF NOT EXISTS  `tblbqbookinghd` ( "
 			+" `strBookingNo` VARCHAR(30) NOT NULL, "
 			+" `strClientCode` VARCHAR(20) NOT NULL, "
 			+" `dteBookingDate` DATETIME NOT NULL, "
@@ -3416,7 +3416,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteBanquetQuery(sql);
 		
 		
-		sql="CREATE TABLE `tblweekendmaster` ( "
+		sql="CREATE TABLE IF NOT EXISTS  `tblweekendmaster` ( "
 				+" `strDayNo` VARCHAR(20) NOT NULL DEFAULT '', "
 				+" `strDay` VARCHAR(20) NOT NULL DEFAULT '', " 
 				+" `dtDteCreated` DATETIME NOT NULL, "
