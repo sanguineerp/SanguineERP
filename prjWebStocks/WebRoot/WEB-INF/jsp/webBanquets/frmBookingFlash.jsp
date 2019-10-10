@@ -217,9 +217,12 @@ function funBookingDetail(ProdDtl)
     var table = document.getElementById("tblBookingDet");
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
+    var bookingNo=data.strBookingNo;
     
-    
-    row.insertCell(0).innerHTML= "<input name=\"strBookingNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strBookingNo."+(rowCount)+"\" value='"+data.strBookingNo+"'>";
+   // row.insertCell(0).innerHTML= "<input name=\"strBookingNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strBookingNo."+(rowCount)+"\" value='"+data.strBookingNo+"'>";
+   
+    row.insertCell(0).innerHTML= "<input name=\"strBookingNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strBookingNo."+(rowCount)+"\" value='"+bookingNo+"' onclick=\"funClick(this)\">";
+   
     row.insertCell(1).innerHTML= "<input name=\"strBookingStatus["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" style=\"text-align: center;\" size=\"15%\" id=\"strBookingStatus."+(rowCount)+"\" value='"+data.strBookingStatus+"'>";
     row.insertCell(2).innerHTML= "<input name=\"dteBookingDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strRoomDesc."+(rowCount)+"\" value='"+data.dteBookingDate+"'>";
     row.insertCell(3).innerHTML= "<input name=\"tmeFromTime["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"tmeFromTime."+(rowCount)+"\" value='"+data.tmeFromTime+"'>";
@@ -231,9 +234,20 @@ function funBookingDetail(ProdDtl)
 }
 
 
+function funClick(obj)
+{
+	//var bookingNo=document.getElementById(""+obj.id+"").innerHTML;
+	var bookingNo=obj.value;
+	var dteFromDate=document.getElementById("dteFromDate").value;
+	var dteToDate=document.getElementById("dteToDate").value;
+	
+	window.open(getContextPath()+"/rptOpenFunctionProspectus.html?bookingNo="+bookingNo);
+	
+}	
+
 function funExportReport()
 {
-	var  click=activeClick;
+	var click=activeClick;
 	var frmDte1=$('#dteFromDate').val();
 	var toDte1=$('#dteToDate').val();
 	if(hidReportName=='divBookingDtl')
@@ -241,6 +255,9 @@ function funExportReport()
 		window.location.href = getContextPath()+"/exportBookingFlashDtl.html?frmDte="+frmDte1+"&toDte="+toDte1+"&reportType="+click;
 	}
 }	
+
+
+
 
 </script>
 

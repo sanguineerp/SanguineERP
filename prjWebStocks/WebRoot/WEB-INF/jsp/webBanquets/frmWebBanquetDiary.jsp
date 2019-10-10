@@ -281,7 +281,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  onClick='funCellOnClick(this)'>";
+			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' title ='"+strDay1+"'  onClick='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
@@ -297,7 +297,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  onClick='funCellOnClick(this)'>";
+			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay2+"' onClick='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
@@ -313,7 +313,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  onClick='funCellOnClick(this)'>";
+			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay3+"' onClick='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -330,7 +330,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  onClick='funCellOnClick(this)'>";
+			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay4+"' onClick='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -362,7 +362,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' onClick='funCellOnClick(this)'>";
+			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay5+"' onClick='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -379,7 +379,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' onClick='funCellOnClick(this)' >";
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay6+"' onClick='funCellOnClick(this)' >";
 		}else{
 			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -390,17 +390,38 @@ var strViewType="normal";
 		var customer =objCell.value;
 		if(bookingColor=='red') //confirm
 		{
-			alert('confirm');
+			var isCheckOk=confirm("Do You Want Genarate FP"); 
+			if(isCheckOk)
+			{
+				var bookingNo=objCell.title.split("#")[2];
+				window.open(getContextPath()+"/rptOpenFunctionProspectus.html?bookingNo="+bookingNo);
+			}
+			//alert('confirm');
 		}
 		else if(bookingColor=='green') //provisional
 		{
-			alert('provisional');
+			var isCheckOk=confirm("Do You Want to Payment ?"); 
+			if(isCheckOk)
+			{
+		 	 url=getContextPath()+"/frmPMSPayment.html";
+		 	 window.open(url);
+			}
 		}
 		else if(bookingColor=='yellow') //waitlisted
 		{
-			alert('waitlisted');
+			var isCheckOk=confirm("Do You Want to Payment ?"); 
+			if(isCheckOk)
+			{
+		 	 url=getContextPath()+"/frmPMSPayment.html";
+		 	 window.open(url);
+			}
 		}else{
-			alert('open');
+			var isCheckOk=confirm("Do You Want to Book ?"); 
+			if(isCheckOk)
+			{
+		 	 url=getContextPath()+"/frmBanquetBooking.html";
+		 	 window.open(url);
+			}
 		}
 	}
 	

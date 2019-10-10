@@ -4,21 +4,42 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ibm.icu.math.BigDecimal;
+import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.webbanquets.bean.clsBookingFlashBean;
+import com.sanguine.webbanquets.bean.clsFunctionProspectusBean;
 import com.sanguine.webpms.bean.clsPMSSalesFlashBean;
 
 @Controller
@@ -26,6 +47,13 @@ public class clsBookingFlashController
 {
 	@Autowired
 	private clsGlobalFunctionsService objGlobalService;
+	@Autowired
+	private clsSetupMasterService objSetupMasterService;
+	@Autowired
+	private ServletContext servletContext;
+	
+	@Autowired
+	private clsFunctionProspectusController objFunctionProspectusController;
 	
 	@RequestMapping(value = "/frmBookingFlash", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model,HttpServletRequest request) {
@@ -78,7 +106,7 @@ public class clsBookingFlashController
 		
 		List<clsBookingFlashBean> listofBookingDtl = new ArrayList<clsBookingFlashBean>();
 		List listofBookingTotal = new ArrayList<>();
-        String sql="select a.strBookingNo,a.strBookingStatus,DATE(a.dteBookingDate),a.tmeFromTime,a.tmeToTime,a.strAreaCode, "
+        String sql="select a.strBookingNo,a.strBookingStatus,DATE_FORMAT( DATE(a.dteBookingDate),'%d-%m-%Y') as dte,a.tmeFromTime,a.tmeToTime,a.strAreaCode, "
                   +" a.strFunctionCode,a.dblBookingAmt "
                   +" from tblbqbookinghd  a "
                   +" where  DATE(a.dteBookingDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' and a.strClientCode='"+strClientCode+"'  and a.strBookingStatus='"+strType+"';"; 
@@ -156,7 +184,7 @@ public class clsBookingFlashController
 		
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		DecimalFormat df = new DecimalFormat("#.##");
-		String sql="select a.strBookingNo,a.strBookingStatus,DATE(a.dteBookingDate),a.tmeFromTime,a.tmeToTime,a.strAreaCode, "
+		String sql="select a.strBookingNo,a.strBookingStatus,DATE_FORMAT( DATE(a.dteBookingDate),'%d-%m-%Y') as dte,a.tmeFromTime,a.tmeToTime,a.strAreaCode, "
                 +" a.strFunctionCode,a.dblBookingAmt "
                 +" from tblbqbookinghd  a "
                 +" where  DATE(a.dteBookingDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' and a.strClientCode='"+strClientCode+"'  and a.strBookingStatus='"+strType+"';"; 
@@ -216,6 +244,20 @@ public class clsBookingFlashController
 		retList.add(detailList);
 		
 		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
+	}
+	
+	
+	@RequestMapping(value = "/rptOpenFunctionProspectus", method = RequestMethod.GET)
+	public void funGenerateFunctionProspectus(@RequestParam("bookingNo")String strBookingNo, HttpServletRequest req, HttpServletResponse resp) 
+	{
+		try 
+		{
+			objFunctionProspectusController.funGenarateFunctionProspectus(strBookingNo, req, resp);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 }
