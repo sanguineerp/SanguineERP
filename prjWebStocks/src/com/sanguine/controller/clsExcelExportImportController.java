@@ -3,7 +3,9 @@ package com.sanguine.controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,8 +48,12 @@ import com.sanguine.service.clsProductMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.webpms.bean.clsGuestMasterBean;
+import com.sanguine.webpms.bean.clsRoomMasterBean;
 import com.sanguine.webpms.dao.clsGuestMasterDao;
+import com.sanguine.webpms.dao.clsRoomTypeMasterDao;
 import com.sanguine.webpms.model.clsGuestMasterHdModel;
+import com.sanguine.webpms.model.clsRoomMasterModel;
+import com.sanguine.webpms.model.clsRoomTypeMasterModel;
 import com.sanguine.webpms.service.clsGuestMasterService;
 
 @Controller
@@ -85,6 +91,9 @@ public class clsExcelExportImportController {
 	
 	@Autowired
 	private clsGuestMasterService  objGuestMasterService;
+	
+	@Autowired
+	private clsRoomTypeMasterDao objRoomTypeMasterDao;
 
 	final static Logger logger = Logger.getLogger(clsExcelExportImportController.class);
 
@@ -780,7 +789,11 @@ public class clsExcelExportImportController {
 
 			case "frmGuestMaster":
 				list = funGuestList(worksheet, request);
-				break;		
+				break;
+				
+			case "frmRoomMaster":
+				list = funRoomList(worksheet, request);
+				break;
 				
 			}
 		} catch (Exception e) {
@@ -788,6 +801,125 @@ public class clsExcelExportImportController {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	private List funRoomList(HSSFSheet worksheet, HttpServletRequest request) {
+	
+
+		List listGuestlist = new ArrayList<>();
+		int RowCount = 0;
+		//String prodCode = "";
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String userCode = request.getSession().getAttribute("usercode").toString();
+		
+		//String prodStock=request.getParameter("prodStock");
+		try {
+			int i = 1;
+			
+			String strRoomName = "";
+			clsRoomMasterModel objModel = new clsRoomMasterModel();
+			HashMap<String,Double> hm = new HashMap<String,Double>();
+			List list = new ArrayList<>();
+			
+			while (i <= worksheet.getLastRowNum()) {
+				// Creates an object representing a single row in excel
+				
+				
+				HSSFRow row = worksheet.getRow(i++);
+				// Sets the Read data to the model class
+				RowCount = row.getRowNum();
+				
+				strRoomName = row.getCell(0).toString();
+				objModel = new clsRoomMasterModel();
+							
+				hm.put(row.getCell(1).toString(),Double.parseDouble(row.getCell(2).toString()));
+				
+				
+				
+				list.add(strRoomName);
+			}
+			
+			funCheckRoomType(hm,clientCode,userCode);
+			
+			funCheckRoom(hm,clientCode,userCode);
+
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			List list = new ArrayList<>();
+			list.add("Invalid Excel File");
+			//list.add("Invalid Entry In Row No." + RowCount + " and Product Code " + prodCode + " ");
+			return list;
+		}
+		return listGuestlist;
+	
+	}
+
+	
+
+	private void funCheckRoom(HashMap<String, Double> hm, String clientCode,
+			String userCode) {
+		
+		
+		
+	}
+
+	private void funCheckRoomType(HashMap<String, Double> hm, String clientCode, String userCode) {
+		
+		 for (Map.Entry<String,Double> entry : hm.entrySet())  {
+			 
+		 
+		
+		String sqlCheck = "select * from tblroomtypemaster a where a.strRoomTypeDesc='"+entry.getKey()+"' and a.strClientCode='"+clientCode+"'";
+		
+		List list=objGlobalFunctionsService.funGetListModuleWise(sqlCheck, "sql");
+		
+		if(list!=null && list.size()>0)
+		{
+			
+			clsRoomTypeMasterModel objRoomTypeMasterModel =  new clsRoomTypeMasterModel();
+			
+			for (int cnt = 0; cnt < list.size(); cnt++) {
+				Object[] arrObj = (Object[]) list.get(cnt);
+			
+			objRoomTypeMasterModel.setStrRoomTypeCode(arrObj[0].toString());
+			objRoomTypeMasterModel.setStrRoomTypeDesc(entry.getKey());
+			objRoomTypeMasterModel.setDblRoomTerrif(entry.getValue());
+			objRoomTypeMasterModel.setStrUserCreated(arrObj[3].toString());
+			objRoomTypeMasterModel.setStrUserEdited(arrObj[4].toString());
+			objRoomTypeMasterModel.setDteDateCreated(arrObj[5].toString());
+			objRoomTypeMasterModel.setDteDateEdited(arrObj[6].toString());
+			objRoomTypeMasterModel.setStrClientCode(clientCode);
+			
+			}
+			objRoomTypeMasterDao.funAddUpdateRoomMaster(objRoomTypeMasterModel);
+		}
+		else
+		{
+			clsRoomTypeMasterModel objRoomTypeMasterModel =  new clsRoomTypeMasterModel();
+					
+					long lastNo = 0;
+
+					lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tblroomtypemaster", "RoomTypeMaster", "strRoomTypeCode", clientCode);
+					String roomTypeCode = "RT" + String.format("%06d", lastNo);
+					// String deptCode="D0000001";
+					
+					
+					
+					
+					objRoomTypeMasterModel.setStrRoomTypeCode(roomTypeCode);
+					objRoomTypeMasterModel.setStrRoomTypeDesc(entry.getKey());
+					objRoomTypeMasterModel.setDblRoomTerrif(entry.getValue());
+					objRoomTypeMasterModel.setStrUserCreated(userCode);
+					objRoomTypeMasterModel.setStrUserEdited(userCode);
+					objRoomTypeMasterModel.setDteDateCreated(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+					objRoomTypeMasterModel.setDteDateEdited(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+					objRoomTypeMasterModel.setStrClientCode(clientCode);
+					
+					objRoomTypeMasterDao.funAddUpdateRoomMaster(objRoomTypeMasterModel);
+				
+		}
+	}
 	}
 
 	/*
@@ -1469,6 +1601,51 @@ public class clsExcelExportImportController {
 	}
 
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/RoomMasterImport", method = RequestMethod.GET)
+	public ModelAndView funPMSRoomExcelExport(HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		
+		//String LocCode = "";
+		List list = new ArrayList<>();
+		List AllGuestlist= new ArrayList();
+		List DataGuestList=null;
+		clsGuestMasterBean objBean=null;
+		String header = "Room Number,Room Type Desc,Rate";
+		List ExportList = new ArrayList();
+		String[] ExcelHeader = header.split(",");
+		ExportList.add(ExcelHeader);
+		try{
+		String sql="select a.strRoomDesc,a.strRoomTypeDesc,b.dblRoomTerrif from tblroom a,tblroomtypemaster b  where a.strRoomTypeCode=b.strRoomTypeCode and a.strClientCode='"+clientCode+"'";
+	            
+		list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		if(!list.isEmpty())
+	   {
+			for (int i = 0; i < list.size(); i++)
+			{
+	             Object[] obj = (Object[]) list.get(i);
+	             DataGuestList=new ArrayList<>();
+	             DataGuestList.add(obj[0].toString());
+	             DataGuestList.add(obj[1].toString());
+	             DataGuestList.add(Double.parseDouble(obj[2].toString()));
+	             
+	             
+	            
+
+	             
+	             AllGuestlist.add(DataGuestList);
+			}
+		}
+		//
+		
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			}
+		ExportList.add(AllGuestlist);
+		
+		return new ModelAndView("excelView", "stocklist", ExportList);
+	}
 	
 	
 @SuppressWarnings({ "rawtypes", "unchecked" })

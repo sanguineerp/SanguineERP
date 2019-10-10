@@ -199,6 +199,8 @@ function funSetGuestCode(code)
 		{
 			alert("Guest name should not be empty!!");
 			flg=false;
+			document.getElementById("txtFirstName").focus();
+
 		}
 		else
 		{
@@ -207,6 +209,7 @@ function funSetGuestCode(code)
 				{
 				  alert("Zero is not Valid Mobile Number");
 				  flg= false;
+				  document.getElementById("txtMobileNo").focus();
 				}else if(mobileNo!="0")
 				{
 					if($("#txtGuestCode").val()==""){
@@ -216,9 +219,10 @@ function funSetGuestCode(code)
 						   {
 						   	 alert("Mobile Number Already Exist for Another Guest");
 						   	 flg=false;
+						   	document.getElementById("txtMobileNo").focus();
 						   }
 					}	
-					
+					if(flg){
 					var pattern = /^[\s()+-]*([0-9][\s()+-]*){6,20}$/;
 					if (pattern.test(mobileNo)) 
 					{
@@ -226,19 +230,7 @@ function funSetGuestCode(code)
 						
 						 var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-					        /* if (reg.test($('#txtEmailId').val()) == false) 
-					        {
-					            alert('Invalid Email Address');
-					            return false;
-					        }
-					        else
-					        {
-					        	if($('#txtDOB').val().trim().length==0)
-					    		{
-					        		 alert('DOB should not be empty!!');
-							         return false;
-					    		}
-					        } */
+					        
 						if($("#txtPANNo").val()=="")
 						{}
 						else
@@ -253,6 +245,7 @@ function funSetGuestCode(code)
 							{
 								alert("Enter Valid PAN No!!");
 								flg=false;
+								
 							}
 						}
 					        
@@ -261,6 +254,9 @@ function funSetGuestCode(code)
 					        	
 					        	alert("Enter UID Number!");
 								flg=false;
+							   	document.getElementById("txtUIDNo").focus();
+
+								
 							}
 							else
 							{
@@ -272,16 +268,18 @@ function funSetGuestCode(code)
 								}
 								else // invalid pan card number
 								{
-									alert("Enter Valid AADHAR No!!");
+									alert("Enter Valid UID No!!");
 									flg=false;
 								}
 							}
 					}
+					
 					else
 					{
 						alert("Invalid Mobile No");
 						flg=false;
 					}	
+					}
 				}
 		   	
 			
@@ -383,7 +381,10 @@ function funSetGuestCode(code)
 			   <tr>
 			           <td><label>Guest Code</label></td>
 				       <td><s:input id="txtGuestCode" path="strGuestCode" cssClass="searchTextBox" ondblclick="funHelp('guestCode')" /></td>				
-			           <td colspan="4"></td>
+			           <td colspan="4">
+			           </td>
+			           
+			          
 			      </tr>
 			
 		          <tr>
@@ -396,7 +397,7 @@ function funSetGuestCode(code)
 				    	    </s:select>
 					   </td>
 						<td>
-							<label>FirstName</label>
+							<label>FirstName</label><label style="color: red;"> *</label>
 						</td>
 						<td>
 							 <s:input colspan="3" type="text" id="txtFirstName" path="strFirstName" cssClass="longTextBox" />
@@ -441,7 +442,7 @@ function funSetGuestCode(code)
 				</tr>
 				<tr>
 					<td>
-						<label>MobileNo</label>
+						<label>MobileNo</label><label style="color: red;"> *</label>
 					</td>
 					<td>
 					      <s:input colspan="3" type="text" id="txtMobileNo" style="text-align:right;" path="intMobileNo" cssClass="longTextBox" onblur="fun1(this);" />
@@ -515,7 +516,7 @@ function funSetGuestCode(code)
 						    <s:input colspan="3" type="text" id="txtAnniversaryDte" path="dteAnniversaryDate" cssClass="calenderTextBox" />
 						</td>
 						<td>
-							<label>UID No.</label>
+							<label>UID No.</label><label style="color: red;"> *</label>
 						</td>
 						<td>
 						    <s:input colspan="3" type="text" id="txtUIDNo" style="text-align:right;" path="strUIDNo" cssClass="longTextBox" />
@@ -675,7 +676,7 @@ function funSetGuestCode(code)
 					<td colspan="4" ></td>
 				  </tr>
 				  <tr>
-				  <td colspan="6"></td>
+				  <td colspan="5"><label style="color: red;"> * indicates mandatory fields</label></td>
 				  </tr>
 				  
 				

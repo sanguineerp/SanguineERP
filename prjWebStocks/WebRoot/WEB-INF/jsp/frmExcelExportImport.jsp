@@ -95,6 +95,10 @@
 				window.location.href=getContextPath()+"/GuestMasterExport.html";	
 				break;
 				
+			case "frmRoomMaster" :
+				window.location.href=getContextPath()+"/RoomMasterImport.html";	
+				break;
+				
 			/* case "frmCheckInCheckOutList" :
 				window.location.href=getContextPath()+"/CheckInCheckOutList.html";	
 				

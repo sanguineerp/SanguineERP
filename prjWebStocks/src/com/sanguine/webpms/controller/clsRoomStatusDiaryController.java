@@ -634,7 +634,7 @@ public class clsRoomStatusDiaryController {
 
 			if(PMSDate.equalsIgnoreCase(strCompDate))
 			{
-				String sql="select a.strRoomTypeDesc from tblroom a where a.strClientCode='"+clientCode+"' group by strBedType ";
+				String sql="select a.strRoomTypeDesc from tblroom a where a.strClientCode='"+clientCode+"' group by  a.strRoomTypeDesc ";
 				List listRoomDesc = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 				//while(listRoomDesc.size()>0)
 				for(int j=0;j<listRoomDesc.size();j++)
