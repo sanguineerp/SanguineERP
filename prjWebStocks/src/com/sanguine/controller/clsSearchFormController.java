@@ -5710,6 +5710,26 @@ public class clsSearchFormController {
 				flgQuerySelection = true;
 				break;
 			}
+			
+			case "BanquetbanquetTypeCode": {
+				columnNames = "a.strBanquetTypeCode,a.strBanquetTypeName,a.dblRate";
+				tableName = "from tblbanquettypemaster a where a.strClientCode='"+clientCode+"'";
+	            listColumnNames = "Banquet Type Code,Banquet Type Name,Rate";
+				idColumnName = "strBanquetTypeCode,strClientCode";
+				searchFormTitle = "Banquet Type Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			case "BanquetbanquetCode": {
+				columnNames = "a.strBanquetCode,a.strBanquetName,a.strOperational";
+				tableName = "from tblbanquetmaster a where a.strClientCode='"+clientCode+"'";
+	            listColumnNames = "Banquet Code,Banquet Name,Operartional";
+				idColumnName = "strBanquetCode,strClientCode";
+				searchFormTitle = "Banquet Master";
+				flgQuerySelection = true;
+				break;
+			}
 
 		}
 

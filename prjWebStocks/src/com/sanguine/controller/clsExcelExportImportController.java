@@ -53,8 +53,10 @@ import com.sanguine.webpms.dao.clsGuestMasterDao;
 import com.sanguine.webpms.dao.clsRoomTypeMasterDao;
 import com.sanguine.webpms.model.clsGuestMasterHdModel;
 import com.sanguine.webpms.model.clsRoomMasterModel;
+import com.sanguine.webpms.model.clsRoomMasterModel_ID;
 import com.sanguine.webpms.model.clsRoomTypeMasterModel;
 import com.sanguine.webpms.service.clsGuestMasterService;
+import com.sanguine.webpms.service.clsRoomMasterService;
 
 @Controller
 public class clsExcelExportImportController {
@@ -94,6 +96,10 @@ public class clsExcelExportImportController {
 	
 	@Autowired
 	private clsRoomTypeMasterDao objRoomTypeMasterDao;
+	
+	@Autowired
+	private clsRoomMasterService objRoomMasterService;
+
 
 	final static Logger logger = Logger.getLogger(clsExcelExportImportController.class);
 
@@ -819,6 +825,7 @@ public class clsExcelExportImportController {
 			String strRoomName = "";
 			clsRoomMasterModel objModel = new clsRoomMasterModel();
 			HashMap<String,Double> hm = new HashMap<String,Double>();
+			HashMap<String, String> hmRoom = new HashMap<String, String>();
 			List list = new ArrayList<>();
 			
 			while (i <= worksheet.getLastRowNum()) {
@@ -833,15 +840,16 @@ public class clsExcelExportImportController {
 				objModel = new clsRoomMasterModel();
 							
 				hm.put(row.getCell(1).toString(),Double.parseDouble(row.getCell(2).toString()));
+				hmRoom.put(row.getCell(0).toString(), row.getCell(1).toString());
 				
 				
 				
-				list.add(strRoomName);
+				//list.add(strRoomName);
 			}
 			
 			funCheckRoomType(hm,clientCode,userCode);
 			
-			funCheckRoom(hm,clientCode,userCode);
+			funCheckRoom(hmRoom,clientCode,userCode);
 
 		} catch (Exception e) {
 			logger.error(e);
@@ -857,11 +865,108 @@ public class clsExcelExportImportController {
 
 	
 
-	private void funCheckRoom(HashMap<String, Double> hm, String clientCode,
+	private void funCheckRoom(HashMap<String, String> hm, String clientCode,
 			String userCode) {
 		
-		
-		
+		 for (Map.Entry<String,String> entry : hm.entrySet())  {
+		 
+			 String sqlData = "select * from tblroom a where a.strRoomDesc='"+entry.getKey()+"' and a.strClientCode='"+clientCode+"'";
+			 
+			 List list=objGlobalFunctionsService.funGetListModuleWise(sqlData, "sql");
+				
+				if(list!=null && list.size()>0)
+				{
+					for (int cnt = 0; cnt < list.size(); cnt++) {
+						Object[] arrObj = (Object[]) list.get(cnt);
+						String strRoomCode = arrObj[0].toString();
+						
+						long lastNo = 0;
+						clsRoomMasterModel objModel;
+						if (strRoomCode.trim().length() == 0) {
+							lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tblroom", "RoomMaster", "strRoomCode", clientCode);
+							String roomCode = "RC" + String.format("%06d", lastNo);
+							objModel = new clsRoomMasterModel(new clsRoomMasterModel_ID(roomCode, clientCode));
+						} else {
+							objModel = new clsRoomMasterModel(new clsRoomMasterModel_ID(strRoomCode, clientCode));
+						}
+						objModel.setStrRoomDesc(arrObj[1].toString());
+						objModel.setStrRoomTypeCode(arrObj[2].toString());
+						objModel.setStrFloorCode(arrObj[3].toString());
+						objModel.setStrBedType(arrObj[4].toString());
+						objModel.setStrFurniture(arrObj[5].toString());
+						objModel.setStrExtraBedCode(arrObj[6].toString());
+						objModel.setStrUpholstery(arrObj[7].toString());
+						objModel.setStrLocation(arrObj[8].toString());
+						objModel.setStrBathTypeCode(arrObj[9].toString());
+						objModel.setStrColorScheme(arrObj[10].toString());
+						objModel.setStrPolishType(arrObj[11].toString());
+						objModel.setStrGuestAmenities(arrObj[12].toString());
+						objModel.setStrInterConnectRooms(arrObj[13].toString());
+						objModel.setStrProvisionForSmokingYN(arrObj[14].toString());
+						objModel.setStrDeactiveYN(arrObj[15].toString());
+						objModel.setStrUserCreated(arrObj[16].toString());
+						objModel.setDteDateCreated(arrObj[18].toString());
+						objModel.setStrUserEdited(userCode);
+						objModel.setDteDateEdited(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+						objModel.setStrStatus("Free");
+						objModel.setStrAccountCode(arrObj[22].toString());
+						objModel.setStrRoomTypeDesc(arrObj[23].toString());
+						
+						objRoomMasterService.funAddUpdateRoomMaster(objModel);
+						
+					}
+						
+					}
+				
+				else
+				{
+					 String sqlNewData = "select * from tblroomtypemaster a where a.strRoomTypeDesc='"+entry.getValue()+"' and a.strClientCode='"+clientCode+"'";
+					 
+					 List listNew=objGlobalFunctionsService.funGetListModuleWise(sqlNewData, "sql");
+					
+					 if(listNew!=null && listNew.size()>0)
+					 {
+						 for (int cnt = 0; cnt < listNew.size(); cnt++) {
+								Object[] arrObj = (Object[]) listNew.get(cnt);
+								
+								long lastNo = 0;
+								clsRoomMasterModel objModel;
+								
+									lastNo = objGlobalFunctionsService.funGetPMSMasterLastNo("tblroom", "RoomMaster", "strRoomCode", clientCode);
+									String roomCode = "RC" + String.format("%06d", lastNo);
+									objModel = new clsRoomMasterModel(new clsRoomMasterModel_ID(roomCode, clientCode));
+								
+									
+								
+								objModel.setStrRoomDesc(entry.getKey().toString());
+								objModel.setStrRoomTypeCode(arrObj[0].toString());
+								objModel.setStrFloorCode("");
+								objModel.setStrBedType("");
+								objModel.setStrFurniture("");
+								objModel.setStrExtraBedCode("");
+								objModel.setStrUpholstery("");
+								objModel.setStrLocation("");
+								objModel.setStrBathTypeCode("");
+								objModel.setStrColorScheme("");
+								objModel.setStrPolishType("");
+								objModel.setStrGuestAmenities("");
+								objModel.setStrInterConnectRooms("");
+								objModel.setStrProvisionForSmokingYN("");
+								objModel.setStrDeactiveYN("");
+								objModel.setStrUserCreated(arrObj[3].toString());
+								objModel.setDteDateCreated(arrObj[5].toString());
+								objModel.setStrUserEdited(userCode);
+								objModel.setDteDateEdited(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+								objModel.setStrStatus("Free");
+								objModel.setStrAccountCode("");
+								objModel.setStrRoomTypeDesc(arrObj[1].toString());
+								
+								objRoomMasterService.funAddUpdateRoomMaster(objModel);
+						 }
+					 }
+				}
+			}
+	
 	}
 
 	private void funCheckRoomType(HashMap<String, Double> hm, String clientCode, String userCode) {

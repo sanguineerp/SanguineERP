@@ -587,6 +587,8 @@
 					<value>com.sanguine.webbanquets.model.clsBanquetStaffCategeoryMasterModel</value>
 					<value>com.sanguine.webbanquets.model.clsBanquetBookingModelHd</value>
 					<value>com.sanguine.webbanquets.model.clsBanquetWeekendMasterModel</value>
+					<value>com.sanguine.webbanquets.model.clsBanquetMasterModel</value>
+					<value>com.sanguine.webbanquets.model.clsBanquetTypeMasterModel</value>
 					
 						
 				</list>

@@ -5180,6 +5180,26 @@
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetWeekendMaster.jsp" ></put-attribute>
 	  </definition>
 	  
+	 <definition name="frmBanquetMaster" extends="base.definition">
+		   <put-attribute name="title" value="Banquet Master" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBanquetMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Banquet Master"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetMaster.jsp" ></put-attribute>
+	  </definition> 
+	  
+	  
+	  <definition name="frmBanquetTypeMaster" extends="base.definition">
+		   <put-attribute name="title" value="Banquet Type Master" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetTypeMaster.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBanquetTypeMaster_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Banquet Type Master"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetTypeMaster.jsp" ></put-attribute>
+	  </definition>  
 	  
 	  
 <!-- 	End Of WebBanquet Tiles Entry -->

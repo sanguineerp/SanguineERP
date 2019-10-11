@@ -2951,6 +2951,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblreservationhd` ADD COLUMN `tmePickUpTime` VARCHAR(10) NOT NULL AFTER `tmeDropTime`; ";
 		funExecutePMSQuery(sql);
 		
+		sql = "ALTER TABLE `tblroom`"
+				+ "ADD PRIMARY KEY (`strRoomCode`, `strClientCode`);";
+		funExecutePMSQuery(sql);
 
 		
 		sql="ALTER TABLE `tblguestmaster` "
@@ -3395,7 +3398,42 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		+" ENGINE=InnoDB;";
 		funExecuteBanquetQuery(sql);
 		
+		sql = "CREATE TABLE `tblbanquettypemaster` ("
+				+ "`strBanquetTypeCode` VARCHAR(20) NOT NULL,"
+				+ "	`strBanquetTypeName` VARCHAR(50) NOT NULL,"
+				+ "`intId` BIGINT(20) NOT NULL,"
+				+ "`dblRate` DECIMAL(18,4) NOT NULL,"
+				+ "`strTaxIndicator` VARCHAR(5) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(20) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(20) NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,"
+				+ "`dteDateEdited` DATETIME NOT NULL,"
+				+ "`strClientCode` VARCHAR(20) NOT NULL,"
+				+ "PRIMARY KEY (`strBanquetTypeCode`, `strClientCode`)"
+				+ ") "
+				+ "COLLATE='latin1_swedish_ci' "
+				+ "ENGINE=InnoDB"
+				+ ";";
 		
+		funExecuteBanquetQuery(sql);
+		
+		sql = "CREATE TABLE `tblbanquetmaster` ("
+				+ "`strBanquetCode` VARCHAR(20) NOT NULL,"
+				+ "`strBanquetName` VARCHAR(30) NOT NULL,"
+				+ "`intId` BIGINT(20) NOT NULL,"
+				+ "`strOperational` VARCHAR(5) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(20) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(20) NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,"
+				+ "`dteDateEdited` DATETIME NOT NULL,"
+				+ "`strClientCode` VARCHAR(10) NOT NULL,"
+				+ "PRIMARY KEY (`strBanquetCode`, `strClientCode`)"
+				+ ") "
+				+ "COLLATE='latin1_swedish_ci' "
+				+ "ENGINE=InnoDB"
+				+ ";";
+		
+		funExecuteBanquetQuery(sql);
 		
 		sql="ALTER TABLE `tblequipment`"
 				+ "ADD COLUMN `strDeptCode` VARCHAR(10) NOT NULL AFTER `intId`;";
@@ -3461,8 +3499,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmStructureUpdateBanquet', 'Structure Update', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'No', 'NO', 'frmStructureUpdate.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmTaxMaster', 'Tax Master', 'Master', '8', 'M', '29', '15', '1', 'imgTaxMaster.png', '7', '1', '1', '1', 'NO', 'YES', 'frmTaxMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmInovice', 'Invoice', 'Transaction', '2', 'T', '69', '10', '1', 'default.png', '7', '1', '1', '1', 'NO', 'NO', 'frmInovice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmBanquetSettlmentMaster', 'Settlement Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmSettlementMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
-		
+				+ "('frmBanquetSettlmentMaster', 'Settlement Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmSettlementMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBanquetMaster', 'Banquet Master', 'Master', '1', 'M', '19', '19', '2', 'default.png', '7', '3', '1', '1', 'No', 'No', 'frmBanquetMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBanquetTypeMaster', 'Banquet Type Master', 'Master', '1', 'M', '19', '19', '2', 'default.png', '7', '3', '1', '1', 'No', 'No', 'frmBanquetTypeMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";		
 		funExecuteQuery(sql);
 		
 		/*----------------------WebBanquetsFrom End-----------------------*/
