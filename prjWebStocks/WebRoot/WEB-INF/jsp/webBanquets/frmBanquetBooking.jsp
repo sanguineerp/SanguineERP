@@ -128,6 +128,10 @@ function funCreateNewCustomer(){
 		    case 'BookingNo' : 
 				funSetBookingData(code);
 				 break;
+				 
+		    case 'banquetCode' : 
+				funSetBanquetName(code);
+				break;	 
 		    	
 			
 		
@@ -256,7 +260,7 @@ function funCreateNewCustomer(){
 				    success: function(response)
 				    {
 				    	$("#txtEventCoordinatorCode").val(code);
-				    	$("#lblEventCoordinatorCode").val(response.strStaffName);
+				    	$("#lblEventCoordinatorCode").text(response.strStaffName);
 				    
 				    },
 				    error: function(jqXHR, exception) {
@@ -293,7 +297,7 @@ function funCreateNewCustomer(){
 				    success: function(response)
 				    { 
 				    	$("#txtEventCoordinatorCode").val(code);
-				    	$("#lblEventCoordinatorCode").val(response.strStaffName);
+				    	$("#lblEventCoordinatorCode").text(response.strStaffName);
 				    	
 				    },
 				    error: function(jqXHR, exception) {
@@ -370,7 +374,7 @@ function funCreateNewCustomer(){
 	{
     	funRemAllRows('tblServiceDtl');
 		var funcode=$("#txtFunctionCode").val();
-		var searchurl=getContextPath()+ "/loadFunctionServiceData.html?functionCode=" + funcode ;
+		var searchurl=getContextPath()+ "/loadBookingServiceData.html?functionCode=" + funcode ;
 		$.ajax({
 			type : "GET",
 			url : searchurl,
@@ -452,7 +456,7 @@ function funCreateNewCustomer(){
 			success : function(response){ 
 				
 				$("#txtEquipmentCode").val(response.strEquipmentCode);
-				$("#lblEquipmentCode").val(response.strEquipmentName);
+				$("#lblEquipmentCode").text(response.strEquipmentName);
 				funfillEquipmentDtlRow(response.strEquipmentCode,response.strEquipmentName,response.dblEquipmentRate,'1');
 	        		
 	        	
@@ -491,7 +495,7 @@ function funCreateNewCustomer(){
 				    success: function(response)
 				    {
 				    	$("#txtStaffCatCode").val(response.strStaffCategeoryCode);
-						$("#lblStaffCatCode").val(response.strStaffCategeoryName);
+						$("#lblStaffCatCode").text(response.strStaffCategeoryName);
 				    	funfillStaffCatRow(response.strStaffCategeoryCode,response.strStaffCategeoryName,'0');
 				    	
 				    },
@@ -527,7 +531,7 @@ function funCreateNewCustomer(){
 			dataType : "json",
 			success : function(response){
 				$("#txtItemCode").val(response.strItemCode);
-				$("#lblItemCode").val(response.strItemName);
+				$("#lblItemCode").text(response.strItemName);
 				funfillMenuItemDtlRow(response.strItemCode,response.strItemName,response.dblAmount,'1');
 	        		
 			    },
@@ -548,6 +552,32 @@ function funCreateNewCustomer(){
 	                alert('Uncaught Error.n' + jqXHR.responseText);
 	            }		            
 	        }
+		});
+	}
+	function funSetBanquetName(code){
+
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadBanquetName.html?docCode=" + code,
+			dataType : "json",
+			success : function(response){ 
+
+				if(response.strEquipmentCode=='Invalid Code')
+	        	{
+	        		alert("Invalid Equipment No");
+	        		$("#txtBanquetCode").val('');
+	        	}
+	        	else
+	        	{
+	        		
+	        		$("#txtBanquetCode").val(response.strBanquetCode);
+	        		$("#lblBanquetName").text(response.strBanquetName);
+	        		
+	        	}
+			},
+			error : function(e){
+
+			}
 		});
 	}
     var ServiceTotal=0;
@@ -1111,10 +1141,11 @@ function funCreateNewCustomer(){
 				</tr>
 				<tr>
 				<td><label>Banquet</label></td>
-					<td><s:input type="text" id="txtBanquetCode"
-							path="" cssClass="searchTextBox"
-							ondblclick="funHelp('StaffCode');" /> &nbsp;&nbsp;&nbsp;<label
-						id="lblBanquetCode"></label></td>
+					<td><s:input type="text" id="txtBanquetCode" 
+							path="strBanquetCode" cssClass="searchTextBox"
+							ondblclick="funHelp('banquetCode');" /> <label
+						id="lblBanquetName"></label></td>
+				
 					
 				</tr>
 				

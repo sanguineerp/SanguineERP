@@ -300,5 +300,21 @@ public class clsBanquetBookingController{
 		return list;
 	}
 	
+	@RequestMapping(value = "/loadBookingServiceData", method = RequestMethod.GET)
+	public @ResponseBody List funLoadFunctionServiceMasterData(@RequestParam("functionCode") String funCode,HttpServletRequest req)
+	{
+		List list =null;
+		try{
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String 	 sql="select a.strServiceCode,a.strServiceName,b.dblRate from tblfunctionservice a,tblservicemaster b where "
+					+ " a.strServiceCode=b.strServiceCode and   a.strFunctionCode='"+funCode+"' and a.strClientCode='"+clientCode+"' and a.strApplicable='Y' ";
+			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
+			}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return list;
+	}
 	  
 }

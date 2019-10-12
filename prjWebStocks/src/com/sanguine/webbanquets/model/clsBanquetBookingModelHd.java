@@ -123,7 +123,7 @@ public class clsBanquetBookingModelHd implements Serializable{
 	private double dblGrandTotal;
 	
 	@Column(name="strBanquetCode")
-	private double strBanquetCode;
+	private String strBanquetCode;
 
 	//Setter-Getter Methods
 	public String getStrBookingNo(){
@@ -341,11 +341,11 @@ public class clsBanquetBookingModelHd implements Serializable{
 		}
 	}
 
-	public double getStrBanquetCode() {
+	public String getStrBanquetCode() {
 		return strBanquetCode;
 	}
 
-	public void setStrBanquetCode(double strBanquetCode) {
+	public void setStrBanquetCode(String strBanquetCode) {
 		this.strBanquetCode = strBanquetCode;
 	}
 

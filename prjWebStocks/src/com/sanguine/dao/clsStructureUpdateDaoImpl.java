@@ -2027,6 +2027,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
         sql="ALTER TABLE `tblsalesreturnhd` ADD COLUMN `dblSubTotal` DECIMAL(18,2) NOT NULL DEFAULT '0' AFTER `strJVNo`;";
 		funExecuteQuery(sql);
 		
+		sql="ALTER TABLE `tblpropertysetup` ADD COLUMN `strIncludeTaxInWeightAvgPrice` VARCHAR(1) NOT NULL DEFAULT 'N' AFTER `strRecipeListPrice`;";
+		funExecuteQuery(sql);
 		
 		
 		
@@ -3374,25 +3376,29 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteBanquetQuery(sql);
 		
 		sql="CREATE TABLE `tblbqbookingdtl` ( "
-			+" `strBookingNo` VARCHAR(25) NOT NULL, "
-			+" `strType` VARCHAR(20) NOT NULL DEFAULT ' ', "
-			+" `strDocNo` VARCHAR(20) NOT NULL DEFAULT ' ', "
-			+" `strDocName` VARCHAR(50) NOT NULL DEFAULT '', "
-			+" `strClientCode` VARCHAR(20) NOT NULL, "
-			+" `strBookingDate` DATETIME NOT NULL, "
-			+" `dblDocQty` DOUBLE NOT NULL DEFAULT '0', "
-			+" `dblDocRate` DOUBLE NOT NULL DEFAULT '0', " 
-			+" `dblDocTotalAmt` DOUBLE NOT NULL DEFAULT '0' "
-				+" ) "
-		+" COLLATE='latin1_swedish_ci' "
-		+" ENGINE=InnoDB;";
+				+" `strBookingNo` VARCHAR(25) NOT NULL, "
+				+" `strType` VARCHAR(20) NOT NULL DEFAULT ' ', "
+				+" `strDocNo` VARCHAR(20) NOT NULL DEFAULT ' ', "
+				+" `strDocName` VARCHAR(50) NOT NULL DEFAULT '', "
+				+" `strClientCode` VARCHAR(20) NOT NULL, "
+				+" `strBookingDate` DATETIME NOT NULL, "
+				+" `dblDocQty` DOUBLE(18,4) NOT NULL DEFAULT '0.0000', "
+				+" `dblDocRate` DOUBLE(18,4) NOT NULL DEFAULT '0.0000', "
+				+" `dblDocTotalAmt` DOUBLE(18,4) NOT NULL DEFAULT '0.0000', "
+				+" `dblDocDiscAmt` DOUBLE(18,4) NOT NULL DEFAULT '0.0000', "
+				+" `dblDocTaxAmt` DOUBLE(18,4) NOT NULL DEFAULT '0.0000' "
+			+" ) "
+			+" COLLATE='latin1_swedish_ci' "
+			+" ENGINE=InnoDB ; ";
+
 		funExecuteBanquetQuery(sql);
+		
+		
 		
 		sql="CREATE TABLE `tblbqbookinghd` ( "
 			+" `strBookingNo` VARCHAR(30) NOT NULL, "
 			+" `strClientCode` VARCHAR(20) NOT NULL, "
 			+" `dteBookingDate` DATETIME NOT NULL, "
-			+" `dblBookingAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.0000', "
 			+" `dteDateCreated` DATETIME NOT NULL, "
 			+" `dteDateEdited` DATETIME NOT NULL, "
 			+" `dteFromDate` DATETIME NOT NULL, "
@@ -3406,15 +3412,21 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+" `strEmailID` VARCHAR(50) NOT NULL, "
 			+" `strEventCoordinatorCode` VARCHAR(20) NOT NULL, "
 			+" `strFunctionCode` VARCHAR(20) NOT NULL, "
-			+" `strPropertyCode` VARCHAR(20) NOT NULL, " 
+			+" `strPropertyCode` VARCHAR(20) NOT NULL, "
 			+" `strUserCreated` VARCHAR(30) NOT NULL, "
 			+" `strUserEdited` VARCHAR(30) NOT NULL, "
 			+" `tmeFromTime` VARCHAR(15) NOT NULL, "
 			+" `tmeToTime` VARCHAR(15) NOT NULL, "
+			+" `dblSubTotal` DECIMAL(18,4) NOT NULL DEFAULT '0.0000', "
+			+" `dblDiscAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.0000', "
+			+" `dblTaxAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.0000', "
+			+" `dblGrandTotal` DECIMAL(18,4) NOT NULL DEFAULT '0.0000', "
+			+" `strBanquetCode` VARCHAR(20) NOT NULL, "
 			+" PRIMARY KEY (`strBookingNo`, `strClientCode`) "
 		+" ) "
 		+" COLLATE='utf8_general_ci' "
-		+" ENGINE=InnoDB;";
+		+" ENGINE=InnoDB ;" ; 
+
 		funExecuteBanquetQuery(sql);
 		
 		sql = "CREATE TABLE `tblbanquettypemaster` ("

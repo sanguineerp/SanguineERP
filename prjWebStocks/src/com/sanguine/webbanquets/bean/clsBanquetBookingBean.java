@@ -57,7 +57,7 @@ public class clsBanquetBookingBean{
 	
 	private double dblGrandTotal;
 	
-	private double  strBanquetCode;
+	private String  strBanquetCode;
 	
 	List<clsBanquetBookingModelDtl> listSeriveDtl=new ArrayList<clsBanquetBookingModelDtl>();
 	List<clsBanquetBookingModelDtl> listEquipDtl=new ArrayList<clsBanquetBookingModelDtl>();
@@ -256,10 +256,10 @@ public class clsBanquetBookingBean{
 	public void setDblGrandTotal(double dblGrandTotal) {
 		this.dblGrandTotal = dblGrandTotal;
 	}
-	public double getStrBanquetCode() {
+	public String getStrBanquetCode() {
 		return strBanquetCode;
 	}
-	public void setStrBanquetCode(double strBanquetCode) {
+	public void setStrBanquetCode(String strBanquetCode) {
 		this.strBanquetCode = strBanquetCode;
 	}
 
