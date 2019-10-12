@@ -210,56 +210,56 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<text><![CDATA[Remarks             :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="94" y="98" width="204" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement x="94" y="98" width="246" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pGuestName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="94" y="115" width="229" height="14" isPrintWhenDetailOverflows="true" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement positionType="Float" x="94" y="115" width="246" height="14" isPrintWhenDetailOverflows="true" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pGuestAddress}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="94" y="148" width="205" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement positionType="Float" x="94" y="148" width="246" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pReservationNo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="94" y="165" width="205" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement positionType="Float" x="94" y="165" width="246" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pRegistrationNo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="94" y="183" width="205" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement positionType="Float" x="94" y="183" width="246" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pRoomNo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="94" y="202" width="205" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement positionType="Float" x="94" y="202" width="246" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pAdult}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="94" y="221" width="205" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement positionType="Float" x="94" y="221" width="246" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pChild}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="94" y="240" width="205" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
+				<reportElement positionType="Float" x="94" y="240" width="246" height="14" uuid="2721457a-8086-462b-b990-f64b7c9148dd"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
@@ -336,7 +336,7 @@ WHERE DATE(b.dteDocDate) BETWEEN '2016-03-25' AND '2016-03-25' AND a.strFolioNo=
 				<text><![CDATA[Office Address   :]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" x="94" y="132" width="229" height="14" isPrintWhenDetailOverflows="true" uuid="d9061159-d488-43e1-9be7-9b181d8cd3b6"/>
+				<reportElement positionType="Float" x="94" y="132" width="246" height="14" isPrintWhenDetailOverflows="true" uuid="d9061159-d488-43e1-9be7-9b181d8cd3b6"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font size="11"/>
 					<paragraph lineSpacing="Single"/>

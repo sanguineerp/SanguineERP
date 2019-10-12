@@ -81,6 +81,7 @@ public class clsStructureUpdateController {
 	@RequestMapping(value = "/frmDeleteModuleList", method = RequestMethod.GET)
 	public ModelAndView funOpenListForm(Map<String, Object> model, HttpServletRequest request) {
 
+		String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
 		String urlHits = "1";
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		try {
@@ -96,7 +97,7 @@ public class clsStructureUpdateController {
 
 		List<String> listPropertyName = new ArrayList<>();
 
-		String sqlPropertyName = "select strPropertyName from tblpropertymaster where strClientCode='" + clientCode + "' ";
+		String sqlPropertyName = "select strPropertyName from "+webStockDB+".tblpropertymaster where strClientCode='" + clientCode + "' ";
 		listPropertyName = objGlobalFunctionsService.funGetDataList(sqlPropertyName, "sql");
 		model.put("listPropertyName", listPropertyName);
 
@@ -318,8 +319,10 @@ public class clsStructureUpdateController {
 	public @ResponseBody List funLoadPropertyMaster(@RequestParam(value = "propName") String propName, HttpServletRequest req) {
 
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+
 		List<String> listPropertyName = new ArrayList<>();
-		String sqlPropertyName = "select strPropertyName from tblpropertymaster where strClientCode='" + clientCode + "' ";
+		String sqlPropertyName = "select strPropertyName from "+webStockDB+".tblpropertymaster where strClientCode='" + clientCode + "' ";
 		listPropertyName = objGlobalFunctionsService.funGetDataList(sqlPropertyName, "sql");
 		listPropertyName.add("All");
 		 Collections.sort(listPropertyName);
@@ -329,9 +332,10 @@ public class clsStructureUpdateController {
 	@RequestMapping(value = "/loadLocName", method = RequestMethod.GET)
 	public @ResponseBody List funLoadLoctionMaster(@RequestParam(value = "propName") String propName, HttpServletRequest req) {
 
+		String dbName = req.getSession().getAttribute("WebStockDB").toString();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		List<String> listLocName = new ArrayList<>();
-		String sqlLocName = "select a.strLocName from tbllocationmaster a ,tblpropertymaster b " + "where a.strPropertyCode=b.strPropertyCode and b.strPropertyName='" + propName + "' and a.strClientCode='" + clientCode + "' ";
+		String sqlLocName = "select a.strLocName from "+dbName+".tbllocationmaster a ,"+dbName+".tblpropertymaster b " + "where a.strPropertyCode=b.strPropertyCode and b.strPropertyName='" + propName + "' and a.strClientCode='" + clientCode + "' ";
 		listLocName = objGlobalFunctionsService.funGetDataList(sqlLocName, "sql");
 		return listLocName;
 	}

@@ -3130,17 +3130,17 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ " ('frmIncomehead', 'IncomeHead Master', 'Master', 1, 'M', 2, 2, '7', 'imgIncomeHeadMaster.png', '3', 3, '3', '3', 'NO', 'YES', 'frmIncomehead.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmPlanMaster', 'Plan Master', 'Master', 1, 'M', 22, 22, '6', 'imgPlanMaster.png', '3', 3, '3', '3', 'NO', 'YES', 'frmPlanMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmPMSPayment', 'Payment', 'Transaction', 2, 'T', 7, 7, '15', 'imgPayment.png', '3', 3, '3', '3', 'NO', 'YES', 'frmPMSPayment.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
-				+ " ('frmPMSTaxMaster', 'Tax Master', 'Master', 1, 'M', 6, 6, '1', 'imgTaxMaster.png', '3', 3, '3', '3', 'NO', 'NO', 'frmPMSTaxMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
+				+ " ('frmPMSTaxMaster', 'PMS Tax Master', 'Master', 1, 'M', 6, 6, '1', 'imgTaxMaster.png', '3', 3, '3', '3', 'NO', 'NO', 'frmPMSTaxMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmPostRoomTerrif', 'Post Room Terrif', 'Transaction', 2, 'T', 5, 5, '1', 'imgPostRoomTerrif.png', '3', 3, '3', '3', 'NO', 'NO', 'frmPostRoomTerrif.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmPropertySetup', 'Property Setup', 'Tools', 4, 'L', 1, 1, '12', 'imgPropertySetup.png', '3', 1, '1', '1', 'NO', 'NO', 'frmPropertySetup.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
-				+ " ('frmReason', 'Reason Master', 'Master', 1, 'M', 7, 7, '5', 'imgReasonMaster.png', '3', 3, '3', '3', 'NO', 'YES', 'frmReason.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
+				+ " ('frmReason', 'PMS Reason Master', 'Master', 1, 'M', 7, 7, '5', 'imgReasonMaster.png', '3', 3, '3', '3', 'NO', 'YES', 'frmReason.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmReservation', 'Reservation', 'Transaction', 2, 'T', 1, 1, '1', 'imgReservation.png', '3', 2, '2', '2', 'NO', 'NO', 'frmReservation.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmRevenueHeadReport', 'Revenue Head Report', 'Reports', 3, 'R', 1, 1, '1', 'imgRevenueHeadReport.png', '3', 1, '1', '1', 'NO', 'NO', 'frmRevenueHeadReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmRoomCancellation', 'Room Cancellation', 'Transaction', 2, 'T', 6, 6, '1', 'imgReservationCancellation.png', '3', 3, '3', '3', 'NO', 'NO', 'frmRoomCancellation.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmRoomMaster', 'Room Master', 'Master', 1, 'M', 1, 1, '1', 'imgRoomMaster.png', '3', 3, '3', '3', 'NO', 'NO', 'frmRoomMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmRoomStatusDiary', 'Room Status Diary', 'Tools', 4, 'L', 1, 2, '12', 'imgRoomStatusDairy.png', '3', 1, '1', '1', 'NO', 'NO', 'frmRoomStatusDiary.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmRoomTypeMaster', 'RoomType Master', 'Master', 1, 'M', 3, 3, '4', 'imgRoomType.png', '3', 3, '3', '3', 'NO', 'YES', 'frmRoomTypeMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
-				+ " ('frmSettlementMaster', 'Settlement Master', 'Master', 1, 'M', 9, 9, '11', 'imgSettlementMaster.png', '3', 3, '3', '3', 'NO', 'YES', 'frmSettlementMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
+				+ " ('frmSettlementMaster', 'PMS Settlement Master', 'Master', 1, 'M', 9, 9, '11', 'imgSettlementMaster.png', '3', 3, '3', '3', 'NO', 'YES', 'frmSettlementMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmTaxGroupMaster', 'Tax Group Master', 'Master', 1, 'M', 20, 20, '1', 'imgTaxGroup.png', '3', 3, '3', '3', 'NO', 'NO', 'frmTaxGroupMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmTaxReport', 'Tax Summary', 'Reports', 3, 'R', 2, 2, '5', 'imgTaxSummary.png', '3', 5, '5', '5', 'NO', 'NO', 'frmTaxReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
 				+ " ('frmWalkin', 'Walk In', 'Transaction', 2, 'T', 4, 4, '12', 'imgWalkIn.png', '3', 3, '3', '3', 'NO', 'YES', 'frmWalkin.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), "
@@ -3853,6 +3853,162 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 
 			// //////////////////////WebCRM Transaction
 			// END///////////////////////////////////////////
+			
+			////PMS Transaction 
+			
+			case "Bill Discount": {
+				sql = "truncate table tblbilldiscount";
+				funExecutePMSQuery(sql);
+
+				break;
+			}
+			
+			case "Block Room": {
+				sql = "truncate table tblblockroom";
+				funExecutePMSQuery(sql);
+				
+
+				break;
+			}
+			
+			case "Change Room": {
+				sql = "truncate table tblchangedroomtypedtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblchangeroom";
+				funExecutePMSQuery(sql);
+
+				break;
+			}
+			
+			case "Check In": {
+				sql = "truncate table tblcheckindtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblcheckinhd";
+				funExecutePMSQuery(sql);
+
+				break;
+			}
+			
+			case "Day End": {
+				sql = "truncate table tbldayendprocess";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblposdayend";
+				funExecutePMSQuery(sql);
+
+				break;
+			}
+			
+			case "Folio Printing": {
+				sql = "truncate table tblfoliodtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblfoliohd";
+				funExecutePMSQuery(sql);
+
+				break;
+			}
+			
+			case "Payment": {
+				sql = "truncate table tblreceiptdtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblreceipthd";
+				funExecutePMSQuery(sql);
+
+				break;
+			}
+			
+			case "Reservation": {
+				sql = "truncate table tblreservationdtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblreservationhd";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblreservationroomratedtl";
+				funExecutePMSQuery(sql);
+				
+
+				break;
+			}
+			
+			case "Reservation Cancellation": {
+				sql = "truncate table tblroomcancelation";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Void Bill": {
+				sql = "truncate table tblvoidbilldtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblvoidbillhd";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblvoidbilltaxdtl";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Walk In": {
+				sql = "truncate table tblwalkindtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblwalkinhd";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblwalkinroomratedtl";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "Folio Posting": {
+				sql = "truncate table tblfoliobckp";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblfoliodtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblfoliohd";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblfoliotaxdtl";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			
+			case "Bill Printing": {
+				sql = "truncate table tblbilldtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblbillhd";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblbilltaxdtl";
+				funExecutePMSQuery(sql);
+				
+			
+				break;
+			}
+			
+			case "Add Extra Bed": {
+				sql = "truncate table tblpackagemasterdtl";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblpackagemasterhd";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tblroompackagedtl";
+				funExecutePMSQuery(sql);
+				
+			
+				break;
+			}
+			
 			default: {
 				sql = "truncate table tbltempitemstock";
 				funExecuteQuery(sql);
@@ -3873,7 +4029,12 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			List<String> listPropertyCode = new ArrayList<>();
 			String sqlPropertyCode = "select strPropertyCode from tblpropertymaster where strPropertyName='" + propName + "' and strClientCode='" + clientCode + "' ";
 			listPropertyCode = objGlobalFunctionsService.funGetDataList(sqlPropertyCode, "sql");
-			String propCode = listPropertyCode.get(0);
+			String propCode="";
+			if(listPropertyCode!=null && listPropertyCode.size()>0)
+			{
+				propCode = listPropertyCode.get(0);
+			}
+			
 			switch (str[i]) {
 
 			// //////////////////////WebStock Transaction
@@ -4393,11 +4554,28 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				funExecutePMSQuery(sql);
 				break;
 			}
-			/*case "Settlement Master": {
+			
+			case "PMS Tax Master": {
+				sql = "truncate table tbltaxmaster";
+				funExecutePMSQuery(sql);
+				
+				sql = "truncate table tbltaxgroup";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			
+			case "PMS Settlement Master": {
 				sql = "truncate table tblsettlementmaster";
 				funExecutePMSQuery(sql);
 				break;
 			}
+			
+			case "PMS Reason Master": {
+				sql = "truncate table tblreasonmaster";
+				funExecutePMSQuery(sql);
+				break;
+			}
+			/*
 			
 			case "Tax Master": {
 				sql = "truncate table tbltaxmaster";
