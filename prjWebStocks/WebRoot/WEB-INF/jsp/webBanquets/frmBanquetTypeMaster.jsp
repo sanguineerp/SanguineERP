@@ -35,12 +35,14 @@
 			{
 			alert("Please Enter Name !!");
 			 flg=false;
+			 $("#txtBanquetTypeName").focus();
 			}
 		
 		if($("#cmbTaxIndicator").val().trim().length==0)
 		{
 		alert("Please Select Tax Indicator !!");
 		 flg=false;
+		 $("#cmbTaxIndicator").focus();
 		}
 		
 		

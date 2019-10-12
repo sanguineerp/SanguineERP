@@ -30,34 +30,34 @@ public class clsBanquetStaffMasterModel implements Serializable{
 	})
 
 //Variable Declaration
-	@Column(name="strStaffCode")
+	@Column(name="strStaffCode",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strStaffCode;
 
-	@Column(name="strStaffName")
+	@Column(name="strStaffName",columnDefinition = "VARCHAR(50) NOT NULL")
 	private String strStaffName;
 
-	@Column(name="strStaffCatCode")
+	@Column(name="strStaffCatCode",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strStaffCatCode;
 
-	@Column(name="strOperationalYN")
+	@Column(name="strOperationalYN",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strOperationalYN;
 
-	@Column(name="strClientCode")
+	@Column(name="strClientCode",columnDefinition = "VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strClientCode;
 
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated",columnDefinition = "VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited",columnDefinition = "VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strUserEdited;
 	
-	@Column(name="dtCreated")
+	@Column(name="dtCreated",columnDefinition = "DATETIME NOT NULL")
 	private String dtCreated;
 	
-	@Column(name="dtEdited")
+	@Column(name="dtEdited",columnDefinition = "DATETIME NOT NULL")
 	private String dtEdited;
 	
-	@Column(name="IntSTId")
+	@Column(name="IntSTId",columnDefinition = "BIGINT(20) NOT NULL")
 	private long intSTId;
 	
 

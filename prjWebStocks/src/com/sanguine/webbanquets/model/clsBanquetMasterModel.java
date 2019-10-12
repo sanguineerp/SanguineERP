@@ -36,7 +36,7 @@ public class clsBanquetMasterModel implements Serializable{
 	@Column(name="strBanquetName",columnDefinition="VARCHAR(30) NOT NULL")
 	private String strBanquetName;
 
-	@Column(name="intId",columnDefinition="NOT NULL")
+	@Column(name="intId",columnDefinition="BIGINT(20) NOT NULL")
 	private long intId;
 
 	

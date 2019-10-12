@@ -585,7 +585,7 @@ public class clsPMSPaymentController {
 		{
 			clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
 			String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
-			String sqlPaymentLoad = "select b.strPCode,b.strPName,a.dblBookingAmt "
+			String sqlPaymentLoad = "select b.strPCode,b.strPName,a.dblSubTotal "
 					+ "from tblbqbookinghd a,"+webStockDB+".tblpartymaster b "
 					+ "where a.strCustomerCode=b.strPCode and a.strClientCode='"+clientCode+"' "
 					+ "and b.strClientCode='"+clientCode+"' and a.strBookingNo='"+docCode+"'";

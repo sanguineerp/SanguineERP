@@ -36,12 +36,14 @@
 			{
 			alert("Please Select Name !!");
 			 flg=false;
+			 $("#txtEquipmentName").focus();
 			}
 		
 		if($("#txtDepartmentCode").val().trim().length==0)
 		{
 		alert("Please Select Department Code !!");
 		 flg=false;
+		 $("#txtDepartmentCode").focus();
 		}
 		return flg;
 	}

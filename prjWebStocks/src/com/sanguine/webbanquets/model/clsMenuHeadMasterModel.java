@@ -30,28 +30,28 @@ public class clsMenuHeadMasterModel implements Serializable{
 	})
 
 //Variable Declaration
-	@Column(name="strMenuHeadCode")
+	@Column(name="strMenuHeadCode",columnDefinition ="VARCHAR(20) NOT NULL")
 	private String strMenuHeadCode;
 
-	@Column(name="strMenuHeadName")
+	@Column(name="strMenuHeadName",columnDefinition ="VARCHAR(50) NOT NULL")
 	private String strMenuHeadName;
 
-	@Column(name="dteDateCreated")
+	@Column(name="dteDateCreated",columnDefinition ="DATETIME NOT NULL")
 	private String dteDateCreated;
 
-	@Column(name="dteDateEdited")
+	@Column(name="dteDateEdited",columnDefinition ="DATETIME NOT NULL")
 	private String dteDateEdited;
 
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated",columnDefinition ="VARCHAR(20) NOT NULL")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited",columnDefinition ="VARCHAR(20) NOT NULL")
 	private String strUserEdited;
 
-	@Column(name="strOperational")
+	@Column(name="strOperational",columnDefinition ="VARCHAR(5) NOT NULL DEFAULT 'No'")
 	private String strOperational;
 
-	@Column(name="strClientCode")
+	@Column(name="strClientCode",columnDefinition ="VARCHAR(10) NOT NULL")
 	private String strClientCode;
 
 //Setter-Getter Methods

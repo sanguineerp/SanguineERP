@@ -30,49 +30,49 @@ public class clsItemMasterModel implements Serializable{
 	})
 
 //Variable Declaration
-	@Column(name="strItemCode")
+	@Column(name="strItemCode",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strItemCode;
 
-	@Column(name="strItemName")
+	@Column(name="strItemName",columnDefinition = "VARCHAR(50) NOT NULL")
 	private String strItemName;
 
-	@Column(name="strMenuHeadCode")
+	@Column(name="strMenuHeadCode",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strMenuHeadCode;
 
-	@Column(name="strSubGroupCode")
+	@Column(name="strSubGroupCode",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strSubGroupCode;
 
-	@Column(name="strDepartmentCode")
+	@Column(name="strDepartmentCode",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strDepartmentCode;
 
-	@Column(name="strUnit")
+	@Column(name="strUnit",columnDefinition = "VARCHAR(50) NOT NULL")
 	private String strUnit;
 
-	@Column(name="dblAmount")
+	@Column(name="dblAmount",columnDefinition = "DECIMAL(10,0) NOT NULL")
 	private double dblAmount;
 
-	@Column(name="dblPercent")
+	@Column(name="dblPercent",columnDefinition = "DECIMAL(10,0) NOT NULL")
 	private double dblPercent;
 
-	@Column(name="dteDateCreated")
+	@Column(name="dteDateCreated",columnDefinition = "DATETIME NOT NULL")
 	private String dteDateCreated;
 
-	@Column(name="dteDateEdited")
+	@Column(name="dteDateEdited",columnDefinition = "DATETIME NOT NULL")
 	private String dteDateEdited;
 
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated",columnDefinition = "VARCHAR(25) NOT NULL")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited",columnDefinition = "VARCHAR(25) NOT NULL")
 	private String strUserEdited;
 
-	@Column(name="strClientCode")
+	@Column(name="strClientCode",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strClientCode;
 
-	@Column(name="strOperational")
+	@Column(name="strOperational",columnDefinition = "VARCHAR(5) NOT NULL DEFAULT 'No'")
 	private String strOperational;
 	
-	@Column(name = "strTaxIndicator", nullable = false)
+	@Column(name = "strTaxIndicator", nullable = false,columnDefinition = "VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strTaxIndicator;
 
 

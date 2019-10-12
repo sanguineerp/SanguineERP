@@ -36,6 +36,7 @@
 			{
 			alert("Please Enter Name !!");
 			 flg=false;
+			 $("#txtBanquetName").focus();
 			}
 		
 		

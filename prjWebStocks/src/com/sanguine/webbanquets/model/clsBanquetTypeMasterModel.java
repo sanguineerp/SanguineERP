@@ -30,34 +30,34 @@ public class clsBanquetTypeMasterModel implements Serializable{
 	})
 
 //Variable Declaration
-	@Column(name="strBanquetTypeCode")
+	@Column(name="strBanquetTypeCode",columnDefinition = "VARCHAR(20) NOT NULL")
 	private String strBanquetTypeCode;
 
-	@Column(name="strBanquetTypeName")
+	@Column(name="strBanquetTypeName",columnDefinition = "VARCHAR(50) NOT NULL")
 	private String strBanquetTypeName;
 
-	@Column(name="intId")
+	@Column(name="intId",columnDefinition = "BIGINT(20) NOT NULL")
 	private long intId;
 
-	@Column(name="dblRate")
+	@Column(name="dblRate",columnDefinition = "DECIMAL(18,4) NOT NULL")
 	private double dblRate;
 
-	@Column(name="strTaxIndicator")
+	@Column(name="strTaxIndicator",columnDefinition = "VARCHAR(5) NOT NULL")
 	private String strTaxIndicator;
 
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated",columnDefinition = "VARCHAR(20) NOT NULL")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited",columnDefinition = "VARCHAR(20) NOT NULL")
 	private String strUserEdited;
 
-	@Column(name="dteDateCreated")
+	@Column(name="dteDateCreated",columnDefinition = "DATETIME NOT NULL")
 	private String dteDateCreated;
 
-	@Column(name="dteDateEdited")
+	@Column(name="dteDateEdited",columnDefinition = "DATETIME NOT NULL")
 	private String dteDateEdited;
 
-	@Column(name="strClientCode")
+	@Column(name="strClientCode",columnDefinition = "VARCHAR(20) NOT NULL")
 	private String strClientCode;
 
 //Setter-Getter Methods

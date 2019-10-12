@@ -25,42 +25,42 @@ public class clsBanquetStaffCategeoryMasterModel implements Serializable{
 
 	@Id
 	@AttributeOverrides({
-		@AttributeOverride(name="strStaffCategeoryCode",column=@Column(name="strStaffCategeoryCode")),
-@AttributeOverride(name="strDeptCode",column=@Column(name="strDeptCode"))
+		@AttributeOverride(name="strStaffCategeoryCode",column=@Column(name="strStaffCategeoryCode",columnDefinition = "VARCHAR(10) NOT NULL")),
+@AttributeOverride(name="strDeptCode",column=@Column(name="strDeptCode",columnDefinition = "VARCHAR(20) NOT NULL DEFAULT ''"))
 	})
 
 //Variable Declaration
-	@Column(name="strStaffCategeoryCode")
+	@Column(name="strStaffCategeoryCode",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strStaffCategeoryCode;
 
-	@Column(name="strStaffCategeoryName")
+	@Column(name="strStaffCategeoryName",columnDefinition = "VARCHAR(50) NOT NULL")
 	private String strStaffCategeoryName;
 
-	@Column(name="strStaffCount")
+	@Column(name="strStaffCount",columnDefinition = "VARCHAR(20) NOT NULL")
 	private String strStaffCount;
 
-	@Column(name="strOperationalYN")
+	@Column(name="strOperationalYN",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strOperationalYN;
 
-	@Column(name="dteDateCreated")
+	@Column(name="dteDateCreated",columnDefinition = "DATETIME NOT NULL")
 	private String dteDateCreated;
 
-	@Column(name="dteDateEdited")
+	@Column(name="dteDateEdited",columnDefinition = "DATETIME NOT NULL")
 	private String dteDateEdited;
 
-	@Column(name="strClientCode")
+	@Column(name="strClientCode",columnDefinition = "VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strClientCode;
 
-	@Column(name="strDeptCode")
+	@Column(name="strDeptCode",columnDefinition = "VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strDeptCode;
 
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated",columnDefinition = "VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited",columnDefinition = "VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strUserEdited;
 
-	@Column(name="intSCId")
+	@Column(name="intSCId",columnDefinition = "BIGINT(20) NOT NULL DEFAULT '0'")
 	private long intSCId;
 
 //Setter-Getter Methods

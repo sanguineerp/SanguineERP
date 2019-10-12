@@ -30,31 +30,31 @@ public class clsCostCenterMasterModel implements Serializable{
 	})
 
 //Variable Declaration
-	@Column(name="strCostCenterCode")
+	@Column(name="strCostCenterCode",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strCostCenterCode;
 
-	@Column(name="strCostCenterName")
+	@Column(name="strCostCenterName",columnDefinition = "VARCHAR(50) NOT NULL")
 	private String strCostCenterName;
 
-	@Column(name="intId")
+	@Column(name="intId",columnDefinition = "INT(5) NOT NULL")
 	private long intId;
 
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited",columnDefinition = "VARCHAR(10) NOT NULL")
 	private String strUserEdited;
 
-	@Column(name="dteDateCreated")
+	@Column(name="dteDateCreated",columnDefinition = "DATETIME NOT NULL")
 	private String dteDateCreated;
 
-	@Column(name="dteDateEdited")
+	@Column(name="dteDateEdited",columnDefinition = "DATETIME NOT NULL")
 	private String dteDateEdited;
 
-	@Column(name="strOperational")
+	@Column(name="strOperational",columnDefinition = "VARCHAR(5) NOT NULL")
 	private String strOperational;
 
-	@Column(name="strClientCode")
+	@Column(name="strClientCode",columnDefinition = "VARCHAR(11) NOT NULL DEFAULT ''")
 	private String strClientCode;
 
 //Setter-Getter Methods
