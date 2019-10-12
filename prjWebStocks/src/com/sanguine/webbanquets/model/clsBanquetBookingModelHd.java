@@ -121,6 +121,9 @@ public class clsBanquetBookingModelHd implements Serializable{
 	
 	@Column(name="dblGrandTotal")
 	private double dblGrandTotal;
+	
+	@Column(name="strBanquetCode")
+	private double strBanquetCode;
 
 	//Setter-Getter Methods
 	public String getStrBookingNo(){
@@ -317,6 +320,7 @@ public class clsBanquetBookingModelHd implements Serializable{
 	public void setDblGrandTotal(double dblGrandTotal) {
 		this.dblGrandTotal = dblGrandTotal;
 	}
+	
 
 	//Function to Set Default Values
 	private Object setDefaultValue(Object value, Object defaultValue){
@@ -335,6 +339,14 @@ public class clsBanquetBookingModelHd implements Serializable{
 		else{
 			return defaultValue;
 		}
+	}
+
+	public double getStrBanquetCode() {
+		return strBanquetCode;
+	}
+
+	public void setStrBanquetCode(double strBanquetCode) {
+		this.strBanquetCode = strBanquetCode;
 	}
 
 }

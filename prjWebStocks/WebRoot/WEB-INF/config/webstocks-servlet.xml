@@ -396,6 +396,8 @@
 					<value>com.sanguine.webclub.model.clsWebClubCommitteeMasterModel</value>
 					<value>com.sanguine.webclub.model.clsWebClubCommitteeMasterDtl</value>
 					<value>com.sanguine.webclub.model.clsWebClubBusinessSourceMasterModel</value>
+					<value>com.sanguine.webclub.model.clsWebClubFacilityMasterModel</value>
+					<value>com.sanguine.webclub.model.clsWebClubCategeoryWiseFacilityModel</value>
 					
 					
 					

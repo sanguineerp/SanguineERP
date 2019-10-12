@@ -389,14 +389,14 @@
 	    {
 		            strCustCode=" ";
 					 $('input[name="Custthemes"]:checked').each(function() {
-						 if(strCustCode.length>0)
-							 {
+						if(strCustCode.length>0)
+						{
 							 strCustCode=strCustCode+","+this.value;
-							 }
-							 else
-							 {
-								 strCustCode=this.value;
-							 }
+						}
+						else
+						{
+							strCustCode=this.value;
+					    }
 						 
 						});
 

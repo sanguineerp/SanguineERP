@@ -1,5 +1,9 @@
 package com.sanguine.webclub.bean;
 
+import java.util.List;
+
+import com.sanguine.webclub.model.clsWebClubFacilityMasterModel;
+
 public class clsWebClubMemberCategoryMasterBean {
 	// Variable Declaration
 	private String strCatCode;
@@ -33,8 +37,50 @@ public class clsWebClubMemberCategoryMasterBean {
 	private double dblDisAmt;
 
 	private String strTenure;
-
+	
+	private String strFacilityCode;
+	
+	private String strFacilityName;
+	
+	private String strOperationalNY;
+	
+	private List<clsWebClubFacilityMasterModel> listFacilityDtl;
 	// Setter-Getter Methods
+	
+
+
+	public List<clsWebClubFacilityMasterModel> getListFacilityDtl() {
+		return listFacilityDtl;
+	}
+
+	public void setListFacilityDtl(List<clsWebClubFacilityMasterModel> listFacilityDtl) {
+		this.listFacilityDtl = listFacilityDtl;
+	}
+
+	public String getStrFacilityCode() {
+		return strFacilityCode;
+	}
+
+	public void setStrFacilityCode(String strFacilityCode) {
+		this.strFacilityCode = strFacilityCode;
+	}
+
+	public String getStrFacilityName() {
+		return strFacilityName;
+	}
+
+	public void setStrFacilityName(String strFacilityName) {
+		this.strFacilityName = strFacilityName;
+	}
+
+	public String getStrOperationalNY() {
+		return strOperationalNY;
+	}
+
+	public void setStrOperationalNY(String strOperationalNY) {
+		this.strOperationalNY = strOperationalNY;
+	}
+
 	public String getStrCatCode() {
 		return strCatCode;
 	}

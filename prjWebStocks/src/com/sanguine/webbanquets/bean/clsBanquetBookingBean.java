@@ -49,6 +49,16 @@ public class clsBanquetBookingBean{
 	
 	private String  strBookingStatus;
 	
+	private double dblSubTotal;
+	
+	private double dblDiscAmt;
+	
+	private double dblTaxAmt;
+	
+	private double dblGrandTotal;
+	
+	private double  strBanquetCode;
+	
 	List<clsBanquetBookingModelDtl> listSeriveDtl=new ArrayList<clsBanquetBookingModelDtl>();
 	List<clsBanquetBookingModelDtl> listEquipDtl=new ArrayList<clsBanquetBookingModelDtl>();
 	List<clsBanquetBookingModelDtl> listStaffCatDtl=new ArrayList<clsBanquetBookingModelDtl>();
@@ -221,6 +231,36 @@ public class clsBanquetBookingBean{
 	}
 	public void setListMenuItemDtl(List<clsBanquetBookingModelDtl> listMenuItemDtl) {
 		this.listMenuItemDtl = listMenuItemDtl;
+	}
+	public double getDblSubTotal() {
+		return dblSubTotal;
+	}
+	public void setDblSubTotal(double dblSubTotal) {
+		this.dblSubTotal = dblSubTotal;
+	}
+	public double getDblDiscAmt() {
+		return dblDiscAmt;
+	}
+	public void setDblDiscAmt(double dblDiscAmt) {
+		this.dblDiscAmt = dblDiscAmt;
+	}
+	public double getDblTaxAmt() {
+		return dblTaxAmt;
+	}
+	public void setDblTaxAmt(double dblTaxAmt) {
+		this.dblTaxAmt = dblTaxAmt;
+	}
+	public double getDblGrandTotal() {
+		return dblGrandTotal;
+	}
+	public void setDblGrandTotal(double dblGrandTotal) {
+		this.dblGrandTotal = dblGrandTotal;
+	}
+	public double getStrBanquetCode() {
+		return strBanquetCode;
+	}
+	public void setStrBanquetCode(double strBanquetCode) {
+		this.strBanquetCode = strBanquetCode;
 	}
 
 	/*public List<clsclsBanquetBookingBeanDtlModel> getclsclsBanquetBookingBeanDtlModel(){

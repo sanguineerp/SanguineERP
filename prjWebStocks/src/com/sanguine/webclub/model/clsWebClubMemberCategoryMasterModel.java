@@ -1,6 +1,7 @@
 package com.sanguine.webclub.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -83,8 +84,20 @@ public class clsWebClubMemberCategoryMasterModel implements Serializable {
 
 	@Column(name = "dtModifiedDate")
 	private String dtModifiedDate;
-
+	
+	@Column(name = "strFacilityCode")
+	private String strFacilityCode;
+	
+	
 	// Setter-Getter Methods
+	public String getStrFacilityCode() {
+		return strFacilityCode;
+	}
+
+	public void setStrFacilityCode(String strFacilityCode) {
+		this.strFacilityCode = strFacilityCode;
+	}
+	
 	public String getStrCatCode() {
 		return strCatCode;
 	}

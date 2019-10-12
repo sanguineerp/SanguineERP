@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsSettlementMasterModel;
@@ -47,7 +48,7 @@ public class clsBanquetBookingController{
 
 //Open BanquetBooking
 	
-	
+	DecimalFormat df= new DecimalFormat("#.##");
 	@RequestMapping(value = "/frmBanquetBooking", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request){
 
@@ -257,6 +258,9 @@ public class clsBanquetBookingController{
 		objHDModel.setStrFunctionCode(objBean.getStrFunctionCode());
 		objHDModel.setTmeFromTime(objBean.getTmeFromTime());
 		objHDModel.setTmeToTime(objBean.getTmeToTime());
+		objHDModel.setDblSubTotal(Double.parseDouble(df.format(objBean.getDblSubTotal())));
+		objHDModel.setStrBanquetCode(objBean.getStrBanquetCode());
+		
 		return objHDModel;
 
 	}

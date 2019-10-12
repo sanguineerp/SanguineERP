@@ -59,7 +59,7 @@
 	            	{
 						var facilityCode = $("#txtFacilityCode").val();
 					    var facilityName = $("#txtFacilityName").val();
-					    var OperationalNY = $("#chkOperationalNY").val();
+					    var OperationalNY = $("#txtOperationalNY").val();
 						funAddRow(facilityCode,facilityName,OperationalNY);
 	            	}
 			}		 
@@ -102,7 +102,7 @@
 		    rowCount=listRow;
 		    row.insertCell(0).innerHTML= "<input class=\"Box\" size=\"8%\" name=\"listFacilityDtl["+(rowCount)+"].strFacilityCode\" id=\"txtFacilityCode."+(rowCount)+"\" value="+facilityCode+">";
 		    row.insertCell(1).innerHTML= "<input class=\"Box\" size=\"55%\" name=\"listFacilityDtl["+(rowCount)+"].strFacilityName\" value='"+facilityName+"' id=\"txtFacilityName."+(rowCount)+"\" >";
-		    row.insertCell(2).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listFacilityDtl["+(rowCount)+"].strOperationalNY\" size=\"9%\" style=\"text-align: right;\" id=\"chkOperationalNY."+(rowCount)+"\" value='"+OperationalNY+"'/>";	
+		    row.insertCell(2).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listFacilityDtl["+(rowCount)+"].strOperationalNY\" size=\"9%\" style=\"text-align: right;\" id=\"txtOperationalNY."+(rowCount)+"\" value='"+OperationalNY+"'/>";	
 		    row.insertCell(3).innerHTML= "<input type=\"button\" class=\"deletebutton\" size=\"5%\" value = \"Delete\" onClick=\"Javacsript:funDeleteRow(this)\"/>";
 			   
 		    listRow++;		    
@@ -141,7 +141,7 @@
 		{
 			$("#txtFacilityCode").val('');
 			$("#txtFacilityName").val('');
-			$("#chkOperationalNY").val('');
+			$("#txtOperationalNY").val('');
 		}
 		
 		function funRemoveProductRows()
@@ -263,18 +263,8 @@
 					        	$("#txtFacilityCode").val(code);
 					        	mastercode=$("#txtFacilityCode").val(code);
 					        	$("#txtFacilityName").val(response.strFacilityName);
-					        	$("#chkOperationalNY").val(response.strOperationalNY);
+					        	$("#txtOperationalNY").val(response.strOperationalNY);
 					        	
-				        	}
-				        	
-				        	
-				        	if(response.strOperationalNY=='Y')
-				        	{
-				        		$("#chkOperationalNY").attr('checked', true);
-				        	}
-				        	else
-				        	{
-				        		$("#chkOperationalNY").attr('checked', false);
 				        	}
 						},
 						error: function(jqXHR, exception) {
@@ -461,8 +451,12 @@
 									</tr>
 									<tr>
 										<td width="20px"><label>Operational</label>
-										 <td colspan="2"><s:checkbox id="chkOperationalNY" path="strOperationalNY" value="Y" required=""/></td>
-										 <td colspan="4"><input id="btnAdd" type="button" class="smallButton" value="Add" onclick="return btnAdd_onclick();"></input></td>
+										<td colspan="2"><s:input id="txtOperationalNY"
+												path="strOperationalNY" required="" cssStyle="width:80% ;"
+												cssClass="longTextBox" /></td>
+										<td colspan="4"><input id="btnAdd" type="button"
+											class="smallButton" value="Add"
+											onclick="return btnAdd_onclick();"></input></td>
 									</tr>
 								</table>
 

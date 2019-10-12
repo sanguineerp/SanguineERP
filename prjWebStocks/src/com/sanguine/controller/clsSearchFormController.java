@@ -3763,6 +3763,16 @@ public class clsSearchFormController {
 			flgQuerySelection = true;
 			break;
 		}
+		case "WCFacilityMaster": {
+			columnNames = "strFacilityCode,strFacilityName";
+			tableName = " clsWebClubFacilityMasterModel where strClientCode='" + clientCode + "' ";
+			listColumnNames = "Facility Code,Facility Name ";
+			idColumnName = "strFacilityCode";
+			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			searchFormTitle = "Facility Master";
+			break;
+		}
+
 		}
 
 		mainMap.put("columnNames", columnNames);
