@@ -662,6 +662,12 @@ public class clsGRNController {
 										}
 										weigthedvalue = stock * dblreOrderPrice;
 										double tempval = ob.getDblQty() * ob.getDblUnitPrice();
+										
+										if(objSetUp.getStrIncludeTaxInWeightAvgPrice().equalsIgnoreCase("Y"))
+										{
+										tempval=tempval + ob.getDblTaxAmt();	
+										}
+
 										weightedStk = stock + ob.getDblQty();
 										if (weightedStk == 0.0) {
 											weightedStk = 1.0;
@@ -736,6 +742,12 @@ public class clsGRNController {
 											* objModel.getDblCostRM();
 									double tempval = ob.getDblQty()
 											* ob.getDblUnitPrice();
+									
+									if(objSetUp.getStrIncludeTaxInWeightAvgPrice().equalsIgnoreCase("Y"))
+									{
+									tempval=tempval + ob.getDblTaxAmt();	
+									}
+
 									weightedStk = stock + ob.getDblQty();
 									if (weightedStk == 0.0) {
 										weightedStk = 1.0;
@@ -773,6 +785,12 @@ public class clsGRNController {
 									weigthedvalue = stock * dblreOrderPrice;
 									double tempval = ob.getDblQty()
 											* ob.getDblUnitPrice();
+									
+									if(objSetUp.getStrIncludeTaxInWeightAvgPrice().equalsIgnoreCase("Y"))
+									{
+									tempval=tempval + ob.getDblTaxAmt();	
+									}
+
 									weightedStk = stock + ob.getDblQty();
 									if (weightedStk == 0.0) {
 										weightedStk = 1.0;

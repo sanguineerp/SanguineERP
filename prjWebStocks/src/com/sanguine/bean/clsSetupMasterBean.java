@@ -110,7 +110,10 @@ public class clsSetupMasterBean {
 	private String strShowAllPartyToAllLoc;
 	private String strPORateEditable;
 	private String strRecipeListPrice;
-
+	private String strIncludeTaxInWeightAvgPrice;
+	
+	
+	
 	// BAnk Dtl Tab
 	private String strBankName;
 	private String strBranchName;
@@ -1410,6 +1413,15 @@ public class clsSetupMasterBean {
 
 	public void setStrRecipeListPrice(String strRecipeListPrice) {
 		this.strRecipeListPrice = strRecipeListPrice;
+	}
+
+	public String getStrIncludeTaxInWeightAvgPrice() {
+		return strIncludeTaxInWeightAvgPrice;
+	}
+
+	public void setStrIncludeTaxInWeightAvgPrice(
+			String strIncludeTaxInWeightAvgPrice) {
+		this.strIncludeTaxInWeightAvgPrice = strIncludeTaxInWeightAvgPrice;
 	}
 
 	

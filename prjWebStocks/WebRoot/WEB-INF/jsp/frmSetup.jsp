@@ -1480,7 +1480,11 @@
 										</s:select>
 										</td>
 									</tr>
-									
+									<tr>
+									<td>Include Tax In Weight Average price</td>
+										<td>
+											<s:checkbox path="strIncludeTaxInWeightAvgPrice" value="Y"/> 
+										</td>
 									
 									</tr>
 								</table>

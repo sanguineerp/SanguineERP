@@ -212,6 +212,11 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
     
 	@Column(name = "strRecipeListPrice", columnDefinition = "VARCHAR(10) default ''")
 	private String strRecipeListPrice;
+	
+	
+	@Column(name = "strIncludeTaxInWeightAvgPrice", columnDefinition = "VARCHAR(1) default 'Y'")
+	private String strIncludeTaxInWeightAvgPrice;
+	
     
 	
 	
@@ -1259,6 +1264,15 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 
 	public void setStrRecipeListPrice(String strRecipeListPrice) {
 		this.strRecipeListPrice = strRecipeListPrice;
+	}
+
+	public String getStrIncludeTaxInWeightAvgPrice() {
+		return strIncludeTaxInWeightAvgPrice;
+	}
+
+	public void setStrIncludeTaxInWeightAvgPrice(
+			String strIncludeTaxInWeightAvgPrice) {
+		this.strIncludeTaxInWeightAvgPrice = strIncludeTaxInWeightAvgPrice;
 	}
 
 	

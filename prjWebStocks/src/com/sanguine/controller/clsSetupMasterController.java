@@ -568,6 +568,7 @@ public class clsSetupMasterController {
 		bean.setStrGRNProdPOWise(objSetup.getStrGRNProdPOWise());
 		bean.setStrPORateEditable(objSetup.getStrPORateEditable());
 		bean.setStrRecipeListPrice(objSetup.getStrRecipeListPrice());
+		bean.setStrIncludeTaxInWeightAvgPrice(objSetup.getStrIncludeTaxInWeightAvgPrice());
 		/*
 		 * Bank Tab
 		 */
@@ -1107,6 +1108,9 @@ public class clsSetupMasterController {
 				bean.getStrRoundOffFinalAmtOnTransaction(), "N", bean.getStrRoundOffFinalAmtOnTransaction()));
 		objPropertySetupModel.setStrPOSTRoundOffAmtToWebBooks(objGlobal.funIfNull(
 				bean.getStrPOSTRoundOffAmtToWebBooks(), "N", bean.getStrPOSTRoundOffAmtToWebBooks()));		
+		
+		
+
        
 		/*
 		 * if(bean.isStrShowAllPropCustomer()==true) {
@@ -1138,6 +1142,8 @@ public class clsSetupMasterController {
 		objPropertySetupModel.setStrSRSlipFormat(bean.getStrSRSlipFormat());
 		objPropertySetupModel.setStrWeightedAvgCal(bean.getStrWeightedAvgCal());
 		 objPropertySetupModel.setStrRecipeListPrice(bean.getStrRecipeListPrice());
+		 
+		 objPropertySetupModel.setStrIncludeTaxInWeightAvgPrice(objGlobal.funIfNull(bean.getStrIncludeTaxInWeightAvgPrice(), "N", bean.getStrIncludeTaxInWeightAvgPrice()));
 		 
 		/*
 		 * Bank Tab
