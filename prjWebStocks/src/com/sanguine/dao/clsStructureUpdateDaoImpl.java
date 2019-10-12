@@ -3213,17 +3213,17 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		sql = "CREATE TABLE `tblequipment` ("
 				+ " `intId` BIGINT(20) NULL DEFAULT NULL, "
-				+ "`strEquipmentCode` VARCHAR(255) NOT NULL,"
-				+ "`strEquipmentName` VARCHAR(255) NOT NULL,"
+				+ "`strEquipmentCode` VARCHAR(10) NOT NULL,"
+				+ "`strEquipmentName` VARCHAR(100) NOT NULL,"
 				+ "`intId` BIGINT(20) NOT NULL,"
-				+ " `strDeptCode` VARCHAR(255) NULL DEFAULT NULL, "
-				+ "`dteDateCreated` VARCHAR(255) NOT NULL,"
-				+ "`dteDateEdited` VARCHAR(255) NOT NULL,"
-				+ "`strUserCreated` VARCHAR(255) NOT NULL,"
-				+ "`strUserEdited` VARCHAR(255) NOT NULL,"
-				+ " `dblEquipmentRate` DOUBLE NULL DEFAULT NULL, "
-				+ "`strOperational` VARCHAR(5) NOT NULL,"
-				+ "`strClientCode` VARCHAR(255) NOT NULL,"
+				+ " `strDeptCode` VARCHAR(10) NULL DEFAULT NULL, "
+				+ "`dteDateCreated` VARCHAR(20) NOT NULL,"
+				+ "`dteDateEdited` VARCHAR(20) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(10) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(10) NOT NULL,"
+				+ " `dblEquipmentRate` DECIMAL(18,4) NOT NULL DEFAULT '0.0', "
+				+ "`strOperational` VARCHAR(2) NOT NULL,"
+				+ "`strClientCode` VARCHAR(10) NOT NULL,"
 				+ "PRIMARY KEY (`strClientCode`, `strEquipmentCode`)"
 				+ ") "
 				+ "COLLATE='utf8_general_ci' "
@@ -3468,10 +3468,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 										   
 		
 		
-		sql="ALTER TABLE `tblequipment`"
-				+ "ADD COLUMN `strDeptCode` VARCHAR(10) NOT NULL AFTER `intId`;";
 		
-		funExecuteBanquetQuery(sql);
 		
 		sql = "ALTER TABLE `tbldepartmentmaster`"
 				+ "ADD COLUMN `strMobileNo` VARCHAR(20) NOT NULL AFTER `strOperational`,"
@@ -3481,10 +3478,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		
 		
-		sql="ALTER TABLE `tblequipment`"
-				+ "ADD COLUMN `dblEquipmentRate` DECIMAL(18,4) NOT NULL DEFAULT '0.0' AFTER `strDeptCode`;";
 		
-		funExecuteBanquetQuery(sql);
 		
 		
 		sql="CREATE TABLE `tblweekendmaster` ( "

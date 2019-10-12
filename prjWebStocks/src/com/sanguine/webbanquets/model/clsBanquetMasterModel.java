@@ -30,32 +30,32 @@ public class clsBanquetMasterModel implements Serializable{
 	})
 
 //Variable Declaration
-	@Column(name="strBanquetCode")
+	@Column(name="strBanquetCode",columnDefinition="VARCHAR(20) NOT NULL")
 	private String strBanquetCode;
 
-	@Column(name="strBanquetName")
+	@Column(name="strBanquetName",columnDefinition="VARCHAR(30) NOT NULL")
 	private String strBanquetName;
 
-	@Column(name="intId")
+	@Column(name="intId",columnDefinition="NOT NULL")
 	private long intId;
 
 	
-	@Column(name="strOperational")
+	@Column(name="strOperational",columnDefinition="VARCHAR(5) NOT NULL")
 	private String strOperational;
 	
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated",columnDefinition="VARCHAR(20) NOT NULL")
 	private String strUserCreated;
 	
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited",columnDefinition="VARCHAR(20) NOT NULL")
 	private String strUserEdited;
 	
-	@Column(name="dteDateCreated")
+	@Column(name="dteDateCreated",columnDefinition="DATETIME NOT NULL")
 	private String dteDateCreated;
 	
-	@Column(name="dteDateEdited")
+	@Column(name="dteDateEdited",columnDefinition="DATETIME NOT NULL")
 	private String dteDateEdited;
 
-	@Column(name="strClientCode")
+	@Column(name="strClientCode",columnDefinition="VARCHAR(10) NOT NULL")
 	private String strClientCode;
 	
 	
