@@ -193,6 +193,7 @@
 	        		$("#txtPercent").val(response.dblPercent);
 	        		document.getElementById("chkOperational").checked = response.strOperational == 'Yes' ? true
 							: false;
+	        		$("#cmbTaxIndicator").val(response.strTaxIndicator);
 	        	}
 			},
 			error: function(jqXHR, exception) {
@@ -351,6 +352,13 @@
 					<s:checkbox value="true" element="li" id="chkOperational" path="strOperational"  checked="true"/>
 				</td>
 			</tr>
+			
+			<tr>
+				<td><label>Tax Indicator</label></td>
+				<td><s:select id="cmbTaxIndicator" name="taxIndicator"
+				path="strTaxIndicator" items="${taxIndicatorList}"  cssClass="BoxW48px"/></td>
+			
+		  </tr>
 		</table>
 
 		<br />

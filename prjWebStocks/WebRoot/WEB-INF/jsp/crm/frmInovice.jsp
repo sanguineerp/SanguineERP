@@ -13,7 +13,8 @@
 <script type="text/javascript">
 
 
-		var QtyTol=0.00;	
+		var QtyTol=0.00,list=0;	
+		
 		$(document).ready(function() 
 		{	
 			var sgData ;
@@ -195,8 +196,7 @@
 				{
 					transactionName='proformaInvoice';
 				}
-			}
-			
+			}															
 			fieldName = transactionName;
 		//	window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
 		window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;top=500,left=500")	
@@ -927,7 +927,7 @@
 	    {
 	    	var strProdCode=$("#hidProdCode").val();
 	    	var dblWeight=$("#txtWeight").val();
-	    	if(funDuplicateProduct(strProdCode,dblWeight))
+	    	if(funDuplicateProductForUpdate(strProdCode,dblWeight))//function change
 	    	{
 	    		funAddProductRow();
 			}
@@ -943,34 +943,30 @@
 
 	    for(var i=0;i<rowCount;i++)
 		{
-	    	if(strProdCode==document.getElementById("txtProdCode."+i).value && dblWeight==parseFloat(document.getElementById("txtWeight."+i).value))
-	        {
-	    		alert("Already added Product "+ strProdCode +" of Weight "+dblWeight+"Kg" );
-				flag=false;
-	        }		
+	    		if(strProdCode==document.getElementById("txtProdCode."+i).value && dblWeight==parseFloat(document.getElementById("txtWeight."+i).value))
+			    {
+			    		alert("Already added Product "+ strProdCode +" of Weight "+dblWeight+"Kg" );
+						flag=false;
+			    }
+    		
+    		
+	    		
 	    	
 		}
-			
-	    /* 	
-	    	{
-			    $('#tblProdDet tr').each(function()
-			    {
-				    if(strProdCode==$(this).find('input').val())// `this` is TR DOM element
-    				{
-				    	alert("Already added "+ strProdCode);
-	    				flag=false;
-    				}
-				});
-			    
-	    	} */
+	    	
+    		
+		    		
 	    return flag;
 	}
 	
 	function funAddProductRow()
 	{
+		
+		
 		var table = document.getElementById("tblProdDet");
 	    var rowCount = table.rows.length;
 	    var row = table.insertRow(rowCount);
+	    rowCount=list;
 	    var strProdCode = $("#hidProdCode").val().trim();
 		var strProdName=$("#txtProdName").val().trim();
 		var strProdType=$("#hidProdType").val();	
@@ -996,9 +992,10 @@
 	   var disAmt=(prodDisPer*totalPrice)/100;
 	   var grandtotalPrice=totalPrice- disAmt;
 	   
-
+    
        var strCustCode=$("#txtCustCode").val();
        var strSOCode="";
+      
 	   row.insertCell(0).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"8%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
 	    row.insertCell(1).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"40%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";
 	   row.insertCell(2).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblQty\" type=\"text\"  required = \"required\" style=\"text-align: right;\" size=\"2%\"  class=\"decimal-places inputText-Auto  txtQty\" id=\"txtQty."+(rowCount)+"\" value="+dblQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
@@ -1020,13 +1017,14 @@
 	 	 row.insertCell(16).innerHTML= "<input readonly=\"readonly\" class=\"Box prevInvCode\" style=\"text-align: right;\" \size=\"3.9%\" id=\"prevInvCode."+(rowCount)+"\"   value='"+prevInvCode+"'/>";
 	 	 row.insertCell(17).innerHTML= "<input readonly=\"readonly\" class=\"Box prevProdrice\" style=\"text-align: right;\" \size=\"3.9%\" id=\"prevProdrice."+(rowCount)+"\"   value='"+prevProdrice+"'/>";
 // 	 	 row.insertCell(18).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdType\" type=\"hidden\" size=\"0%\" id=\"txtProdTpye."+(rowCount)+"\" value='"+strProdType+"'/>";
-		    
+		     list++; 
 	 	 QtyTol+=parseFloat(dblQty);
 	 	$("#txtQtyTotl").val(QtyTol);
 	  //  $("#txtSubGroup").focus();
 	    funCalculateTotalAmt();
 	    funClearProduct();
 	   // funGetTotal();
+	 
 	    return false;
 	}
 	
@@ -1086,7 +1084,9 @@
 	
 	function funDeleteRow(obj) 
 	{
+		
 	    var index = obj.parentNode.parentNode.rowIndex;
+	  
 	    var table = document.getElementById("tblProdDet");
 	    table.deleteRow(index);
 	}
@@ -2148,24 +2148,25 @@
 		}
 		
 		
-	function funDuplicateProductForUpdate(strProdCode)
+	function funDuplicateProductForUpdate(strProdCode,dblWeight)
 		{
 		 var table = document.getElementById("tblProdDet");
 		    var rowCount = table.rows.length;		   
-		    var flag=false;
+		    var flag=true;
 		    if(rowCount > 0)
-		    	{
+		    {
 				    $('#tblProdDet tr').each(function()
 				    {
-					    if(strProdCode==$(this).find('input').val())// `this` is TR DOM element
+					    if(strProdCode==$(this).find('input').val() && dblWeight==$(this).find('input')[4].value)// `this` is TR DOM element
 	    				{
-					    	flag=true; 
+					    	alert("Already added Product "+ strProdCode +" of Weight "+dblWeight+"Kg" );
+					    	flag=false; 
 					    	
 		    			
 	    				}
 					});
 				    
-		    	}
+		   }
 		    return flag;
 		}
 		
@@ -2311,8 +2312,14 @@ function funGetKeyCode(event,controller) {
 	    {
 	    
 	    	var custCode = $("#txtCustCode").val();
-	    	var prodName = $("#txtProdName").val();
-	    	funSetProduct(prodName);
+	    	//var prodName = $("#txtProdName").val();
+	    	var strProdCode=$("#hidProdCode").val();
+	    	var dblWeight=$("#txtWeight").val();
+	    	if(funDuplicateProduct(strProdCode,dblWeight))
+	    	{
+	    		funAddProductRow();
+			}
+	    	//funSetProduct(prodName);
 	 	    	/* $.each(prodData, function(i,item)
 	 			    	{
 	 				var prodName = $("#txtProdName").val();
@@ -2347,7 +2354,12 @@ function funGetKeyCode(event,controller) {
 			          $("#txtQty").focus();
 			          return false;
 			       	}else{
-				    	funAddProductRow();
+			       		var strProdCode=$("#hidProdCode").val();
+				    	var dblWeight=$("#txtWeight").val();
+				    	if(funDuplicateProductForUpdate(strProdCode,dblWeight))
+				    	{
+				    		funAddProductRow();
+						}
 				    	//$("#txtSubGroup").focus();
 		    }
 	    }

@@ -179,7 +179,7 @@ public class clsFunctionMasterController{
 		return list;
 	}
 
-	@RequestMapping(value = "/loadFunctionServiceData", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/loadFunctionServiceData", method = RequestMethod.GET)
 	public @ResponseBody List funLoadFunctionServiceMasterData(@RequestParam("functionCode") String funCode,HttpServletRequest req)
 	{
 		List list =null;
@@ -195,6 +195,34 @@ public class clsFunctionMasterController{
 			}
 		return list;
 	}
+*/
 
+
+@RequestMapping(value = "/loadFunctionServiceData", method = RequestMethod.GET)
+	public @ResponseBody List funLoadFunctionServiceMasterData(@RequestParam("functionCode") String funCode,HttpServletRequest req)
+	{
+		List list =null;
+		try{
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			
+			String sql="select a.strServiceCode,a.strServiceName,if(ifnull(b.strFunctionCode,'')='','N',b.strApplicable)"
+                      +" from tblservicemaster a left outer join tblfunctionservice b  on "
+                      +" a.strServiceCode=b.strServiceCode "
+                      +" and   b.strFunctionCode='"+funCode+"' and a.strClientCode=b.strClientCode 	";
+			
+			/*String sql="select a.strServiceCode,a.strServiceName,ifnull(b.strApplicable,'N') "
+                      +" from tblservicemaster a left outer join tblfunctionservice b  on  "
+                      +" a.strServiceCode=b.strServiceCode and b.strFunctionCode='"+funCode+"'  "
+                      +" where a.strClientCode=b.strClientCode  " ;*/
+
+			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
+			
+		}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return list;
+	}
 
 }

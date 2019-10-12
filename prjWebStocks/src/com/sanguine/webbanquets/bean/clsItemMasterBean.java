@@ -29,6 +29,8 @@ public class clsItemMasterBean{
 	private String strClientCode;
 
 	private String strOperational;
+	
+	private String strTaxIndicator;
 
 //Setter-Getter Methods
 	public String getStrItemCode(){
@@ -127,6 +129,12 @@ public class clsItemMasterBean{
 	}
 	public void setStrOperational(String strOperational){
 		this.strOperational=strOperational;
+	}
+	public String getStrTaxIndicator() {
+		return strTaxIndicator;
+	}
+	public void setStrTaxIndicator(String strTaxIndicator) {
+		this.strTaxIndicator = strTaxIndicator;
 	}
 
 

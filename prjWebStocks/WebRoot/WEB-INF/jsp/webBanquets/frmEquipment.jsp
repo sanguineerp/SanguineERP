@@ -90,6 +90,7 @@
 	        		$("#txtEquipmentCode").val(response.strEquipmentCode);
 	        		$("#txtDepartmentCode").val(response.strDeptCode);
 	        		$("#dblEquipmentRate").val(response.dblEquipmentRate);
+	        		$("#cmbTaxIndicator").val(response.strTaxIndicator);
 	        	}
 			},
 			error : function(e){
@@ -194,6 +195,13 @@
 				<td colspan="3"><s:checkbox id="strOperational" path="strOperational" value="Y"/></td>
 				
 			</tr>
+			
+			<tr>
+				<td><label>Tax Indicator</label></td>
+				<td><s:select id="cmbTaxIndicator" name="taxIndicator"
+				path="strTaxIndicator" items="${taxIndicatorList}"  cssClass="BoxW48px"/></td>
+			
+		  </tr>
 				
 		</table>
 

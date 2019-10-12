@@ -1,5 +1,6 @@
 package com.sanguine.webbanquets.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class clsServiceMasterController{
 	private clsServiceMasterService objServiceMasterService;
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
-	private clsGlobalFunctions objGlobal=null;
+	private clsGlobalFunctions objGlobal;
 
 //Open ServiceMaster
 	@RequestMapping(value = "/frmServiceMaster", method = RequestMethod.GET)
@@ -45,6 +46,15 @@ public class clsServiceMasterController{
 			urlHits = "1";
 		}
 		model.put("urlHits", urlHits);
+		
+		objGlobal = new clsGlobalFunctions();
+		List<String> listTaxIndicator = new ArrayList<>();
+		listTaxIndicator.add(" ");
+		String[] alphabetSet = objGlobal.funGetAlphabetSet();
+		for (int i = 0; i < alphabetSet.length; i++) {
+			listTaxIndicator.add(alphabetSet[i]);
+		}
+		model.put("taxIndicatorList", listTaxIndicator);
 		
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmServiceMaster_1", "command", new clsServiceMasterBean());
@@ -125,12 +135,12 @@ public class clsServiceMasterController{
 	    objModel.setStrClientCode(clientCode);
 	    objModel.setStrDeptCode(objBean.getStrDeptCode());
 	    objModel.setStrServiceName(objBean.getStrServiceName());
-	    objModel.setStrOperationalYN(objGlobal.funIfNull(objBean.getStrOperationalYN(), "N", "Y"));
+	    objModel.setStrOperationalYN(objGlobal.funIfNull(objBean.getStrOperationalYN(),"N","Y"));
 	    objModel.setStrUserEdited(userCode);
 	    objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 	    objModel.setStrPropertyCode(propertyCode);
 	    objModel.setDblRate(objBean.getDblRate());
-	
+	    objModel.setStrTaxIndicator(objGlobal.funIfNull(objBean.getStrTaxIndicator(), "", objBean.getStrTaxIndicator()));
 		return objModel;
 
 	}

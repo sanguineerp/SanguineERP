@@ -66,6 +66,7 @@ function funSetData(code){
 						$("#txtOperational").prop('checked',
 								false);
 	        		
+	        		$("#cmbTaxIndicator").val(response.strTaxIndicator);
 				}
 			},
 			error : function(jqXHR, exception){
@@ -194,8 +195,9 @@ function funSetData(code){
 				<td>
 					<label>Operational Y/N</label>
 				</td>
+				<td ><s:checkbox path="strOperationalYN" id="txtOperational" value="Y" />
 				
-				<td ><s:checkbox value="true" path="strOperationalYN"  id="txtOperational"  checked="true" />
+				<%-- <td ><s:checkbox value="true" path="strOperationalYN"  id="txtOperational"  /> --%>
 					
 			</tr>
 			<tr>
@@ -216,6 +218,13 @@ function funSetData(code){
 				<!-- <td><label >Weight</label></td> -->
 				<%--  <td><s:input id="txtWeight" name="weight" path="dblWeight" cssClass="decimal-places numberField"/></td> --%>
 			</tr>
+			
+			<tr>
+				<td><label>Tax Indicator</label></td>
+				<td><s:select id="cmbTaxIndicator" name="taxIndicator"
+				path="strTaxIndicator" items="${taxIndicatorList}"  cssClass="BoxW48px"/></td>
+				
+		   </tr>
 			
 		</table>
 

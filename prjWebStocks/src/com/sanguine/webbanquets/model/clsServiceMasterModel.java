@@ -67,6 +67,9 @@ public class clsServiceMasterModel implements Serializable{
 	@Column(name="dblRate")
 	private double dblRate;
 	
+	@Column(name = "strTaxIndicator", nullable = false)
+	private String strTaxIndicator;
+	
 	
 	
 
@@ -158,6 +161,14 @@ public long getIntSId() {
 
 	public void setDblRate(double dblRate) {
 		this.dblRate = dblRate;
+	}
+
+	public String getStrTaxIndicator() {
+		return strTaxIndicator;
+	}
+
+	public void setStrTaxIndicator(String strTaxIndicator) {
+		this.strTaxIndicator = strTaxIndicator;
 	}
 
 	//Function to Set Default Values

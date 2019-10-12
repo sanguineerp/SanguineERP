@@ -51,6 +51,15 @@ public class clsItemMasterController{
 		uomList = objclsUOMService.funGetUOMList(clientCode);
 		model.put("uomList", uomList);
 		
+		objGlobal = new clsGlobalFunctions();
+		List<String> listTaxIndicator = new ArrayList<>();
+		listTaxIndicator.add(" ");
+		String[] alphabetSet = objGlobal.funGetAlphabetSet();
+		for (int i = 0; i < alphabetSet.length; i++) {
+			listTaxIndicator.add(alphabetSet[i]);
+		}
+		model.put("taxIndicatorList", listTaxIndicator);
+		
 		if ("2".equalsIgnoreCase(urlHits)) {
 			return new ModelAndView("frmItemMaster_1", "command", new clsItemMasterBean());
 		} else if ("1".equalsIgnoreCase(urlHits)) {
@@ -109,6 +118,7 @@ public class clsItemMasterController{
 			objModel.setStrUnit(objBean.getStrUnit());
 			objModel.setDblAmount(objBean.getDblAmount());
 			objModel.setDblPercent(objBean.getDblPercent());
+			objModel.setStrTaxIndicator(objGlobal.funIfNull(objBean.getStrTaxIndicator(), "", objBean.getStrTaxIndicator()));
 		}
 		else
 		{
@@ -126,6 +136,7 @@ public class clsItemMasterController{
 			objModel.setStrUnit(objBean.getStrUnit());
 			objModel.setDblAmount(objBean.getDblAmount());
 			objModel.setDblPercent(objBean.getDblPercent());
+			objModel.setStrTaxIndicator(objGlobal.funIfNull(objBean.getStrTaxIndicator(), "", objBean.getStrTaxIndicator()));
 		}
 		return objModel;
 	}

@@ -24,6 +24,8 @@ public class clsServiceMasterBean{
 	
 	private double dblRate;
 	
+	private String strTaxIndicator;
+	
 	
 
 public double getDblRate() {
@@ -99,6 +101,12 @@ public double getDblRate() {
 	}
 	public void setStrDeptCode(String strDeptCode) {
 		this.strDeptCode = strDeptCode;
+	}
+	public String getStrTaxIndicator() {
+		return strTaxIndicator;
+	}
+	public void setStrTaxIndicator(String strTaxIndicator) {
+		this.strTaxIndicator = strTaxIndicator;
 	}
 
 

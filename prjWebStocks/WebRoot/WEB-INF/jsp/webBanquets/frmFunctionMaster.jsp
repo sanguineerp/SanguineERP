@@ -86,14 +86,14 @@
 					$("#txtFunctionCode").val(response.strFunctionCode);
 	        		$("#txtFunctionName").val(response.strFunctionName);
 	        		$("#txtFunctionName").focus();
-	        		//$("#txtOperational").val(response.strOperationalYN);
 	        		if (response.strOperationalYN == 'Y') {
 						$("#txtOperational").prop('checked',
 								true);
 					} else
 						$("#txtOperational").prop('checked',
 								false);
-	        		funUpdateServiceData(response.listService);
+	        		funLoadFunctionService(code);
+	        		//funUpdateServiceData(response.listService);
 	        		
 				}
 
@@ -141,6 +141,8 @@
 
 	});
 
+	
+	
    function funHelp(transactionName)
 	{
 		fieldName=transactionName;
@@ -165,7 +167,7 @@
    
    function funLoadService()
 	{
-		
+	   
 		$.ajax({
 			type: "GET",
 	        url: getContextPath()+"/loadServiceData.html",
@@ -219,7 +221,7 @@
 	    
 	}
    
-   function funUpdateServiceData(listService){
+   /* function funUpdateServiceData(listService){
 		
 		if(listService.length>0){
 			funRemAllRows("tblService");
@@ -229,6 +231,44 @@
 			});
    	
 		}
+	}
+   
+    */
+   
+   function funLoadFunctionService(funCode)
+	{
+	  
+		$.ajax({
+			type: "GET",
+	        url: getContextPath()+"/loadFunctionServiceData.html?functionCode="+funCode,
+	        dataType: "json",
+	        success: function(response)
+	        {
+	        	    $('#tblService tbody').empty();
+	        		$.each(response, function(i,item)
+	                {   
+	        			funfillServiceRow(response[i][0],response[i][1],response[i][2]);
+					});
+	        	
+			},
+			error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+	        }
+    });
 	}
 	
    
@@ -266,7 +306,7 @@
 					
 					<tr>
 					<td><label>Operational Y/N</label></td>
-					<td ><s:checkbox path="strOperationalYN" id="txtOperational" value="Y" checked="true" />
+					<td ><s:checkbox path="strOperationalYN" id="txtOperational" value="Y" />
 								<%-- <s:option value="Y">YES</s:option>
 								<s:option value="N">NO</s:option></s:select></td> --%>
 					</tr>

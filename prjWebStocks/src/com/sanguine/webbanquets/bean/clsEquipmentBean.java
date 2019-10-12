@@ -21,6 +21,8 @@ public class clsEquipmentBean{
 	private String strDeptCode;
 	
 	private double dblEquipmentRate;
+	
+	private String strTaxIndicator;
 
 //Setter-Getter Methods
 	public String getStrEquipmentCode(){
@@ -88,6 +90,12 @@ public class clsEquipmentBean{
 	}
 	public void setDblEquipmentRate(double dblEquipmentRate) {
 		this.dblEquipmentRate = dblEquipmentRate;
+	}
+	public String getStrTaxIndicator() {
+		return strTaxIndicator;
+	}
+	public void setStrTaxIndicator(String strTaxIndicator) {
+		this.strTaxIndicator = strTaxIndicator;
 	}
 
 

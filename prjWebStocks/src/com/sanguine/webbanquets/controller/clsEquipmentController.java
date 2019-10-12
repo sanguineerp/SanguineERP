@@ -49,7 +49,14 @@ public class clsEquipmentController{
 		}
 		model.put("urlHits", urlHits);
 		
-		
+		objGlobal = new clsGlobalFunctions();
+		List<String> listTaxIndicator = new ArrayList<>();
+		listTaxIndicator.add(" ");
+		String[] alphabetSet = objGlobal.funGetAlphabetSet();
+		for (int i = 0; i < alphabetSet.length; i++) {
+			listTaxIndicator.add(alphabetSet[i]);
+		}
+		model.put("taxIndicatorList", listTaxIndicator);
 		//objSampleService.funSaveData("WebBAnquet");
 		
 		if ("2".equalsIgnoreCase(urlHits)) {
@@ -127,6 +134,7 @@ public class clsEquipmentController{
 		objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
 		objModel.setStrDeptCode(objBean.getStrDeptCode());
 		objModel.setDblEquipmentRate(objBean.getDblEquipmentRate());
+		objModel.setStrTaxIndicator(objGlobal.funIfNull(objBean.getStrTaxIndicator(), "", objBean.getStrTaxIndicator()));
 		}
 		
 		else
@@ -141,6 +149,7 @@ public class clsEquipmentController{
 			objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
 			objModel.setStrDeptCode(objBean.getStrDeptCode());
 			objModel.setDblEquipmentRate(objBean.getDblEquipmentRate());
+			objModel.setStrTaxIndicator(objGlobal.funIfNull(objBean.getStrTaxIndicator(), "", objBean.getStrTaxIndicator()));
 			
 		}
 		return objModel;

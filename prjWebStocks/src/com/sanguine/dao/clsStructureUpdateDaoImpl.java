@@ -2954,6 +2954,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql = "ALTER TABLE `tblroom`"
 				+ "ADD PRIMARY KEY (`strRoomCode`, `strClientCode`);";
 		funExecutePMSQuery(sql);
+		   
 
 		
 		sql="ALTER TABLE `tblguestmaster` "
@@ -3199,20 +3200,23 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ ")COLLATE='latin1_swedish_ci'ENGINE=InnoDB; ";
 		funExecuteBanquetQuery(sql);
 		
-		sql = "CREATE TABLE IF NOT EXISTS  `tblequipment` ("
-				+ "`strEquipmentCode` VARCHAR(255) NOT NULL,"
-				+ "`strEquipmentName` VARCHAR(255) NOT NULL,"
-				+ "`intId` BIGINT(20) NOT NULL,"
-				+ "`dteDateCreated` VARCHAR(255) NOT NULL,"
-				+ "`dteDateEdited` VARCHAR(255) NOT NULL,"
-				+ "`strUserCreated` VARCHAR(255) NOT NULL,"
-				+ "`strUserEdited` VARCHAR(255) NOT NULL,"
-				+ "`strOperational` VARCHAR(5) NOT NULL,"
-				+ "`strClientCode` VARCHAR(255) NOT NULL,"
-				+ "PRIMARY KEY (`strClientCode`, `strEquipmentCode`)"
-				+ ") "
-				+ "COLLATE='utf8_general_ci' "
-				+ "ENGINE=InnoDB "
+		sql = " CREATE TABLE IF NOT EXISTS  `tblequipment` ( "
+				+ " `intId` BIGINT(20) NULL DEFAULT NULL, "
+				+ " `strEquipmentCode` VARCHAR(255) NOT NULL, "
+				+ " `strEquipmentName` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strOperational` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strDeptCode` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `dteDateCreated` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `dteDateEdited` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strUserCreated` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strUserEdited` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `dblEquipmentRate` DOUBLE NULL DEFAULT NULL, "
+				+ " `strTaxIndicator` VARCHAR(20) NOT NULL DEFAULT '', "
+				+ " `strClientCode` VARCHAR(255) NOT NULL, "
+				+ " PRIMARY KEY (`strClientCode`, `strEquipmentCode`) "
+				+ " ) "
+				+ " COLLATE='utf8_general_ci' "
+				+ " ENGINE=InnoDB "
 				+ ";";
 		
 		
@@ -3237,81 +3241,79 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE IF NOT EXISTS  `tblfunctionmaster` ("
-				+ "`strFunctionCode` VARCHAR(10) NOT NULL,"
-				+ "`strFunctionName` VARCHAR(100) NOT NULL DEFAULT '',"
-				+ "`strOperationalYN` VARCHAR(2) NOT NULL DEFAULT 'Y',"
-				+ "`strPropertyCode` VARCHAR(5) NOT NULL,"
-				+ "`strClientCode` VARCHAR(10) NOT NULL,"
-				+ "`strUserCreated` VARCHAR(10) NOT NULL,"
-				+ "`strUserEdited` VARCHAR(10) NOT NULL,"
-				+ "`strDateCreated` DATETIME NOT NULL,"
-				+ "`strDateEdited` DATETIME NOT NULL,"
-				+ "`intFId` BIGINT(20) NOT NULL DEFAULT '0',"
-				+ "PRIMARY KEY (`strFunctionCode`, `strClientCode`)"
-				+ ") "
+		sql="CREATE TABLE IF NOT EXISTS  `tblfunctionmaster` ( "
+				+ " `intFId` BIGINT(20) NOT NULL, "
+				+ " `strFunctionCode` VARCHAR(255) NOT NULL, "
+				+ " `strFunctionName` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strOperationalYN` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strPropertyCode` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strUserCreated` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strUserEdited` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strDateCreated` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strDateEdited` VARCHAR(255) NULL DEFAULT NULL, "
+				+ " `strClientCode` VARCHAR(255) NOT NULL, "
+				+ " PRIMARY KEY (`strClientCode`, `strFunctionCode`) "
+				+ " ) "
 				+ "COLLATE='utf8_general_ci' "
 				+ "ENGINE=InnoDB;";
 		
 		funExecuteBanquetQuery(sql);
 		
-		sql="CREATE TABLE IF NOT EXISTS  `tblbqitemmaster` ("
-				+ "`strItemCode` VARCHAR(10) NOT NULL,"
-				+ "	`strItemName` VARCHAR(50) NOT NULL,"
-				+ "	`strMenuHeadCode` VARCHAR(10) NOT NULL,"
-				+ "	`strSubGroupCode` VARCHAR(10) NOT NULL,"
-				+ "	`strDepartmentCode` VARCHAR(10) NOT NULL,"
-				+ "	`strUnit` VARCHAR(50) NOT NULL,"
-				+ "	`dblAmount` DECIMAL(10,0) NOT NULL,"
-				+ "	`dblPercent` DECIMAL(10,0) NOT NULL,"
-				+ "	`strOperational` VARCHAR(5) NOT NULL DEFAULT 'No',"
-				+ "	`dteDateCreated` DATETIME NOT NULL,"
-				+ "	`dteDateEdited` DATETIME NOT NULL,"
-				+ "	`strUserCreated` VARCHAR(25) NOT NULL,"
-				+ "	`strUserEdited` VARCHAR(25) NOT NULL,"
-				+ "	`strClientCode` VARCHAR(10) NOT NULL,"
-				+ "	PRIMARY KEY (`strItemCode`, `strClientCode`),"
-				+ "	INDEX `strMenuHeadCode` (`strMenuHeadCode`),"
-				+ "	INDEX `strSubGroupCode` (`strSubGroupCode`),"
-				+ "	INDEX `strDepartmentCode` (`strDepartmentCode`)"
-				+ ")"
-				+ "COLLATE='latin1_swedish_ci'"
-				+ "ENGINE=InnoDB;";
-		funExecuteBanquetQuery(sql);
-		
-		
-		sql="CREATE TABLE IF NOT EXISTS `tblfunctionservice` ( "
-				+ "`strFunctionCode` VARCHAR(10) NOT NULL, "
-				+ " `strServiceCode` VARCHAR(10) NOT NULL, "
-				+ " `strServiceName` VARCHAR(70) NOT NULL, " 
+		sql="CREATE TABLE IF NOT EXISTS  `tblbqitemmaster` ( "
+				+ " `strItemCode` VARCHAR(10) NOT NULL, "
+				+ " `strItemName` VARCHAR(50) NOT NULL, "
+				+ " `strMenuHeadCode` VARCHAR(10) NOT NULL, "
+				+ " `strSubGroupCode` VARCHAR(10) NOT NULL, "
+				+ " `strDepartmentCode` VARCHAR(10) NOT NULL, "
+				+ " `strUnit` VARCHAR(50) NOT NULL, "
+				+ " `dblAmount` DECIMAL(10,0) NOT NULL, "
+				+ " `dblPercent` DECIMAL(10,0) NOT NULL, "
+				+ " `dteDateCreated` DATETIME NOT NULL, "
+				+ " `dteDateEdited` DATETIME NOT NULL, "
+				+ " `strUserCreated` VARCHAR(25) NOT NULL, "
+				+ " `strUserEdited` VARCHAR(25) NOT NULL, "
 				+ " `strClientCode` VARCHAR(10) NOT NULL, "
-				+ " `strApplicable` VARCHAR(10) NOT NULL, "
-				+ " INDEX `FKA6E5DC5F1AE1AC01` (`strClientCode`, `strFunctionCode`) "
-			+ " ) "
-			+ " COLLATE='utf8_general_ci' "
-			+ " ENGINE=InnoDB;";
+				+ " `strOperational` VARCHAR(5) NOT NULL DEFAULT 'No', "
+				+ " `strTaxIndicator` VARCHAR(20) NOT NULL DEFAULT '', "
+				+ " PRIMARY KEY (`strItemCode`, `strClientCode`), "
+				+ " INDEX `strMenuHeadCode` (`strMenuHeadCode`), "
+				+ " INDEX `strSubGroupCode` (`strSubGroupCode`), "
+				+ " INDEX `strDepartmentCode` (`strDepartmentCode`) "
+				+ " ) "
+				+ " COLLATE='latin1_swedish_ci' "
+				+ " ENGINE=InnoDB";
 		
 		funExecuteBanquetQuery(sql);
 		
+		sql="CREATE TABLE IF NOT EXISTS   `tblfunctionservice` ( "
+				+ "	`strFunctionCode` VARCHAR(10) NOT NULL, "
+				+ "	`strServiceCode` VARCHAR(10) NOT NULL, "
+				+ "	`strServiceName` VARCHAR(50) NOT NULL, "
+				+ "	`strApplicable` VARCHAR(10) NOT NULL, "
+				+ "	`strClientCode` VARCHAR(10) NOT NULL "
+				+ "	) "
+				+ "	COLLATE='utf8_general_ci' "
+				+ "	ENGINE=InnoDB;";
+		funExecuteBanquetQuery(sql);
 
-		sql="CREATE TABLE IF NOT EXISTS  `tblservicemaster` ("
-				+ "`strServiceCode` VARCHAR(10) NOT NULL,"
-				+ "`strServiceName` VARCHAR(50) NOT NULL DEFAULT '',"
-				+ "`intSId` BIGINT(20) NOT NULL DEFAULT '0',"
-				+ "`strPropertyCode` VARCHAR(5) NOT NULL,"
-				+ "`strClientCode` VARCHAR(10) NOT NULL,"
-				+ "`dblRate` DECIMAL(18,4) NOT NULL,"
-				+ "`strUserCreated` VARCHAR(10) NOT NULL,"
-				+ "`strUserEdited` VARCHAR(10) NOT NULL,"
-				+ "`dteDateCreated` DATETIME NOT NULL,"
-				+ "`dteDateEdited` DATETIME NOT NULL,"
-				+ "`strOperationalYN` VARCHAR(2) NOT NULL DEFAULT 'Y',"
-				+ "`strDeptCode` VARCHAR(10) NOT NULL,"
-				+ "PRIMARY KEY (`strServiceCode`, `strClientCode`)"
-				+ ") "
-				+ "COLLATE='utf8_general_ci' "
-				+ "ENGINE=InnoDB"
-				+ ";";
+		sql="CREATE TABLE IF NOT EXISTS  `tblservicemaster` ( "
+				+ "	`intSId` BIGINT(20) NOT NULL, "
+				+ "	`strServiceCode` VARCHAR(255) NOT NULL, "
+				+ "	`strServiceName` VARCHAR(255) NULL DEFAULT NULL, "
+				+ "	`strDeptCode` VARCHAR(255) NULL DEFAULT NULL, "
+				+ "	`dblRate` DOUBLE NULL DEFAULT NULL, "
+				+ "	`strOperationalYN` VARCHAR(255) NULL DEFAULT NULL, "
+				+ "	`strPropertyCode` VARCHAR(255) NULL DEFAULT NULL, "
+				+ "	`strUserCreated` VARCHAR(255) NULL DEFAULT NULL, "
+				+ "	`strUserEdited` VARCHAR(255) NULL DEFAULT NULL, "
+				+ "	`dteDateCreated` VARCHAR(255) NULL DEFAULT NULL, "
+				+ "	`dteDateEdited` VARCHAR(255) NULL DEFAULT NULL, "
+				+ "	`strTaxIndicator` VARCHAR(20) NOT NULL DEFAULT '', "
+				+ "	`strClientCode` VARCHAR(255) NOT NULL, "
+				+ "	PRIMARY KEY (`strClientCode`, `strServiceCode`) "
+			+ "	) "
+			+ "	COLLATE='latin1_swedish_ci' "
+			+ "	ENGINE=InnoDB;";
 
 		funExecuteBanquetQuery(sql);
 		
@@ -3434,6 +3436,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ ";";
 		
 		funExecuteBanquetQuery(sql);
+										   
+		
 		
 		sql="ALTER TABLE `tblequipment`"
 				+ "ADD COLUMN `strDeptCode` VARCHAR(10) NOT NULL AFTER `intId`;";
@@ -3502,6 +3506,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmBanquetSettlmentMaster', 'Settlement Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmSettlementMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetMaster', 'Banquet Master', 'Master', '1', 'M', '19', '19', '2', 'default.png', '7', '3', '1', '1', 'No', 'No', 'frmBanquetMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetTypeMaster', 'Banquet Type Master', 'Master', '1', 'M', '19', '19', '2', 'default.png', '7', '3', '1', '1', 'No', 'No', 'frmBanquetTypeMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";		
+		
 		funExecuteQuery(sql);
 		
 		/*----------------------WebBanquetsFrom End-----------------------*/

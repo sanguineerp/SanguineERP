@@ -723,20 +723,10 @@ public class clsGRNController {
 								}
 							} else {
 								if (ob.getDblUnitPrice() != objModel
-										.getDblCostRM()) {
-									// Weighted average Calculating Logic and
-									// Update
-									// In Product Master
-									stock = objGlobalFunctions
-											.funGetCurrentStockForProduct(
-													ob.getStrProdCode(),
-													objHdModel.getStrLocCode(),
-													clientCode,
-													userCode,
-													startDate,
-													objGlobalFunctions
-															.funGetCurrentDate("yyyy-MM-dd"),
-													proprtyWiseStock);
+										.getDblCostRM()) {// Weighted average Calculating Logic and
+									// Update In Product Master
+									stock = objGlobalFunctions.funGetCurrentStockForProduct(ob.getStrProdCode(),objHdModel.getStrLocCode(),
+													clientCode,userCode,startDate,objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd"),proprtyWiseStock);
 									String strstock = stock.toString();
 
 									if (strstock.contains("-")) {
@@ -761,39 +751,25 @@ public class clsGRNController {
 									if (strweightedAvg.contains("-")) {
 										weightedAvg = weightedAvg * (-1);
 									}
-									objProductMasterService
-											.funProductUpdateCostRM(
-													weightedAvg,
-													ob.getStrProdCode(),
-													clientCode);
+									objProductMasterService.funProductUpdateCostRM(weightedAvg,ob.getStrProdCode(),clientCode);
+									
 								}
 							}
 
 						} else {
 							double dblreOrderPrice = 0;
-							clsProductReOrderLevelModel objReOrder = objProductMasterService
-									.funGetProdReOrderLvl(ob.getStrProdCode(),
-											objHdModel.getStrLocCode(),
-											clientCode);
+							clsProductReOrderLevelModel objReOrder = objProductMasterService.funGetProdReOrderLvl(ob.getStrProdCode(),objHdModel.getStrLocCode(),clientCode);
 							if (objReOrder != null) {
-								if (ob.getDblUnitPrice() != objReOrder
-										.getDblPrice()) {
+								if (ob.getDblUnitPrice() != objReOrder.getDblPrice()) {
 									dblreOrderPrice = objReOrder.getDblPrice();
-									stock = objGlobalFunctions
-											.funGetCurrentStockForProduct(
-													ob.getStrProdCode(),
-													objHdModel.getStrLocCode(),
-													clientCode,
-													userCode,
-													startDate,
-													objGlobalFunctions
-															.funGetCurrentDate("yyyy-MM-dd"),
-													proprtyWiseStock);
+									stock = objGlobalFunctions.funGetCurrentStockForProduct(ob.getStrProdCode(),
+													objHdModel.getStrLocCode(),clientCode,userCode,startDate,
+													objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd"),proprtyWiseStock);
 									String strstock = stock.toString();
-
 									if (strstock.contains("-")) {
 										stock = 0.0;
 									}
+
 									weigthedvalue = stock * dblreOrderPrice;
 									double tempval = ob.getDblQty()
 											* ob.getDblUnitPrice();

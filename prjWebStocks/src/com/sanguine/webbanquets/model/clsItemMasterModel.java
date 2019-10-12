@@ -71,6 +71,10 @@ public class clsItemMasterModel implements Serializable{
 
 	@Column(name="strOperational")
 	private String strOperational;
+	
+	@Column(name = "strTaxIndicator", nullable = false)
+	private String strTaxIndicator;
+
 
 //Setter-Getter Methods
 	public String getStrItemCode(){
@@ -172,7 +176,15 @@ public class clsItemMasterModel implements Serializable{
 	}
 
 
-//Function to Set Default Values
+public String getStrTaxIndicator() {
+		return strTaxIndicator;
+	}
+
+	public void setStrTaxIndicator(String strTaxIndicator) {
+		this.strTaxIndicator = strTaxIndicator;
+	}
+
+	//Function to Set Default Values
 	private Object setDefaultValue(Object value, Object defaultValue){
 		if(value !=null && (value instanceof String && value.toString().length()>0)){
 			return value;

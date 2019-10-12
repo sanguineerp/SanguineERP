@@ -63,6 +63,10 @@ public class clsEquipmentModel implements Serializable{
 	@Column(name="dblEquipmentRate")
 	private double dblEquipmentRate;
 	
+	@Column(name = "strTaxIndicator", nullable = false)
+	private String strTaxIndicator;
+
+	
 	//Setter-Getter Methods
 	public String getStrEquipmentCode(){
 		return strEquipmentCode;
@@ -163,6 +167,14 @@ public class clsEquipmentModel implements Serializable{
 
 	public void setDblEquipmentRate(double dblEquipmentRate) {
 		this.dblEquipmentRate = dblEquipmentRate;
+	}
+
+	public String getStrTaxIndicator() {
+		return strTaxIndicator;
+	}
+
+	public void setStrTaxIndicator(String strTaxIndicator) {
+		this.strTaxIndicator = strTaxIndicator;
 	}
 
 	

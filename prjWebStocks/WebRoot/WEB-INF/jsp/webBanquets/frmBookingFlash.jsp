@@ -265,7 +265,7 @@ function funExportReport()
 </head>
 <body>
 <div id="formHeading">
-		<label>Banquets Flash </label>
+		<label>Banquet Flash </label>
 	</div>
 	
 <s:form name="frmBookingFlash" method="GET" action="">
