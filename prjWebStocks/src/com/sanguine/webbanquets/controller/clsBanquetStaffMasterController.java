@@ -100,7 +100,9 @@ public class clsBanquetStaffMasterController{
 				mpModel.setDtEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));	
 				mpModel.setStrClientCode(clientCode);
 				mpModel.setStrUserCreated(userCode);			
-				mpModel.setStrUserEdited(userCode);					
+				mpModel.setStrUserEdited(userCode);	
+				mpModel.setStrMobile(objBean.getStrMobile());
+				mpModel.setStrEmail(objBean.getStrEmail());
 			} else {
 				
 				clsBanquetStaffMasterModel objMemberProfile = objBanquetStaffMasterService.funGetBanquetStaffMaster(objBean.getStrStaffCode(), clientCode);
@@ -118,6 +120,9 @@ public class clsBanquetStaffMasterController{
 					mpModel.setStrClientCode(clientCode);
 					mpModel.setStrUserCreated(userCode);			
 					mpModel.setStrUserEdited(userCode);	
+					mpModel.setStrMobile(objBean.getStrMobile());
+					mpModel.setStrEmail(objBean.getStrEmail());
+					
 				} else {
 					mpModel = new clsBanquetStaffMasterModel(new clsBanquetStaffMasterModel_ID(objBean.getStrStaffCode(), clientCode));	
 					mpModel.setIntSTId(objMemberProfile.getIntSTId());				
@@ -127,7 +132,9 @@ public class clsBanquetStaffMasterController{
 					mpModel.setStrOperationalYN(objBean.getStrOperationalYN());
 					mpModel.setDtCreated(objMemberProfile.getDtCreated());						
 					mpModel.setStrClientCode(objMemberProfile.getStrClientCode());
-					mpModel.setStrUserCreated(objMemberProfile.getStrUserCreated());						
+					mpModel.setStrUserCreated(objMemberProfile.getStrUserCreated());	
+					mpModel.setStrMobile(objBean.getStrMobile());
+					mpModel.setStrEmail(objBean.getStrEmail());
 					}
 			}			
 			mpModel.setStrUserEdited(userCode);			

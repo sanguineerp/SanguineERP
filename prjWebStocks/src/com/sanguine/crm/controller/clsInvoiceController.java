@@ -2723,9 +2723,9 @@ public class clsInvoiceController
 		List listDtlData = new ArrayList<>();
 		for(int i=0;i<sOCode.length;i++)
 		{
-		String sqlData = "select a.strDocNo,a.strDocName,a.dblDocQty,a.dblDocRate "
+		String sqlData = " select a.strDocNo,a.strDocName,a.dblDocQty,a.dblDocRate "
 				+ "from tblbqbookingdtl a "
-				+ "where  a.strBookingNo='"+sOCode[i].toString()+"' and a.strClientCode='"+clientCode+"' group by a.strBookingNo";
+				+ "where  a.strBookingNo='"+sOCode[i].toString()+"' and a.strClientCode='"+clientCode+"' ";
 		
 		listDtlData = objGlobalFunctionsService.funGetListModuleWise(sqlData, "sql");
 		}

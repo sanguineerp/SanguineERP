@@ -3332,8 +3332,6 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 
 		funExecuteBanquetQuery(sql);
 		
-		
-		
 		sql="CREATE TABLE `tblstaffmaster` ( "
 				+" `intSTId` BIGINT(20) NOT NULL, "
 				+" `strStaffCode` VARCHAR(10) NOT NULL, "
@@ -3344,7 +3342,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+" `strUserEdited` VARCHAR(20) NOT NULL DEFAULT '', "
 				+" `dtCreated` DATETIME NOT NULL, "
 				+" `dtEdited` DATETIME NOT NULL, "
-				+" `strClientCode` VARCHAR(20) NOT NULL DEFAULT '', "
+				+" `strClientCode` VARCHAR(20) NOT NULL DEFAULT '',"
+				+" `strMobile` VARCHAR(50) NOT NULL DEFAULT '',"
+				+" `strEmail` VARCHAR(50) NOT NULL DEFAULT '', "
 				+" PRIMARY KEY (`strStaffCode`, `strClientCode`) "
 			+" ) "
 			+" COLLATE='utf8_general_ci' "
@@ -3473,8 +3473,12 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteBanquetQuery(sql);
 		
 		
+			
 		sql="ALTER TABLE `tblbanquetmaster` ADD COLUMN `strBanquetTypeCode` VARCHAR(20) NOT NULL AFTER `strUserEdited`";
 		funExecuteBanquetQuery(sql);
+		
+	
+		
 		
 		
 		sql="CREATE TABLE `tblweekendmaster` ( "
@@ -3515,7 +3519,6 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmPMSPayment', 'Payment', 'Transaction', '2', 'T', '7', '7', '15', 'imgPayment.png', '7', '3', '3', '3', 'NO', 'YES', 'frmPMSPayment.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetBooking', 'Banquet Booking', 'Transaction', 1, 'T', 1, 1, '1', 'default.png', '7', 1, '1', '1', 'No', 'No', 'frmBanquetBooking.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmRoomCancellation', 'Booking Cancellation', 'Transaction', '2', 'T', '6', '6', '1', 'imgReservationCancellation.png', '7', '3', '3', '3', 'NO', 'NO', 'frmRoomCancellation.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmBookingFlash', 'Booking Flash', 'Report', 1, 'R', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmBookingFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmProFormaInvoice', 'ProForma Invoice', 'Transaction', '2', 'T', '70', '11', '1', 'default.png', '7', '1', '1', '1', 'NO', 'NO', 'frmProFormaInvoice.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetWeekendMaster', 'Weekend Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmBanquetWeekendMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetSetup', 'Banquet Setup', 'Tools', 1, 'M', 1, 1, '12', 'default.png', '7', 1, '1', '1', 'NO', 'NO', 'frmBanquetSetup.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
@@ -3525,7 +3528,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmBanquetSettlmentMaster', 'Settlement Master', 'Master', 1, 'M', 19, 19, '2', 'default.png', '7', 3, '1', '1', 'No', 'No', 'frmSettlementMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetMaster', 'Banquet Master', 'Master', '1', 'M', '19', '19', '2', 'default.png', '7', '3', '1', '1', 'No', 'No', 'frmBanquetMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 				+ "('frmBanquetTypeMaster', 'Banquet Type Master', 'Master', '1', 'M', '19', '19', '2', 'default.png', '7', '3', '1', '1', 'No', 'No', 'frmBanquetTypeMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-				+ "('frmAdvanceStatusReport', 'Advance Status Report', 'Report', 1, 'R', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmAdvanceStatusReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
+				+ "('frmAdvanceStatusReport', 'Advance Status Report', 'Report', 1, 'R', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmAdvanceStatusReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmBookingFlash', 'Banquet Flash', 'Report', 1, 'R', 1, 2, '1', 'default.png', '7', 1, '1', '1', 'NO', 'NA', 'frmBookingFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
 				
 		
 		funExecuteQuery(sql);

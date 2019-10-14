@@ -50,6 +50,8 @@ public class clsFunctionProspectusBean{
 	
 	private List listOfServices;
 
+	private String strQty;
+	
 //Setter-Getter Methods
 	public String getStrBookingNo(){
 		return strBookingNo;
@@ -206,6 +208,12 @@ public class clsFunctionProspectusBean{
 	}
 	public void setListOfServices(List listOfServices) {
 		this.listOfServices = listOfServices;
+	}
+	public String getStrQty() {
+		return strQty;
+	}
+	public void setStrQty(String strQty) {
+		this.strQty = strQty;
 	}
 
 

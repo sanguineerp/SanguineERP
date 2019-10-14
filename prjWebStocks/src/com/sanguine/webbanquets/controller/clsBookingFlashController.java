@@ -107,7 +107,7 @@ public class clsBookingFlashController
 		List<clsBookingFlashBean> listofBookingDtl = new ArrayList<clsBookingFlashBean>();
 		List listofBookingTotal = new ArrayList<>();
         String sql="select a.strBookingNo,a.strBookingStatus,DATE_FORMAT( DATE(a.dteBookingDate),'%d-%m-%Y') as dte,a.tmeFromTime,a.tmeToTime,a.strAreaCode, "
-                  +" a.strFunctionCode,a.dblBookingAmt "
+                  +" a.strFunctionCode,a.dblGrandTotal "
                   +" from tblbqbookinghd  a "
                   +" where  DATE(a.dteBookingDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' and a.strClientCode='"+strClientCode+"'  and a.strBookingStatus='"+strType+"';"; 
         
@@ -185,7 +185,7 @@ public class clsBookingFlashController
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		DecimalFormat df = new DecimalFormat("#.##");
 		String sql="select a.strBookingNo,a.strBookingStatus,DATE_FORMAT( DATE(a.dteBookingDate),'%d-%m-%Y') as dte,a.tmeFromTime,a.tmeToTime,a.strAreaCode, "
-                +" a.strFunctionCode,a.dblBookingAmt "
+                +" a.strFunctionCode,a.dblGrandTotal "
                 +" from tblbqbookinghd  a "
                 +" where  DATE(a.dteBookingDate) BETWEEN '"+fromDte+"' AND '"+toDte+"' and a.strClientCode='"+strClientCode+"'  and a.strBookingStatus='"+strType+"';"; 
 		List listCheckOutDtl = objGlobalService.funGetListModuleWise(sql, "sql");

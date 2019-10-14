@@ -22,7 +22,11 @@ public class clsBanquetStaffMasterBean{
 
 	private String IntGId;
 	
-public String getIntGId() {
+	private String strMobile;
+	
+	private String strEmail;
+	
+   public String getIntGId() {
 		return IntGId;
 	}
 	public void setIntGId(String intGId) {
@@ -89,6 +93,18 @@ public String getIntGId() {
 	}
 	public void setDtEdited(String dtEdited) {
 		this.dtEdited = dtEdited;
+	}
+	public String getStrMobile() {
+		return strMobile;
+	}
+	public void setStrMobile(String strMobile) {
+		this.strMobile = strMobile;
+	}
+	public String getStrEmail() {
+		return strEmail;
+	}
+	public void setStrEmail(String strEmail) {
+		this.strEmail = strEmail;
 	}
 	
 

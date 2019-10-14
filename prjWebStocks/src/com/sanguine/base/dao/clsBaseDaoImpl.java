@@ -98,6 +98,8 @@ public class clsBaseDaoImpl implements intfBaseDao {
 			objSessionFactory = WebClubSessionFactory;
 		} else if (moduleType.equals("WebBooks")) {
 			objSessionFactory = webBooksSessionFactory;
+		}else if (moduleType.equals("WebBanquet")) {
+			objSessionFactory = webPMSSessionFactory;
 		}
 		
 		if (queryType.equals("sql")) {

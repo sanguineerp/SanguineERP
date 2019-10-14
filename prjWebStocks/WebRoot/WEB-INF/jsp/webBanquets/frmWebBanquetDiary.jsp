@@ -125,7 +125,7 @@ body {
 <script type="text/javascript">
 	
 var strViewType="normal";
-	
+var selectedCell;	
 	$(function() 
 	{
 		
@@ -135,7 +135,14 @@ var strViewType="normal";
 		funGetHeaderData();
 	});
 	
-	$(function() {
+	
+	window.onclick = function(event) {
+	  if (event.target.value == 'Close') {
+		  var modal = document.getElementById("dialog");
+		  modal.style.display = "none";
+	  }
+	}
+	/* $(function() {
 
 		  $("#dialog").dialog({
 		     autoOpen: false,
@@ -147,8 +154,40 @@ var strViewType="normal";
 		      $("#dialog").dialog("open");
 		  });
 
-		});
+		}); */
 	
+	/* function showPopup(your_variable){
+        $("#popup").dialog({
+            width: 200,
+            height: 200,
+            open: function(){
+                $(this).find("p").html("Hello " + your_variable)
+            }
+        });
+    }
+	 */
+/* 	
+	$(function() {
+
+	 data-toggle="modal" 
+		  $('[data-toggle="modal"]').hover(function() {
+		 
+		  
+	}); */
+	
+	
+	 
+	 function openDialog(){
+		document.getElementById("dialog").style.display = "block"
+		$("#dialog").dialog({
+	            width: 600,
+	            height: 200,
+	             open: function(){
+
+	             },
+		 		
+	        });
+	 }
 	
 	function funRemoveTableRows(table)
 	{
@@ -281,7 +320,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' title ='"+strDay1+"'  onClick='funCellOnClick(this)'>";
+			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' title ='"+strDay1+"'  onmouseover='funCellOnClick(this)'  >";
 		}else{
 			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
@@ -297,7 +336,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay2+"' onClick='funCellOnClick(this)'>";
+			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay2+"' onmouseover='funCellOnClick(this)'  >";
 		}else{
 			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
@@ -313,7 +352,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay3+"' onClick='funCellOnClick(this)'>";
+			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay3+"' onmouseover='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -330,7 +369,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay4+"' onClick='funCellOnClick(this)'>";
+			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay4+"' onmouseover='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -346,7 +385,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' onClick='funCellOnClick(this)' >";
+			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' onmouseover='funCellOnClick(this)' >";
 		}else{
 			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
@@ -362,7 +401,7 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay5+"' onClick='funCellOnClick(this)'>";
+			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay5+"' onmouseover='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -379,42 +418,49 @@ var strViewType="normal";
 			else if(data[1]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay6+"' onClick='funCellOnClick(this)' >";
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay6+"' onmouseover='funCellOnClick(this)' >";
 		}else{
 			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
 	}
 	
 	function funCellOnClick(objCell){
+		selectedCell=objCell;
 		var bookingColor=objCell.style.backgroundColor;
 		var customer =objCell.value;
 		if(bookingColor=='red') //confirm
 		{
-			var isCheckOk=confirm("Do You Want Genarate FP"); 
+			openDialog();
+			/* var isCheckOk=confirm("Do You Want Genarate FP"); 
 			if(isCheckOk)
 			{
 				var bookingNo=objCell.title.split("#")[2];
 				window.open(getContextPath()+"/rptOpenFunctionProspectus.html?bookingNo="+bookingNo);
-			}
+			} */
 			//alert('confirm');
 		}
 		else if(bookingColor=='green') //provisional
 		{
-			var isCheckOk=confirm("Do You Want to Payment ?"); 
+			openDialog();
+		
+			/* var isCheckOk=confirm("Do You Want to Payment ?"); 
 			if(isCheckOk)
 			{
 		 	 url=getContextPath()+"/frmPMSPayment.html";
 		 	 window.open(url);
-			}
+			} */
 		}
 		else if(bookingColor=='yellow') //waitlisted
 		{
-			var isCheckOk=confirm("Do You Want to Payment ?"); 
+			openDialog();
+			
+			/* var isCheckOk=confirm("Do You Want to Payment ?"); 
 			if(isCheckOk)
 			{
 		 	 url=getContextPath()+"/frmPMSPayment.html";
 		 	 window.open(url);
-			}
+			} */
+			
 		}else{
 			var isCheckOk=confirm("Do You Want to Book ?"); 
 			if(isCheckOk)
@@ -475,9 +521,91 @@ var strViewType="normal";
 		strViewType=viewName;
 	}
 	
-	function funDialogButtonclick(){
+	function funDialogButtonclick(button){
+		var bookingNo=selectedCell.title.split("#")[2];
+		funGetCustomerBookingDtl(bookingNo);
+		var buttonVal=button.value;
+		switch(buttonVal){
+			
+		case 'Cancle' :
+			
+			 url=getContextPath()+"/frmRoomCancellation.html";
+		 	 window.open(url);
+			break;
+		
+		case 'Payment' :
+			 url=getContextPath()+"/frmPMSPayment.html";
+		 	 window.open(url);
+			break;
+		case 'FP' :
+			
+			window.open(getContextPath()+"/rptOpenFunctionProspectus.html?bookingNo="+bookingNo);
+			
+			break;
+		
+		case 'Pro-Invoice' :
+			
+			 url=getContextPath()+"/frmProFormaInvoice.html";
+		 	 window.open(url);
+			break;
+		case 'Close' :
+			document.getElementById("dialog").close();
+			 
+			break;
+			
+		default :
+			
+			break;				
+		}
 		
 	}
+	
+	function funGetCustomerBookingDtl(bookingNo)
+	{
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/getCustomerBookingDetails.html?bookingNo="+bookingNo,
+			dataType : "json",
+			 beforeSend : function(){
+				 $("#wait").css("display","block");
+		    },
+		    complete: function(){
+		    	 $("#wait").css("display","none");
+		    },
+			
+			success : function(response){ 
+				funRemoveTableRows("tblCustomerInfo");
+				
+				
+				if(response.length>0){
+					var table=document.getElementById("tblCustomerInfo");
+					var rowCount=table.rows.length;
+					var row=table.insertRow();
+					
+					
+				}
+				
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+	}
+	
 	</script>
 
 
@@ -532,18 +660,10 @@ var strViewType="normal";
 			</table> 
 		
 			<br>
-			<table id="tblBanquetInfo" class="table table-bordered" >
+			<table id="tblBanquetInfo" class="table table-bordered"   >
 			</table>
 			
 		</div>
-		
-		<!-- <div style="position: fixed;">
-		 <p align="center" >
-			<input type="button" value="View" id="btnView" tabindex="3" class="form_button" onclick="funShowDiary();"/>
-			<input type="reset" value="Reset" id="btnReset" class="form_button" onclick="funResetFields()"/>
-		</p>
-		</div>
-	 -->
 		<div id="wait"
 			style="display: none; width: 60px; height: 60px; border: 0px solid black; position: absolute; top: 60%; left: 55%; padding: 2px;">
 			<img
@@ -551,17 +671,22 @@ var strViewType="normal";
 				width="60px" height="60px" />
 		</div>
 		
-		<div id="dialog" title="Booking Details">
+		<div id="dialog" title="Booking Details" style="display: none;">
 			  <table id="tblBookingDetails"  cellpadding="0" cellspacing="2"  >				 																																	
 						<tr>
 						<td>
 							<input  type="button" id="btnCancelBooking" value ="Cancle" onclick="funDialogButtonclick(this)" class="button" />
-							<input  type="button" id="btnPayment" value ="payment" onclick="funDialogButtonclick(this)" class="button" />
+							<input  type="button" id="btnPayment" value ="Payment" onclick="funDialogButtonclick(this)" class="button" />
 							<input  type="button" id="btnProspect" value ="FP" onclick="funDialogButtonclick(this)" class="button" />
-							<input  type="button" id="btnConfirm" value ="Cancle" onclick="funDialogButtonclick(this)" class="button" />
-							<input  type="button" id="btnConfirm" value ="Cancle" onclick="funDialogButtonclick(this)" class="button" />
+							<input  type="button" id="btnProInvoice" value ="Pro-Invoice" onclick="funDialogButtonclick(this)" class="button" />
+							<input  type="button" id="btnClose" value ="Close" onclick="funDialogButtonclick(this)" class="button" />
 						</td>
 						</tr>		
+						<tr>
+						<td>
+							<table id="tblCustomerInfo"> </table>
+						</td>
+						</tr>
 																																				 									   				   									   									   						
 			</table>	
 		</div>

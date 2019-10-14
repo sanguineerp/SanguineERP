@@ -101,6 +101,7 @@ public class clsFunctionProspectusController
 		List listEquipment = new ArrayList<>();
 		List listService = new ArrayList<>();
 		List listMenu = new ArrayList<>();
+		
 		String reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptFunctionProspectus.jrxml");
 		String imagePath = servletContext.getRealPath("/resources/images/Sanguine_Logo_Icon.png");
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
@@ -109,12 +110,13 @@ public class clsFunctionProspectusController
 		}
 		
 		sql="SELECT a.strBookingNo,b.strType,a.strCustomerCode,a.dteBookingDate,c.strLocName,a.strFunctionCode,a.intMinPaxNo,"
-				+ "a.intMaxPaxNo,a.tmeFromTime,a.tmeToTime,d.strStaffName FROM tblbqbookinghd a "
+				+ "a.intMaxPaxNo,a.tmeFromTime,a.tmeToTime,d.strStaffName,d.strMobile,d.strEmail,g.strBanquetName FROM tblbqbookinghd a "
 				+ "LEFT OUTER JOIN tblbqbookingdtl b ON b.strBookingNo=a.strBookingNo LEFT OUTER "
 				+ "JOIN "+webStockDB+".tbllocationmaster c ON c.strLocCode=a.strAreaCode LEFT OUTER JOIN "
 				+ "tblstaffmaster d ON d.strStaffCode=a.strEventCoordinatorCode LEFT OUTER "
-				+ "JOIN "+webStockDB+".tblpartymaster e ON e.strPCode=a.strCustomerCode LEFT OUTER JOIN "
-				+ "tblfunctionmaster f ON f.strFunctionCode=a.strFunctionCode WHERE a.strBookingNo=b.strBookingNo "
+				+ "JOIN "+webStockDB+".tblpartymaster e ON e.strPCode=a.strCustomerCode LEFT OUTER JOIN  "
+				+ "tblfunctionmaster f ON f.strFunctionCode=a.strFunctionCode LEFT OUTER  "
+                + "JOIN tblbanquetmaster g ON a.strBanquetCode=g.strBanquetCode WHERE a.strBookingNo=b.strBookingNo "
 				+ "AND a.strBookingNo='"+strBookingNo+"' AND a.strClientCode='"+clientCode+"' "
 				+ "GROUP BY b.strType";
 		
@@ -125,6 +127,9 @@ public class clsFunctionProspectusController
 			strServiceType=obj[1].toString();
 			reportParams.put("pArea", obj[4].toString());
 			reportParams.put("pEventCoordinator", obj[10].toString());
+			reportParams.put("pMobile", obj[11].toString());
+			reportParams.put("pEmail", obj[12].toString());
+			reportParams.put("pBanquetName", obj[13].toString());
 			if(obj[2].toString().startsWith("C"))
 			{
 				sql="SELECT a.strPCode,a.strPName,a.strOperational FROM tblpartymaster a WHERE a.strPCode='"+obj[2].toString()+"' "
@@ -138,7 +143,7 @@ public class clsFunctionProspectusController
 			}
 			if(obj[5].toString().startsWith("FM"))
 			{
-				sql="SELECT b.strType,b.strDocName,c.strFunctionName FROM tblbqbookinghd a LEFT OUTER JOIN tblbqbookingdtl b "
+				sql="SELECT b.strType,b.strDocName,c.strFunctionName,b.dblDocQty FROM tblbqbookinghd a LEFT OUTER JOIN tblbqbookingdtl b "
 						+ "ON b.strBookingNo=a.strBookingNo LEFT OUTER JOIN tblfunctionmaster c ON "
 						+ "c.strFunctionCode=a.strFunctionCode WHERE a.strBookingNo='"+strBookingNo+"' "
 						+ "AND c.strFunctionCode='"+obj[5].toString()+"' AND c.strOperationalYN='Y' AND b.strType='"+strServiceType+"' AND a.strPropertyCode='"+propertyCode+"' "
@@ -153,6 +158,7 @@ public class clsFunctionProspectusController
 							objBean = new clsFunctionProspectusBean();
 							objBean.setStrServiceType(strServiceType);
 							objBean.setStrService(objFunction[1].toString());
+					        objBean.setStrQty(objFunction[3].toString());
 							listStaff.add(objBean);
 						}
 						else if(strServiceType.equals("Service"))
@@ -167,6 +173,7 @@ public class clsFunctionProspectusController
 							objBean = new clsFunctionProspectusBean();
 							objBean.setStrServiceType(strServiceType);
 							objBean.setStrService(objFunction[1].toString());
+							 objBean.setStrQty(objFunction[3].toString());
 							listEquipment.add(objBean);
 						}
 						else if(strServiceType.equals("Menu"))
@@ -174,7 +181,8 @@ public class clsFunctionProspectusController
 							objBean = new clsFunctionProspectusBean();
 							objBean.setStrServiceType(strServiceType);
 							objBean.setStrService(objFunction[1].toString());
-							listMenu.add(objBean);
+							objBean.setStrQty(objFunction[3].toString());
+						    listMenu.add(objBean);
 						}
 					}
 			}

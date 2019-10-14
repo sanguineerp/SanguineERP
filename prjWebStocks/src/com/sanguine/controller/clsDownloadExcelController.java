@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ibm.icu.math.BigDecimal;
 import com.sanguine.service.clsGlobalFunctionsService;
 
 
@@ -47,6 +48,15 @@ public class clsDownloadExcelController {
 		String strCurr = req.getSession().getAttribute("currValue").toString();
 		double currValue = Double.parseDouble(strCurr);
 		
+		
+		
+		
+		
+		
+		
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		DecimalFormat df = new DecimalFormat("#.##");
+		
 		double totalOpeningStock=0.00,totalGRN=0.00,totalSCGRN=0.00,totalStkTransferIn=0.00,totalStkAdjIn=0.00;
 		double totalMISIn=0.00,totalProducedQty=0.00,totalSalesRet=0.00,totalMaterialRet=0.00,totalPurchaseRet=0.00,totalDelNote=0.00;
 		double totalStkTransOut=0.00,totalStkAdjOut=0.00,totalMISOut=0.00,totalQtyConsumed=0.00,totalSaleAmt=0.00,totalClosingStk=0.00,totalValueTotal = 0.00,totalIssueUOMStk=0.00;
@@ -64,6 +74,34 @@ public class clsDownloadExcelController {
 			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Unit Price", "Opening Stock", "GRN", "SCGRN", "	Stock Transfer In", "Stock Adj In", "MIS In", "Qty Produced", "Sales Return", "Material Return", "Purchase Return", "Delivery Note", "Stock Trans Out", "Stock Adj Out", "MIS Out", "Qty Consumed", "Sales",
 					"Closing Stock", "Value", "Issue UOM Stock", "Issue Conversion", "Issue UOM", "Part No" };
 			listStock.add(ExcelHeader);
+			
+			List totalsList = new ArrayList();
+			totalsList.add("Total");
+			totalsList.add("");
+			totalsList.add("");	
+			totalsList.add("");
+			totalsList.add("");	
+			totalsList.add("");	
+			totalsList.add("");
+			totalsList.add("");	
+			totalsList.add("");
+			totalsList.add("");	
+			totalsList.add("");	
+			totalsList.add("");
+			totalsList.add("");	
+			totalsList.add("");
+			totalsList.add("");	
+			totalsList.add("");	
+			totalsList.add("");
+			totalsList.add("");	
+			totalsList.add("");
+			totalsList.add("");	
+			totalsList.add("");
+			totalsList.add("");
+			totalsList.add("");
+			totalsList.add("");
+			totalsList.add("");
+			totalsList.add("");
 
 			String startDate = req.getSession().getAttribute("startDate").toString();
 			String[] sp = startDate.split(" ");
@@ -266,11 +304,13 @@ public class clsDownloadExcelController {
 					}
 					
 					
-					dataList.add(value);
+					dataList.add(df.format(value));
 					dataList.add(arrObj[26].toString());
 					dataList.add(arrObj[29].toString());
 					dataList.add(arrObj[30].toString());
 					dataList.add(arrObj[31].toString());
+					
+					dblTotalValue = new BigDecimal(df.format(value)).add(dblTotalValue);
 
 					listStockFlashModel.add(dataList);
 					
@@ -293,6 +333,8 @@ public class clsDownloadExcelController {
 					totalClosingStk+= Double.parseDouble(arrObj[26].toString());
 					totalValueTotal+= value;
 					totalIssueUOMStk+= Double.parseDouble(arrObj[28].toString());
+					
+					
 
 				}
 
@@ -333,11 +375,13 @@ public class clsDownloadExcelController {
 					}
 					
 					//dblValueTotal += value;
-					dataList.add(value);
+					dataList.add(df.format(value));
 					dataList.add(funGetDecimalValue(arrObj[26].toString()));
 					dataList.add(arrObj[29].toString());
 					dataList.add(arrObj[30].toString());
 					dataList.add(arrObj[31].toString());
+					
+					dblTotalValue = new BigDecimal(df.format(value)).add(dblTotalValue);
 
 					listStockFlashModel.add(dataList);
 					
@@ -362,6 +406,8 @@ public class clsDownloadExcelController {
 					totalIssueUOMStk+= Double.parseDouble(arrObj[28].toString());*/
 				}
 			}
+			
+			totalsList.add(dblTotalValue);
 			List dataList = new ArrayList<>();
 			dataList.add("");
 			dataList.add("");
@@ -419,15 +465,41 @@ public class clsDownloadExcelController {
 			dataList.add("");
 			dataList.add("");
 			dataList.add("");
-
+			
+		
 			listStockFlashModel.add(dataList);
+			List blankList = new ArrayList();
+			listStockFlashModel.add(blankList);// Blank Row at Bottom
+		  
+			
+			
+			listStockFlashModel.add(totalsList);
+
+			
 			listStock.add(listStockFlashModel);
 			// return a view which will be resolved by an excel view resolver
 			return new ModelAndView("excelViewWithReportName", "listWithReportName", listStock);
 		} else if ("Summary".equalsIgnoreCase(reportType)) {
 			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Unit Price", "Opening Stock", "Receipts", "Issue", "Closing Stock", "Value", "Issue UOM Stock", "Issue Conversion", "Issue UOM", "Part No" };
 			listStock.add(ExcelHeader);
+            
+			List totalsList1 = new ArrayList();
+			totalsList1.add("Total");
+			totalsList1.add("");
+			totalsList1.add("");	
+			totalsList1.add("");
+			totalsList1.add("");	
+			totalsList1.add("");	
+			totalsList1.add("");
+			totalsList1.add("");	
+			totalsList1.add("");
+			totalsList1.add("");	
+			totalsList1.add("");	
+			totalsList1.add("");
+			totalsList1.add("");	
 
+				
+			
 			String startDate = req.getSession().getAttribute("startDate").toString();
 			String[] sp = startDate.split(" ");
 			String[] spDate = sp[0].split("/");
@@ -547,12 +619,13 @@ public class clsDownloadExcelController {
 				if (value < 0) {
 					value = value * (-1);
 				}
-				dataList.add(value);
+				dataList.add(df.format(value));
 				dataList.add(arrObj[12].toString());
 				dataList.add(arrObj[15].toString());
 				dataList.add(arrObj[16].toString());
 				dataList.add(arrObj[17].toString());
-
+                
+				dblTotalValue = new BigDecimal(df.format(value)).add(dblTotalValue);
 				listStockFlashModel.add(dataList);
 				
 				/*totalOpeningStock+=Double.parseDouble(arrObj[9].toString());
@@ -569,6 +642,9 @@ public class clsDownloadExcelController {
 				totalValueTotal+= value;
 				totalIssueUOMStk+= Double.parseDouble(arrObj[14].toString());*/
 			}
+			
+			totalsList1.add(dblTotalValue);
+			
 			List dataList = new ArrayList<>();
 			dataList.add("");
 			dataList.add("");
@@ -595,8 +671,12 @@ public class clsDownloadExcelController {
 			dataList.add("");
 			dataList.add("");
 			dataList.add("");
-
+			
 			listStockFlashModel.add(dataList);
+			List blankList = new ArrayList();
+			listStockFlashModel.add(blankList);// Blank Row at Bottom
+			listStockFlashModel.add(totalsList1);
+			
 			listStock.add(listStockFlashModel);
 			return new ModelAndView("excelViewWithReportName", "listWithReportName", listStock);
 		} 

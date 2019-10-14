@@ -138,17 +138,17 @@ public class clsBanquetStatusDiaryController {
 		}
 		
 		
-		
 		return listViewDates;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" } )
 	@RequestMapping(value ="/getBanquetBookingDetails", method=RequestMethod.GET)
 	public @ResponseBody List funGetBanquetBookingDetails(@RequestParam("viewDate")String viewDate,@RequestParam("viewType")String viewType,@RequestParam("areaCode") String areaCode,HttpServletRequest req){
 		List listBanquetReservation=new ArrayList<>();
 		try{
 			
 			clsRoomStatusDtlBean objBean=new clsRoomStatusDtlBean();
-			
+			int toDateDiff=0,fromDateDiff=0;
 			viewDate=viewDate.split("-")[2] +"-"+viewDate.split("-")[1]+"-"+viewDate.split("-")[0];
 			String stratTime="00:00",tableRowTime="";
 			for(int i=0;i<24;i++){
@@ -164,45 +164,38 @@ public class clsBanquetStatusDiaryController {
 				 }
 				 
 				 String newTime = df.format(cal.getTime());
-				 Date dTimeLimStop = df.parse(newTime); 
+				// Date dTimeLimStop = df.parse(newTime); 
 				 
 				 tableRowTime=stratTime+"-"+newTime;
 				
-			 
 				 objBean=new clsRoomStatusDtlBean();
 				 objBean.setStrDay(tableRowTime);
 				 
-				 String webStockDB=req.getSession().getAttribute("WebStockDB").toString(); 
+			String webStockDB=req.getSession().getAttribute("WebStockDB").toString(); 
 			String sqlDiary="select a.strBookingNo,DATEDIFF(a.dteFromDate,'"+viewDate+"') dayDiff,a.strBookingStatus,"
-					+ "a.dteBookingDate,a.dteFromDate,a.dteToDate,a.strCustomerCode,p.strPName"
+					+ "a.dteBookingDate,a.dteFromDate,a.dteToDate,a.strCustomerCode,p.strPName,DATEDIFF(a.dteToDate,a.dteFromDate) todateDiff"
 					+ " from tblbqbookinghd a left outer join `"+webStockDB+"`.tblpartymaster p on a.strCustomerCode=p.strPCode "
 					+ " WHERE a.strAreaCode='"+areaCode+"' and  " 
 				 +" date(a.dteFromDate) >='"+viewDate+"' and date(a.dteToDate) <= DATE_ADD('"+viewDate+"',INTERVAL 7 DAY) "
 				 +" and time(a.tmeFromTime) <= '"+stratTime+":00'"
 				 +" and time(a.tmeToTime) >= '"+newTime+":00';";
 
-			 stratTime=newTime;
-			 
+			stratTime=newTime;
 			List listBooking=objGlobalFunctionsService.funGetListModuleWise(sqlDiary, "sql");
 			if(listBooking!=null && listBooking.size()>0){
 				for(int k=0;k<listBooking.size();k++){
 					
 					Object obj[]=(Object[])listBooking.get(k);
-					
-					if(Double.parseDouble(obj[1].toString())==0){
-						objBean.setStrDay1(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
-					}else if(Double.parseDouble(obj[1].toString())==1){
-						objBean.setStrDay2(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
-					}else if(Double.parseDouble(obj[1].toString())==2){
-						objBean.setStrDay3(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
-					}else if(Double.parseDouble(obj[1].toString())==3){
-						objBean.setStrDay4(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
-					}else if(Double.parseDouble(obj[1].toString())==4){
-						objBean.setStrDay5(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
-					}else if(Double.parseDouble(obj[1].toString())==5){
-						objBean.setStrDay6(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
-					}else if(Double.parseDouble(obj[1].toString())==6){
-						objBean.setStrDay7(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+					toDateDiff=Integer.parseInt(obj[8].toString());
+					fromDateDiff=Integer.parseInt(obj[1].toString());
+					if(toDateDiff>0){
+						for(int m=fromDateDiff;m<=toDateDiff+fromDateDiff;m++){
+							obj[1]=m;
+							funSetDairyData(obj,objBean);	
+						}
+							
+					}else{
+						funSetDairyData(obj,objBean);
 					}
 					
 				}
@@ -217,6 +210,25 @@ public class clsBanquetStatusDiaryController {
 		return listBanquetReservation;
 	}
 
+	
+	private void funSetDairyData(Object obj[],clsRoomStatusDtlBean objBean){
+		
+		if(Double.parseDouble(obj[1].toString())==0){
+			objBean.setStrDay1(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+		}else if(Double.parseDouble(obj[1].toString())==1){
+			objBean.setStrDay2(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+		}else if(Double.parseDouble(obj[1].toString())==2){
+			objBean.setStrDay3(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+		}else if(Double.parseDouble(obj[1].toString())==3){
+			objBean.setStrDay4(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+		}else if(Double.parseDouble(obj[1].toString())==4){
+			objBean.setStrDay5(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+		}else if(Double.parseDouble(obj[1].toString())==5){
+			objBean.setStrDay6(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+		}else if(Double.parseDouble(obj[1].toString())==6){
+			objBean.setStrDay7(obj[7].toString().toString()+"#"+obj[2].toString().toString()+"#"+obj[0].toString().toString());	
+		}
+	}
 	
 	private String funGetDayOfWeek(int day) {
 		String dayOfWeek = "Sun";
@@ -254,5 +266,31 @@ public class clsBanquetStatusDiaryController {
 		return dayOfWeek;
 	}
 
+	
+	@RequestMapping(value ="/getCustomerBookingDetails", method = RequestMethod.GET)
+	public @ResponseBody List funGetCustomerBookingDetails(@RequestParam("bookingNo")String bookingNo,HttpServletRequest req){
+		
+		List listBooking=new ArrayList<>();
+		try{
+			String webStockDB=req.getSession().getAttribute("WebStockDB").toString(); 
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String sqlCustomerDetails="select a.strBookingNo,p.strPName,p.strMobile,a.dteFromDate,a.tmeFromTime,a.tmeToTime,f.strFunctionName, a.strBookingStatus "  
+					+" from tblbqbookinghd a left outer join `"+webStockDB+"`.tblpartymaster p " 
+					+" ON a.strCustomerCode=p.strPCode and a.strClientCode=p.strClientCode "
+					+" left outer join  tblfunctionmaster f on a.strFunctionCode=f.strFunctionCode "
+					+" where a.strBookingNo='"+bookingNo+"' and a.strClientCode='"+clientCode+"' ";
+			List listBooking1=objGlobalFunctionsService.funGetListModuleWise(sqlCustomerDetails, "sql");
+			if(listBooking!=null && listBooking.size()>0){
+				listBooking=listBooking1;
+			}else{
+				listBooking=new ArrayList<>();
+			}
+			
+		}catch(Exception e){
+			
+		}
+		return listBooking;
+	}
+	
 	
 }

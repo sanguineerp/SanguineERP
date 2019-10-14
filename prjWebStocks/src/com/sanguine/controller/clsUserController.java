@@ -1613,43 +1613,7 @@ public class clsUserController {
 			}
 		}
 	}
-	/*
-	 * @SuppressWarnings("unused")
-	 * 
-	 * @RequestMapping(value = "/frmShowTodayCheckOutRooms", method =
-	 * RequestMethod.GET) public ModelAndView
-	 * frmShowTodayCheckOutRooms(HttpServletRequest req,Map<String,Object>
-	 * model) { String urlHits="1"; try { urlHits =
-	 * req.getParameter("saddr").toString(); } catch (NullPointerException e) {
-	 * urlHits = "1"; } String clientCode =
-	 * req.getSession().getAttribute("clientCode").toString(); String
-	 * sql=" select c.strRoomDesc,d.strRoomTypeDesc " +
-	 * " from tblcheckinhd a,tblcheckindtl b,tblroom c,tblroomtypemaster d  " +
-	 * " where a.strCheckInNo=b.strCheckInNo  and b.strRoomNo = c.strRoomCode "
-	 * +
-	 * " and c.strRoomTypeCode=d.strRoomTypeCode and a.strClientCode=b.strClientCode  "
-	 * +
-	 * " and b.strClientCode = c.strClientCode and c.strClientCode = a.strClientCode "
-	 * + " and a.strClientCode='"+clientCode+"' " +
-	 * " and date(a.dteDepartureDate) = '"
-	 * +objGlobalFun.funGetCurrentDate("yyyy-MM-dd")+"'" ; // +
-	 * " group by a.strRoomNo " ; List
-	 * listCheckout=objGlobalService.funGetListModuleWise(sql, "sql");
-	 * if(listCheckout!=null) { model.put("listCheckout", listCheckout); }
-	 * 
-	 * model.put("urlHits", urlHits);
-	 * 
-	 * if (urlHits.equalsIgnoreCase("1")) { return new
-	 * ModelAndView("frmShowTodayCheckOutRooms","command",new
-	 * clsGuestMasterBean()); } else { return new
-	 * ModelAndView("frmShowTodayCheckOutRooms_1","command",new
-	 * clsGuestMasterBean()); }
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
-
+	
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/getCheckoutNotification", method = RequestMethod.GET)
 	public @ResponseBody List frmShowTodayCheckOutRooms(HttpServletRequest req, Map<String, Object> model) {

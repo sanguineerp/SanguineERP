@@ -91,6 +91,8 @@
 			        		$("#chkOperationalYN").attr('checked', false);
 			        		
 			        	}
+				    	$("#txtMobile").val(response.strMobile);
+				    	$("#txtEmail").val(response.strEmail);
 				    	
 				    	
 				    },
@@ -172,8 +174,23 @@
 				
 				<td><s:checkbox id="chkOperationalYN" name="chkOperationalYN" path="strOperationalYN" value="Y" checked="true"/></td> 
 				
-			
 			</tr>
+			
+			<tr>			
+			   <td> <label> Mobile No.  </label> </td>
+		       <td>
+					        <!-- pattern="[789][0-9]{9}" -->
+			     <s:input  type="tel" pattern="[0-9]{10,10}"  maxlength="11"  placeholder="Enter Valid MobileNo." id="txtMobile" name="txtMobile" path="strMobile" cssClass="BoxW116px" />
+			   </td> 
+				
+		    </tr>
+			
+			<tr>
+			   <td><label>Email  </label></td>
+			   <td colspan="3">
+			     <s:input   placeholder="name@email.com"   id="txtEmail" name="txtEmail" path="strEmail" cssClass="longTextBox"/>
+			   </td>
+		   </tr>
 		
 		</table>
 

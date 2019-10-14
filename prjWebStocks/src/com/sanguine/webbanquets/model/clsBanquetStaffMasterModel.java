@@ -60,8 +60,15 @@ public class clsBanquetStaffMasterModel implements Serializable{
 	@Column(name="IntSTId",columnDefinition = "BIGINT(20) NOT NULL")
 	private long intSTId;
 	
+	@Column(name="strMobile",columnDefinition = "VARCHAR(50) NOT NULL DEFAULT '' ")
+	private String strMobile;
+	
+	@Column(name="strEmail",columnDefinition = "VARCHAR(50) NOT NULL DEFAULT '' ")
+	private String strEmail;
 
-public long getIntSTId() {
+	
+
+        public long getIntSTId() {
 		return intSTId;
 	}
 
@@ -69,7 +76,7 @@ public long getIntSTId() {
 		this.intSTId = intSTId;
 	}
 
-public String getDtCreated() {
+        public String getDtCreated() {
 		return dtCreated;
 	}
 
@@ -136,7 +143,23 @@ public String getDtCreated() {
 	}
 
 
-//Function to Set Default Values
+        public String getStrMobile() {
+		return strMobile;
+	}
+
+	public void setStrMobile(String strMobile) {
+		this.strMobile = (String)setDefaultValue(strMobile, "");
+	}
+
+	public String getStrEmail() {
+		return strEmail;
+	}
+
+	public void setStrEmail(String strEmail) {
+		this.strEmail = (String)setDefaultValue(strEmail, "");
+	}
+
+	//Function to Set Default Values
 	private Object setDefaultValue(Object value, Object defaultValue){
 		if(value !=null && (value instanceof String && value.toString().length()>0)){
 			return value;

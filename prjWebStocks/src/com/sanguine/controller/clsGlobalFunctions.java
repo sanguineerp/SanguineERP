@@ -2241,6 +2241,713 @@ public class clsGlobalFunctions {
 					if (list.size() > 0)
 						checkComesaRegionTax = true;
 				}
+			} 
+			else if(taxType.equalsIgnoreCase("Banquet")){
+
+				String[] spProduct = prodDetails.split("!");
+				String supplierCode = "", productCode = "";
+				for (int cn = 0; cn < spProduct.length; cn++) {
+					String[] sp1 = spProduct[cn].split(",");
+					supplierCode = sp1[2];
+					productCode = sp1[0];
+					double unitPrice = Double.parseDouble(sp1[1]);
+					double qty = Double.parseDouble(sp1[3]);
+					double discAmt = Double.parseDouble(sp1[4]);
+					double weight =0;
+					if(sp1.length>5){
+						weight=Double.parseDouble(sp1[5]);
+					}
+					
+					listTaxDtl = funGetProductWiseTaxDetails(productCode,clientCode);
+					if(listTaxDtl!=null && listTaxDtl.size()>0){
+						for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
+							double taxableAmt = unitPrice * qty;
+							Object[] arrObj = (Object[]) listTaxDtl.get(0);
+
+							clsProductTaxDtl objProdTaxDtl = new clsProductTaxDtl();
+							if (hmProductTaxDtl.containsKey(productCode)) {
+								objProdTaxDtl = hmProductTaxDtl.get(productCode);
+								objProdTaxDtl.setDblQty(objProdTaxDtl.getDblQty() + qty);
+							} else {
+									objProdTaxDtl.setDblDiscountPer(0);
+									objProdTaxDtl.setDblMarginPer(0);
+									objProdTaxDtl.setStrProductCode(productCode);
+									objProdTaxDtl.setStrSupplierCode(supplierCode);
+									objProdTaxDtl.setStrTaxIndicator(arrObj[1].toString());
+									objProdTaxDtl.setDblUnitPrice(unitPrice);
+									objProdTaxDtl.setDblMRP(Double.parseDouble(arrObj[2].toString()));
+									objProdTaxDtl.setDblQty(qty);
+									objProdTaxDtl.setDblDiscountAmt(discAmt);
+									objProdTaxDtl.setStrPickMRPForTaxCal("N");
+									objProdTaxDtl.setStrExcisable("N");
+									objProdTaxDtl.setDblWeight(0);
+							}
+							hmProductTaxDtl.put(productCode, objProdTaxDtl);
+						}
+					}
+					
+				}
+			
+			}
+			else {
+				String[] spProduct = prodDetails.split("!");
+				String supplierCode = "", productCode = "";
+				for (int cn = 0; cn < spProduct.length; cn++) {
+					String[] sp1 = spProduct[cn].split(",");
+					supplierCode = sp1[2];
+					productCode = sp1[0];
+					double unitPrice = Double.parseDouble(sp1[1]);
+					double qty = Double.parseDouble(sp1[3]);
+					double discAmt = Double.parseDouble(sp1[4]);
+					double weight =0;
+					if(sp1.length>5){
+						weight=Double.parseDouble(sp1[5]);
+					}
+					
+					String sqlTaxIndicator = "select strProdCode,strTaxIndicator,dblMRP,strPickMRPForTaxCal,strExciseable " + " from tblproductmaster where strProdCode='" + productCode + "' and strClientCode='"+clientCode+"' ";
+					listTaxDtl = objGlobalFunctionsService.funGetList(sqlTaxIndicator, "sql");
+					for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
+						double taxableAmt = unitPrice * qty;
+						if(weight>0){
+							 taxableAmt = unitPrice * qty *weight;
+						}
+						Object[] arrObj = (Object[]) listTaxDtl.get(0);
+
+						clsProductTaxDtl objProdTaxDtl = new clsProductTaxDtl();
+						if (hmProductTaxDtl.containsKey(productCode)) {
+							objProdTaxDtl = hmProductTaxDtl.get(productCode);
+							objProdTaxDtl.setDblQty(objProdTaxDtl.getDblQty() + qty);
+						} else {
+							String sqlMarginDisc = "select a.dblDiscount,b.dblMargin " + " from tblpartymaster a,tblprodsuppmaster b " + " where a.strPCode=b.strSuppCode and a.strClientCode=b.strClientCode and a.strPCode='" + supplierCode + "' " + " and b.strProdCode='" + productCode + "' and a.strClientCode='"+clientCode+"' ";
+							List listMarginDisc = objGlobalFunctionsService.funGetList(sqlMarginDisc, "sql");
+							if (listMarginDisc.size() > 0) {
+								Object[] arrObjMarginDisc = (Object[]) listMarginDisc.get(0);
+								objProdTaxDtl.setDblDiscountPer(Double.parseDouble(arrObjMarginDisc[0].toString()));
+								objProdTaxDtl.setDblMarginPer(Double.parseDouble(arrObjMarginDisc[1].toString()));
+							} else {
+								objProdTaxDtl.setDblDiscountPer(0);
+								objProdTaxDtl.setDblMarginPer(0);
+							}
+
+							objProdTaxDtl.setStrProductCode(productCode);
+							objProdTaxDtl.setStrSupplierCode(supplierCode);
+							objProdTaxDtl.setStrTaxIndicator(arrObj[1].toString());
+							objProdTaxDtl.setDblUnitPrice(unitPrice);
+							objProdTaxDtl.setDblMRP(Double.parseDouble(arrObj[2].toString()));
+							objProdTaxDtl.setDblQty(qty);
+							objProdTaxDtl.setDblDiscountAmt(discAmt);
+							objProdTaxDtl.setStrPickMRPForTaxCal(arrObj[3].toString());
+							objProdTaxDtl.setStrExcisable(arrObj[4].toString());
+							objProdTaxDtl.setDblWeight(weight);
+						}
+						hmProductTaxDtl.put(productCode, objProdTaxDtl);
+					}
+				}
+			}
+
+			StringBuilder sbSql = new StringBuilder();
+
+			for (Map.Entry<String, clsProductTaxDtl> entry : hmProductTaxDtl.entrySet()) {
+				System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+				sbSql.setLength(0);
+				
+				
+				sbSql.append("select a.strPCode,b.strTaxCode,b.strTaxDesc,b.strTaxType,b.dblPercent,b.strTaxOnTax,b.strTaxOnTaxCode " 
+						+ " ,b.strTaxCalculation,b.strTaxOnSubGroup,b.strTaxRounded,b.strCalTaxOnMRP,b.strTaxOnGD,b.dblAbatement " 
+						+ " ,b.strExcisable,strTOTOnMRPItems,b.dblAmount,ifNull(b.strShortName ,'')" 
+						+ " from tblpartytaxdtl a,tbltaxhd b "
+						+ " where a.strTaxCode=b.strTaxCode and a.strPCode='" + entry.getValue().getStrSupplierCode() + "' and strTaxOnSP='" + taxType + "' " 
+						+ " and (b.strTaxIndicator='" + entry.getValue().getStrTaxIndicator() + "' or b.strTaxIndicator='') " 
+						+ " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' and b.strPropertyCode='" + propCode + "' "
+						+ " and b.strTaxReversal='N' ");
+				
+				if (checkComesaRegionTax)
+					sbSql.append(" and strNotApplicableForComesa='N' ");
+			
+				sbSql.append(" order by b.strTaxOnTax,b.strTaxCode; ");
+				
+				System.out.println(sbSql);
+				List listTax = objGlobalFunctionsService.funGetList(sbSql.toString(), "sql");
+				for (int cnt = 0; cnt < listTax.size(); cnt++) {
+					boolean flgEligibleForTax = false;
+					Object[] arrObj = (Object[]) listTax.get(cnt);
+					double taxPer = Double.parseDouble(arrObj[4].toString());
+					String taxCode = arrObj[1].toString();
+					String taxDesc = arrObj[2].toString();
+					String taxOnTaxCode = arrObj[6].toString();
+					String taxOnSubGroup = arrObj[8].toString();
+					String taxRounded = arrObj[9].toString();
+					String calTaxOnMRP = arrObj[10].toString();
+					String taxOnGD = arrObj[11].toString();
+					double abatement = Double.parseDouble(arrObj[12].toString());
+					String exciseable = arrObj[13].toString();
+					String totOnMRPItems = arrObj[14].toString();
+					double taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
+					double fixAmt = Double.parseDouble(arrObj[15].toString());
+					shortName = arrObj[16].toString();
+					
+					if(entry.getValue().getDblWeight()>0){
+						taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty() *entry.getValue().getDblWeight();	
+					}
+					// Code to calculate taxable amt.
+
+					if (taxType.equalsIgnoreCase("Sales")) // Code to calculate taxable amt for sales taxes.
+					{
+						boolean checkSettlementWiseTax=false; 
+						if(objSetup.getStrSettlementWiseInvSer().equals("Yes"))
+						{
+							checkSettlementWiseTax=funGetSettlementWiseTax(taxCode,strSettlement);
+						}
+						if(checkSettlementWiseTax)
+						{
+						if (exciseable.equals("Y")) // Excisable field from tax master
+						{
+							if (entry.getValue().getStrExcisable().equals("Y")) // Excisable
+																				// field/
+																				// from
+																				// product
+																				// master
+							{
+								flgEligibleForTax = true;
+								if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Check
+																							// if
+																							// excisewill
+																							// be
+																							// calculated
+																							// on
+																							// Product
+																							// MRP
+								{
+									taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+									if (abatement > 0) {
+										taxableAmt = taxableAmt * (abatement / 100);
+									}
+								} else // excise will be calculated on Product
+										// Unit Price
+								{
+									double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
+									taxableAmt -= marginAmt;
+									double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
+									taxableAmt -= discountAmt;
+								}
+							}
+						} else // Code for non excisable taxes.
+						{
+							double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
+							taxableAmt -= marginAmt;
+							
+							if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) {
+								taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+								if(entry.getValue().getDblWeight()>0){
+									taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty()*entry.getValue().getDblWeight());
+								}
+								taxableAmt -= marginAmt;
+								if (abatement > 0) {
+									//taxableAmt = taxableAmt * (abatement / 100);
+									
+									taxableAmt=(taxableAmt * 100 / (100 + abatement));
+								}
+							}
+							
+							double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
+							taxableAmt -= discountAmt;
+							flgEligibleForTax = true;
+
+						}
+					}} else // Code to calculate taxable amt for Purchase taxes.
+					{
+						if (exciseable.equals("Y")) // Excisable field from tax
+													// master.
+						{
+							if (entry.getValue().getStrExcisable().equals("Y")) // Excisable
+																				// fieldfrom
+																				// product/
+																				// master.
+							{
+								flgEligibleForTax = true;
+								if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Calculate
+																							// Excise
+																							// on
+																							// Product
+																							// MRP
+								{
+									taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+									if (abatement > 0) {
+										taxableAmt = taxableAmt * (abatement / 100);
+									}
+								} else // Calculate Excise on Product Unit Price
+								{
+									taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
+								}
+							}
+						} else {
+							//purchase tax check mrp calculation
+							if (entry.getValue().getStrPickMRPForTaxCal().equals("Y") && calTaxOnMRP.equalsIgnoreCase("Y")) // Calculate Product MRP
+								{
+									taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+								} else // Calculate Purchase tax on Product Unit Price
+								{
+									taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
+								}
+							flgEligibleForTax = true;
+						}
+					}
+
+					// Reduce discount amt from taxable amt if tax is on
+					// Discount
+					if (taxOnGD.equals("Discount")) {
+						taxableAmt -= entry.getValue().getDblDiscountAmt();
+					}
+					String taxDtl = taxableAmt + "#" + arrObj[1] + "#" + arrObj[2] + "#" + arrObj[3] + "#" + arrObj[4] + "#" + arrObj[16];
+
+					if (funCheckTaxOnSubGroup(taxOnSubGroup, entry.getKey(), taxCode) && flgEligibleForTax) {
+						if (arrObj[5].toString().equals("Y"))// Tax On Tax
+						{
+							double taxAmt = 0;
+
+							if (taxType.equalsIgnoreCase("Sales")) // Tax on
+																	// Sales
+							{
+								if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) {
+									if (totOnMRPItems.equalsIgnoreCase("Y")) {
+										if (arrObj[7].toString().equalsIgnoreCase("Backword")) {
+											taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+											taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
+										} else {
+											taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+											taxAmt = (taxPer / 100) * taxableAmt;
+										}
+									} else {
+										taxAmt = (taxPer / 100) * taxableAmt;
+									}
+								} else {
+									if (arrObj[7].toString().equalsIgnoreCase("Backword")) {
+										taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+										taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
+									} else {
+										taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+										taxAmt = (taxPer / 100) * taxableAmt;
+									}
+								}
+							} else //
+							{
+								if (arrObj[7].toString().equalsIgnoreCase("Backword")) {
+									taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+									taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
+								} else {
+									taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+									taxAmt = (taxPer / 100) * taxableAmt;
+								}
+							}
+
+							if (taxRounded.equals("Y")) {
+								taxAmt = Math.rint(taxAmt);
+							}
+							clsTaxDtl objTaxDtl = new clsTaxDtl();
+							if (hmTaxCalDtl.containsKey(taxCode)) {
+								objTaxDtl = hmTaxCalDtl.get(taxCode);
+								objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
+								objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
+								objTaxDtl.setStrTaxShorName(shortName);
+							} else {
+								objTaxDtl.setTaxCode(taxCode);
+								objTaxDtl.setTaxName(taxDesc);
+								objTaxDtl.setTaxableAmt(taxableAmt);
+								objTaxDtl.setTaxAmt(taxAmt);
+								objTaxDtl.setTaxPer(taxPer);
+								objTaxDtl.setStrTaxShorName(shortName);
+							}
+							hmTaxCalDtl.put(taxCode, objTaxDtl);
+
+							objTaxDtl = new clsTaxDtl();
+							objTaxDtl.setTaxCode(taxCode);
+							objTaxDtl.setTaxName(taxDesc);
+							objTaxDtl.setTaxableAmt(taxableAmt);
+							objTaxDtl.setTaxAmt(taxAmt);
+							objTaxDtl.setTaxPer(taxPer);
+							hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
+							hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
+						} else {
+							double taxAmt = 0;
+							if (arrObj[7].toString().equalsIgnoreCase("Backword")) {
+								taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
+								if (arrObj[3].toString().equalsIgnoreCase("Fixed Amount")) {
+									taxAmt = fixAmt;
+								}
+							} else {
+								taxAmt = (taxPer / 100) * taxableAmt;
+								if (arrObj[3].toString().equalsIgnoreCase("Fixed Amount")) {
+									taxAmt = fixAmt;
+								}
+							}
+
+							if (taxRounded.equals("Y")) {
+								taxAmt = Math.rint(taxAmt);
+							}
+							clsTaxDtl objTaxDtl = new clsTaxDtl();
+							if (hmTaxCalDtl.containsKey(taxCode)) {
+								objTaxDtl = hmTaxCalDtl.get(taxCode);
+								objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
+								objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
+								objTaxDtl.setStrTaxShorName(shortName);
+							} else {
+								objTaxDtl.setTaxCode(taxCode);
+								objTaxDtl.setTaxName(taxDesc);
+								objTaxDtl.setTaxableAmt(taxableAmt);
+								objTaxDtl.setTaxAmt(taxAmt);
+								objTaxDtl.setTaxPer(taxPer);
+								objTaxDtl.setStrTaxShorName(shortName);
+							}
+							hmTaxCalDtl.put(taxCode, objTaxDtl);
+
+							objTaxDtl = new clsTaxDtl();
+							objTaxDtl.setTaxCode(taxCode);
+							objTaxDtl.setTaxName(taxDesc);
+							objTaxDtl.setTaxableAmt(taxableAmt);
+							objTaxDtl.setTaxAmt(taxAmt);
+							objTaxDtl.setTaxPer(taxPer);
+							hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
+							hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
+						}
+					}
+
+					// order-> taxable amt,Tax code,tax desc,tax type,tax per
+					hmProductTaxDtl1.put(arrObj[1].toString(), taxDtl);
+				}
+
+				// Start For Customer taxes are not add in Customer tax tab and
+				// also wants to calcutate taxes
+				if (false) // No need For Customer taxes are not add in Customer
+							// tax tab and also wants to calcutate taxes
+				{
+					String sql = "select b.strTaxCode,b.strTaxDesc,b.strTaxType,b.dblPercent,b.strTaxOnTax,b.strTaxOnTaxCode " + " ,b.strTaxCalculation,b.strTaxOnSubGroup,b.strTaxRounded,b.strCalTaxOnMRP,b.strTaxOnGD,b.dblAbatement " + " ,b.strExcisable,strTOTOnMRPItems,b.dblAmount,ifNull(b.strShortName ,'')" + " from tbltaxhd b " + " where  strTaxOnSP='" + taxType + "' "
+							+ " and (b.strTaxIndicator='" + entry.getValue().getStrTaxIndicator() + "' or b.strTaxIndicator='') " + " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' and b.strPropertyCode='" + propCode + "' " + " order by b.strTaxOnTax,b.strTaxCode; ";
+
+					if (listTax.size() == 0) {
+						listTax = objGlobalFunctionsService.funGetList(sql, "sql");
+
+						for (int cnt = 0; cnt < listTax.size(); cnt++) {
+							boolean flgEligibleForTax = false;
+							Object[] arrObj = (Object[]) listTax.get(cnt);
+							double taxPer = Double.parseDouble(arrObj[3].toString());
+							String taxCode = arrObj[0].toString();
+							String taxDesc = arrObj[1].toString();
+							String taxOnTaxCode = arrObj[5].toString();
+							String taxOnSubGroup = arrObj[7].toString();
+							String taxRounded = arrObj[8].toString();
+							String calTaxOnMRP = arrObj[9].toString();
+							String taxOnGD = arrObj[10].toString();
+							double abatement = Double.parseDouble(arrObj[11].toString());
+							String exciseable = arrObj[12].toString();
+							String totOnMRPItems = arrObj[13].toString();
+							double taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
+							double fixAmt = Double.parseDouble(arrObj[14].toString());
+							shortName = arrObj[15].toString();
+							// Code to calculate taxable amt.
+
+							if (taxType.equalsIgnoreCase("Sales")) // Code to/ calculatetaxable/ amt for sales taxes.
+							{
+								if (exciseable.equals("Y")) // Excisable field from tax master
+								{
+									if (entry.getValue().getStrExcisable().equals("Y")) // Excisable field from/ productmaster
+									{
+										flgEligibleForTax = true;
+										if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Check ifexcisewill be calculated on Product MRP
+										{
+											taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+											if (abatement > 0) {
+												taxableAmt = taxableAmt * (abatement / 100);
+											}
+										} else // excise will be calculated on
+												// Product Unit Price
+										{
+											double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
+											taxableAmt -= marginAmt;
+											double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
+											taxableAmt -= discountAmt;
+										}
+									}
+								} else // Code for non excisable taxes.
+								{
+									if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) {
+										taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+										if (abatement > 0) {
+											taxableAmt = taxableAmt * (abatement / 100);
+										}
+									}
+									double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
+									taxableAmt -= marginAmt;
+									double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
+									taxableAmt -= discountAmt;
+									flgEligibleForTax = true;
+								}
+							} else // Code to calculate taxable amt for Purchase
+									// taxes.
+							{
+								if (exciseable.equals("Y")) // Excisable field
+															// from tax master.
+								{
+									if (entry.getValue().getStrExcisable().equals("Y")) // Excisable field from product master.
+									{
+										flgEligibleForTax = true;
+										if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Calculate Excise on Product MRP
+										{
+											taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+											if (abatement > 0) {
+												taxableAmt = taxableAmt * (abatement / 100);
+											}
+										} else // Calculate Excise on Product
+												// Unit Price
+										{
+											taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
+										}
+									}
+								} else {
+									flgEligibleForTax = true;
+								}
+							}
+
+							// Reduce discount amt from taxable amt if tax is on
+							// Discount
+							if (taxOnGD.equals("Discount")) {
+								taxableAmt -= entry.getValue().getDblDiscountAmt();
+							}
+							String taxDtl = taxableAmt + "#" + arrObj[0] + "#" + arrObj[1] + "#" + arrObj[2] + "#" + arrObj[3] + "#" + arrObj[15];
+
+							if (funCheckTaxOnSubGroup(taxOnSubGroup, entry.getKey(), taxCode) && flgEligibleForTax) {
+								if (arrObj[4].toString().equals("Y"))// Tax On
+																		// Tax
+								{
+									double taxAmt = 0;
+
+									if (taxType.equalsIgnoreCase("Sales")) // Tax on Sales
+									{
+										if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) {
+											if (totOnMRPItems.equalsIgnoreCase("Y")) {
+												if (arrObj[6].toString().equalsIgnoreCase("Backword")) {
+													taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+													taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
+												} else {
+													taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+													taxAmt = (taxPer / 100) * taxableAmt;
+												}
+											} else {
+												taxAmt = (taxPer / 100) * taxableAmt;
+											}
+										} else {
+											if (arrObj[6].toString().equalsIgnoreCase("Backword")) {
+												taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+												taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
+											} else {
+												taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+												taxAmt = (taxPer / 100) * taxableAmt;
+											}
+										}
+									} else //
+									{
+										if (arrObj[6].toString().equalsIgnoreCase("Backword")) {
+											taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+											taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
+										} else {
+											taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
+											taxAmt = (taxPer / 100) * taxableAmt;
+										}
+									}
+
+									if (taxRounded.equals("Y")) {
+										taxAmt = Math.rint(taxAmt);
+									}
+									clsTaxDtl objTaxDtl = new clsTaxDtl();
+									if (hmTaxCalDtl.containsKey(taxCode)) {
+										objTaxDtl = hmTaxCalDtl.get(taxCode);
+										objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
+										objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
+										objTaxDtl.setStrTaxShorName(shortName);
+									} else {
+										objTaxDtl.setTaxCode(taxCode);
+										objTaxDtl.setTaxName(taxDesc);
+										objTaxDtl.setTaxableAmt(taxableAmt);
+										objTaxDtl.setTaxAmt(taxAmt);
+										objTaxDtl.setTaxPer(taxPer);
+										objTaxDtl.setStrTaxShorName(shortName);
+									}
+									hmTaxCalDtl.put(taxCode, objTaxDtl);
+
+									objTaxDtl = new clsTaxDtl();
+									objTaxDtl.setTaxCode(taxCode);
+									objTaxDtl.setTaxName(taxDesc);
+									objTaxDtl.setTaxableAmt(taxableAmt);
+									objTaxDtl.setTaxAmt(taxAmt);
+									objTaxDtl.setTaxPer(taxPer);
+									hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
+									hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
+								} else {
+									double taxAmt = 0;
+									if (arrObj[6].toString().equalsIgnoreCase("Backword")) {
+										taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
+										if (arrObj[2].toString().equalsIgnoreCase("Fixed Amount")) {
+											taxAmt = fixAmt;
+										}
+									} else {
+										taxAmt = (taxPer / 100) * taxableAmt;
+										if (arrObj[2].toString().equalsIgnoreCase("Fixed Amount")) {
+											taxAmt = fixAmt;
+										}
+									}
+
+									if (taxRounded.equals("Y")) {
+										taxAmt = Math.rint(taxAmt);
+									}
+									clsTaxDtl objTaxDtl = new clsTaxDtl();
+									if (hmTaxCalDtl.containsKey(taxCode)) {
+										objTaxDtl = hmTaxCalDtl.get(taxCode);
+										objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
+										objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
+										objTaxDtl.setStrTaxShorName(shortName);
+									} else {
+										objTaxDtl.setTaxCode(taxCode);
+										objTaxDtl.setTaxName(taxDesc);
+										objTaxDtl.setTaxableAmt(taxableAmt);
+										objTaxDtl.setTaxAmt(taxAmt);
+										objTaxDtl.setTaxPer(taxPer);
+										objTaxDtl.setStrTaxShorName(shortName);
+									}
+									hmTaxCalDtl.put(taxCode, objTaxDtl);
+
+									objTaxDtl = new clsTaxDtl();
+									objTaxDtl.setTaxCode(taxCode);
+									objTaxDtl.setTaxName(taxDesc);
+									objTaxDtl.setTaxableAmt(taxableAmt);
+									objTaxDtl.setTaxAmt(taxAmt);
+									objTaxDtl.setTaxPer(taxPer);
+									hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
+									hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
+								}
+							}
+							// order-> taxable amt,Tax code,tax desc,tax
+							// type,tax per
+							hmProductTaxDtl1.put(arrObj[0].toString(), taxDtl);
+						}
+					}
+				}// no need to calculate for customer taxes are not add in
+					// Customer tax tab and also wants to calcutate taxes
+					// End For Customer taxes are not add in Customer tax tab
+					// and also wants to calcutate taxes
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		hmProductTaxDtl1.clear();
+		for (Map.Entry<String, clsTaxDtl> entry : hmTaxCalDtl.entrySet()) {
+			// order-> taxable amt,Tax code,tax desc,tax type,tax per,tax amt
+
+			String taxDtl = entry.getValue().getTaxableAmt() + "#" + entry.getValue().getTaxCode() + "#" + entry.getValue().getTaxName() + "#NA" + "#" + entry.getValue().getTaxPer() + "#" + entry.getValue().getTaxAmt() + "#" + entry.getValue().getStrTaxShorName();
+			hmProductTaxDtl1.put(entry.getKey(), taxDtl);
+		}
+
+		return hmProductTaxDtl1;
+	}
+
+
+	private List funGetProductWiseTaxDetails(String productCode,String clientCode)
+	{
+		List listprodTaxDetail=null;
+		try{
+			StringBuilder sqlProdTax=new StringBuilder();
+			if(productCode.startsWith("BI")){
+				sqlProdTax.append("select a.strItemCode,a.strTaxIndicator,a.dblAmount from tblbqitemmaster a where a.strItemCode='"+productCode+"' and  a.strClientCode='"+clientCode+"' ");
+			} else if(productCode.startsWith("EC")){
+				sqlProdTax.append("select a.strEquipmentCode,a.strTaxIndicator,a.dblEquipmentRate from tblequipment  a where a.strEquipmentCode='"+productCode+"' and  a.strClientCode='"+clientCode+"' ");
+			} else if(productCode.startsWith("S0")){
+				sqlProdTax.append("select a.strServiceCode ,a.strTaxIndicator,a.dblRate from tblservicemaster a where a.strServiceCode='"+productCode+"' and  a.strClientCode='"+clientCode+"' ");
+			} 
+			listprodTaxDetail=objBaseService.funGetListModuleWise(sqlProdTax, "sql", "WebBanquet");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return listprodTaxDetail;
+	}
+	
+
+	@SuppressWarnings({ "rawtypes", "unused" })
+	@RequestMapping(value = "/getTaxDtlForProduct1", method = RequestMethod.GET)
+	public @ResponseBody Map<String, String> funCalculateTax1(@RequestParam("prodCode") String prodDetails, @RequestParam("taxType") String taxType, @RequestParam("transDate") String transDate, @RequestParam("CIFAmt") String CIFAmt,@RequestParam("strSettlement") String strSettlement,  HttpServletRequest req) {
+		Map<String, String> hmProductTaxDtl1 = new HashMap<String, String>();
+		List listTaxDtl = new ArrayList<String>();
+		List listTaxes = new ArrayList();
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String propCode = req.getSession().getAttribute("propertyCode").toString();
+		Map<String, clsTaxDtl> hmTaxCalDtl = new HashMap<String, clsTaxDtl>();
+		Map<String, clsTaxDtl> hmTaxCalDtlTemp = new HashMap<String, clsTaxDtl>();
+		Map<String, Map<String, clsTaxDtl>> hmProdTaxCalDtl = new HashMap<String, Map<String, clsTaxDtl>>();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
+		String shortName = "";
+		try {
+			Map<String, clsProductTaxDtl> hmProductTaxDtl = new HashMap<String, clsProductTaxDtl>();
+			String supplierCodeForForeignTax = "";
+			boolean foreignSupplier = false, comesaRegionSupplier = false, checkComesaRegionTax = false;
+			double CIFAmountForTaxCal = Double.parseDouble(CIFAmt);
+
+			if (clientCode.equals("226.001") && taxType.equalsIgnoreCase("Purchase")) {
+				String[] spProduct1 = prodDetails.split("!");
+				String productCode1 = "";
+				for (int cn = 0; cn < spProduct1.length; cn++) {
+					String[] sp1 = spProduct1[cn].split(",");
+					supplierCodeForForeignTax = sp1[2];
+				}
+
+				if (!supplierCodeForForeignTax.trim().isEmpty()) {
+					String sqlTax = "select strPartyType,strComesaRegion from tblpartymaster where strPCode='" + supplierCodeForForeignTax + "' and strPartyType='Foreign' ";
+					List list = objGlobalFunctionsService.funGetList(sqlTax, "sql");
+					if (list.size() > 0) {
+						foreignSupplier = true;
+						Object[] arrObj = (Object[]) list.get(0);
+						if (arrObj[1].equals("Y"))
+							comesaRegionSupplier = true;
+					}
+				}
+			}
+
+			if (CIFAmountForTaxCal > 0 && foreignSupplier) {
+				String[] spProduct1 = prodDetails.split("!");
+				for (int cn = 0; cn < spProduct1.length; cn++) {
+					String[] sp1 = spProduct1[cn].split(",");
+					supplierCodeForForeignTax = sp1[2];
+					break;
+				}
+				clsProductTaxDtl objOtherTaxDtl = new clsProductTaxDtl();
+				objOtherTaxDtl.setStrProductCode("OtherTaxCharges");
+				objOtherTaxDtl.setStrSupplierCode(supplierCodeForForeignTax);
+				objOtherTaxDtl.setStrTaxIndicator(" ");
+				objOtherTaxDtl.setDblUnitPrice(CIFAmountForTaxCal);
+				objOtherTaxDtl.setDblMRP(0);
+				objOtherTaxDtl.setDblQty(1);
+				objOtherTaxDtl.setDblDiscountAmt(0);
+				objOtherTaxDtl.setStrPickMRPForTaxCal("N");
+				objOtherTaxDtl.setStrExcisable("N");
+				hmProductTaxDtl.put("OtherTaxCharges", objOtherTaxDtl);
+			}
+
+			if (clientCode.equals("226.001") && foreignSupplier && taxType.equalsIgnoreCase("Purchase")) {
+				if (comesaRegionSupplier) {
+					String products = "";
+					String[] spProduct = prodDetails.split("!");
+					for (int cn = 0; cn < spProduct.length; cn++) {
+						String[] sp1 = spProduct[cn].split(",");
+						if (cn == 0)
+							products = "('" + sp1[cn] + "'";
+						else
+							products += ",'" + sp1[cn] + "'";
+					}
+					products = products + ")";
+
+					StringBuilder sbSqlProducts = new StringBuilder();
+					sbSqlProducts.append("select strProdCode from tblproductmaster where strProdcode in " + products + " and strComesaItem='Y'");
+					List list = objBaseService.funGetList(sbSqlProducts, "sql");
+					if (list.size() > 0)
+						checkComesaRegionTax = true;
+				}
 			} else {
 				String[] spProduct = prodDetails.split("!");
 				String supplierCode = "", productCode = "";
@@ -2806,660 +3513,6 @@ public class clsGlobalFunctions {
 	}
 
 
-	
-	
-
-	@SuppressWarnings({ "rawtypes", "unused" })
-	@RequestMapping(value = "/getTaxDtlForProduct1", method = RequestMethod.GET)
-	public @ResponseBody Map<String, String> funCalculateTax1(@RequestParam("prodCode") String prodDetails, @RequestParam("taxType") String taxType, @RequestParam("transDate") String transDate, @RequestParam("CIFAmt") String CIFAmt,@RequestParam("strSettlement") String strSettlement,  HttpServletRequest req) {
-		Map<String, String> hmProductTaxDtl1 = new HashMap<String, String>();
-		List listTaxDtl = new ArrayList<String>();
-		List listTaxes = new ArrayList();
-		String clientCode = req.getSession().getAttribute("clientCode").toString();
-		String propCode = req.getSession().getAttribute("propertyCode").toString();
-		Map<String, clsTaxDtl> hmTaxCalDtl = new HashMap<String, clsTaxDtl>();
-		Map<String, clsTaxDtl> hmTaxCalDtlTemp = new HashMap<String, clsTaxDtl>();
-		Map<String, Map<String, clsTaxDtl>> hmProdTaxCalDtl = new HashMap<String, Map<String, clsTaxDtl>>();
-		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propCode, clientCode);
-		String shortName = "";
-		try {
-			Map<String, clsProductTaxDtl> hmProductTaxDtl = new HashMap<String, clsProductTaxDtl>();
-			String supplierCodeForForeignTax = "";
-			boolean foreignSupplier = false, comesaRegionSupplier = false, checkComesaRegionTax = false;
-			double CIFAmountForTaxCal = Double.parseDouble(CIFAmt);
-
-			if (clientCode.equals("226.001") && taxType.equalsIgnoreCase("Purchase")) {
-				String[] spProduct1 = prodDetails.split("!");
-				String productCode1 = "";
-				for (int cn = 0; cn < spProduct1.length; cn++) {
-					String[] sp1 = spProduct1[cn].split(",");
-					supplierCodeForForeignTax = sp1[2];
-				}
-
-				if (!supplierCodeForForeignTax.trim().isEmpty()) {
-					String sqlTax = "select strPartyType,strComesaRegion from tblpartymaster where strPCode='" + supplierCodeForForeignTax + "' and strPartyType='Foreign' ";
-					List list = objGlobalFunctionsService.funGetList(sqlTax, "sql");
-					if (list.size() > 0) {
-						foreignSupplier = true;
-						Object[] arrObj = (Object[]) list.get(0);
-						if (arrObj[1].equals("Y"))
-							comesaRegionSupplier = true;
-					}
-				}
-			}
-
-			if (CIFAmountForTaxCal > 0 && foreignSupplier) {
-				String[] spProduct1 = prodDetails.split("!");
-				for (int cn = 0; cn < spProduct1.length; cn++) {
-					String[] sp1 = spProduct1[cn].split(",");
-					supplierCodeForForeignTax = sp1[2];
-					break;
-				}
-				clsProductTaxDtl objOtherTaxDtl = new clsProductTaxDtl();
-				objOtherTaxDtl.setStrProductCode("OtherTaxCharges");
-				objOtherTaxDtl.setStrSupplierCode(supplierCodeForForeignTax);
-				objOtherTaxDtl.setStrTaxIndicator(" ");
-				objOtherTaxDtl.setDblUnitPrice(CIFAmountForTaxCal);
-				objOtherTaxDtl.setDblMRP(0);
-				objOtherTaxDtl.setDblQty(1);
-				objOtherTaxDtl.setDblDiscountAmt(0);
-				objOtherTaxDtl.setStrPickMRPForTaxCal("N");
-				objOtherTaxDtl.setStrExcisable("N");
-				hmProductTaxDtl.put("OtherTaxCharges", objOtherTaxDtl);
-			}
-
-			if (clientCode.equals("226.001") && foreignSupplier && taxType.equalsIgnoreCase("Purchase")) {
-				if (comesaRegionSupplier) {
-					String products = "";
-					String[] spProduct = prodDetails.split("!");
-					for (int cn = 0; cn < spProduct.length; cn++) {
-						String[] sp1 = spProduct[cn].split(",");
-						if (cn == 0)
-							products = "('" + sp1[cn] + "'";
-						else
-							products += ",'" + sp1[cn] + "'";
-					}
-					products = products + ")";
-
-					StringBuilder sbSqlProducts = new StringBuilder();
-					sbSqlProducts.append("select strProdCode from tblproductmaster where strProdcode in " + products + " and strComesaItem='Y'");
-					List list = objBaseService.funGetList(sbSqlProducts, "sql");
-					if (list.size() > 0)
-						checkComesaRegionTax = true;
-				}
-			} else {
-				String[] spProduct = prodDetails.split("!");
-				String supplierCode = "", productCode = "";
-				for (int cn = 0; cn < spProduct.length; cn++) {
-					String[] sp1 = spProduct[cn].split(",");
-					supplierCode = sp1[2];
-					productCode = sp1[0];
-					double unitPrice = Double.parseDouble(sp1[1]);
-					double qty = Double.parseDouble(sp1[3]);
-					double discAmt = Double.parseDouble(sp1[4]);
-					double weight =0;
-					if(sp1.length>5){
-						weight=Double.parseDouble(sp1[5]);
-					}
-					
-					String sqlTaxIndicator = "select strProdCode,strTaxIndicator,dblMRP,strPickMRPForTaxCal,strExciseable " + " from tblproductmaster where strProdCode='" + productCode + "' and strClientCode='"+clientCode+"' ";
-					listTaxDtl = objGlobalFunctionsService.funGetList(sqlTaxIndicator, "sql");
-					for (int cnt = 0; cnt < listTaxDtl.size(); cnt++) {
-						double taxableAmt = unitPrice * qty;
-						if(weight>0){
-							 taxableAmt = unitPrice * qty *weight;
-						}
-						Object[] arrObj = (Object[]) listTaxDtl.get(0);
-
-						clsProductTaxDtl objProdTaxDtl = new clsProductTaxDtl();
-						if (hmProductTaxDtl.containsKey(productCode)) {
-							objProdTaxDtl = hmProductTaxDtl.get(productCode);
-							objProdTaxDtl.setDblQty(objProdTaxDtl.getDblQty() + qty);
-						} else {
-							String sqlMarginDisc = "select a.dblDiscount,b.dblMargin " + " from tblpartymaster a,tblprodsuppmaster b " + " where a.strPCode=b.strSuppCode and a.strClientCode=b.strClientCode and a.strPCode='" + supplierCode + "' " + " and b.strProdCode='" + productCode + "' and a.strClientCode='"+clientCode+"' ";
-							List listMarginDisc = objGlobalFunctionsService.funGetList(sqlMarginDisc, "sql");
-							if (listMarginDisc.size() > 0) {
-								Object[] arrObjMarginDisc = (Object[]) listMarginDisc.get(0);
-								objProdTaxDtl.setDblDiscountPer(Double.parseDouble(arrObjMarginDisc[0].toString()));
-								objProdTaxDtl.setDblMarginPer(Double.parseDouble(arrObjMarginDisc[1].toString()));
-							} else {
-								objProdTaxDtl.setDblDiscountPer(0);
-								objProdTaxDtl.setDblMarginPer(0);
-							}
-
-							objProdTaxDtl.setStrProductCode(productCode);
-							objProdTaxDtl.setStrSupplierCode(supplierCode);
-							objProdTaxDtl.setStrTaxIndicator(arrObj[1].toString());
-							objProdTaxDtl.setDblUnitPrice(unitPrice);
-							objProdTaxDtl.setDblMRP(Double.parseDouble(arrObj[2].toString()));
-							objProdTaxDtl.setDblQty(qty);
-							objProdTaxDtl.setDblDiscountAmt(discAmt);
-							objProdTaxDtl.setStrPickMRPForTaxCal(arrObj[3].toString());
-							objProdTaxDtl.setStrExcisable(arrObj[4].toString());
-							objProdTaxDtl.setDblWeight(weight);
-						}
-						hmProductTaxDtl.put(productCode, objProdTaxDtl);
-					}
-				}
-			}
-
-			StringBuilder sbSql = new StringBuilder();
-
-			for (Map.Entry<String, clsProductTaxDtl> entry : hmProductTaxDtl.entrySet()) {
-				System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
-				sbSql.setLength(0);
-				
-				
-				sbSql.append("select a.strPCode,b.strTaxCode,b.strTaxDesc,b.strTaxType,b.dblPercent,b.strTaxOnTax,b.strTaxOnTaxCode " 
-						+ " ,b.strTaxCalculation,b.strTaxOnSubGroup,b.strTaxRounded,b.strCalTaxOnMRP,b.strTaxOnGD,b.dblAbatement " 
-						+ " ,b.strExcisable,strTOTOnMRPItems,b.dblAmount,ifNull(b.strShortName ,'')" 
-						+ " from tblpartytaxdtl a,tbltaxhd b "
-						+ " where a.strTaxCode=b.strTaxCode and a.strPCode='" + entry.getValue().getStrSupplierCode() + "' and strTaxOnSP='" + taxType + "' " 
-						+ " and (b.strTaxIndicator='" + entry.getValue().getStrTaxIndicator() + "' or b.strTaxIndicator='') " 
-						+ " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' and b.strPropertyCode='" + propCode + "' "
-						+ " and b.strTaxReversal='N' ");
-				
-			
-				if (checkComesaRegionTax)
-					sbSql.append(" and strNotApplicableForComesa='N' ");
-
-				sbSql.append(" order by b.strTaxOnTax,b.strTaxCode; ");
-				
-				
-				
-				
-				
-				System.out.println(sbSql);
-				List listTax = objGlobalFunctionsService.funGetList(sbSql.toString(), "sql");
-				for (int cnt = 0; cnt < listTax.size(); cnt++) {
-					boolean flgEligibleForTax = false;
-					Object[] arrObj = (Object[]) listTax.get(cnt);
-					double taxPer = Double.parseDouble(arrObj[4].toString());
-					String taxCode = arrObj[1].toString();
-					String taxDesc = arrObj[2].toString();
-					String taxOnTaxCode = arrObj[6].toString();
-					String taxOnSubGroup = arrObj[8].toString();
-					String taxRounded = arrObj[9].toString();
-					String calTaxOnMRP = arrObj[10].toString();
-					String taxOnGD = arrObj[11].toString();
-					double abatement = Double.parseDouble(arrObj[12].toString());
-					String exciseable = arrObj[13].toString();
-					String totOnMRPItems = arrObj[14].toString();
-					double taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
-					if(entry.getValue().getDblWeight()>0){
-						taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty() *entry.getValue().getDblWeight();	
-					}
-					
-					double fixAmt = Double.parseDouble(arrObj[15].toString());
-					shortName = arrObj[16].toString();
-					// Code to calculate taxable amt.
-
-					if (taxType.equalsIgnoreCase("Sales")) // Code to
-															// calculatetaxable
-															// amt for sales
-															// taxes.
-					{
-						boolean checkSettlementWiseTax=false; 
-						if(objSetup.getStrSettlementWiseInvSer().equals("Yes"))
-						{
-							checkSettlementWiseTax=funGetSettlementWiseTax(taxCode,strSettlement);
-						}
-						if(checkSettlementWiseTax)
-						{
-						if (exciseable.equals("Y")) // Excisable field from
-													// taxmaster
-						{
-							if (entry.getValue().getStrExcisable().equals("Y")) // Excisable
-																				// field/
-																				// from
-																				// product
-																				// master
-							{
-								flgEligibleForTax = true;
-								if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Check
-																							// if
-																							// excisewill
-																							// be
-																							// calculated
-																							// on
-																							// Product
-																							// MRP
-								{
-									taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
-									if (abatement > 0) {
-										taxableAmt = taxableAmt * (abatement / 100);
-									}
-								} else // excise will be calculated on Product
-										// Unit Price
-								{
-									double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
-									taxableAmt -= marginAmt;
-									double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
-									taxableAmt -= discountAmt;
-								}
-							}
-						} else // Code for non excisable taxes.
-						{
-							if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) {
-								taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
-								if (abatement > 0) {
-									taxableAmt = taxableAmt * (abatement / 100);
-								}
-							}
-							double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
-							taxableAmt -= marginAmt;
-							double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
-							taxableAmt -= discountAmt;
-							flgEligibleForTax = true;
-
-						}
-					}} else // Code to calculate taxable amt for Purchase taxes.
-					{
-						if (exciseable.equals("Y")) // Excisable field from tax
-													// master.
-						{
-							if (entry.getValue().getStrExcisable().equals("Y")) // Excisable
-																				// fieldfrom
-																				// product/
-																				// master.
-							{
-								flgEligibleForTax = true;
-								if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Calculate
-																							// Excise
-																							// on
-																							// Product
-																							// MRP
-								{
-									taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
-									if (abatement > 0) {
-										taxableAmt = taxableAmt * (abatement / 100);
-									}
-								} else // Calculate Excise on Product Unit Price
-								{
-									taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
-								}
-							}
-						} else {
-							flgEligibleForTax = true;
-						}
-					}
-
-					// Reduce discount amt from taxable amt if tax is on
-					// Discount
-					if (taxOnGD.equals("Discount")) {
-						taxableAmt -= entry.getValue().getDblDiscountAmt();
-					}
-					String taxDtl = taxableAmt + "#" + arrObj[1] + "#" + arrObj[2] + "#" + arrObj[3] + "#" + arrObj[4] + "#" + arrObj[16];
-
-					if (funCheckTaxOnSubGroup(taxOnSubGroup, entry.getKey(), taxCode) && flgEligibleForTax) {
-						if (arrObj[5].toString().equals("Y"))// Tax On Tax
-						{
-							double taxAmt = 0;
-
-							if (taxType.equalsIgnoreCase("Sales")) // Tax on
-																	// Sales
-							{
-								if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) {
-									if (totOnMRPItems.equalsIgnoreCase("Y")) {
-										if (arrObj[7].toString().equalsIgnoreCase("Backword")) {
-											taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-											taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
-										} else {
-											taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-											taxAmt = (taxPer / 100) * taxableAmt;
-										}
-									} else {
-										taxAmt = (taxPer / 100) * taxableAmt;
-									}
-								} else {
-									if (arrObj[7].toString().equalsIgnoreCase("Backword")) {
-										taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-										taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
-									} else {
-										taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-										taxAmt = (taxPer / 100) * taxableAmt;
-									}
-								}
-							} else //
-							{
-								if (arrObj[7].toString().equalsIgnoreCase("Backword")) {
-									taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-									taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
-								} else {
-									taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-									taxAmt = (taxPer / 100) * taxableAmt;
-								}
-							}
-
-							if (taxRounded.equals("Y")) {
-								taxAmt = Math.rint(taxAmt);
-							}
-							clsTaxDtl objTaxDtl = new clsTaxDtl();
-							if (hmTaxCalDtl.containsKey(taxCode)) {
-								objTaxDtl = hmTaxCalDtl.get(taxCode);
-								objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
-								objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
-								objTaxDtl.setStrTaxShorName(shortName);
-								objTaxDtl.setStrTaxType(arrObj[7].toString());
-							} else {
-								objTaxDtl.setTaxCode(taxCode);
-								objTaxDtl.setTaxName(taxDesc);
-								objTaxDtl.setTaxableAmt(taxableAmt);
-								objTaxDtl.setTaxAmt(taxAmt);
-								objTaxDtl.setTaxPer(taxPer);
-								objTaxDtl.setStrTaxShorName(shortName);
-								objTaxDtl.setStrTaxType(arrObj[7].toString());
-							}
-							hmTaxCalDtl.put(taxCode, objTaxDtl);
-
-							objTaxDtl = new clsTaxDtl();
-							objTaxDtl.setTaxCode(taxCode);
-							objTaxDtl.setTaxName(taxDesc);
-							objTaxDtl.setTaxableAmt(taxableAmt);
-							objTaxDtl.setTaxAmt(taxAmt);
-							objTaxDtl.setTaxPer(taxPer);
-							hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
-							hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
-						} else {
-							double taxAmt = 0;
-							if (arrObj[7].toString().equalsIgnoreCase("Backword")) {
-								taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
-								if (arrObj[3].toString().equalsIgnoreCase("Fixed Amount")) {
-									taxAmt = fixAmt;
-								}
-							} else {
-								taxAmt = (taxPer / 100) * taxableAmt;
-								if (arrObj[3].toString().equalsIgnoreCase("Fixed Amount")) {
-									taxAmt = fixAmt;
-								}
-							}
-
-							if (taxRounded.equals("Y")) {
-								taxAmt = Math.rint(taxAmt);
-							}
-							clsTaxDtl objTaxDtl = new clsTaxDtl();
-							if (hmTaxCalDtl.containsKey(taxCode)) {
-								objTaxDtl = hmTaxCalDtl.get(taxCode);
-								objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
-								objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
-								objTaxDtl.setStrTaxShorName(shortName);
-								objTaxDtl.setStrTaxType(arrObj[7].toString());
-							} else {
-								objTaxDtl.setTaxCode(taxCode);
-								objTaxDtl.setTaxName(taxDesc);
-								objTaxDtl.setTaxableAmt(taxableAmt);
-								objTaxDtl.setTaxAmt(taxAmt);
-								objTaxDtl.setTaxPer(taxPer);
-								objTaxDtl.setStrTaxShorName(shortName);
-								objTaxDtl.setStrTaxType(arrObj[7].toString());
-							}
-							hmTaxCalDtl.put(taxCode, objTaxDtl);
-
-							objTaxDtl = new clsTaxDtl();
-							objTaxDtl.setTaxCode(taxCode);
-							objTaxDtl.setTaxName(taxDesc);
-							objTaxDtl.setTaxableAmt(taxableAmt);
-							objTaxDtl.setTaxAmt(taxAmt);
-							objTaxDtl.setTaxPer(taxPer);
-							objTaxDtl.setStrTaxType(arrObj[7].toString());
-							hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
-							hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
-						}
-					}
-
-					// order-> taxable amt,Tax code,tax desc,tax type,tax per
-					hmProductTaxDtl1.put(arrObj[1].toString(), taxDtl);
-				}
-
-				// Start For Customer taxes are not add in Customer tax tab and
-				// also wants to calcutate taxes
-				if (false) // No need For Customer taxes are not add in Customer
-							// tax tab and also wants to calcutate taxes
-				{
-					String sql = "select b.strTaxCode,b.strTaxDesc,b.strTaxType,b.dblPercent,b.strTaxOnTax,b.strTaxOnTaxCode " + " ,b.strTaxCalculation,b.strTaxOnSubGroup,b.strTaxRounded,b.strCalTaxOnMRP,b.strTaxOnGD,b.dblAbatement " + " ,b.strExcisable,strTOTOnMRPItems,b.dblAmount,ifNull(b.strShortName ,'')" + " from tbltaxhd b " + " where  strTaxOnSP='" + taxType + "' "
-							+ " and (b.strTaxIndicator='" + entry.getValue().getStrTaxIndicator() + "' or b.strTaxIndicator='') " + " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' and b.strPropertyCode='" + propCode + "' " + " order by b.strTaxOnTax,b.strTaxCode; ";
-
-					if (listTax.size() == 0) {
-						listTax = objGlobalFunctionsService.funGetList(sql, "sql");
-
-						for (int cnt = 0; cnt < listTax.size(); cnt++) {
-							boolean flgEligibleForTax = false;
-							Object[] arrObj = (Object[]) listTax.get(cnt);
-							double taxPer = Double.parseDouble(arrObj[3].toString());
-							String taxCode = arrObj[0].toString();
-							String taxDesc = arrObj[1].toString();
-							String taxOnTaxCode = arrObj[5].toString();
-							String taxOnSubGroup = arrObj[7].toString();
-							String taxRounded = arrObj[8].toString();
-							String calTaxOnMRP = arrObj[9].toString();
-							String taxOnGD = arrObj[10].toString();
-							double abatement = Double.parseDouble(arrObj[11].toString());
-							String exciseable = arrObj[12].toString();
-							String totOnMRPItems = arrObj[13].toString();
-							double taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
-							double fixAmt = Double.parseDouble(arrObj[14].toString());
-							shortName = arrObj[15].toString();
-							// Code to calculate taxable amt.
-
-							if (taxType.equalsIgnoreCase("Sales")) // Code to/ calculatetaxable/ amt for sales taxes.
-							{
-								if (exciseable.equals("Y")) // Excisable field from tax master
-								{
-									if (entry.getValue().getStrExcisable().equals("Y")) // Excisable field from/ productmaster
-									{
-										flgEligibleForTax = true;
-										if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Check ifexcisewill be calculated on Product MRP
-										{
-											taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
-											if (abatement > 0) {
-												taxableAmt = taxableAmt * (abatement / 100);
-											}
-										} else // excise will be calculated on
-												// Product Unit Price
-										{
-											double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
-											taxableAmt -= marginAmt;
-											double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
-											taxableAmt -= discountAmt;
-										}
-									}
-								} else // Code for non excisable taxes.
-								{
-									if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) {
-										taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
-										if (abatement > 0) {
-											taxableAmt = taxableAmt * (abatement / 100);
-										}
-									}
-									double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
-									taxableAmt -= marginAmt;
-									double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
-									taxableAmt -= discountAmt;
-									flgEligibleForTax = true;
-								}
-							} else // Code to calculate taxable amt for Purchase
-									// taxes.
-							{
-								if (exciseable.equals("Y")) // Excisable field
-															// from tax master.
-								{
-									if (entry.getValue().getStrExcisable().equals("Y")) // Excisable field from product master.
-									{
-										flgEligibleForTax = true;
-										if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Calculate Excise on Product MRP
-										{
-											taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
-											if (abatement > 0) {
-												taxableAmt = taxableAmt * (abatement / 100);
-											}
-										} else // Calculate Excise on Product
-												// Unit Price
-										{
-											taxableAmt = entry.getValue().getDblUnitPrice() * entry.getValue().getDblQty();
-										}
-									}
-								} else {
-									flgEligibleForTax = true;
-								}
-							}
-
-							// Reduce discount amt from taxable amt if tax is on
-							// Discount
-							if (taxOnGD.equals("Discount")) {
-								taxableAmt -= entry.getValue().getDblDiscountAmt();
-							}
-							String taxDtl = taxableAmt + "#" + arrObj[0] + "#" + arrObj[1] + "#" + arrObj[2] + "#" + arrObj[3] + "#" + arrObj[15];
-
-							if (funCheckTaxOnSubGroup(taxOnSubGroup, entry.getKey(), taxCode) && flgEligibleForTax) {
-								if (arrObj[4].toString().equals("Y"))// Tax On
-																		// Tax
-								{
-									double taxAmt = 0;
-
-									if (taxType.equalsIgnoreCase("Sales")) // Tax on Sales
-									{
-										if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) {
-											if (totOnMRPItems.equalsIgnoreCase("Y")) {
-												if (arrObj[6].toString().equalsIgnoreCase("Backword")) {
-													taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-													taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
-												} else {
-													taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-													taxAmt = (taxPer / 100) * taxableAmt;
-												}
-											} else {
-												taxAmt = (taxPer / 100) * taxableAmt;
-											}
-										} else {
-											if (arrObj[6].toString().equalsIgnoreCase("Backword")) {
-												taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-												taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
-											} else {
-												taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-												taxAmt = (taxPer / 100) * taxableAmt;
-											}
-										}
-									} else //
-									{
-										if (arrObj[6].toString().equalsIgnoreCase("Backword")) {
-											taxableAmt -= funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-											taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
-										} else {
-											taxableAmt += funGetTaxAmtForTaxOnTaxCal(hmProdTaxCalDtl.get(entry.getKey()), taxOnTaxCode);
-											taxAmt = (taxPer / 100) * taxableAmt;
-										}
-									}
-
-									if (taxRounded.equals("Y")) {
-										taxAmt = Math.rint(taxAmt);
-									}
-									clsTaxDtl objTaxDtl = new clsTaxDtl();
-									if (hmTaxCalDtl.containsKey(taxCode)) {
-										objTaxDtl = hmTaxCalDtl.get(taxCode);
-										objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
-										objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
-										objTaxDtl.setStrTaxShorName(shortName);
-										objTaxDtl.setStrTaxType(arrObj[7].toString());
-									} else {
-										objTaxDtl.setTaxCode(taxCode);
-										objTaxDtl.setTaxName(taxDesc);
-										objTaxDtl.setTaxableAmt(taxableAmt);
-										objTaxDtl.setTaxAmt(taxAmt);
-										objTaxDtl.setTaxPer(taxPer);
-										objTaxDtl.setStrTaxShorName(shortName);
-										objTaxDtl.setStrTaxType(arrObj[7].toString());
-									}
-									hmTaxCalDtl.put(taxCode, objTaxDtl);
-
-									objTaxDtl = new clsTaxDtl();
-									objTaxDtl.setTaxCode(taxCode);
-									objTaxDtl.setTaxName(taxDesc);
-									objTaxDtl.setTaxableAmt(taxableAmt);
-									objTaxDtl.setTaxAmt(taxAmt);
-									objTaxDtl.setTaxPer(taxPer);
-									objTaxDtl.setStrTaxType(arrObj[7].toString());
-									hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
-									hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
-								} else {
-									double taxAmt = 0;
-									if (arrObj[6].toString().equalsIgnoreCase("Backword")) {
-										taxAmt = (taxableAmt / (taxPer + 100)) * taxPer;
-										if (arrObj[2].toString().equalsIgnoreCase("Fixed Amount")) {
-											taxAmt = fixAmt;
-										}
-									} else {
-										taxAmt = (taxPer / 100) * taxableAmt;
-										if (arrObj[2].toString().equalsIgnoreCase("Fixed Amount")) {
-											taxAmt = fixAmt;
-										}
-									}
-
-									if (taxRounded.equals("Y")) {
-										taxAmt = Math.rint(taxAmt);
-									}
-									
-									clsTaxDtl objTaxDtl = new clsTaxDtl();
-									if (hmTaxCalDtl.containsKey(taxCode)) {
-										objTaxDtl = hmTaxCalDtl.get(taxCode);
-										objTaxDtl.setTaxableAmt(objTaxDtl.getTaxableAmt() + taxableAmt);
-										objTaxDtl.setTaxAmt(objTaxDtl.getTaxAmt() + taxAmt);
-										objTaxDtl.setStrTaxShorName(shortName);
-										objTaxDtl.setStrTaxType(arrObj[7].toString());
-									} else {
-										objTaxDtl.setTaxCode(taxCode);
-										objTaxDtl.setTaxName(taxDesc);
-										objTaxDtl.setTaxableAmt(taxableAmt);
-										objTaxDtl.setTaxAmt(taxAmt);
-										objTaxDtl.setTaxPer(taxPer);
-										objTaxDtl.setStrTaxShorName(shortName);
-										objTaxDtl.setStrTaxType(arrObj[7].toString());
-									}
-									hmTaxCalDtl.put(taxCode, objTaxDtl);
-
-									objTaxDtl = new clsTaxDtl();
-									objTaxDtl.setTaxCode(taxCode);
-									objTaxDtl.setTaxName(taxDesc);
-									objTaxDtl.setTaxableAmt(taxableAmt);
-									objTaxDtl.setTaxAmt(taxAmt);
-									objTaxDtl.setTaxPer(taxPer);
-									objTaxDtl.setStrTaxType(arrObj[7].toString());
-									hmTaxCalDtlTemp.put(taxCode, objTaxDtl);
-									hmProdTaxCalDtl.put(entry.getKey(), hmTaxCalDtlTemp);
-								}
-							}
-							// order-> taxable amt,Tax code,tax desc,tax
-							// type,tax per
-							hmProductTaxDtl1.put(arrObj[0].toString(), taxDtl);
-						}
-					}
-				}// no need to calculate for customer taxes are not add in
-					// Customer tax tab and also wants to calcutate taxes
-					// End For Customer taxes are not add in Customer tax tab
-					// and also wants to calcutate taxes
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		hmProductTaxDtl1.clear();
-		for (Map.Entry<String, clsTaxDtl> entry : hmTaxCalDtl.entrySet()) {
-			// order-> taxable amt,Tax code,tax desc,tax type,tax per,tax amt
-			String strTaxNoType="";
-			if(entry.getValue().getStrTaxType()!=null){
-				strTaxNoType=entry.getValue().getStrTaxType();
-			}
-			
-			String taxDtl = entry.getValue().getTaxableAmt() + "#" + entry.getValue().getTaxCode() + "#" + entry.getValue().getTaxName() + "#NA" + "#" + entry.getValue().getTaxPer() + "#" + entry.getValue().getTaxAmt() + "#" + entry.getValue().getStrTaxShorName()+"#"+strTaxNoType;
-			if(!strTaxNoType.equalsIgnoreCase("Backword")){
-				hmProductTaxDtl1.put(entry.getKey(), taxDtl);	
-			}
-			
-		}
-
-		return hmProductTaxDtl1;
-	}
-
-	
 	
 	
 	
