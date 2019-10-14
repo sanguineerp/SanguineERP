@@ -133,6 +133,14 @@
 		fieldName=transactionName;
 		window.open("searchform.html?formname="+fieldName+"&searchText=", 'window', 'width=600,height=600');
 	}
+	
+	function isNumber(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+            return false;
+
+        return true;
+    }  
 </script>
 
 </head>
@@ -175,7 +183,7 @@
 				</td>
 				<td colspan="4">
 				
-					<s:input colspan="3" type="text" value="0" path="dblEquipmentRate" id="dblEquipmentRate" style="width:17%;text-align:right;" cssClass="longTextBox" /> 
+					<s:input colspan="3" type="text" value="0" path="dblEquipmentRate" id="dblEquipmentRate" style="width:17%;text-align:right;" onkeypress="javascript:return isNumber(event)" cssClass="longTextBox" /> 
 					
 				</td>
 				</tr>

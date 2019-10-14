@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sanguine.webbanquets.bean.clsBanquetSetupMasterBean;
 import com.sanguine.webbanquets.bean.clsBanquetWeekendMasterBean;
 import com.sanguine.webbanquets.dao.clsBanquetWeekendMasterDao;
 import com.sanguine.webbanquets.model.clsBanquetWeekendMasterModel;
@@ -26,7 +27,7 @@ public class clsBanquetWeekendMasterServiceImpl implements clsBanquetWeekendMast
 	}
 
 	@Override
-	public clsBanquetWeekendMasterBean funGetWeekendMaster(String clientCode){
+	public clsBanquetSetupMasterBean funGetWeekendMaster(String clientCode){
 		return objBanquetWeekendMasterDao.funGetWeekendMaster(clientCode);
 	}
 

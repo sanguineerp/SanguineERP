@@ -1,5 +1,6 @@
 package com.sanguine.webbanquets.dao;
 
+import com.sanguine.webbanquets.bean.clsBanquetSetupMasterBean;
 import com.sanguine.webbanquets.bean.clsBanquetWeekendMasterBean;
 import com.sanguine.webbanquets.model.clsBanquetWeekendMasterModel;
 
@@ -9,7 +10,7 @@ public interface clsBanquetWeekendMasterDao{
 
 	public clsBanquetWeekendMasterModel funGetBanquetWeekendMaster(String clientCode);
 
-	public clsBanquetWeekendMasterBean funGetWeekendMaster(String clientCode);
+	public clsBanquetSetupMasterBean funGetWeekendMaster(String clientCode);
 	
 	public void funDeleteWeekendMaster(String clientCode);
 	

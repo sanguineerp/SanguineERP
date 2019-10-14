@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.webbanquets.bean.clsBanquetSetupMasterBean;
 import com.sanguine.webbanquets.bean.clsBanquetWeekendMasterBean;
 import com.sanguine.webbanquets.model.clsBanquetWeekendMasterModel;
 import com.sanguine.webbanquets.model.clsBanquetWeekendMasterModel_ID;
@@ -36,10 +37,10 @@ public class clsBanquetWeekendMasterDaoImpl implements clsBanquetWeekendMasterDa
 
 	@Override
 	@Transactional(value = "WebPMSTransactionManager")
-	public clsBanquetWeekendMasterBean funGetWeekendMaster(String clientCode) 
+	public clsBanquetSetupMasterBean funGetWeekendMaster(String clientCode) 
 	{
 		List<String> list = null;
-		clsBanquetWeekendMasterBean objModel = new clsBanquetWeekendMasterBean();
+		clsBanquetSetupMasterBean objModel = new clsBanquetSetupMasterBean();
 			list = webPMSSessionFactory.getCurrentSession().createSQLQuery("select strDay from tblweekendmaster where strClientCode='" + clientCode + "'  ").list();	
 			if(!list.isEmpty())
 			{

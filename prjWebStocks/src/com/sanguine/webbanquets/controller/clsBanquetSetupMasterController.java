@@ -1,7 +1,5 @@
 package com.sanguine.webbanquets.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -16,66 +14,83 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.webbanquets.bean.clsBanquetStaffCategeoryMasterBean;
 import com.sanguine.webbanquets.bean.clsBanquetSetupMasterBean;
-import com.sanguine.webbanquets.bean.clsBanquetWeekendMasterBean;
+import com.sanguine.webbanquets.model.clsBanquetStaffCategeoryMasterModel;
 import com.sanguine.webbanquets.model.clsBanquetWeekendMasterModel;
+import com.sanguine.webbanquets.service.clsBanquetStaffCategeoryMasterService;
 import com.sanguine.webbanquets.service.clsBanquetWeekendMasterService;
 
 @Controller
-public class clsBanquetWeekendMasterController{
+public class clsBanquetSetupMasterController{
 
 	@Autowired
 	private clsBanquetWeekendMasterService objBanquetWeekendMasterService;
-	@Autowired
-	private clsGlobalFunctionsService objGlobalFunctionsService;
-
+	@Autowired	
+	private clsBanquetStaffCategeoryMasterService objBanquetStaffCategeoryMasterService;
 	@Autowired
 	private clsGlobalFunctions objGlobal;
 
 
-//Open BanquetWeekendMaster
-	@RequestMapping(value = "/frmBanquetWeekendMaster", method = RequestMethod.GET)
+//Open BanquetStaffCategeoryMaster
+	@RequestMapping(value = "/frmBanquetSetup", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(HttpServletRequest request){
 		clsBanquetWeekendMasterModel objModel = new clsBanquetWeekendMasterModel();
 		clsBanquetSetupMasterBean objBean = new clsBanquetSetupMasterBean();
 		String clientCode=request.getSession().getAttribute("clientCode").toString();
 		String usercode=request.getSession().getAttribute("usercode").toString();
-		objBean=objBanquetWeekendMasterService.funGetWeekendMaster(clientCode);
-		return new ModelAndView("frmBanquetWeekendMaster","command", objBean);
+		objBean=objBanquetWeekendMasterService.funGetWeekendMaster(clientCode);	
+		return new ModelAndView("frmBanquetSetup","command", objBean);
 	}
 //Load Master Data On Form
-	@RequestMapping(value = "/frmBanquetWeekendMaster1", method = RequestMethod.POST)
-	public @ResponseBody clsBanquetWeekendMasterModel funLoadMasterData(HttpServletRequest request){
+	@RequestMapping(value = "/frmBanquetSetup1", method = RequestMethod.POST)
+	public @ResponseBody clsBanquetSetupMasterBean funLoadMasterData(HttpServletRequest request){
 		objGlobal=new clsGlobalFunctions();
 		String sql="";
 		String clientCode=request.getSession().getAttribute("clientCode").toString();
-		String usercode=request.getSession().getAttribute("usercode").toString();
-		clsBanquetWeekendMasterBean objBean=new clsBanquetWeekendMasterBean();
+		String userCode=request.getSession().getAttribute("usercode").toString();
+		clsBanquetStaffCategeoryMasterBean objBean=new clsBanquetStaffCategeoryMasterBean();
 		String docCode=request.getParameter("docCode").toString();
-		List listModel=objGlobalFunctionsService.funGetList(sql);
-		clsBanquetWeekendMasterModel objBanquetWeekendMaster = new clsBanquetWeekendMasterModel();
-		return objBanquetWeekendMaster;
+		//List listModel=objGlobalFunctionsService.funGetList(sql);
+		clsBanquetSetupMasterBean objBanquetStaffCategeoryMaster = new clsBanquetSetupMasterBean();
+		return objBanquetStaffCategeoryMaster;
 	}
 
-//Save or Update BanquetWeekendMaster
-	@RequestMapping(value = "/saveBanquetWeekendMaster", method = RequestMethod.POST)
-	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsBanquetWeekendMasterBean objBean ,BindingResult result,HttpServletRequest req){
+//Save or Update BanquetStaffCategeoryMaster
+	@RequestMapping(value = "/saveBanquetSetupMaster", method = RequestMethod.POST)
+	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsBanquetSetupMasterBean objBean ,BindingResult result,HttpServletRequest req){
 		if(!result.hasErrors()){
 			String clientCode=req.getSession().getAttribute("clientCode").toString();
 			String usercode=req.getSession().getAttribute("usercode").toString();
 			objBanquetWeekendMasterService.funDeleteWeekendMaster(clientCode);
-			funPrepareModel(objBean,usercode,clientCode);			
-			return new ModelAndView("redirect:/frmBanquetWeekendMaster.html");
+			funPrepareModel(objBean,usercode,clientCode);
+			req.getSession().setAttribute("success", true);
+			req.getSession().setAttribute("successMessage", "Updated Successfully");
+			return new ModelAndView("redirect:/frmBanquetSetup.html");
 		}
 		else{
-			return new ModelAndView("frmBanquetWeekendMaster");
+			return new ModelAndView("frmBanquetSetup");
 		}
 	}
+	
+		
+	/*@RequestMapping(value = "/loadStaffCategeoryMasterData", method = RequestMethod.GET)
+	public @ResponseBody clsBanquetStaffCategeoryMasterModel funAssignFields(@RequestParam("staffCatCode") String staffCatCode, HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String userCode=request.getSession().getAttribute("usercode").toString();
+		clsBanquetStaffCategeoryMasterModel objModel = objBanquetStaffCategeoryMasterService.funGetBanquetStaffCategeoryMaster(staffCatCode, clientCode);
+		if (null == objModel) {
+			objModel = new clsBanquetStaffCategeoryMasterModel();
+			//objLocCode.setStrLocCode("Invalid Code");
+		}
 
-//Convert bean to model function
-	private clsBanquetWeekendMasterModel funPrepareModel(clsBanquetWeekendMasterBean objBean,String usercode,String clientCode){
+		return objModel;
+	}*/
+		
+	private void funPrepareModel(clsBanquetSetupMasterBean objBean,String usercode,String clientCode){
 		clsBanquetWeekendMasterModel objModel = new clsBanquetWeekendMasterModel();
 		String strAllDayData="";
+		//weekend master tab 
 		if(objBean.getStrSunday()!=null)			//1
 		{		
 			strAllDayData=objBean.getStrSunday();
@@ -161,8 +176,19 @@ public class clsBanquetWeekendMasterController{
 			objBanquetWeekendMasterService.funAddUpdateBanquetWeekendMaster(objModel);
 			
 		}
-		return objModel;
+
 
 	}
 
 }
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptAdvanceStatusReport" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c4ff44ab-368d-45e8-8f2f-2aaea1711927">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="WebRoot\WEB-INF\reports\NEW_DATAADAPTER.xml"/>
+	<style name="Title" fontName="Serif" fontSize="26" isBold="true" pdfFontName="Serif-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Serif" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Serif" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Serif" fontSize="12"/>
+	<parameter name="strCompanyName" class="java.lang.String"/>
+	<parameter name="strImagePath" class="java.lang.String"/>
+	<parameter name="strUserCode" class="java.lang.String"/>
+	<parameter name="strAddr1" class="java.lang.String"/>
+	<parameter name="strAddr2" class="java.lang.String"/>
+	<parameter name="strCity" class="java.lang.String"/>
+	<parameter name="strState" class="java.lang.String"/>
+	<parameter name="strCountry" class="java.lang.String"/>
+	<parameter name="strPin" class="java.lang.String"/>
+	<parameter name="fromDate" class="java.lang.String"/>
+	<parameter name="toDate" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select c.strPName Supplier_Name,a.strGRNCode GRN_No, a.dtGRNDate GRN_Date, a.strAgainst GRN_Type, a.strPONo PO_No, 
+a.strBillNo Bill_No, a.dtBillDate Bill_Date, a.dblSubTotal, a.dblTaxAmt, a.dblTotal,
+b.strProdCode P_Code, d.strProdName Product_Name, d.strUOM UOM, b.dblQty Qty_Recd, b.dblRejected Qty_Rejected, 
+b.dblUnitPrice Price, b.dblTotalPrice Amount, e.strLocName Location_Name
+from tblgrnhd a, tblgrndtl b, tblpartymaster c,
+tblproductmaster d, tbllocationmaster e
+Where a.strGRNCode = b.strGRNCode
+and a.strSuppCode = c.strPCode
+and a.strLocCode = e.strLocCode
+and b.strProdCode = d.strProdCode
+and a.dtGRNDate >= '2015-02-25 00:00:00'
+and a.dtGRNDate <= '2015-02-25 00:00:00'
+and a.strLocCode = 'L000197'
+Order By Supplier_Name, a.strGRNCode]]>
+	</queryString>
+	<field name="strSettlementDesc" class="java.lang.String"/>
+	<field name="strReservationNo" class="java.lang.String"/>
+	<field name="dteBookingDate" class="java.lang.String"/>
+	<field name="strCustomerCode" class="java.lang.String"/>
+	<field name="strPname" class="java.lang.String"/>
+	<field name="dblReceiptAmt" class="java.lang.Double"/>
+	<variable name="totalReceiptAmt" class="java.lang.Double" resetType="Group" resetGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$F{dblReceiptAmt}]]></variableExpression>
+	</variable>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{strSettlementDesc}]]></groupExpression>
+		<groupHeader>
+			<band height="23">
+				<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+				<textField>
+					<reportElement key="" style="SubTitle" isPrintRepeatedValues="false" x="0" y="0" width="555" height="23" forecolor="#006600" uuid="76f1b808-48cb-4a75-afd6-e172bf63f0a9"/>
+					<textElement>
+						<font fontName="Serif" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{strSettlementDesc}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Group2">
+		<groupHeader>
+			<band height="23">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="7" y="0" width="479" height="20" uuid="a0281913-196b-49e6-b26a-834f5f960db1"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" Reservation No. "+$F{strReservationNo}+"                   Reservation Date: "+$F{dteBookingDate}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="42">
+				<textField>
+					<reportElement x="218" y="4" width="80" height="14" uuid="e305de3f-c0ec-407b-bf43-4481681bf8cf"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Amount : "]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement positionType="FixRelativeToBottom" x="200" y="19" width="210" height="1" forecolor="#0D0D0D" uuid="f59e4fee-d5a7-4d77-b82a-2caa93698cd7"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#999999"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement positionType="FixRelativeToBottom" x="200" y="1" width="210" height="1" uuid="eb262e46-8df0-481f-b3e9-79dcf37b50d8"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#999999"/>
+					</graphicElement>
+				</line>
+				<textField pattern="#0">
+					<reportElement x="300" y="2" width="100" height="18" uuid="1ab9f791-f6d3-4ed9-9e61-734be6b0aea0"/>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA[$V{totalReceiptAmt}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="102" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="201" y="23" width="352" height="15" uuid="fb3b72b8-be5e-4faf-bf43-6edbbc8da6d7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strAddr1}+", "+$P{strAddr2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="201" y="54" width="352" height="20" uuid="d571fca4-02d7-4a74-8a17-7a5984613d92"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Advance Status Report ]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="0" y="0" width="201" height="76" uuid="175faff8-71e8-407f-aa46-d1f10ef618e9"/>
+				<imageExpression><![CDATA[$P{strImagePath}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="201" y="2" width="352" height="20" uuid="517b0b64-f64b-47dc-b25c-d8a28cdbd678"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Serif" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strCompanyName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="201" y="38" width="352" height="15" uuid="e52d6ab2-a00d-424e-b6d5-a1d2417fa3f1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strCity}+", "+$P{strState}+", "+$P{strCountry}+", "+$P{strPin}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="78" width="555" height="1" uuid="1505ad91-8fe0-4769-9984-f320df0eac44"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="6" y="82" width="130" height="16" uuid="74545f41-06b3-45fa-a723-38a4f6a6ac29"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["From Date : "+$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="403" y="82" width="149" height="16" uuid="667836d0-de5e-4796-ab21-8b496fa15dc5"/>
+				<textElement>
+					<font fontName="Serif" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["To Date :"+$P{toDate}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="100" width="555" height="1" uuid="7573c9e9-3493-4f7e-ac00-19dec5f09883"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="6" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="0" width="60" height="20" uuid="8e81a440-9858-4b02-932c-013c91340c31"/>
+				<textFieldExpression><![CDATA[$F{strCustomerCode}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="80" y="1" width="190" height="18" uuid="c6b4794f-fc80-4195-9b41-409d078e2acc"/>
+				<textFieldExpression><![CDATA[$F{strPname}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0">
+				<reportElement x="280" y="0" width="50" height="20" uuid="96f688ca-53b2-452c-9fe4-916070c58bea"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{dblReceiptAmt}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="39" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="bf3cbbb4-dc90-4e65-904c-15b28010bddf"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="160" y="2" width="24" height="20" uuid="673ae2ba-33b6-4e1f-8957-15453ec3c64e"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AT :]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="500" y="2" width="50" height="20" uuid="15978804-89d8-4c78-b58b-823889a134f4"/>
+				<textElement textAlignment="Left">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement x="184" y="3" width="56" height="19" uuid="54b9d0c3-2fb2-44ad-8e61-1c1e487e5c42"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="290" y="2" width="20" height="20" uuid="ec18b6c5-681b-4f3a-b2b2-2da799af85cb"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[By :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="2" width="61" height="20" uuid="b9b1b51a-2062-477a-b304-ddecb70fbc9d"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Created on :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="320" y="2" width="100" height="20" uuid="fa68f1cb-dcc1-41bb-9626-5bb4c7105c5a"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strUserCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="2" width="50" height="20" uuid="74e1c7e0-8ecd-42b9-a6dd-16ab28af1f12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="70" y="2" width="90" height="20" uuid="79d4184a-97aa-4fb9-86e7-423482b4710f"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="1" width="555" height="1" uuid="da2bbec3-95fe-4cc3-8485-84316ae89706"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="19"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

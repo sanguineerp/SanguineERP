@@ -2646,12 +2646,12 @@
     </definition>
  
  	<definition name="frmProFormaInvoice_1" extends="base.definition4">
-        <put-attribute name="title" value="Pro Forma Inovice"></put-attribute>
+        <put-attribute name="title" value="ProForma Inovice"></put-attribute>
         <put-attribute name="body" value="/WEB-INF/jsp/crm/frmProFormaInvoice.jsp"></put-attribute>
     </definition> 
     
     <definition name="frmProFormaInvoice" extends="base.definition">
-        <put-attribute name="title" value="Pro Forma Inovice"></put-attribute>
+        <put-attribute name="title" value="ProForma Inovice"></put-attribute>
         <put-attribute name="body" value="/WEB-INF/jsp/crm/frmProFormaInvoice.jsp"></put-attribute>
     </definition>	
     
@@ -4203,12 +4203,12 @@
 
 	
 	    <definition name="frmDepartmentMaster" extends="base.definition">
-			<put-attribute name="title" value="Department"></put-attribute>
+			<put-attribute name="title" value="Department Master"></put-attribute>
 			<put-attribute name="body"
 				value="/WEB-INF/jsp/webPMS/masters/frmDepartmentMaster.jsp"></put-attribute>
 		</definition>
 		<definition name="frmDepartmentMaster_1" extends="base.definition4">
-			<put-attribute name="title" value="Department"></put-attribute>
+			<put-attribute name="title" value="Department Master"></put-attribute>
 			<put-attribute name="body"
 				value="/WEB-INF/jsp/webPMS/masters/frmDepartmentMaster.jsp"></put-attribute>
 		</definition>
@@ -4324,12 +4324,12 @@
 		
 		
 		<definition name="frmSettlementMaster" extends="base.definition">
-			<put-attribute name="title" value="Settlement"></put-attribute>
+			<put-attribute name="title" value="Settlement Master"></put-attribute>
 			<put-attribute name="body"
 				value="/WEB-INF/jsp/webPMS/masters/frmSettlementMaster.jsp"></put-attribute>
 		</definition>		
 		<definition name="frmSettlementMaster_1" extends="base.definition4">
-			<put-attribute name="title" value="Settlement"></put-attribute>
+			<put-attribute name="title" value="Settlement Master"></put-attribute>
 			<put-attribute name="body"
 				value="/WEB-INF/jsp/webPMS/masters/frmSettlementMaster.jsp"></put-attribute>
 		</definition>
@@ -5119,22 +5119,22 @@
   
   
     <definition name="frmBanquetStaffMaster" extends="base.definition">
-		   <put-attribute name="title" value="Dairy" ></put-attribute>
+		   <put-attribute name="title" value="Staff Master" ></put-attribute>
 		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetStaffMaster.jsp" ></put-attribute>
 	  </definition>
 	
 	 <definition name="frmBanquetStaffMaster_1" extends="base.definition4">
-	 	 <put-attribute name="title" value="Dairy"  ></put-attribute>
+	 	 <put-attribute name="title" value="Staff Master"  ></put-attribute>
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetStaffMaster.jsp" ></put-attribute>
 	  </definition>
 	  
 	  <definition name="frmBanquetStaffCategeoryMaster" extends="base.definition">
-		   <put-attribute name="title" value="Dairy" ></put-attribute>
+		   <put-attribute name="title" value="Staff Categeory Master" ></put-attribute>
 		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetStaffCategeoryMaster.jsp" ></put-attribute>
 	  </definition>
 	
 	 <definition name="frmBanquetStaffCategeoryMaster_1" extends="base.definition4">
-	 	 <put-attribute name="title" value="Dairy"  ></put-attribute>
+	 	 <put-attribute name="title" value="Staff Categeory Master"  ></put-attribute>
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetStaffCategeoryMaster.jsp" ></put-attribute>
 	  </definition>
 	  
@@ -5200,6 +5200,30 @@
 	 	 <put-attribute name="title" value="Banquet Type Master"  ></put-attribute>
 	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetTypeMaster.jsp" ></put-attribute>
 	  </definition>  
+	  
+	  
+	   <definition name="frmAdvanceStatusReport" extends="base.definition">
+		   <put-attribute name="title" value="Advance Status Report" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmAdvanceStatusReport.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmAdvanceStatusReport_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Advance Status Report"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmAdvanceStatusReport.jsp" ></put-attribute>
+	  </definition>
+	  
+	  
+
+   <definition name="frmBanquetSetup" extends="base.definition">
+		   <put-attribute name="title" value="Banquet Setup" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetSetup.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBanquetSetup_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Banquet Setup"  ></put-attribute>
+	  	<put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetSetup.jsp" ></put-attribute>
+	  </definition>
+	  
 	  
 	  
 <!-- 	End Of WebBanquet Tiles Entry -->
