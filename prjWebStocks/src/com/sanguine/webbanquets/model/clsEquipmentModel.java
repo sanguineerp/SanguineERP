@@ -30,10 +30,10 @@ public class clsEquipmentModel implements Serializable{
 	})
 
 //Variable Declaration
-	@Column(name="strEquipmentCode",columnDefinition = "VARCHAR(10) NOT NULL")
+	@Column(name="strEquipmentCode",columnDefinition = "VARCHAR(255) NOT NULL DEFAULT ''")
 	private String strEquipmentCode;
 
-	@Column(name="strEquipmentName",columnDefinition ="VARCHAR(100) NOT NULL")
+	@Column(name="strEquipmentName",columnDefinition ="VARCHAR(100) NOT NULL DEFAULT ''")
 	private String strEquipmentName;
 
 	@Column(name="dteDateCreated",columnDefinition ="VARCHAR(20) NOT NULL")
@@ -42,10 +42,10 @@ public class clsEquipmentModel implements Serializable{
 	@Column(name="dteDateEdited",columnDefinition ="VARCHAR(20) NOT NULL")
 	private String dteDateEdited;
 
-	@Column(name="strUserCreated",columnDefinition ="VARCHAR(10) NOT NULL")
+	@Column(name="strUserCreated",columnDefinition ="NOT NULL DEFAULT ''")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited",columnDefinition ="VARCHAR(10) NOT NULL")
+	@Column(name="strUserEdited",columnDefinition ="NOT NULL DEFAULT ''")
 	private String strUserEdited;
 
 	@Column(name="strClientCode",columnDefinition ="VARCHAR(10) NOT NULL")
@@ -60,7 +60,7 @@ public class clsEquipmentModel implements Serializable{
 	@Column(name="strDeptCode",columnDefinition ="VARCHAR(10) NOT NULL")
 	private String strDeptCode;
 	
-	@Column(name="dblEquipmentRate",columnDefinition ="DECIMAL(18,4) NOT NULL DEFAULT '0.0'")
+	@Column(name="dblEquipmentRate",columnDefinition ="DECIMAL(18,4) NOT NULL DEFAULT '0.0000'")
 	private double dblEquipmentRate;
 	
 	@Column(name = "strTaxIndicator", nullable = false)

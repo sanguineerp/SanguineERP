@@ -27,25 +27,25 @@ public class clsBanquetWeekendMasterModel implements Serializable{
 	})
 
 //Variable Declaration
-	@Column(name="strDayNo")
+	@Column(name="strDayNo",columnDefinition="VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strDayNo;
 
-	@Column(name="strDay")
+	@Column(name="strDay",columnDefinition="VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strDay;
 
-	@Column(name="dtDteCreated")
+	@Column(name="dtDteCreated",columnDefinition="DATETIME NOT NULL")
 	private String dtDteCreated;
 	
-	@Column(name="dtDteEdited")
+	@Column(name="dtDteEdited",columnDefinition="DATETIME NOT NULL")
 	private String dtDteEdited;
 	
-	@Column(name="strUserCreated")
+	@Column(name="strUserCreated",columnDefinition="VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strUserCreated;
 
-	@Column(name="strUserEdited")
+	@Column(name="strUserEdited",columnDefinition="VARCHAR(20) NOT NULL DEFAULT ''")
 	private String strUserEdited;
 
-	@Column(name="strClientCode")
+	@Column(name="strClientCode",columnDefinition="VARCHAR(20) NOT NULL")
 	private String strClientCode;
 
 	public String getDtDteCreated() {

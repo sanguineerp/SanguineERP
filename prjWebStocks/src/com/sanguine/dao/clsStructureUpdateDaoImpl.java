@@ -3212,24 +3212,20 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteBanquetQuery(sql);
 		
 		sql = "CREATE TABLE `tblequipment` ("
-				+ " `intId` BIGINT(20) NULL DEFAULT NULL, "
-				+ "`strEquipmentCode` VARCHAR(10) NOT NULL,"
-				+ "`strEquipmentName` VARCHAR(100) NOT NULL,"
-				+ "`intId` BIGINT(20) NOT NULL,"
-				+ " `strDeptCode` VARCHAR(10) NULL DEFAULT NULL, "
-				+ "`dteDateCreated` VARCHAR(20) NOT NULL,"
-				+ "`dteDateEdited` VARCHAR(20) NOT NULL,"
-				+ "`strUserCreated` VARCHAR(10) NOT NULL,"
-				+ "`strUserEdited` VARCHAR(10) NOT NULL,"
-				+ " `dblEquipmentRate` DECIMAL(18,4) NOT NULL DEFAULT '0.0', "
+				+ "`strEquipmentCode` VARCHAR(255) NOT NULL DEFAULT '',"
+				+ "`strEquipmentName` VARCHAR(100) NOT NULL DEFAULT '',"
+				+ "`dblEquipmentRate` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',"
+				+ "`dteDateCreated` DATETIME NOT NULL,`dteDateEdited` DATETIME NOT NULL,`intId` BIGINT(20) NOT NULL,`strDeptCode` VARCHAR(10) NOT NULL,"
 				+ "`strOperational` VARCHAR(2) NOT NULL,"
-				+ "`strClientCode` VARCHAR(10) NOT NULL,"
-				+ "PRIMARY KEY (`strClientCode`, `strEquipmentCode`)"
+				+ "`strTaxIndicator` VARCHAR(255) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(10) NOT NULL DEFAULT '',"
+				+ "`strUserEdited` VARCHAR(10) NOT NULL DEFAULT '',"
+				+ "`strClientCode` VARCHAR(255) NOT NULL,"
+				+ "PRIMARY KEY (`strClientCode`, `strEquipmentCode`) "
 				+ ") "
 				+ "COLLATE='utf8_general_ci' "
-				+ "ENGINE=InnoDB "
+				+ "ENGINE=InnoDB"
 				+ ";";
-		
 		
 		
 		funExecuteBanquetQuery(sql);
