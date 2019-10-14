@@ -1044,7 +1044,7 @@ function funCreateNewCustomer(){
 		   	    	rateEquip =$("#txtTotalEquipAmt").val(); 
 			   	}
 		   	    var rateBanquet =0;
-		   	    if($("txtBanquetRate").val()!='')
+		   	    if($("#txtBanquetRate").val()!='')
 			   	{
 		   	    	rateBanquet =$("#txtBanquetRate").val(); 
 			   	}
