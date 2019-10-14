@@ -106,11 +106,11 @@ public class clsBanquetMasterController{
 			objModel.setStrBanquetName(objBean.getStrBanquetName());
 			objModel.setStrClientCode(clientCode);
 			objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
-			
 			objModel.setStrUserCreated(userCode);
 			objModel.setStrUserEdited(userCode);
 			objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+			objModel.setStrBanquetTypeCode(objBean.getStrBanquetTypeCode());
 			
 			
 		}
@@ -123,11 +123,11 @@ public class clsBanquetMasterController{
 			objModel.setStrBanquetName(objBean.getStrBanquetName());
 			objModel.setStrClientCode(clientCode);
 			objModel.setStrOperational(objGlobal.funIfNull(objBean.getStrOperational(), "N", "Y"));
-			
 			objModel.setStrUserCreated(userCode);
 			objModel.setStrUserEdited(userCode);
 			objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 			objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+			objModel.setStrBanquetTypeCode(objBean.getStrBanquetTypeCode());
 			
 		}
 		return objModel;

@@ -3473,8 +3473,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteBanquetQuery(sql);
 		
 		
-		
-		
+		sql="ALTER TABLE `tblbanquetmaster` ADD COLUMN `strBanquetTypeCode` VARCHAR(20) NOT NULL AFTER `strUserEdited`";
+		funExecuteBanquetQuery(sql);
 		
 		
 		sql="CREATE TABLE `tblweekendmaster` ( "

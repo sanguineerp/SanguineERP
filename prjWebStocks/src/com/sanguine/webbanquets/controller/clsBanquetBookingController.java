@@ -306,8 +306,8 @@ public class clsBanquetBookingController{
 		List list =null;
 		try{
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
-			String 	 sql="select a.strServiceCode,a.strServiceName,b.dblRate from tblfunctionservice a,tblservicemaster b where "
-					+ " a.strServiceCode=b.strServiceCode and   a.strFunctionCode='"+funCode+"' and a.strClientCode='"+clientCode+"' and a.strApplicable='Y' ";
+			String 	 sql="	select a.strBanquetName,b.strBanquetTypeName,   b.dblRate from tblbanquetmaster a,tblbanquettypemaster b"
+					+ " where a.strBanquetTypeCode=b.strBanquetTypeCode and a.strOperational='Y'  and a.strClientCode='"+clientCode+"'";
 			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
 			}
 		catch(Exception e)
@@ -316,5 +316,23 @@ public class clsBanquetBookingController{
 			}
 		return list;
 	}
+	
+	@RequestMapping(value = "/LoadBanquetRate", method = RequestMethod.GET)
+	public @ResponseBody List funLoadBanquetRate(@RequestParam("BanquetCode") String banquetCode,HttpServletRequest req)
+	{
+		List list =null;
+		try{
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String 	 sql="	select a.strBanquetName,b.strBanquetTypeName,b.dblRate from tblbanquetmaster a,tblbanquettypemaster b"
+					+ " where a.strBanquetTypeCode=b.strBanquetTypeCode and a.strOperational='Y'  and a.strClientCode='"+clientCode+"' and a.strBanquetCode='"+banquetCode+"'";
+			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
+			}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return list;
+	}
+
 	  
 }

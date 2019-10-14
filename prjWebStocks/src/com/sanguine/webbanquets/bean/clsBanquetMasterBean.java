@@ -21,6 +21,8 @@ public class clsBanquetMasterBean{
 	private String dteDateEdited;
 
 	private String strClientCode;
+	
+	private String strBanquetTypeCode;
 
 //Setter-Getter Methods
 	public String getStrBanquetCode(){
@@ -94,6 +96,12 @@ public class clsBanquetMasterBean{
 	}
 	public void setDteDateEdited(String dteDateEdited) {
 		this.dteDateEdited = dteDateEdited;
+	}
+	public String getStrBanquetTypeCode() {
+		return strBanquetTypeCode;
+	}
+	public void setStrBanquetTypeCode(String strBanquetTypeCode) {
+		this.strBanquetTypeCode = strBanquetTypeCode;
 	}
 
 

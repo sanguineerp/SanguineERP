@@ -58,6 +58,9 @@ public class clsBanquetMasterModel implements Serializable{
 	@Column(name="strClientCode",columnDefinition="VARCHAR(10) NOT NULL")
 	private String strClientCode;
 	
+	@Column(name="strBanquetTypeCode",columnDefinition="VARCHAR(20) NOT NULL")
+	private String strBanquetTypeCode;
+	
 	
 
 //Setter-Getter Methods

@@ -392,7 +392,7 @@ function funCreateNewCustomer(){
 	                alert('Not connect.n Verify Network.');
 	            } else if (jqXHR.status == 404) {
 	                alert('Requested page not found. [404]');
-	            } else if (jqXHR.status == 500) {
+	            } else if (jq.XHR.status == 500) {
 	                alert('Internal Server Error [500].');
 	            } else if (exception === 'parsererror') {
 	                alert('Requested JSON parse failed.');
@@ -572,6 +572,7 @@ function funCreateNewCustomer(){
 	        		
 	        		$("#txtBanquetCode").val(response.strBanquetCode);
 	        		$("#lblBanquetName").text(response.strBanquetName);
+	        		funLoadBanquetRate(response.strBanquetCode);
 	        		
 	        	}
 			},
@@ -610,9 +611,9 @@ function funCreateNewCustomer(){
 		if(funDuplicateEuipForUpdate(EquipCode))
 	    {
 			var table = document.getElementById("tblEquipDtl");
-		    var rowCount = table.rows.length;
-		    rowCount=listEquipRow;
+		    var rowCount = table.rows.length;  
 		    var row = table.insertRow(rowCount);
+		    rowCount=listEquipRow;
 		    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listEquipDtl["+(rowCount)+"].strDocNo\"  id=\"txtEquipCode."+(rowCount)+"\" value='"+EquipCode+"' />";
 		    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listEquipDtl["+(rowCount)+"].strDocName\"  id=\"txtEquipName."+(rowCount)+"\" value='"+EquipName+"'/>"; 
 		    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listEquipDtl["+(rowCount)+"].dblDocQty\"  id=\"txtEquipQty."+(rowCount)+"\" value='"+EquipQty+"' onblur=\"funUpdateEuipPrice(this);\"/>";    
@@ -620,6 +621,7 @@ function funCreateNewCustomer(){
 		    row.insertCell(4).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowEquip(this)">';		    
 		    listEquipRow++;
 		    funCalculateEuipTotal();
+		    funUpdateTotalBookingAmt();
 			
 	    }		
 		
@@ -632,8 +634,8 @@ function funCreateNewCustomer(){
 		
 		var table = document.getElementById("tblStaffCatDtl");
 	    var rowCount = table.rows.length;
-	    rowCount=listStaffRow;
 	    var row = table.insertRow(rowCount);
+	    rowCount=listStaffRow;
 	    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocNo\"  id=\"txtStaffCatCode."+(rowCount)+"\" value='"+StaffCatCode+"' />";
 	    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocName\"  id=\"txtStaffCatName."+(rowCount)+"\" value='"+StaffCatName+"'/>";
 	    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listStaffCatDtl["+(rowCount)+"].dblDocQty\"  id=\"txtStaffCatNumber."+(rowCount)+"\" value='"+StaffQty+"'/>";
@@ -650,8 +652,8 @@ function funCreateNewCustomer(){
 		{
 			var table = document.getElementById("tblMenuDtl");
 		    var rowCount = table.rows.length;
-		    rowCount=listItemRow;
 		    var row = table.insertRow(rowCount);
+		    rowCount=listItemRow;
 		    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listMenuItemDtl["+(rowCount)+"].strDocNo\"  id=\"txtItemCode."+(rowCount)+"\" value='"+ItemCode+"'/>";
 		    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listMenuItemDtl["+(rowCount)+"].strDocName\"  id=\"txtItemName."+(rowCount)+"\" value='"+ItemName+"'/>";
 		    row.insertCell(2).innerHTML= "<input  class=\"decimal-places-amt\" size=\"5%\" name=\"listMenuItemDtl["+(rowCount)+"].dblDocQty\"  id=\"txtItemQty."+(rowCount)+"\" value='"+ItemQty+"' onblur=\"funUpdateItemPrice(this);\"/>";
@@ -660,6 +662,7 @@ function funCreateNewCustomer(){
 		    
 		    listItemRow++;
 		    funCalculateItemTotal();
+		    funUpdateTotalBookingAmt();
 		
 		}
 		
@@ -825,71 +828,87 @@ function funCreateNewCustomer(){
 			});
 		}
 	 
-	   		   $(document).on('change', '[type=checkbox]', function() {
-			     var checkbox = $(this).is(':checked');
-			     var index = this.parentNode.parentNode.rowIndex;
-			         if(checkbox)
-			    	 {
-			        	 var  Rate1=document.getElementById("txtServiceRate."+index).value;
-					     var ServiceRate1 =$("#txtTotalServiceAmt").val();
-					     var Total1=0;
-					     if(ServiceRate1=='')
-				    	 {
-					    	 Total1=  parseFloat(Rate1);
-					    	
-				    	 }
-					     else
-					     {
-					    	 Total1= parseFloat(ServiceRate1) + parseFloat(Rate1);
-					     } 	 
-					     $("#txtTotalServiceAmt").val(Total1);
-			    	 
-			    	 }else{
-			    		 var  Rate2=document.getElementById("txtServiceRate."+index).value;
-					     var ServiceRate2 =$("#txtTotalServiceAmt").val();
-					     var Total2=0;
-					     if(ServiceRate2=='')
-					     {
-					    	 Total2= parseFloat(Rate2);
-					    	 
-					     }
-					     else
-					     {
-					    	 Total2= parseFloat(ServiceRate2) - parseFloat(Rate2);
-					     } 	 
-					   
-					     $("#txtTotalServiceAmt").val(Total2);
-			    		 
-			    	 }
-			    
+	 
+	  function funLoadBanquetRate(code)
+	  {
+
+
+			$.ajax({
+				type : "GET",
+				url : getContextPath()+ "/LoadBanquetRate.html?BanquetCode=" + code,
+				dataType : "json",
+				success : function(response){ 
+					$("#txtBanquetRate").val(response[0][2]);
+					funUpdateTotalBookingAmt();
+				},
+				error : function(e){
+					if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+				}
 			});
+		
+	  }
+ 
+   		   $(document).on('change', '[type=checkbox]', function() {
+		     var checkbox = $(this).is(':checked');
+		     var index = this.parentNode.parentNode.rowIndex;
+		         if(checkbox)
+		    	 {
+		        	 var  Rate1=document.getElementById("txtServiceRate."+index).value;
+				     var ServiceRate1 =$("#txtTotalServiceAmt").val();
+				     var Total1=0;
+				     if(ServiceRate1=='')
+			    	 {
+				    	 Total1=  parseFloat(Rate1);
+				    	
+			    	 }
+				     else
+				     {
+				    	 Total1= parseFloat(ServiceRate1) + parseFloat(Rate1);
+				     } 	 
+				     $("#txtTotalServiceAmt").val(Total1);
+				     funUpdateTotalBookingAmt();
+		    	 
+		    	 }else{
+		    		 var  Rate2=document.getElementById("txtServiceRate."+index).value;
+				     var ServiceRate2 =$("#txtTotalServiceAmt").val();
+				     var Total2=0;
+				     if(ServiceRate2=='')
+				     {
+				    	 Total2= parseFloat(Rate2);
+				    	 
+				     }
+				     else
+				     {
+				    	 Total2= parseFloat(ServiceRate2) - parseFloat(Rate2);
+				     } 	 
+				   
+				     $("#txtTotalServiceAmt").val(Total2);
+				     funUpdateTotalBookingAmt();
+		    		 
+		    	 }
+		    
+		});
 	   		   
-	   	function funOnClickBookingTotal()
-	   	{
-	   	    var rateService =0;
-	   	    if($("#txtTotalServiceAmt").val()!='')
-		   	{
-	   	    	
-	   	    	rateService= $("#txtTotalServiceAmt").val(); 
-		   	}
-	   	    var rateItem =0;
-	   	    if($("#txtTotalItemAmt").val()!='')
-		   	{
-	   	    	rateItem  =$("#txtTotalItemAmt").val();
-		   	}
-	   	    var rateEquip =0;
-	   	    if($("#txtTotalEquipAmt").val()!='')
-		   	{
-	   	    	rateEquip =$("#txtTotalEquipAmt").val(); 
-		   	}
-	   	   var bookingTotal = parseFloat(rateEquip) + parseFloat(rateItem) + parseFloat(rateService);
-	       $("#txtTotalBookingAmt").val(bookingTotal);
-	   		
-	   	}
+	   
 	   	function funUpdateEuipPrice(object)
 		{
 	   		 
 	   		funCalculateEuipTotal();
+	   		funUpdateTotalBookingAmt();
 			/* var index=object.parentNode.parentNode.rowIndex;
 			if(document.getElementById("txtEquipQty."+index).value !='')
 			{
@@ -905,6 +924,7 @@ function funCreateNewCustomer(){
 		function funUpdateItemPrice(object)
 		{
 			funCalculateItemTotal();
+			funUpdateTotalBookingAmt();
 			
 			/* var index=object.parentNode.parentNode.rowIndex;
 			if(document.getElementById("txtItemQty."+index).value !='')
@@ -1004,8 +1024,54 @@ function funCreateNewCustomer(){
 				    
 		   }
 		    return flag;
-		} 
-
+		}
+		function funUpdateTotalBookingAmt()
+		{
+			 var rateService =0;
+		   	    if($("#txtTotalServiceAmt").val()!='')
+			   	{
+		   	    	
+		   	    	rateService= $("#txtTotalServiceAmt").val(); 
+			   	}
+		   	    var rateItem =0;
+		   	    if($("#txtTotalItemAmt").val()!='')
+			   	{
+		   	    	rateItem  =$("#txtTotalItemAmt").val();
+			   	}
+		   	    var rateEquip =0;
+		   	    if($("#txtTotalEquipAmt").val()!='')
+			   	{
+		   	    	rateEquip =$("#txtTotalEquipAmt").val(); 
+			   	}
+		   	    var rateBanquet =0;
+		   	    if($("txtBanquetRate").val()!='')
+			   	{
+		   	    	rateBanquet =$("#txtBanquetRate").val(); 
+			   	}
+		   	   var FinalAmount = parseFloat(rateEquip) + parseFloat(rateItem) + parseFloat(rateService) + parseFloat(rateBanquet);
+		       $("#txtTotalBookingAmt").val(FinalAmount);
+		}
+		function funValidateForm()
+		{
+			var flag=true;
+			if($("#txtCustomerCode").val().trim().length==0)
+			{
+				 alert("Please Select Customer Name !!");
+				 flag=false;
+			}
+		
+			else if($("#txtAreaCode").val().trim().length==0)
+			{
+				alert("Please Select Area!!");
+				flag=false;
+			}
+			else if($("#txtFunctionCode").val().trim().length==0)
+			{
+				alert("Please Select fuction!!");
+				flag=false;
+			}
+		    return flag;
+		}
 	 
 </script>
 
@@ -1024,7 +1090,7 @@ function funCreateNewCustomer(){
 
 		<div id="tab_container" style="height: 550px">
 			<ul class="tabs">
-				<li data-state="tab1" style="width: 6%; padding-left: 2%;"active" onclick="funOnClickBookingTotal()" >Booking</li>
+				<li data-state="tab1" style="width: 6%; padding-left: 2%;"active" >Booking</li>
 				<li data-state="tab2" style="width: 8%; padding-left: 1%">Service</li>
 				<li data-state="tab3" style="width: 8%; padding-left: 1%">Equipment</li>
 				<li data-state="tab4" style="width: 8%; padding-left: 1%">Staff
@@ -1043,13 +1109,13 @@ function funCreateNewCustomer(){
 				</tr>
 
 				<tr>
-					<td><label>Booking No</label></td>
-					<td><s:input type="text" id="txtBookingNo"
+					<td width="150px"><label>Booking No</label></td>
+					<td width="400px" ><s:input type="text" id="txtBookingNo"
 							path="strBookingNo" cssClass="searchTextBox"
 							ondblclick="funHelp('BookingNo');" /></td>
 
-					<td><label>Property</label></td>
-					<td><s:select id="txtPropertyCode" path="strPropertyCode"
+					<td width="150px"><label>Property</label></td>
+					<td width="400px"><s:select id="txtPropertyCode" path="strPropertyCode"
 							items="${listOfProperty}" required="true" cssClass="BoxW200px"></s:select></td>
 
 					<td><label id="lblPropName"></label></td>
@@ -1123,7 +1189,7 @@ function funCreateNewCustomer(){
 				</tr>
 
 				<tr>
-					<td width="100px"><label>Function Code</label></td>
+					<td><label>Function Code</label></td>
 					<!--  <td><label>Function Code</label></td> -->
 					<td><s:input id="txtFunctionCode" path="strFunctionCode"
 							readonly="true" ondblclick="funHelp('functionMaster')"
@@ -1144,7 +1210,13 @@ function funCreateNewCustomer(){
 					<td><s:input type="text" id="txtBanquetCode" 
 							path="strBanquetCode" cssClass="searchTextBox"
 							ondblclick="funHelp('banquetCode');" /> <label
-						id="lblBanquetName"></label></td>
+						id="lblBanquetName"></label>
+						&nbsp;&nbsp;
+						<s:input id="txtBanquetRate" path=""
+							style="text-align: right; width: 20%;" 
+						     name="txtBanquetRate" class="longTextBox"  onblur="funUpdateTotalBookingAmt();"/></td>
+							<!-- <label
+						id="lblBanquetRate"></label></td> -->
 				
 					
 				</tr>

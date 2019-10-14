@@ -33,11 +33,15 @@
 	{
 		var flg=true;
 		if($("#txtBanquetName").val().trim().length==0)
-			{
+		{
 			alert("Please Enter Name !!");
 			 flg=false;
-			 $("#txtBanquetName").focus();
-			}
+		}
+		else if($("#txtBanquetTypeCode").val().trim().length==0)
+		{
+			alert("Please Select Booking Type !!");
+			 flg=false;
+		}
 		
 		
 		return flg;
@@ -50,6 +54,11 @@
 		case 'banquetCode' : 
 			funSetBanquetName(code);
 			break;
+		case 'banquetTypeCode' : 
+			funSetBanquetTypeName(code);
+			break;
+
+		
 		
 		
 		}
@@ -82,6 +91,7 @@
 		        	}
 	        		$("#txtBanquetCode").val(response.strBanquetCode);
 	        		$("#txtBanquetName").val(response.strBanquetName);
+	        		$("#txtBanquetTypeCode").val(response.strBanquetTypeCode);
 	        		if(response.strOperational=='Y')
 		        	{
 		        		document.getElementById("strOperational").checked = response.strOperational == 'Y' ? true: false;
@@ -100,7 +110,31 @@
 		});
 	}
 
+	function funSetBanquetTypeName(code){
 
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/loadBanquetType.html?docCode=" + code,
+			dataType : "json",
+			success : function(response){ 
+
+				if(response.strEquipmentCode=='Invalid Code')
+	        	{
+	        		alert("Invalid Equipment No");
+	        		$("#txtBanquetTypeCode").val('');
+	        	}
+	        	else
+	        	{
+	        		
+	        		$("#txtBanquetTypeCode").val(response.strBanquetTypeCode);
+	        		
+	        	}
+			},
+			error : function(e){
+
+			}
+		});
+	}
 
 
 
@@ -146,6 +180,14 @@
 			<td><label>Operational</label></td>
 				<td colspan="3"><s:checkbox id="strOperational" path="strOperational" value="Y"/></td>
 				
+			</tr>
+			<tr>
+				<td>
+					<label>Banquet Type Code</label>
+				</td>
+				<td>
+					<s:input colspan="3" type="text" id="txtBanquetTypeCode" path="strBanquetTypeCode" ondblclick="funHelp('banquetTypeCode')" cssClass="searchTextBox jQKeyboard form-control" />
+				</td>
 			</tr>
 			
 		</table>

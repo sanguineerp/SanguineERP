@@ -2846,7 +2846,7 @@
 		function funGetMonthEnd(strLocCode,transDate) {
 			var strMonthEnd="";
 			var searchUrl = "";
-			searchUrl = getContextPath()+ "/checkMonthEnd.html?locCode=" + strLocCode+"&GRNDate="+transDate;;
+			searchUrl = getContextPath()+ "/checkMonthEnd.html?locCode=" + strLocCode+"&GRNDate="+transDate;
 
 			$.ajax({
 				type : "GET",

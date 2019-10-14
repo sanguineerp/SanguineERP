@@ -398,7 +398,18 @@
 				{
 					alert("Please Add Product in Grid");
 					return false;
-				}   
+				}  
+				var stkDate=$("#txtStkPostDate").val();
+				if(funGetMonthEnd(document.all("txtLocCode").value,stkDate)!=true)
+				{
+	            	alert("Month End Done For Selected Month");
+		            return false;
+	            }
+				else
+				{
+					return true;
+				}
+				
 				
 			});
 		});
@@ -1113,7 +1124,44 @@
 			
 		}
 	    
-	    
+	   //Check Month End done or not
+			function funGetMonthEnd(strLocCode,transDate) {
+				var strMonthEnd="";
+				var searchUrl = "";
+				searchUrl = getContextPath()+ "/checkMonthEnd.html?locCode=" + strLocCode+"&GRNDate="+transDate;
+
+				$.ajax({
+					type : "GET",
+					url : searchUrl,
+					dataType : "json",
+					async: false,
+					success : function(response) {
+						strMonthEnd=response;
+						//alert(strMonthEnd);
+					},
+					error : function(jqXHR, exception) {
+						if (jqXHR.status === 0) {
+							alert('Not connect.n Verify Network.');
+						} else if (jqXHR.status == 404) {
+							alert('Requested page not found. [404]');
+						} else if (jqXHR.status == 500) {
+							alert('Internal Server Error [500].');
+						} else if (exception === 'parsererror') {
+							alert('Requested JSON parse failed.');
+						} else if (exception === 'timeout') {
+							alert('Time out error.');
+						} else if (exception === 'abort') {
+							alert('Ajax request aborted.');
+						} else {
+							alert('Uncaught Error.n' + jqXHR.responseText);
+						}
+					}
+				});
+				if(strMonthEnd=="1" || strMonthEnd=="-1")
+					return false;
+				if(strMonthEnd=="0")
+					return true;
+			}
 	    
 	    
 	    
