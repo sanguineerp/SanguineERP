@@ -1073,6 +1073,57 @@ function funCreateNewCustomer(){
 		    return flag;
 		}
 	 
+		function funChangeArrivalDate()
+		{
+			var arrivalDate=$("#txtFromDate").val();
+			
+		    //var currentDate=datepicker('setDate','todate');
+
+		    var d = new Date();
+		    var strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
+	    	
+		    if (arrivalDate < currentDate) 
+	  		 {
+			    	alert("Arrival Date Should not be come before Current Date");
+			    	$("#txtFromDate").datepicker({ dateFormat: 'dd-mm-yy' });
+			    	$("#txtFromDate").datepicker('setDate','todate');
+					return false
+	         }
+	    	
+	    	
+		}
+		
+		function funCheckFromDate()
+		{
+			var arrivalDate=$("#txtFromDate").val();
+		    var todate=$("#txtToDate").val();;
+
+	    	if (todate < arrivalDate) 
+	  		 {
+			    	alert("To date should be greater then from Date");
+			    	$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
+			    	$("#txtToDate").datepicker('setDate','todate');;
+					return false
+	         }
+	    	
+	    	
+		}
+		
+		function funCheckCuurntDate()
+		{
+			var bookinDate=$("#txtBookingDate").val();
+		    var fromDate=$("#txtFromDate").val();;
+
+	    	if (bookinDate < fromDate) 
+	  		 {
+			    	alert("Booking date should be greater then Current Date");
+			    	$("#txtBookingDate").datepicker({ dateFormat: 'dd-mm-yy' });
+			    	$("#txtBookingDate").datepicker('setDate','todate');;
+					return false
+	         }
+	    	
+	    	
+		}
 </script>
 
 </head>
@@ -1130,7 +1181,7 @@ function funCreateNewCustomer(){
 
 					<td><label>Booking Date</label></td>
 					<td><s:input type="text" id="txtBookingDate"
-							path="dteBookingDate" cssClass="calenderTextBox" /> <!-- onchange="funChangeArrivalDate();" -->
+							path="dteBookingDate" cssClass="calenderTextBox" onchange="funCheckCuurntDate();"/> <!-- onchange="funChangeArrivalDate();" -->
 						<label id="lblBookingDate"></label></td>
 
 
@@ -1140,12 +1191,12 @@ function funCreateNewCustomer(){
 				<tr>
 					<td><label>From Date</label></td>
 					<td><s:input type="text" id="txtFromDate" path="dteFromDate"
-							cssClass="calenderTextBox" /></td>
+							cssClass="calenderTextBox" onchange="funChangeArrivalDate();" /></td>
 
 					<!-- onchange="funChangeArrivalDate();"  -->
 					<td><label>To Date</label></td>
 					<td><s:input type="text" id="txtToDate" path="dteToDate"
-							cssClass="calenderTextBox" /></td>
+							cssClass="calenderTextBox"  onchange="funCheckFromDate();"/></td>
 					<!-- onchange="CalculateDateDiff();" -->
 					<td colspan="2"></td>
 				</tr>

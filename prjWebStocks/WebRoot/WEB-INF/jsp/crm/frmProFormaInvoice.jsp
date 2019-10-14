@@ -1674,6 +1674,7 @@
 			var rowCount = table.rows.length;
 			var row = table.insertRow(rowCount);
 				
+			
 			dblUnitPrice=parseFloat(dblUnitPrice).toFixed(maxAmountDecimalPlaceLimit);
 			dblWeight=parseFloat(dblWeight).toFixed(maxQuantityDecimalPlaceLimit);
 				
@@ -1689,26 +1690,26 @@
 			var strRemarks=$("#txtRemarks").val();
 			var grandtotalPrice=dblTotalPrice-disAmt;
 			
-			row.insertCell(0).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"8%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
-			row.insertCell(1).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"40%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";
+			row.insertCell(0).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"7%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
+			row.insertCell(1).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"21%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";
 			row.insertCell(2).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdType\" readonly=\"readonly\" class=\"Box\" size=\"0%\" id=\"txtProdTpye."+(rowCount)+"\" value='"+strProdType+"'/>";
-			row.insertCell(3).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblQty\" type=\"text\"  required = \"required\" style=\"text-align: right;\" size=\"3.9%\"  class=\"decimal-places inputText-Auto  txtQty\" id=\"txtQty."+(rowCount)+"\" value="+dblAcceptQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
-			row.insertCell(4).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblWeight\" type=\"text\"  required = \"required\" style=\"text-align: right;\" size=\"3.9%\" class=\"decimal-places inputText-Auto\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
-			row.insertCell(5).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblTotalWeight\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"3.9%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
-			row.insertCell(6).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\" class=\"Box txtUnitprice\" style=\"text-align: right;\" \size=\"4.9%\" id=\"unitprice."+(rowCount)+"\"   value='"+dblUnitPrice+"'/>";
-			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box totalValueCell\" style=\"text-align: right;\" \size=\"4.9%\" id=\"totalPrice."+(rowCount)+"\"   value='"+dblTotalPrice+"'/>";
-			row.insertCell(8).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblDisAmt\" readonly=\"readonly\" class=\"Box dblDisAmt\" style=\"text-align: right;\" \size=\"4.9%\" id=\"dblDisAmt."+(rowCount)+"\"   value='"+disAmt+"'/>";
-			row.insertCell(9).innerHTML= "<input readonly=\"readonly\" class=\"Box grandtotalPrice\" style=\"text-align: right;\" \size=\"4.9%\" id=\"grandtotalPrice."+(rowCount)+"\"   value='"+grandtotalPrice+"'/>";
+			row.insertCell(3).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblQty\" type=\"text\"  required = \"required\" style=\"text-align: right;\" size=\"2.5%\"  class=\"decimal-places inputText-Auto  txtQty\" id=\"txtQty."+(rowCount)+"\" value="+dblAcceptQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+			row.insertCell(4).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblWeight\" type=\"text\"  required = \"required\" style=\"text-align: right;\" size=\"4%\" class=\"decimal-places inputText-Auto\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
+			row.insertCell(5).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblTotalWeight\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"3%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
+			row.insertCell(6).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\" class=\"Box txtUnitprice\" style=\"text-align: right;\" \size=\"4%\" id=\"unitprice."+(rowCount)+"\"   value='"+dblUnitPrice+"'/>";
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box totalValueCell\" style=\"text-align: right;\" \size=\"4%\" id=\"totalPrice."+(rowCount)+"\"   value='"+dblTotalPrice+"'/>";
+			row.insertCell(8).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblDisAmt\" readonly=\"readonly\" class=\"Box dblDisAmt\" style=\"text-align: right;\" \size=\"3%\" id=\"dblDisAmt."+(rowCount)+"\"   value='"+disAmt+"'/>";
+			row.insertCell(9).innerHTML= "<input readonly=\"readonly\" class=\"Box grandtotalPrice\" style=\"text-align: right;\" \size=\"5%\" id=\"grandtotalPrice."+(rowCount)+"\"   value='"+grandtotalPrice+"'/>";
 				    
 			row.insertCell(10).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strPktNo\" type=\"text\"    class=\"Box\" \size=\"5%\" id=\"txtPktNo."+(rowCount)+"\" value="+packingNo+" >";
-			row.insertCell(11).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strRemarks\" size=\"10%\" id=\"txtRemarks."+(rowCount)+"\" value='"+strRemarks+"'/>";
-			row.insertCell(12).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strInvoiceable\" readonly=\"readonly\" class=\"Box\"  size=\"6%\" id=\"txtInvoiceable."+(rowCount)+"\" value="+strInvoiceable+" >";
-			row.insertCell(13).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strSerialNo\" type=\"text\"    class=\"Box\" size=\"5%\" id=\"txtSerialNo."+(rowCount)+"\" value="+strSerialNo+" >";	    
+			row.insertCell(11).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strRemarks\" size=\"5%\" id=\"txtRemarks."+(rowCount)+"\" value='"+strRemarks+"'/>";
+			row.insertCell(12).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strInvoiceable\" readonly=\"readonly\" class=\"Box\"  size=\"4.5%\" id=\"txtInvoiceable."+(rowCount)+"\" value="+strInvoiceable+" >";
+			row.insertCell(13).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strSerialNo\" type=\"text\"    class=\"Box\" size=\"4.3%\" id=\"txtSerialNo."+(rowCount)+"\" value="+strSerialNo+" >";	    
 			row.insertCell(14).innerHTML= '<input  class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRow(this)">';		    
-			row.insertCell(15).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strCustCode\" type=\"text\"    class=\"Box\" size=\"7%\" id=\"txtCustCode."+(rowCount)+"\" value="+strCustCode+" >";
-			row.insertCell(16).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strSOCode\" type=\"text\"    class=\"Box\" size=\"13%\" id=\"txtSOCOde."+(rowCount)+"\" value="+strSOCode+" >";
-			row.insertCell(17).innerHTML= "<input readonly=\"readonly\" class=\"Box prevInvCode\" style=\"text-align: right;\" \size=\"11%\" id=\"prevInvCode."+(rowCount)+"\"   value='"+prevInvCode+"'/>";
-			row.insertCell(18).innerHTML= "<input readonly=\"readonly\" class=\"Box prevUnitPrice\" style=\"text-align: right;\" \size=\"3.9%\" id=\"prevUnitPrice."+(rowCount)+"\"   value='"+prevUnitPrice+"'/>";
+			row.insertCell(15).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strCustCode\" type=\"text\"    class=\"Box\" size=\"4.5%\" id=\"txtCustCode."+(rowCount)+"\" value="+strCustCode+" >";
+			row.insertCell(16).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strSOCode\" type=\"text\"    class=\"Box\" size=\"10%\" id=\"txtSOCOde."+(rowCount)+"\" value="+strSOCode+" >";
+			row.insertCell(17).innerHTML= "<input readonly=\"readonly\" class=\"Box prevInvCode\" style=\"text-align: right;\" \size=\"10%\" id=\"prevInvCode."+(rowCount)+"\"   value=''/>";
+			row.insertCell(18).innerHTML= "<input readonly=\"readonly\" class=\"Box prevUnitPrice\" style=\"text-align: right;\" \size=\"10%\" id=\"prevUnitPrice."+(rowCount)+"\"   value=''/>";
 				 	
 			QtyTol+=parseFloat(dblAcceptQty);
 			$("#txtSubGroup").focus();
@@ -2221,26 +2222,26 @@ function funChangeCombo() {
 									style="width: 150%; border: #0F0; table-layout: fixed;"
 										class="transTablex col15-center">
 									<tr bgcolor="#72BEFC">
-										<td width="8%">Product Code</td>
+										<td width="7%">Product Code</td>
 										<!--  COl1   -->
-										<td width="25%">Product  Name</td>
+										<td width="21%">Product  Name</td>
 										<!--  COl2   -->
 										<td width="0%"></td> 
 										<!--  COl3   -->
 										<td width="5%">Qty</td>
 										<!--  COl4   -->
-									  <td width="5%">Wt/Unit</td> 
+									  <td width="4%">Wt/Unit</td> 
 										<!-- COl5   -->
 										<td width="3%">Total Wt</td> 
 										<!-- COl6   -->
- 										<td width="5%">Unit Price</td> 
+ 										<td width="4%">Unit Price</td> 
 										<!--  COl7   -->
-										<td width="6%">Total Amt</td>
+										<td width="4%">Total Amt</td>
 										<!--  COl8   -->
 										<!-- COl6   -->
- 										<td width="5%">Disc Amt</td> 
+ 										<td width="3%">Disc Amt</td> 
 										<!--  COl7   -->
-										<td width="6%"> Grand Amt</td>
+										<td width="5%"> Grand Amt</td>
 										<!--  COl8   -->
 									   <td width="5%">Packing No</td>
 										<!--  COl9   -->
@@ -2248,11 +2249,11 @@ function funChangeCombo() {
 										<!--COl10   -->
 										<td width="4.5%">Invoice</td> 
 										<!--  COl11   -->
-										<td width="5%">Serial No</td>
+										<td width="4.3%">Serial No</td>
 										<!-- COl12   -->
-										<td width="5%">Delete</td> 
+										<td width="4.5%">Delete</td> 
 										<!--  COl13   -->
-                                        <td width="6%">Customer Code</td> 
+                                        <td width="10%">Customer Code</td> 
 										<!-- COl14   -->
                                         <td width="10%">SOCode</td> 
 											<!-- COl15   -->
@@ -2280,25 +2281,25 @@ function funChangeCombo() {
 										<!--  COl2   -->
  										<col style="width: 0%"> 
 										<!--  COl3   -->
-										<col style="width: 5%">
+										<col style="width: 3%">
 										<!--  COl4   -->
-										<col style="width: 4%"> 
+										<col style="width: 3%"> 
 										<!--COl5   -->
 										<col style="width: 3%"> 
 										<!--COl6   -->
- 										<col style="width: 4%"> 
+ 										<col style="width: 3%"> 
+										<!-- COl7   -->
+										<col style="width: 3%"> 
 										<!-- COl7   -->
 										<col style="width: 4%"> 
 										<!-- COl7   -->
 										<col style="width: 3%"> 
-										<!-- COl7   -->
-										<col style="width: 5%"> 
 										<!--  COl8   -->
-										<col style="width: 5%"> 
+										<col style="width: 3.5%"> 
 										<!--  COl9   -->
-										<col style="width: 5%"> 
+										<col style="width: 4%"> 
 										<!--  COl10  -->
-										<col style="width: 4.5%">
+										<col style="width: 5.5%">
 								    	<!--COl11  -->
 										<col style="width: 3.5%"> 
 										<!--  COl12   -->
@@ -2306,11 +2307,11 @@ function funChangeCombo() {
 										<!--COl13   -->
 										<col style="width: 5%">
 										<!--  COl14   -->
-										<col style="width: 10">
+										<col style="width: 10%">
 										<!--  COl15   -->
-										<col style="width: 10">
+										<col style="width: 10%">
 										<!--  COl15   -->
-										<col style="width: 10">
+										<col style="width: 10%">
 										<!--  COl15   -->
 
 										</tbody>

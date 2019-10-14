@@ -105,10 +105,25 @@ public class clsBanquetBookingController{
 			String userCode=req.getSession().getAttribute("usercode").toString();
 			String propCode=req.getSession().getAttribute("propertyCode").toString();
 			String startDate=req.getSession().getAttribute("startDate").toString();
-			clsBanquetBookingModelHd objHdModel = funPrepareHdModel(objBean,userCode,clientCode,req,propCode);
-			List<clsBanquetBookingModelDtl> listBookingDtl=new ArrayList<clsBanquetBookingModelDtl>();
 			
-			objBanquetBookingService.funAddUpdateBanquetBookingHd(objHdModel);
+			String sqlCheck = "select a.strBookingNo from tblbqbookinghd a "
+					+ "where '"+objGlobalFunctions.funGetDate("yyyy-MM-dd", objBean.getDteFromDate())+"' between Date(a.dteFromDate) and Date(a.dteToDate) "
+					+ "AND '"+objBean.getTmeFromTime()+"' between a.tmeFromTime and a.tmeToTime and a.strClientCode='"+clientCode+"'";
+			
+			List listAudit = objGlobalFunctionsService.funGetListModuleWise(sqlCheck, "sql");
+			if(listAudit.size()>0)
+			{
+				req.getSession().setAttribute("notsuccess", true);
+				req.getSession().setAttribute("successMessage", "Booked for this time ");
+			}
+			else
+			{
+				clsBanquetBookingModelHd objHdModel = funPrepareHdModel(objBean,userCode,clientCode,req,propCode);
+				List<clsBanquetBookingModelDtl> listBookingDtl=new ArrayList<clsBanquetBookingModelDtl>();
+				
+				objBanquetBookingService.funAddUpdateBanquetBookingHd(objHdModel);
+			
+			
 			
 			
 			if(objBean.getListSeriveDtl()!=null && !objBean.getListSeriveDtl().isEmpty())
@@ -172,7 +187,7 @@ public class clsBanquetBookingController{
 			objBanquetBookingService.funAddUpdateBanquetBookingHd(objHdModel);
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Booking No : ".concat(objHdModel.getStrBookingNo()));
-			
+			}
 			return new ModelAndView("redirect:/frmBanquetBooking.html");
 		}
 		else{
