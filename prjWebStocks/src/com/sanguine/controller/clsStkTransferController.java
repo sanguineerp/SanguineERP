@@ -777,13 +777,24 @@ public class clsStkTransferController
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptStockTransferSlip.jrxml");
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
-			String sql = "select a.strSTCode,DATE_FORMAT(a.dtSTDate,'%m-%d-%Y') as dtSTDate,a.strFromLocCode," + "a.strToLocCode,a.strNarration,a.strMaterialIssue,a.strWOCode" + " ,a.strAgainst," + "b.strLocName as strFromLocName,c.strLocName as strToLocName,a.strUserCreated," + "a.strAuthLevel2,a.strAuthLevel1 " + " from tblstocktransferhd a,tbllocationmaster b,tbllocationmaster c" + " where a.strFromLocCode=b.strLocCode and a.strToLocCode=c.strLocCode and a.strSTCode='" + stCode + "' " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + " and c.strClientCode='" + clientCode + "' ";
+			String sql = "select a.strSTCode,DATE_FORMAT(a.dtSTDate,'%m-%d-%Y') as dtSTDate,a.strFromLocCode," + 
+			         " a.strToLocCode,a.strNarration,a.strMaterialIssue,a.strWOCode" + " ,"
+					 + " a.strAgainst," + "b.strLocName as strFromLocName,c.strLocName as strToLocName,a.strUserCreated," + 
+					 " a.strAuthLevel2,a.strAuthLevel1 " + " "
+					 + " from tblstocktransferhd a,tbllocationmaster b,tbllocationmaster c" + " "
+					 + " where a.strFromLocCode=b.strLocCode and a.strToLocCode=c.strLocCode and a.strSTCode='" + stCode + "' " + " "
+					 + "and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + " "
+					 + " and c.strClientCode='" + clientCode + "' ";
 
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JRDesignQuery newQuery = new JRDesignQuery();
 			newQuery.setText(sql);
 			jd.setQuery(newQuery);
-			String sql2 = "select a.strSTCode,a.strProdCode,b.strProdName,a.dblQty,a.dblWeight,a.dblPrice,a.strRemark,b.strUOM " + " from tblstocktransferdtl a,tblproductmaster b " + " where a.strProdCode=b.strProdCode and a.strSTCode='" + stCode + "' and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' ";
+			String sql2 = "select a.strSTCode,a.strProdCode,b.strProdName,a.dblQty,a.dblWeight,(b.dblCostRM*a.dblQty) as costRM,a.strRemark,"
+					 + " b.strUOM " + ""
+					 + "  from tblstocktransferdtl a,tblproductmaster b " + ""
+					 + "  where a.strProdCode=b.strProdCode and a.strSTCode='" + stCode + "' and "
+					 + " a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' ";
 
 			JRDesignQuery subQuery = new JRDesignQuery();
 			subQuery.setText(sql2);

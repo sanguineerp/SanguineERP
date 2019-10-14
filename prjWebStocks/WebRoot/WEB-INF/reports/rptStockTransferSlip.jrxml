@@ -372,8 +372,9 @@
 								</textField>
 							</jr:columnFooter>
 							<jr:detailCell style="table_TD" height="26" rowSpan="1">
-								<textField>
+								<textField pattern="#,##0.00#">
 									<reportElement x="1" y="0" width="46" height="26" uuid="c9cc100f-259b-4e4c-9e66-3136f54e1a57"/>
+									<box leftPadding="1"/>
 									<textElement textAlignment="Right" verticalAlignment="Middle">
 										<font fontName="Serif" size="8"/>
 										<paragraph rightIndent="2"/>

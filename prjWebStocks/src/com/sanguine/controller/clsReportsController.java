@@ -2628,7 +2628,7 @@ public class clsReportsController {
 				JRDesignQuery newQuery = new JRDesignQuery();
 				newQuery.setText(sql);
 				jd.setQuery(newQuery);
-				String sql2 = "select a.strTransCode as strSTCode,a.strProdCode,b.strProdName,a.dblQty,a.dblWeight,a.dblUnitPrice as dblPrice, " + "  a.strRemarks as strRemark " + "  from tblauditdtl a,tblproductmaster b  where a.strProdCode=b.strProdCode and " + "  a.strTransCode='" + TransCode + "'  and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' ";
+				String sql2 = "select a.strTransCode as strSTCode,a.strProdCode,b.strProdName,a.dblQty,a.dblWeight,(b.dblCostRM*a.dblQty) as costRM, " + "  a.strRemarks as strRemark " + "  from tblauditdtl a,tblproductmaster b  where a.strProdCode=b.strProdCode and " + "  a.strTransCode='" + TransCode + "'  and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' ";
 
 				JRDesignQuery subQuery = new JRDesignQuery();
 				subQuery.setText(sql2);

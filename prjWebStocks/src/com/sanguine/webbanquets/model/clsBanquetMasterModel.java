@@ -153,4 +153,12 @@ public class clsBanquetMasterModel implements Serializable{
 		this.dteDateEdited = dteDateEdited;
 	}
 
+	public String getStrBanquetTypeCode() {
+		return strBanquetTypeCode;
+	}
+
+	public void setStrBanquetTypeCode(String strBanquetTypeCode) {
+		this.strBanquetTypeCode = strBanquetTypeCode;
+	}
+
 }
