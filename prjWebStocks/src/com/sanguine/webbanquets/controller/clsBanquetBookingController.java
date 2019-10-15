@@ -151,10 +151,13 @@ public class clsBanquetBookingController{
 				{
 					clsBanquetBookingModelDtl objDtl=list.get(i);
 				
+					if(objDtl.getStrDocName()!=null)
+					{
 					objDtl.setStrType("Equipment");
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 					objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
 					listBookingDtl.add(objDtl);	
+					}
 				}	
 			}
 			if(objBean.getListStaffCatDtl()!=null && !objBean.getListStaffCatDtl().isEmpty())
@@ -163,10 +166,12 @@ public class clsBanquetBookingController{
 				for(int i=0;i<list.size();i++)
 				{
 					clsBanquetBookingModelDtl objDtl=list.get(i);
-					
+					if(objDtl.getStrDocName()!=null)
+					{
 					objDtl.setStrType("Staff");
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 					listBookingDtl.add(objDtl);					
+					}
 				}
 				
 			}
@@ -176,11 +181,13 @@ public class clsBanquetBookingController{
 				for(int i=0;i<list.size();i++)
 				{
 					clsBanquetBookingModelDtl objDtl=list.get(i);
-					
+					if(objDtl.getStrDocName()!=null)
+					{
 					objDtl.setStrType("Menu");
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 					objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
 					listBookingDtl.add(objDtl);					
+					}
 				}				
 			}
 			objHdModel.setListBanquetBookingDtlModels(listBookingDtl);
