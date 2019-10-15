@@ -2400,38 +2400,70 @@ public class clsGlobalFunctions {
 						}
 						if(checkSettlementWiseTax)
 						{
-						if (exciseable.equals("Y")) // Excisable field from tax master
-						{
-							if (entry.getValue().getStrExcisable().equals("Y")) // Excisable
-																				// field/
-																				// from
-																				// product
-																				// master
+							if (exciseable.equals("Y")) // Excisable field from tax master
 							{
-								flgEligibleForTax = true;
-								if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Check
-																							// if
-																							// excisewill
-																							// be
-																							// calculated
-																							// on
-																							// Product
-																							// MRP
+								if (entry.getValue().getStrExcisable().equals("Y")) // Excisable
+																					// field/
+																					// from
+																					// product
+																					// master
 								{
-									taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
-									if (abatement > 0) {
-										taxableAmt = taxableAmt * (abatement / 100);
+									flgEligibleForTax = true;
+									if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) // Check
+																								// if
+																								// excisewill
+																								// be
+																								// calculated
+																								// on
+																								// Product
+																								// MRP
+									{
+										taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+										if (abatement > 0) {
+											taxableAmt = taxableAmt * (abatement / 100);
+										}
+									} else // excise will be calculated on Product
+											// Unit Price
+									{
+										double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
+										taxableAmt -= marginAmt;
+										double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
+										taxableAmt -= discountAmt;
 									}
-								} else // excise will be calculated on Product
-										// Unit Price
-								{
-									double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
-									taxableAmt -= marginAmt;
-									double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
-									taxableAmt -= discountAmt;
 								}
+							} else // Code for non excisable taxes.
+							{
+								double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
+								taxableAmt -= marginAmt;
+								
+								if (entry.getValue().getStrPickMRPForTaxCal().equals("Y")) {
+									taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty());
+									if(entry.getValue().getDblWeight()>0){
+										taxableAmt = (entry.getValue().getDblMRP() * entry.getValue().getDblQty()*entry.getValue().getDblWeight());
+									}
+									taxableAmt -= marginAmt;
+									if (abatement > 0) {
+										//taxableAmt = taxableAmt * (abatement / 100);
+										
+										taxableAmt=(taxableAmt * 100 / (100 + abatement));
+									}
+								}
+								
+								double discountAmt = taxableAmt * (entry.getValue().getDblDiscountPer() / 100);
+								taxableAmt -= discountAmt;
+								flgEligibleForTax = true;
+	
 							}
-						} else // Code for non excisable taxes.
+						}
+					
+					} else if (taxType.equalsIgnoreCase("Banquet")) // Code to calculate taxable amt for Banquet taxes.
+					{
+						boolean checkSettlementWiseTax=true; 
+						if(objSetup.getStrSettlementWiseInvSer().equals("Yes"))
+						{
+							checkSettlementWiseTax=funGetSettlementWiseTax(taxCode,strSettlement);
+						}
+						if(checkSettlementWiseTax)
 						{
 							double marginAmt = taxableAmt * (entry.getValue().getDblMarginPer() / 100);
 							taxableAmt -= marginAmt;
@@ -2453,14 +2485,15 @@ public class clsGlobalFunctions {
 							taxableAmt -= discountAmt;
 							flgEligibleForTax = true;
 
+						
 						}
-					}} else // Code to calculate taxable amt for Purchase taxes.
+					
+					}
+					else // Code to calculate taxable amt for Purchase taxes.
 					{
-						if (exciseable.equals("Y")) // Excisable field from tax
-													// master.
+						if (exciseable.equals("Y")) // Excisable field from tax master.
 						{
-							if (entry.getValue().getStrExcisable().equals("Y")) // Excisable
-																				// fieldfrom
+							if (entry.getValue().getStrExcisable().equals("Y")) // Excisable fieldfrom
 																				// product/
 																				// master.
 							{

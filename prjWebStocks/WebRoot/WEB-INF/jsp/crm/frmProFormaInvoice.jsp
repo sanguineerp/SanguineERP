@@ -1252,7 +1252,7 @@
 		var dteInv =$('#txtDCDate').val();
 		var CIFAmt=0;
 		var settlement='';
-	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Sales&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
+	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Banquet&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
 	    $.ajax({
 			type: "GET",
 		    url:gurl,
