@@ -634,7 +634,7 @@ function funCreateNewCustomer(){
 		    rowCount=listEquipRow;
 		    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listEquipDtl["+(rowCount)+"].strDocNo\"  id=\"txtEquipCode."+(rowCount)+"\" value='"+EquipCode+"' />";
 		    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listEquipDtl["+(rowCount)+"].strDocName\"  id=\"txtEquipName."+(rowCount)+"\" value='"+EquipName+"'/>"; 
-		    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listEquipDtl["+(rowCount)+"].dblDocQty\"  id=\"txtEquipQty."+(rowCount)+"\" value='"+EquipQty+"' onblur=\"funUpdateEuipPrice(this);\"/>";    
+		    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listEquipDtl["+(rowCount)+"].dblDocQty\" style=\"text-align: right;\"  id=\"txtEquipQty."+(rowCount)+"\" value='"+EquipQty+"' onblur=\"funUpdateEuipPrice(this);\"/>";    
 		    row.insertCell(3).innerHTML= "<input  readonly=\"readonly\" class=\"Box \" style=\"padding-right: 5px;text-align: right;\" size=\"25%\" name=\"listEquipDtl["+(rowCount)+"].dblDocRate\"  id=\"txtEquipRate."+(rowCount)+"\" value='"+EquipRate+"'/>";
 		    row.insertCell(4).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowEquip(this)">';		    
 		    listEquipRow++;
@@ -656,13 +656,56 @@ function funCreateNewCustomer(){
 	    rowCount=listStaffRow;
 	    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocNo\"  id=\"txtStaffCatCode."+(rowCount)+"\" value='"+StaffCatCode+"' />";
 	    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocName\"  id=\"txtStaffCatName."+(rowCount)+"\" value='"+StaffCatName+"'/>";
-	    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listStaffCatDtl["+(rowCount)+"].dblDocQty\"  id=\"txtStaffCatNumber."+(rowCount)+"\" value='"+StaffQty+"'/>";
+	    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listStaffCatDtl["+(rowCount)+"].dblDocQty\" style=\"text-align: right;\"  id=\"txtStaffCatNumber."+(rowCount)+"\" value='"+StaffQty+"' onblur=\"funCheckStaffNumber(this,'"+StaffCatCode+"','"+rowCount+"');\"/>";
 	    row.insertCell(3).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowStaff(this)">';		    
 	    listStaffRow++;
 	  
 	     
 	    
 	}
+	
+	function funCheckStaffNumber(obj,StaffCatCode,cnt)
+	{
+		var staffCode = StaffCatCode;
+		var staffCnt = obj.value;
+		
+		var searchurl=getContextPath()+ "/checkStaffCnt.html?staffCode=" + staffCode+"&staffCnt="+ staffCnt;
+		$.ajax({
+			type : "GET",
+			url : searchurl,
+			dataType : "json",
+			success : function(response){ 
+				if(response)
+					{
+					
+					}
+				else
+					{
+						alert("Please select less count");
+						$("#txtStaffCatNumber").val(0);
+					}
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+		
+	}
+	
 	var MenuTotal=0;
 	function funfillMenuItemDtlRow(ItemCode,ItemName,ItemRate,ItemQty)
 	{
@@ -674,7 +717,7 @@ function funCreateNewCustomer(){
 		    rowCount=listItemRow;
 		    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listMenuItemDtl["+(rowCount)+"].strDocNo\"  id=\"txtItemCode."+(rowCount)+"\" value='"+ItemCode+"'/>";
 		    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listMenuItemDtl["+(rowCount)+"].strDocName\"  id=\"txtItemName."+(rowCount)+"\" value='"+ItemName+"'/>";
-		    row.insertCell(2).innerHTML= "<input  class=\"decimal-places-amt\" size=\"5%\" name=\"listMenuItemDtl["+(rowCount)+"].dblDocQty\"  id=\"txtItemQty."+(rowCount)+"\" value='"+ItemQty+"' onblur=\"funUpdateItemPrice(this);\"/>";
+		    row.insertCell(2).innerHTML= "<input  class=\"decimal-places-amt\" size=\"5%\" name=\"listMenuItemDtl["+(rowCount)+"].dblDocQty\"  id=\"txtItemQty."+(rowCount)+"\" style=\"text-align: right;\" value='"+ItemQty+"' onblur=\"funUpdateItemPrice(this);\"/>";
 		    row.insertCell(3).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"15%\" style=\"padding-right: 5px;text-align: right;\"  name=\"listMenuItemDtl["+(rowCount)+"].dblDocRate\"  id=\"txtItemRate."+(rowCount)+"\" value='"+ItemRate+"'/>";
 		    row.insertCell(4).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowMenu(this)">';	
 		    
@@ -1120,8 +1163,8 @@ function funCreateNewCustomer(){
 	  		 {
 			    	alert("To date should be greater then from Date");
 			    	$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
-			    	$("#txtToDate").datepicker('setDate','todate');;
-					return false
+			    	$("#txtToDate").datepicker('setDate','todate');
+					return false;
 	         }
 	    	
 	    	
@@ -1595,7 +1638,7 @@ function funCreateNewCustomer(){
 							<!-- col2   -->
 
 							<!-- col3   -->
-							<td align="center"">Delete</td>
+							<td align="center" style="width: 15%">Delete</td>
 
 							<!-- col3   -->
 
@@ -1611,20 +1654,20 @@ function funCreateNewCustomer(){
 						
 
 							<!-- col2   -->
-							<col width="20%">
+							<col width="15%">
 							<!-- col2   -->
 
 							<!-- col2   -->
-							<col width="40%">
+							<col width="30%">
 							<!-- col2   -->
 
 							<!-- col2   -->
-							<col width="10%">
+							<col width="12%">
 							<!-- col2   -->
 
 
 							<!-- col2   -->
-							<col width="20%">
+							<col width="15%">
 							<!-- col2   -->
 
 							<!-- col2   -->

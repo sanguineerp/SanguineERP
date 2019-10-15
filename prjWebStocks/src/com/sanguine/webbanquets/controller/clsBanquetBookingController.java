@@ -356,5 +356,37 @@ public class clsBanquetBookingController{
 		return list;
 	}
 
+	
+	@RequestMapping(value = "/checkStaffCnt", method = RequestMethod.GET)
+	public @ResponseBody boolean funCheckStaffCnt(@RequestParam("staffCode") String staffCode,@RequestParam("staffCnt") String staffCnt,HttpServletRequest req)
+	{
+		List list =null;
+		
+		boolean condition = false;
+		double dblCnt = Double.parseDouble(staffCnt);
+		try{
+			String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String 	 sql="select a.strStaffCount from tblstaffcategeorymaster a where a.strStaffCategeoryCode='"+staffCode+"' and a.strClientCode='"+clientCode+"'";
+			list= objGlobalFunctionsService.funGetDataList(sql, "sql");
+			if(list!=null && list.size()>0)
+			{
+				Double strCnt = Double.parseDouble(list.get(0).toString());
+				if(dblCnt > strCnt)
+				{
+					condition = false;
+				}
+				else
+				{
+					condition = true;
+				}
+			}
+			}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return condition;
+	}
 	  
 }

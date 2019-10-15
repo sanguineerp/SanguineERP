@@ -2631,7 +2631,7 @@ public class clsInvoiceController
 				Object[] obj = (Object[]) objSales.get(i);
 				clsSalesOrderDtl saleDtl = new clsSalesOrderDtl();
 				
-				saleDtl.setDblAcceptQty(0.0);
+				saleDtl.setDblAcceptQty(Double.parseDouble(obj[2].toString()));
 				saleDtl.setDblAvalaibleStk(0.0);
 				saleDtl.setDblAvgQty(2);
 				saleDtl.setDblConversion(0.0);
