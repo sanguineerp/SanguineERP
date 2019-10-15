@@ -40,6 +40,24 @@
 					<%
 				}
 			}%>
+			
+			
+			var message1='';
+			<%if (session.getAttribute("notsuccess") != null) {
+				if(session.getAttribute("successMessage") != null){%>
+					message1='<%=session.getAttribute("successMessage").toString()%>';
+					<%
+					session.removeAttribute("successMessage");
+				}
+				boolean test1 = ((Boolean) session.getAttribute("notsuccess")).booleanValue();
+				session.removeAttribute("notsuccess");
+				if (test1) {
+					%>	
+					alert(message1);
+					<%
+				}
+			}%>
+			
 
 	   });
 

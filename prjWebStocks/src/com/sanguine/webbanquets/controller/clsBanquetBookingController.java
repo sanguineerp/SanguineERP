@@ -114,7 +114,7 @@ public class clsBanquetBookingController{
 			if(listAudit.size()>0)
 			{
 				req.getSession().setAttribute("notsuccess", true);
-				req.getSession().setAttribute("successMessage", "Booked for this time ");
+				req.getSession().setAttribute("successMessage", "Please select different time ");
 			}
 			else
 			{
