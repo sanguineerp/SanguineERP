@@ -1373,7 +1373,8 @@
 		var grandTotal=parseFloat(subTotal)+parseFloat(totalTaxAmt);
 		grandTotal=grandTotal.toFixed(2);
 		$("#lblTaxableAmt").text(totalTaxableAmt);
-		$("#lblTaxTotal").text(totalTaxAmt);			
+		$("#lblTaxTotal").text(totalTaxAmt);
+		$("#txtPOTaxAmt").val(totalTaxAmt);
 // 		$("#lblPOGrandTotal").text(grandTotal);
 // 		var taxAmt=$("#txtPOTaxAmt").val();
 		var disAmt = $('#txtDiscount').val();

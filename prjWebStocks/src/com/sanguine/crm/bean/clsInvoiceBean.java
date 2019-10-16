@@ -114,6 +114,10 @@ public class clsInvoiceBean {
 	private String strUOM;
 
 	private String strProdCode;
+	
+	private double dbltTaxAmt;
+	
+	private double dbltTaxableAmt;
 
 	private Map<String, String> hmProdTaxDtl;
 
@@ -815,6 +819,22 @@ public class clsInvoiceBean {
 
 	public void setStrDocType(String strDocType) {
 		this.strDocType = strDocType;
+	}
+
+	public double getDbltTaxAmt() {
+		return dbltTaxAmt;
+	}
+
+	public void setDbltTaxAmt(double dbltTaxAmt) {
+		this.dbltTaxAmt = dbltTaxAmt;
+	}
+
+	public double getDbltTaxableAmt() {
+		return dbltTaxableAmt;
+	}
+
+	public void setDbltTaxableAmt(double dbltTaxableAmt) {
+		this.dbltTaxableAmt = dbltTaxableAmt;
 	}
 
 	

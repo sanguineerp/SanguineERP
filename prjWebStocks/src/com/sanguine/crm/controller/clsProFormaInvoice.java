@@ -410,6 +410,7 @@ public class clsProFormaInvoice {
 				String userCode = req.getSession().getAttribute("usercode").toString();
 				String propCode = req.getSession().getAttribute("propertyCode").toString();
 				String startDate = req.getSession().getAttribute("startDate").toString();
+				String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
 				double dblCurrencyConv = 1.0;
 				
 				Date today = Calendar.getInstance().getTime();
@@ -462,10 +463,13 @@ public class clsProFormaInvoice {
 
 				if (objBean.getDblTaxAmt() != null) {
 					taxamt = objBean.getDblTaxAmt();
+					objHDModel.setDblTaxAmt(taxamt);
 				}
+				else
+				{
 				objHDModel.setDblTotalAmt(0.0);
 				objHDModel.setDblTaxAmt(0.0);
-
+				}
 				objHDModel.setStrCurrencyCode(objSetup.getStrCurrencyCode());
 				clsCurrencyMasterModel objModel = objCurrencyMasterService.funGetCurrencyMaster(objSetup.getStrCurrencyCode(), clientCode);
 				if (objModel == null) {
@@ -621,10 +625,25 @@ public class clsProFormaInvoice {
 						if (objInvDtl.getDblWeight() > 0) {
 							prodRateForTaxCal = objInvDtl.getDblUnitPrice() * objInvDtl.getDblWeight() * dblCurrencyConv;
 						}
-						String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0";
-						Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
+						String prodTaxDtl="";
+						if(objInvDtl.getStrCustCode().equals(""))
+						{
+							prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objBean.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0";
+						}
+						else
+						{
+							prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0";
+						}
+						Map<String, String> hmProdTaxDtl = null;
+						if(strModuleName.equalsIgnoreCase("7-WebBanquet")){
+							hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Banquet", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
+						}
+						else
+						{
+							hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
+						
 						System.out.println("Map Size= " + hmProdTaxDtl.size());
-
+						}
 						Map<String, clsProFormaInvoiceTaxDtlModel> hmInvTaxDtl = new HashMap<String, clsProFormaInvoiceTaxDtlModel>();
 						if (hmInvCustTaxDtl.containsKey(key)) {
 							hmInvTaxDtl = hmInvCustTaxDtl.get(key);
@@ -919,7 +938,7 @@ public class clsProFormaInvoice {
 						objHDModel.setDblTotalAmt(totalAmt);
 					}
 					objHDModel.setDblSubTotalAmt(subTotal);
-					objHDModel.setDblTaxAmt(taxAmt);
+					//objHDModel.setDblTaxAmt(taxAmt);
 					objHDModel.setDblGrandTotal(grandTotal);
 
 					List<clsProFormaInvSalesOrderDtl> listInvSODtl = new ArrayList<clsProFormaInvSalesOrderDtl>();
@@ -3081,20 +3100,22 @@ public class clsProFormaInvoice {
 
 				String[] date = dteInvDate.split("-");
 				dteInvDate = date[2] + "-" + date[1] + "-" + date[0];
-
-				
+				double dblTotaltaxAmt = 0.00;
+				String strInvCode = "";
 				String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
 				String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
 				if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
 				{
 					double taxAmt = 0.00;
-					String sqlDetailQ = "SELECT  b.dblQty,c.strDocName,c.strType,b.dblPrice,b.dblQty *b.dblPrice AS amount,b.strProdCode,a.dblDiscountAmt,a.dblGrandTotal "
+					String sqlDetailQ = "SELECT  b.dblQty,c.strDocName,c.strType,b.dblPrice,b.dblQty *b.dblPrice AS amount,b.strProdCode,a.dblDiscountAmt,a.dblGrandTotal,d.dblValue,a.strInvCode "
 							+ "FROM "+webStockDB+".tblproformainvoicehd a "
 							+ "LEFT OUTER "
 							+ "JOIN "+webStockDB+".tblproformainvoicedtl b ON a.strInvCode=b.strInvCode "
 							+ "LEFT OUTER "
 							+ "JOIN tblbqbookingdtl c ON b.strProdCode=c.strDocNo "
-							+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"' group by c.strDocNo";
+							+ "LEFT OUTER "
+							+ "JOIN "+webStockDB+".tblproformainvprodtaxdtl d on c.strDocNo =d.strProdCode "
+							+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"' AND d.strDocNo like 'T%' group by c.strDocNo";
 					
 						list = objGlobalFunctionsService.funGetListModuleWise(sqlDetailQ, "sql");
 						if (!list.isEmpty()) {
@@ -3110,11 +3131,18 @@ public class clsProFormaInvoice {
 								objBean.setDblDiscountAmt(Double.parseDouble(arrObj[6].toString()));
 								objBean.setDblTotalAmt(Double.parseDouble(arrObj[3].toString())*Double.parseDouble(arrObj[0].toString()));
 								objBean.setDblGrandTotal(Double.parseDouble(arrObj[7].toString()));
-								
+								strInvCode=arrObj[8].toString();
 								fieldList.add(objBean);
-								objBean.setDblTaxAmt(taxAmt);
+								objBean.setDblTaxAmt(Double.parseDouble(arrObj[8].toString()));
 
 							}
+						}
+						
+						String sqlTotalTax = "select a.dblTaxAmt from "+webStockDB+".tblproformainvoicehd a where a.strInvCode='"+strInvCode+"' and a.strClientCode='"+clientCode+"'";
+						List listTotalTax = objGlobalFunctionsService.funGetListModuleWise(sqlTotalTax, "sql");
+						if(listTotalTax!=null && listTotalTax.size()>0)
+						{
+							dblTotaltaxAmt = Double.parseDouble(listTotalTax.get(0).toString());
 						}
 				}
 				else
