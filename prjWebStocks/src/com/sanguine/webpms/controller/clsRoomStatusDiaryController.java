@@ -417,6 +417,13 @@ public class clsRoomStatusDiaryController {
 									}
 								}
 							}
+							
+							String sqlRoomCnt = "select count(*) from tblroom a where a.strRoomTypeDesc='"+arrObjRooms[2].toString()+"' and a.strClientCode='"+clientCode+"'";
+							List listRoomCnt = objGlobalFunctionsService.funGetListModuleWise(sqlRoomCnt, "sql");
+							if(listRoomCnt!=null && listRoomCnt.size()>0)
+							{
+								objRoomStatusDtl.setDblRoomCnt(Double.parseDouble(listRoomCnt.get(0).toString()));
+							}
 							objTemp.add(objRoomStatusDtl);
 							//objRoomTypeWise.put(arrObjRooms[2].toString(),objTemp);
 						//}
@@ -442,6 +449,13 @@ public class clsRoomStatusDiaryController {
 						objRoomStatusDtl.setStrRoomNo(arrObjRooms[1].toString());
 						objRoomStatusDtl.setStrRoomType(arrObjRooms[2].toString());
 						objRoomStatusDtl.setStrRoomStatus(arrObjRooms[3].toString());
+						
+						String sqlRoomCnt = "select count(*) from tblroom a where a.strRoomTypeDesc='"+arrObjRooms[2].toString()+"' and a.strClientCode='"+clientCode+"'";
+						List listRoomCnt = objGlobalFunctionsService.funGetListModuleWise(sqlRoomCnt, "sql");
+						if(listRoomCnt!=null && listRoomCnt.size()>0)
+						{
+							objRoomStatusDtl.setDblRoomCnt(Double.parseDouble(listRoomCnt.get(0).toString()));
+						}
 						
 						objTemp.add(objRoomStatusDtl);
 						//objRoomTypeWise.put(arrObjRooms[2].toString(),objTemp);
@@ -496,6 +510,7 @@ public class clsRoomStatusDiaryController {
 					}
 				}
 				//objRoomTypeWise.put(objRoomStatusDtl);
+				
 				
 		}
 		listRoomStatusBeanDtl.add(objRoomTypeWise);	
@@ -661,11 +676,11 @@ public class clsRoomStatusDiaryController {
 							{
 								if(strRoomData.isEmpty())
 								{
-									strRoomData=listRoomDesc.get(j)+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);
+									strRoomData=listRoomDesc.get(j)+"/"+listCheckInData.get(0);
 								}
 								else
 								{
-									strRoomData=strRoomData+"/"+listCheckInData.get(0)+"-"+listRoomData.get(0);	
+									strRoomData=strRoomData+"/"+listCheckInData.get(0);
 								}
 							}
 							tempPMSDate=yy+"-"+mm+"-"+dd1;

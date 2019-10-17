@@ -313,7 +313,8 @@ body {
 						
 						var key=item.strRoomType;
 						var value=mapRoomType[key];
-						funFillROomTypeHeaderRowsHeaderRows(key,value);
+						var roomCnt = item.dblRoomCnt;
+						funFillROomTypeHeaderRowsHeaderRows(key,value,roomCnt);
 					}
 					itemroomType=item.strRoomType;
 					funFillRoomStatusRows(item.strRoomNo,item.strDay1,item.strDay2,item.strDay3,item.strDay4,item.strDay5,item.strDay6,item.strDay7,item.strRoomStatus,item);
@@ -849,7 +850,7 @@ body {
 			});
 	}
 		
-		function funFillROomTypeHeaderRowsHeaderRows(key,value)
+		function funFillROomTypeHeaderRowsHeaderRows(key,value,roomCnt)
 		{
 		
 			var table=document.getElementById("tblRoomType");
@@ -857,7 +858,7 @@ body {
 			var rowCount=table.rows.length;
 			var row=table.insertRow();
 			row.setAttribute("class", "header");
-			
+			key=key+" ("+roomCnt+")";
 			//table.setAttribute("class","table table-bordered");
 
 			var valueArr = value.split('/');

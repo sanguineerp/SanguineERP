@@ -99,6 +99,11 @@
 				window.location.href=getContextPath()+"/RoomMasterImport.html";	
 				break;
 				
+				
+			case "frmSupplieMaster" :
+				window.location.href=getContextPath()+"/SupplierMasterImport.html";	
+				break;
+				
 			/* case "frmCheckInCheckOutList" :
 				window.location.href=getContextPath()+"/CheckInCheckOutList.html";	
 				

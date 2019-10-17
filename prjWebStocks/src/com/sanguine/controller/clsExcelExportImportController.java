@@ -4,8 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +35,7 @@ import com.sanguine.model.clsGroupMasterModel;
 import com.sanguine.model.clsMISDtlModel;
 import com.sanguine.model.clsOpeningStkDtl;
 import com.sanguine.model.clsPOSSalesDtlModel;
+import com.sanguine.model.clsPartyTaxIndicatorDtlModel;
 import com.sanguine.model.clsProdSuppMasterModel;
 import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
@@ -41,12 +44,15 @@ import com.sanguine.model.clsPurchaseOrderDtlModel;
 import com.sanguine.model.clsRequisitionDtlModel;
 import com.sanguine.model.clsStkPostingDtlModel;
 import com.sanguine.model.clsSubGroupMasterModel;
+import com.sanguine.model.clsSupplierMasterModel;
+import com.sanguine.model.clsSupplierMasterModel_ID;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsGroupMasterService;
 import com.sanguine.service.clsPOSLinkUpService;
 import com.sanguine.service.clsProductMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsSubGroupMasterService;
+import com.sanguine.service.clsSupplierMasterService;
 import com.sanguine.webpms.bean.clsGuestMasterBean;
 import com.sanguine.webpms.bean.clsRoomMasterBean;
 import com.sanguine.webpms.dao.clsGuestMasterDao;
@@ -61,6 +67,9 @@ import com.sanguine.webpms.service.clsRoomMasterService;
 @Controller
 public class clsExcelExportImportController {
 
+	@Autowired
+	private clsSupplierMasterService objSupplierMasterService;
+	
 	@Autowired
 	private clsProductMasterService objProductMasterService;
 	
@@ -801,12 +810,181 @@ public class clsExcelExportImportController {
 				list = funRoomList(worksheet, request);
 				break;
 				
+			case "frmSupplieMaster":
+				list = funSupplierList(worksheet, request);
+				break;
+				
 			}
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	private List funSupplierList(HSSFSheet worksheet, HttpServletRequest request) {
+	
+
+		List listGuestlist = new ArrayList<>();
+		int RowCount = 0;
+		//String prodCode = "";
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String userCode = request.getSession().getAttribute("usercode").toString();
+		
+		//String prodStock=request.getParameter("prodStock");
+		try {
+			int i = 1;
+			
+			String strSupplierCode = "";
+			
+			HashMap<String,String> hm = new HashMap<String,String>();
+			HashMap<String, String> hmRoom = new HashMap<String, String>();
+			List list = new ArrayList<>();
+			
+			while (i <= worksheet.getLastRowNum()) {
+				// Creates an object representing a single row in excel
+				
+				
+				HSSFRow row = worksheet.getRow(i++);
+				// Sets the Read data to the model class
+				RowCount = row.getRowNum();
+				
+				
+				//String strSuppCode = row.getCell(0).toString();
+							
+				hm.put(row.getCell(1).toString(),row.getCell(2).toString());
+				//hmRoom.put(row.getCell(0).toString(), row.getCell(1).toString());
+				
+				
+				
+				//list.add(strRoomName);
+			}
+			
+			funCheckSupplier(hm,clientCode,userCode);
+			
+			
+
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			List list = new ArrayList<>();
+			list.add("Invalid Excel File");
+			//list.add("Invalid Entry In Row No." + RowCount + " and Product Code " + prodCode + " ");
+			return list;
+		}
+		return listGuestlist;
+	
+	}
+
+	private void funCheckSupplier(HashMap<String, String> hm,
+			String clientCode, String userCode) {
+		
+		 for (Entry<String, String> entry : hm.entrySet())  {
+			 
+		 
+		
+		String sqlCheck = "SELECT * FROM tblpartymaster a WHERE a.strClientCode='"+clientCode+"' AND a.strPName='"+entry.getKey()+"'";
+		
+		List list=objGlobalFunctionsService.funGetListModuleWise(sqlCheck, "sql");
+		
+		if(list!=null && list.size()>0)
+		{
+			
+			
+		}
+		else
+		{
+				clsSupplierMasterModel objModel = new clsSupplierMasterModel();					
+				long lastNo = 0;
+
+				lastNo = objGlobalFunctionsService.funGetLastNo("tblpartymaster", "SupplierMaster", "intPid", clientCode);
+				String PCode = "S" + String.format("%06d", lastNo);
+				objModel = new clsSupplierMasterModel(new clsSupplierMasterModel_ID(PCode, clientCode));
+				objModel.setIntPId(lastNo);
+				objModel.setStrUserCreated(userCode);
+				objModel.setDtCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				
+				objModel.setStrPName(entry.getKey());
+				objModel.setStrPhone("");
+				objModel.setStrMobile(entry.getValue());
+				objModel.setStrFax("");
+				objModel.setStrContact("");
+				objModel.setStrEmail("");
+
+				objModel.setStrBankName("");
+				objModel.setStrBankAdd1("");
+				objModel.setStrBankAdd2("");
+				objModel.setStrTaxNo1("");
+				objModel.setStrTaxNo2("");
+				objModel.setStrPmtTerms("");
+				objModel.setStrAcCrCode("");
+				objModel.setStrMAdd1("");
+				objModel.setStrMAdd2("");
+				objModel.setStrMCity("");
+				objModel.setStrMPin("");
+				objModel.setStrMState("");
+				objModel.setStrMCountry("");
+				objModel.setStrBAdd1("");
+				objModel.setStrBAdd2("");
+				objModel.setStrBCity("");
+				objModel.setStrBPin("");
+				objModel.setStrBState("");
+				objModel.setStrBCountry("");
+				objModel.setStrSAdd1("");
+				objModel.setStrSAdd2("");
+				objModel.setStrSCity("");
+				objModel.setStrSPin("");
+				objModel.setStrSState("");
+				objModel.setStrSCountry("");
+				objModel.setStrCST("");
+				objModel.setStrVAT("");
+				objModel.setStrExcise("");
+				objModel.setStrServiceTax("");
+				objModel.setStrSubType("");
+				objModel.setDtExpiryDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				objModel.setStrManualCode("");
+				objModel.setStrRegistration("");
+				objModel.setStrRange("");
+				objModel.setStrDivision("");
+				objModel.setStrCommissionerate("");
+				objModel.setStrBankAccountNo("");
+				objModel.setStrBankABANo("");
+				objModel.setIntCreditDays(0);
+				objModel.setDblCreditLimit(0);
+				objModel.setDblLatePercentage(0.0);
+				objModel.setDblRejectionPercentage(0.0);
+				objModel.setStrIBANNo("");
+				objModel.setStrSwiftCode("");
+				objModel.setStrCategory("");
+				objModel.setStrExcisable("");
+				objModel.setStrCategory("");
+				objModel.setStrUserModified(userCode);
+				objModel.setDtLastModified(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				objModel.setDtCreatedDate(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				objModel.setStrUserCreated(userCode);
+				objModel.setStrPartyType("");
+				objModel.setStrPType("Supp");
+				objModel.setStrPartyIndi("");
+				objModel.setStrOperational("");
+				objModel.setStrAccManager("");
+				objModel.setStrECCNo("");
+				objModel.setDtInstallions(objGlobalFunctions.funGetCurrentDateTime("yyyy-MM-dd"));
+				objModel.setStrGSTNo("");
+				objModel.setStrLocCode("");
+				objModel.setStrPropCode("");
+				objModel.setStrExternalCode("");
+				objModel.setStrCurrency("");
+				objModel.setStrComesaRegion("");
+				objModel.setStrDebtorCode("");
+				
+				List<clsPartyTaxIndicatorDtlModel> listPartyTaxDtl = new ArrayList<clsPartyTaxIndicatorDtlModel>();
+				
+				objModel.setArrListPartyTaxDtlModel(listPartyTaxDtl);
+				
+				objSupplierMasterService.funAddUpdate(objModel);
+				
+		}
+	}
 	}
 
 	private List funRoomList(HSSFSheet worksheet, HttpServletRequest request) {
@@ -1752,7 +1930,51 @@ public class clsExcelExportImportController {
 		return new ModelAndView("excelView", "stocklist", ExportList);
 	}
 	
-	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/SupplierMasterImport", method = RequestMethod.GET)
+	public ModelAndView funSupplierMasterExport(HttpServletRequest request) {
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		
+		//String LocCode = "";
+		List list = new ArrayList<>();
+		List AllGuestlist= new ArrayList();
+		List DataGuestList=null;
+		clsGuestMasterBean objBean=null;
+		String header = "Code,Supplier Name,Mobile Number";
+		List ExportList = new ArrayList();
+		String[] ExcelHeader = header.split(",");
+		ExportList.add(ExcelHeader);
+		try{
+		String sql="select a.strPCode, a.strPName ,a.strMobile from tblpartymaster a where a.strClientCode='"+clientCode+"'";
+	            
+		list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+		if(!list.isEmpty())
+	   {
+			for (int i = 0; i < list.size(); i++)
+			{
+	             Object[] obj = (Object[]) list.get(i);
+	             DataGuestList=new ArrayList<>();
+	             DataGuestList.add(obj[0].toString());
+	             DataGuestList.add(obj[1].toString());
+	             DataGuestList.add(obj[2].toString());
+	             
+	             
+	            
+
+	             
+	             AllGuestlist.add(DataGuestList);
+			}
+		}
+		//
+		
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			}
+		ExportList.add(AllGuestlist);
+		
+		return new ModelAndView("excelView", "stocklist", ExportList);
+	}
 @SuppressWarnings({ "rawtypes", "unchecked" })
 	public List funGuestList(HSSFSheet worksheet, HttpServletRequest request) {
 		List listGuestlist = new ArrayList<>();

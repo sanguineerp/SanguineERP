@@ -697,6 +697,18 @@ var strcheckboxStatus="N";
 		}
 		
 		
+		function funOpenExportImport()			
+		{
+			var transactionformName="frmSupplieMaster";
+			//var guestCode=$('#txtGuestCode').val();
+			
+			
+		//	response=window.showModalDialog("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+			response=window.open("frmExcelExportImport.html?formname="+transactionformName,"dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+	        
+			
+		}
+		
 		</script>
 
 </head>
@@ -724,6 +736,9 @@ var strcheckboxStatus="N";
 					<table class="masterTable">
 						<tr>
 					        <th align="right" colspan="4"> <a id="baseUrl" href="#">Attatch Documents</a>&nbsp; &nbsp; &nbsp; &nbsp;  </th>
+					        <th align="right" colspan="6" ><a onclick="funOpenExportImport()"
+					href="javascript:void(0);">Export/Import</a>&nbsp; &nbsp; &nbsp;
+					&nbsp;&nbsp;</th>
 					    </tr>
 					    
 				    	<tr>

@@ -51,6 +51,8 @@ public class clsRoomStatusDtlBean {
 	
 	double dblRemainingAmt = 0;
 	
+	double dblRoomCnt = 0;
+	
 	private String strDay;
 	private TreeMap<Integer, List<clsGuestListReportBean>> mapGuestListPerDay;
 
@@ -303,6 +305,20 @@ public class clsRoomStatusDtlBean {
 
 	public void setDblRemainingAmt(double dblRemainingAmt) {
 		this.dblRemainingAmt = dblRemainingAmt;
+	}
+
+
+
+
+	public double getDblRoomCnt() {
+		return dblRoomCnt;
+	}
+
+
+
+
+	public void setDblRoomCnt(double dblRoomCnt) {
+		this.dblRoomCnt = dblRoomCnt;
 	}
 
 }
