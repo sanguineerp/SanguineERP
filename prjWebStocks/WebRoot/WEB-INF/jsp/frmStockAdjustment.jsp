@@ -41,6 +41,7 @@ $(document).ready(function(){
 	var recipeconversionUOM="";
 	var ConversionValue=0;
 	var fieldName,gUOM,gProdType,listRow=0;
+	var clickCount=0;
 		
 	/**
 	 * Check validation before adding product data in grid
@@ -419,6 +420,8 @@ $(document).ready(function(){
 		 */
 		function funValidateFields()
 		{
+			if(clickCount==0){
+				clickCount=clickCount+1;
 				if($("#txtLocCode").val().length==0)
 				{
 					$("#txtLocCode").focus();
@@ -449,7 +452,10 @@ $(document).ready(function(){
 				}
 		
 			
-			
+		}
+			else{
+				return false;
+			}
 		}
 		function funHelp1(transactionName,loc)
 		{ 

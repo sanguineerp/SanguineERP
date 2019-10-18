@@ -16,6 +16,7 @@
 	* Global variable
 	**/
 	var taxPer=0,listRow=0,gPIQty=0,gPICode="";
+	 var clickCount=0;
 	
 	/**
 	* Ready function for Tab
@@ -1980,7 +1981,8 @@
 		 * Checking Validation before submiting the data
 		 */
 	    function funCallFormAction(actionName, object) {
-
+	    	if(clickCount==0){
+				clickCount=clickCount+1;
 		
 		var spPODate=$("#txtPODate").val().split('-');
 	    var poDate = new Date(spPODate[2],spPODate[1]-1,spPODate[0]);
@@ -2093,7 +2095,10 @@
 		   		return false;
 		   }
 		   
-		 
+		}
+	    else{
+			return false;
+		}
 	}
 		
 		

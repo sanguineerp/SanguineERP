@@ -48,6 +48,7 @@
 	var gTaxPer=0;
 	var gTaxOnGD=0;
 	var listRow=0;
+	 var clickCount=0;
 	
 		/**
 		 * Ready Function for Initialize textField with default value
@@ -833,6 +834,8 @@
 		 */
 		function funCallFormAction(actionName,object) 
 		{
+			if(clickCount==0){
+				clickCount=clickCount+1;
 			if(!fun_isDate($("#txtPurchDate").val()))
 			{
 				alert('Invalid Date');
@@ -868,6 +871,10 @@
 			else
 			{
 				return true;
+			}
+			}
+			else{
+				return false;
 			}
 		}
 		

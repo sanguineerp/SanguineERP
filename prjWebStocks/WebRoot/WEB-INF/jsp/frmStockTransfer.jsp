@@ -22,6 +22,7 @@
 		var urlHits;
 		var listRow=0;
 		var steditable;
+		var clickCount=0;
 		
 		$(document).ready(function () {
 			$("#txtToLocCode").focus();
@@ -697,6 +698,8 @@
 		 */
 		function funCallFormAction() 
 		{
+			if(clickCount==0){
+				clickCount=clickCount+1;
 			var table = document.getElementById("tblProduct");
 			var rowCount = table.rows.length;	
 			if ($("#txtSTDate").val().trim().length==0) 
@@ -763,8 +766,10 @@
 			 		alert("Please Select Against");
 					return false;
 			 } */
-		 
-			
+		}
+			else{
+				return false;
+			}
 		}
 		
 		function funLocCustomerLinkedProductData()

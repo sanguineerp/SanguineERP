@@ -17,6 +17,7 @@ var ReceivedconversionUOM="";
 var issuedconversionUOM="";
 var recipeconversionUOM="";
 var ConversionValue=0;
+var clickCount=0;
 /**
  * Ready Function for Ajax Waiting and reset form
  */
@@ -752,6 +753,8 @@ $(document).ready(function(){
 	 */
 	function funCallFormAction(actionName,object) 
 	{	
+		if(clickCount==0){
+			clickCount=clickCount+1;
 		var table = document.getElementById("tblProdDet");
 		var rowCount = table.rows.length;		 
 		
@@ -777,6 +780,10 @@ $(document).ready(function(){
 			return true;
 		
 		}
+	}
+	else{
+		return false;
+	}
 	}
 	
 	function funGetKeyCode(event,controller) {

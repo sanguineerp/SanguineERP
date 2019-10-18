@@ -67,6 +67,7 @@
 	<script type="text/javascript">
 				
 		var fieldName,listRow=0;
+		 var clickCount=0;
 		
 		$(function()
 		{
@@ -632,6 +633,9 @@
 		 }
 		 function funCallFormAction(actionName,object) 
 			{
+			 
+			 if(clickCount==0){
+					clickCount=clickCount+1;
 				var table = document.getElementById("tblProduct");
 			    var rowCount = table.rows.length;
 			   
@@ -667,6 +671,11 @@
 				{
 					return true;
 				}
+			
+			}
+			else{
+				return false;
+			}
 			}
 		 function funResetFields()
 			{

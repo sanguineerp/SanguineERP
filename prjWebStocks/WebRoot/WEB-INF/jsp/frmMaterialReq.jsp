@@ -22,6 +22,8 @@
 	var fieldName,listRow=0;/**
 	 * Ready Function for Ajax Waiting
 	 */
+	 var clickCount=0;
+
 	$(document).ready(function() {
 		resetForms('matReq');
 		$("#txtProdCode").focus();
@@ -915,6 +917,9 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 			 */
 			function funCallFormAction(actionName,object) 
 			{	
+				if(clickCount==0){
+					clickCount=clickCount+1;
+				
 				if(!fun_isDate($("#txtReqDate").val())){
 						alert('Invalid Requisition Date');
 			            $("#txtReqDate").focus();
@@ -972,6 +977,10 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 				{
 					return true;
 					
+				}
+			}
+				else{
+					return false;
 				}
 			}
 			

@@ -32,6 +32,7 @@ var message='';
 
 
 	var code='';
+	
 	<%
 	if(null!=session.getAttribute("rptDSCode"))
 	{%>
@@ -108,7 +109,8 @@ $(function()
 	 */
 	function funCallFormAction(actionName,object) 
 	{	
-	
+		if(clickCount==0){
+			clickCount=clickCount+1;
 		if(!fun_isDate($("#txtDSDate").val())){
 			 alert('Invalid Date');
 	            $("#txtDSDate").focus();
@@ -116,6 +118,11 @@ $(function()
 		}
 		var table = document.getElementById("tblDeliverySchedule");
 	    var rowCount = table.rows.length;
+	    
+	}
+	else{
+		return false;
+	}
 	}
  
 	/**
@@ -130,7 +137,8 @@ $(function()
 	/**
 	 * Open help window
 	 */
-	var fieldName="";	
+	var fieldName="";
+	 var clickCount=0;
 	function funHelp(transactionName)
 	{
 		fieldName=transactionName;

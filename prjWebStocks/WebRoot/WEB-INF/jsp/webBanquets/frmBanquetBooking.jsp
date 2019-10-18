@@ -1671,7 +1671,7 @@ function funCreateNewCustomer(){
 							<!-- col2   -->
 
 							<!-- col2   -->
-							<col width="15%">
+							<col width="13.5%">
 							<!-- col2   -->
 
 							</tbody>
