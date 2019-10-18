@@ -9,6 +9,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tbluserlogs")
 public class clsUserLogsModel {
+	
 	@GeneratedValue
 	@Id
 	@Column(name = "intId", columnDefinition = "BIGINT(20) NOT NULL")

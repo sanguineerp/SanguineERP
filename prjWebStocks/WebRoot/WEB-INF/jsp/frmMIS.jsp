@@ -16,6 +16,7 @@
   * Ready Function for Ajax Waiting
  **/
  var miseditable;
+ var clickCount=0;
  $(document).ready(function () {
     resetForms('MIS');
     $("#txtLocTo").focus();
@@ -1047,146 +1048,179 @@
 		 */
 		function funCallFormAction(actionName,object) 
 		{
-			var flg=true;
-			var AllowDateChangeInMIS='<%=session.getAttribute("AllowDateChangeInMIS").toString()%>';
-			var table = document.getElementById("tblProdDet");
-			var rowCount = table.rows.length;	
-			
-			var spMISDate=$("#txtMISDate").val().split('-');
-		    var misDate = new Date(spMISDate[2],spMISDate[1]-1,spMISDate[0]);
-		    var td=new Date();
-		    var d2 = new Date(td.getYear()+1900,td.getMonth(),td.getDate());
-		    var dateDiff=misDate-d2;
-		    if(dateDiff>0)
-		    {
-		    	alert("Future date is not allowed for MIS");
-		    	$("#txtMISDate").focus();
-				return false;		    	
-		    }
-			if (!fun_isDate($("#txtMISDate").val())) 
-			    {
-				 alert('Invalid Date');
-				 $("#txtMISDate").focus();
-				 return false;  
-			   }
-			if($("#txtMISCode").val().trim()=="")
-			{
-			 	if(AllowDateChangeInMIS=="N")
-				{
-			 		var spMISDate=$("#txtMISDate").val().split('-');
-				    var misDate = new Date(spMISDate[2],spMISDate[1]-1,spMISDate[0]);
-				    var td=new Date();
-				    var d2 = new Date(td.getYear()+1900,td.getMonth(),td.getDate());
-				    var dateDiff=misDate-d2;
-				  //  alert(dateDiff);
-				  /*  var newDate= $(this).datepicker('getDate');
-			       var curDateTime = new Date();
-			       var curDate = new Date(curDateTime.getFullYear(), curDateTime.getMonth(), curDateTime.getDate()); */
-			       //alert("misDate"+misDate+"\d2"+d2);
-			       
-			       
-			       
-			      		 if (dateDiff < 0 ) 
-			      		 {
-			             	alert('Please Select Todate');
-			             	$("#txtMISDate").focus();
-			             	return false;
-				         }
-				 
-				} 
-			}
-			if($("#txtLocFrom").val().trim().length == 0)
-				{
-					alert("Please Enter Location From or Search");
-					$("#txtLocFrom").focus();
-					return false;
-				}
-			 if($("#txtLocTo").val()=='')
-				{
-					alert("Please Enter Location To or Search");
-					$("#txtLocTo").focus();
-					return false;
-				}
-			 if($("#txtLocFrom").val()==$("#txtLocTo").val())
-				{
-					alert("Location From and Location To cannot be same");
-					return false;
-				}
-			 if(rowCount<1)
-				{
-					alert("Please Add Product in Grid");
-					return false;
-				}
-			 if(  $("#cmbAgainst").val() == null || $("#cmbAgainst").val().trim().length == 0 )
-				 {
-				 		alert("Please Select Against");
-						return false;
-				 }
-			 
-			 
-			 if("${strNegStock}"=="N")
-				{
-					var strurl=getContextPath()+"/checkStockForAllProduct.html";					
-					 $.ajax({				
-					 	type: "POST",
-					    url:strurl,
-					    data:$("#MIS").serialize(),					  
-					    context: document.body,
-					    dataType: "json",
-					    async:false,
-					    success: function(response)
-					    {	
-					    	if(null!=response && response!="")
-					    		{
-					    			alert("No Stock is Available for Product "+ response);
-									flg= false;
-					    		}
-					    	else
-					    		{
-					    			document.forms[0].action = "saveMIS.html";
-					    		}
-						},
-						error: function(jqXHR, exception) {
-				            if (jqXHR.status === 0) {
-				                alert('Not connect.n Verify Network.');
-				            } else if (jqXHR.status == 404) {
-				                alert('Requested page not found. [404]');
-				            } else if (jqXHR.status == 500) {
-				                alert('Internal Server Error [500].');
-				            } else if (exception === 'parsererror') {
-				                alert('Requested JSON parse failed.');
-				            } else if (exception === 'timeout') {
-				                alert('Time out error.');
-				            } else if (exception === 'abort') {
-				                alert('Ajax request aborted.');
-				            } else {
-				                alert('Uncaught Error.n' + jqXHR.responseText);
-				            }
-				            flg= false;
-				            return flg;
-				        }
-					});
-				}
-				else
-					{
-					flg= true;
-					return flg;
-					}
-			 
-			 
-			 var misDate=$("#txtMISDate").val();
-			 
-				if(funGetMonthEnd(document.all("txtLocFrom").value,misDate)!=true)
-				{
-	            	alert("Month End Done For Selected Month");
-		            return false;
-	            }
-				else
-				{
-					return true;
-				}
-			 
+			  
+			if(clickCount==0){
+				clickCount=clickCount+1;
 				
+				var flg=true;
+				var AllowDateChangeInMIS='<%=session.getAttribute("AllowDateChangeInMIS").toString()%>';
+				var table = document.getElementById("tblProdDet");
+				var rowCount = table.rows.length;	
+				
+				var spMISDate=$("#txtMISDate").val().split('-');
+			    var misDate = new Date(spMISDate[2],spMISDate[1]-1,spMISDate[0]);
+			    var td=new Date();
+			    var d2 = new Date(td.getYear()+1900,td.getMonth(),td.getDate());
+			    var dateDiff=misDate-d2;
+			    if(dateDiff>0)
+			    {
+			    	alert("Future date is not allowed for MIS");
+			    	$("#txtMISDate").focus();
+			    	
+			    	//document.getElementById(object.id).disabled = false;
+					return false;		    	
+			    }
+				if (!fun_isDate($("#txtMISDate").val())) 
+				    {
+					 alert('Invalid Date');
+					 $("#txtMISDate").focus();
+					 
+					 //document.getElementById(object.id).disabled = false;
+					 return false;  
+				   }
+				if($("#txtMISCode").val().trim()=="")
+				{
+				 	if(AllowDateChangeInMIS=="N")
+					{
+				 		var spMISDate=$("#txtMISDate").val().split('-');
+					    var misDate = new Date(spMISDate[2],spMISDate[1]-1,spMISDate[0]);
+					    var td=new Date();
+					    var d2 = new Date(td.getYear()+1900,td.getMonth(),td.getDate());
+					    var dateDiff=misDate-d2;
+					  //  alert(dateDiff);
+					  /*  var newDate= $(this).datepicker('getDate');
+				       var curDateTime = new Date();
+				       var curDate = new Date(curDateTime.getFullYear(), curDateTime.getMonth(), curDateTime.getDate()); */
+				       //alert("misDate"+misDate+"\d2"+d2);
+				       
+				       
+				       
+				      		 if (dateDiff < 0 ) 
+				      		 {
+				             	alert('Please Select Todate');
+				             	$("#txtMISDate").focus();
+				             	
+				             	//document.getElementById(object.id).disabled = false;
+				             	return false;
+					         }
+					 
+					} 
+				}
+				if($("#txtLocFrom").val().trim().length == 0)
+					{
+						alert("Please Enter Location From or Search");
+						$("#txtLocFrom").focus();
+						
+						//document.getElementById(object.id).disabled = false;
+						return false;
+					}
+				 if($("#txtLocTo").val()=='')
+					{
+						alert("Please Enter Location To or Search");
+						$("#txtLocTo").focus();
+						
+						//document.getElementById(object.id).disabled = false;
+						return false;
+					}
+				 if($("#txtLocFrom").val()==$("#txtLocTo").val())
+					{
+						alert("Location From and Location To cannot be same");
+						
+						//document.getElementById(object.id).disabled = false;
+						return false;
+					}
+				 if(rowCount<1)
+					{
+						alert("Please Add Product in Grid");
+						
+						//document.getElementById(object.id).disabled = false;
+						return false;
+					}
+				 if(  $("#cmbAgainst").val() == null || $("#cmbAgainst").val().trim().length == 0 )
+					 {
+					 		alert("Please Select Against");
+					 		
+					 		//document.getElementById(object.id).disabled = false;
+							return false;
+					 }
+				 
+				 
+				 if("${strNegStock}"=="N")
+					{
+						var strurl=getContextPath()+"/checkStockForAllProduct.html";					
+						 $.ajax({				
+						 	type: "POST",
+						    url:strurl,
+						    data:$("#MIS").serialize(),					  
+						    context: document.body,
+						    dataType: "json",
+						    async:false,
+						    success: function(response)
+						    {	
+						    	if(null!=response && response!="")
+						    		{
+						    			alert("No Stock is Available for Product "+ response);
+										flg= false;
+						    		}
+						    	else
+						    		{
+						    			document.forms[0].action = "saveMIS.html";
+						    		}
+							},
+							error: function(jqXHR, exception) {
+					            if (jqXHR.status === 0) {
+					                alert('Not connect.n Verify Network.');
+					            } else if (jqXHR.status == 404) {
+					                alert('Requested page not found. [404]');
+					            } else if (jqXHR.status == 500) {
+					                alert('Internal Server Error [500].');
+					            } else if (exception === 'parsererror') {
+					                alert('Requested JSON parse failed.');
+					            } else if (exception === 'timeout') {
+					                alert('Time out error.');
+					            } else if (exception === 'abort') {
+					                alert('Ajax request aborted.');
+					            } else {
+					                alert('Uncaught Error.n' + jqXHR.responseText);
+					            }
+					            flg= false;
+					            
+					            //document.getElementById(object.id).disabled = false;
+					            return flg;
+					        }
+						});
+					}
+					else
+						{
+						flg= true;
+						//document.getElementById(object.id).disabled = true;
+						return flg;
+						}
+				 
+				 
+				 var misDate=$("#txtMISDate").val();
+				 
+					if(funGetMonthEnd(document.all("txtLocFrom").value,misDate)!=true)
+					{
+		            	alert("Month End Done For Selected Month");
+		            	//document.getElementById(object.id).disabled = false;
+			            return false;
+		            }
+					else
+					{
+						//document.getElementById(object.id).disabled = true;
+						return true;
+					}
+				 
+
+				
+				
+			}else{
+				return false;
+			}
+			////document.getElementById(object.id).disabled = true;
+			
+							
 					
 		}
 		

@@ -2351,15 +2351,29 @@ public class clsGlobalFunctions {
 				System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
 				sbSql.setLength(0);
 				
+				if(taxType.equalsIgnoreCase("Banquet")){
 				
-				sbSql.append("select a.strPCode,b.strTaxCode,b.strTaxDesc,b.strTaxType,b.dblPercent,b.strTaxOnTax,b.strTaxOnTaxCode " 
-						+ " ,b.strTaxCalculation,b.strTaxOnSubGroup,b.strTaxRounded,b.strCalTaxOnMRP,b.strTaxOnGD,b.dblAbatement " 
-						+ " ,b.strExcisable,strTOTOnMRPItems,b.dblAmount,ifNull(b.strShortName ,'')" 
-						+ " from tblpartytaxdtl a,tbltaxhd b "
-						+ " where a.strTaxCode=b.strTaxCode and a.strPCode='" + entry.getValue().getStrSupplierCode() + "' and strTaxOnSP='" + taxType + "' " 
-						+ " and (b.strTaxIndicator='" + entry.getValue().getStrTaxIndicator() + "' or b.strTaxIndicator='') " 
-						+ " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' and b.strPropertyCode='" + propCode + "' "
-						+ " and b.strTaxReversal='N' ");
+					sbSql.append(" SELECT '',b.strTaxCode,b.strTaxDesc,b.strTaxType,b.dblPercent, "
+							+ " b.strTaxOnTax,b.strTaxOnTaxCode,b.strTaxCalculation,b.strTaxOnSubGroup,b.strTaxRounded, "
+							+ " b.strCalTaxOnMRP,b.strTaxOnGD,b.dblAbatement,b.strExcisable,b.strTOTOnMRPItems, "
+							+ " b.dblAmount, IFNULL(b.strShortName,'') "
+							+ " from tbltaxhd b "
+							+ " WHERE strTaxOnSP='" + taxType + "'  and (b.strTaxIndicator='" + entry.getValue().getStrTaxIndicator() + "' or b.strTaxIndicator='') " 
+							+ " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' and b.strPropertyCode='" + propCode + "' " 
+							+ " AND b.strTaxReversal='N' ");
+					
+				}else{
+				
+					sbSql.append("select a.strPCode,b.strTaxCode,b.strTaxDesc,b.strTaxType,b.dblPercent,b.strTaxOnTax,b.strTaxOnTaxCode " 
+							+ " ,b.strTaxCalculation,b.strTaxOnSubGroup,b.strTaxRounded,b.strCalTaxOnMRP,b.strTaxOnGD,b.dblAbatement " 
+							+ " ,b.strExcisable,strTOTOnMRPItems,b.dblAmount,ifNull(b.strShortName ,'')" 
+							+ " from tblpartytaxdtl a,tbltaxhd b "
+							+ " where a.strTaxCode=b.strTaxCode and a.strPCode='" + entry.getValue().getStrSupplierCode() + "' and strTaxOnSP='" + taxType + "' " 
+							+ " and (b.strTaxIndicator='" + entry.getValue().getStrTaxIndicator() + "' or b.strTaxIndicator='') " 
+							+ " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' and b.strPropertyCode='" + propCode + "' "
+							+ " and b.strTaxReversal='N' ");
+					
+				}
 				
 				if (checkComesaRegionTax)
 					sbSql.append(" and strNotApplicableForComesa='N' ");
