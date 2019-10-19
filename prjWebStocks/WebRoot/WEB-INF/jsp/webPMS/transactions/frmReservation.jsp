@@ -253,7 +253,7 @@
 				funSetRoomNo(code);
 			break;
 			
-			case 'roomByRoomTypeForReservation': 
+			case 'roomByRoomType': 
 				funSetRoomNo(code);
 				break;
 			
@@ -1369,7 +1369,7 @@
 			}
 		else
 			{
-			if(transactionName=="roomByRoomTypeForReservation" && condition!=" ")
+			if(transactionName=="roomByRoomType" && condition!=" ")
 			{
 				window.open("searchform.html?formname="+fieldName+"&strRoomTypeCode="+condition+"&searchText=","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 			
@@ -2180,7 +2180,7 @@
 				<td><input type="text" id="txtRoomTypeCode" name="txtRoomTypeCode" Class="searchTextBox" ondblclick="funHelp('roomType')" /></td>
 				
 			    <td><label id="lblRoomNo">Room</label></td>
-			    <td><input type="text" id="txtRoomNo" name="txtRoomNo" path="strRoomNo" ondblclick="funHelp1('roomByRoomTypeForReservation')" Class="searchTextBox"/></td> 
+			    <td><input type="text" id="txtRoomNo" name="txtRoomNo" path="strRoomNo" ondblclick="funHelp1('roomByRoomType')" Class="searchTextBox"/></td> 
 				 
 				<td><label id="lblExtraBed">Extra Bed</label></td>
 				<td><input type="text" id="txtExtraBed" name="txtExtraBed" Class="searchTextBox" ondblclick="funHelp('extraBed')" /></td>

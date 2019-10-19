@@ -240,8 +240,9 @@ public class clsInvoiceController
 			model.put("urlHits", urlHits);
 
 			List<String> strAgainst = new ArrayList<>();
-			
+			strAgainst.add("All");
 			strAgainst.add("Banquet");
+			
 			model.put("againstList", strAgainst);
 
 			Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
@@ -357,6 +358,7 @@ public class clsInvoiceController
 			String startDate = req.getSession().getAttribute("startDate").toString();
 			double dblCurrencyConv = 1.0;
 
+			String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
 			Date today = Calendar.getInstance().getTime();
 			DateFormat df = new SimpleDateFormat("HH:mm:ss");
 			String reportDate = df.format(today);
@@ -462,9 +464,14 @@ public class clsInvoiceController
 				{
 					List list = objGlobalFunctionsService.funGetList("select strExciseable,strPickMRPForTaxCal from tblproductmaster " + " where strProdCode='" + objInvDtl.getStrProdCode() + "' ", "sql");
 
-					Object[] arrProdDtl = (Object[]) list.get(0);
-					String excisable = arrProdDtl[0].toString();
-					String pickMRP = arrProdDtl[1].toString();
+					String excisable ="N";
+					if(list!=null && list.size()>0)
+					{
+						Object[] arrProdDtl = (Object[]) list.get(0);
+						excisable = arrProdDtl[0].toString();
+						String pickMRP = arrProdDtl[1].toString();
+					}
+					
 					String key = objInvDtl.getStrCustCode() + "!" + excisable;
 
 					if (hmInvCustDtl.containsKey(key))
@@ -495,8 +502,16 @@ public class clsInvoiceController
 					objInvDtlModel.setDblBillRate(Double.parseDouble(decFormat.format(objInvDtl.getDblBillRate() * dblCurrencyConv)));
 					objInvDtlModel.setStrSOCode(objInvDtl.getStrSOCode());
 					objInvDtlModel.setStrCustCode(objInvDtl.getStrCustCode());
-					objInvDtlModel.setStrUOM(objProdTempUom.getStrReceivedUOM());
-					objInvDtlModel.setDblUOMConversion(objProdTempUom.getDblReceiveConversion());
+					if(objProdTempUom!=null)
+					{
+						objInvDtlModel.setStrUOM(objProdTempUom.getStrReceivedUOM());
+						objInvDtlModel.setDblUOMConversion(objProdTempUom.getDblReceiveConversion());
+					}
+					else
+					{
+						objInvDtlModel.setStrUOM("");
+						objInvDtlModel.setDblUOMConversion(1);
+					}
 					objInvDtlModel.setDblProdDiscAmount(objInvDtl.getDblDisAmt());
 					List<clsInvoiceProdTaxDtl> listInvProdTaxDtl = null;
 					if (hmInvProdTaxDtl.containsKey(key))
@@ -536,11 +551,16 @@ public class clsInvoiceController
 					objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
 					listInvProdTaxDtl.add(objInvProdTaxDtl);
 
+					double discPer = 0.0;
 					sqlQuery.setLength(0);
 					sqlQuery.append("select a.dblDiscount from tblpartymaster a " + " where a.strPCode='" + objInvDtl.getStrCustCode() + "' and a.strPType='Cust' ");
 					List listproddiscount = objGlobalFunctionsService.funGetList(sqlQuery.toString(), "sql");
-					Object objproddiscount = (Object) listproddiscount.get(0);
-					double discPer = Double.parseDouble(objproddiscount.toString());
+					if(listproddiscount!=null && listproddiscount.size()>0)
+					{
+						Object objproddiscount = (Object) listproddiscount.get(0);
+						discPer = Double.parseDouble(objproddiscount.toString());
+					}
+					
 					double discAmt = billRate * (discPer / 100) * dblCurrencyConv;
 					billRate = billRate - discAmt;
 					System.out.println(billRate);
@@ -561,8 +581,16 @@ public class clsInvoiceController
 						prodRateForTaxCal = objInvDtl.getDblUnitPrice() * objInvDtl.getDblWeight() * dblCurrencyConv;
 					}*/
 					String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0,"+objInvDtl.getDblWeight();
-					Map<String, String> hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
+					Map<String, String> hmProdTaxDtl = null;
+					if(strModuleName.equalsIgnoreCase("7-WebBanquet")){
+						hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Banquet", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
+					}
+					else
+					{
+						hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
+					
 					System.out.println("Map Size= " + hmProdTaxDtl.size());
+					}
 
 					Map<String, clsInvoiceTaxDtlModel> hmInvTaxDtl = new HashMap<String, clsInvoiceTaxDtlModel>();
 					if (hmInvCustTaxDtl.containsKey(key))
@@ -777,7 +805,14 @@ public class clsInvoiceController
 				String exciseable = entry.getKey().substring(entry.getKey().length() - 1, entry.getKey().length());
 
 				objHDModel.setStrExciseable(exciseable);
+				if(!custCode.equals(""))
+				{
 				objHDModel.setStrCustCode(custCode);
+				}
+				else
+				{
+				objHDModel.setStrCustCode(objBean.getStrCustCode());
+				}
 				objHDModel.setListInvDtlModel(listInvoiceDtlModel);
 
 				double subTotal = 0, taxAmt = 0, totalAmt = 0, totalExcisableAmt = 0;
@@ -785,10 +820,18 @@ public class clsInvoiceController
 				{
 					List list = objGlobalFunctionsService.funGetList("select strExciseable,strPickMRPForTaxCal,dblMRP from tblproductmaster " + " where strProdCode='" + objInvItemDtl.getStrProdCode() + "' ", "sql");
 					// String excisable=list.get(0).toString();
-					Object[] arrProdDtl = (Object[]) list.get(0);
-					String excisable = arrProdDtl[0].toString();
-					String pickMRP = arrProdDtl[1].toString();
-					double dblMrp = Double.parseDouble(arrProdDtl[2].toString()) * dblCurrencyConv;
+					String excisable = "N";
+					String pickMRP = "N";
+					double dblMrp = 0.0;
+
+					if(list!=null && list.size()>0)
+					{
+						Object[] arrProdDtl = (Object[]) list.get(0);
+						excisable = arrProdDtl[0].toString();
+						pickMRP = arrProdDtl[1].toString();
+						dblMrp = Double.parseDouble(arrProdDtl[2].toString()) * dblCurrencyConv;
+					}
+					
 					String key = custCode + "!" + excisable;
 					if (pickMRP.equals("Y"))
 					{

@@ -3042,21 +3042,45 @@ public class clsProFormaInvoice {
 				if (objSetup == null) {
 					objSetup = new clsPropertySetupModel();
 				}
-				String reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptProFormaInvoiceSlipFormat5ReportForBanquet.jrxml");
+				String reportName="";
+				if(InvCode.charAt(2)=='I')
+				{
+					reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptInvoiceSlipFormat5ReportForBanquet.jrxml");
+				}
+				else
+				{
+					reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptProFormaInvoiceSlipFormat5ReportForBanquet.jrxml");
+				}
+				
 				String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 				HashMap hm = new HashMap();
 				ArrayList fieldList = new ArrayList();
 				String strAuthLevel1="",strAuthLevel2="",strUserCreated="";
 				
+				double dblPGrandTotal=0.0;
+				double dblPTaxTotal=0.0;
+				double dblPDiscount=0.0;
+				double pdblSubTotal=0.0;
+				
 				hm.put("InvCode", InvCode);
 				hm.put("dteInvDate", dteInvDate);
 
-				String sqlHd = " select a.strInvCode,a.dteInvDate,b.strPName,b.strSAdd1,b.strSAdd2,b.strSCity,b.strSPin,b.strSState " //7
+				String sqlHd = "";
+				if(InvCode.charAt(2)=='I')
+				{
+					sqlHd = " select a.strInvCode,a.dteInvDate,b.strPName,b.strSAdd1,b.strSAdd2,b.strSCity,b.strSPin,b.strSState " //7
+							+ ",b.strSCountry,a.strVehNo,a.dblSubTotalAmt,a.dblTaxAmt,a.strDulpicateFlag,b.strECCNo,a.dblTotalAmt,a.dblGrandTotal " //15
+							+ ",b.strVAT,b.strMAdd1,b.strMAdd2,b.strMCity,b.strMPin,b.strMState,b.strMCountry,a.strPONo,a.strVehNo,a.dblDiscountAmt "//25
+							+ ",a.strAuthLevel1,a.strAuthLevel2 ,a.strUserCreated "
+							+ " from tblinvoicehd a,tblpartymaster b where a.strInvCode='" + InvCode + "'  " + " and a.strCustCode=b.strPCode  and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode ";
+				}
+				else{
+				sqlHd = " select a.strInvCode,a.dteInvDate,b.strPName,b.strSAdd1,b.strSAdd2,b.strSCity,b.strSPin,b.strSState " //7
 						+ ",b.strSCountry,a.strVehNo,a.dblSubTotalAmt,a.dblTaxAmt,a.strDulpicateFlag,b.strECCNo,a.dblTotalAmt,a.dblGrandTotal " //15
 						+ ",b.strVAT,b.strMAdd1,b.strMAdd2,b.strMCity,b.strMPin,b.strMState,b.strMCountry,a.strPONo,a.strVehNo,a.dblDiscountAmt "//25
 						+ ",a.strAuthLevel1,a.strAuthLevel2 ,a.strUserCreated "
 						+ " from tblproformainvoicehd a,tblpartymaster b where a.strInvCode='" + InvCode + "'  " + " and a.strCustCode=b.strPCode  and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode ";
-
+				}
 				List list = objGlobalFunctionsService.funGetList(sqlHd, "sql");
 				if (!list.isEmpty()) {
 					Object[] arrObj = (Object[]) list.get(0);
@@ -3106,16 +3130,34 @@ public class clsProFormaInvoice {
 				String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
 				if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
 				{
+					String sqlDetailQ="";
 					double taxAmt = 0.00;
-					String sqlDetailQ = "SELECT  b.dblQty,c.strDocName,c.strType,b.dblPrice,b.dblQty *b.dblPrice AS amount,b.strProdCode,a.dblDiscountAmt,a.dblGrandTotal,d.dblValue,a.strInvCode "
-							+ "FROM "+webStockDB+".tblproformainvoicehd a "
-							+ "LEFT OUTER "
-							+ "JOIN "+webStockDB+".tblproformainvoicedtl b ON a.strInvCode=b.strInvCode "
-							+ "LEFT OUTER "
-							+ "JOIN tblbqbookingdtl c ON b.strProdCode=c.strDocNo "
-							+ "LEFT OUTER "
-							+ "JOIN "+webStockDB+".tblproformainvprodtaxdtl d on c.strDocNo =d.strProdCode "
-							+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"' AND d.strDocNo like 'T%' group by c.strDocNo";
+					if(InvCode.charAt(2)=='I')
+					{
+						sqlDetailQ = "SELECT  b.dblQty,c.strDocName,c.strType,b.dblPrice,b.dblQty *b.dblPrice AS amount,b.strProdCode,a.dblDiscountAmt,a.dblGrandTotal,d.dblValue,a.strInvCode "
+								+ "FROM "+webStockDB+".tblinvoicehd a "
+								+ "LEFT OUTER "
+								+ "JOIN "+webStockDB+".tblinvoicedtl b ON a.strInvCode=b.strInvCode "
+								+ "LEFT OUTER "
+								+ "JOIN tblbqbookingdtl c ON b.strProdCode=c.strDocNo "
+								+ "LEFT OUTER "
+								+ "JOIN "+webStockDB+".tblinvprodtaxdtl d on c.strDocNo =d.strProdCode "
+								+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"' AND d.strDocNo like 'T%' GROUP BY c.strDocNo";
+					}
+					else
+					{
+						sqlDetailQ = "SELECT  b.dblQty,c.strDocName,c.strType,b.dblPrice,b.dblQty *b.dblPrice AS amount,b.strProdCode,a.dblDiscountAmt,a.dblGrandTotal,d.dblValue,a.strInvCode "
+								+ "FROM "+webStockDB+".tblproformainvoicehd a "
+								+ "LEFT OUTER "
+								+ "JOIN "+webStockDB+".tblproformainvoicedtl b ON a.strInvCode=b.strInvCode "
+								+ "LEFT OUTER "
+								+ "JOIN tblbqbookingdtl c ON b.strProdCode=c.strDocNo "
+								+ "LEFT OUTER "
+								+ "JOIN "+webStockDB+".tblproformainvprodtaxdtl d on c.strDocNo =d.strProdCode "
+								+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"' AND d.strDocNo like 'T%' GROUP BY c.strDocNo";
+					}
+					
+					
 					
 						list = objGlobalFunctionsService.funGetListModuleWise(sqlDetailQ, "sql");
 						if (!list.isEmpty()) {
@@ -3134,7 +3176,9 @@ public class clsProFormaInvoice {
 								strInvCode=arrObj[8].toString();
 								fieldList.add(objBean);
 								objBean.setDblTaxAmt(Double.parseDouble(arrObj[8].toString()));
-
+								dblPGrandTotal = Double.parseDouble(arrObj[7].toString());
+								dblPTaxTotal = dblPTaxTotal+Double.parseDouble(arrObj[8].toString());
+								pdblSubTotal=pdblSubTotal+Double.parseDouble(arrObj[3].toString())*Double.parseDouble(arrObj[0].toString());
 							}
 						}
 						
@@ -3222,7 +3266,10 @@ public class clsProFormaInvoice {
 				hm.put("strAuthLevel1", strAuthLevel1);
 				hm.put("strAuthLevel2", strAuthLevel2);
 				hm.put("strUserCreated", strUserCreated);
-
+				hm.put("dblPGrandTotal", dblPGrandTotal);
+				hm.put("dblPTaxTotal", dblPTaxTotal);
+				hm.put("pdblSubTotal", pdblSubTotal);
+				
 				JasperDesign jd = JRXmlLoader.load(reportName);
 				JasperReport jr = JasperCompileManager.compileReport(jd);
 
@@ -3395,6 +3442,7 @@ public class clsProFormaInvoice {
 				hm.put("totalInvoiceValue", totalInvoiceValue);
 				hm.put("strGSTNo.", objSetup.getStrCST());
 				hm.put("custGSTNo", custGSTNo);
+				
 
 				// ////////////
 

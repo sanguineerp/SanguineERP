@@ -1252,7 +1252,18 @@
 		var dteInv =$('#txtDCDate').val();
 		var CIFAmt=0;
 		var settlement='';
-	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Banquet&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
+		var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
+		var taxType = "";
+		if(strIndustryType=='7-WebBanquet') 
+   		{
+			taxType = "Banquet";
+   		}
+		else
+		{
+			taxType = "Sales";
+		}
+		
+	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType="+taxType+"&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
 	    $.ajax({
 			type: "GET",
 		    url:gurl,

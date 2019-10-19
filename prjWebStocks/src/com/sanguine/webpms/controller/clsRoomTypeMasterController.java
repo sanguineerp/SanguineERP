@@ -22,6 +22,7 @@ import com.sanguine.webpms.bean.clsBathTypeMasterBean;
 import com.sanguine.webpms.bean.clsRoomTypeMasterBean;
 import com.sanguine.webpms.dao.clsBathTypeMasterDao;
 import com.sanguine.webpms.dao.clsRoomTypeMasterDao;
+import com.sanguine.webpms.dao.clsWebPMSDBUtilityDao;
 import com.sanguine.webpms.model.clsBaggageMasterModel;
 import com.sanguine.webpms.model.clsBathTypeMasterModel;
 import com.sanguine.webpms.model.clsRoomTypeMasterModel;
@@ -39,6 +40,8 @@ public class clsRoomTypeMasterController {
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
 
+	@Autowired
+	clsWebPMSDBUtilityDao objWebPMSUtility;
 	// Open RoomTypeMaster
 	@RequestMapping(value = "/frmRoomTypeMaster", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
@@ -64,7 +67,16 @@ public class clsRoomTypeMasterController {
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		clsRoomTypeMasterModel objRoomTypeMasterModel = objRoomTypeMasterService.funPrepareRoomTypeModel(objRoomTypeMasterBean, clientCode, userCode);
 		objRoomTypeMasterDao.funAddUpdateRoomMaster(objRoomTypeMasterModel);
-
+		
+		if(objRoomTypeMasterBean.getStrRoomTypeCode().equals(""))
+		{
+			
+		}
+		else
+		{
+			String sqlUpdate = "update tblroom a set a.strRoomTypeDesc='"+objRoomTypeMasterBean.getStrRoomTypeDesc()+"' where a.strRoomTypeCode='"+objRoomTypeMasterBean.getStrRoomTypeCode()+"' and a.strClientCode='"+clientCode+"'";
+			objWebPMSUtility.funExecuteUpdate(sqlUpdate, "sql");
+		}
 		req.getSession().setAttribute("success", true);
 		req.getSession().setAttribute("successMessage", "RoomType Code : ".concat(objRoomTypeMasterModel.getStrRoomTypeCode()));
 

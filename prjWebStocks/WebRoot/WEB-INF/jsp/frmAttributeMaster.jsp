@@ -17,6 +17,7 @@ $(document).ready(function(){
 	<script type="text/javascript">
 	
 		var fieldName;
+		
 		function funResetFields()
 		{
 			
