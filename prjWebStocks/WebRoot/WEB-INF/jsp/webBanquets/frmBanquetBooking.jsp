@@ -12,6 +12,7 @@
 
 	var fieldName,listServiceRow=0,listEquipRow=0,listStaffRow=0,listItemRow=0;
 	var totalTerrAmt = 0.0;
+	var clickCount = 0.0;
 	  $(document).ready(function(){
 		    
 		  $(".tab_content").hide();
@@ -1114,6 +1115,9 @@ function funCreateNewCustomer(){
 		}
 		function funValidateForm()
 		{
+			
+			if(clickCount==0){
+				clickCount=clickCount+1;
 			var flag=true;
 			if($("#txtCustomerCode").val().trim().length==0)
 			{
@@ -1132,6 +1136,11 @@ function funCreateNewCustomer(){
 				flag=false;
 			}
 		    return flag;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	 
 		function funChangeArrivalDate()

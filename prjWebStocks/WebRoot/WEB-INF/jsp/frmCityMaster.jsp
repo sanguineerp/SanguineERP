@@ -32,6 +32,29 @@
 
 	});
 
+		var clickCount =0.0;
+		function funCallFormAction(actionName,object) 
+			{
+				
+				if ($("#txtCityName").val()=="") 
+				    {
+					 alert('Enter City Name');
+					 $("#txtCityName").focus();
+					 return false;  
+				   
+				
+				}
+		if(clickCount==0){
+			clickCount=clickCount+1;
+		}
+				else
+				{
+					return false;
+				}
+				return true; 
+			}
+
+	
 	$(function() 
 	{
 	});
@@ -245,7 +268,7 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funCallFormAction('submit',this);"/>
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 

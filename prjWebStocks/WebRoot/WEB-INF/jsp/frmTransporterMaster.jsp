@@ -14,6 +14,7 @@
 $(document).ready(function()
 		{
 var message='';
+
 <%if (session.getAttribute("success") != null) {
 	            if(session.getAttribute("successMessage") != null){%>
 	            message='<%=session.getAttribute("successMessage").toString()%>';
@@ -29,7 +30,24 @@ var message='';
 }}%>
 
 });
-
+var clickCount =0.0;
+function funCallFormAction(actionName,object) 
+{
+	if(clickCount==0){
+		clickCount=clickCount+1;	
+	if ($("#txtTransName").val()=="") 
+	    {
+		 alert('Enter Transport Name');
+		 $("#txtTransName").focus();
+		 return false;  
+	   }
+	}
+	else
+	{
+		return false;
+	}
+	return true; 
+}
 
 function funHelp(transactionName)
 {	     fieldName=  transactionName
@@ -350,7 +368,7 @@ function funHelp(transactionName)
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit"  class="form_button" />
+			<input type="submit" value="Submit"  class="form_button" onclick="return funCallFormAction('submit',this);"/>
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 

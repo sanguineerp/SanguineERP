@@ -8,6 +8,7 @@
 <title></title>
 <script type="text/javascript">
 	var fieldName,settlementType="";
+	var clickCount=0.0;
 	
 	$(function() 
 	{
@@ -427,6 +428,9 @@
  	
 	function funValidateFields(actionName,object)
 	{
+		
+		if(clickCount==0){
+			clickCount=clickCount+1;
 		var flg=true;
 		
 		if($("#txtSettlementCode").val().trim().length==0)
@@ -476,6 +480,11 @@
 		
 		
 		return flg;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 function funCreateNewGuest(){

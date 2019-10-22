@@ -92,6 +92,7 @@ $(document).ready(function()
 	
 	//Define Global Variable
 	var listRowCustTabGrid=0;
+	var clickCount =0.0;
 	
 		var fieldName,gAttName,gAttValueCode,gProcessName;
 		$(function()
@@ -1676,6 +1677,14 @@ $(document).ready(function()
 				        }
 						
 			      });
+			
+			}
+		if(clickCount==0){
+			clickCount=clickCount+1;
+		}
+			else
+			{
+				return false;
 			}
 			//alert("flg"+flg);
 			return flg;
@@ -1965,6 +1974,14 @@ $(document).ready(function()
 	    
     }
     
+    function funOpenExportImport()			
+	{
+		var transactionformName="frmProductMaster";
+	    
+		response=window.open("frmExcelExportImport.html?formname="+transactionformName,"dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
+        
+	
+	}
     
     
 		 
@@ -2004,7 +2021,8 @@ $(document).ready(function()
 							<br> <br>
 								<table class="masterTable">				
 				<tr>
-			        <th align="right" colspan="5"> <a id="baseUrl" href="#">Attach Documents</a>&nbsp; &nbsp; &nbsp; &nbsp;  </th>
+			        <th align="right" colspan="5"> <a id="baseUrl" href="#">Attach Documents</a>&nbsp; &nbsp; &nbsp; &nbsp; 
+			        <a onclick="funOpenExportImport()" href="javascript:void(0);">Export/Import</a>&nbsp; &nbsp; &nbsp;	 </th>
 			         
 			    </tr>
 			    

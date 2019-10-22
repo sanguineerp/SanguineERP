@@ -35,7 +35,7 @@
     resetForms('grpForm');
     $("#txtGroupName").focus();
 }); 
-
+ var clickCount =0.0;
 /**
  * AutoComplte when user Type the Name then Display Exists Group Name
  */
@@ -198,6 +198,8 @@
 		**/
 		function funCallFormAction(actionName,object) 
 		{
+			if(clickCount==0){
+				clickCount=clickCount+1;
 			var flg=true;
 			if($('#txtGroupCode').val()=='')
 			{
@@ -244,7 +246,15 @@
 						
 			      });
 			}
+			
+			}
+				else
+				{
+					return false;
+				}
 			return flg;
+			
+			
 		}
 		
 

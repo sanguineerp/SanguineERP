@@ -16,6 +16,7 @@ $(document).ready(function(){
 </script>
 
 <script type="text/javascript">
+	var clickCount =0.0;	
 	function funHelp(transactionName) {
 		
 	//	 window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
@@ -45,22 +46,14 @@ $(document).ready(function(){
 							} else {
 								$("#chkStockAdj").attr('checked', false);
 							}
-							document.getElementById("chkStocktra").checked = response.strStocktra == 'Y' ? true
-									: false;
-							document.getElementById("chkNonConf").checked = response.strNonConf == 'Y' ? true
-									: false;
-							document.getElementById("chkFollowUps").checked = response.strFollowUps == 'Y' ? true
-									: false;
-							document.getElementById("chkCorract").checked = response.strCorract == 'Y' ? true
-									: false;
-							document.getElementById("chkPrevAct").checked = response.strPrevAct == 'Y' ? true
-									: false;
-							document.getElementById("chkResAlloc").checked = response.strResAlloc == 'Y' ? true
-									: false;
-							document.getElementById("tchkDelcha").checked = response.strDelcha == 'Y' ? true
-									: false;
-							document.getElementById("chkLeadMaster").checked = response.strLeadMaster == 'Y' ? true
-									: false;
+							document.getElementById("chkStocktra").checked = response.strStocktra == 'Y' ? true: false;
+							document.getElementById("chkNonConf").checked = response.strNonConf == 'Y' ? true: false;
+							document.getElementById("chkFollowUps").checked = response.strFollowUps == 'Y' ? true: false;
+							document.getElementById("chkCorract").checked = response.strCorract == 'Y' ? true: false;
+							document.getElementById("chkPrevAct").checked = response.strPrevAct == 'Y' ? true: false;
+							document.getElementById("chkResAlloc").checked = response.strResAlloc == 'Y' ? true: false;
+							document.getElementById("tchkDelcha").checked = response.strDelcha == 'Y' ? true: false;
+							document.getElementById("chkLeadMaster").checked = response.strLeadMaster == 'Y' ? true: false;
 						}
 						
 					},
@@ -154,6 +147,8 @@ $(document).ready(function(){
 		if($('#txtReasonCode').val()=='')
 		{
 			var code = $('#txtReasonName').val().trim();
+			if(clickCount==0){
+				clickCount=clickCount+1;
 			 $.ajax({
 			        type: "GET",
 			        url: getContextPath()+"/checkReasonName.html?reasonName="+code,
@@ -191,6 +186,11 @@ $(document).ready(function(){
 			        }
 					
 		      });
+		}
+		else
+		{
+			return false;
+		}
 		}
 		//alert("flg"+flg);
 		return flg;

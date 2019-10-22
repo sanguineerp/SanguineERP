@@ -10,6 +10,7 @@
 	
 	var fieldName;
     var totalAmt=0.00;
+    var clickCount =0.0;
 	
 //reset fields
 	function funResetFields()
@@ -230,6 +231,9 @@
 	
 	function funValidateFields()
 	{
+		
+		if(clickCount==0){
+			clickCount=clickCount+1;
 		var flag=true;
 		var table=document.getElementById("tblIncomeHeadDtl");
 		var rowCount=table.rows.length;
@@ -249,6 +253,12 @@
 			folioText.disabled=false;
 		}		
 		return flag;
+		
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**

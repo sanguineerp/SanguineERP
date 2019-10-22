@@ -9,6 +9,26 @@
 <script type="text/javascript">
 	var fieldName;
 
+	var clickCount =0.0;	
+	function funCallFormAction(actionName,object) 
+		{
+			
+			if ($("#txtUDCName").val()=="") 
+			    {
+				 alert('Enter UDC Name');
+				 $("#txtUDCName").focus();
+				 return false;  
+			   
+			}
+		if(clickCount==0){
+			clickCount=clickCount+1;
+		}
+			else
+			{
+				return false;
+			}
+			return true; 
+		}
 	$(function() 
 	{
 	});
@@ -55,7 +75,7 @@
 <body>
 
 	<div id="formHeading">
-	<label>UDReportCategoryMaster</label>
+	<label>UD Report Category Master</label>
 	</div>
 
 	<s:form name="UDReportCategoryMaster" method="POST" action="saveUDReportCategoryMaster.html">
@@ -100,7 +120,7 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funCallFormAction('submit',this);"/>
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 

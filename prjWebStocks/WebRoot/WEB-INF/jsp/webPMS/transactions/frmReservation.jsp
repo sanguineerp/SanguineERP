@@ -1848,9 +1848,11 @@
  	     row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"strTypeRoomDesc."+(rowCount)+"\" value='"+list[2]+"' />";
  	     row.insertCell(2).innerHTML= "<input type=\"text\"    style=\"text-align:right;\"  name=\"listReservationRoomRateDtl["+(rowCount)+"].dblRoomRate\" id=\"dblRoomRate."+(rowCount)+"\" onchange =\"Javacsript:funCalculateTotals()\" value='"+list[1]+"' >";
  	     row.insertCell(3).innerHTML= "<input type=\"hidden\" class=\"Box \"  name=\"listReservationRoomRateDtl["+(rowCount)+"].strRoomType\" id=\"strRoomType."+(rowCount)+"\" value='"+list[3]+"' >";
+ 	  
+ 	     /* totalTerrAmt =list[1];
+ 	  	 $("#txtTotalAmt").val(totalTerrAmt); */
  	   
- 	     totalTerrAmt =totalTerrAmt + list[1];
- 	    $("#txtTotalAmt").val(totalTerrAmt);
+ 	  	
 		}
 		 
 	}
@@ -2296,8 +2298,8 @@
 	
 	</div>
 	<div style="margin:auto;width: 25%; float:right; margin-right:100px; ">
-	<label>Total</label>
-	<td><s:input id="txtTotalAmt" path=""  readonly="true" cssClass="shortTextBox"/></td>
+	<!-- <label>Total</label> -->
+	<%-- <td><s:input id="txtTotalAmt" path="" style="text-align:right;" readonly="true" cssClass="shortTextBox"/></td> --%>
 	</div>
 	</div>
 	

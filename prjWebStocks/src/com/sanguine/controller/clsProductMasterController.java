@@ -1181,7 +1181,7 @@ public class clsProductMasterController {
 		listStock.add(listStockFlashModel);
 		return new ModelAndView("excelView", "stocklist", listStock);
 	}
-	private Blob funBlankBlob() {
+	public Blob funBlankBlob() {
 		Blob blob = new Blob() {
 
 			@Override

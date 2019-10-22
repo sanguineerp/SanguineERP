@@ -17,6 +17,28 @@ function funResetFields(){
 	resetForms('characteristicsForm');
 	   $("#CharacteristicsName").focus();
 }
+
+
+var clickCount =0.0;	
+function funCallFormAction(actionName,object) 
+	{
+		
+		if ($("#CharacteristicsName").val()=="") 
+		    {
+			 alert('Enter characteristic Name');
+			 $("#CharacteristicsName").focus();
+			 return false;  
+		   
+		}
+	if(clickCount==0){
+		clickCount=clickCount+1;
+	}
+		else
+		{
+			return false;
+		}
+		return true; 
+	}
 function funHelp(transactionName)
 {
 	fieldName=transactionName;
@@ -140,7 +162,7 @@ var message='';
 		
 		<p align="center">
 			<input type="submit" value="Submit"  class="form_button"
-				onclick="return funValidateFields()" /> 
+				onclick="return funCallFormAction()" /> 
 				<input type="reset"
 				value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>

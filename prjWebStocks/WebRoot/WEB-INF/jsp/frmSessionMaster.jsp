@@ -36,7 +36,7 @@
     $("#txtSessionName").focus();
 }); 
 
-
+ var clickCount =0.0;
 	/**
 	* Reset The Session Name TextField
 	**/
@@ -45,6 +45,22 @@
 		$("#txtSessionName").focus();
     }
 	
+	function funCallFormAction(actionName,object) 
+	{
+		if(clickCount==0){
+			clickCount=clickCount+1;	
+		if ($("#txtSessionName").val()=="") 
+		    {
+			 alert('Enter Name');
+			 $("#txtSODate").focus();
+			 return false;  
+		   }
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 		/**
 		* Open Help
@@ -177,7 +193,8 @@
 		<br />
 		<p align="center">
 			<input type="submit" value="Submit" tabindex="3" class="form_button"
-				onclick="return funCallFormAction('submit',this);" /> <input type="reset"
+				onclick="return funCallFormAction('submit',this);" /> 
+				<input type="reset"
 				value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 	</s:form>

@@ -25,6 +25,7 @@
 <script type="text/javascript">
 
 	var settlemantWiseSeries='No';
+	var clickCount =0.0;
 
 	//Textfiled On blur geting data
 	$(function() {
@@ -151,6 +152,8 @@
 		
 		function funValidateFields()
 		{
+			if(clickCount==0){
+				clickCount=clickCount+1;
 			if(settlemantWiseSeries=='Yes')
 			{
 				
@@ -161,7 +164,13 @@
 				}
 			}
 			return true;
-			
+			}
+			else
+			{
+				
+				return false;
+				
+			}
 	    }
 </script>
 

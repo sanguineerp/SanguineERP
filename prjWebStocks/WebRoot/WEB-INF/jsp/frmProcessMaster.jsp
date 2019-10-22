@@ -8,7 +8,26 @@
 <title>Process Master</title>
 <script type="text/javascript">
 	var fieldName;
-
+	var clickCount =0.0;	
+	function funCallFormAction(actionName,object) 
+		{
+			
+			if ($("#strProcessName").val()=="") 
+			    {
+				 alert('Enter Process Name');
+				 $("#strProcessName").focus();
+				 return false;  
+			   
+			}
+		if(clickCount==0){
+			clickCount=clickCount+1;
+		}
+			else
+			{
+				return false;
+			}
+			return true; 
+		}
 
 	
 	/**

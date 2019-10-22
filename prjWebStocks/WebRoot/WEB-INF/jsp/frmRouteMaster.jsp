@@ -8,7 +8,7 @@
 <title></title>
 <script type="text/javascript">
 	var fieldName;
-
+	var clickCount =0.0;
 	$(function() 
 	{
 		
@@ -29,6 +29,26 @@
 		
 	});
 
+	function funCallFormAction(actionName,object) 
+	{
+		
+		if ($("#txtRouteName").val()=="") 
+		    {
+			 alert('Enter Route Name');
+			 $("#txtRouteName").focus();
+			 return false;  
+		  
+		}
+	if(clickCount==0){
+		clickCount=clickCount+1;
+	 }
+		else
+		{
+			return false;
+		}
+		return true; 
+	}
+	
 	function funSetData(code){
 
 		switch(fieldName){
@@ -139,7 +159,7 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funCallFormAction('submit',this);" />
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 

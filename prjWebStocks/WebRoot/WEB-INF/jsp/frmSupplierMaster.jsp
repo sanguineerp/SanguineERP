@@ -43,9 +43,11 @@ var strcheckboxStatus="N";
 
 		var fieldName;
 		var posItemCode;
+		var clickCount =0.0;
 		
 		function funValidateFields()
 		{
+			
 			var flg=true;
 			if($("#txtPartyName").val().trim()=="")
 			{
@@ -53,6 +55,9 @@ var strcheckboxStatus="N";
 				$("#txtPartyName").focus();
 				return false;
 			}
+			
+			if(clickCount==0){
+				clickCount=clickCount+1;
 			if($('#txtPartyCode').val()=='')
 			{
 				var code = $('#txtPartyName').val().trim();
@@ -96,6 +101,12 @@ var strcheckboxStatus="N";
 			}
 			//alert("flg"+flg);
 			return flg;
+			
+			}
+				else
+				{
+					return false;
+				}
 			
 	    }
 				

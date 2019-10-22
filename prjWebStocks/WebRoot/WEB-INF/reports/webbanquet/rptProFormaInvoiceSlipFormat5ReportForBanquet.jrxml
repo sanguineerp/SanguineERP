@@ -595,29 +595,11 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="50" uuid="e9531240-ab62-4bef-92ad-202d2c9a3b26">
+					<jr:column width="173" uuid="e9531240-ab62-4bef-92ad-202d2c9a3b26">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 						<jr:columnHeader style="table" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="50" height="30" uuid="75d16733-e211-4e86-af45-f2c88a8ecefe"/>
-								<textElement textAlignment="Center"/>
-								<text><![CDATA[Amount]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="Table 8_TD" height="20">
-							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-							<textField isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="48" height="20" uuid="7df80f93-a4ec-4878-9938-bd1df704e82a"/>
-								<textElement textAlignment="Right"/>
-								<textFieldExpression><![CDATA[$F{dblTotalAmt}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="223" uuid="c2f20519-3edc-4903-adf6-8f70c53b1475">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
-						<jr:columnHeader style="table" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="223" height="30" uuid="6b26b380-8094-45c4-af6e-0e7ec80ff169"/>
+								<reportElement x="0" y="0" width="173" height="30" uuid="75d16733-e211-4e86-af45-f2c88a8ecefe"/>
 								<textElement textAlignment="Center"/>
 								<text><![CDATA[Descreption]]></text>
 							</staticText>
@@ -625,8 +607,26 @@
 						<jr:detailCell style="Table 8_TD" height="20">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 							<textField isBlankWhenNull="true">
-								<reportElement x="7" y="0" width="186" height="20" uuid="9929d09b-a879-4932-8357-32e97cdcfbb6"/>
+								<reportElement x="7" y="0" width="166" height="20" uuid="7df80f93-a4ec-4878-9938-bd1df704e82a"/>
+								<textElement textAlignment="Left"/>
 								<textFieldExpression><![CDATA[$F{strProdName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="c2f20519-3edc-4903-adf6-8f70c53b1475">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="table" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="6b26b380-8094-45c4-af6e-0e7ec80ff169"/>
+								<textElement textAlignment="Center"/>
+								<text><![CDATA[Type]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 8_TD" height="20">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+							<textField isBlankWhenNull="true">
+								<reportElement x="7" y="0" width="93" height="20" uuid="9929d09b-a879-4932-8357-32e97cdcfbb6"/>
+								<textFieldExpression><![CDATA[$F{strUOM}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -636,7 +636,7 @@
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="30" uuid="88d83097-3749-4190-adef-f60b8154701e"/>
 								<textElement textAlignment="Center"/>
-								<text><![CDATA[Rate]]></text>
+								<text><![CDATA[Qty]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table 8_TD" height="20">
@@ -644,7 +644,7 @@
 							<textField isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="50" height="20" uuid="c7839f04-341f-4441-bed6-913f799a01ec"/>
 								<textElement textAlignment="Right"/>
-								<textFieldExpression><![CDATA[$F{dblUnitPrice}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{dblQty}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -654,14 +654,15 @@
 							<staticText>
 								<reportElement x="0" y="0" width="100" height="30" uuid="b9dc8a77-e43a-45d0-89a7-dea14c8dcb5b"/>
 								<textElement textAlignment="Center"/>
-								<text><![CDATA[Type]]></text>
+								<text><![CDATA[Rate]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table 8_TD" height="20">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="10" y="0" width="90" height="20" uuid="d0f3bc82-1dfd-44f0-a14b-af308577e9b4"/>
-								<textFieldExpression><![CDATA[$F{strUOM}]]></textFieldExpression>
+								<reportElement x="0" y="0" width="90" height="20" uuid="d0f3bc82-1dfd-44f0-a14b-af308577e9b4"/>
+								<textElement textAlignment="Right"/>
+								<textFieldExpression><![CDATA[$F{dblUnitPrice}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -671,7 +672,7 @@
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="30" uuid="072ffd3e-d144-491d-8fb9-eb1524b9c340"/>
 								<textElement textAlignment="Center"/>
-								<text><![CDATA[Qty]]></text>
+								<text><![CDATA[Amount]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table 8_TD" height="20">
@@ -679,7 +680,7 @@
 							<textField isBlankWhenNull="true">
 								<reportElement x="10" y="0" width="50" height="20" uuid="6eca90f3-94f1-4a88-aaea-7a8cd4657aa8"/>
 								<textElement textAlignment="Center"/>
-								<textFieldExpression><![CDATA[$F{dblQty}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{dblGrandTotal}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

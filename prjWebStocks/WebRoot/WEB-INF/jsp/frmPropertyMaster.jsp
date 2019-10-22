@@ -110,6 +110,8 @@
 	
  function onLoadFunction()
 	{
+	 
+	}
 	 var message='';
 		<%if (session.getAttribute("success") != null) {
 			            if(session.getAttribute("successMessage") != null){%>
@@ -125,7 +127,7 @@
 		<%
 		}}%>
 
-	}
+
  function funCallFormAction(actionName,object) 
 	{
 		var flg=true;

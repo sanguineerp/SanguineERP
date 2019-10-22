@@ -12,7 +12,7 @@
 	$(function() 
 	{
 	});
-
+	var clickCount =0.0;
 	function funSetData(code){
 
 		switch(fieldName){
@@ -23,6 +23,25 @@
 		}
 	}
 
+	function funCallFormAction(actionName,object) 
+	{
+		
+		if ($("#txtCurrencyName").val()=="") 
+		    {
+			 alert('Enter Name');
+			 $("#txtSODate").focus();
+			 return false;  
+		   
+		}
+	if(clickCount==0){
+		clickCount=clickCount+1;
+	}
+		else
+		{
+			return false;
+		}
+		return true; 
+	}
 
 	function funSetCurrencyCode(code){
 
@@ -208,7 +227,7 @@
 		<br />
 		<br />
 		<p align="center">
-			<input type="submit" value="Submit" tabindex="3" class="form_button" />
+			<input type="submit" value="Submit" tabindex="3" class="form_button" onclick="return funCallFormAction('submit',this);"/>
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 

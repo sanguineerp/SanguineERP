@@ -33,6 +33,7 @@ $(document).ready(function(){
 </script>
 	<script type="text/javascript">
 	var fieldName;
+	var clickCount =0.0;
 	//Initialize tab Index or which tab is Active
 	$(document).ready(function() 
 			{		
@@ -371,6 +372,9 @@ $(document).ready(function(){
 				alert("Please Select Property Code");
 				return false;
 			}
+			
+			if(clickCount==0){
+				clickCount=clickCount+1;
 			if($('#txtLocCode').val()=='')
 			{
 				var code = $('#txtlocName').val();
@@ -412,6 +416,11 @@ $(document).ready(function(){
 						
 			      });
 			}
+		}
+		else
+		{
+			return false;
+		}
 // 			if($('#txtLocCode').val()==$('#txtUnderLocCode').val())
 // 				{
 // 					alert("Location and Under Location Are Same");

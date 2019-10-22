@@ -55,6 +55,26 @@
 	
 	
 		var fieldName;
+		var clickCount =0.0;	
+		function funCallFormAction(actionName,object) 
+			{
+				
+				if ($("#txtTaxDesc").val()=="") 
+				    {
+					 alert('Enter Tax Desc');
+					 $("#txtTaxDesc").focus();
+					 return false;  
+				   
+				}
+			if(clickCount==0){
+				clickCount=clickCount+1;
+			}
+				else
+				{
+					return false;
+				}
+				return true; 
+			}
 		$(function() 
 		{
 		 	$( "#txtDtFromDate" ).datepicker({ dateFormat: 'dd-mm-yy' });
@@ -1108,7 +1128,7 @@
 		<br />
 					
 		<p align="center">
-			<input type="submit" value="Submit" id="btnSubmit" class="form_button" "/> 
+			<input type="submit" value="Submit" id="btnSubmit" class="form_button" " onclick="return funCallFormAction('submit',this);"/> 
 			<input type="reset" value="Reset" class="form_button" onclick="funResetFields()"/>
 		</p>
 			

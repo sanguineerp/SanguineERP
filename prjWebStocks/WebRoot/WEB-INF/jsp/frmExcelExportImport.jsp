@@ -104,6 +104,10 @@
 				window.location.href=getContextPath()+"/SupplierMasterImport.html";	
 				break;
 				
+			case "frmProductMaster" :
+				window.location.href=getContextPath()+"/ProductMasterExport.html";
+				break;
+				
 			/* case "frmCheckInCheckOutList" :
 				window.location.href=getContextPath()+"/CheckInCheckOutList.html";	
 				
@@ -230,6 +234,11 @@
 		if(transactionformName=="frmMIS")
 		{
 			LocCode='<%=request.getParameter("strLocCode") %>'
+		}
+		
+		if(transactionformName=="frmProductMaster")
+		{
+			LocCode='<%=request.getParameter("strProdCode") %>'
 		}
 		
 		
