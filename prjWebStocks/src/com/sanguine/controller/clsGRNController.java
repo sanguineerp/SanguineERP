@@ -512,6 +512,7 @@ public class clsGRNController {
 				objGRNDtl.setStrIsueLocName("");
 			}
 			objGRNDtl.setStrStkble(prodMaster.getStrNonStockableItem());
+			objGRNDtl.setDblFreeQty(grnDtl.getDblFreeQty());
 			StringBuilder sqlBuilder = new StringBuilder();
 			sqlBuilder.setLength(0);
 			sqlBuilder
@@ -638,6 +639,7 @@ public class clsGRNController {
 						ob.setDblTaxAmt(taxAmt * currValue);
 						
 						ob.setDblUnitPrice(ob.getDblUnitPrice() * currValue);
+						ob.setDblFreeQty(ob.getDblFreeQty());
 						objGRNService.funAddUpdateDtl(ob);
 						clsProductMasterModel objModel = objProductMasterService.funGetObject(ob.getStrProdCode(), clientCode);
 
@@ -668,7 +670,7 @@ public class clsGRNController {
 										tempval=tempval + ob.getDblTaxAmt();	
 										}
 
-										weightedStk = stock + ob.getDblQty();
+										weightedStk = stock + ob.getDblQty()+ob.getDblFreeQty();
 										if (weightedStk == 0.0) {
 											weightedStk = 1.0;
 										}
@@ -748,7 +750,7 @@ public class clsGRNController {
 									tempval=tempval + ob.getDblTaxAmt();	
 									}
 
-									weightedStk = stock + ob.getDblQty();
+									weightedStk = stock + ob.getDblQty()+ob.getDblFreeQty();
 									if (weightedStk == 0.0) {
 										weightedStk = 1.0;
 									}
@@ -791,7 +793,7 @@ public class clsGRNController {
 									tempval=tempval + ob.getDblTaxAmt();	
 									}
 
-									weightedStk = stock + ob.getDblQty();
+									weightedStk = stock + ob.getDblQty()+ob.getDblFreeQty();
 									if (weightedStk == 0.0) {
 										weightedStk = 1.0;
 									}

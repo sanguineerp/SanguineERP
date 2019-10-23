@@ -1332,7 +1332,7 @@ public class clsGlobalFunctions {
 		}
 
 		objGlobalFunctionsService.funDeleteTempItemStock(clientCode, userCode);
-		String hql = "insert into clsTempItemStockModel(strProdCode,dblQty,strClientCode,strUserCode) " + "select b.strProdCode,sum(b.dblQty-b.dblRejected),'" + clientCode + "','" + userCode + "' " + "from clsGRNHdModel a,clsGRNDtlModel b " + "where a.strGRNCode=b.strGRNCode and date(a.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' ";
+		String hql = "insert into clsTempItemStockModel(strProdCode,dblQty,strClientCode,strUserCode) " + "select b.strProdCode,sum(b.dblQty-b.dblRejected+b.dblFreeQty),'" + clientCode + "','" + userCode + "' " + "from clsGRNHdModel a,clsGRNDtlModel b " + "where a.strGRNCode=b.strGRNCode and date(a.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' ";
 		if (!locCode.equalsIgnoreCase("All")) {
 			hql += "and a.strLocCode='" + locCode + "' ";
 		}
@@ -1772,7 +1772,7 @@ public class clsGlobalFunctions {
 		
 		// Calculate GRN Qty for Product
 
-		String hql_GRN = "select sum(b.dblQty-b.dblRejected) " + "from clsGRNHdModel a,clsGRNDtlModel b " + "where a.strGRNCode=b.strGRNCode and b.strProdCode='" + prodCode + "' " + "and date(a.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' ";
+		String hql_GRN = "select sum(b.dblQty-b.dblRejected+b.dblFreeQty) " + "from clsGRNHdModel a,clsGRNDtlModel b " + "where a.strGRNCode=b.strGRNCode and b.strProdCode='" + prodCode + "' " + "and date(a.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' ";
 		if (!locCode.equalsIgnoreCase("All")) {
 			hql_GRN += "and a.strLocCode In " + locCode + " ";
 		}

@@ -583,6 +583,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		sql = "ALTER TABLE `tblwalkinroomratedtl`	ADD COLUMN `dblDiscount` DECIMAL(18,4) NOT NULL DEFAULT '0.0' AFTER `strClientCode`;";
 		funExecuteQuery(sql);
+		
+		sql = "ALTER TABLE `tblgrndtl` "
+				+ "ADD COLUMN `dblFreeQty` DECIMAL(18,4) NOT NULL DEFAULT '0.00' AFTER `strMISCode`;";
+		funExecuteQuery(sql);
+		
 		sql = " select strMasterCode from tbllinkup ";
 		int i=funExecute(sql);
 		

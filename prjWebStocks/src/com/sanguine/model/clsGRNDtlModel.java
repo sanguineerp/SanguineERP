@@ -134,6 +134,9 @@ public class clsGRNDtlModel implements Serializable {
 	@Transient
 	private String strCurrency;
 
+	@Column(name = "dblFreeQty", columnDefinition = "DECIMAL(18,4) NOT NULL default '0.0000'")
+	private double dblFreeQty;
+	
 	public long getIntId() {
 		return intId;
 	}
@@ -458,5 +461,13 @@ public class clsGRNDtlModel implements Serializable {
 		}
 		// return value !=null && (value instanceof String &&
 		// value.toString().length()>0) ? value : defaultValue;
+	}
+
+	public double getDblFreeQty() {
+		return dblFreeQty;
+	}
+
+	public void setDblFreeQty(double dblFreeQty) {
+		this.dblFreeQty = dblFreeQty;
 	}
 }

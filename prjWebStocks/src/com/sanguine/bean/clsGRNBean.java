@@ -103,6 +103,8 @@ public class clsGRNBean {
 	private double dblVATClaim;
 	
 	private String strRateEditableYN;
+	
+	private double dblFreeQty;
 
 	public List<clsGRNTaxDtlModel> getListGRNTaxDtl() {
 		return listGRNTaxDtl;
@@ -499,6 +501,14 @@ public class clsGRNBean {
 
 	public void setStrRateEditableYN(String strRateEditableYN) {
 		this.strRateEditableYN = strRateEditableYN;
+	}
+
+	public double getDblFreeQty() {
+		return dblFreeQty;
+	}
+
+	public void setDblFreeQty(double dblFreeQty) {
+		this.dblFreeQty = dblFreeQty;
 	}
 
 
