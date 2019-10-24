@@ -149,7 +149,23 @@ public class clsReportBean {
 	
 	private String strSettlementName;
 	
+	private String strGRNNumber;
 	
+	private String strItemCode;
+	
+	private String strItemName;
+	
+	private String strLocation;
+	
+	private double dblFOCQty;
+	
+	private String dteGRNDate;
+	
+	private String strAmt;
+	
+	
+	
+	private String strSuppName;
 	private List<clsFundFlowBean> listFundFlowBean = new ArrayList<clsFundFlowBean>();
 
 	public String getStrWeekDay() {
@@ -640,6 +656,70 @@ public class clsReportBean {
 
 	public void setStrSettlementName(String strSettlementName) {
 		this.strSettlementName = strSettlementName;
+	}
+
+	public String getStrGRNNumber() {
+		return strGRNNumber;
+	}
+
+	public void setStrGRNNumber(String strGRNNumber) {
+		this.strGRNNumber = strGRNNumber;
+	}
+
+	public String getStrItemCode() {
+		return strItemCode;
+	}
+
+	public void setStrItemCode(String strItemCode) {
+		this.strItemCode = strItemCode;
+	}
+
+	public String getStrItemName() {
+		return strItemName;
+	}
+
+	public void setStrItemName(String strItemName) {
+		this.strItemName = strItemName;
+	}
+
+	public String getStrLocation() {
+		return strLocation;
+	}
+
+	public void setStrLocation(String strLocation) {
+		this.strLocation = strLocation;
+	}
+
+	public double getDblFOCQty() {
+		return dblFOCQty;
+	}
+
+	public void setDblFOCQty(double dblFOCQty) {
+		this.dblFOCQty = dblFOCQty;
+	}
+
+	public String getDteGRNDate() {
+		return dteGRNDate;
+	}
+
+	public void setDteGRNDate(String dteGRNDate) {
+		this.dteGRNDate = dteGRNDate;
+	}
+
+	public String getStrAmt() {
+		return strAmt;
+	}
+
+	public void setStrAmt(String strAmt) {
+		this.strAmt = strAmt;
+	}
+
+	public String getStrSuppName() {
+		return strSuppName;
+	}
+
+	public void setStrSuppName(String strSuppName) {
+		this.strSuppName = strSuppName;
 	}
 
 }

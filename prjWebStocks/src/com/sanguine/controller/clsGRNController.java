@@ -731,7 +731,7 @@ public class clsGRNController {
 								}
 							} else {
 								if (ob.getDblUnitPrice() != objModel
-										.getDblCostRM()) {// Weighted average Calculating Logic and
+										.getDblCostRM() || ob.getDblFreeQty()>0) {// Weighted average Calculating Logic and
 									// Update In Product Master
 									stock = objGlobalFunctions.funGetCurrentStockForProduct(ob.getStrProdCode(),objHdModel.getStrLocCode(),
 													clientCode,userCode,startDate,objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd"),proprtyWiseStock);

@@ -1943,6 +1943,16 @@
 	<definition name="frmGRNList" extends="base.searchFormDefination">
 		<put-attribute name="body" value="/WEB-INF/jsp/frmGRNList.jsp"></put-attribute>
 	</definition>
+	
+	<definition name="frmFreeOfCostReport_1" extends="base.definition4">
+	      <put-attribute name="title" value="Free Of Cost(FOC)"></put-attribute>
+	      <put-attribute name="body" value="/WEB-INF/jsp/frmFreeOfCostReport.jsp"></put-attribute>
+    </definition> 
+    
+	 <definition name="frmFreeOfCostReport" extends="base.definition">
+	       <put-attribute name="title" value="Free Of Cost(FOC)"></put-attribute>
+	       <put-attribute name="body" value="/WEB-INF/jsp/frmFreeOfCostReport.jsp"></put-attribute>
+	 </definition>   
 
 
 	<!-- 	End Of Webstock Tiles Entry -->
