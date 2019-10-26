@@ -1953,7 +1953,15 @@
 	       <put-attribute name="title" value="Free Of Cost(FOC)"></put-attribute>
 	       <put-attribute name="body" value="/WEB-INF/jsp/frmFreeOfCostReport.jsp"></put-attribute>
 	 </definition>   
-
+     
+     <definition name="frmSupplierTaxWiseGRNReport" extends="base.definition">
+		<put-attribute name="title" value="Supplier Tax Wise GRN Report"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/frmSupplierTaxWiseGRNReport.jsp"></put-attribute>
+	 </definition>
+	 <definition name="frmSupplierTaxWiseGRNReport_1" extends="base.definition4">
+		<put-attribute name="title" value="Supplier Tax Wise GRN Report"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/frmSupplierTaxWiseGRNReport.jsp"></put-attribute>
+	 </definition>
 
 	<!-- 	End Of Webstock Tiles Entry -->
 	

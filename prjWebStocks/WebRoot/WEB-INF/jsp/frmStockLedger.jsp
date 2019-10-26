@@ -111,6 +111,8 @@
 			var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
 		    
+		    var freeQty=0;
+		    
 			row.insertCell(0).innerHTML= "<label>Transaction Date</label>";
 			row.insertCell(1).innerHTML= "<label>CostCenter/Supplier Name</label>";
 			row.insertCell(2).innerHTML= "<label>Transaction Type</label>";
@@ -160,6 +162,7 @@
 				   	 
 				   		//row1.insertCell(8).innerHTML= "<label type=\"hidden\">"+item[7]+"</label>";
 			   		}
+				 freeQty += parseFloat(item[7]);
 				}
 			});
 			
@@ -173,7 +176,7 @@
 		    
 		for (var cnt = 1; cnt < rowCount1; cnt++) {
 				var cells1 = tableRows[cnt].cells;
-
+            
 				var rec = cells1[4].innerHTML;
 				rec = rec.substring(7, rec.lastIndexOf("<"));
 				var issue = cells1[5].innerHTML;
@@ -342,6 +345,13 @@
 			row1.insertCell(1).innerHTML = "<label>"+ parseFloat(totalRec).toFixed(maxQuantityDecimalPlaceLimit)+ "</label>";
 			row1.insertCell(2).innerHTML = "<label>"+ (parseFloat(totalRec) * parseFloat(rateForValue)).toFixed(maxAmountDecimalPlaceLimit) + "</label>";
 
+			
+			rowCount = rowCount + 1;
+			row1 = table.insertRow(rowCount);
+			row1.insertCell(0).innerHTML = "<label>Free Quantity</label>";
+			row1.insertCell(1).innerHTML = "<label>"+ parseFloat(freeQty).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+			row1.insertCell(2).innerHTML = "<label>"+parseFloat(0).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+			
 			rowCount = rowCount + 1;
 			row1 = table.insertRow(rowCount);
 			row1.insertCell(0).innerHTML = "<label>Total Issues</label>";
@@ -353,6 +363,9 @@
 			row1.insertCell(0).innerHTML = "<label>Closing Balance</label>";
 			row1.insertCell(1).innerHTML = "<label>"+ parseFloat(closingBalance).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
 			row1.insertCell(2).innerHTML = "<label>"+ (parseFloat(closingBalance) * parseFloat(rateForValue)).toFixed(maxAmountDecimalPlaceLimit) + "</label>";
+			
+			
+			
 		}
 		function funCheckNull(chkValue){
 			
