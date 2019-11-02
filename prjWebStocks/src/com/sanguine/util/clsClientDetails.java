@@ -39,8 +39,9 @@ public class clsClientDetails {
 		this.Client_Name = Client_Name;
 		this.installDate = installDate;
 		this.expiryDate = expiryDate;
-
 	}
+
+	
 
 	private clsClientDetails(String id, String Client_Name, Date installDate, Date expiryDate, int intPropertyMachine, int intUserNo) {
 		this.id = id;
@@ -217,8 +218,8 @@ public class clsClientDetails {
 			
 			hmClientDtl.put("336.001", clsClientDetails.createClientDetails("336.001", "SHAH SPORTS ACADEMY PRIVATE LIMITED", dFormat.parse("2019-10-05"), dFormat.parse("2019-11-05")));//
 			hmClientDtl.put("337.001", clsClientDetails.createClientDetails("337.001", "Symbiosis University", dFormat.parse("2019-10-08"), dFormat.parse("2019-11-08")));//Abhijit Rege  9112299043 headhospitality@symbiosis.ac.in regeabhijit@gmail.com
-
-			//
+			
+			hmClientDtl.put("338.001", clsClientDetails.createClientDetails("338.001", "ELEPHANT & CO", dFormat.parse("2019-10-22"), dFormat.parse("2019-11-22")));//(Pune)//Released on 22-10-2019 for 1 month till 22-11-2019 for 2 SPOS ,5 APOS,WebStocks,No SMS Pack,No Bill Deletion.", "ANUJ SOLANKI", "9819657210", "anujsolanki@gmail.com", "No Bill Deletion","santesting","2","PUNE","50K","10K"
 			
 		} catch (Exception e) {
 			e.printStackTrace();

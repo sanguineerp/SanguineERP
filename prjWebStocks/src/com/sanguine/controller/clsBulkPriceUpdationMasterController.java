@@ -128,7 +128,10 @@ public class clsBulkPriceUpdationMasterController {
 
 				if (obModel.getStrProdCode() != null) {
 					clsProductMasterModel objModel1 = objProductMasterService.funGetObject(obModel.getStrProdCode(), clientCode);
-
+					if(obModel.getStrProdCode().equals("P000146")){
+						System.out.println(obModel.getStrProdCode());
+					}
+					System.out.println(obModel.getStrProdCode() +" prod code");
 					objModel1.setStrSGCode(obModel.getStrSGCode());
 					clsSubGroupMasterModel objSubGroup = objSubGrpMasterService.funGetObject(obModel.getStrSGCode(), clientCode);
 					objModel1.setStrSGName(objSubGroup.getStrSGName());
@@ -148,7 +151,7 @@ public class clsBulkPriceUpdationMasterController {
 					objModel1.setStrExciseable(objGlobal.funIfNull(obModel.getStrExciseable(), "N", "Y"));
 					objModel1.setStrNotInUse(objGlobal.funIfNull(obModel.getStrNotInUse(), "N", "Y"));
 					objModel1.setStrPickMRPForTaxCal(objGlobal.funIfNull(obModel.getStrPickMRPForTaxCal(), "N", "Y"));
-					objModel1.setStrBarCode(obModel.getStrBarCode());
+					objModel1.setStrBarCode(objGlobal.funIfNull(obModel.getStrBarCode(),"",obModel.getStrBarCode()));
 					objModel1.setDblReceiveConversion(obModel.getDblReceiveConversion());
 					objModel1.setStrReceivedUOM(obModel.getStrReceivedUOM());
 					objModel1.setStrIssueUOM(obModel.getStrIssueUOM());
@@ -162,7 +165,13 @@ public class clsBulkPriceUpdationMasterController {
 					if (objModel1.getStrProductImage() == null) {
 						objModel1.setStrProductImage(funBlankBlob());
 					}
-					objProductMasterService.funAddUpdateGeneral(objModel1);
+					try{
+						objProductMasterService.funAddUpdateGeneral(objModel1);	
+					}catch(Exception e){
+						System.out.println(obModel.getStrProdCode() +" prod error");
+						e.printStackTrace();
+					}
+					
 				}
 
 			}

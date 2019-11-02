@@ -21,7 +21,7 @@
 <title>BulkPriceUpdation</title>
 <script type="text/javascript">
 	
-	var productMasterData="",gridHelpRow ="",fieldName="";
+	var productMasterData="",gridHelpRow ="",fieldName="",listUMO;
    //Set tab which have Active on form loding
 	$(document).ready(function()
 	{
@@ -181,8 +181,10 @@
 			}
 		}
 		
+		
 		function funLoadSGProduct()
 		{
+			funLoadAllUMO();
 			var sgCode = $("#cmbSubGroup").val();
 			var itemType= $("#txtProdType").val();
 			$.ajax({
@@ -231,12 +233,12 @@
 		    
 		}
 		
-		var items_per_page = 20;
+		var items_per_page = 500;
 		function getOptionsFromForm()
 		{
 		    var opt = {callback: pageselectCallback};
 			opt['items_per_page'] = items_per_page;
-			opt['num_display_entries'] = 20;
+			opt['num_display_entries'] = 500;
 			opt['num_edge_entries'] = 3;
 			opt['prev_text'] = "Prev";
 			opt['next_text'] = "Next";
@@ -337,10 +339,8 @@
 
 
 
-
-		    
-		function getProductTypeUOM(strUOM)
-		{
+		function funLoadAllUMO(){
+			
 			var retOption="";
 			$.ajax({
 				type : "GET",
@@ -349,18 +349,7 @@
 				dataType : "json",
 				async : false,
 				success : function(response) {
-				
-					$.each(response, function(i,item)
-		               {		
-							if(response[i]==strUOM)
-								{
-								retOption+= "<option value='"+response[i]+"' selected>"+response[i]+"</option> ";
-								}
-							else
-								{
-								retOption+= "<option value='"+response[i]+"' >"+response[i]+"</option> ";
-								}
-		               });
+					listUMO=response;
 				},
 				error: function(jqXHR, exception) {
 		            if (jqXHR.status === 0) {
@@ -380,6 +369,26 @@
 		            }		            
 		        }
 			});
+			retOption+="  > </td>";
+			return retOption;
+		}
+		    
+		function getProductTypeUOM(strUOM)
+		{
+			var retOption="";
+			
+			$.each(listUMO, function(i,item)
+		               {		
+							if(listUMO[i]==strUOM)
+								{
+								retOption+= "<option value='"+listUMO[i]+"' selected>"+listUMO[i]+"</option> ";
+								}
+							else
+								{
+								retOption+= "<option value='"+listUMO[i]+"' >"+listUMO[i]+"</option> ";
+								}
+		               });
+			
 			retOption+="  > </td>";
 			return retOption;
 		}
