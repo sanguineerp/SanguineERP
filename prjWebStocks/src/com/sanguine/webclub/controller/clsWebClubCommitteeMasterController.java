@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.sanguine.bean.clsPOSItemMasterImportBean;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webclub.bean.clsWebClubCommitteeMasterBean;
@@ -23,8 +22,6 @@ import com.sanguine.webclub.model.clsWebClubCommitteeMasterDtl;
 import com.sanguine.webclub.model.clsWebClubCommitteeMasterModel;
 import com.sanguine.webclub.model.clsWebClubCommitteeMasterModel_ID;
 import com.sanguine.webclub.model.clsWebClubCommitteeMemberRoleMasterModel;
-import com.sanguine.webclub.model.clsWebClubPreMemberProfileModel;
-import com.sanguine.webclub.model.clsWebClubPreMemberProfileModel_ID;
 import com.sanguine.webclub.service.clsWebClubCommitteeMasterService;
 import com.sanguine.webclub.service.clsWebClubCommitteeMemberRoleMasterService;
 

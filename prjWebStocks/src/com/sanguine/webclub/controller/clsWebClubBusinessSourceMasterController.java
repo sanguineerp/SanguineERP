@@ -74,7 +74,7 @@ public class clsWebClubBusinessSourceMasterController{
 			clsWebClubBusinessSourceMasterModel objModel = funPrepareModel(objBean,userCode,clientCode);
 			objWebClubBusinessSourceMasterService.funAddUpdateWebClubBusinessSourceMaster(objModel);
 			req.getSession().setAttribute("success", true);
-			req.getSession().setAttribute("successMessage", "Business Source Code : ".concat(objBean.getStrBusinessSrcCode()));
+			req.getSession().setAttribute("successMessage", "Business Source Code : ".concat(objModel.getStrBusinessSrcCode()));
 			return new ModelAndView("redirect:/frmWebClubBusinessSourceMaster.html");
 		}
 		else{

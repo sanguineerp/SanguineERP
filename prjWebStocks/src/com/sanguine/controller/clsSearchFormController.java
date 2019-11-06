@@ -35,6 +35,7 @@ import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
+import com.sanguine.webclub.model.clsWebClubPreMemberProfileModel;
 
 @Controller
 public class clsSearchFormController {
@@ -3244,6 +3245,8 @@ public class clsSearchFormController {
 		Map<String, Object> mainMap = new HashMap<>();
 
 		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+		String webBooksDB=req.getSession().getAttribute("WebBooksDB").toString();
+		
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String columnNames = "";
 		String tableName = "";
@@ -3770,6 +3773,53 @@ public class clsSearchFormController {
 			idColumnName = "strFacilityCode";
 			criteria = getCriteriaQuery(columnNames, search_with, tableName);
 			searchFormTitle = "Facility Master";
+			break;
+		}
+		
+		case "WCMemberCode": {
+			columnNames = "strCustomerCode,strMemberCode,strFullName";
+			tableName = " clsWebClubMemberProfileModel where strClientCode='"+clientCode+"' and strCustomerCode=strPrimaryCustomerCode";
+			listColumnNames = "Customer Code,Member Code,Name ";
+			idColumnName = "strCustomerCode,strClientCode";
+			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			searchFormTitle = "Profile Explorer";
+			break;
+		}
+		
+		case "WCBankCode": {
+			columnNames = "strBankCode,strBankName,strBranch,strMICR";
+			tableName = " from "+webBooksDB+".tblbankmaster where strClientCode='" + clientCode + "' ";
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+				tableName += " and strPropertyCode = '" + propertyCode + "' ";
+			}*/
+			listColumnNames = "Bank Code,Bank Name,Branch Name,MIRC";
+			idColumnName = "strBankCode";
+			flgQuerySelection = true;
+			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			searchFormTitle = "Bank Master";
+			break;
+		}
+		case "WCBankCodee": {
+			columnNames = "strBankCode,strBankName,strBranch,strMICR";
+			tableName = " from "+webBooksDB+".tblbankmaster where strClientCode='" + clientCode + "' ";
+			/*if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
+				tableName += " and strPropertyCode = '" + propertyCode + "' ";
+			}*/
+			listColumnNames = "Bank Code,Bank Name,Branch Name,MIRC";
+			idColumnName = "strBankCode";
+			flgQuerySelection = true;
+			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			searchFormTitle = "Bank Master";
+			break;
+		}
+		
+		case "WCmemProfileCustomerIssued": {
+			columnNames = "strCustomerCode,strMemberCode,strFullName,strFirstName,strCategoryCode";
+			tableName = "clsWebClubMemberProfileModel where strClientCode='" + clientCode + "' and strCustomerCode=strPrimaryCustomerCode ";
+			listColumnNames = "Customer,Member Code,Member Name,First Name,Category";
+			idColumnName = "strCustomerCode";
+			criteria = getCriteriaQuery(columnNames, search_with, tableName);
+			searchFormTitle = "Member Profile";
 			break;
 		}
 

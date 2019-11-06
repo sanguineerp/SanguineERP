@@ -2143,7 +2143,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="INSERT INTO `tbltreemast` (`strFormName`, `strFormDesc`, `strRootNode`, `intRootIndex`, `strType`, `intFormKey`, `intFormNo`, `strImgSrc`, `strImgName`, `strModule`, `strTemp`, `strActFile`, `strHelpFile`, `strProcessForm`, `strAutorisationForm`, `strRequestMapping`, `strAdd`, `strAuthorise`, `strDelete`, `strDeliveryNote`, `strDirect`, `strEdit`, `strGRN`, `strGrant`, `strMinimumLevel`, `strOpeningStock`, `strPrint`, `strProductionOrder`, `strProject`, `strPurchaseIndent`, `strPurchaseOrder`, `strPurchaseReturn`, `strRateContractor`, `strRequisition`, `strSalesOrder`, `strSalesProjection`, `strSalesReturn`, `strServiceOrder`, `strSubContractorGRN`, `strView`, `strWorkOrder`, `strAuditForm`, `strMIS`, `strInvoice`, `strDeliverySchedule`, `strFormAccessYN`) VALUES "
 			+" ('frmWebClubSecurityShellMaster', 'Security Shell', 'Master', 1, 'M', 1, 10, '1', 'default.png', '4', 1, '1', '1', 'NO', 'YES', 'frmWebClubSecurityShell.html',  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 			+" ('frmWebClubBusinessSourceMaster', 'Business Source Master', 'Master', '1', 'M', '1', '1', '1', 'default.png', '4', '1', '1', '1', 'NO', 'NO', 'frmWebClubBusinessSourceMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'), "
-			+" ('frmWebClubFacilityMaster', 'Facility Master', 'Master', 1, 'M', 1, 3, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmWebClubFacilityMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+			+" ('frmWebClubFacilityMaster', 'Facility Master', 'Master', 1, 'M', 1, 3, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmWebClubFacilityMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+			+ "('frmWebClubPDC', 'Post Deposit Cheque(PDC)', 'Master', 1, 'M', 1, 1, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmWebClubPDC.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+			+ "('frmMemberExplorer', 'Member Explorer', 'Master', '1', 'M', '1', '14', '1', 'default.png', '4', '1', '1', '1', 'NO', 'NO', 'frmMemberExplorer.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+			+ "('frmBankMaster', 'Bank Master', 'Master', 1, 'M', 1, 1, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmBankMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		funExecuteQuery(sql);
 		
 		sql = "CREATE TABLE `tblbusinesssource` ("
@@ -2196,6 +2199,21 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+ " COLLATE='latin1_swedish_ci' "
 			+ " ENGINE=InnoDB; ";
 		
+		funExecuteWebClubQuery(sql);
+		
+		sql = "CREATE TABLE `tblpdcdtl` ("
+				+ "`strMemCode` VARCHAR(20) NOT NULL,"
+				+ "`strChequeNo` VARCHAR(20) NOT NULL,"
+				+ "`strDrawnOn` VARCHAR(20) NOT NULL,"
+				+ "`strType` VARCHAR(10) NOT NULL,"
+				+ "`dblChequeAmt` DECIMAL(10,4) NOT NULL DEFAULT '0.0000',"
+				+ "`dteChequeDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',"
+				+ "`dteDateCreated` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',"
+				+ "`dteDateEdited` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',"
+				+ "`strUserCreated` VARCHAR(10) NOT NULL DEFAULT '',"
+				+ "`strUserEdited` VARCHAR(10) NOT NULL DEFAULT '',"
+				+ "`strClientCode` VARCHAR(10) NOT NULL, INDEX `strMemCode` (`strMemCode`)"
+				+ ") COLLATE='latin1_swedish_ci' ENGINE=InnoDB;";	
 		funExecuteWebClubQuery(sql);
 		
 		

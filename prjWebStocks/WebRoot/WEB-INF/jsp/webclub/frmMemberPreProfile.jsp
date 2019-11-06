@@ -53,6 +53,15 @@
         $("#txtdtToDate" ).datepicker('setDate', 'today');
         $("#txtdtToDate").datepicker();
         
+        
+        $("#txtdtFromDate").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#txtdtFromDate" ).datepicker('setDate', 'today');
+        $("#txtdtFromDate").datepicker();
+        
+        $("#txtdtFromDate").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#txtdtFromDate" ).datepicker('setDate', 'today');
+        $("#txtdtFromDate").datepicker();
+        
         $("#txtdtSpouseDateofBirth").datepicker({ dateFormat: 'yy-mm-dd' });
         $("#txtdtSpouseDateofBirth" ).datepicker('setDate', 'today');
         $("#txtdtSpouseDateofBirth").datepicker();
@@ -2306,7 +2315,7 @@ function funSetBillingRegionCode(code){
 							
 						<td width="120px"><label>Area Code</label></td>
 							<td width="150px"><s:input id="txtBillingAreaCode"
-									ondblclick="funHelp('WCBillingAreaMaster')" cssClass="searchTextBox" required="required"
+									ondblclick="funHelp('WCBillingAreaMaster')" cssClass="searchTextBox" 
 									type="text" path="strBillingAreaCode" ></s:input></td>
 									
 						<td colspan="2"><s:input id="txtBillingAreaName" path="" 
@@ -2314,7 +2323,7 @@ function funSetBillingRegionCode(code){
 									
 						<td width="120px"><label>City Code</label></td>
 							<td width="150px"><s:input id="txtBillingCtCode"
-									ondblclick="funHelp('WCBillingCityMaster')" cssClass="searchTextBox" required="required"
+									ondblclick="funHelp('WCBillingCityMaster')" cssClass="searchTextBox" 
 									type="text" path="strBillingCtCode" ></s:input></td>
 									
 						<td colspan="2"><s:input id="txtBillingCtName" path="" 
@@ -2358,7 +2367,7 @@ function funSetBillingRegionCode(code){
 						<td ><label>State Code</label></td>
 							<td width="150px"><s:input id="txtBillingStateCode"
 									ondblclick="funHelp('WCBillingStateMaster')" cssClass="searchTextBox"
-									type="text" path="strBillingStateCode"  required="required" ></s:input></td>
+									type="text" path="strBillingStateCode"   ></s:input></td>
 									
 						<td colspan="2"><s:input id="txtBillingStateName" path="" 
 									cssClass="longTextBox" type="text"></s:input></td>
@@ -2533,8 +2542,8 @@ function funSetBillingRegionCode(code){
 		<tr>	
 				<td width="120px"><label>Membership Category</label></td>
 							<td width="150px"><s:input id="txtMSCategoryCode"
-									ondblclick="" cssClass="searchTextBox" 
-									type="text" path="strCategoryCode" required="required" ></s:input></td>
+									ondblclick="WCCatMaster" cssClass="searchTextBox" 
+									type="text" path="strCategoryCode"  ></s:input></td>
 									
 						<td><s:input id="txtMemberName" path="" 
 									cssClass="longTextBox" type="text"></s:input></td>
@@ -2756,7 +2765,7 @@ function funSetBillingRegionCode(code){
 			    <td><s:input id="txtdtFromDate" name="txtdtFromDate" path=""  cssClass="calenderTextBox" /></td>
 				
 				<td><label>To Date</label></td>
-			    <td colspan="2"><s:input id="txtdtToDate" name="txtdtFromDate" path=""  cssClass="calenderTextBox" /></td>
+			    <td colspan="2"><s:input id="txtdtToDate" name="txtdtToDate" path=""  cssClass="calenderTextBox" /></td>
 			</tr>
 			
 			<tr>
@@ -2801,7 +2810,7 @@ function funSetBillingRegionCode(code){
 						name="txtChangeDependentMemberCode" path="" readonly="true"
 						cssStyle="searchTextBox" cssClass="longTextBox"  /> <s:errors path=""></s:errors></td>
 					<td><s:input  type="text" id="txtChangeDependentCode" 
-						name="txtChangeDependentCode" path="" required="true"
+						name="txtChangeDependentCode" path="" 
 						cssClass="longTextBox"  /> <s:errors path=""></s:errors></td>
 						
 						

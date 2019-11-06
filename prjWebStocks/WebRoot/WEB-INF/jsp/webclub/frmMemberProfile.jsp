@@ -2252,7 +2252,7 @@ function funSetBillingRegionCode(code){
 							
 						<td width="120px"><label>Area Code</label></td>
 							<td width="150px"><s:input id="txtBillingAreaCode"
-									ondblclick="funHelp('WCBillingAreaMaster')" cssClass="searchTextBox" required="required"
+									ondblclick="funHelp('WCBillingAreaMaster')" cssClass="searchTextBox" 
 									type="text" path="strBillingAreaCode" ></s:input></td>
 									
 						<td colspan="2"><s:input id="txtBillingAreaName" path="" 
@@ -2260,7 +2260,7 @@ function funSetBillingRegionCode(code){
 									
 						<td width="120px"><label>City Code</label></td>
 							<td width="150px"><s:input id="txtBillingCtCode"
-									ondblclick="funHelp('WCBillingCityMaster')" cssClass="searchTextBox" required="required"
+									ondblclick="funHelp('WCBillingCityMaster')" cssClass="searchTextBox" 
 									type="text" path="strBillingCtCode" ></s:input></td>
 									
 						<td colspan="2"><s:input id="txtBillingCtName" path="" 
@@ -2304,7 +2304,7 @@ function funSetBillingRegionCode(code){
 						<td ><label>State Code</label></td>
 							<td width="150px"><s:input id="txtBillingStateCode"
 									ondblclick="funHelp('WCBillingStateMaster')" cssClass="searchTextBox"
-									type="text" path="strBillingStateCode"  required="required" ></s:input></td>
+									type="text" path="strBillingStateCode"   ></s:input></td>
 									
 						<td colspan="2"><s:input id="txtBillingStateName" path="" 
 									cssClass="longTextBox" type="text"></s:input></td>
@@ -2480,7 +2480,7 @@ function funSetBillingRegionCode(code){
 				<td width="120px"><label>Membership Category</label></td>
 							<td width="150px"><s:input id="txtMSCategoryCode"
 									ondblclick="funHelp('WCCatMaster')" cssClass="searchTextBox" 
-									type="text" path="strCategoryCode" required="required" ></s:input></td>
+									type="text" path="strCategoryCode"  ></s:input></td>
 									
 						<td><s:input id="txtMemberName" path="" 
 									cssClass="longTextBox" type="text"></s:input></td>

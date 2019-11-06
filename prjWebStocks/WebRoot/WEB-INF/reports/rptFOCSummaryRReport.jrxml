@@ -27,6 +27,7 @@
 	<parameter name="strState" class="java.lang.String"/>
 	<parameter name="strCountry" class="java.lang.String"/>
 	<parameter name="strPin" class="java.lang.String"/>
+	<parameter name="strUserCode" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select  1 from dual]]>
 	</queryString>
@@ -279,27 +280,62 @@
 		<band height="3" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="cc6cdde0-ce9b-4677-a33e-128aa37ad13f"/>
-				<textElement textAlignment="Right">
-					<font fontName="Serif" size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="2b2e0156-49c0-47db-a1ab-500af021ab09"/>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="6" y="8" width="61" height="15" uuid="f911a241-f343-411e-b1f6-42acbc55a315"/>
 				<textElement>
-					<font fontName="Serif" size="10" isBold="false"/>
+					<font fontName="Serif" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="5b187dad-cc20-44f3-adf2-7edac2b7fe7e"/>
+				<text><![CDATA[Created on :]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="69" y="8" width="90" height="15" uuid="606a98ca-5f98-46b5-8da4-802873ce12b7"/>
 				<textElement>
-					<font fontName="Serif" size="10" isBold="false"/>
+					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="165" y="8" width="24" height="15" uuid="c70beddb-96ec-4824-827c-992b4af89df4"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AT :]]></text>
+			</staticText>
+			<textField pattern="HH:mm">
+				<reportElement x="189" y="8" width="56" height="15" uuid="3e948574-c3a8-44cf-a4c8-a2e90ba5e264"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="8" width="20" height="15" uuid="86932df9-7bfa-405d-b106-7b620f6880b7"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[By :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="325" y="8" width="100" height="15" uuid="18f6a1fe-62c1-4c51-8f90-26736eb6396e"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strUserCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="8" width="50" height="15" uuid="2bc263b8-f862-4808-80b5-16b975ffdb94"/>
+				<textElement textAlignment="Right">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="502" y="8" width="50" height="15" uuid="c3d1fa6f-f261-4e99-9c50-d751bf3b6ed3"/>
+				<textElement textAlignment="Left">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

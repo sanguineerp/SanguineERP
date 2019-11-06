@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptConsReceiptValStoreWiseBreskUPReport" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13acf49e-4913-4d1b-bccc-113817ad15d1">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="WebRoot\WEB-INF\reports\NEW_DATAADAPTER.xml"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="342"/>
@@ -264,7 +264,7 @@ Group By a.strLocCode, a.strSuppCode, b.strPName]]>
 		</band>
 	</detail>
 	<lastPageFooter>
-		<band height="27">
+		<band height="60">
 			<staticText>
 				<reportElement x="296" y="4" width="64" height="21" forecolor="#002CB0" uuid="2bfb863f-4c85-4f1b-9d44-bfc0473e5972"/>
 				<box>
@@ -302,6 +302,62 @@ Group By a.strLocCode, a.strSuppCode, b.strPName]]>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
 			</line>
+			<staticText>
+				<reportElement x="0" y="40" width="61" height="15" uuid="d49f4f71-284a-4c94-9049-d6c621b2367e"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Created on :]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="63" y="40" width="90" height="15" uuid="5d4e66c3-b710-4482-be64-058587035853"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement x="183" y="40" width="56" height="15" uuid="5da2123e-0df3-4f04-926f-4dc02f5258f8"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="159" y="40" width="24" height="15" uuid="7cffa783-b651-491c-bdf9-6536b18a5545"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AT :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="40" width="20" height="15" uuid="099492e8-0d6e-4fc4-a1d4-6c63a3c8f7f7"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[By :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="319" y="40" width="100" height="15" uuid="4574cd85-2dfd-4585-aa65-e9e5e423f8b7"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strUserCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="446" y="40" width="50" height="15" uuid="7747826d-b6da-46b1-bd5a-a4d9590e82e8"/>
+				<textElement textAlignment="Right">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="496" y="40" width="50" height="15" uuid="312a3f22-0b12-4e0f-966d-883502de6170"/>
+				<textElement textAlignment="Left">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</lastPageFooter>
 	<summary>

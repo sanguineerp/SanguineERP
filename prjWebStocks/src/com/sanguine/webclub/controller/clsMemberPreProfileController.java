@@ -120,7 +120,7 @@ public class clsMemberPreProfileController {
 		clsWebClubPreMemberProfileModel mpModel;
 		if (memProfileBean.getStrCustomerCode().trim().length() == 0) {
 
-			lastNo = objGlobalFunctionsService.funGetLastNo("tblmembermaster", "MemberProfile", "intGId", clientCode);
+			lastNo = objGlobalFunctionsService.funGetLastNo("tblpremembermaster", "MemberPreProfile", "intGId", clientCode);
 			String customerCode = "C" + String.format("%06d", lastNo);
 			mpModel = new clsWebClubPreMemberProfileModel(new clsWebClubPreMemberProfileModel_ID(customerCode, clientCode));
 			mpModel.setIntGId(lastNo);
@@ -578,7 +578,7 @@ public class clsMemberPreProfileController {
 
 		if (memProfileBean.getStrSpouseCustomerCode() == null) {
 
-			lastNo = objGlobalFunctionsService.funGetLastNo("tblmembermaster", "MemberProfile", "intGId", clientCode);
+			lastNo = objGlobalFunctionsService.funGetLastNo("tblpremembermaster", "MemberPreProfile", "intGId", clientCode);
 			String customerCode = "C" + String.format("%06d", lastNo);
 			mpModel = new clsWebClubPreMemberProfileModel(new clsWebClubPreMemberProfileModel_ID(customerCode, clientCode));
 			mpModel.setIntGId(lastNo);

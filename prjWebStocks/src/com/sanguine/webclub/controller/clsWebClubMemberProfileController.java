@@ -770,12 +770,17 @@ public class clsWebClubMemberProfileController {
 	public @ResponseBody List funAssignFields(@RequestParam("primaryCode") String primaryCode, HttpServletRequest req) {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		List<clsWebClubMemberProfileModel> objMemberModelList = objMemberProfileService.funGetAllMember(primaryCode, clientCode);
-
-		if (null == objMemberModelList) {
-			List<clsWebClubMemberProfileModel> objMemModelList = new ArrayList<clsWebClubMemberProfileModel>();
-			objMemModelList.get(0).setStrMemberCode("Invalid Code");
+		List<clsWebClubMemberProfileModel> finalList = new ArrayList<>();
+		if (null != objMemberModelList) {
+			for(int i=0;i<objMemberModelList.size();i++)
+			{
+				if(objMemberModelList.get(i).getStrMemberCode()!=null && objMemberModelList.size()>0 && !objMemberModelList.get(i).getStrMemberCode().equals(""))
+				{
+					finalList.add(objMemberModelList.get(i));
+				}
+			}
 		}
-		return objMemberModelList;
+		return finalList;
 	}
 
 	@RequestMapping(value = "/loadWebClubMemberProfileCustomerData", method = RequestMethod.GET)

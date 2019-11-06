@@ -3492,7 +3492,23 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmWebClubFacilityMaster.jsp"></put-attribute>
 	</definition>
 	
+	<definition name="frmMemberExplorer" extends="base.definition">
+		<put-attribute name="title" value="Member Explorer"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmMemberExplorer.jsp"></put-attribute>
+	</definition>
+	<definition name="frmMemberExplorer_1" extends="base.definition4">
+		<put-attribute name="title" value="Member Explorer"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmMemberExplorer.jsp"></put-attribute>
+	</definition>
 	
+		<definition name="frmWebClubPDC" extends="base.definition">
+		<put-attribute name="title" value="Post Deposit Cheque(PDC)"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmWebClubPDC.jsp"></put-attribute>
+	</definition>
+	<definition name="frmWebClubPDC_1" extends="base.definition4">
+		<put-attribute name="title" value="Post Deposit Cheque(PDC)"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/jsp/webclub/frmWebClubPDC.jsp"></put-attribute>
+	</definition>
 	
 	
 	
