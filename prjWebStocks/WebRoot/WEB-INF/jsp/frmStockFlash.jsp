@@ -208,7 +208,7 @@
     			}	
 		    if($("#cmbReportType").val()=='Detail')
 		   	{		    	
-			   	newcontent = '<table id="tblStockFlash" class="transTablex" style="width: 100%;font-size:11px;font-weight: bold;"><tr bgcolor="#75c0ff"><td id="labld1" size="10%">Property Name</td><td id="labld2"> Product Code</td><td id="labld3"> Product Name</td>	<td id="labld4"> Location </td>	<td id="labld5"> Group</td><td id="labld6"> Sub Group</td><td id="labld7"> UOM</td><td id="labld8"> Bin No</td><td id="labld9"> Unit Price</td><td id="labld10"> Opening Stock</td><td id="labld11"> GRN</td><td id="labld12"> SCGRN</td><td id="labld13"> Stock Transfer In</td><td id="labld14"> Stock Adj In</td><td id="labld15"> MIS In</td><td id="labld16"> Qty Produced</td><td id="labld17"> Sales Return</td><td id="labld18"> Material Return</td><td id="labld19"> Purchase Return</td><td id="labld20"> Delivery Note</td><td id="labld21"> Stock Trans Out</td><td id="labld22"> Stock Adj Out</td><td id="labld23"> MIS Out</td><td id="labld24"> Qty Consumed</td><td id="labld25"> Sales</td><td id="labld26">Closing Stock</td><td id="labld27">Value</td><td id="labld28">Issue UOM Stock</td><td id="labld29">Issue Conversion</td><td id="labld30">Issue UOM </td><td id="labld31">Part No</td></tr>';
+			   	newcontent = '<table id="tblStockFlash" class="transTablex" style="width: 100%;font-size:11px;font-weight: bold;"><tr bgcolor="#75c0ff"><td id="labld1" size="10%">Property Name</td><td id="labld2"> Product Code</td><td id="labld3"> Product Name</td>	<td id="labld4"> Location </td>	<td id="labld5"> Group</td><td id="labld6"> Sub Group</td><td id="labld7"> UOM</td><td id="labld8"> Bin No</td><td id="labld9"> Unit Price</td><td id="labld10"> Opening Stock</td><td id="labld11"> GRN</td><td id="labld12"> Free Qty</td><td id="labld13"> SCGRN</td><td id="labld14"> Stock Transfer In</td><td id="labld15"> Stock Adj In</td><td id="labld16"> MIS In</td><td id="labld17"> Qty Produced</td><td id="labld18"> Sales Return</td><td id="labld19"> Material Return</td><td id="labld20"> Purchase Return</td><td id="labld21"> Delivery Note</td><td id="labld22"> Stock Trans Out</td><td id="labld23"> Stock Adj Out</td><td id="labld24"> MIS Out</td><td id="labld25"> Qty Consumed</td><td id="labld26"> Sales</td><td id="labld27">Closing Stock</td><td id="labld28">Value</td><td id="labld29">Issue UOM Stock</td><td id="labld30">Issue Conversion</td><td id="labld31">Issue UOM </td><td id="labld32">Part No</td></tr>';
 			   	// Iterate through a selection of the content and build an HTML string
 			    for(var i=page_index*items_per_page;i<max_elem;i++)
 			    {
@@ -223,12 +223,14 @@
 			        newcontent += '<td>'+StkFlashData[i].strBinNo+'</td>';
 			    	        
 			        var qtyWithUOM=$("#cmbQtyWithUOM").val();
-			        if(qtyWithUOM=='No')
+			         if(qtyWithUOM=='No')
 			        {
 				        newcontent += '<td align="right">'+(parseFloat(StkFlashData[i].dblCostRM)/currValue).toFixed(maxAmountDecimalPlaceLimit)+'</td>';
 				        newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblOpStock).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';
 				        newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblGRN).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';
+				        newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblFreeQty).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';
 				        newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblSCGRN).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';
+				        
 				        newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblStkTransIn).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';
 				        newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblStkAdjIn).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';
 				        newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblMISIn).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';
@@ -254,6 +256,7 @@
 				        newcontent += '<td align="right">'+StkFlashData[i].dblCostRM/currValue+'</td>';
 				        newcontent += '<td align="right">'+StkFlashData[i].dblOpStock+'</td>';
 				        newcontent += '<td align="right">'+StkFlashData[i].dblGRN+'</td>';
+				        newcontent += '<td align="right">'+StkFlashData[i].dblFreeQty+'</td>';
 				        newcontent += '<td align="right">'+StkFlashData[i].dblSCGRN+'</td>';
 				        newcontent += '<td align="right">'+StkFlashData[i].dblStkTransIn+'</td>';
 				        newcontent += '<td align="right">'+StkFlashData[i].dblStkAdjIn+'</td>';

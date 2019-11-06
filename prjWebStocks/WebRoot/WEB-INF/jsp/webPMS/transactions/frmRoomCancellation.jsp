@@ -131,10 +131,7 @@
 	   			$('#trDate').hide(); 
 	   			$('#txtCorporate').hide();
 	   			$('#lblCorporate').hide();
-	   			document.title = 'Booking Cancellation';
-
-
-	   			
+	   			document.title = 'Booking Cancellation';	   			
 	   		}
 	   		else
    			{
@@ -142,6 +139,20 @@
 	   			$('#lblNo').text('Reservation No.');
 	   			
    			}
+	   		var strBookingNO='<%=session.getAttribute("BookingNo").toString()%>';
+	   		if(strBookingNO!='')
+			 {
+				 $("#txtReservationNo").val(strBookingNO);				
+				 funSetReservationData(strBookingNO);
+				 <%session.removeAttribute("BookingNo");%>
+			 }
+			 else
+			 {				
+				 $("#txtReservationNo").val("");
+				 <%session.removeAttribute("BookingNo");%>
+				 
+			 } 
+	   		
 	});
 	
 	/**

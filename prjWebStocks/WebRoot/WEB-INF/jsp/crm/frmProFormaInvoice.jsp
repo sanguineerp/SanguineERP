@@ -13,12 +13,40 @@
 
 
 		var QtyTol=0.00;	
+		var bookingNO
 		$(document).ready(function() 
 		{	
 			var sgData ;
 			var prodData;
-			var clientCode='<%=session.getAttribute("clientCode").toString()%>';
-			
+			var clientCode='<%=session.getAttribute("clientCode").toString()%>';				
+			var Against='<%=session.getAttribute("Banquet").toString()%>';			
+			var customerCode='<%=session.getAttribute("CustomerCode").toString()%>';			
+			bookingNO='<%=session.getAttribute("BookingNo").toString()%>';		
+			if(bookingNO!=''&&Against!=''&&customerCode!='')
+			 {
+				 $("#cmbAgainst").val(Against);	
+				 $("#txtCustCode").val(funSetBookingNo);					 
+				 document.all["txtSOCode"].style.display = 'block';
+				 document.all["btnFill"].style.display = 'block';  
+				 $("#txtSOCode").val(bookingNO);	
+				 funSetCuster(customerCode);
+				 funSetBookingNo(bookingNO);
+				 funSetSalesOrderDtl();
+				 <%session.removeAttribute("Banquet");%>
+				 <%session.removeAttribute("BookingNo");%>
+				 <%session.removeAttribute("CustomerCode");%>
+			 }
+			 else
+			 {
+				
+				 $("#txtReservationNo").val("");
+				 <%session.removeAttribute("Banquet");%>
+				 <%session.removeAttribute("BookingNo");%>
+				 <%session.removeAttribute("CustomerCode");%>
+				 
+			 }   
+		
+				
 			$(".tab_content").hide();
 			$(".tab_content:first").show();
 	
@@ -122,6 +150,9 @@
 										window.open('attachDoc.html?transName=frmInovice.jsp&formName=Invoice&code='+$("#txtDCCode").val(),"mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=600,height=600,left=400px");
 									});				
 		});
+		
+		
+		
 		
 		
 		function funHelp(transactionName)
@@ -538,7 +569,7 @@
 						$("#txtDiscount").val(response.dblDiscountAmt);
 						$("#txtDiscountPer").val(response.dblDiscount);
 						
-						$('#cmbSettlement').val(response.strSettlementCode);
+						$("#cmbSettlement").val(response.strSettlementCode);
 						$('#txtMobileNoForSettlement').val(response.strMobileNoForSettlement);
 						$("#hidcustDiscount").val(response.dblDiscountAmt);
 						QtyTol=0.00;
@@ -1252,18 +1283,7 @@
 		var dteInv =$('#txtDCDate').val();
 		var CIFAmt=0;
 		var settlement='';
-		var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
-		var taxType = "";
-		if(strIndustryType=='7-WebBanquet') 
-   		{
-			taxType = "Banquet";
-   		}
-		else
-		{
-			taxType = "Sales";
-		}
-		
-	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType="+taxType+"&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
+	    gurl=getContextPath()+"/getTaxDtlForProduct.html?prodCode="+prodCodeForTax+"&taxType=Banquet&transDate="+dteInv+"&CIFAmt="+CIFAmt+"&strSettlement="+settlement,
 	    $.ajax({
 			type: "GET",
 		    url:gurl,
@@ -1546,11 +1566,7 @@
 						}
 						clearInterval(timer);
 					}
-			    }, 500);
-			
-			
-		
-			
+			    }, 500);						
 		}
 		//Open Against  From and Set  Code in combo box
 		function funOpenInvoiceHelp(locCode,dtFullfilled,custCode) {
@@ -1574,9 +1590,6 @@
 					}
 			    }, 500);
 			
-			
-		
-			
 		}
 		function funRemRows() {
 			var table = document.getElementById("tblProdDet");
@@ -1592,8 +1605,16 @@
 		
 		function funSetSalesOrderTaxDtl()
 		{
-		    strCodes = $('#txtSOCode').val();
-			strSOCodes = strCodes.split(",")
+			if(bookingNO!=null)
+				{
+					strCodes = bookingNO;
+				}
+			else
+				{
+					strCodes = $('#txtSOCode').val();
+				 	strSOCodes = strCodes.split(",")
+				}
+		    
 						
 			var searchUrl=getContextPath()+ "/loadSOTaxDtlforInvoice.html?SOCode=" + strCodes ;
 			$.ajax({
@@ -1628,13 +1649,10 @@
 			
 		}
 		
-		
-		
 		function funSetSalesOrderDtl()
-		{
-		    strCodes = $('#txtSOCode').val();
+		{	
+			strCodes = $('#txtSOCode').val();
 			strSOCodes = strCodes.split(",")
-
 		   	var searchUrl=getContextPath()+ "/loadAgainstSOForInvoice.html?SOCode=" + strCodes ;
 			$.ajax({
 				type: "GET",
@@ -1853,9 +1871,7 @@
 				    var self = this;
 					  //  var sgName= $("#txtSubGroup").val();
 					    $(self).autocomplete( "search", '');
-					});
-					 
-					 
+					});					 
 				});
 			});
 		

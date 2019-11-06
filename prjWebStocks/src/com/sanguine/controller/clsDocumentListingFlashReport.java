@@ -221,7 +221,9 @@ public class clsDocumentListingFlashReport {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/downloadDocFlashExcel", method = RequestMethod.GET)
 	public ModelAndView downloadDocFlashExcel(@RequestParam(value = "docFlashType") String docFlashType, HttpServletRequest req) {
-
+		String dateTime[] = objGlobal.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		String userCode = req.getSession().getAttribute("usercode").toString();
+		List footer = new ArrayList<>();
 		List listExportDoc = new ArrayList();
 		DecimalFormat df = new DecimalFormat("#0.00"); 
 		if (docFlashType.equals("GRN")) {
@@ -246,7 +248,14 @@ public class clsDocumentListingFlashReport {
 
 				listGRNModel.add(dataList);
 			}
+			List blank = new ArrayList<>();
+			blank.add("");
+			listGRNModel.add(blank);
 
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			listGRNModel.add(footer);
 			listExportDoc.add(listGRNModel);
 		}
 
@@ -267,6 +276,14 @@ public class clsDocumentListingFlashReport {
 				dataList.add(df.format(objMRHdModel.getDblSubTotal()));
 				listMRModel.add(dataList);
 			}
+			List blank = new ArrayList<>();
+			blank.add("");
+			listMRModel.add(blank);
+
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			listMRModel.add(footer);
 			listExportDoc.add(listMRModel);
 		}
 
@@ -286,8 +303,17 @@ public class clsDocumentListingFlashReport {
 				dataList.add(df.format(objMISHdModel.getDblTotalAmt()));
 				listMISModel.add(dataList);
 			}
+			List blank = new ArrayList<>();
+			blank.add("");
+			listMISModel.add(blank);
+
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			listMISModel.add(footer);
 			listExportDoc.add(listMISModel);
 		}
+		
 		
 		return new ModelAndView("excelView", "stocklist", listExportDoc);
 

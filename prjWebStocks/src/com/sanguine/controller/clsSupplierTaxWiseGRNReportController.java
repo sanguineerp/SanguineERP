@@ -60,6 +60,9 @@ public class clsSupplierTaxWiseGRNReportController
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		HashMap<String,Integer> HmTaxNameTaxIndex = new HashMap<String,Integer>();
 		
+		String dateTime[] = objGlobalFunctions.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
+		
 		String suppCode=objBean.getStrSuppCode();
 		String suppName=" ";
 		double subTotal=0.0;
@@ -175,6 +178,14 @@ public class clsSupplierTaxWiseGRNReportController
 
              }
 		}
+		List blank = new ArrayList<>();
+		blank.add("");
+		SuppTaxList.add(blank);
+		footer.add("Created on :" +dateTime[0]);
+		footer.add("AT :" +dateTime[1]);
+		footer.add("By :" +userCode);
+		SuppTaxList.add(footer);
+		
 		
 		exportList.add(SuppTaxList);
 

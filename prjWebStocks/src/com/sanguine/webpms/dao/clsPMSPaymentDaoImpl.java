@@ -17,6 +17,7 @@ import com.sanguine.webpms.model.clsPMSPaymentHdModel;
 public class clsPMSPaymentDaoImpl implements clsPMSPaymentDao {
 	@Autowired
 	private SessionFactory webPMSSessionFactory;
+	
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
@@ -37,6 +38,19 @@ public class clsPMSPaymentDaoImpl implements clsPMSPaymentDao {
 			objModel.getListPaymentRecieptDtlModel().size();
 		}
 		return objModel;
+
+	}
+	
+	
+	@Override
+	@Transactional(value = "WebPMSTransactionManager")
+	public void funChangeBookingStatus(String sql, String queryType) {
+		if (queryType.equals("sql")) {
+			webPMSSessionFactory.getCurrentSession().createSQLQuery(sql).executeUpdate();
+		} else {
+			webPMSSessionFactory.getCurrentSession().createQuery(sql).executeUpdate();
+		}		
+		return ;
 
 	}
 }

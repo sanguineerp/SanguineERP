@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2017-06-27T14:54:15 -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="288" pageHeight="842" columnWidth="248" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e4599d99-5fc3-4853-ab4c-6095cba680e8">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
@@ -469,6 +468,35 @@
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band splitType="Stretch"/>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="8" width="61" height="15" uuid="d33805ae-6572-465c-8c3d-bedda556b677"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Created on :]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="61" y="8" width="90" height="15" uuid="767957d3-fb97-4dd0-b86e-443d929a587b"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="155" y="8" width="24" height="15" uuid="ce1795f1-9fd7-421f-991b-16047f7c569d"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AT :]]></text>
+			</staticText>
+			<textField pattern="HH:mm">
+				<reportElement x="178" y="8" width="56" height="15" uuid="f07caf88-3ef8-4a83-a8f0-c374efe60d0a"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 </jasperReport>

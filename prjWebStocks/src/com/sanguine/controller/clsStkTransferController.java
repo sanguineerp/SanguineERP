@@ -1280,7 +1280,7 @@ public class clsStkTransferController
 			// fromDate, toDate, clientCode, userCode,stockableItem);
 			String sqlHDQuery = " select a.strSTCode,a.strProdCode,b.strProdName,a.dblQty,a.dblWeight,a.dblPrice,a.strRemark " + " from tblstocktransferdtl a,tblproductmaster b " + " where a.strProdCode=b.strProdCode and a.strSTCode='" + strFromSTCode + "' and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' ";
 
-			mv = funExcelExport(LocCodeFrom, sqlHDQuery, req, map);
+			mv = funExcelExport(LocCodeFrom, sqlHDQuery, req, map,userCode);
 		}
 		catch (Exception e)
 		{
@@ -1293,11 +1293,13 @@ public class clsStkTransferController
 	 * Excel Export Function
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ModelAndView funExcelExport(String stCode, String sql, HttpServletRequest req, ModelMap map)
+	public ModelAndView funExcelExport(String stCode, String sql, HttpServletRequest req, ModelMap map,String userCode)
 	{
 		List listStock = new ArrayList();
 		String[] ExcelHeader = { "Sr.No.", "Product Code", "Product Name", "Qty", "Price", "Remark" };
 		listStock.add(ExcelHeader);
+		String dateTime[] = objGlobalFunctions.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
 		double qty = 0.0;
 		double price = 0.0;
 
@@ -1330,9 +1332,15 @@ public class clsStkTransferController
 			totalData.add(qty);
 			totalData.add(price);
 			totalData.add("");
+			listStockFlashModel.add(totalData);			
+			List blank = new ArrayList<>();
+			blank.add("");
+			listStockFlashModel.add(blank);
 
-			listStockFlashModel.add(totalData);
-
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			listStockFlashModel.add(footer);
 			listStock.add(listStockFlashModel);
 
 		}

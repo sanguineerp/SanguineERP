@@ -13,4 +13,6 @@ public interface clsPMSPaymentDao {
 	public void funAddUpdatePaymentHd(clsPMSPaymentHdModel objHdModel);
 
 	public clsPMSPaymentHdModel funGetPaymentModel(String receiptNo, String clientCode);
+
+	public void funChangeBookingStatus(String sql, String queryType);
 }

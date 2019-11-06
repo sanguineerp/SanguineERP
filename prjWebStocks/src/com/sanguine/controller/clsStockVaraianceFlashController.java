@@ -121,7 +121,9 @@ public class clsStockVaraianceFlashController extends AbstractExcelView {
 		String strLocCode = spParam1[0];
 		String fromDate = objGlobal.funGetDate("yyyy-MM-dd", spParam1[1]);
 		String toDate = objGlobal.funGetDate("yyyy-MM-dd", spParam1[2]);
-
+		String dateTime[] = objGlobal.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		String userCode = request.getSession().getAttribute("usercode").toString();
+		List footer = new ArrayList<>();
 		double value = 0;
 
 		String sql = "select e.strSGName,c.strProdName,sum(b.dblCStock),sum(b.dblPStock),sum(b.dblVariance),c.dblCostRM,(c.dblCostRM *sum(b.dblVariance)) as value " + " from clsStkPostingHdModel a,clsStkPostingDtlModel b,clsProductMasterModel c ,clsStkAdjustmentHdModel d,clsSubGroupMasterModel e " + " where a.strPSCode=b.strPSCode and b.strProdCode=c.strProdCode  and a.strSACode=d.strSACode and c.strSGCode=e.strSGCode  "

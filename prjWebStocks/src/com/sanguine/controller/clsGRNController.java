@@ -2409,6 +2409,10 @@ public class clsGRNController {
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String tempLoc[] = objBean.getStrLocationCode().split(",");
 		String strLocCodes = "";
+		
+		
+		String dateTime[] = objGlobalFunctions.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
 
 		String locNames = "";
 		for (int i = 0; i < tempLoc.length; i++) {
@@ -2829,7 +2833,14 @@ public class clsGRNController {
 				openingStklist.add(dataListgrandtotal);
 			}
 		}
+		List blank = new ArrayList<>();
+		blank.add("");
+		openingStklist.add(blank);
 
+		footer.add("Created on :" +dateTime[0]);
+		footer.add("AT :" +dateTime[1]);
+		footer.add("By :" +userCode);
+		openingStklist.add(footer);
 		exportList.add(openingStklist);
 
 		return new ModelAndView("excelViewFromDateTodateWithReportName",
@@ -2879,6 +2890,10 @@ public class clsGRNController {
 		String clientCode = req.getSession().getAttribute("clientCode")
 				.toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
+		
+		
+		String dateTime[] = objGlobalFunctions.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
 
 		if (tempSupplierCode[0].length() > 0) {
 			for (int i = 0; i < tempSupplierCode.length; i++) {
@@ -3053,7 +3068,15 @@ public class clsGRNController {
 		totDataList.add(df.format(totAmt));
 
 		grnSummarylist.add(totDataList);
+        
+		List blank = new ArrayList<>();
+		blank.add("");
+		grnSummarylist.add(blank);
 
+		footer.add("Created on :" +dateTime[0]);
+		footer.add("AT :" +dateTime[1]);
+		footer.add("By :" +userCode);
+		grnSummarylist.add(footer);
 		exportList.add(grnSummarylist);
 
 		return new ModelAndView("excelViewFromDateTodateWithReportName",

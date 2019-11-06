@@ -7,8 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title></title>
 <script type="text/javascript">
-	var fieldName,settlementType="";
-	var clickCount=0.0;
+	var fieldName,settlementType="",gstrIndustryType;
 	
 	$(function() 
 	{
@@ -38,11 +37,40 @@
 		  }
 		  
 		  var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
-	   		if(strIndustryType=='7-WebBanquet') 
+		  gstrIndustryType=strIndustryType;
+		  if(strIndustryType=='7-WebBanquet') 
 	   		{
 	   			$('#trGuest').hide();
 	   			
 	   		}
+	   		
+	   		var bookingNo='<%=session.getAttribute("BookingNo").toString()%>';
+	   		var obookingNo='<%=session.getAttribute("OBookingNo").toString()%>';	   		
+	   		var invoiceCode='<%=session.getAttribute("invoiceCode").toString()%>';
+	   		var date='<%=session.getAttribute("date").toString()%>';			   		
+	   		if(invoiceCode!=''&&bookingNo!='')
+	   		{
+	   		 $("#txtDocCode").val(invoiceCode);				
+	   		 $("#cmbAgainst").val('Invoice');
+	   		 funSetPaymentGuestInvoiceCodeData(bookingNo,"Booking");  
+	   		 <%session.removeAttribute("BookingNo");%>	
+			 <%session.removeAttribute("invoiceCode");%>
+	   		}
+	   		else if(obookingNo!='')
+	   		{
+		   		$("#txtDocCode").val(invoiceCode);
+				funSetPaymentGuestData(obookingNo,"Booking");
+				<%session.removeAttribute("OBookingNo");%>	
+	   		}
+			else
+			{				
+				$("#txtDocCode").val("");
+				<%session.removeAttribute("BookingNo");%>					 
+				<%session.removeAttribute("invoiceCode");%>
+				<%session.removeAttribute("date");%>
+			} 
+	   		
+	   		
 		  
 	});
 
@@ -83,12 +111,54 @@
 				funSetGuestCode(code);
 				break;
 				
-			case 'BillForBanquet' : 
-				funSetPaymentGuestData(code,"Banquet");
+			case 'BillForBooking' : 
+				funSetPaymentGuestData(code,"Booking");
+				break;
+				
+			case 'proformaInvoice' : 
+				funSetInvoiceData(code);
 				break;
 		}
 	}
 
+	function funSetInvoiceData(code)
+	{
+		gurl=getContextPath()+"/loadProFormaInvoiceHdData.html?invCode="+code;
+		$.ajax({
+	        type: "GET",
+	        url: gurl,
+	        dataType: "json",
+	        success: function(response)
+	        {		        	
+	        		if(null == response.strInvCode){
+	        			alert("Invalid  Invoice Code");
+	        			$("#txtDocCode").val('');
+	        			$("#txtDocCode").focus();	        			
+	        		}else{		        			
+	        			$('#txtDocCode').val(code);
+	        			$('#txtReceiptAmt').val(response.dblGrandTotal);
+	        		}
+			},
+			error: function(jqXHR, exception) {
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }		            
+	        }
+      });
+	}
+	
 	function funSetGuestCode(code){
 		
 		$.ajax({
@@ -126,8 +196,7 @@
 		$("#txtCreditName").val(obj.strGuestCode);
 		$("#txtCredit").val(obj.strFirstName);
 	
-	}
-	
+	}	
 	
 	function funSetReceiptData(code){
 
@@ -187,7 +256,7 @@
 	}
 	
 	
-//set PaymentGuestDetails Data
+	//set PaymentGuestDetails Data
 	function funSetPaymentGuestData(code,type)
 	{
 		var searchUrl=getContextPath()+"/loadPaymentGuestDetails.html?docCode="+code+ "&docName=" + type;
@@ -234,6 +303,53 @@
 		});
 	}
 
+	
+	//set PaymentGuestDetails redirected from diary
+	function funSetPaymentGuestInvoiceCodeData(code,type)
+	{
+		var searchUrl=getContextPath()+"/loadPaymentGuestDetails.html?docCode="+code+ "&docName=" + type;
+		$.ajax({
+			
+			url:searchUrl,
+			type :"GET",
+			dataType: "json",
+	        success: function(response)
+	        {
+	        	if(response.strRoomCode=='Invalid Code')
+	        	{
+	        		alert("Invalid Doc Code");
+	        		$("#txtDocCode").val('');
+	        	}
+	        	else
+	        	{
+	        		
+	        		$("#lblGuestName").text("Guest Name");
+	        		$("#lblGuestFullName").text(response[0].strFirstName+" "+response[0].strMiddleName+" "+response[0].strLastName);
+	        		$( "#txtReceiptAmt" ).focus();
+	        		$( "#lblBalnceAmount").text(response[0].dblBalanceAmount);
+	        		 $("#txtReceiptAmt").val(response[0].dblBalanceAmount);
+	        	}
+			},
+			error: function(jqXHR, exception) 
+			{
+	            if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+	        }
+		});
+	}
 	
 	function funSetBillNo(code)
 	{
@@ -313,10 +429,15 @@
 			funHelp("BillForPayment");
 			fieldName = "BillForPayment";
 		}
-		else if ($("#cmbAgainst").val() == "Banquet")
+		else if ($("#cmbAgainst").val() == "Booking")
 		{
 			funHelp("BillForBanquet");
-			fieldName = "BillForBanquet";
+			fieldName = "BillForBooking";
+		}
+		else if ($("#cmbAgainst").val() == "Invoice")
+		{
+			funHelp("proformaInvoice");
+			fieldName = "proformaInvoice";
 		}
 		
 	}
@@ -428,9 +549,6 @@
  	
 	function funValidateFields(actionName,object)
 	{
-		
-		if(clickCount==0){
-			clickCount=clickCount+1;
 		var flg=true;
 		
 		if($("#txtSettlementCode").val().trim().length==0)
@@ -450,11 +568,15 @@
 		
 		if(settlementType=="Credit")
 		{
-			if($("#txtCreditName").val().trim().length==0)
-			{
-				alert("Please Enter Credit Name !!");
-				 flg=false;
-			}
+			if(gstrIndustryType!='7-WebBanquet')
+				{
+				if($("#txtCreditName").val().trim().length==0)
+				{
+					alert("Please Enter Credit Name !!");
+					 flg=false;
+				}
+				}
+			
 		}
 		
 		if(parseFloat($("#lblBalnceAmount").text())>='0.0')
@@ -474,17 +596,12 @@
 		}
 		else
 		{
-			alert("Please Enter Amount");
-			 flg=false;
+			//alert("Please Enter Amount");
+			 //flg=false;
 		}	
 		
 		
 		return flg;
-		}
-		else
-		{
-			return false;
-		}
 	}
 	
 function funCreateNewGuest(){

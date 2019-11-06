@@ -1899,6 +1899,9 @@ public class clsReportsController {
 		String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
 		ExpfDate = objGlobal.funGetDate("yyyy-MM-dd", ExpfDate);
 		ExptDate = objGlobal.funGetDate("yyyy-MM-dd", ExptDate);
+		String dateTime[] = objGlobalFunctions.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
+		String userCode = req.getSession().getAttribute("usercode").toString();
 
 		List ExpStock = new ArrayList();
 		String[] ExcelHeader = { "Product Name", "Batch Code", "Supplier Name", "GRN Date", "GRN Code", "GRN Qty", "Balance Qty", "Expiry Date","ManuBatch Code" };
@@ -1925,6 +1928,14 @@ public class clsReportsController {
 			DataList.add(arrObj[10].toString());
 			listExpFlashModel.add(DataList);
 		}
+		List blank = new ArrayList<>();
+		blank.add("");
+		listExpFlashModel.add(blank);
+
+		footer.add("Created on :" +dateTime[0]);
+		footer.add("AT :" +dateTime[1]);
+		footer.add("By :" +userCode);
+		listExpFlashModel.add(footer);
 		ExpStock.add(listExpFlashModel);
 		return new ModelAndView("excelView", "stocklist", ExpStock);
 	}
@@ -5605,6 +5616,8 @@ public class clsReportsController {
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+		String dateTime[] = objGlobalFunctions.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
 		if (objSetup == null)
 		{
 			objSetup = new clsPropertySetupModel();
@@ -5980,12 +5993,14 @@ public class clsReportsController {
 			fieldList.add(totList);
 		}
 	}
+		
 
+	/*
 		listLOCWiseData.add(fieldList);//2
 		
 		listLOCWiseData.add(companyName);	
 //		listLOCWiseData.add("MIS Location Wise Category Wise Report");
-		listLOCWiseData.add("Reporting For:"+fromLoc);
+		listLOCWiseData.add("Reporting For:"+fromLoc);*/
 //			
 //		String periodFromDate = fromDate + "  -  " + toDate;
 //
@@ -5999,10 +6014,24 @@ public class clsReportsController {
 
 		if(objBean.getStrDocType().equalsIgnoreCase("PDF"))
 		{
+			listLOCWiseData.add(fieldList);//2
+			
+			listLOCWiseData.add(companyName);	
+//			listLOCWiseData.add("MIS Location Wise Category Wise Report");
+			listLOCWiseData.add("Reporting For:"+fromLoc);
 			return new ModelAndView("pdfViewMISLocationWiseCategoryWiseReport", "listWithReportName", listLOCWiseData);
 		}
 		else
 		{
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			fieldList.add(footer);
+			listLOCWiseData.add(fieldList);//2
+			
+			listLOCWiseData.add(companyName);	
+//			listLOCWiseData.add("MIS Location Wise Category Wise Report");
+			listLOCWiseData.add("Reporting For:"+fromLoc);
 			return new ModelAndView("excelViewFromDateTodateWithReportName", "listFromDateTodateWithReportName", listLOCWiseData);
 		}
 
@@ -6507,8 +6536,12 @@ public class clsReportsController {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String companyName = req.getSession().getAttribute("companyName").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
+		
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+		
+		String dateTime[] = objGlobal.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
 		if (objSetup == null)
 		{
 			objSetup = new clsPropertySetupModel();
@@ -6705,6 +6738,14 @@ public class clsReportsController {
 			}
 			
 			billDataList.add(totalAmount);
+			List blank = new ArrayList<>();
+			blank.add("");
+			billDataList.add(blank);
+
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			billDataList.add(footer);
 			
 			allBillDataList.add(billDataList);
 			

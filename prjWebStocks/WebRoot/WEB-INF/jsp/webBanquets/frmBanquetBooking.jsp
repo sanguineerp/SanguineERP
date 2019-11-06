@@ -7,17 +7,33 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title></title>
+<style type="text/css">
 
+
+.label{
+    float: left;
+    padding-top: 2px;
+    position: relative;
+    text-align: left;
+    vertical-align: middle;
+}
+.label:after{
+ content:"*" ;
+color:red    
+}
+
+
+</style>
 <script type="text/javascript">
 
 	var fieldName,listServiceRow=0,listEquipRow=0,listStaffRow=0,listItemRow=0;
 	var totalTerrAmt = 0.0;
-	var clickCount = 0.0;
-	  $(document).ready(function(){
-		    
+	var gflag;
+	var gbookingflag;
+
+	  $(document).ready(function(){		  
 		  $(".tab_content").hide();
 			$(".tab_content:first").show();
-
 			$("ul.tabs li").click(function() {
 				$("ul.tabs li").removeClass("active");
 				$(this).addClass("active");
@@ -74,12 +90,13 @@
 		});
 		
 		$('#txtFromTime').timepicker('setTime', new Date());
+		$('#txtToTime').timepicker('setTime', new Date());
 	    $("#txtBookingDate").datepicker({ dateFormat: 'dd-mm-yy' });
 		$("#txtFromDate").datepicker({ dateFormat: 'dd-mm-yy' });
 		$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
+		$("#txtBookingDate").datepicker('setDate','todate');
 		$("#txtFromDate").datepicker('setDate','todate');
 		$("#txtToDate").datepicker('setDate', 'todate');
-		$("#txtBookingDate").datepicker('setDate', 'todate');
 		
 		$('a#baseUrl').click(function() 
 		{
@@ -650,17 +667,18 @@ function funCreateNewCustomer(){
 	
 	function funfillStaffCatRow(StaffCatCode,StaffCatName,StaffQty)
 	{
-		
-		var table = document.getElementById("tblStaffCatDtl");
-	    var rowCount = table.rows.length;
-	    var row = table.insertRow(rowCount);
-	    rowCount=listStaffRow;
-	    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocNo\"  id=\"txtStaffCatCode."+(rowCount)+"\" value='"+StaffCatCode+"' />";
-	    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocName\"  id=\"txtStaffCatName."+(rowCount)+"\" value='"+StaffCatName+"'/>";
-	    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listStaffCatDtl["+(rowCount)+"].dblDocQty\" style=\"text-align: right;\"  id=\"txtStaffCatNumber."+(rowCount)+"\" value='"+StaffQty+"' onblur=\"funCheckStaffNumber(this,'"+StaffCatCode+"','"+rowCount+"');\"/>";
-	    row.insertCell(3).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowStaff(this)">';		    
-	    listStaffRow++;
-	  
+		if(funDuplicateStaffUpdate(StaffCatCode))
+	    {
+			var table = document.getElementById("tblStaffCatDtl");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    rowCount=listStaffRow;
+		    row.insertCell(0).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"8%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocNo\"  id=\"txtStaffCatCode."+(rowCount)+"\" value='"+StaffCatCode+"' />";
+		    row.insertCell(1).innerHTML= "<input  readonly=\"readonly\" class=\"Box\" size=\"27%\" name=\"listStaffCatDtl["+(rowCount)+"].strDocName\"  id=\"txtStaffCatName."+(rowCount)+"\" value='"+StaffCatName+"'/>";
+		    row.insertCell(2).innerHTML= "<input   class=\" decimal-places-amt\" size=\"5%\" name=\"listStaffCatDtl["+(rowCount)+"].dblDocQty\" style=\"text-align: right;\"  id=\"txtStaffCatNumber."+(rowCount)+"\" value='1' onblur=\"funCheckStaffNumber(this,'"+StaffCatCode+"','"+rowCount+"');\"/>";
+		    row.insertCell(3).innerHTML= '<input type="button" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRowStaff(this)">';		    
+		    listStaffRow++;
+	    }
 	     
 	    
 	}
@@ -963,9 +981,60 @@ function funCreateNewCustomer(){
 		    		 
 		    	 }
 		    
-		});
-	   		   
+		}); 
+	
+   		   
+   		  
+   		   
 	   
+   		function funCheckBooking(){
+   			gflag=false;
+   			var fromTime=$('#txtFromTime').val();
+   			var fromDate=$('#txtFromDate').val();   			
+   			
+			$.ajax({
+				type : "GET",
+				url : getContextPath()+ "/checkBooking.html?fromTime=" + fromTime+"&fromDate="+fromDate,
+				dataType : "json",
+				success : function(response){
+					if(response==false)
+						{
+							gflag=true;
+							gbookingflag=false;
+						}		
+					else
+					{
+						gbookingflag=true;
+						alert("Select Different Date And Time  ");		
+					}
+				},
+				error : function(e){
+					if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }
+				}
+			});		
+			
+			
+		}
+	 
+	 
+   		   
+   		   
+   		   
+   		   
 	   	function funUpdateEuipPrice(object)
 		{
 	   		 
@@ -1066,6 +1135,27 @@ function funCreateNewCustomer(){
 		   }
 		    return flag;
 		} 
+		function funDuplicateStaffUpdate(strEuipCode)
+		{
+		 var table = document.getElementById("tblEquipDtl");
+		    var rowCount = table.rows.length;		   
+		    var flag=true;
+		    if(rowCount > 0)
+		    {
+				    $('#tblStaffCatDtl tr').each(function()
+				    {
+					    if(strEuipCode==$(this).find('input').val())// `this` is TR DOM element
+	    				{
+					    	alert("Already added Staff "+ strEuipCode );
+					    	flag=false; 
+					    	
+		    			
+	    				}
+					});
+				    
+		   }
+		    return flag;
+		}
 		function funDuplicateItemForUpdate(strItemCode)
 		{
 		 var table = document.getElementById("tblMenuDtl");
@@ -1112,35 +1202,75 @@ function funCreateNewCustomer(){
 			   	}
 		   	   var FinalAmount = parseFloat(rateEquip) + parseFloat(rateItem) + parseFloat(rateService) + parseFloat(rateBanquet);
 		       $("#txtTotalBookingAmt").val(FinalAmount);
-		}
-		function funValidateForm()
-		{
-			
-			if(clickCount==0){
-				clickCount=clickCount+1;
-			var flag=true;
-			if($("#txtCustomerCode").val().trim().length==0)
-			{
-				 alert("Please Select Customer Name !!");
-				 flag=false;
-			}
+		}	
 		
-			else if($("#txtAreaCode").val().trim().length==0)
+		
+		function funValidateForm()
+		{	
+			var flag=true;
+			if(gbookingflag==true)
+			{
+				alert("Select Different Date And Time  ");	
+				 flag=false;
+			}			
+			if($("#txtAreaCode").val().trim().length==0)
 			{
 				alert("Please Select Area!!");
 				flag=false;
 			}
 			else if($("#txtFunctionCode").val().trim().length==0)
 			{
-				alert("Please Select fuction!!");
+				alert("Please Select Fuction Code!!");
 				flag=false;
 			}
-		    return flag;
-			}
-			else
+			else if($("#txtMaxPaxNo").val()=="0")
 			{
-				return false;
+				alert("Please Enter Max Pax!!");
+				flag=false;
 			}
+			else if($("#txtBanquetCode").val().trim().length==0)
+			{
+				alert("Please Enter Banquet Code!!");
+				flag=false;
+			}
+			else if($('#txtFromDate').val()>$('#txtToDate').val())
+			{				
+					alert("Please Enter To Date is Greater Than From Date")
+					flag=false;
+			}
+			else if($("#txtCustomerCode").val().trim().length==0)
+			{
+				 alert("Please Select Customer Code !!");
+				 flag=false;
+			}
+			else if($("#txtCustomerName").val().trim().length==0)
+			{
+				 alert("Please Enter Customer Name !!");
+				 flag=false;
+			}		
+			else if($("#txtMobileNo").val().trim().length==0)
+			{
+				 alert("Please Enter Mobile Number !!");
+				 flag=false;
+			}
+			else if($("#txtEmailId").val().trim().length==0)
+			{
+				 alert("Please Enter Email Id !!");
+				 flag=false;
+			}
+			else if($('#txtFromDate').val()==$('#txtToDate').val())
+			{
+				if(!($('#txtToTime').val() >= $('#txtFromTime').val()))
+				{
+					alert("Please Enter Out Time is Greater Than In Time")
+					flag=false;
+				}
+			}			
+			
+						
+			return flag; 
+			
+			
 		}
 	 
 		function funChangeArrivalDate()
@@ -1194,6 +1324,16 @@ function funCreateNewCustomer(){
 	    	
 	    	
 		}
+		
+		
+		
+		/* $(document).ready(function(){
+		    $("#div1").on('click', function(){
+		            console.log("click!!!");
+		        });
+		});
+		 */
+		
 </script>
 
 </head>
@@ -1223,7 +1363,7 @@ function funCreateNewCustomer(){
 
 		
 
-		<div id="tab1" class="tab_content" style="height: 800px">
+		<div id="tab1" class="tab_content" style="height: 500px">
             <table class="transTable">
 				<tr>
 					<th colspan="6">
@@ -1231,7 +1371,7 @@ function funCreateNewCustomer(){
 
 				<tr>
 					<td width="150px"><label>Booking No</label></td>
-					<td width="400px" ><s:input type="text" id="txtBookingNo"
+					<td width="400px" ><s:input type="text" id="txtBookingNo" readonly="true" 
 							path="strBookingNo" cssClass="searchTextBox"
 							ondblclick="funHelp('BookingNo');" /></td>
 
@@ -1243,30 +1383,28 @@ function funCreateNewCustomer(){
 				</tr>
 
 				<tr>
-					<td><label>Area</label></td>
-					<td><s:input type="text" id="txtAreaCode" path="strAreaCode"
-							cssClass="searchTextBox"
-							ondblclick="funHelp('PropertyWiseLocation');" /> <label
-						id="lblAreaCode"></label></td>
-
+					<td><label class="label">Area </label></td>
+					<td><s:input type="text" id="txtAreaCode" path="strAreaCode" cssClass="searchTextBox" readonly="true" 
+											ondblclick="funHelp('PropertyWiseLocation');" /> 
+					<label id="lblAreaCode"></label></td>
+						
+						
 					<td><label>Booking Date</label></td>
 					<td><s:input type="text" id="txtBookingDate"
 							path="dteBookingDate" cssClass="calenderTextBox" onchange="funCheckCuurntDate();"/> <!-- onchange="funChangeArrivalDate();" -->
 						<label id="lblBookingDate"></label></td>
-
-
 				</tr>
 			
 
 				<tr>
 					<td><label>From Date</label></td>
 					<td><s:input type="text" id="txtFromDate" path="dteFromDate"
-							cssClass="calenderTextBox" onchange="funChangeArrivalDate();" /></td>
+							cssClass="calenderTextBox" onchange="funChangeArrivalDate();funCheckBooking;" onblur="funCheckBooking();"/></td>
 
 					<!-- onchange="funChangeArrivalDate();"  -->
 					<td><label>To Date</label></td>
 					<td><s:input type="text" id="txtToDate" path="dteToDate"
-							cssClass="calenderTextBox"  onchange="funCheckFromDate();"/></td>
+							cssClass="calenderTextBox"  onchange="funCheckFromDate();" onblur="funCheckBooking();"/></td>
 					<!-- onchange="CalculateDateDiff();" -->
 					<td colspan="2"></td>
 				</tr>
@@ -1274,7 +1412,7 @@ function funCreateNewCustomer(){
 				<tr>
 					<td><label>In Time</label></td>
 					<td><s:input type="text" id="txtFromTime" path="tmeFromTime"
-							cssClass="calenderTextBox" /></td>
+							cssClass="calenderTextBox" onblur="funCheckBooking();"/></td>
 
 					<td><label>Out Time</label></td>
 					<td><s:input type="text" id="txtToTime" path="tmeToTime"
@@ -1286,8 +1424,8 @@ function funCreateNewCustomer(){
 					<td><label>Min Pax</label></td>
 					<td><s:input id="txtMinPaxNo" name="txtMinPaxNo"
 							path="intMinPaxNo" style="width: 20%;text-align: right;"
-							type="number" min="1" step="1" class="longTextBox" /></td>
-					<td><label>Max Pax</label></td>
+							type="number" min="0" step="1" class="longTextBox" /></td>
+					<td><label class="label">Max Pax </label></td>
 					<td><s:input id="txtMaxPaxNo" path="intMaxPaxNo"
 							style="text-align: right; width: 20%;" type="number" min="0"
 							step="1" name="txtMaxPaxNo" class="longTextBox" /></td>
@@ -1297,12 +1435,12 @@ function funCreateNewCustomer(){
 				<tr>
 				<td><label>Billing Instructions</label></td>
 					<td><s:input type="text" id="txtBillingInstructionCode"
-							path="strBillingInstructionCode" cssClass="searchTextBox"
+							path="strBillingInstructionCode" cssClass="searchTextBox" readonly="true"
 							ondblclick="funHelp('BillingInstCode');" /> <label
 						id="lblBillingInstDesc"></label></td>
 				<td><label>Event Co-Ordinator</label></td>
 					<td><s:input type="text" id="txtEventCoordinatorCode"
-							path="strEventCoordinatorCode" cssClass="searchTextBox"
+							path="strEventCoordinatorCode" cssClass="searchTextBox" readonly="true"
 							ondblclick="funHelp('StaffCode');" /> &nbsp;&nbsp;&nbsp;<label
 						id="lblEventCoordinatorCode"></label></td>
 					
@@ -1310,10 +1448,10 @@ function funCreateNewCustomer(){
 				</tr>
 
 				<tr>
-					<td><label>Function Code</label></td>
+					<td><label class="label">Function Code </label></td>
 					<!--  <td><label>Function Code</label></td> -->
 					<td><s:input id="txtFunctionCode" path="strFunctionCode"
-							readonly="true" ondblclick="funHelp('functionMaster')"
+							readonly="true" ondblclick="funHelp('functionMaster')" 
 							cssClass="searchTextBox" /> <label id="lblFunctionName"></label>
 					</td>
 
@@ -1327,9 +1465,9 @@ function funCreateNewCustomer(){
 
 				</tr>
 				<tr>
-				<td><label>Banquet</label></td>
+				<td><label class="label">Banquet </label></td>
 					<td><s:input type="text" id="txtBanquetCode" 
-							path="strBanquetCode" cssClass="searchTextBox"
+							path="strBanquetCode" cssClass="searchTextBox" readonly="true"
 							ondblclick="funHelp('banquetCode');" /> <label
 						id="lblBanquetName"></label>
 						&nbsp;&nbsp;
@@ -1352,14 +1490,14 @@ function funCreateNewCustomer(){
 				<table class="transTable">
 
 					<tr>
-						<td><label>Customer Code</label></td>
-						<td><s:input type="text" id="txtCustomerCode"
+						<td><label class="label">Customer Code </label></td>
+						<td><s:input type="text" id="txtCustomerCode" readonly="true"
 								path="strCustomerCode" ondblclick="funHelp('custMaster');"
 								class="searchTextBox" /></td>
 
 
-						<td><label id="lblGFirstName"> Name</label></td>
-						<td><input type="text" id="txtCustomerName"
+						<td><label id="lblGFirstName" class="label"> Name </label></td>
+						<td><input type="text" id="txtCustomerName" 
 							class="longTextBox" /></td>
 
 						<td><input type="Button" value="New Costomer"
@@ -1369,9 +1507,9 @@ function funCreateNewCustomer(){
 					</tr>
 
 					<tr>
-						<td><label>Mobile No</label></td>
-						<td><input type="text" id="txtMobileNo" class="longTextBox" /></td>
-                        	<td><label>Email Id</label></td>
+						<td><label class="label">Mobile No </label></td>
+						<td><input type="text" id="txtMobileNo"  class="longTextBox" pattern="[789][0-9]{9}" title="Mobile number is wrong"/></td>
+                        	<td><label class="label">Email Id </label></td>
 					<td><s:input type="text" id="txtEmailId" path="strEmailID"
 							cssClass="longTextBox" /></td>
 						<td colspan="1"></td>

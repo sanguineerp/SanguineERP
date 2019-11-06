@@ -208,7 +208,9 @@ public class clsStockTranferFlashController {
      	
 		String[] ExcelHeader = { "Product Code", "Product Name", "Transfer Qty", "Amount" };
 		listStock.add(ExcelHeader);
-
+        
+		String dateTime[] = objGlobal.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
 		//String sql = " select b.strProdCode,c.strProdName,sum(b.dblQty),(c.dblCostRM*b.dblQty) AS costRM from tblstocktransferhd a,tblstocktransferdtl b,tblproductmaster c " + " where a.strSTCode=b.strSTCode " + " and a.strFromLocCode='" + fromLocCode + "' and a.strToLocCode='" + toLocCode + "' " + " and Date(a.dtSTDate) between '" + fromDate + "' and '" + toDate + "'  " + " and b.strProdCode=c.strProdCode "
 			//	+ " group by b.strProdCode " + " order by c.strProdName ";
 		String sql="SELECT b.strProdCode,c.strProdName, SUM(b.dblQty),(c.dblCostRM* SUM(b.dblQty)) AS costRM FROM tblstocktransferhd a,tblstocktransferdtl b,tblproductmaster c,tblgroupmaster d,tblsubgroupmaster e " 
@@ -239,6 +241,14 @@ public class clsStockTranferFlashController {
 		totalsList.add("");
 		totalsList.add(df.format(dblTotalValue));
 		listStockFlashModel.add(totalsList);
+		List blank = new ArrayList<>();
+		blank.add("");
+		listStockFlashModel.add(blank);
+
+		footer.add("Created on :" +dateTime[0]);
+		footer.add("AT :" +dateTime[1]);
+		footer.add("By :" +userCode);
+		listStockFlashModel.add(footer);
 		listStock.add(listStockFlashModel);
 		// return a view which will be resolved by an excel view resolver
 		return new ModelAndView("excelView", "stocklist", listStock);

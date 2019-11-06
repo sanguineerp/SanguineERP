@@ -418,7 +418,7 @@ public class clsStockFlashController {
 		clsCurrencyMasterModel objModel = objCurrencyMasterService.funGetCurrencyMaster(currCode, clientCode);
 
 		if (qtyWithUOM.equals("No")) {
-			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo " + " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice) " + ",a.dblOpeningStk,a.dblGRN,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn"
+			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo " + " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice) " + ",a.dblOpeningStk,a.dblGRN,a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn"
 					+ ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut " + ",a.dblClosingStk," + "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 					// + "(a.dblClosingStk*b.dblCostRM) as Value"
 					+ ",a.dblClosingStk as IssueUOMStock "
@@ -458,9 +458,11 @@ public class clsStockFlashController {
 					// + " ,b.dblCostRM"
 					+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice) "
 
-					+ ",funGetUOM(a.dblOpeningStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as OpeningStk"
+					+ " ,funGetUOM(a.dblOpeningStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as OpeningStk"
 
 					+ " ,funGetUOM(a.dblGRN,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
+					
+                    + " ,funGetUOM(a.dblFreeQty,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
 					+ " ,funGetUOM(a.dblSCGRN,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
@@ -574,24 +576,25 @@ public class clsStockFlashController {
 			objStkFlashModel.setDblCostRM(arrObj[8].toString());
 			objStkFlashModel.setDblOpStock(funGetDecimalValue(arrObj[9].toString())); // openStk
 			objStkFlashModel.setDblGRN(funGetDecimalValue(arrObj[10].toString())); // GRN
-			objStkFlashModel.setDblSCGRN(funGetDecimalValue(arrObj[11].toString())); // SCGRN
-			objStkFlashModel.setDblStkTransIn(funGetDecimalValue(arrObj[12].toString())); // stkTrans
-			objStkFlashModel.setDblStkAdjIn(funGetDecimalValue(arrObj[13].toString())); // STKAdj
-			objStkFlashModel.setDblMISIn(funGetDecimalValue(arrObj[14].toString()));
-			objStkFlashModel.setDblQtyProduced(funGetDecimalValue(arrObj[15].toString()));
-			objStkFlashModel.setDblSalesReturn(funGetDecimalValue(arrObj[16].toString()));
-			objStkFlashModel.setDblMaterialReturnIn(funGetDecimalValue(arrObj[17].toString()));
-			objStkFlashModel.setDblPurchaseReturn(funGetDecimalValue(arrObj[18].toString()));
-			objStkFlashModel.setDblDeliveryNote(funGetDecimalValue(arrObj[19].toString()));
-			objStkFlashModel.setDblStkTransOut(funGetDecimalValue(arrObj[20].toString()));
-			objStkFlashModel.setDblStkAdjOut(funGetDecimalValue(arrObj[21].toString()));
-			objStkFlashModel.setDblMISOut(funGetDecimalValue(arrObj[22].toString()));
-			objStkFlashModel.setDblQtyConsumed(funGetDecimalValue(arrObj[23].toString()));
-			objStkFlashModel.setDblSales(funGetDecimalValue(arrObj[24].toString()));
-			objStkFlashModel.setDblMaterialReturnOut(arrObj[25].toString());
-			objStkFlashModel.setDblClosingStock(funGetDecimalValue(arrObj[26].toString()));
+			objStkFlashModel.setDblFreeQty(Double.parseDouble(funGetDecimalValue(arrObj[11].toString())));
+			objStkFlashModel.setDblSCGRN(funGetDecimalValue(arrObj[12].toString())); // SCGRN
+			objStkFlashModel.setDblStkTransIn(funGetDecimalValue(arrObj[13].toString())); // stkTrans
+			objStkFlashModel.setDblStkAdjIn(funGetDecimalValue(arrObj[14].toString())); // STKAdj
+			objStkFlashModel.setDblMISIn(funGetDecimalValue(arrObj[15].toString()));
+			objStkFlashModel.setDblQtyProduced(funGetDecimalValue(arrObj[16].toString()));
+			objStkFlashModel.setDblSalesReturn(funGetDecimalValue(arrObj[17].toString()));
+			objStkFlashModel.setDblMaterialReturnIn(funGetDecimalValue(arrObj[18].toString()));
+			objStkFlashModel.setDblPurchaseReturn(funGetDecimalValue(arrObj[19].toString()));
+			objStkFlashModel.setDblDeliveryNote(funGetDecimalValue(arrObj[20].toString()));
+			objStkFlashModel.setDblStkTransOut(funGetDecimalValue(arrObj[21].toString()));
+			objStkFlashModel.setDblStkAdjOut(funGetDecimalValue(arrObj[22].toString()));
+			objStkFlashModel.setDblMISOut(funGetDecimalValue(arrObj[23].toString()));
+			objStkFlashModel.setDblQtyConsumed(funGetDecimalValue(arrObj[24].toString()));
+			objStkFlashModel.setDblSales(funGetDecimalValue(arrObj[25].toString()));
+			objStkFlashModel.setDblMaterialReturnOut(arrObj[26].toString());
+			objStkFlashModel.setDblClosingStock(funGetDecimalValue(arrObj[27].toString()));
 
-			BigDecimal value = new BigDecimal(arrObj[27].toString());
+			BigDecimal value = new BigDecimal(arrObj[28].toString());
 			// double value=Double.parseDouble(arrObj[27].toString());
 			BigDecimal zero = new BigDecimal("0");
 			// double temp=value;
@@ -601,10 +604,10 @@ public class clsStockFlashController {
 
 			dblTotalValue = dblTotalValue.add(value);
 			objStkFlashModel.setDblValue(String.valueOf(value));
-			objStkFlashModel.setDblIssueUOMStock(funGetDecimalValue(arrObj[26].toString()));
-			objStkFlashModel.setDblIssueConversion(arrObj[29].toString());
-			objStkFlashModel.setStrIssueUOM(arrObj[30].toString());
-			objStkFlashModel.setStrPartNo(arrObj[31].toString());
+			objStkFlashModel.setDblIssueUOMStock(funGetDecimalValue(arrObj[27].toString()));
+			objStkFlashModel.setDblIssueConversion(arrObj[30].toString());
+			objStkFlashModel.setStrIssueUOM(arrObj[31].toString());
+			objStkFlashModel.setStrPartNo(arrObj[32].toString());
 
 			listStockFlashModel.add(objStkFlashModel);
 		}
@@ -977,7 +980,7 @@ public class clsStockFlashController {
 		clsCurrencyMasterModel objModel = objCurrencyMasterService.funGetCurrencyMaster(currCode, clientCode);
 
 		if (qtyWithUOM.equals("No")) {
-			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo " + " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice) " + ",a.dblOpeningStk,a.dblGRN,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn"
+			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo " + " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice) " + ",a.dblOpeningStk,a.dblGRN+a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn"
 					+ ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut " + ",a.dblClosingStk," + "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 					+ ",a.dblClosingStk as IssueUOMStock "
 					+ ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -1005,7 +1008,7 @@ public class clsStockFlashController {
 
 					+ ",funGetUOM(a.dblOpeningStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as OpeningStk"
 
-					+ " ,funGetUOM(a.dblGRN,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
+					+ " ,funGetUOM(a.dblGRN+a.dblFreeQty,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
 					+ " ,funGetUOM(a.dblSCGRN,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 

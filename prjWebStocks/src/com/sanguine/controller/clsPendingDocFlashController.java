@@ -24,7 +24,7 @@ import com.sanguine.service.clsGlobalFunctionsService;
 public class clsPendingDocFlashController {
 	@Autowired
 	clsGlobalFunctionsService objGlobalService;
-
+	@Autowired
 	clsGlobalFunctions objGlobal;
 
 	/**
@@ -366,7 +366,9 @@ public class clsPendingDocFlashController {
 		String[] spParam = param1.split(",");
 		String loc1 = spParam[1];
 		String loc2 = "";
-
+		String dateTime[] = objGlobal.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
+		String userCode = req.getSession().getAttribute("usercode").toString();
 		if (spParam[0].equals("frmMaterialReq")) {
 			String[] spLoc = spParam[1].split("!");
 			loc1 = spLoc[0];
@@ -599,7 +601,14 @@ public class clsPendingDocFlashController {
 			}
 			arrList.add(arrListTemp);
 		}
+		List blank = new ArrayList<>();
+		blank.add("");
+		arrList.add(blank);
 
+		footer.add("Created on :" +dateTime[0]);
+		footer.add("AT :" +dateTime[1]);
+		footer.add("By :" +userCode);
+		arrList.add(footer);
 		listUDReport.add(arrList);
 
 		return new ModelAndView("excelViewWithReportName", "listWithReportName", listUDReport);

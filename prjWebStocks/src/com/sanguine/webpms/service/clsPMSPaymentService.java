@@ -14,4 +14,5 @@ public interface clsPMSPaymentService {
 
 	public clsPMSPaymentHdModel funPreparePaymentModel(clsPMSPaymentBean objPaymentBean, String clientCode, HttpServletRequest request, String userCode);
 
+	public void funChangeBookingStatus(String sql, String queryType);
 }

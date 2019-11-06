@@ -99,33 +99,20 @@ public class clsBanquetBookingController{
 	 * @return
 	 */
 	@RequestMapping(value = "/saveBanquetBooking", method = RequestMethod.POST)
-	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsBanquetBookingBean objBean ,BindingResult result,HttpServletRequest req){
+	public ModelAndView funAddUpdate(Map<String, Object> model,@ModelAttribute("command") @Valid clsBanquetBookingBean objBean ,BindingResult result,HttpServletRequest req){
 		if(!result.hasErrors()){
+			String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
 			String clientCode=req.getSession().getAttribute("clientCode").toString();
 			String userCode=req.getSession().getAttribute("usercode").toString();
 			String propCode=req.getSession().getAttribute("propertyCode").toString();
 			String startDate=req.getSession().getAttribute("startDate").toString();
+			boolean flag=true;			
 			
-			String sqlCheck = "select a.strBookingNo from tblbqbookinghd a "
-					+ "where '"+objGlobalFunctions.funGetDate("yyyy-MM-dd", objBean.getDteFromDate())+"' between Date(a.dteFromDate) and Date(a.dteToDate) "
-					+ "AND '"+objBean.getTmeFromTime()+"' between a.tmeFromTime and a.tmeToTime and a.strClientCode='"+clientCode+"'";
-			
-			List listAudit = objGlobalFunctionsService.funGetListModuleWise(sqlCheck, "sql");
-			if(listAudit.size()>0)
-			{
-				req.getSession().setAttribute("notsuccess", true);
-				req.getSession().setAttribute("successMessage", "Please select different time ");
-			}
-			else
-			{
 				clsBanquetBookingModelHd objHdModel = funPrepareHdModel(objBean,userCode,clientCode,req,propCode);
 				List<clsBanquetBookingModelDtl> listBookingDtl=new ArrayList<clsBanquetBookingModelDtl>();
 				
 				objBanquetBookingService.funAddUpdateBanquetBookingHd(objHdModel);
-			
-			
-			
-			
+						
 			if(objBean.getListSeriveDtl()!=null && !objBean.getListSeriveDtl().isEmpty())
 			{
 				List<clsBanquetBookingModelDtl>list=objBean.getListSeriveDtl();
@@ -139,10 +126,8 @@ public class clsBanquetBookingController{
 						objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 						objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
 						listBookingDtl.add(objDtl);	
-					}
-				
-				}
-				
+					}				
+				}				
 			}
 			if(objBean.getListEquipDtl()!=null && !objBean.getListEquipDtl().isEmpty())
 			{
@@ -172,8 +157,7 @@ public class clsBanquetBookingController{
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 					listBookingDtl.add(objDtl);					
 					}
-				}
-				
+				}				
 			}
 			if(objBean.getListMenuItemDtl()!=null && !objBean.getListMenuItemDtl().isEmpty())
 			{
@@ -190,13 +174,32 @@ public class clsBanquetBookingController{
 					}
 				}				
 			}
+			if(objBean.getStrBanquetCode()!=null)
+			{
+				String sql = "SELECT b.dblRate,a.strBanquetName FROM tblbanquetmaster a,tblbanquettypemaster b WHERE a.strBanquetCode='"+objBean.getStrBanquetCode()+"' and a.strBanquetTypeCode=b.strBanquetTypeCode and a.strClientCode='"+clientCode+"' ";
+				List listBanquet = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");				
+				if(!listBanquet.isEmpty())
+				{			
+					clsBanquetBookingModelDtl objDtl=new clsBanquetBookingModelDtl();
+					Object[] obj = (Object[])listBanquet.get(0);					
+					objDtl.setStrType("Banquet");
+					objDtl.setStrDocNo(objBean.getStrBanquetCode());
+					objDtl.setDblDocQty(1);
+					objDtl.setDblDocRate(Double.parseDouble(obj[0].toString()));;
+					objDtl.setStrDocName(obj[1].toString());
+					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
+					objDtl.setDblDocTotalAmt(Double.parseDouble(obj[0].toString()));
+					listBookingDtl.add(objDtl);	
+					
+				}
+			}
+			
 			objHdModel.setListBanquetBookingDtlModels(listBookingDtl);
 			objBanquetBookingService.funAddUpdateBanquetBookingHd(objHdModel);
 			req.getSession().setAttribute("success", true);
 			req.getSession().setAttribute("successMessage", "Booking No : ".concat(objHdModel.getStrBookingNo()));
-			}
 			return new ModelAndView("redirect:/frmBanquetBooking.html");
-		}
+			}
 		else{
 			return new ModelAndView("frmBanquetBooking");
 		}
@@ -328,8 +331,8 @@ public class clsBanquetBookingController{
 		List list =null;
 		try{
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
-			String 	 sql="	select a.strBanquetName,b.strBanquetTypeName,   b.dblRate from tblbanquetmaster a,tblbanquettypemaster b"
-					+ " where a.strBanquetTypeCode=b.strBanquetTypeCode and a.strOperational='Y'  and a.strClientCode='"+clientCode+"'";
+			String 	 sql="select a.strServiceCode,a.strServiceName,b.dblRate from tblfunctionservice a,tblservicemaster b where "
+					+ " a.strServiceCode=b.strServiceCode and   a.strFunctionCode='"+funCode+"' and a.strClientCode='"+clientCode+"' and a.strApplicable='Y' ";
 			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
 			}
 		catch(Exception e)
@@ -382,6 +385,33 @@ public class clsBanquetBookingController{
 				}
 			}
 			}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return condition;
+	}
+	
+	
+	
+	
+	@RequestMapping(value = "/checkBooking", method = RequestMethod.GET)
+	public @ResponseBody boolean funCheckBooking(@RequestParam("fromTime") String fromTime,@RequestParam("fromDate") String fromDate,HttpServletRequest req)
+	{
+		List list =null;		
+		boolean condition = false;		
+		try{
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String sqlCheck = "select a.strBookingNo from tblbqbookinghd a "
+					+ "where '"+objGlobalFunctions.funGetDate("yyyy-MM-dd", fromDate)+"' between Date(a.dteFromDate) and Date(a.dteToDate) "
+					+ "AND '"+fromTime+"' between a.tmeFromTime and a.tmeToTime and a.strClientCode='"+clientCode+"'";
+			
+			List listAudit = objGlobalFunctionsService.funGetListModuleWise(sqlCheck, "sql");
+			if(!listAudit.isEmpty())
+			{
+				condition=true;
+			}
+		}
 		catch(Exception e)
 			{
 				e.printStackTrace();

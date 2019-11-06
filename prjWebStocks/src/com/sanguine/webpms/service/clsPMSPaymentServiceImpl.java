@@ -5,11 +5,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.crm.model.clsProFormaInvoiceHdModel;
+import com.sanguine.crm.service.clsProFormaInvoiceHdService;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.webbanquets.model.clsBanquetBookingModelDtl;
+import com.sanguine.webbanquets.model.clsBanquetBookingModelHd;
+import com.sanguine.webbanquets.service.clsBanquetBookingService;
 import com.sanguine.webpms.bean.clsPMSPaymentBean;
 import com.sanguine.webpms.dao.clsPMSPaymentDao;
 import com.sanguine.webpms.model.clsBillHdModel;
@@ -29,12 +36,17 @@ public class clsPMSPaymentServiceImpl implements clsPMSPaymentService {
 	private clsGlobalFunctions objGlobal;
 
 	@Autowired
-	private clsBillService objBillService;
+	private clsBillService objBillService;	
 
 	@Override
 	public void funAddUpdatePaymentHd(clsPMSPaymentHdModel objHdModel) {
 		// TODO Auto-generated method stub
 	}
+	@Override
+	public void funChangeBookingStatus(String sql,String queryType) {	
+		objPaymentDao.funChangeBookingStatus(sql,queryType);		
+	}
+	
 
 	@Override
 	public clsPMSPaymentHdModel funPreparePaymentModel(clsPMSPaymentBean objPaymentBean, String clientCode, HttpServletRequest request, String userCode) {
@@ -104,7 +116,7 @@ public class clsPMSPaymentServiceImpl implements clsPMSPaymentService {
 			}
 		}
 		
-		else if (objPaymentBean.getStrAgainst().equals("Banquet")) {
+		else if (objPaymentBean.getStrAgainst().equals("Booking")) {
 			
 				
 					checkInNo = "";
@@ -113,6 +125,12 @@ public class clsPMSPaymentServiceImpl implements clsPMSPaymentService {
 					folioNo = "";
 					billNo = "";
 				
+		}else if (objPaymentBean.getStrAgainst().equals("Invoice")) {			
+			checkInNo = "";
+			registrationNo = "";
+			reservationNo = objPaymentBean.getStrDocNo();
+			folioNo = "";
+			billNo = "";		
 		}
 
 		else {

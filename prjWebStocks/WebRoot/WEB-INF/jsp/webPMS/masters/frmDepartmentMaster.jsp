@@ -229,8 +229,8 @@
 				 <td><label>Deactivate</label></td>
 				 <td  >
 				 <s:select id="cmdDeactivate" path="strDeactivate" cssClass="BoxW124px">
-				    <option selected="selected" value="Y">Yes</option>
-			        <option value="N">No</option>
+				    <option selected="selected" value="N">No</option>
+			        <option value="Y">Yes</option>
 		         </s:select>
 				</td>
 			</tr>

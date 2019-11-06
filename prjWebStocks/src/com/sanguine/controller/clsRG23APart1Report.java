@@ -69,6 +69,8 @@ public class clsRG23APart1Report extends AbstractExcelView {
 		String userCode = request.getSession().getAttribute("usercode").toString();
 		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String locCode = request.getParameter("strLocationCode").toString();
+		
+		
 		// String
 		// locCode=request.getSession().getAttribute("locationCode").toString();
 		String sql = "";

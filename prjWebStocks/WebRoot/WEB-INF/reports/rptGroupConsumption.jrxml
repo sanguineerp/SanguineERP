@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
-<!-- 2015-06-25T19:44:01 -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptGroupConsumption" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7681b3a1-03b4-4f66-b085-cffe7b20a777">
 	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
@@ -234,4 +233,64 @@
 			</componentElement>
 		</band>
 	</detail>
+	<pageFooter>
+		<band height="26">
+			<staticText>
+				<reportElement x="6" y="8" width="61" height="15" uuid="45f0572b-a1fc-4595-995b-2fa03299af2f"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Created on :]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="69" y="8" width="90" height="15" uuid="9367ac0e-db97-48b8-838a-2c4bf6d75ff6"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="165" y="8" width="24" height="15" uuid="4a1c05bf-7d4a-46ae-89fe-22f8094b9f80"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AT :]]></text>
+			</staticText>
+			<textField pattern="HH:mm">
+				<reportElement x="189" y="8" width="56" height="15" uuid="35e8e2cc-35fb-402a-b5b3-eda1d33fc32c"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="8" width="20" height="15" uuid="dc2072f8-7185-43b9-ab93-fb8271d7d0b0"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[By :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="325" y="8" width="100" height="15" uuid="be4b1383-0816-435d-b035-31514b9265c6"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{strUserCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="8" width="50" height="15" uuid="c4ac175c-bd52-40e0-b15e-34f35fff810d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="502" y="8" width="50" height="15" uuid="911c31d7-e612-436d-83d8-e8e63dd59283"/>
+				<textElement textAlignment="Left">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
 </jasperReport>

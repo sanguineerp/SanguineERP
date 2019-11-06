@@ -89,7 +89,10 @@ public class clsCurrentStockModel {
 
 	@Column(name = "dblPercentage", columnDefinition = "DECIMAL(18,4) NOT NULL default '0.0000'")
 	private String dblPercentage;
-
+    
+	@Column(name = "dblFreeQty", columnDefinition = "DECIMAL(18,4) NOT NULL default '0.0000'")
+	private double dblFreeQty;
+	
 	public String getStrProdCode() {
 		return strProdCode;
 	}
@@ -305,4 +308,14 @@ public class clsCurrentStockModel {
 	public void setDblPercentage(String dblPercentage) {
 		this.dblPercentage = dblPercentage;
 	}
+
+	public double getDblFreeQty() {
+		return dblFreeQty;
+	}
+
+	public void setDblFreeQty(double dblFreeQty) {
+		this.dblFreeQty = dblFreeQty;
+	}
+
+	
 }

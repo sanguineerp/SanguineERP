@@ -1125,12 +1125,12 @@ public class clsMISController {
 				String dateTime[] = objGlobalFunctions.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
 				List footer = new ArrayList<>();
 
-				footer.add("Created on :");
-				footer.add(dateTime[0]);
-				footer.add("AT :");
-				footer.add(dateTime[1]);
-				footer.add("By :");
-				footer.add(userCode);
+				footer.add("Created on :" +dateTime[0]);
+				//footer.add(dateTime[0]);
+				footer.add("AT :" +dateTime[1]);
+				//footer.add(dateTime[1]);
+				footer.add("By :" +userCode);
+				//footer.add(userCode);
 				openingStklist.add(footer);
 
 			} else {
@@ -1279,12 +1279,12 @@ public class clsMISController {
 				String dateTime[] = objGlobalFunctions.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
 				List footer = new ArrayList<>();
 
-				footer.add("Created on :");
-				footer.add(dateTime[0]);
-				footer.add("AT :");
-				footer.add(dateTime[1]);
-				footer.add("By :");
-				footer.add(userCode);
+				footer.add("Created on :" +dateTime[0]);
+				//footer.add(dateTime[0]);
+				footer.add("AT :" +dateTime[1]);
+				//footer.add(dateTime[1]);
+				footer.add("By :" +userCode);
+				//footer.add(userCode);
 				listdata.add(footer);
 
 			} else {

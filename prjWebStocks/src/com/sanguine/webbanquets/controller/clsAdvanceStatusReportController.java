@@ -133,6 +133,14 @@ public class clsAdvanceStatusReportController {
 			
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptAdvanceStatusReport.jrxml");
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
+			/*String sqlPayment ="SELECT a.strReceiptNo,a.strReservationNo, "
+					+ "IFNULL(b.strCustomerCode,''),IFNULL(c.strPname,''),e.strSettlementDesc,IFNULL(b.dteBookingDate,''),a.dblReceiptAmt "				
+					+ "FROM tblreceipthd a "
+					+ "LEFT OUTER JOIN tblbqbookinghd b ON a.strReservationNo=b.strBookingNo "
+					+ "LEFT OUTER JOIN "+webStockDB+".tblpartymaster c ON c.strPCode=b.strCustomerCode "
+					+ "LEFT OUTER JOIN tblreceiptdtl d ON d.strReceiptNo=a.strReceiptNo "
+					+ "LEFT OUTER JOIN tblsettlementmaster e ON e.strSettlementCode=d.strSettlementCode "
+					+ "WHERE a.strAgainst='Banquet' ORDER BY e.strSettlementDesc ";*/
 			String sqlPayment ="SELECT a.strReceiptNo,a.strReservationNo, "
 					+ "IFNULL(b.strCustomerCode,''),IFNULL(c.strPname,''),e.strSettlementDesc,IFNULL(b.dteBookingDate,''),a.dblReceiptAmt "				
 					+ "FROM tblreceipthd a "
@@ -140,7 +148,9 @@ public class clsAdvanceStatusReportController {
 					+ "LEFT OUTER JOIN "+webStockDB+".tblpartymaster c ON c.strPCode=b.strCustomerCode "
 					+ "LEFT OUTER JOIN tblreceiptdtl d ON d.strReceiptNo=a.strReceiptNo "
 					+ "LEFT OUTER JOIN tblsettlementmaster e ON e.strSettlementCode=d.strSettlementCode "
-					+ "WHERE a.strAgainst='Banquet' ORDER BY e.strSettlementDesc ";
+					+ "WHERE a.strAgainst='Booking' AND DATE(b.dteFromDate) BETWEEN '"+fromTempDate+"' AND DATE(b.dteToDate) "
+					+ "AND a.strClientCode='"+clientCode+"' AND a.strClientCode=b.strClientCode AND a.strClientCode=c.strClientCode "
+					+ "AND a.strClientCode=d.strClientCode AND a.strClientCode=e.strClientCode ORDER BY e.strSettlementDesc ";
 			List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
 			
 		

@@ -164,6 +164,8 @@ public class clsTransectionFlashController {
 
 		List listTranesSumData = new ArrayList();
 		listTranesSumData.add("TranesSumData_" + fDate + "to" + tDate + "_" + userCode);
+		String dateTime[] = objGlobal.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
 
 		fDate = objGlobal.funGetDate("yyyy-MM-dd", fDate);
 		tDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
@@ -203,6 +205,14 @@ public class clsTransectionFlashController {
 				DataList.add(arrObj[1].toString());
 				listTranesData.add(DataList);
 			}
+			List blank = new ArrayList<>();
+			blank.add("");
+			listTranesData.add(blank);
+
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			listTranesData.add(footer);
 			listTranesSumData.add(listTranesData);
 
 		}

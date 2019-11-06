@@ -26,6 +26,11 @@ public class clsTempItemStockModel {
 
 	@Column(name = "strUserCode")
 	private String strUserCode;
+	
+	@Column(name = "dblFreeQty")
+	private double dblFreeQty;
+	
+	
 
 	public String getStrProdCode() {
 		return strProdCode;
@@ -65,6 +70,14 @@ public class clsTempItemStockModel {
 
 	public void setIntId(long intId) {
 		this.intId = intId;
+	}
+
+	public double getDblFreeQty() {
+		return dblFreeQty;
+	}
+
+	public void setDblFreeQty(double dblFreeQty) {
+		this.dblFreeQty = dblFreeQty;
 	}
 
 }

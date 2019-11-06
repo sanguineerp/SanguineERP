@@ -293,6 +293,9 @@ public class clsAvgConsumptionController {
 		rpeortName = rpeortName.replaceAll(" ", "");
 		exportList.add(rpeortName);
 
+		String dateTime[] = objGlobal.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
+		
 		ArrayList<clsAvgConsumptionReportBean> fieldList = new ArrayList<clsAvgConsumptionReportBean>();
 
 		List<String> listHeader = new ArrayList<String>();
@@ -414,7 +417,15 @@ public class clsAvgConsumptionController {
 			listExportDtl.add(listobj);
 			srNo++;
 		}
+		
+		List blank = new ArrayList<>();
+		blank.add("");
+		listExportDtl.add(blank);
 
+		footer.add("Created on :" +dateTime[0]);
+		footer.add("AT :" +dateTime[1]);
+		footer.add("By :" +userCode);
+		listExportDtl.add(footer);
 		exportList.add(listExportDtl);
 
 		return new ModelAndView("excelViewWithReportName", "listWithReportName", exportList);

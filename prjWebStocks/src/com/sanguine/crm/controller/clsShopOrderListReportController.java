@@ -274,7 +274,7 @@ public class clsShopOrderListReportController {
 			String dteToFulDate = tfy + "-" + tfm + "-" + tfd;
 
 			ArrayList fieldList = new ArrayList();
-			String sqlEvnQuery="select p.custName,p.groupName,p.subGroupName,p.prodName,p.dblQty as salesq,p.dblAcceptQty,"
+			/*String sqlEvnQuery="select p.custName,p.groupName,p.subGroupName,p.prodName,p.dblQty as salesq,p.dblAcceptQty,"
 					+ " p.soCode,p.custCode,p.sortNo ,IFNULL(q.dblRetQty,0)"
 					+ "from"
 					+ " (SELECT e.strPName as custName,f.strGName as groupName,c.strSGName as subGroupName,"
@@ -296,10 +296,29 @@ public class clsShopOrderListReportController {
 					+ " AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode AND c.strGCode=f.strGCode "
 					+ " AND a.strCustCode = '" + strCustName + "' AND c.strGCode='" + strGCode + "'  and  DATE(a.dteSRDate)  between '" + dteFromDate + "' and '" + dteToDate + "' "
 					+ " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode"
-					+ " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q on p.prodCode=q.prodCode";
+					+ " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q on p.prodCode=q.prodCode";*/
 			/*String sqlEvnQuery = " select  e.strPName,f.strGName,c.strSGName,d.strProdName,sum(b.dblQty) as dblQty  ,sum(b.dblAcceptQty) as dblAcceptQty ," + " a.strSOCode,a.strCustCode,c.intSortingNo " + " from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, tblproductmaster d ," + " tblpartymaster e ,tblgroupmaster f  " + " where a.strSOCode=b.strSOCode "
 					+ " and b.strProdCode=d.strProdCode " + " and d.strSGCode=c.strSGCode " + " and a.strCustCode=e.strPCode " + " and c.strGCode=f.strGCode " + " and a.strCustCode = '" + strCustName + "' and c.strGCode='" + strGCode + "' ";
-*/
+*/             
+			String sqlEvnQuery="SELECT p.custName,p.groupName,p.subGroupName,p.prodName,p.dblQty AS salesq,p.dblAcceptQty, p.invCode,p.custCode,p.sortNo, IFNULL(q.dblQty,0) "
+                               + " FROM (SELECT e.strPName AS custName,f.strGName AS groupName,c.strSGName AS subGroupName, d.strProdName AS prodName, SUM(b.dblQty)  "
+                               + " AS dblQty, SUM(b.dblQty) AS dblAcceptQty, a.strInvCode AS invCode, a.strCustCode AS custCode,c.intSortingNo AS sortNo,  "
+                               + " b.strProdCode AS prodCode  "
+                               + " FROM tblinvoicehd a,tblinvoicedtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f  "
+                               + " WHERE a.strInvCode=b.strInvCode AND b.strProdCode=d.strProdCode AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode   "
+                               + " AND c.strGCode=f.strGCode AND a.strCustCode = 'C000034' AND c.strGCode='G000002' AND DATE(a.dteInvDate) BETWEEN '2019-10-01'   "
+                               + " AND '2019-10-31'   "
+                               + " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  "
+                               + " ORDER BY e.strPName,c.intSortingNo,d.strProdName) p  "
+                               + " LEFT OUTER  "
+                               + " JOIN (SELECT e.strPName AS custName,f.strGName AS groupName,c.strSGName AS subGroupName, d.strProdName AS prodName, SUM(b.dblQty)   "
+                               + " AS dblQty, '' AS dblAcceptQty,a.strCustCode AS custCode,c.intSortingNo AS sortNo, b.strProdCode AS prodCode  "
+                               + " FROM tblsalesreturnhd a,tblsalesreturndtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f  "
+                               + " WHERE a.strSRCode=b.strSRCode AND b.strProdCode=d.strProdCode AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode  "
+                               + " AND c.strGCode=f.strGCode AND a.strCustCode = 'C000034' AND c.strGCode='G000002' AND DATE(a.dteSRDate) BETWEEN '2019-10-01'  "
+                               + " AND '2019-10-31'  "
+                               + " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  "
+                               + " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q ON p.prodCode=q.prodCode; ";
 			
 			HashMap<String, String> hmCustWiseSub = new HashMap<String, String>();
 
@@ -314,7 +333,7 @@ public class clsShopOrderListReportController {
 			/*String sqlSubGroup = " select  e.strPName,c.strSGName from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, " + " tblproductmaster d , tblpartymaster e ,tblgroupmaster f " + " where a.strSOCode=b.strSOCode  and b.strProdCode=d.strProdCode  " + "and d.strSGCode=c.strSGCode  and a.strCustCode=e.strPCode " + "and c.strGCode=f.strGCode and a.strCustCode  =  '" + strCustName
 					+ "' and c.strGCode='" + strGCode + "' " + " and date(a.dteSODate) " + " between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by d.strSGCode,a.strCustCode " + " ORDER BY e.strPName,c.intSortingNo,d.strProdName   ";
 */        
-            String sqlSubGroup="select p.custName,p.groupName,p.subGroupName,p.prodName,p.dblQty as salesq,p.dblAcceptQty,"
+           /* String sqlSubGroup="select p.custName,p.groupName,p.subGroupName,p.prodName,p.dblQty as salesq,p.dblAcceptQty,"
 			+ " p.soCode,p.custCode,p.sortNo ,IFNULL(q.dblRetQty,0)"
 			+ "from"
 			+ " (SELECT e.strPName as custName,f.strGName as groupName,c.strSGName as subGroupName,"
@@ -336,7 +355,27 @@ public class clsShopOrderListReportController {
 			+ " AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode AND c.strGCode=f.strGCode "
 			+ " AND a.strCustCode = '" + strCustName + "' AND c.strGCode='" + strGCode + "'  and  DATE(a.dteSRDate)  between '" + dteFromDate + "' and '" + dteToDate + "' "
 			+ " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode"
-			+ " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q on p.prodCode=q.prodCode";
+			+ " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q on p.prodCode=q.prodCode";*/
+			
+			String sqlSubGroup=" SELECT p.custName,p.groupName,p.subGroupName,p.prodName,p.dblQty AS salesq,p.dblAcceptQty, p.invCode,p.custCode,p.sortNo, IFNULL(q.dblQty,0) "
+                               + " FROM (SELECT e.strPName AS custName,f.strGName AS groupName,c.strSGName AS subGroupName, d.strProdName AS prodName, SUM(b.dblQty)  "
+                               + " AS dblQty, SUM(b.dblQty) AS dblAcceptQty, a.strInvCode AS invCode, a.strCustCode AS custCode,c.intSortingNo AS sortNo,  "
+                               + " b.strProdCode AS prodCode  "
+                               + " FROM tblinvoicehd a,tblinvoicedtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f  "
+                               + " WHERE a.strInvCode=b.strInvCode AND b.strProdCode=d.strProdCode AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode   "
+                               + " AND c.strGCode=f.strGCode AND a.strCustCode = 'C000034' AND c.strGCode='G000002' AND DATE(a.dteInvDate) BETWEEN '2019-10-01'   "
+                               + " AND '2019-10-31'   "
+                               + " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  "
+                               + " ORDER BY e.strPName,c.intSortingNo,d.strProdName) p  "
+                               + " LEFT OUTER  "
+                               + " JOIN (SELECT e.strPName AS custName,f.strGName AS groupName,c.strSGName AS subGroupName, d.strProdName AS prodName, SUM(b.dblQty)   "
+                               + " AS dblQty, '' AS dblAcceptQty,a.strCustCode AS custCode,c.intSortingNo AS sortNo, b.strProdCode AS prodCode  "
+                               + " FROM tblsalesreturnhd a,tblsalesreturndtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f  "
+                               + " WHERE a.strSRCode=b.strSRCode AND b.strProdCode=d.strProdCode AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode  "
+                               + " AND c.strGCode=f.strGCode AND a.strCustCode = 'C000034' AND c.strGCode='G000002' AND DATE(a.dteSRDate) BETWEEN '2019-10-01'  "
+                               + " AND '2019-10-31'  "
+                               + " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  "
+                               + " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q ON p.prodCode=q.prodCode;";
 			List listCustSubgroup = objGlobalFunctionsService.funGetDataList(sqlSubGroup, "sql");
 			Map<String, List<String>> hmCustSG = new HashMap<String, List<String>>();
 			// Map<String,String> hmCustSG=new HashMap<String,String>();

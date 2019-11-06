@@ -1050,6 +1050,11 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql=" ALTER TABLE `tblpropertysetup` ADD COLUMN `strRecipeListPrice` VARCHAR(10) NOT NULL DEFAULT '' AFTER `strPOSTRoundOffAmtToWebBooks`;";
 		funExecuteQuery(sql);
 		
+		sql= "ALTER TABLE `tblcurrentstock` ADD COLUMN `dblFreeQty` DECIMAL(18,4) NOT NULL DEFAULT '0.0000' AFTER `strLastISDate_Qty`";
+		funExecuteQuery(sql);
+		 
+		sql= "ALTER TABLE `tbltempitemstock` ADD COLUMN `dblFreeQty`  DECIMAL(18,4) NOT NULL DEFAULT '0.0000' AFTER `intId`";
+		funExecuteQuery(sql);
 		
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
@@ -1374,6 +1379,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		sql = "delete from tbltreemast  where strFormName='frmStockReq'";
 		funExecuteQuery(sql);
+		
+		
+		
 		}
 		
 		// //--------------------END----------------------------/////

@@ -1142,6 +1142,9 @@ public class clsProductMasterController {
 		String[] ExcelHeader = { "Product Code", "Product Name", "SubGroup Name","UOM","Cost","List Price","Location Name","Specification" };
 		listStock.add(ExcelHeader);
 		
+		String dateTime[] = objGlobal.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
+		
 		String sql = "";
 		if (objSetup.getStrShowProdMaster().equalsIgnoreCase("Y")) {
 			sql = " select p.strProdCode as ProdCode,p.strProdName as ProdName,s.strSGName as SGName," + " p.strUOM as UOM,p.dblCostRM as CostRM,p.dblListPrice as ListPrice," + " ifnull(l.strlocname,'') as Locname,p.strSpecification as Specification ,p.strBinNo as BinNo " + " from tblproductmaster p" + " left outer join tblsubgroupmaster s on p.strSGCode=s.strSGCode and s.strClientcode='" + clientCode
@@ -1178,6 +1181,15 @@ public class clsProductMasterController {
 			DataList.add(arrObj[7].toString());
 			listStockFlashModel.add(DataList);
 		}
+		List blank = new ArrayList<>();
+		blank.add("");
+		listStockFlashModel.add(blank);
+
+		footer.add("Created on :" +dateTime[0]);
+		footer.add("AT :" +dateTime[1]);
+		footer.add("By :" +userCode);
+		listStockFlashModel.add(footer);
+
 		listStock.add(listStockFlashModel);
 		return new ModelAndView("excelView", "stocklist", listStock);
 	}

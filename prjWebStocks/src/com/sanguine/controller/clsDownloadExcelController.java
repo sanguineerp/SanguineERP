@@ -49,7 +49,8 @@ public class clsDownloadExcelController {
 		double currValue = Double.parseDouble(strCurr);
 		
 		
-		
+		String dateTime[] = objGlobal.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
 		
 		
 		
@@ -71,7 +72,7 @@ public class clsDownloadExcelController {
 		}
 
 		if ("Detail".equalsIgnoreCase(reportType)) {
-			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Unit Price", "Opening Stock", "GRN", "SCGRN", "	Stock Transfer In", "Stock Adj In", "MIS In", "Qty Produced", "Sales Return", "Material Return", "Purchase Return", "Delivery Note", "Stock Trans Out", "Stock Adj Out", "MIS Out", "Qty Consumed", "Sales",
+			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Unit Price", "Opening Stock", "GRN","Free Qty", "SCGRN", "	Stock Transfer In", "Stock Adj In", "MIS In", "Qty Produced", "Sales Return", "Material Return", "Purchase Return", "Delivery Note", "Stock Trans Out", "Stock Adj Out", "MIS Out", "Qty Consumed", "Sales",
 					"Closing Stock", "Value", "Issue UOM Stock", "Issue Conversion", "Issue UOM", "Part No" };
 			listStock.add(ExcelHeader);
 			
@@ -102,6 +103,7 @@ public class clsDownloadExcelController {
 			totalsList.add("");
 			totalsList.add("");
 			totalsList.add("");
+			totalsList.add("");
 
 			String startDate = req.getSession().getAttribute("startDate").toString();
 			String[] sp = startDate.split(" ");
@@ -121,7 +123,7 @@ public class clsDownloadExcelController {
 				{
 					sqlBuilder.setLength(0);
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
-							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
+							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN,a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",a.dblClosingStk,"
 							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value " + ",a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
@@ -147,7 +149,7 @@ public class clsDownloadExcelController {
 				{
 					sqlBuilder.setLength(0);
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
-							+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
+							+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)/" + currValue + " , " + "a.dblOpeningStk,a.dblGRNa.dblFreeQty,,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",a.dblClosingStk,"
 							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value,"
 							+ "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -171,7 +173,7 @@ public class clsDownloadExcelController {
 				{
 					sqlBuilder.setLength(0);
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
-							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + ", " + "a.dblOpeningStk,a.dblGRN,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
+							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + ", " + "a.dblOpeningStk,a.dblGRN,a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",a.dblClosingStk,"
 							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
 							+ "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -198,6 +200,8 @@ public class clsDownloadExcelController {
 				+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " " + ",funGetUOM(a.dblOpeningStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as OpeningStk"
 
 				+ " ,funGetUOM(a.dblGRN,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
+				
+                + " ,funGetUOM(a.dblFreeQty,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
 				+ " ,funGetUOM(a.dblSCGRN,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
@@ -295,6 +299,7 @@ public class clsDownloadExcelController {
 					dataList.add(arrObj[22].toString());
 					dataList.add(arrObj[23].toString());
 					dataList.add(arrObj[24].toString());
+					dataList.add(arrObj[25].toString());
 
 
 					dataList.add(arrObj[26].toString());
@@ -470,11 +475,18 @@ public class clsDownloadExcelController {
 			listStockFlashModel.add(dataList);
 			List blankList = new ArrayList();
 			listStockFlashModel.add(blankList);// Blank Row at Bottom
-		  
+		    
 			
 			
 			listStockFlashModel.add(totalsList);
+			List blank = new ArrayList<>();
+			blank.add("");
+			listStockFlashModel.add(blank);
 
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			listStockFlashModel.add(footer);
 			
 			listStock.add(listStockFlashModel);
 			// return a view which will be resolved by an excel view resolver
@@ -676,6 +688,14 @@ public class clsDownloadExcelController {
 			List blankList = new ArrayList();
 			listStockFlashModel.add(blankList);// Blank Row at Bottom
 			listStockFlashModel.add(totalsList1);
+			List blank = new ArrayList<>();
+			blank.add("");
+			listStockFlashModel.add(blank);
+
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			listStockFlashModel.add(footer);
 			
 			listStock.add(listStockFlashModel);
 			return new ModelAndView("excelViewWithReportName", "listWithReportName", listStock);
@@ -698,7 +718,7 @@ public class clsDownloadExcelController {
 				{
 					sqlBuilder.setLength(0);
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
-							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
+							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN+a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",a.dblClosingStk,"
 							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value " + ",a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
@@ -719,7 +739,7 @@ public class clsDownloadExcelController {
 				{
 					sqlBuilder.setLength(0);
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
-							+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
+							+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN+a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",a.dblClosingStk,"
 							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value,"
 							+ "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -743,7 +763,7 @@ public class clsDownloadExcelController {
 				{
 					sqlBuilder.setLength(0);
 					sqlBuilder.append( "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"					
-							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + ", " + "a.dblOpeningStk,a.dblGRN,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
+							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + ", " + "a.dblOpeningStk,a.dblGRN+a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",a.dblClosingStk,"							
 							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
 							+ "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -770,7 +790,7 @@ public class clsDownloadExcelController {
 				
 				+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " " + ",funGetUOM(a.dblOpeningStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as OpeningStk"
 
-				+ " ,funGetUOM(a.dblGRN,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
+				+ " ,funGetUOM(a.dblGRN+a.dblFreeQty,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
 				+ " ,funGetUOM(a.dblSCGRN,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
@@ -978,6 +998,15 @@ public class clsDownloadExcelController {
 			dataList.add("");
 			dataList.add("");
 			listStockFlashModel.add(dataList);
+			
+			List blank = new ArrayList<>();
+			blank.add("");
+			listStockFlashModel.add(blank);
+
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			listStockFlashModel.add(footer);
 			listStock.add(listStockFlashModel);
 			return new ModelAndView("excelViewWithReportName", "listWithReportName", listStock);
 		}
@@ -1098,6 +1127,14 @@ public class clsDownloadExcelController {
 
 			}
 			listStock.add(listStockFlashModel);
+			List blank = new ArrayList<>();
+			blank.add("");
+			listStockFlashModel.add(blank);
+
+			footer.add("Created on :" +dateTime[0]);
+			footer.add("AT :" +dateTime[1]);
+			footer.add("By :" +userCode);
+			listStockFlashModel.add(footer);
 			// return a view which will be resolved by an excel view resolver
 			return new ModelAndView("excelViewWithReportName", "listWithReportName", listStock);
 

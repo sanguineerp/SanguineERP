@@ -121,17 +121,84 @@ body {
   width: 100px;height: 28px; white-space: normal;
 }
 
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: -125%;
+  left: 50%;
+  margin-left: -20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+.tooltiptextleft {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 110%;
+  left: 0%;
+  margin-left: -50px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptextleft {
+  visibility: visible;
+  opacity: 1;
+}
+
+.btn {
+  border: none;
+  outline: none;  
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Style the active class, and buttons on mouse-over */
+.active, .btn:hover {
+  background-color: gainsboro;
+  color: white;
+}
 </style>
 <script type="text/javascript">
 	
 var strViewType="normal";
 var selectedCell;	
+var bookingNo;
+var customerNo
+var gstrLocCode;
+
 	$(function() 
 	{
-		
+		$( tblBanquetInfo ).tooltip();
 		$("#txtViewDate").datepicker({ dateFormat: 'dd-mm-yy' });
 		$("#txtViewDate").datepicker('setDate', 'today');
-		
+		$('#tdDay').text($('#txtViewDate').val());
 		funGetHeaderData();
 	});
 	
@@ -142,38 +209,7 @@ var selectedCell;
 		  modal.style.display = "none";
 	  }
 	}
-	/* $(function() {
-
-		  $("#dialog").dialog({
-		     autoOpen: false,
-		     modal: true
-		   });
-
-		  $("#myButton").on("click", function(e) {
-		      e.preventDefault();
-		      $("#dialog").dialog("open");
-		  });
-
-		}); */
 	
-	/* function showPopup(your_variable){
-        $("#popup").dialog({
-            width: 200,
-            height: 200,
-            open: function(){
-                $(this).find("p").html("Hello " + your_variable)
-            }
-        });
-    }
-	 */
-/* 	
-	$(function() {
-
-	 data-toggle="modal" 
-		  $('[data-toggle="modal"]').hover(function() {
-		 
-		  
-	}); */
 	
 	
 	 
@@ -249,7 +285,92 @@ var selectedCell;
 		});
 	}
 	
-	function funShowDiary(strAreaCode)
+	function funGetDayViewHeaderData(bookingNo)
+	{
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/getBanquetDiaryDayViewHeader.html?",
+			dataType : "json",
+			 beforeSend : function(){
+				 $("#wait").css("display","block");
+		    },
+		    complete: function(){
+		    	 $("#wait").css("display","none");
+		    },
+			
+			success : function(response){ 
+				funRemoveTableRows("tblBanquetInfo");					
+				if(response.length>0){						
+					funFillDayViewHeaderRows(response);				
+					
+				}
+				
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+	}
+	
+	function funGetWeekendView(gstrLocCode)
+	{
+		var viewDate=$("#txtViewDate").val();
+			
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/getBanquetWeekendViewBookingDetails.html?viewDate=" + viewDate+"&viewType="+strViewType+"&areaCode="+gstrLocCode,
+			dataType : "json",
+			 beforeSend : function(){
+				 $("#wait").css("display","block");
+		    },
+		    complete: function(){
+		    	 $("#wait").css("display","none");
+		    },
+			
+			success : function(response){ 
+				funRemoveTableRows("tblBanquetInfo");
+				$.each(response, function(i,item)
+				{
+					funFillBanquetDairy(response[i].strDay,response[i].strDay1,response[i].strDay2,response[i].strDay3,response[i].strDay4,response[i].strDay5,response[i].strDay6,response[i].strDay7);
+				});
+				
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+	}
+		
+	
+	function funShowDiaryNormalView(strAreaCode)
 	{
 		var viewDate=$("#txtViewDate").val();
 			
@@ -292,6 +413,91 @@ var selectedCell;
 		});
 	}
 	
+	function funShowDailyView(strAreaCode)
+	{
+		var viewDate=$("#txtViewDate").val();
+			
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/getBanquetDailyViewBookingDetails.html?viewDate=" + viewDate+"&viewType="+strViewType+"&areaCode="+strAreaCode,
+			dataType : "json",
+			 beforeSend : function(){
+				 $("#wait").css("display","block");
+		    },
+		    complete: function(){
+		    	 $("#wait").css("display","none");
+		    },
+			
+			success : function(response){ 
+				funRemoveTableRows("tblBanquetInfo");
+				$.each(response, function(i,item)
+				{
+					funFillDailyViewBanquetDairy(response[i].strDay,response[i].strDay1,response[i].strDay2,response[i].strDay3,response[i].strDay4,response[i].strDay5,response[i].strDay6,response[i].strDay7);
+				});
+				
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+	}
+	
+	function funShowDiaryCancelView(strAreaCode)
+	{
+		var viewDate=$("#txtViewDate").val();
+			
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/getBanquetCancelBookingDetails.html?viewDate=" + viewDate+"&viewType="+strViewType+"&areaCode="+strAreaCode,
+			dataType : "json",
+			 beforeSend : function(){
+				 $("#wait").css("display","block");
+		    },
+		    complete: function(){
+		    	 $("#wait").css("display","none");
+		    },
+			
+			success : function(response){ 
+				funRemoveTableRows("tblBanquetInfo");
+				$.each(response, function(i,item)
+				{
+					funFillBanquetDairy(response[i].strDay,response[i].strDay1,response[i].strDay2,response[i].strDay3,response[i].strDay4,response[i].strDay5,response[i].strDay6,response[i].strDay7);
+				});
+				
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+	}
 	
 	
 	function funFillBanquetDairy(time,strDay1,strDay2,strDay3,strDay4,strDay5,strDay6,strDay7){
@@ -307,20 +513,23 @@ var selectedCell;
 		strDay6=funCheckNull(strDay6);
 		strDay7=funCheckNull(strDay7);
 		
-		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 95%; height: 20px;background: #cfe8e8;\" value='"+time+"' onClick='funCellOnClick(this)'>";
+		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 95%; height: 20px;background: #cfe8e8;\" value='"+time+"' onClick='funCellOnClick(this)' >";
 		var style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
 		if(strDay1!=''){
 			var data=strDay1.split("#");
 			 style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
-			if(data[1]=='Confirm'){
+			if(data[2]=='Confirm'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
-			}else if(data[1]=='Provisional'){
+			}else if(data[2]=='Provisional'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
 			}
-			else if(data[1]=='Waiting'){
+			else if(data[2]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' title ='"+strDay1+"'  onmouseover='funCellOnClick(this)'  >";
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay1+"' title='"+data+"'  onclick='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
@@ -328,15 +537,18 @@ var selectedCell;
 		if(strDay2!=''){
 			var data=strDay2.split("#");
 			
-			if(data[1]=='Confirm'){
+			if(data[2]=='Confirm'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
-			}else if(data[1]=='Provisional'){
+			}else if(data[2]=='Provisional'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
 			}
-			else if(data[1]=='Waiting'){
+			else if(data[2]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay2+"' onmouseover='funCellOnClick(this)'  >";
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"' name='"+strDay2+"' title='"+data+"' onclick='funCellOnClick(this)' >";
 		}else{
 			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
@@ -344,15 +556,18 @@ var selectedCell;
 		if(strDay3!=''){
 			var data=strDay3.split("#");
 			 
-			if(data[1]=='Confirm'){
+			if(data[2]=='Confirm'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
-			}else if(data[1]=='Provisional'){
+			}else if(data[2]=='Provisional'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
 			}
-			else if(data[1]=='Waiting'){
+			else if(data[2]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay3+"' onmouseover='funCellOnClick(this)'>";
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay3+"' title='"+data+"' onclick='funCellOnClick(this)' >";
 		}else{
 			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -361,15 +576,18 @@ var selectedCell;
 		if(strDay4!=''){
 			var data=strDay4.split("#");
 			 
-			if(data[1]=='Confirm'){
+			if(data[2]=='Confirm'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
-			}else if(data[1]=='Provisional'){
+			}else if(data[2]=='Provisional'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
 			}
-			else if(data[1]=='Waiting'){
+			else if(data[2]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay4+"' onmouseover='funCellOnClick(this)'>";
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay4+"' title='"+data+"' onclick='funCellOnClick(this)' >";
 		}else{
 			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -377,15 +595,18 @@ var selectedCell;
 		if(strDay5!=''){
 			var data=strDay5.split("#");
 			
-			if(data[1]=='Confirm'){
+			if(data[2]=='Confirm'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
-			}else if(data[1]=='Provisional'){
+			}else if(data[2]=='Provisional'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
 			}
-			else if(data[1]=='Waiting'){
+			else if(data[2]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"' onmouseover='funCellOnClick(this)' >";
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"' name='"+strDay5+"' title='"+data+"' onclick='funCellOnClick(this)' >";
 		}else{
 			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
 		}
@@ -393,15 +614,18 @@ var selectedCell;
 		if(strDay6!=''){
 			var data=strDay6.split("#");
 			
-			if(data[1]=='Confirm'){
+			if(data[2]=='Confirm'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
-			}else if(data[1]=='Provisional'){
+			}else if(data[2]=='Provisional'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
 			}
-			else if(data[1]=='Waiting'){
+			else if(data[2]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay5+"' onmouseover='funCellOnClick(this)'>";
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay6+"' title='"+data+"' onclick='funCellOnClick(this)' >";
 		}else{
 			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
@@ -410,67 +634,230 @@ var selectedCell;
 			var data=strDay7.split("#");
 			
 			
-			if(data[1]=='Confirm'){
+			if(data[2]=='Confirm'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
-			}else if(data[1]=='Provisional'){
+			}else if(data[2]=='Provisional'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
 			}
-			else if(data[1]=='Waiting'){
+			else if(data[2]=='Waiting'){
 				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
 			}
-			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[0]+"'  title ='"+strDay6+"' onmouseover='funCellOnClick(this)' >";
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay7+"' title='"+data+"' onclick='funCellOnClick(this)'>";
 		}else{
 			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
 		}
+		
+		
 	}
 	
-	function funCellOnClick(objCell){
+function funFillDailyViewBanquetDairy(time,strDay1,strDay2,strDay3,strDay4,strDay5,strDay6,strDay7){
+		
+		var table=document.getElementById("tblBanquetInfo");
+		var rowCount=table.rows.length;
+		var row=table.insertRow();
+		strDay1=funCheckNull(strDay1);
+		strDay2=funCheckNull(strDay2);
+		strDay3=funCheckNull(strDay3);
+		strDay4=funCheckNull(strDay4);
+		strDay5=funCheckNull(strDay5);
+		strDay6=funCheckNull(strDay6);
+		strDay7=funCheckNull(strDay7);
+		
+		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 95%; height: 20px;background: #cfe8e8;\" value='"+time+"' onClick='funCellOnClick(this)' >";
+		var style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay1!=''){
+			var data=strDay1.split("#");
+			 style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+			if(data[2]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[2]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[2]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay1+"' title='"+data+"'  onclick='funCellOnClick(this)'>";
+		}else{
+			row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay2!=''){
+			var data=strDay2.split("#");
+			
+			if(data[2]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[2]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[2]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"' name='"+strDay2+"' title='"+data+"' onclick='funCellOnClick(this)' >";
+		}else{
+			row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay3!=''){
+			var data=strDay3.split("#");
+			 
+			if(data[2]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[2]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[2]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay3+"' title='"+data+"' onclick='funCellOnClick(this)' >";
+		}else{
+			row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
+		}
+		
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay4!=''){
+			var data=strDay4.split("#");
+			 
+			if(data[2]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[2]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[2]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay4+"' title='"+data+"' onclick='funCellOnClick(this)' >";
+		}else{
+			row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay5!=''){
+			var data=strDay5.split("#");
+			
+			if(data[2]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[2]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[2]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"' name='"+strDay5+"' title='"+data+"' onclick='funCellOnClick(this)' >";
+		}else{
+			row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value=''  onClick='funCellOnClick(this)'>";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay6!=''){
+			var data=strDay6.split("#");
+			
+			if(data[2]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[2]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[2]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay6+"' title='"+data+"' onclick='funCellOnClick(this)' >";
+		}else{
+			row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
+		}
+		style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer;\"';
+		if(strDay7!=''){
+			var data=strDay7.split("#");
+			
+			
+			if(data[2]=='Confirm'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: red;\"';
+			}else if(data[2]=='Provisional'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: green;\"';
+			}
+			else if(data[2]=='Waiting'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: yellow;\"';
+			}
+			else if(data[2]=='Cancel'){
+				style='\"padding-left: 5px;width: 95%; height: 20px;cursor: pointer; background: orange;\"';
+			}
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='"+data[1]+"'  name='"+strDay7+"' title='"+data+"' onclick='funCellOnClick(this)'>";
+		}else{
+			row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style="+style+" value='' onClick='funCellOnClick(this)' >";
+		}
+		
+		
+	}
+	
+	function funCellOnClick(objCell){			
 		selectedCell=objCell;
 		var bookingColor=objCell.style.backgroundColor;
 		var customer =objCell.value;
-		if(bookingColor=='red') //confirm
-		{
-			openDialog();
-			/* var isCheckOk=confirm("Do You Want Genarate FP"); 
-			if(isCheckOk)
-			{
-				var bookingNo=objCell.title.split("#")[2];
-				window.open(getContextPath()+"/rptOpenFunctionProspectus.html?bookingNo="+bookingNo);
-			} */
-			//alert('confirm');
-		}
-		else if(bookingColor=='green') //provisional
-		{
-			openDialog();
 		
-			/* var isCheckOk=confirm("Do You Want to Payment ?"); 
-			if(isCheckOk)
+		bookingNo=objCell.name.split("#")[0];
+		funGetCustomerBookingDtl(bookingNo);
+					
+			if(bookingColor=='red') //confirm
 			{
-		 	 url=getContextPath()+"/frmPMSPayment.html";
-		 	 window.open(url);
-			} */
-		}
-		else if(bookingColor=='yellow') //waitlisted
-		{
-			openDialog();
-			
-			/* var isCheckOk=confirm("Do You Want to Payment ?"); 
-			if(isCheckOk)
-			{
-		 	 url=getContextPath()+"/frmPMSPayment.html";
-		 	 window.open(url);
-			} */
-			
-		}else{
-			var isCheckOk=confirm("Do You Want to Book ?"); 
-			if(isCheckOk)
-			{
-		 	 url=getContextPath()+"/frmBanquetBooking.html";
-		 	 window.open(url);
+				openDialog();
+				/* var isCheckOk=confirm("Do You Want Genarate FP"); 
+				if(isCheckOk)
+				{
+					var bookingNo=objCell.title.split("#")[2];
+					window.open(getContextPath()+"/rptOpenFunctionProspectus.html?bookingNo="+bookingNo);
+				} */
+				//alert('confirm');
 			}
-		}
-	}
-	
+			else if(bookingColor=='green') //provisional
+			{
+				openDialog();
+			
+				/* var isCheckOk=confirm("Do You Want to Payment ?"); 
+				if(isCheckOk)
+				{
+			 	 url=getContextPath()+"/frmPMSPayment.html";
+			 	 window.open(url);
+				} */
+			}
+			else if(bookingColor=='yellow') //waitlisted
+			{			
+				openDialog();
+				
+				/* var isCheckOk=confirm("Do You Want to Payment ?"); 
+				if(isCheckOk)
+				{
+			 	 url=getContextPath()+"/frmPMSPayment.html";
+			 	 window.open(url);
+				} */
+				
+			}else{
+				$('#dialog').dialog('close');
+				var isCheckOk=confirm("Do You Want to Book ?"); 
+				if(isCheckOk)
+				{
+			 	 url=getContextPath()+"/frmBanquetBooking.html";
+			 	 window.open(url);
+				}
+			}
+		
+	}	
 	
 	function funCheckNull(strData){
 		if(strData==null){
@@ -494,16 +881,77 @@ var selectedCell;
 		row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[5]+"' >";
 		row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100%;height: 30Px;\" value='"+obj[6]+"' >";
 		
+	}	
+	
+	function funFillDayViewHeaderRows(obj)
+	{
+		document.getElementById("tblBanquetInfo").deleteRow(0);
+		var table=document.getElementById("tblBanquetInfo");
+		table.setAttribute("class", "table table-bordered");
+		var rowCount=table.rows.length;		
+		var row=table.insertRow();		
+		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 119.3px;height: 30Px;\" value='Time' >";
+		for(var i=0;i<obj.length;i++)
+			{
+			row.insertCell(i+1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 119.3px;height: 30Px; background-color: honeydew;\" value='"+obj[i]+"' >";
+			}	
+	}
+	function funFillDialogTableHeaderRows()
+	{
+		var table=document.getElementById("tblCustomerInfo");
+		table.setAttribute("class", "table table-bordered");
+		var rowCount=table.rows.length;
+		var row=table.insertRow();
+		
+		row.insertCell(0).innerHTML=  "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 80px;height: 30Px;background:#73cae4;\" value='Booking No' >";
+		row.insertCell(1).innerHTML=  "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100px;height: 30Px;background:#73cae4;\" value='Contact Name' >";
+		row.insertCell(2).innerHTML=  "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 70px;height: 30Px;background:#73cae4;\" value='Mobile NO' >";
+		row.insertCell(3).innerHTML=  "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100px;height: 30Px;background:#73cae4;\" value='Email ID' >";
+		row.insertCell(4).innerHTML=  "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 70px;height: 30Px;background:#73cae4;\" value='From Date' >";
+		row.insertCell(5).innerHTML=  "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 70px;height: 30Px;background:#73cae4;\" value='To Date' >";
+		row.insertCell(6).innerHTML=  "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 150px;height: 30Px;background:#73cae4;\" value='Time' >";
+		row.insertCell(7).innerHTML=  "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100px;height: 30Px;background:#73cae4;\" value='Area Name'>";
+		row.insertCell(8).innerHTML=  "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 70px;height: 30Px;background:#73cae4;\" value='PAX' >";
+		row.insertCell(9).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 80px;height: 30Px;background:#73cae4;\" value='Status' >";	
+		row.insertCell(10).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100px;height: 30Px;background:#73cae4;\" value='Function Name' >";
+		row.insertCell(11).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 80px;height: 30Px;background:#73cae4;\" value='Booked Date' >";
+					
+
 	}
 	
-	function funAreaOptionSelected(strLocCode,strLocName){
-		funGetHeaderData();
-		funShowDiary(strLocCode);
+	function funFillDialogTableRows(obj)
+	{
+		var table=document.getElementById("tblCustomerInfo");
+		table.setAttribute("class", "table table-bordered");
+		var rowCount=table.rows.length;
+		var row=table.insertRow();		
+		
+		row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 80px;height: 30Px;\" value='"+obj[0]+"' >";
+		row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100px;height: 30Px;\" value='"+obj[1]+"' >";
+		row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 70px;height: 30Px;\" value='"+obj[2]+"' >";
+		row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100px;height: 30Px;\" value='"+obj[3]+"' >";
+		row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 70px;height: 30Px;\" value='"+obj[4]+"' >";
+		row.insertCell(5).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 70px;height: 30Px;\" value='"+obj[5]+"' >";
+		row.insertCell(6).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 150px;height: 30Px;\" value=' "+obj[6]+"  To  "+obj[7]+"'>";
+		row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100px;height: 30Px;\" value='"+obj[8]+"' >";
+		row.insertCell(8).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 70px;height: 30Px;\" value='"+obj[9]+" To "+obj[10]+"'>";
+		row.insertCell(9).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 80px;height: 30Px;\" value='"+obj[11]+"' >";
+		row.insertCell(10).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 100px;height: 30Px;\" value='"+obj[12]+"' >";		
+		row.insertCell(11).innerHTML= "<input readonly=\"readonly\" class=\"Box \"  style=\"padding-left: 5px;width: 80px;height: 30Px;\" value='"+obj[13]+"' >";		
+		
+	}
+	
+	function funAreaOptionSelected(strLocCode,strLocName){		
+		gstrLocCode=strLocCode;
+		funDiaryView(strViewType);
+		$('#dialog').dialog('close');
+		//funGetHeaderData();
+		//funShowDiaryNormalView(strLocCode);
 	}
 	
 	function funShowRoomStatusDtl1(row)
 	{
-		$(document).ready(function() {
+		$(document).ready(function() {			
 			  //Fixing jQuery Click Events for the iPad
 			  var ua = navigator.userAgent,
 			    event = (ua.match(/iPad/i)) ? "touchstart" : "click";
@@ -518,43 +966,107 @@ var selectedCell;
 	}
 	
 	function funDiaryView(viewName){
-		strViewType=viewName;
+		if(gstrLocCode===undefined)
+			{
+				alert("Please select location");			
+			}
+		else
+			{
+			strViewType=viewName;
+			document.getElementById("normal").className = "btn";
+			document.getElementById("day").className = "btn";
+			document.getElementById("cancel").className = "btn";
+			document.getElementById("weekend").className = "btn";
+			
+			switch(strViewType){				
+			case 'normal' :			
+				funGetHeaderData();
+				$('#tdconfirm').show();
+				$('#tdwait').show();
+				$('#tdprov').show();
+				$('#tdcancel').hide();
+				$('#tdAreaButtons').show();	
+				$('#tdDay').hide();					
+				$('#tdwidth').css('width', '100px');
+				document.getElementById("normal").className = "btn active";
+				funShowDiaryNormalView(gstrLocCode);
+				 break;
+			
+			case 'day' :	
+				$('#tdconfirm').show();
+				$('#tdwait').show();
+				$('#tdprov').show();
+				$('#tdcancel').hide();
+				$('#tdAreaButtons').hide();
+				$('#tdDay').show();
+				$('#tdwidth').css('width', '100px');
+				document.getElementById("day").className = "btn active";
+				funGetDayViewHeaderData();
+				funShowDailyView(gstrLocCode);			
+				 break;
+			
+			case 'cancel' :			
+				funGetHeaderData();			
+				$('#tdconfirm').hide();
+				$('#tdwait').hide();
+				$('#tdprov').hide();
+				$('#tdcancel').show();
+				$('#tdAreaButtons').show();
+				$('#tdDay').hide();
+				$('#tdwidth').css('width', '228px');
+				document.getElementById("cancel").className = "btn active";
+				funShowDiaryCancelView(gstrLocCode);
+				 break;
+			
+			case 'weekend' :		
+				$('#tdconfirm').show();
+				$('#tdwait').show();
+				$('#tdprov').show();
+				$('#tdcancel').hide();
+				$('#tdAreaButtons').show();	
+				$('#tdDay').hide();
+				$('#tdwidth').css('width', '100px');
+				document.getElementById("weekend").className = "btn active";
+				funGetHeaderData();
+				funGetWeekendView(gstrLocCode);
+				 break;
+			
+				}
+			$('#dialog').dialog('close');
+			}
+		
+		
+		
 	}
 	
-	function funDialogButtonclick(button){
-		var bookingNo=selectedCell.title.split("#")[2];
-		funGetCustomerBookingDtl(bookingNo);
-		var buttonVal=button.value;
-		switch(buttonVal){
+	function funDialogButtonclick(value){
+		//var buttonVal=button.value;
+		switch(value){
 			
-		case 'Cancle' :
-			
-			 url=getContextPath()+"/frmRoomCancellation.html";
+		case 'Cancel' :			
+			 url=getContextPath()+"/frmRoomCancellation.html?strBookingNo="+bookingNo;
 		 	 window.open(url);
-			break;
+			 break;
 		
 		case 'Payment' :
-			 url=getContextPath()+"/frmPMSPayment.html";
-		 	 window.open(url);
-			break;
-		case 'FP' :
+			 funGetInvoiceForPaymentCode(bookingNo);
 			
-			window.open(getContextPath()+"/rptOpenFunctionProspectus.html?bookingNo="+bookingNo);
+			 break;
 			
-			break;
+		case 'FP' :			
+		     window.open(getContextPath()+"/rptOpenFunctionProspectus.html?bookingNo="+bookingNo);			
+			 break;
 		
 		case 'Pro-Invoice' :
-			
-			 url=getContextPath()+"/frmProFormaInvoice.html";
-		 	 window.open(url);
-			break;
-		case 'Close' :
-			document.getElementById("dialog").close();
+			funGetInvoiceCode(bookingNo);
 			 
-			break;
+			 break;
 			
-		default :
+		case 'Close' :			
+			 $('#dialog').dialog('close');			 
+			 break;
 			
+		default :			
 			break;				
 		}
 		
@@ -574,15 +1086,19 @@ var selectedCell;
 		    },
 			
 			success : function(response){ 
-				funRemoveTableRows("tblCustomerInfo");
-				
-				
+				funRemoveTableRows("tblCustomerInfo");				
 				if(response.length>0){
+					
 					var table=document.getElementById("tblCustomerInfo");
 					var rowCount=table.rows.length;
 					var row=table.insertRow();
-					
-					
+					funFillDialogTableHeaderRows();					
+					 $.each(response, function(cnt,item)
+								{
+									funFillDialogTableRows(item);	
+									customerNo=item[14];
+									
+								}); 
 				}
 				
 			},
@@ -605,8 +1121,113 @@ var selectedCell;
 			}
 		});
 	}
+		
+	function funGetInvoiceCode(bookingNo)
+	{
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/getInvoiceCodeExist.html?bookingNo="+bookingNo,
+			dataType : "json",
+			 beforeSend : function(){
+				 $("#wait").css("display","block");
+		    },
+		    complete: function(){
+		    	 $("#wait").css("display","none");
+		    },
+			
+			success : function(response){ 								
+				if(response.length>0){
+					 $.each(response, function(cnt,item)
+								{
+									url=getContextPath()+"/rptProFormaInvoiceSlipFormat5Report.html?rptInvCode="+item[0]+"&rptInvDate="+item[1];
+								 	window.open(url);									
+								}); 
+				}
+				else
+					{
+						url=getContextPath()+"/frmProFormaInvoice.html?bookingNo="+bookingNo+"&CustomerCode="+customerNo;
+				 	 	window.open(url);
+					}
+				
+			},
+			error : function(e){				
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+		
+	}
+	function funGetInvoiceForPaymentCode(bookingNo)
+	{
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/getInvoiceCodeExist.html?bookingNo="+bookingNo,
+			dataType : "json",
+			 beforeSend : function(){
+				 $("#wait").css("display","block");
+		    },
+		    complete: function(){
+		    	 $("#wait").css("display","none");
+		    },
+			
+			success : function(response){ 								
+				if(response.length>0){
+					 $.each(response, function(cnt,item)
+					{
+						url=getContextPath()+"/frmPMSPayment.html?invoiceCode="+item[0]+"&date="+item[1]+"&strBookingNo="+item[2];
+						window.open(url);									
+					}); 
+				}
+				else
+					{
+						 url=getContextPath()+"/frmPMSPayment.html?sstrBookingNo="+bookingNo;
+					 	 window.open(url);
+					}
+				
+			},
+			error : function(e){				
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
+		
+	}
+	 
+	function funDateChange()
+	{
+		  $( "#tdDay" ).text($("#txtViewDate").val());
+	}
 	
-	</script>
+	
+	
+	
+</script>
 
 
 </head>
@@ -624,18 +1245,33 @@ var selectedCell;
 					<td>
 					<table>
 						<tr>
-							<td><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" /></td>
-							<td style="width :400px;"> <button id="myButton">click!</button></td>
-							<td bgcolor="ff0000" style="padding-left: 5px;padding-right: 5px;">Confirm</td>
-							<td bgcolor="Yellow" style="padding-left: 5px;padding-right: 5px;">Waitlisted</td>
-							<td bgcolor="Green" style="padding-left: 5px;padding-right: 5px;">Provisinal</td>
-							<td style="width :100px;"> </td>
+							<td><s:input type="text" id="txtViewDate" path="" cssClass="calenderTextBox" height="25px" onchange="funDateChange()"/></td>
+							<td style="width :350px;"> <!-- <button id="myButton">click!</button> --></td>
+							<td id="tdconfirm" bgcolor="ff0000" style="padding-left: 5px;padding-right: 5px;">Confirm</td>
+							<td id="tdwait" bgcolor="Yellow" style="padding-left: 5px;padding-right: 5px;">Waitlisted</td>
+							<td id="tdprov" bgcolor="Green" style="padding-left: 5px;padding-right: 5px;">Provisinal</td>
+							<td id="tdcancel" bgcolor="Orange" style="padding-left: 5px;padding-right: 5px; display:none;  width: 40px" >Cancel</td>
+							<td id="tdwidth" style="width :100px;"> </td>
 							<td style="background: white;">
 							<span>
-								<img  src="../${pageContext.request.contextPath}/resources/images/banquet/normalView.png" title="HOME" height="20px" width="20px" onclick="funDiaryView('normal');">	&nbsp;&nbsp;
-								<img  src="../${pageContext.request.contextPath}/resources/images/banquet/dayView.png" title="HOME" height="20px" width="20px" onclick="funDiaryView('day');">	&nbsp;&nbsp;
-								<img  src="../${pageContext.request.contextPath}/resources/images/banquet/cancel.png" title="HOME" height="20px" width="20px" onclick="funDiaryView('cancel');"> 	&nbsp;&nbsp;
-								<img  src="../${pageContext.request.contextPath}/resources/images/banquet/weekend.png" title="HOME" height="20px" width="20px" onclick="funDiaryView('weekend');">	&nbsp;&nbsp;
+							<div id="myDIV">
+								<div class="tooltip">									
+									<img  src="../${pageContext.request.contextPath}/resources/images/banquet/normalView.png" id="normal" title="HOME" height="18px" width="20px" class="btn active" onclick="funDiaryView('normal');">	&nbsp;&nbsp;
+										<span class="tooltiptextleft">Normal View</span>
+								</div>
+								<div class="tooltip">	
+									<img  src="../${pageContext.request.contextPath}/resources/images/banquet/dayView.png" id="day" title="HOME" height="18px" width="20px" class="btn" onclick="funDiaryView('day');">	&nbsp;&nbsp;
+									<span class="tooltiptextleft">Day View</span>
+								</div>
+								<div class="tooltip">								
+									<img  src="../${pageContext.request.contextPath}/resources/images/banquet/cancel.png" id="cancel" title="HOME" height="18px" width="20px" class="btn" onclick="funDiaryView('cancel');"> 	&nbsp;&nbsp;
+									<span class="tooltiptextleft">Cancel</span>
+								</div>
+								<div class="tooltip">	
+									<img  src="../${pageContext.request.contextPath}/resources/images/banquet/weekend.png" id="weekend" title="HOME" height="18px" width="20px" class="btn" onclick="funDiaryView('weekend');">	&nbsp;&nbsp;
+									<span class="tooltiptextleft">Weekend</span>
+								</div>
+								</div>
 							</span>
 							</td>
 						</tr>
@@ -643,7 +1279,7 @@ var selectedCell;
 					</td>
 				</tr>
 				<tr>
-				<td>
+				<td id="tdAreaButtons">
 				<div id="divAreaButtons" style="text-align: right; height:40px; overflow-x: auto; overflow-y: hidden; width: 100%;">
 					 	<table id="tblAreaButtons"  cellpadding="0" cellspacing="2"  >				 																																	
 								<tr>							
@@ -653,16 +1289,15 @@ var selectedCell;
 											</td>
 									</c:forEach>																						
 							    </tr>																																				 									   				   									   									   						
-						</table>			
+						</table>		
 			 	</div>
 				</td>
 				</tr>
 			</table> 
-		
+				<label id="tdDay" style="text-align: center; display: none; margin-left:132px; font-size:19px; margin-top:13px; margin-bottom:-1px; height:24px; overflow-x: auto; overflow-y: hidden; width: 100px" class="button" >Male</label>	
 			<br>
 			<table id="tblBanquetInfo" class="table table-bordered"   >
-			</table>
-			
+			</table>			
 		</div>
 		<div id="wait"
 			style="display: none; width: 60px; height: 60px; border: 0px solid black; position: absolute; top: 60%; left: 55%; padding: 2px;">
@@ -674,12 +1309,33 @@ var selectedCell;
 		<div id="dialog" title="Booking Details" style="display: none;">
 			  <table id="tblBookingDetails"  cellpadding="0" cellspacing="2"  >				 																																	
 						<tr>
-						<td>
-							<input  type="button" id="btnCancelBooking" value ="Cancle" onclick="funDialogButtonclick(this)" class="button" />
+						<td>						
+							<div class="tooltip">
+							<img onclick="funDialogButtonclick('Cancel')" src="resources/images/banquet/cancelpayment.jpg">
+							<span class="tooltiptext">Cancel Booking</span>
+							</div>
+							<div class="tooltip">
+							<img onclick="funDialogButtonclick('Payment')" src="resources/images/banquet/payment.jpg"> 
+							<span class="tooltiptext">Payment</span>
+							</div>
+							<div class="tooltip">
+							<img onclick="funDialogButtonclick('FP')" src="resources/images/banquet/FunctionPlan.jpg"> 
+							<span class="tooltiptext">Function Prospectus</span>
+							</div>
+							<div class="tooltip">
+							<img onclick="funDialogButtonclick('Pro-Invoice')" src="resources/images/banquet/ProInvoice.jpg"> 
+							<span class="tooltiptext">ProForma Invoice</span>
+							</div>
+							<div class="tooltip">
+							<img onclick="funDialogButtonclick('Close')" src="resources/images/banquet/closeIcons.jpg">   
+							<span class="tooltiptext">Close</span>
+							</div>
+	
+					 <!-- < <input  type="button" id="btnCancelBooking" value ="Cancle" onclick="funDialogButtonclick(this)" class="button" />
 							<input  type="button" id="btnPayment" value ="Payment" onclick="funDialogButtonclick(this)" class="button" />
 							<input  type="button" id="btnProspect" value ="FP" onclick="funDialogButtonclick(this)" class="button" />
 							<input  type="button" id="btnProInvoice" value ="Pro-Invoice" onclick="funDialogButtonclick(this)" class="button" />
-							<input  type="button" id="btnClose" value ="Close" onclick="funDialogButtonclick(this)" class="button" />
+							<input  type="button" id="btnClose" value ="Close" onclick="funDialogButtonclick(this)" class="button" /> -->
 						</td>
 						</tr>		
 						<tr>

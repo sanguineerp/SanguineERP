@@ -297,7 +297,7 @@ public class clsFoodCostPerConsumptionController
 
 		fromDate = objGlobal.funGetDate("yyyy-MM-dd", fromDate);
 		toDate = objGlobal.funGetDate("yyyy-MM-dd", toDate);
-		
+		String userCode = req.getSession().getAttribute("usercode").toString();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		
 		String[] monthName = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
@@ -308,7 +308,9 @@ public class clsFoodCostPerConsumptionController
 		int inttoMonth = Integer.parseInt(toMonth[1]) - 1;
 		String fromDateToDisplay = frmMonth[2] + "-" + monthName[intfrmMonth] + "-" + frmMonth[0];
 		String toDateToDisplay = toMonth[2] + "-" + monthName[inttoMonth] + "-" + toMonth[0];
-
+		
+		String dateTime[] = objGlobalFunctions.funGetCurrentDateTime("dd-MM-yyyy").split(" ");
+		List footer = new ArrayList<>();
 		
 		clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(clientCode);
 		String companyName = objCompModel.getStrCompanyName();
@@ -375,13 +377,24 @@ public class clsFoodCostPerConsumptionController
 			
 			dataRow.add(dataCol);
 		}
-		
+		List blank = new ArrayList<>();
+		blank.add("");
+		dataRow.add(blank);
+
+		footer.add("Created on :" +dateTime[0]);
+		footer.add("AT :" +dateTime[1]);
+		footer.add("By :" +userCode);
+		dataRow.add(footer);
 		ExportList.add(dataRow);
-		
-		
 		return new ModelAndView("excelViewFromDateTodateCompanyNameWithReportName", "listFromDateTodateWithReportName", ExportList);
 		
 	}
+	
+		
+		
+		
+		
+	
 	
 	
 	

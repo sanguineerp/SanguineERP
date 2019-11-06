@@ -1295,7 +1295,7 @@ public class clsGlobalFunctions {
 
 				funProcessStock(locCode, startDate, newToDate, clientCode, userCode, req, resp);
 
-				String sql = "Update tblcurrentstock set dblOpeningStk=dblClosingStk, dblGRN=0, dblSCGRN=0" + ", dblStkTransIn=0, dblStkAdjIn=0, dblMISIn=0, dblMaterialReturnIn=0, dblQtyProduced=0" + ", dblStkTransOut=0, dblStkAdjOut=0, dblMISOut=0, dblQtyConsumed=0, dblSales=0" + ", dblMaterialReturnOut=0, dblDeliveryNote=0, dblPurchaseReturn=0 " + " where strUserCode='" + userCode
+				String sql = "Update tblcurrentstock set dblOpeningStk=dblClosingStk, dblGRN=0, dblSCGRN=0, dblFreeQty=0" + ", dblStkTransIn=0, dblStkAdjIn=0, dblMISIn=0, dblMaterialReturnIn=0, dblQtyProduced=0" + ", dblStkTransOut=0, dblStkAdjOut=0, dblMISOut=0, dblQtyConsumed=0, dblSales=0" + ", dblMaterialReturnOut=0, dblDeliveryNote=0, dblPurchaseReturn=0 " + " where strUserCode='" + userCode
 						+ "' and strClientCode='" + clientCode + "' ";
 				objGlobalFunctionsService.funUpdate(sql, "sql");
 			} catch (ParseException e) {
@@ -1332,7 +1332,7 @@ public class clsGlobalFunctions {
 		}
 
 		objGlobalFunctionsService.funDeleteTempItemStock(clientCode, userCode);
-		String hql = "insert into clsTempItemStockModel(strProdCode,dblQty,strClientCode,strUserCode) " + "select b.strProdCode,sum(b.dblQty-b.dblRejected+b.dblFreeQty),'" + clientCode + "','" + userCode + "' " + "from clsGRNHdModel a,clsGRNDtlModel b " + "where a.strGRNCode=b.strGRNCode and date(a.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' ";
+		String hql = "insert into clsTempItemStockModel(strProdCode,dblQty,strClientCode,strUserCode,dblFreeQty) " + "select b.strProdCode,sum(b.dblQty-b.dblRejected),'" + clientCode + "','" + userCode + "',sum(b.dblFreeQty)" + "from clsGRNHdModel a,clsGRNDtlModel b " + "where a.strGRNCode=b.strGRNCode and date(a.dtGRNDate) between '" + fromDate + "' and '" + toDate + "' ";
 		if (!locCode.equalsIgnoreCase("All")) {
 			hql += "and a.strLocCode='" + locCode + "' ";
 		}
@@ -1346,11 +1346,13 @@ public class clsGlobalFunctions {
 		 * "Update clsCurrentStockModel a Set a.dblGRN = IFNULL((select b.dblQty from clsTempItemStockModel b "
 		 * +"where a.strProdCode = b.strProdCode and b.dblQty),0)";
 		 */
-		hql = "Update tblcurrentstock a Set a.dblGRN = a.dblGRN + IFNULL((select b.dblQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' and b.dblQty ),0)";
+		hql = "Update tblcurrentstock a Set a.dblGRN = a.dblGRN + IFNULL((select b.dblQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' and b.dblQty ),0),a.dblFreeQty = a.dblFreeQty + IFNULL((select b.dblFreeQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' and b.dblQty and b.dblFreeQty ),0)";
+
 		objGlobalFunctionsService.funUpdateCurrentStock(hql);
 
 		// Delete TempItemStock Table
 		objGlobalFunctionsService.funDeleteTempItemStock(clientCode, userCode);
+		
 		// Insert Opening Stock Qty into tblTempItemStock Table
 		hql = "insert into clsTempItemStockModel(strProdCode,dblQty,strClientCode,strUserCode) " + "select b.strProdCode,sum(b.dblQty),'" + clientCode + "','" + userCode + "' " + "from clsInitialInventoryModel a,clsOpeningStkDtl b " + "where a.strOpStkCode=b.strOpStkCode and date(a.dtCreatedDate) between '" + fromDate + "' and '" + toDate + "' ";
 		if (!locCode.equalsIgnoreCase("All")) {
