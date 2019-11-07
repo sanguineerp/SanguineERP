@@ -52,105 +52,105 @@ public class clsWebClubPDCController{
 		return objWebClubPDC;
 	}
 
-//Save or Update WebClubPDC
-	@RequestMapping(value = "/saveWebClubPDC", method = RequestMethod.POST)
-	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsWebClubPDCBean objBean ,BindingResult result,HttpServletRequest req){
-		String clientCode=req.getSession().getAttribute("clientCode").toString();
-		String userCode=req.getSession().getAttribute("usercode").toString();
-		
-		if(objBean.getListPDCDtlRecieved()!=null||objBean.getListPDCDtlIssued()!=null)
-		{
-		if(objBean.getListPDCDtlRecieved()!=null&&objBean.getStrMemCodeRecieved()!=null){	
+	//Save or Update WebClubPDC
+		@RequestMapping(value = "/saveWebClubPDC", method = RequestMethod.POST)
+		public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsWebClubPDCBean objBean ,BindingResult result,HttpServletRequest req){
+			String clientCode=req.getSession().getAttribute("clientCode").toString();
+			String userCode=req.getSession().getAttribute("usercode").toString();
 			
-			String MemCode=objBean.getStrMemCodeRecieved();				
-			String sql="SELECT a.strMemCode,a.strChequeNo,a.strDrawnOn,a.strType,a.dblChequeAmt,Date(a.dteChequeDate) FROM tblpdcdtl a WHERE a.strMemCode='"+MemCode+"' and a.strClientCode='"+clientCode+"' and a.strType='Received' ";
-			List list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-			if (!list.isEmpty()) {				
-				objWebClubPDCService.funDeleteDtlRecieved(MemCode, clientCode);	
-			}
-			
-			objGlobal = new clsGlobalFunctions();			
-			for(int i=0;i<objBean.getListPDCDtlRecieved().size();i++)
+			if(objBean.getStrMemCodeRecieved()!=null||objBean.getStrMemCodeIssued()!=null)
 			{
-				clsWebClubPDCModel objModel = new clsWebClubPDCModel();
-				clsWebClubPDCBean obj = objBean.getListPDCDtlRecieved().get(i);
-				if(obj.getStrMemCode()!=null)
-				{
-				objModel.setStrMemCode(obj.getStrMemCode());
-				objModel.setStrChequeNo(obj.getStrChequeNo());
-				objModel.setStrDrawnOn(obj.getStrDrawnOn());
-				objModel.setStrType(obj.getStrType());
-				objModel.setDblChequeAmt(obj.getDblChequeAmt());
-				objModel.setDteChequeDate(obj.getDteChequeDate());
-				objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
-				objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
-				objModel.setStrUserCreated(userCode);
-				objModel.setStrUserEdited(userCode);
-				objModel.setStrClientCode(clientCode);	
+			if(objBean.getListPDCDtlRecieved()!=null&&objBean.getStrMemCodeRecieved()!=null){	
 				
-				objWebClubPDCService.funAddUpdateWebClubPDC(objModel);
-				}				
-			}				
-		}	
-		else if(objBean.getListPDCDtlRecieved()==null && objBean.getStrMemCodeRecieved()!=null)
-		{
-			String MemCode=objBean.getStrMemCodeRecieved();			
-			String sql="SELECT a.strMemCode,a.strChequeNo,a.strDrawnOn,a.strType,a.dblChequeAmt,Date(a.dteChequeDate) FROM tblpdcdtl a WHERE a.strMemCode='"+MemCode+"' and a.strClientCode='"+clientCode+"' and a.strType='Received' ";
-			List list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-			if (!list.isEmpty()) {					
-				objWebClubPDCService.funDeleteDtlRecieved(MemCode, clientCode);	
-			}
-		}
-		if(objBean.getListPDCDtlIssued()!=null&&objBean.getStrMemCodeIssued()!=null){
-			String MemCode=objBean.getStrMemCodeIssued();			
-			String sql="SELECT a.strMemCode,a.strChequeNo,a.strDrawnOn,a.strType,a.dblChequeAmt,Date(a.dteChequeDate) FROM tblpdcdtl a WHERE a.strMemCode='"+MemCode+"' and a.strClientCode='"+clientCode+"' and a.strType='Issued' ";
-			List list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
-			if (!list.isEmpty()) {					
-				objWebClubPDCService.funDeleteDtlIssued(MemCode, clientCode);	
-			}
-			
-			objGlobal = new clsGlobalFunctions();			
-			for(int i=0;i<objBean.getListPDCDtlIssued().size();i++)
-			{
-				clsWebClubPDCModel objModel = new clsWebClubPDCModel();
-				clsWebClubPDCBean obj = objBean.getListPDCDtlIssued().get(i);
-				if(obj.getStrMemCode()!=null)
-				{
-				objModel.setStrMemCode(obj.getStrMemCode());
-				objModel.setStrChequeNo(obj.getStrChequeNo());
-				objModel.setStrDrawnOn(obj.getStrDrawnOn());
-				objModel.setStrType(obj.getStrType());
-				objModel.setDblChequeAmt(obj.getDblChequeAmt());
-				objModel.setDteChequeDate(obj.getDteChequeDate());
-				objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
-				objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
-				objModel.setStrUserCreated(userCode);
-				objModel.setStrUserEdited(userCode);
-				objModel.setStrClientCode(clientCode);	
+				String MemCode=objBean.getStrMemCodeRecieved();				
+				String sql="SELECT a.strMemCode,a.strChequeNo,a.strDrawnOn,a.strType,a.dblChequeAmt,Date(a.dteChequeDate) FROM tblpdcdtl a WHERE a.strMemCode='"+MemCode+"' and a.strClientCode='"+clientCode+"' and a.strType='Received' ";
+				List list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+				if (!list.isEmpty()) {				
+					objWebClubPDCService.funDeleteDtlRecieved(MemCode, clientCode);	
+				}
 				
-				objWebClubPDCService.funAddUpdateWebClubPDC(objModel);
+				objGlobal = new clsGlobalFunctions();			
+				for(int i=0;i<objBean.getListPDCDtlRecieved().size();i++)
+				{
+					clsWebClubPDCModel objModel = new clsWebClubPDCModel();
+					clsWebClubPDCBean obj = objBean.getListPDCDtlRecieved().get(i);
+					if(obj.getStrMemCode()!=null)
+					{
+					objModel.setStrMemCode(obj.getStrMemCode());
+					objModel.setStrChequeNo(obj.getStrChequeNo());
+					objModel.setStrDrawnOn(obj.getStrDrawnOn());
+					objModel.setStrType(obj.getStrType());
+					objModel.setDblChequeAmt(obj.getDblChequeAmt());
+					objModel.setDteChequeDate(obj.getDteChequeDate());
+					objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+					objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+					objModel.setStrUserCreated(userCode);
+					objModel.setStrUserEdited(userCode);
+					objModel.setStrClientCode(clientCode);	
+					
+					objWebClubPDCService.funAddUpdateWebClubPDC(objModel);
+					}				
 				}				
-			}				
-		}			
-		else if(objBean.getListPDCDtlRecieved()==null && objBean.getStrMemCodeRecieved()!=null)
+			}	
+			else if(objBean.getListPDCDtlRecieved()==null && objBean.getStrMemCodeRecieved()!=null)
 			{
+				String MemCode=objBean.getStrMemCodeRecieved();			
+				String sql="SELECT a.strMemCode,a.strChequeNo,a.strDrawnOn,a.strType,a.dblChequeAmt,Date(a.dteChequeDate) FROM tblpdcdtl a WHERE a.strMemCode='"+MemCode+"' and a.strClientCode='"+clientCode+"' and a.strType='Received' ";
+				List list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+				if (!list.isEmpty()) {					
+					objWebClubPDCService.funDeleteDtlRecieved(MemCode, clientCode);	
+				}
+			}
+			if(objBean.getListPDCDtlIssued()!=null&&objBean.getStrMemCodeIssued()!=null){
 				String MemCode=objBean.getStrMemCodeIssued();			
 				String sql="SELECT a.strMemCode,a.strChequeNo,a.strDrawnOn,a.strType,a.dblChequeAmt,Date(a.dteChequeDate) FROM tblpdcdtl a WHERE a.strMemCode='"+MemCode+"' and a.strClientCode='"+clientCode+"' and a.strType='Issued' ";
 				List list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 				if (!list.isEmpty()) {					
 					objWebClubPDCService.funDeleteDtlIssued(MemCode, clientCode);	
 				}
+				
+				objGlobal = new clsGlobalFunctions();			
+				for(int i=0;i<objBean.getListPDCDtlIssued().size();i++)
+				{
+					clsWebClubPDCModel objModel = new clsWebClubPDCModel();
+					clsWebClubPDCBean obj = objBean.getListPDCDtlIssued().get(i);
+					if(obj.getStrMemCode()!=null)
+					{
+					objModel.setStrMemCode(obj.getStrMemCode());
+					objModel.setStrChequeNo(obj.getStrChequeNo());
+					objModel.setStrDrawnOn(obj.getStrDrawnOn());
+					objModel.setStrType(obj.getStrType());
+					objModel.setDblChequeAmt(obj.getDblChequeAmt());
+					objModel.setDteChequeDate(obj.getDteChequeDate());
+					objModel.setDteDateCreated(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+					objModel.setDteDateEdited(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
+					objModel.setStrUserCreated(userCode);
+					objModel.setStrUserEdited(userCode);
+					objModel.setStrClientCode(clientCode);	
+					
+					objWebClubPDCService.funAddUpdateWebClubPDC(objModel);
+					}		
+				}			
+			}		
+			else if(objBean.getListPDCDtlIssued()==null && objBean.getStrMemCodeIssued()!=null)
+				{
+					String MemCode=objBean.getStrMemCodeIssued();			
+					String sql="SELECT a.strMemCode,a.strChequeNo,a.strDrawnOn,a.strType,a.dblChequeAmt,Date(a.dteChequeDate) FROM tblpdcdtl a WHERE a.strMemCode='"+MemCode+"' and a.strClientCode='"+clientCode+"' and a.strType='Issued' ";
+					List list=objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
+					if (!list.isEmpty()) {					
+						objWebClubPDCService.funDeleteDtlIssued(MemCode, clientCode);	
+					}
+				}
+			
+			req.getSession().setAttribute("success", true);
+			req.getSession().setAttribute("successMessage", "Data Save Successfully");		
+			return new ModelAndView("redirect:/frmWebClubPDC.html");
 			}
-		
-		req.getSession().setAttribute("success", true);
-		req.getSession().setAttribute("successMessage", "Data Save Successfully");		
-		return new ModelAndView("redirect:/frmWebClubPDC.html");
+			
+			else{
+				return new ModelAndView("frmWebClubPDC");
+			}		
 		}
-		
-		else{
-			return new ModelAndView("frmWebClubPDC");
-		}		
-	}
 	
 	// Assign filed function to set data onto form for edit transaction.
 		@RequestMapping(value = "/loadPDCMemberWiseData", method = RequestMethod.GET)

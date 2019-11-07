@@ -18,7 +18,6 @@
 			
 		 	$("#txtMemCode").val('');
 			$("#txtChequeNo").val('');
-			//$("#txtChkDte").val('');
 			$("#txtAmt").val('');
 			$("#txtDrawnOn").val('');
 			
@@ -57,13 +56,9 @@
 				alert("Data Save successfully\n");
 			<%
 			}}%>
-			
-			
-
 		});
 	
 	 
-	//satyajit code start
 	 function btnAdd_onclickRecieved() 
 		{			
 			if(($("#txtMemCode").val().trim().length == 0))
@@ -263,9 +258,9 @@
 		}
 		function funResetProductFieldsIssued()
 		{
-			$("#txtChequeNo").val('');
-			$("#txtAmt").val('');
-			$("#txtDrawnOn").val('');
+			$("#txtChequeNoo").val('');
+			$("#txtAmtt").val('');
+			$("#txtDrawnOnn").val('');
 		}
 		
 		/* function funRemoveProductRows()
@@ -283,7 +278,6 @@
 		
 	
 		
-	 //satyajit code end
 	 
 	 function funHelp(transactionName)
 		{	       
@@ -302,16 +296,13 @@
 		 	flag=true;
 		 	var table = document.getElementById("tblDetails");
 		    var rowRecieved = table.rows.length;
-		    
-		    //alert("recieved row is "+rowRecieved);
 		    var table = document.getElementById("tblDetailss");
-		    var rowIssued = table.rows.length;		   
-		   // alert("recieved row is "+rowIssued);
-		    if(rowRecieved==0&&rowIssued==0)
-		    	{
-		    		flag=false;
-		    		alert("Enter Cheque Details");
-		    	}		  		 	
+		    var rowIssued = table.rows.length;				    	
+		    	if($('#txtMemCode').val()==''&&$('#txtMemCodee').val()=='')
+		    		{
+		    			flag=false;
+		    			alert("Please Enter Data");
+		    		}
 		 	return flag;
 			
 		}	
@@ -358,8 +349,7 @@
 				        		$.each(response, function(cnt,item)
 					 			{ 
 					        				$("#txtDrawnOn").val(code);
-				        					$("#lbldrawnOn").text(response[0]);
-				        					        					
+				        					$("#lbldrawnOn").text(response[0]);				        					        					
 					 			});	
 				        	}
 						},
@@ -400,8 +390,7 @@
 			        		$.each(response, function(cnt,item)
 				 			{ 
 				        				$("#txtDrawnOnn").val(code);
-			        					$("#lbldrawnOnn").text(response[0]);
-			        					        					
+			        					$("#lbldrawnOnn").text(response[0]);			        					        					
 				 			});	
 			        	}
 					},
@@ -483,8 +472,7 @@
 				        		$("#txtMemCode").val('');
 				        	}
 				        	else
-				        	{
-				        		
+				        	{				        		
 				        		var table=document.getElementById("tblDetails");
 				    			var rowCount=table.rows.length;
 				    			while(rowCount>0)
@@ -497,13 +485,9 @@
 				        					if(item[3]=="Received")
 				        						{
 				        						funAddRowReceived(item[0],item[1],item[2],item[5],item[4])
-				        						}
-				        					
-				        					
-								        	
+				        						}		
 							      		});		
-				        		$("#txtMemCode").val(code);	 
-					        						        	
+				        		$("#txtMemCode").val(code);	 					        						        	
 				        	}
 						},
 						error: function(jqXHR, exception) {
@@ -585,19 +569,13 @@
 			        	}
 			        	else
 			        	{
-			        		$("#txtMemCodee").val(code);	
-			        		if($('#txtMemCodee').val()==$('#txtMemCode').val())
-			        			{
-			        				//alert("hi")
-			        			}
-			        		else{				        			
-					    			var table=document.getElementById("tblDetailss");
-					    			var rowCount=table.rows.length;
-					    			while(rowCount>0)
-					    			{table.deleteRow(0);
-					    			   rowCount--;
-					    			}			        			
-			        			}
+			        		$("#txtMemCodee").val(code);				        						        			
+					    	var table=document.getElementById("tblDetailss");
+					    	var rowCount=table.rows.length;
+					    	while(rowCount>0)
+					    	{table.deleteRow(0);
+					    	   rowCount--;
+					    	}			   
 			        		
 			        		$.each(response, function(cnt,item)
 				 					{

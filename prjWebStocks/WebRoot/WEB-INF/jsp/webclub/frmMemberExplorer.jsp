@@ -125,8 +125,6 @@
 		
 		function funCallFormAction(actionName,object) 
 		{
-			if(clickCount==0){
-				clickCount=clickCount+1;
 			var flg=true;
 			if($('#txtCustCode').val()!='')
 			{
@@ -178,7 +176,7 @@
 				{
 				alert("Pleae select member")
 				}
-			}
+			
 			return false;
 		}
 		 function funShowImagePreview(input)
@@ -219,7 +217,7 @@
 		 }
 		 
 		 function funSetMemberDataReceived(code){
-			 
+			 resetTables(); 
 			 $("#txtFacilityCode").val(code);
 				var searchurl=getContextPath()+"/loadWebClubMemberProfileData.html?primaryCode="+code;
 				//alert(searchurl);
@@ -288,6 +286,7 @@
 					    			} */
 					        		$.each(response, function(cnt,item)
 						 					{
+					        					
 					        					$("#txtMemCode").val(item[0]);
 					        					if(item[3]=="Received")
 					        						{
@@ -328,7 +327,8 @@
 			 * Adding Product Data in grid 
 			 */
 			function funAddRowReceived(memCode,drawnOn,chequeNo,chequeDate,chequeAmt) 
-			{   	    	    
+			{   	
+				
 			    var table = document.getElementById("tblDetails");
 			    var rowCount = table.rows.length;
 			    var row = table.insertRow(rowCount);   
@@ -343,7 +343,7 @@
 				row.insertCell(6).innerHTML= "<input type=\"button\" class=\"deletebutton\" size=\"1%\" value = \"Delete\" onClick=\"Javacsript:funDeleteRowRecieved(this)\"/>";
 				   
 			    listRow++;		    
-			  	   		    
+			       
 			}
 		 
 			function funAddRowIssued(memCode,drawnOn,chequeNo,chequeDate,chequeAmt) 
@@ -367,7 +367,11 @@
 		 
 			
 			
-		
+		function resetTables()
+		{
+			$('#tblDetails').empty();
+			$('#tblDetailss').empty();
+		}
 		 
 		
 </script>
