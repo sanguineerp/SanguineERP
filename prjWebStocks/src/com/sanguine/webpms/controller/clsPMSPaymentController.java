@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +31,8 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,8 +48,6 @@ import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
-import com.sanguine.webbanquets.model.clsBanquetBookingModelHd;
-import com.sanguine.webbanquets.service.clsBanquetBookingService;
 import com.sanguine.webpms.bean.clsFolioDtlBean;
 import com.sanguine.webpms.bean.clsPMSPaymentBean;
 import com.sanguine.webpms.bean.clsPaymentReciptBean;
@@ -123,81 +120,59 @@ public class clsPMSPaymentController {
 
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunService;
-	
-	@Autowired
-	private clsBanquetBookingService objBanquetBookingService;//remove
-	
 	// Open Payment
-		@RequestMapping(value = "/frmPMSPayment", method = RequestMethod.GET)
-		public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
-			String urlHits = "1";
-			String strModule = request.getSession().getAttribute("selectedModuleName").toString();
-			
-			if(request.getParameter("invoiceCode")!=null&&request.getParameter("strBookingNo")!=null)
-			{
-				request.getSession().setAttribute("BookingNo",request.getParameter("strBookingNo").toString());
-				request.getSession().setAttribute("invoiceCode",request.getParameter("invoiceCode").toString());
-				request.getSession().setAttribute("date",request.getParameter("date").toString());
-				request.getSession().setAttribute("OBookingNo","");
-			}
-			else if(request.getParameter("sstrBookingNo")!=null)
-			{
-				request.getSession().setAttribute("OBookingNo",request.getParameter("sstrBookingNo").toString());
-				request.getSession().setAttribute("BookingNo","");
-				request.getSession().setAttribute("invoiceCode","");
-				request.getSession().setAttribute("date","");
-			}
-			else
-			{
-				request.getSession().setAttribute("BookingNo","");
-				request.getSession().setAttribute("OBookingNo","");
-				request.getSession().setAttribute("invoiceCode","");
-				request.getSession().setAttribute("date","");
-			}
-			
-			if(strModule.equalsIgnoreCase("3-WebPMS"))
-			{
+	@RequestMapping(value = "/frmPMSPayment", method = RequestMethod.GET)
+	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
+		String urlHits = "1";
+		String strModule = request.getSession().getAttribute("selectedModuleName").toString();
+
+		if(strModule.equalsIgnoreCase("3-WebPMS"))
+		{
+		List<String> listAgainst = new ArrayList<>();
+		listAgainst.add("Reservation");
+		//listAgainst.add("Check-In");
+		listAgainst.add("Folio-No");
+		listAgainst.add("Bill");
+		model.put("listAgainst", listAgainst);
+		
+		List<String> listSettlement = new ArrayList<>();
+		listSettlement.add("Part Settlement");
+		listSettlement.add("Full Settlement");
+
+		model.put("listSettlement", listSettlement);
+		
+		}
+		else
+		{
 			List<String> listAgainst = new ArrayList<>();
-			listAgainst.add("Reservation");
-			//listAgainst.add("Check-In");
-			listAgainst.add("Folio-No");
-			listAgainst.add("Bill");
+			listAgainst.add("Banquet");
+			
 			model.put("listAgainst", listAgainst);
 			
 			List<String> listSettlement = new ArrayList<>();
 			listSettlement.add("Part Settlement");
 			listSettlement.add("Full Settlement");
 
-			model.put("listSettlement", listSettlement);			
-			}
-			else
-			{
-				List<String> listAgainst = new ArrayList<>();
-				listAgainst.add("Booking");
-				listAgainst.add("Invoice");
-				model.put("listAgainst", listAgainst);
-				
-				List<String> listSettlement = new ArrayList<>();
-				listSettlement.add("Part Settlement");
-				listSettlement.add("Full Settlement");
-
-				model.put("listSettlement", listSettlement);
-			}
-			try {
-				urlHits = request.getParameter("saddr").toString();
-			} catch (NullPointerException e) {
-				urlHits = "1";
-			}
-			model.put("urlHits", urlHits);
-
-			if (urlHits.equalsIgnoreCase("1")) {
-
-				return new ModelAndView("frmPMSPayment", "command", new clsPMSPaymentBean());
-			} else {
-				return new ModelAndView("frmPMSPayment_1", "command", new clsPMSPaymentBean());
-			}
+			model.put("listSettlement", listSettlement);
 		}
+		try {
+			urlHits = request.getParameter("saddr").toString();
+		} catch (NullPointerException e) {
+			urlHits = "1";
+		}
+		model.put("urlHits", urlHits);
 
+		if (urlHits.equalsIgnoreCase("1")) {
+
+			return new ModelAndView("frmPMSPayment", "command", new clsPMSPaymentBean());
+		} else {
+			return new ModelAndView("frmPMSPayment_1", "command", new clsPMSPaymentBean());
+		}
+	}
+
+	
+	
+	
 	// Load Payemt Data
 	@RequestMapping(value = "/loadReceiptData", method = RequestMethod.GET)
 	public @ResponseBody clsPMSPaymentBean funLoadReceiptData(@RequestParam("receiptNo") String receiptNo, HttpServletRequest request) {
@@ -217,11 +192,9 @@ public class clsPMSPaymentController {
 		} else if (objPaymentModel.getStrAgainst().equals("Check-In")) {
 			objPaymentRecBean.setStrDocNo(objPaymentModel.getStrCheckInNo());
 		}
-		else if (objPaymentModel.getStrAgainst().equals("Booking")) {
+		else if (objPaymentModel.getStrAgainst().equals("Banquet")) {
 			objPaymentRecBean.setStrDocNo(objPaymentModel.getStrReservationNo());
-		}
-		else if (objPaymentModel.getStrAgainst().equals("Invoice")) {
-			objPaymentRecBean.setStrDocNo(objPaymentModel.getStrReservationNo());
+
 		}
 		else {
 			objPaymentRecBean.setStrDocNo(objPaymentModel.getStrBillNo());
@@ -242,7 +215,7 @@ public class clsPMSPaymentController {
 		return objPaymentRecBean;
 	}
 
-	// Save or Update Payment	
+	// Save or Update Payment
 	@RequestMapping(value = "/savePMSPayment", method = RequestMethod.GET)
 	public ModelAndView funAddUpdate(@ModelAttribute("command") @Valid clsPMSPaymentBean objBean, BindingResult result, HttpServletRequest req) {
 		if (!result.hasErrors()) {
@@ -303,7 +276,7 @@ public class clsPMSPaymentController {
 				String sqlRecipt="SELECT ifnull(sum(a.dblReceiptAmt),0) "
 						+ " FROM tblreceipthd a left outer join tblbillhd b on a.strBillNo=b.strBillNo "
 						+ " and a.strReservationNo and b.strReservationNo AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"',tblreceiptdtl c "
-						+ " WHERE a.strReceiptNo=c.strReceiptNo and b.strBillNo='" + docCode + "' AND c.strClientCode='"+clientCode+"' ";
+						+ " WHERE a.strReceiptNo=c.strReceiptNo and b.strBillNo='" + docCode + "'  ";
 				
 				List listRecipt = objGlobalFunctionsService.funGetListModuleWise(sqlRecipt, "sql");
 				double reciptAmt=0.0;
@@ -489,9 +462,9 @@ public class clsPMSPaymentController {
 					
 					if(!flgIsFullPaymentFound)
 					{
-						String sqlPaymentAmt=" select withPkgAmt,withoutPkgAmt from " 
-								+ " (select ifnull(sum(a.dblIncomeHeadAmt),0) withPkgAmt from tblroompackagedtl a where a.strReservationNo='" + docCode + "' AND a.strClientCode='"+clientCode+"' ) a,"
-								+ " (select ifnull(sum(a.dblRoomRate),0) withoutPkgAmt from tblreservationroomratedtl a where a.strReservationNo='" + docCode + "' AND a.strClientCode='"+clientCode+"') b ";
+						String sqlPaymentAmt=" select withPkgAmt,withoutPkgAmt from "
+								+ " (select ifnull(sum(a.dblIncomeHeadAmt),0) withPkgAmt from tblroompackagedtl a where a.strReservationNo='" + docCode + "' ) a,"
+								+ " (select ifnull(sum(a.dblRoomRate),0) withoutPkgAmt from tblreservationroomratedtl a where a.strReservationNo='" + docCode + "' ) b ";
 						List listPaymentAmt = objGlobalFunctionsService.funGetListModuleWise(sqlPaymentAmt, "sql");
 						if(listPaymentAmt.size()>0)
 						{
@@ -520,7 +493,7 @@ public class clsPMSPaymentController {
 			}
 			else 
 			{
-				sql = " select c.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName " + " from tblcheckindtl a,tblguestmaster c " + " where a.strGuestCode=c.strGuestCode " + " and a.strCheckInNo='" + docCode + "' and a.strPayee='Y' AND a.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' ";
+				sql = " select c.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName " + " from tblcheckindtl a,tblguestmaster c " + " where a.strGuestCode=c.strGuestCode " + " and a.strCheckInNo='" + docCode + "' and a.strPayee='Y'";
 				List listData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 				if(listData.size()>0)
 				{
@@ -627,7 +600,7 @@ public class clsPMSPaymentController {
 				}
 			}
 		}
-		else if(docName.equalsIgnoreCase("Booking"))
+		else if(docName.equalsIgnoreCase("Banquet"))
 		{
 			clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
 			String webStockDB=request.getSession().getAttribute("WebStockDB").toString();
@@ -656,7 +629,7 @@ public class clsPMSPaymentController {
 		}
 		else 
 		{
-			sql = " select c.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName " + " from tblcheckindtl a,tblguestmaster c " + " where a.strGuestCode=c.strGuestCode " + " and a.strCheckInNo='" + docCode + "' and a.strPayee='Y' AND a.strClientCode='"+clientCode+"'  AND c.strClientCode='"+clientCode+"'" ;
+			sql = " select c.strGuestCode,c.strFirstName,c.strMiddleName,c.strLastName " + " from tblcheckindtl a,tblguestmaster c " + " where a.strGuestCode=c.strGuestCode " + " and a.strCheckInNo='" + docCode + "' and a.strPayee='Y'";
 			List listData = objGlobalFunctionsService.funGetListModuleWise(sql, "sql");
 			if(listData.size()>0)
 			{
@@ -767,50 +740,13 @@ public class clsPMSPaymentController {
 					objPaymentReciptBean.setDteModifiedDate(dteModifiedDate);
 					datalist.add(objPaymentReciptBean);
 				}
-			} else if (checkAgainst.equalsIgnoreCase("Booking")) {
+			} else if (checkAgainst.equalsIgnoreCase("Banquet")) {
 				reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptBanquetPaymentRecipt.jrxml");
 				
 
 				String sqlPayment = "SELECT a.strReceiptNo,c.strBookingNo,b.strPName,e.strSettlementDesc,a.dblPaidAmt, DATE_FORMAT(DATE(a.dteReceiptDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDateEdited),'%d-%m-%Y') "
 						+ "FROM tblreceipthd a,"+webStockDB+".tblpartymaster b,tblbqbookinghd c,tblreceiptdtl d,tblsettlementmaster e "
 						+ "WHERE a.strReceiptNo='"+reciptNo+"' AND b.strPCode=c.strCustomerCode AND a.strReservationNo=c.strBookingNo AND a.strReceiptNo=d.strReceiptNo AND d.strSettlementCode=e.strSettlementCode AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
-				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
-
-				for (int i = 0; i < listOfPayment.size(); i++) {
-					Object PaymentData[] = (Object[]) listOfPayment.get(i);
-
-					String strReceiptNo = PaymentData[0].toString();
-					String strBookingNo = PaymentData[1].toString();
-					String strFirstName = PaymentData[2].toString();
-					String strSettlementDesc = PaymentData[3].toString();
-					String dblPaidAmt = PaymentData[4].toString();
-					String dteReciptDate = PaymentData[5].toString();
-					String dteModifiedDate = PaymentData[5].toString();
-
-					clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
-					objPaymentReciptBean.setStrReceiptNo(strReceiptNo);
-					objPaymentReciptBean.setStrFirstName(strFirstName+" ");
-					objPaymentReciptBean.setStrSettlementDesc(strSettlementDesc);
-					objPaymentReciptBean.setDblPaidAmt(dblPaidAmt);
-					objPaymentReciptBean.setDteReciptDate(dteReciptDate);
-					objPaymentReciptBean.setDteModifiedDate(dteModifiedDate);
-					objPaymentReciptBean.setStrReservationNo(strBookingNo);
-					datalist.add(objPaymentReciptBean);
-				}
-			} 
-			else if (checkAgainst.equalsIgnoreCase("Invoice")) {
-				reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptBanquetPaymentInvoiceRecipt.jrxml");
-				
-				
-				String sqlPayment = "SELECT a.strReceiptNo,g.strInvCode,b.strPName ,e.strSettlementDesc,a.dblPaidAmt, DATE_FORMAT(DATE(a.dteReceiptDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDateEdited),'%d-%m-%Y') "
-						+ "FROM tblreceipthd a,tblbqbookinghd c,"+webStockDB+".tblpartymaster b,tblsettlementmaster e,tblreceiptdtl d,"+webStockDB+".tblproformainvoicehd g "
-						+ "WHERE a.strReceiptNo='"+reciptNo+"' AND b.strPCode=c.strCustomerCode AND g.strSOCode=c.strBookingNo "
-						+ "AND a.strReceiptNo=d.strReceiptNo AND d.strSettlementCode=e.strSettlementCode AND a.strClientCode='"+clientCode+"'" ;
-
-				/*String sqlPayment = "SELECT a.strReceiptNo,c.strBookingNo,b.strPName,e.strSettlementDesc,a.dblPaidAmt, DATE_FORMAT(DATE(a.dteReceiptDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDateEdited),'%d-%m-%Y') "
-						+ "FROM tblreceipthd a,"+webStockDB+".tblpartymaster b,tblbqbookinghd c,tblreceiptdtl d,tblsettlementmaster e "
-						+ "WHERE a.strReceiptNo='"+reciptNo+"' AND b.strPCode=c.strCustomerCode AND a.strReservationNo=c.strBookingNo AND a.strReceiptNo=d.strReceiptNo AND d.strSettlementCode=e.strSettlementCode AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"'";
-				 		*/	
 				List listOfPayment = objGlobalFunctionsService.funGetDataList(sqlPayment, "sql");
 
 				for (int i = 0; i < listOfPayment.size(); i++) {
@@ -1013,7 +949,6 @@ public class clsPMSPaymentController {
 	@RequestMapping(value = "/frmPMSPaymentAdvanceAmount", method = RequestMethod.GET)
 	public ModelAndView funOpenMSPaymentAdvanceAmount(Map<String, Object> model, HttpServletRequest request) {
 		String urlHits = "1";
-		String clientCode = request.getSession().getAttribute("clientCode").toString();
 
 		List<String> listAgainst = new ArrayList<>();
 		listAgainst.add("Reservation");
@@ -1026,7 +961,7 @@ public class clsPMSPaymentController {
 		if(AdvAmount.charAt(2)=='R')
 		{
 			String sqlReservation="select ifnull(sum(a.dblIncomeHeadAmt),0)-ifnull(b.dblReceiptAmt,0) from tblroompackagedtl a left outer join  tblreceipthd b   on  a.strReservationNo=b.strReservationNo "
-					 +" where a.strReservationNo='"+AdvAmount+"'AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"'  group by a.strReservationNo " ;
+					 +" where a.strReservationNo='"+AdvAmount+"'  group by a.strReservationNo " ;
 			List listResevation = objGlobalFunctionsService.funGetDataList(sqlReservation, "sql");
 			if (listResevation.size()>0) 
 			{
@@ -1035,7 +970,7 @@ public class clsPMSPaymentController {
 			else
 			{
 				sqlReservation="select ifnull(sum(a.dblRoomRate),0)-ifnull(b.dblReceiptAmt,0) from tblreservationroomratedtl a left outer join  tblreceipthd b   on  a.strReservationNo=b.strReservationNo "
-						 +" where a.strReservationNo='"+AdvAmount+"' AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' group by a.strReservationNo " ;
+						 +" where a.strReservationNo='"+AdvAmount+"'  group by a.strReservationNo " ;
 				listResevation = objGlobalFunctionsService.funGetDataList(sqlReservation, "sql");
 
 				if (listResevation.size()>0) 
@@ -1050,9 +985,9 @@ public class clsPMSPaymentController {
 			 		+ "WHERE b.strCheckInNo = '"+AdvAmount+"' and a.strRoomTypeCode=b.strRoomType";*/
 			String sqlCheckIn="SELECT ROUND(dblRoomRate-(temp2.dblRoomRate*temp2.dblDiscount)/100+ SUM(d.dblTaxAmt)) FROM "
 					+ "( SELECT temp.dblRoomRate,temp.dblDiscount,c.strFolioNo FROM ( SELECT b.dblRoomRate,b.dblDiscount,a.strCheckInNo FROM tblcheckinhd a "
-					+ "LEFT OUTER JOIN tblwalkinroomratedtl b ON b.strWalkinNo=a.strWalkInNo WHERE a.strCheckInNo='"+AdvAmount+"' AND a.strClientCode='"+clientCode+"') temp "
-					+ ",tblfoliohd c WHERE temp.strCheckInNo=c.strCheckInNo AND c.strClientCode='"+clientCode+"') temp2,tblfoliotaxdtl d "
-					+ "WHERE temp2.strFolioNo=d.strFolioNo AND d.strClientCode='"+clientCode+"' ";
+					+ "LEFT OUTER JOIN tblwalkinroomratedtl b ON b.strWalkinNo=a.strWalkInNo WHERE a.strCheckInNo='"+AdvAmount+"') temp "
+					+ ",tblfoliohd c WHERE temp.strCheckInNo=c.strCheckInNo) temp2,tblfoliotaxdtl d "
+					+ "WHERE temp2.strFolioNo=d.strFolioNo";
 			 List listResevation = objGlobalFunctionsService.funGetDataList(sqlCheckIn, "sql");
 			 if (listResevation.size()>0) 
 				{

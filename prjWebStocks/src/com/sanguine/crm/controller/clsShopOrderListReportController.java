@@ -306,8 +306,8 @@ public class clsShopOrderListReportController {
                                + " b.strProdCode AS prodCode  "
                                + " FROM tblinvoicehd a,tblinvoicedtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f  "
                                + " WHERE a.strInvCode=b.strInvCode AND b.strProdCode=d.strProdCode AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode   "
-                               + " AND c.strGCode=f.strGCode AND a.strCustCode = 'C000034' AND c.strGCode='G000002' AND DATE(a.dteInvDate) BETWEEN '2019-10-01'   "
-                               + " AND '2019-10-31'   "
+                               + " AND c.strGCode=f.strGCode AND a.strCustCode = '"+strCustName+"' AND c.strGCode='" + strGCode + "' AND DATE(a.dteInvDate) BETWEEN '" + dteFromDate + "'   "
+                               + " AND '" + dteToDate + "'   "
                                + " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  "
                                + " ORDER BY e.strPName,c.intSortingNo,d.strProdName) p  "
                                + " LEFT OUTER  "
@@ -315,8 +315,8 @@ public class clsShopOrderListReportController {
                                + " AS dblQty, '' AS dblAcceptQty,a.strCustCode AS custCode,c.intSortingNo AS sortNo, b.strProdCode AS prodCode  "
                                + " FROM tblsalesreturnhd a,tblsalesreturndtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f  "
                                + " WHERE a.strSRCode=b.strSRCode AND b.strProdCode=d.strProdCode AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode  "
-                               + " AND c.strGCode=f.strGCode AND a.strCustCode = 'C000034' AND c.strGCode='G000002' AND DATE(a.dteSRDate) BETWEEN '2019-10-01'  "
-                               + " AND '2019-10-31'  "
+                               + " AND c.strGCode=f.strGCode AND a.strCustCode = '"+strCustName+"' AND c.strGCode='" + strGCode + "' AND DATE(a.dteSRDate) BETWEEN '" + dteFromDate + "'  "
+                               + " AND '" + dteToDate + "'  "
                                + " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  "
                                + " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q ON p.prodCode=q.prodCode; ";
 			
@@ -363,8 +363,8 @@ public class clsShopOrderListReportController {
                                + " b.strProdCode AS prodCode  "
                                + " FROM tblinvoicehd a,tblinvoicedtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f  "
                                + " WHERE a.strInvCode=b.strInvCode AND b.strProdCode=d.strProdCode AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode   "
-                               + " AND c.strGCode=f.strGCode AND a.strCustCode = 'C000034' AND c.strGCode='G000002' AND DATE(a.dteInvDate) BETWEEN '2019-10-01'   "
-                               + " AND '2019-10-31'   "
+                               + " AND c.strGCode=f.strGCode  AND a.strCustCode = '"+strCustName+"' AND c.strGCode='" + strGCode + "' AND DATE(a.dteInvDate) BETWEEN '" + dteFromDate + "'   "
+                               + " AND '" + dteToDate + "'   "
                                + " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  "
                                + " ORDER BY e.strPName,c.intSortingNo,d.strProdName) p  "
                                + " LEFT OUTER  "
@@ -372,8 +372,8 @@ public class clsShopOrderListReportController {
                                + " AS dblQty, '' AS dblAcceptQty,a.strCustCode AS custCode,c.intSortingNo AS sortNo, b.strProdCode AS prodCode  "
                                + " FROM tblsalesreturnhd a,tblsalesreturndtl b,tblsubgroupmaster c, tblproductmaster d, tblpartymaster e,tblgroupmaster f  "
                                + " WHERE a.strSRCode=b.strSRCode AND b.strProdCode=d.strProdCode AND d.strSGCode=c.strSGCode AND a.strCustCode=e.strPCode  "
-                               + " AND c.strGCode=f.strGCode AND a.strCustCode = 'C000034' AND c.strGCode='G000002' AND DATE(a.dteSRDate) BETWEEN '2019-10-01'  "
-                               + " AND '2019-10-31'  "
+                               + " AND c.strGCode=f.strGCode AND a.strCustCode = '"+strCustName+"' AND c.strGCode='" + strGCode + "' AND DATE(a.dteSRDate) BETWEEN '" + dteFromDate + "'  "
+                               + " AND '" + dteToDate + "' "
                                + " GROUP BY b.strProdCode,d.strSGCode,f.strGCode,a.strCustCode  "
                                + " ORDER BY e.strPName,c.intSortingNo,d.strProdName) q ON p.prodCode=q.prodCode;";
 			List listCustSubgroup = objGlobalFunctionsService.funGetDataList(sqlSubGroup, "sql");
