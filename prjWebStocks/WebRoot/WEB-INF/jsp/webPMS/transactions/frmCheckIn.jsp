@@ -150,20 +150,20 @@
 			var against='';
 			against='<%=session.getAttribute("against").toString()%>';
 			var isCheckOk=confirm("Do You Want to Generate Check-In Slip ?"); 
-			var isAdvanceOk=confirm("Do You Want to pay Advance Amount ?"); 
+			//var isAdvanceOk=confirm("Do You Want to pay Advance Amount ?"); 
 			if(isCheckOk)
 			{
 				checkInNo='<%=session.getAttribute("AdvanceAmount").toString()%>';
 				
 				window.open(getContextPath() + "/rptCheckInSlip.html?checkInNo=" +checkInNo+"&cmbAgainst="+against,'_blank');
 			}
-			if(isAdvanceOk)
+			<%-- if(isAdvanceOk)
 			{
 				checkInNo='<%=session.getAttribute("AdvanceAmount").toString()%>';
 				window.open(getContextPath()+"/frmPMSPaymentAdvanceAmount.html?AdvAmount="+checkInNo);
 				session.removeAttribute("AdvanceAmount");
 				
-			}<%	
+			} --%><%	
 		}
 	}%>
 	

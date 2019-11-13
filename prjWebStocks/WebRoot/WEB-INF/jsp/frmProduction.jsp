@@ -14,6 +14,7 @@
 		 * Global variable
 		 */
 		var strUOM,listRow=0;
+		var list;
 		/**
 		 * Ready Function for Initialize textField with default value
 		 * And Set date in date picker 
@@ -420,8 +421,26 @@
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
 		   	rowCount=listRow;
-		    row.insertCell(0).innerHTML= "<input name=\"listProductionDtl["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"8%\"   id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";	
-		    row.insertCell(1).innerHTML= "<input name=\"listProductionDtl["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"48%\"  id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"' />";	
+		   	list = funGetToolTipData(strProdCode,dblQtyProd);
+		   	var toolTip="";
+		   	for(var i = 0;i<list.length;i++)
+		   		{
+		   			var pName = list[i][0];
+		   			var uom = list[i][1];
+		   			var finalWeight = list[i][2];
+		   			var costRM = list[i][3];
+		   			
+		   			toolTip = toolTip+pName+" - "+uom+" "+finalWeight+" - "+costRM+"\n"
+		   			
+		   		}
+		   	var x1 = row.insertCell(0);
+		   	x1.title = toolTip;
+		   	
+		   	var x2 = row.insertCell(1);
+		   	x2.title = toolTip;
+		   	
+		   	x1.innerHTML= "<input name=\"listProductionDtl["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box\" size=\"8%\"   id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";	
+		   	x2.innerHTML= "<input name=\"listProductionDtl["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"48%\"  id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"' />";	
 		    row.insertCell(2).innerHTML= "<input name=\"listProductionDtl["+(rowCount)+"].strUOM\" readonly=\"readonly\" class=\"Box\" size=\"3%\"  id=\"txtUOM."+(rowCount)+"\" value='"+strUOM+"' />";
 		    row.insertCell(3).innerHTML=" <input name=\"listProductionDtl["+(rowCount)+"].strProcessCode\" readonly=\"readonly\" class=\"Box\" size=\"8%\"  id=\"strProcessCode."+(rowCount)+"\" value="+strProcessCode+">";
 		    row.insertCell(4).innerHTML=" <input name=\"listProductionDtl["+(rowCount)+"].strProcessName\" readonly=\"readonly\" class=\"Box\" size=\"8%\"  id=\"strProcessName."+(rowCount)+"\" value="+strProcessName+">";	
@@ -634,6 +653,43 @@
 		{
 			location.reload(true);
 		}
+		
+		function funGetToolTipData(prodCode,qty)
+		{
+			var list1;
+			searchUrl=getContextPath()+"/loadToolTipData.html?prodCode="+prodCode+"&qty="+qty;				
+			$.ajax({				
+	        	type: "GET",
+		        url: searchUrl,
+		        dataType: "json",
+		        async:false,
+		        success: function(response)
+		        {				        	
+		        	list1 = response;
+				},
+				error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+	      });
+			return list1;
+		} 
+		
+		
+		
 </script>
 </head>
 <body onload="funOnLoad();">

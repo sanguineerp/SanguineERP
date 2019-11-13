@@ -983,11 +983,11 @@ public class clsPMSPaymentController {
 			
 			/*String sqlCheckIn = "SELECT a.dblRoomTerrif FROM tblroomtypemaster a,tblcheckindtl  b "
 			 		+ "WHERE b.strCheckInNo = '"+AdvAmount+"' and a.strRoomTypeCode=b.strRoomType";*/
-			String sqlCheckIn="SELECT ROUND(dblRoomRate-(temp2.dblRoomRate*temp2.dblDiscount)/100+ SUM(d.dblTaxAmt)) FROM "
+			String sqlCheckIn="SELECT ROUND(dblRoomRate-(temp2.dblRoomRate*temp2.dblDiscount)/100) FROM "
 					+ "( SELECT temp.dblRoomRate,temp.dblDiscount,c.strFolioNo FROM ( SELECT b.dblRoomRate,b.dblDiscount,a.strCheckInNo FROM tblcheckinhd a "
 					+ "LEFT OUTER JOIN tblwalkinroomratedtl b ON b.strWalkinNo=a.strWalkInNo WHERE a.strCheckInNo='"+AdvAmount+"') temp "
-					+ ",tblfoliohd c WHERE temp.strCheckInNo=c.strCheckInNo) temp2,tblfoliotaxdtl d "
-					+ "WHERE temp2.strFolioNo=d.strFolioNo";
+					+ ",tblfoliohd c WHERE temp.strCheckInNo=c.strCheckInNo) temp2";
+					
 			 List listResevation = objGlobalFunctionsService.funGetDataList(sqlCheckIn, "sql");
 			 if (listResevation.size()>0) 
 				{

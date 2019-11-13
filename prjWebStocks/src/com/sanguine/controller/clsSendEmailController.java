@@ -563,6 +563,10 @@ public class clsSendEmailController
 		// takes input from e-mail form.
 		try
 		{
+			if(strMessege==null)
+			{
+				strMessege="Email Content is not saved in property setup";
+			}
 			String subject = "";
 			if(strModuleName.equalsIgnoreCase("dayEnd"))
 			{
@@ -625,9 +629,10 @@ public class clsSendEmailController
 			{
 				strReturnValue = "Supplier has No Email Id";
 			}
-
+			
 			return strReturnValue;
 		}
+	
 		catch (javax.mail.MessagingException e)
 		{
 			e.printStackTrace();

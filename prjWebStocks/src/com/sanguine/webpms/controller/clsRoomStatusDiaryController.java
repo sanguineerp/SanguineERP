@@ -144,7 +144,7 @@ public class clsRoomStatusDiaryController {
 					+ "AND a.strCheckInNo NOT IN (SELECT strCheckInNo FROM tblbillhd) AND a.strClientCode='"+clientCode+"' AND b.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' AND e.strClientCode='"+clientCode+"' "
 					+ "UNION "
 					+ "SELECT a.strReservationNo,d.strRoomCode,d.strRoomDesc, CONCAT(c.strFirstName,' ',c.strMiddleName,' ',c.strLastName), "
-					+ "IFNULL(e.strBookingTypeDesc,''), DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y'), "
+					+ "'RESERVATION', DATE_FORMAT(DATE(a.dteArrivalDate),'%d-%m-%Y'), DATE_FORMAT(DATE(a.dteDepartureDate),'%d-%m-%Y'), "
 					+ "DATEDIFF(DATE(a.dteDepartureDate),DATE(a.dteArrivalDate)),LEFT(TIMEDIFF(a.tmeDepartureTime,(select a.tmeCheckOutTime from tblpropertysetup a )),6), "
 					+ "LEFT(TIMEDIFF(a.tmeArrivalTime,(select a.tmeCheckInTime from tblpropertysetup a )),6),a.tmeArrivalTime,a.tmeDepartureTime , DATEDIFF(DATE(a.dteArrivalDate),'"+viewDate+"'),DATEDIFF(DATE(a.dteDepartureDate),'"+viewDate+"')"
 					+ "FROM tblreservationhd a,tblreservationdtl b,tblguestmaster c,tblroom d,tblbookingtype e "
@@ -528,15 +528,18 @@ public class clsRoomStatusDiaryController {
 		NumberFormat decformat = new DecimalFormat("#0.00");
 		double dblTotalRemainingAmt = 0;
 	//for Folio Amt
-		String sqlFolioAmt = "select sum(a.dblDebitAmt) from tblfoliodtl a where a.strFolioNo='"+strFolioNo+"' and a.strClientCode='"+clintCode+"' ";
+		String sqlFolioAmt = "select sum(ifnull(a.dblDebitAmt,0)) from tblfoliodtl a where a.strFolioNo='"+strFolioNo+"' and a.strClientCode='"+clintCode+"' ";
 		List listFolioAmt = objGlobalFunctionsService.funGetListModuleWise(sqlFolioAmt, "sql");
 
 		if (!listFolioAmt.isEmpty() && listFolioAmt!=null) {
 			for(int i = 0; i<listFolioAmt.size(); i++)
 			{
+				if(listFolioAmt.get(i)!=null)
+				{
 				double dblFolioAmt = 0;
 				dblFolioAmt = Double.parseDouble(listFolioAmt.get(i).toString());
 				dblTotalRemainingAmt = dblTotalRemainingAmt + dblFolioAmt;
+				}
 
 			}
 		}
@@ -556,16 +559,18 @@ public class clsRoomStatusDiaryController {
 		}
 		
 		//For Folio Tax Amt
-		String sqlFolioTaxAmt = "select sum(a.dblTaxAmt) from tblfoliotaxdtl a where a.strFolioNo='"+strFolioNo+"' and a.strDocNo like 'RM%' and a.strClientCode='"+clintCode+"';";
+		String sqlFolioTaxAmt = "select sum(ifnull(a.dblTaxAmt,0)) from tblfoliotaxdtl a where a.strFolioNo='"+strFolioNo+"' and a.strDocNo like 'RM%' and a.strClientCode='"+clintCode+"';";
 		List listFolioTaxAmt = objGlobalFunctionsService.funGetListModuleWise(sqlFolioTaxAmt, "sql");
 
-		if (!listFolioTaxAmt.isEmpty() && listFolioTaxAmt!=null) {
+		if (listFolioTaxAmt!=null && listFolioTaxAmt.size()>0) {
 			for(int i = 0; i<listFolioTaxAmt.size(); i++)
 			{
+				if(listFolioTaxAmt.get(i)!=null)
+				{
 				double dblFolioTaxAmt = 0;
 				dblFolioTaxAmt = Double.parseDouble(listFolioTaxAmt.get(i).toString());
 				dblTotalRemainingAmt = dblTotalRemainingAmt + dblFolioTaxAmt;
-
+				}
 			}
 		}
 		

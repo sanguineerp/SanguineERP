@@ -521,6 +521,39 @@ public class clsProductionController {
 		
 		
 	}
+	
+	
+	@RequestMapping(value = "/loadToolTipData", method = RequestMethod.GET)
+	public @ResponseBody List<clsProductionHdModel> funLoadToolTipData(@RequestParam(value = "prodCode") String strProdCode,@RequestParam(value = "qty") String strQty,HttpServletRequest request) {
+		objGlobal = new clsGlobalFunctions();
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		List finalList = new ArrayList<>();
+		
+		
+		String sqlBomCode = "select a.strBOMCode from tblbommasterhd a where a.strParentCode='"+strProdCode+"' and a.strClientCode='"+clientCode+"'";
+		List listBomCOde = objGlobalFunctionsService.funGetDataList(sqlBomCode, "sql");
+		if(listBomCOde!=null && listBomCOde.size()>0)
+		{
+			String strBomCode = listBomCOde.get(0).toString();
+			String sqlTooltipData = "SELECT c.strProdName AS ProdName,ROUND((c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100)*'"+strQty+"',2) AS finalWT,c.strUOM,ROUND(c.dblCostRM,2) "
+					+ "FROM tblbommasterhd a,tblbommasterdtl b,tblproductmaster c,tblproductmaster d "
+					+ "WHERE a.strBOMCode=b.strBOMCode AND b.strChildCode = c.strProdCode AND a.strParentCode=d.strProdCode AND a.strClientCode='"+clientCode+"' "
+					+ " "
+					+ "AND a.strClientCode=b.strClientCode AND b.strClientCode=c.strClientCode AND a.strBOMCode='"+strBomCode+"' "
+					+ "GROUP BY b.strChildCode "
+					+ "ORDER BY b.strChildCode";
+			
+			List listToolTipData = objGlobalFunctionsService.funGetDataList(sqlTooltipData, "sql");
+			for (int cnt = 0; cnt < listToolTipData.size(); cnt++) {
+				Object[] arrObj = (Object[]) listToolTipData.get(cnt);
+				finalList.add(arrObj);
 
+			}
+			
+			
+			
+			}
+		return finalList;
+	}
 	
 }

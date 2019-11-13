@@ -11,12 +11,14 @@
 	
 	$(function() 
 	{
-		var pmsDate='2019-05-05'; <%-- '<%=session.getAttribute("PMSDate").toString()%>'; --%>
+		var pmsDate='2019-11-11';
+		<%-- '<%=session.getAttribute("PMSDate").toString()%>'; --%>
 		
+		 <%-- '<%=session.getAttribute("PMSDate").toString()%>'; --%>
+		 
 		$("#txtExpiryDate").datepicker({ dateFormat: 'dd-mm-yy' });
 		$("#txtExpiryDate").datepicker('setDate', pmsDate);		
 		
-		 var pmsDate='2019-05-05';<%-- '<%=session.getAttribute("PMSDate").toString()%>'; --%>
 		  var dte=pmsDate.split("-");
 		  $("#txtPMSDate").val(dte[2]+"-"+dte[1]+"-"+dte[0]);
 		  
@@ -36,7 +38,7 @@
 			  
 		  }
 		  
-		  var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
+		<%--   var strIndustryType='';
 		  gstrIndustryType=strIndustryType;
 		  if(strIndustryType=='7-WebBanquet') 
 	   		{
@@ -69,7 +71,7 @@
 				<%session.removeAttribute("invoiceCode");%>
 				<%session.removeAttribute("date");%>
 			} 
-	   		
+	   		 --%>
 	   		
 		  
 	});

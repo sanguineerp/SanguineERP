@@ -3864,6 +3864,7 @@ public class clsReportsController {
 		String yieldCalculation = objBean.getStrProdType();
 
 		funPrepardRecipeCostingReport(bomCode, type, resp, req, yieldCalculation);
+		//
 	}
 
 
