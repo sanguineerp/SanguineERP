@@ -161,6 +161,7 @@ public class clsBulkInvoiceController {
 	{
 		
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String strLocCode= req.getSession().getAttribute("locationCode").toString();
 		String StrSuppCode[]=strCustCode.split(",");
 		List listSo=new ArrayList();
 		String fd = dteFrmDate.split("-")[0];
@@ -185,7 +186,7 @@ public class clsBulkInvoiceController {
 				+"  AND c.strPType='cust' AND a.strSOCode NOT IN( "
 				+" SELECT strSOCode FROM tblinvsalesorderdtl)  "
 				+" AND a.strClientCode='"+clientCode+"' AND a.strCustCode='"+strSupplierCode+"' " 
-				+" AND a.strLocCode='L000001' AND date(a.dteFulmtDate) BETWEEN '"+dteFrmDateSql+"' AND '"+dteToDateSql+"'";
+				+" AND a.strLocCode='"+strLocCode+"' AND date(a.dteFulmtDate) BETWEEN '"+dteFrmDateSql+"' AND '"+dteToDateSql+"' and a.dblSubTotal>0 ";
 				
 			List listSO = objGlobalFunctionsService.funGetList(sqlSO,"sql");
 			if (!listSO.isEmpty())
