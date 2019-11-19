@@ -117,7 +117,8 @@
 								funLoadBomData(listdata[i].strChildCode,listdata[i].strProdName,listdata[i].dblQty,listdata[i].strUOM );
 			                                               
 			                });
-							listRow=count+1;	
+							listRow=count+1;
+							funShowRecipeCost(code);
 			        		
 		        		}
 		        	else
@@ -535,6 +536,39 @@
 				rowCount--;
 			}
 		}
+		
+		function funShowRecipeCost(code)
+		{
+			searchUrl=getContextPath()+"/loadRecipeCost.html?bomCode="+code;				
+			$.ajax({				
+	        	type: "GET",
+		        url: searchUrl,
+		        dataType: "json",
+		        async:false,
+		        success: function(response)
+		        {				        	
+		        	$("#lblRecipeCost").text(response);
+				},
+				error: function(jqXHR, exception) {
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.n' + jqXHR.responseText);
+		            }		            
+		        }
+	      });
+		}
+		
 	</script>
 </head>
 
@@ -597,7 +631,8 @@
 				<tr>
 				<td><label>Method</label></td>
 					<td><s:textarea cssStyle="width:100%" id="txtMethod" path="strMethod" /></td>
-				<td colspan="2"></td>
+				<td><label>Recipe Cost</label></td>
+				<td><label id="lblRecipeCost"></label></td>
 				
 				</tr>
 			</table>

@@ -680,6 +680,41 @@ public class clsRecipeMasterController {
 		}
 		return bomDtl;
 	}
+	
+	@RequestMapping(value = "/loadRecipeCost", method = RequestMethod.GET)
+	public @ResponseBody Double funLoadRecipeCost(@RequestParam("bomCode") String code, HttpServletRequest request) {
+		String urlHits = "1";
+		try {
+			urlHits = request.getParameter("saddr").toString();
+		} catch (NullPointerException e) {
+			urlHits = "1";
+		}
+		
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String userCode = request.getSession().getAttribute("usercode").toString();
+
+		String sqlCost = "SELECT  ROUND(SUM(((b.dblQty/c.dblRecipeConversion)*c."
+				+ "dblCostRM)),3) AS RecipeCost "
+				+ "FROM tblbommasterhd a,tblbommasterdtl b,tblproductmaster c,"
+				+ "tblproductmaster d  "
+				+ "WHERE a.strBOMCode=b.strBOMCode "
+				+ "AND b.strChildCode = c.strProdCode "
+				+ "AND a.strParentCode=d.strProdCode "
+				+ "AND a.strClientCode='"+clientCode+"' "
+						+ "AND a.strClientCode=b.strClientCode "
+						+ "AND b.strClientCode=c.strClientCode "
+						+ "AND a.strBOMCode='"+code+"'";
+		List listCost = objRecipeMasterService.funGetProductList(sqlCost);
+		double dblCost = 0.0;
+		if(listCost!=null && listCost.size()>0)
+		{
+			dblCost = Double.parseDouble(listCost.get(0).toString());
+		}
+		return dblCost;
+		
+
+	}
+
 
 
 	// ///////////////////////////Yield Concept//////////////////////////////

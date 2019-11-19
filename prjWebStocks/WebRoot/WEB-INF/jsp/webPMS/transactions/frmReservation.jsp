@@ -1394,6 +1394,7 @@
 		{
 			alert("Please Select Booking Type");
 			flg=false;
+			$("#txtBookingTypeCode").focus();
 		}
 		else
 		{

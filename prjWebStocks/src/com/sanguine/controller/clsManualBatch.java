@@ -20,8 +20,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.sanguine.bean.clsProductBatchBean;
 import com.sanguine.model.clsBatchHdModel;
 import com.sanguine.model.clsBatchHdModel_ID;
+import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsProductBatchService;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsSetupMasterService;
 
 @Controller
 public class clsManualBatch {
@@ -35,6 +37,10 @@ public class clsManualBatch {
 	
 	@Autowired
 	clsGlobalFunctions objGlobal;
+	
+
+	@Autowired
+	private clsSetupMasterService objSetupMasterService;
 
 	/**
 	 * Open Batch Form
@@ -97,10 +103,15 @@ public class clsManualBatch {
 		objGlobal = new clsGlobalFunctions();
 		try {
 			if (!result.hasErrors()) {
+				
+				clsPropertySetupModel objSetup = objSetupMasterService
+						.funGetObjectPropertySetup(propCode, clientCode);
+			
+				if(objSetup.getStrFifo().equalsIgnoreCase("N")){
 				List<clsBatchHdModel> batchList = objBean.getListBatchDtl();
 				for (int i = 0; i < batchList.size(); i++) {
 					clsBatchHdModel tempBatchModel = batchList.get(i);
-					clsBatchHdModel batchModel = new clsBatchHdModel(new clsBatchHdModel_ID(objBean.getStrMISCode(), tempBatchModel.getStrProdCode(), clientCode));
+					clsBatchHdModel batchModel = new clsBatchHdModel(new clsBatchHdModel_ID(objBean.getStrMISCode(), tempBatchModel.getStrProdCode(), clientCode,tempBatchModel.getStrBatchCode()));
 					batchModel.setStrTransCode(objBean.getStrMISCode());
 					batchModel.setStrProdCode(tempBatchModel.getStrProdCode());
 					batchModel.setStrClientCode(clientCode);
@@ -120,6 +131,95 @@ public class clsManualBatch {
 					returnvalue = "Inserted";
 					request.getSession().removeAttribute("rptMISCode");
 					request.getSession().removeAttribute("ManualBatchItemList");
+				}
+			}
+				
+				else
+					{
+					List<clsBatchHdModel> batchListPending = objBean.getListBatchDtl();
+					
+					for (int i = 0; i < batchListPending.size(); i++) {
+					clsBatchHdModel tempBatchModel = batchListPending.get(i);
+					clsBatchHdModel batchModel = new clsBatchHdModel();
+					double dblTempBatchQty = tempBatchModel.getDblQty(); 
+					String sqlBatchCode = "select * from tblbatchhd a where a.strProdCode='"+tempBatchModel.getStrProdCode()+"' "
+							+ "and a.dblPendingQty>0 and a.strClientCode='"+clientCode+"' order by a.strBatchCode asc";
+					List listBatch = objGlobalFunctionsService.funGetList(sqlBatchCode, "sql");
+					if(listBatch!=null && listBatch.size()>0)
+					{
+						
+						for (int cnt = 0; cnt < listBatch.size(); cnt++) {
+							
+							Object[] arrObject = (Object[]) listBatch.get(cnt);
+							String strClientCode  = arrObject[0].toString();
+							String strProdCode  = arrObject[1].toString();
+							String strTransCode  = arrObject[2].toString();
+							String strBatchCode  = arrObject[3].toString();
+							double dblPendingQty= Double.parseDouble(arrObject[4].toString());
+							double dblQty  = Double.parseDouble(arrObject[5].toString());
+							String strExpiryDate  = arrObject[6].toString();
+							int srNo  = Integer.parseInt(arrObject[7].toString());
+							String strFormLocCode  = arrObject[8].toString();
+							String strManualBatchCode  = arrObject[9].toString();
+							String strPropCode  = arrObject[10].toString();
+							String strToLocCode  = arrObject[11].toString();
+							String strTranssCodeForUpdate  = arrObject[12].toString();
+							String strTransType  = arrObject[13].toString();
+							if(dblTempBatchQty<=dblPendingQty)
+							{
+							dblTempBatchQty = dblPendingQty-dblTempBatchQty;
+							
+							batchModel.setStrTransCode(objBean.getStrMISCode());
+							batchModel.setStrProdCode(tempBatchModel.getStrProdCode());
+							batchModel.setStrClientCode(clientCode);
+							batchModel.setStrBatchCode(strBatchCode);
+							batchModel.setDblQty(dblPendingQty);
+							if(dblTempBatchQty<0)
+							{
+								dblTempBatchQty=0;
+							}
+							else
+							{
+								batchModel.setDblPendingQty(0.0);
+							}
+							batchModel.setDblPendingQty(0.0);
+							batchModel.setDtExpiryDate(tempBatchModel.getDtExpiryDate());
+							batchModel.setStrManuBatchCode("");
+							batchModel.setStrTransType("MIS");
+							batchModel.setStrPropertyCode(propCode);
+							batchModel.setStrToLocCode("");
+							batchModel.setStrFromLocCode("");
+							batchModel.setStrTransCodeforUpdate("");
+							objBatchProcessService.funSaveOrUpdateBatch(batchModel);
+							StringBuilder sqlBuilder = new StringBuilder("update tblbatchhd set dblPendingQty='"+dblTempBatchQty+"' where strBatchCode='" + strBatchCode + "' and strManuBatchCode!='' ");
+							objGlobalFunctionsService.funUpdate(sqlBuilder.toString(), "sql");
+							break;
+							}
+							else if (dblTempBatchQty>0)
+							{
+								dblTempBatchQty = dblTempBatchQty-dblPendingQty;
+
+								batchModel.setStrTransCode(objBean.getStrMISCode());
+								batchModel.setStrProdCode(tempBatchModel.getStrProdCode());
+								batchModel.setStrClientCode(clientCode);
+								batchModel.setStrBatchCode(strBatchCode);
+								batchModel.setDblQty(dblPendingQty);
+								batchModel.setDblPendingQty(dblTempBatchQty);
+								batchModel.setDtExpiryDate(tempBatchModel.getDtExpiryDate());
+								batchModel.setStrManuBatchCode(tempBatchModel.getStrManuBatchCode());
+								batchModel.setStrTransType("MIS");
+								batchModel.setStrPropertyCode(propCode);
+								batchModel.setStrToLocCode("");
+								batchModel.setStrFromLocCode("");
+								batchModel.setStrTransCodeforUpdate("");
+								objBatchProcessService.funSaveOrUpdateBatch(batchModel);
+								StringBuilder sqlBuilder = new StringBuilder("update tblbatchhd set dblPendingQty='0' where strBatchCode='" + strBatchCode + "' and strManuBatchCode!=''");
+								objGlobalFunctionsService.funUpdate(sqlBuilder.toString(), "sql");
+								
+							}
+					}
+					}				
+					}			
 				}
 			}
 		} catch (Exception e) {

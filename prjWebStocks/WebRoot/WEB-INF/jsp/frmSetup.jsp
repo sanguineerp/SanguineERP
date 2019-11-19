@@ -1485,6 +1485,11 @@
 										<td>
 											<s:checkbox path="strIncludeTaxInWeightAvgPrice" value="Y"/> 
 										</td>
+										
+										<td>Batching First in first out(FIFO) </td>
+										<td>
+											<s:checkbox path="strFifo" value="Y"/> 
+										</td>
 									
 									</tr>
 								</table>

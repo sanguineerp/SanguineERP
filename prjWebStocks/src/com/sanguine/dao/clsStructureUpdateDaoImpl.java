@@ -1056,6 +1056,16 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql= "ALTER TABLE `tbltempitemstock` ADD COLUMN `dblFreeQty`  DECIMAL(18,4) NOT NULL DEFAULT '0.0000' AFTER `intId`";
 		funExecuteQuery(sql);
 		
+		sql = "ALTER TABLE `tblpropertysetup`"
+				+ "ADD COLUMN `strFifo` VARCHAR(1) NOT NULL DEFAULT 'N' AFTER `strIncludeTaxInWeightAvgPrice`;";
+		funExecuteQuery(sql);
+		
+		sql = "ALTER TABLE `tblbatchhd` "
+				+ "DROP PRIMARY KEY,"
+				+ "ADD PRIMARY KEY (`strClientCode`, `strProdCode`, `strTransCode`, `strBatchCode`);";
+		funExecuteQuery(sql);
+
+		
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
 		List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();

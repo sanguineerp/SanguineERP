@@ -75,7 +75,7 @@ public class clsProductBatchController {
 				List<clsBatchHdModel> BatchList = objBean.getListBatchDtl();
 				for (int i = 0; i < BatchList.size(); i++) {
 					clsBatchHdModel tempBatchModel = BatchList.get(i);
-					clsBatchHdModel BatchModel = new clsBatchHdModel(new clsBatchHdModel_ID(tempBatchModel.getStrTransCode(), tempBatchModel.getStrProdCode(), clientCode));
+					clsBatchHdModel BatchModel = new clsBatchHdModel(new clsBatchHdModel_ID(tempBatchModel.getStrTransCode(), tempBatchModel.getStrProdCode(), clientCode,tempBatchModel.getStrBatchCode()));
 					BatchModel.setStrTransCode(tempBatchModel.getStrTransCode());
 					BatchModel.setStrProdCode(tempBatchModel.getStrProdCode());
 					BatchModel.setStrClientCode(clientCode);

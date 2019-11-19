@@ -24,10 +24,11 @@ public class clsBatchHdModel implements Serializable {
 		strTransCode = clsBatchHdModel_ID.getStrTransCode();
 		strProdCode = clsBatchHdModel_ID.getStrProdCode();
 		strClientCode = clsBatchHdModel_ID.getStrClientCode();
+		strBatchCode = clsBatchHdModel_ID.getStrBatchCode();
 	}
 
 	@Id
-	@AttributeOverrides({ @AttributeOverride(name = "strTransCode", column = @Column(name = "strTransCode")), @AttributeOverride(name = "strProdCode", column = @Column(name = "strProdCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")) })
+	@AttributeOverrides({ @AttributeOverride(name = "strTransCode", column = @Column(name = "strTransCode")), @AttributeOverride(name = "strProdCode", column = @Column(name = "strProdCode")), @AttributeOverride(name = "strClientCode", column = @Column(name = "strClientCode")),@AttributeOverride(name = "strBatchCode", column = @Column(name = "strBatchCode")) })
 	@Column(name = "strBatchCode", columnDefinition = "VARCHAR(25) NOT NULL default ''")
 	private String strBatchCode;
 

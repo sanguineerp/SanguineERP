@@ -253,6 +253,8 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	@Column(name = "strSMSContent", columnDefinition = "VARCHAR(500) default ''")
 	private String strSMSContent;
 
+	@Column(name = "strFifo", columnDefinition = "VARCHAR(1) default 'Y'")
+	private String strFifo;
 	
 	// SMS setUp Tab End
 
@@ -1273,6 +1275,14 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	public void setStrIncludeTaxInWeightAvgPrice(
 			String strIncludeTaxInWeightAvgPrice) {
 		this.strIncludeTaxInWeightAvgPrice = strIncludeTaxInWeightAvgPrice;
+	}
+
+	public String getStrFifo() {
+		return strFifo;
+	}
+
+	public void setStrFifo(String strFifo) {
+		this.strFifo = strFifo;
 	}
 
 	

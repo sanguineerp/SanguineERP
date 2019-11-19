@@ -179,6 +179,7 @@ public class clsSetupMasterBean {
 	private String StrCurrentDateForTransaction;
 	private String strRoundOffFinalAmtOnTransaction;
 	private String strPOSTRoundOffAmtToWebBooks;
+	private String strFifo;
 
 	
 	
@@ -1422,6 +1423,14 @@ public class clsSetupMasterBean {
 	public void setStrIncludeTaxInWeightAvgPrice(
 			String strIncludeTaxInWeightAvgPrice) {
 		this.strIncludeTaxInWeightAvgPrice = strIncludeTaxInWeightAvgPrice;
+	}
+
+	public String getStrFifo() {
+		return strFifo;
+	}
+
+	public void setStrFifo(String strFifo) {
+		this.strFifo = strFifo;
 	}
 
 	

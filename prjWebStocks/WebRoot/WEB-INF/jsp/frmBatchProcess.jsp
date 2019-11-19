@@ -100,11 +100,11 @@
 
 								<tr>
 									<td style="width: 13%; height: 18px;" align="left"><input readonly="readonly" class="Box" size="12%" name="listBatchDtl[${status.index}].strTransCode" value="${GRNBatch.strGRNCode}" /></td>
-									<td style="width: 13%; height: 18px;" align="left"><input readonly="readonly" class="Box" size="10%" name="listBatchDtl[${status.index}].strProdCode" value="${GRNBatch.strProdCode}" /></td>
-									<td style="width: 35%; height: 18px;" align="left"><input readonly="readonly" class="Box" size="40%" name="listBatchDtl[${status.index}].strProdName" value="${GRNBatch.strProdName}"/></td>
+									<td style="width: 12%; height: 18px;" align="left"><input readonly="readonly" class="Box" size="10%" name="listBatchDtl[${status.index}].strProdCode" value="${GRNBatch.strProdCode}" /></td>
+									<td style="width: 34%; height: 18px;" align="left"><input readonly="readonly" class="Box" size="40%" name="listBatchDtl[${status.index}].strProdName" value="${GRNBatch.strProdName}"/></td>
 									<td style="width: 10%; height: 18px;" align="Right"><input readonly="readonly" class="Box" size="8%" name="listBatchDtl[${status.index}].dblQty" value="${GRNBatch.dblQty}" /></td>
-									<td style="width: 13%; height: 18px;" align="left"><input class="datePicker calenderTextBox" size="14%" name="listBatchDtl[${status.index}].dtExpiryDate" value=""/></td>
-									<td style="width: 18%; height: 18px;" align="left"><input size="18%" name="listBatchDtl[${status.index}].strManuBatchCode" value="" /></td>
+									<td style="width: 12%; height: 18px;" align="left"><input class="datePicker calenderTextBox" size="14%" name="listBatchDtl[${status.index}].dtExpiryDate" value=""/></td>
+									<td style="width: 20%; height: 18px;" align="left"><input size="18%" name="listBatchDtl[${status.index}].strManuBatchCode" value="" /></td>
 									
 								</tr>
 			</c:forEach> 

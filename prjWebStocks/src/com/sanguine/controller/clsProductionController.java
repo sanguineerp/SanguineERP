@@ -535,7 +535,7 @@ public class clsProductionController {
 		if(listBomCOde!=null && listBomCOde.size()>0)
 		{
 			String strBomCode = listBomCOde.get(0).toString();
-			String sqlTooltipData = "SELECT c.strProdName AS ProdName,ROUND((c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100)*'"+strQty+"',2) AS finalWT,c.strUOM,ROUND(c.dblCostRM,2) "
+			String sqlTooltipData = "SELECT c.strProdName AS ProdName,ROUND((c.dblYieldPer*(b.dblQty/c.dblRecipeConversion)/100)*'"+strQty+"',2) AS finalWT,c.strUOM,ROUND(c.dblCostRM*'"+strQty+"',2) "
 					+ "FROM tblbommasterhd a,tblbommasterdtl b,tblproductmaster c,tblproductmaster d "
 					+ "WHERE a.strBOMCode=b.strBOMCode AND b.strChildCode = c.strProdCode AND a.strParentCode=d.strProdCode AND a.strClientCode='"+clientCode+"' "
 					+ " "
