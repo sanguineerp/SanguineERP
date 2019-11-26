@@ -216,6 +216,12 @@
 	<variable name="vTotalWeight" class="java.lang.Double" resetType="Group" resetGroup="ProdSubGroup" calculation="Sum">
 		<variableExpression><![CDATA[$F{dblWeight}]]></variableExpression>
 	</variable>
+	<variable name="totalDisc" class="java.lang.Double" resetType="Group" resetGroup="ProdSubGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{dblDisAmt}]]></variableExpression>
+	</variable>
+	<variable name="grossTotalDisc" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{dblDisAmt}]]></variableExpression>
+	</variable>
 	<group name="ProdSubGroup">
 		<groupExpression><![CDATA[$F{strSubGroupName}]]></groupExpression>
 		<groupHeader>
@@ -369,6 +375,17 @@
 						<font size="9" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{vTotalWeight}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00#">
+					<reportElement x="322" y="0" width="38" height="13" uuid="24582848-e6c5-45be-b8e5-59e31896d884">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<box rightPadding="2"/>
+					<textElement textAlignment="Right">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalDisc}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -1926,7 +1943,7 @@
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="322" y="1" width="1" height="18" uuid="a419fbd6-8eaf-4961-be09-37581338c959">
+				<reportElement x="320" y="1" width="1" height="18" uuid="a419fbd6-8eaf-4961-be09-37581338c959">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
@@ -2020,6 +2037,15 @@
 			<textField>
 				<reportElement positionType="FixRelativeToBottom" x="113" y="251" width="122" height="14" uuid="6e005a42-839c-4f75-88b8-3c4c7e5b27fb"/>
 				<textFieldExpression><![CDATA[$P{strBankIFSC}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#">
+				<reportElement x="321" y="3" width="38" height="15" uuid="85c554cd-eb11-4d18-a6f0-dac1cf78ffd5">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{grossTotalDisc}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

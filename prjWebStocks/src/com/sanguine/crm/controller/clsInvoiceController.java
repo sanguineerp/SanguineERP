@@ -246,6 +246,7 @@ public class clsInvoiceController
 			model.put("againstList", strAgainst);
 
 			Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
+			
 			model.put("settlementList", settlementList);
 
 			Map<String, String> hmCurrency = objCurrencyMasterService.funCurrencyListToDisplay(clientCode);
@@ -297,7 +298,11 @@ public class clsInvoiceController
 		model.put("againstList", strAgainst);
 
 		Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
+		settlementList.put("MultiSettle", "MultiSettle");
 		model.put("settlementList", settlementList);
+        
+		Map<String, String> settleListWithoutMultiSettle = objSettlementService.funGetSettlementComboBox(clientCode);
+		model.put("settleListWithoutMultiSettle", settleListWithoutMultiSettle);
 
 		Map<String, String> hmCurrency = objCurrencyMasterService.funCurrencyListToDisplay(clientCode);
 		if (hmCurrency.isEmpty()) {
@@ -446,7 +451,10 @@ public class clsInvoiceController
 			objHDModel.setDblExtraCharges(objBean.getDblExtraCharges());
 
 			// /********Save Data forDetail in SO***********////
-
+           
+			
+			
+			
 			StringBuilder sqlQuery = new StringBuilder();
 			DecimalFormat decFormat = objGlobalFunctions.funGetDecimatFormat(req);
 
@@ -454,7 +462,7 @@ public class clsInvoiceController
 			Map<String, List<clsInvoiceModelDtl>> hmInvCustDtl = new HashMap<String, List<clsInvoiceModelDtl>>();
 			Map<String, Map<String, clsInvoiceTaxDtlModel>> hmInvCustTaxDtl = new HashMap<String, Map<String, clsInvoiceTaxDtlModel>>();
 			Map<String, List<clsInvoiceProdTaxDtl>> hmInvProdTaxDtl = new HashMap<String, List<clsInvoiceProdTaxDtl>>();
-			List<clsInvoiceDtlBean> listInvDtlBean = objBean.getListclsInvoiceModelDtl();
+			List<clsInvoiceDtlBean> listInvDtlBean =  objBean.getListclsInvoiceModelDtl();
 			Map mapSubTotal=new HashMap<>();
 			double dblSubTotalAmt=0;
 			
@@ -512,7 +520,19 @@ public class clsInvoiceController
 						objInvDtlModel.setStrUOM("");
 						objInvDtlModel.setDblUOMConversion(1);
 					}
+					if(objBean.getStrDiscType().equalsIgnoreCase("Total Disc"))
+			        {
+						 objInvDtl.setDblDisAmt((objInvDtl.getDblUnitPrice() * objInvDtl.getDblQty()  * objBean.getDblDiscount())/100 );
+
+
+						if(objInvDtl.getDblWeight() >0)
+						{
+							 objInvDtl.setDblDisAmt((objInvDtl.getDblUnitPrice() * objInvDtl.getDblQty() * objInvDtl.getDblWeight()  * objBean.getDblDiscount())/100 );
+
+						}
+			        }
 					objInvDtlModel.setDblProdDiscAmount(objInvDtl.getDblDisAmt());
+					
 					List<clsInvoiceProdTaxDtl> listInvProdTaxDtl = null;
 					if (hmInvProdTaxDtl.containsKey(key))
 					{
@@ -580,7 +600,7 @@ public class clsInvoiceController
 					{
 						prodRateForTaxCal = objInvDtl.getDblUnitPrice() * objInvDtl.getDblWeight() * dblCurrencyConv;
 					}*/
-					String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() + ",0,"+objInvDtl.getDblWeight();
+					String prodTaxDtl = objInvDtl.getStrProdCode() + "," + prodRateForTaxCal + "," + objInvDtl.getStrCustCode() + "," + objInvDtl.getDblQty() +","+objInvDtl.getDblDisAmt()+","+objInvDtl.getDblWeight();
 					Map<String, String> hmProdTaxDtl = null;
 					if(strModuleName.equalsIgnoreCase("7-WebBanquet")){
 						hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Banquet", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
@@ -6928,7 +6948,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			bAddress = obj[14].toString() + " " + obj[15].toString();
 			bState = obj[16].toString();
 			bPin = obj[17].toString();
-			objDtlBean.setDblDisAmt(Double.parseDouble(obj[13].toString()));
+			objDtlBean.setDblDisAmt(Double.parseDouble(obj[23].toString()));
 			sAddress = obj[18].toString() + " " + obj[19].toString();
 			sState = obj[20].toString();
 			sPin = obj[21].toString();

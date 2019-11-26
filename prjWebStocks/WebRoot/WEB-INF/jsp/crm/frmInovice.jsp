@@ -14,9 +14,11 @@
 
 
 		var QtyTol=0.00,list=0;	
+		var discType="";
 		
 		$(document).ready(function() 
 		{	
+			discType="";
 			var sgData ;
 			var prodData;
 			var clientCode='<%=session.getAttribute("clientCode").toString()%>';
@@ -838,7 +840,8 @@
 			$("#txtCPODate").focus();
 			return false;  
 		}
-	
+	    
+		
 		if($("#txtSettlementType").val()=="Online Payment")
 		{
 	 		if($("#txtMobileNoForSettlement").val()=="")
@@ -912,6 +915,71 @@
 	    return false;
 	}
 	
+	function funFillSettlementRow() 
+	{
+	
+	    var table = document.getElementById("tblSettlement");
+	    var rowCount = table.rows.length;
+	    var row = table.insertRow(rowCount);
+	    var settleCode=$("#cmbPartSettlement").val();
+	    var  settleDesc="CASh";     
+	    var settlementAmt=$("#txtSettlementAmt").val();
+	  
+		
+	    row.insertCell(0).innerHTML= "<input class=\"Box\" size=\"22%\" name=\"listInvoiceTaxDtl["+(rowCount)+"].strTaxCode\" id=\"txtTaxCode."+(rowCount)+"\" value='"+settleCode+"' >";
+	    row.insertCell(1).innerHTML= "<input class=\"Box\" size=\"22%\" name=\"listInvoiceTaxDtl["+(rowCount)+"].strTaxDesc\" id=\"txtTaxDesc."+(rowCount)+"\" value='"+settleDesc+"'>";		    	    
+	    row.insertCell(2).innerHTML= "<input type=\"number\" step=\"any\" required = \"required\" style=\"text-align: right;\" size=\"15.5%\" name=\"listInvoiceTaxDtl["+(rowCount)+"].strTaxableAmt\" id=\"txtTaxableAmt."+(rowCount)+"\" value="+settlementAmt+">";
+	    row.insertCell(3).innerHTML= '<input type="button" size=\"6%\" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteTaxRow(this)" >';
+	    
+	   /*  funCalSettlementTotal();
+	    funClearFieldsOnTaxTab(); */
+	    
+	    return false;
+	}
+	function funClearFieldsOnSettlementTab()
+	{
+		$("#txtTaxCode").val("");
+		$("#lblTaxDesc").text("");
+		$("#txtTaxableAmt").val("");
+		$("#txtTaxAmt").val("");
+		$("#txtTaxCode").focus();
+	
+	}
+	function funCalSettlementTotal()
+	{
+		var totalTaxAmt=0,totalTaxableAmt=0;
+		var table = document.getElementById("tblTax");
+		var rowCount = table.rows.length;
+		var subTotal=parseFloat($("#txtSubTotlAmt").val());
+		totalTaxableAmt=parseFloat(document.getElementById("txtTaxableAmt."+0).value);
+		for(var i=0;i<rowCount;i++)
+		{
+			
+			//totalTaxableAmt=parseFloat(document.getElementById("txtTaxableAmt."+i).value)+totalTaxableAmt;
+			totalTaxAmt=parseFloat(document.getElementById("txtTaxAmt."+i).value)+totalTaxAmt;
+		}
+		
+		totalTaxableAmt=totalTaxableAmt.toFixed(2);
+		totalTaxAmt=totalTaxAmt.toFixed(2);
+		var grandTotal=parseFloat(subTotal)+parseFloat(totalTaxAmt);
+		grandTotal=grandTotal.toFixed(2);
+		$("#lblTaxableAmt").text(totalTaxableAmt);
+		$("#lblTaxTotal").text(totalTaxAmt);			
+// 		$("#lblPOGrandTotal").text(grandTotal);
+// 		var taxAmt=$("#txtPOTaxAmt").val();
+		var disAmt = $('#txtDiscount').val();
+		var extraCharge = $('#txtExtraCharges').val();
+		var finalAmt=parseFloat(subTotal)+parseFloat(extraCharge)+parseFloat(totalTaxAmt)-disAmt;
+		$("#txtFinalAmt").val(finalAmt.toFixed(maxQuantityDecimalPlaceLimit));
+	}
+	
+	function funDeleteTaxRow(obj) 
+	{
+	    var index = obj.parentNode.parentNode.rowIndex;
+	    var table = document.getElementById("tblSettlement");
+		table.deleteRow(index);
+		//funCalSettlementTotal();
+	}
 	
 
 	function btnAdd_onclick()
@@ -1002,11 +1070,28 @@
 	    var strInvoiceable = $("#cmbInvoiceable").val();
 	    var strRemarks=$("#txtRemarks").val();
 	    var prodDisPer=$("#txtProdDisper").val();
+	    if(prodDisPer > 0)
+	    {
+	    	if(	discType == "Total Disc")
+			{
+				
+				alert('You have already  given Total Discount');
+	 			return false;  
+				
+			}
+	    	else
+	    	{
+	    		discType="";
+		    	discType="Item Wise disc";
+		    	$("#hidDiscType").val(discType);
+	    	}	
+	    	
+	    }	
 	    
 	    var prevInvCode=$("#hidPrevInvCode").val();
 	    var prevProdrice=$("#hidPreInvPrice").val();
         var unitprice=$("#hidUnitPrice").val();
-       unitprice=parseFloat(unitprice).toFixed(maxQuantityDecimalPlaceLimit);
+        unitprice=parseFloat(unitprice).toFixed(maxQuantityDecimalPlaceLimit);
 	  
        var totalPrice=unitprice*dblQty;
 	   if(dblTotalWeight>0){
@@ -1019,9 +1104,9 @@
        var strCustCode=$("#txtCustCode").val();
        var strSOCode="";
       
-	   row.insertCell(0).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"8%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
+	    row.insertCell(0).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdCode\" readonly=\"readonly\" class=\"Box txtProdCode\" size=\"8%\" id=\"txtProdCode."+(rowCount)+"\" value='"+strProdCode+"' />";		  		   	  
 	    row.insertCell(1).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdName\" readonly=\"readonly\" class=\"Box\" size=\"40%\" id=\"txtProdName."+(rowCount)+"\" value='"+strProdName+"'/>";
-	   row.insertCell(2).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblQty\" type=\"text\"  required = \"required\" style=\"text-align: right;\" size=\"2%\"  class=\"decimal-places inputText-Auto  txtQty\" id=\"txtQty."+(rowCount)+"\" value="+dblQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
+	    row.insertCell(2).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblQty\" type=\"text\"  required = \"required\" style=\"text-align: right;\" size=\"2%\"  class=\"decimal-places inputText-Auto  txtQty\" id=\"txtQty."+(rowCount)+"\" value="+dblQty+" onblur=\"Javacsript:funUpdatePrice(this)\">";
 	    row.insertCell(3).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblWeight\" type=\"text\"  required = \"required\" style=\"text-align: right;\" size=\"2%\" class=\"decimal-places inputText-Auto\" id=\"txtWeight."+(rowCount)+"\" value="+dblWeight+" >";
 	    row.insertCell(4).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblTotalWeight\" readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"12%\" id=\"dblTotalWeight."+(rowCount)+"\"   value='"+dblTotalWeight+"'/>";
 	    row.insertCell(5).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].dblUnitPrice\" readonly=\"readonly\" class=\"Box txtUnitprice\" style=\"text-align: right;\" \size=\"12.9%\" id=\"unitprice."+(rowCount)+"\"   value='"+unitprice+"'/>";
@@ -1037,8 +1122,8 @@
 	 	row.insertCell(13).innerHTML= '<input  class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteRow(this)">';		    
 	 	row.insertCell(14).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strCustCode\" type=\"text\"    class=\"Box\" size=\"7%\" id=\"txtCustCode."+(rowCount)+"\" value="+strCustCode+" >";
 	 	row.insertCell(15).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strSOCode\" type=\"text\"    class=\"Box\" size=\"13%\" id=\"txtSOCOde."+(rowCount)+"\" value="+strSOCode+" >";
-	 	 row.insertCell(16).innerHTML= "<input readonly=\"readonly\" class=\"Box prevInvCode\" style=\"text-align: right;\" \size=\"3.9%\" id=\"prevInvCode."+(rowCount)+"\"   value='"+prevInvCode+"'/>";
-	 	 row.insertCell(17).innerHTML= "<input readonly=\"readonly\" class=\"Box prevProdrice\" style=\"text-align: right;\" \size=\"3.9%\" id=\"prevProdrice."+(rowCount)+"\"   value='"+prevProdrice+"'/>";
+	 	row.insertCell(16).innerHTML= "<input readonly=\"readonly\" class=\"Box prevInvCode\" style=\"text-align: right;\" \size=\"3.9%\" id=\"prevInvCode."+(rowCount)+"\"   value='"+prevInvCode+"'/>";
+	 	row.insertCell(17).innerHTML= "<input readonly=\"readonly\" class=\"Box prevProdrice\" style=\"text-align: right;\" \size=\"3.9%\" id=\"prevProdrice."+(rowCount)+"\"   value='"+prevProdrice+"'/>";
 // 	 	 row.insertCell(18).innerHTML= "<input name=\"listclsInvoiceModelDtl["+(rowCount)+"].strProdType\" type=\"hidden\" size=\"0%\" id=\"txtProdTpye."+(rowCount)+"\" value='"+strProdType+"'/>";
 		     list++; 
 	 	 QtyTol+=parseFloat(dblQty);
@@ -1107,11 +1192,25 @@
 	
 	function funDeleteRow(obj) 
 	{
-		
-	    var index = obj.parentNode.parentNode.rowIndex;
-	  
+		var index = obj.parentNode.parentNode.rowIndex;
 	    var table = document.getElementById("tblProdDet");
 	    table.deleteRow(index);
+		var discAmt=0;
+		var count=0;
+		$('#tblProdDet tr').each(function()
+	    {
+		    if(discAmt=$(this).find('input')[4].value > 0)// `this` is TR DOM element
+			{
+		    	count++; 
+			}
+		});
+		if(!(count >= 1))
+		{
+			
+		   discType=""; 
+		   $("#txtDiscount").val(0);
+		}
+	   
 	}
 	
 	
@@ -2556,9 +2655,58 @@ function funSetTax(code)
 	        }
       });
 }
+
 	function funCalculateDiscount()
 	{
 		
+		if($("#txtDiscountPer").val() > 0)
+		{
+			if(	discType=="Item Wise disc")
+			{
+				
+				alert('You have already  given ItemWise Discount ');
+				$("#txtDiscountPer").val(0);
+	 			return false;  
+				
+			}
+			else
+			{
+				discType="";
+				var subtotal=$("#txtSubTotlAmt").val();
+				var discPer=$("#txtDiscountPer").val();
+				var discAmount=((subtotal * discPer)/100).toFixed(maxQuantityDecimalPlaceLimit);
+				$("#txtDiscount").val(discAmount);
+				discType="Total Disc";
+				$("#hidDiscType").val(discType);
+			}	
+			
+		}	
+		
+	}
+	function funCalculatePerDiscount()
+	{
+		
+		if($("#txtDiscount").val() > 0)
+		{
+			if(	discType=="Item Wise disc")
+			{
+				alert('You have already  given ItemWise Discount ');
+	 			return false;  
+				
+			}
+			else
+			{
+				discType="";
+				var subtotal=$("#txtSubTotlAmt").val();
+				var discAmount=$("#txtDiscount").val();
+				var discPer=((discAmount / subtotal)*100);
+				$("#txtDiscountPer").val(discPer);
+				discType="Total Disc";
+				$("#hidDiscType").val(discType);
+				
+			}
+			
+		}	
 		
 	}
 	
@@ -2566,41 +2714,52 @@ function funChangeCombo() {
 		
 		// Ajax call loadSettlementMasterData  --> pass settlement code
 		var code=$("#cmbSettlement").val();
-		var searchurl=getContextPath()+"/loadSettlementMasterData.html?code="+code;
-		 $.ajax({
-			        type: "GET",
-			        url: searchurl,
-			        dataType: "json",
-			        success: function(response)
-			        {
-			        	if(response.strSettlementCode=='Invalid Code')
-			        	{
-			        		alert("Settlement type not found");
-			        	}
-			        	else
-			        	{
-				        	$("#txtSettlementType").val(response.strSettlementType);
-				        	//alert($("#txtSettlementType").val());
-			        	}
-					},
-					error: function(jqXHR, exception) {
-			            if (jqXHR.status === 0) {
-			                alert('Not connect.n Verify Network.');
-			            } else if (jqXHR.status == 404) {
-			                alert('Requested page not found. [404]');
-			            } else if (jqXHR.status == 500) {
-			                alert('Internal Server Error [500].');
-			            } else if (exception === 'parsererror') {
-			                alert('Requested JSON parse failed.');
-			            } else if (exception === 'timeout') {
-			                alert('Time out error.');
-			            } else if (exception === 'abort') {
-			                alert('Ajax request aborted.');
-			            } else {
-			                alert('Uncaught Error.n' + jqXHR.responseText);
-			            }		            
-			        }
-		      });
+		if(code!="MultiSettle")
+		{
+			 $("#tab4").prop("disabled", false);
+			 document.getElementById("tab4").style.visibility = "hidden";  
+			var searchurl=getContextPath()+"/loadSettlementMasterData.html?code="+code;
+			 $.ajax({
+				        type: "GET",
+				        url: searchurl,
+				        dataType: "json",
+				        success: function(response)
+				        {
+				        	if(response.strSettlementCode=='Invalid Code')
+				        	{
+				        		alert("Settlement type not found");
+				        	}
+				        	else
+				        	{
+					        	$("#txtSettlementType").val(response.strSettlementType);
+					        	//alert($("#txtSettlementType").val());
+				        	}
+						},
+						error: function(jqXHR, exception) {
+				            if (jqXHR.status === 0) {
+				                alert('Not connect.n Verify Network.');
+				            } else if (jqXHR.status == 404) {
+				                alert('Requested page not found. [404]');
+				            } else if (jqXHR.status == 500) {
+				                alert('Internal Server Error [500].');
+				            } else if (exception === 'parsererror') {
+				                alert('Requested JSON parse failed.');
+				            } else if (exception === 'timeout') {
+				                alert('Time out error.');
+				            } else if (exception === 'abort') {
+				                alert('Ajax request aborted.');
+				            } else {
+				                alert('Uncaught Error.n' + jqXHR.responseText);
+				            }		            
+				        }
+			      });
+
+		
+		}
+		else
+		{
+			document.getElementById("tab4").style.visibility = "visible";  
+		}	
 	}
 	
 	function funOnChangeCurrency()
@@ -2639,6 +2798,8 @@ function funChangeCombo() {
 								style="width: 100px; padding-left: 55px">Invoice</li>
 							<li data-state="tab2" style="width: 100px; padding-left: 55px">Address</li>
 							<li data-state="tab3" style="width: 100px; padding-left: 55px">Taxes</li>
+							<li data-state="tab4" style="width: 100px; padding-left: 55px">Settlement</li>
+							
 						</ul>
 
 						<div id="tab1" class="tab_content">
@@ -2944,14 +3105,14 @@ function funChangeCombo() {
 								<td><s:textarea id="txtDeliveryNote" path="strDeliveryNote" Cols="50" rows="3" style="width:80%" /></td>
 								
 								 <td><label >Discount Per</label></td>	
-								 <td ><s:input type="text" id="txtDiscountPer" path="dblDiscount" value="0" cssClass="decimal-places-amt numberField" onkeypress="funCalculateDiscount();" />
+								 <td ><s:input type="text" id="txtDiscountPer" path="dblDiscount" value="0" cssClass="decimal-places-amt numberField" onblur="funCalculateDiscount();" />
 								 </td>
 							</tr>	
 							<tr>
 								<td><label>Supplier's Ref.</label></td>
 								<td><s:input id="txtSupplierRef" path="strSupplierRef" type="text" 	class="BoxW116px" /></td>
 								<td><label >Discount Amount</label></td>	
-								<td ><s:input type="text" id="txtDiscount" path="dblDiscountAmt" value="0" cssClass="decimal-places-amt numberField"  /></td>
+								<td ><s:input type="text" id="txtDiscount" path="dblDiscountAmt" value="0" cssClass="decimal-places-amt numberField"  onblur="funCalculatePerDiscount();" /></td>
 							</tr>
 							
 							<tr>
@@ -3112,6 +3273,62 @@ function funChangeCombo() {
 							
 						</div>
 						
+						<div id="tab4" class="tab_content">
+							<br>
+							<br>
+							<%-- <table class="transTable">
+								<tr>									
+									<td style="width:100px"><label>Settlement</label>
+								<td><s:select id="cmbPartSettlement" path=""
+											items="${settleListWithoutMultiSettle}" cssClass="BoxW124px" 
+											 /></td>
+								<td><label>Settlement Amount</label></td>
+									<td>
+										<input type="number" style="text-align: right;" step="any" id="txtSettlementAmt" class="BoxW116px"/>
+									</td>
+															
+									<td>
+										<input type="button" id="btnAddSettlement" value="Add" class="smallButton" onclick="funFillSettlementRow()"/>
+									</td>
+								</tr>
+							</table> --%>
+							<br>
+							<table style="width: 80%;" class="transTablex col5-center">
+								<tr>
+									<td style="width:10%">Settlement Code</td>
+									<td style="width:10%">Settlement Name</td>
+									<td style="width:10%">Settlement Amount</td>
+							<!-- 		<td style="width:10%">Tax Amount</td> -->
+									<td style="width:5%">Delete</td>
+								</tr>							
+							</table>
+							<div style="background-color: #a4d7ff;border: 1px solid #ccc;display: block; height: 150px;
+			    				margin: auto;overflow-x: hidden; overflow-y: scroll;width: 80%;">
+									<table id="tblSettlement" class="transTablex col5-center" style="width: 100%;">
+									<tbody>    
+											<col style="width:10%"><!--  COl1   -->
+											<col style="width:10%"><!--  COl2   -->
+											<col style="width:10%"><!--  COl3   -->
+										<%-- 	<col style="width:10%"><!--  COl4   --> --%>
+											<col style="width:6%"><!--  COl5   -->									
+									</tbody>							
+									</table>
+							</div>			
+						<br>
+						<table id="tblSettlementTotal" class="masterTable">
+							<tr>
+								<td width="130px"><label>Settlement Amt Total</label></td>
+								<td><label id="lblSettlementAmt"></label></td>
+								
+								
+							</tr>
+							
+							
+						</table>
+							
+						</div>
+						
+						
 					</div>
 				</td>
 			</tr>
@@ -3126,6 +3343,7 @@ function funChangeCombo() {
 		</div>
 		<br><br>
 		<s:input type="hidden" id="hidProdType" path="strProdType"></s:input>
+		<s:input type="hidden" id="hidDiscType" path="strDiscType"></s:input>
 		
 		<input type="hidden" id="hidPrevInvCode" ></input>	
 			<input type="hidden" id="hidPreInvPrice" ></input>

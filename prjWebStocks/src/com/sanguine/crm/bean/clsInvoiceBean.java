@@ -163,6 +163,8 @@ public class clsInvoiceBean {
 
 	private String strInvoiceDate;
 	
+	private String strDiscType;
+	
     private List<clsInvoiceBean> listMultipleSOCodes =new ArrayList<>();
     
  // Getter And Setter
@@ -835,6 +837,14 @@ public class clsInvoiceBean {
 
 	public void setDbltTaxableAmt(double dbltTaxableAmt) {
 		this.dbltTaxableAmt = dbltTaxableAmt;
+	}
+
+	public String getStrDiscType() {
+		return strDiscType;
+	}
+
+	public void setStrDiscType(String strDiscType) {
+		this.strDiscType = strDiscType;
 	}
 
 	
