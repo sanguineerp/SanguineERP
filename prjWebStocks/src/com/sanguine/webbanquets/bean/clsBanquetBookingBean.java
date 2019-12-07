@@ -64,6 +64,9 @@ public class clsBanquetBookingBean{
 	List<clsBanquetBookingModelDtl> listStaffCatDtl=new ArrayList<clsBanquetBookingModelDtl>();
 	List<clsBanquetBookingModelDtl> listMenuItemDtl=new ArrayList<clsBanquetBookingModelDtl>();
 	
+	List<clsBanquetBookingModelDtl> listExternalServices=new ArrayList<clsBanquetBookingModelDtl>();
+	
+	
 
 	//private List<clsclsBanquetBookingBeanDtlModel> listclsclsBanquetBookingBeanDtlModel
 //Setter-Getter Methods
@@ -261,6 +264,13 @@ public class clsBanquetBookingBean{
 	}
 	public void setStrBanquetCode(String strBanquetCode) {
 		this.strBanquetCode = strBanquetCode;
+	}
+	public List<clsBanquetBookingModelDtl> getListExternalServices() {
+		return listExternalServices;
+	}
+	public void setListExternalServices(
+			List<clsBanquetBookingModelDtl> listExternalServices) {
+		this.listExternalServices = listExternalServices;
 	}
 
 	/*public List<clsclsBanquetBookingBeanDtlModel> getclsclsBanquetBookingBeanDtlModel(){

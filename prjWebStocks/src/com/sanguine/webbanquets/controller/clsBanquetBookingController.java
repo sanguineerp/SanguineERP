@@ -20,16 +20,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ibm.icu.text.DecimalFormat;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.model.clsCompanyMasterModel;
-import com.sanguine.model.clsSettlementMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.webbanquets.bean.clsBanquetBookingBean;
 import com.sanguine.webbanquets.model.clsBanquetBookingModelDtl;
 import com.sanguine.webbanquets.model.clsBanquetBookingModelHd;
-import com.sanguine.webbanquets.model.clsFunctionMasterModel;
 import com.sanguine.webbanquets.service.clsBanquetBookingService;
-import com.sanguine.webpms.bean.clsReservationBean;
-import com.sanguine.webpms.model.clsPropertySetupHdModel;
 
 @Controller
 public class clsBanquetBookingController{
@@ -121,10 +117,11 @@ public class clsBanquetBookingController{
 					clsBanquetBookingModelDtl objDtl=list.get(i);
 					if(objDtl.getStrType()!=null)
 					{
-						objDtl.setStrType("Service");
+						objDtl.setStrType("In Service");
 						objDtl.setDblDocQty(1);
 						objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 						objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
+						objDtl.setStrVendorCode("");
 						listBookingDtl.add(objDtl);	
 					}				
 				}				
@@ -141,6 +138,7 @@ public class clsBanquetBookingController{
 					objDtl.setStrType("Equipment");
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 					objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
+					objDtl.setStrVendorCode("");
 					listBookingDtl.add(objDtl);	
 					}
 				}	
@@ -155,6 +153,7 @@ public class clsBanquetBookingController{
 					{
 					objDtl.setStrType("Staff");
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
+					objDtl.setStrVendorCode("");
 					listBookingDtl.add(objDtl);					
 					}
 				}				
@@ -170,8 +169,23 @@ public class clsBanquetBookingController{
 					objDtl.setStrType("Menu");
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 					objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
+					objDtl.setStrVendorCode("");
 					listBookingDtl.add(objDtl);					
 					}
+				}				
+			}
+			if(objBean.getListExternalServices()!=null && !objBean.getListExternalServices().isEmpty())
+			{
+				List<clsBanquetBookingModelDtl>list=objBean.getListExternalServices();
+				for(int i=0;i<list.size();i++)
+				{
+					clsBanquetBookingModelDtl objDtl=list.get(i);
+						objDtl.setStrType("Ex Service");
+						objDtl.setDblDocQty(1);
+						objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
+						objDtl.setDblDocTotalAmt(objDtl.getDblDocQty() * objDtl.getDblDocRate());
+						listBookingDtl.add(objDtl);	
+									
 				}				
 			}
 			if(objBean.getStrBanquetCode()!=null)
@@ -189,6 +203,7 @@ public class clsBanquetBookingController{
 					objDtl.setStrDocName(obj[1].toString());
 					objDtl.setStrBookingDate(objHdModel.getDteBookingDate());
 					objDtl.setDblDocTotalAmt(Double.parseDouble(obj[0].toString()));
+					objDtl.setStrVendorCode("");
 					listBookingDtl.add(objDtl);	
 					
 				}
@@ -298,7 +313,7 @@ public class clsBanquetBookingController{
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String 	 sql="select  a.strServiceCode,a.strServiceName ,s.dblRate, if(ifnull(b.strDocNo,'')='','N','Y')"
 					+ " from tblservicemaster s , tblfunctionservice a left outer join tblbqbookingdtl b on a.strServiceCode=b.strDocNo and b.strBookingNo='"+bookingCode+"'"
-					+ "where  a.strFunctionCode='"+funCode+"' and s.strServiceCode=a.strServiceCode  and s.strClientCode='"+clientCode+"' group by  a.strServiceCode;";
+					+ "where  a.strFunctionCode='"+funCode+"' and s.strServiceCode=a.strServiceCode  and s.strClientCode='"+clientCode+"' and s.strServiceType='Internal' group by  a.strServiceCode;";
 			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
 			}
 		catch(Exception e)
@@ -307,6 +322,27 @@ public class clsBanquetBookingController{
 			}
 		return list;
 	}
+	
+	@RequestMapping(value = "/loadBookingExternalServiceData", method = RequestMethod.GET)
+	public @ResponseBody List funLoadBookingExternalServiceData(@RequestParam("functionCode") String funCode,@RequestParam("bookingCode") String  bookingCode, HttpServletRequest req)
+	{
+		List list =null;
+		try{
+			String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
+			String clientCode = req.getSession().getAttribute("clientCode").toString();
+			String 	 sql="select a.strDocNo,a.strDocName,a.dblDocRate,a.strVendorCode, b.strPName "
+					+ " from tblbqbookingdtl a ,`"+webStockDB+"`.tblpartymaster b "
+					+ "where a.strVendorCode=b.strPCode and  a.strBookingNo='"+bookingCode+"' and a.strType='Ex Service';";
+			
+			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
+			}
+		catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		return list;
+	}
+
 	
 	@RequestMapping(value = "/loadPropertyCode", method = RequestMethod.GET)
 	public @ResponseBody List funLoadPropertyCode(@RequestParam("docCode") String docCode,HttpServletRequest req)
@@ -332,7 +368,7 @@ public class clsBanquetBookingController{
 		try{
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String 	 sql="select a.strServiceCode,a.strServiceName,b.dblRate from tblfunctionservice a,tblservicemaster b where "
-					+ " a.strServiceCode=b.strServiceCode and   a.strFunctionCode='"+funCode+"' and a.strClientCode='"+clientCode+"' and a.strApplicable='Y' ";
+					+ " a.strServiceCode=b.strServiceCode and   a.strFunctionCode='"+funCode+"' and a.strClientCode='"+clientCode+"' and a.strApplicable='Y' and b.strServiceType='Internal' ";
 			list= objGlobalFunctionsService.funGetDataList(sql, "sql");		
 			}
 		catch(Exception e)
@@ -342,7 +378,7 @@ public class clsBanquetBookingController{
 		return list;
 	}
 	
-	@RequestMapping(value = "/LoadBanquetRate", method = RequestMethod.GET)
+	@RequestMapping(value = "/loadBanquetRate", method = RequestMethod.GET)
 	public @ResponseBody List funLoadBanquetRate(@RequestParam("BanquetCode") String banquetCode,HttpServletRequest req)
 	{
 		List list =null;
@@ -419,4 +455,5 @@ public class clsBanquetBookingController{
 		return condition;
 	}
 	  
+	
 }

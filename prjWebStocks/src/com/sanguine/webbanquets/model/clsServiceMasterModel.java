@@ -70,7 +70,8 @@ public class clsServiceMasterModel implements Serializable{
 	@Column(name = "strTaxIndicator", nullable = false)
 	private String strTaxIndicator;
 	
-	
+	@Column(name="strServiceType")
+	private String strServiceType;
 	
 
 //Setter-Getter Methods
@@ -188,6 +189,14 @@ public long getIntSId() {
 		else{
 			return defaultValue;
 		}
+	}
+
+	public String getStrServiceType() {
+		return strServiceType;
+	}
+
+	public void setStrServiceType(String strServiceType) {
+		this.strServiceType = strServiceType;
 	}
 
 }

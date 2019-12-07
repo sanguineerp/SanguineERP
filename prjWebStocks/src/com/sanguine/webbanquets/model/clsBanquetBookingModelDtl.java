@@ -41,6 +41,9 @@ public class clsBanquetBookingModelDtl  implements Serializable {
 		@Column(name="dblDocTaxAmt")
 		private double dblDocTaxAmt;
 
+		@Column(name="strVendorCode")
+		private String strVendorCode;
+		
 		public String getStrType() {
 			return strType;
 		}
@@ -111,6 +114,14 @@ public class clsBanquetBookingModelDtl  implements Serializable {
 
 		public void setDblDocTaxAmt(double dblDocTaxAmt) {
 			this.dblDocTaxAmt = dblDocTaxAmt;
+		}
+
+		public String getStrVendorCode() {
+			return strVendorCode;
+		}
+
+		public void setStrVendorCode(String strVendorCode) {
+			this.strVendorCode = strVendorCode;
 		}
 
 }

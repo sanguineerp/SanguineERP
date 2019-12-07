@@ -3541,6 +3541,12 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		funExecuteBanquetQuery(sql);
 		
+		sql="ALTER TABLE `tblservicemaster` ADD COLUMN `strServiceType` VARCHAR(10) NOT NULL  DEFAULT ''  AFTER `strClientCode` ;";
+		funExecuteBanquetQuery(sql);
+		
+		sql="ALTER TABLE `tblbqbookingdtl` ADD COLUMN `strVendorCode` VARCHAR(10) NOT NULL DEFAULT '' AFTER `dblDocTaxAmt`;";
+		funExecuteBanquetQuery(sql);
+		
 		
 		//treeMaster Banquets All forms
 		

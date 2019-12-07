@@ -5791,6 +5791,28 @@ public class clsSearchFormController {
 				break;
 			}
 
+			case "BanquetExternalServices": {
+				columnNames = "strServiceCode,strServiceName";
+				tableName = " clsServiceMasterModel where strClientCode='" + clientCode + "' and strServiceType='External' ";
+				listColumnNames = "Service Code,Service Name";
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				idColumnName = "strServiceCode";
+				searchFormTitle = "Service Master";
+							 
+				break;
+			}
+			
+			case "Banquetsuppcode": {
+				columnNames = "strPCode,strPName,strMobile,strEmail,strContact";
+				tableName = "select strPCode,strPName,strMobile,strEmail,strContact from "+webStockDB+".tblpartymaster  "
+						+ "where strClientCode='" + clientCode + "' and strPType ='Supp' or strPType='' ";
+				listColumnNames = "Vendor Code,Vendor Name,Mobile No,Email-id,Contact Person";
+				idColumnName = "strPCode";
+				searchFormTitle = "Vendor Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
 		}
 
 		mainMap.put("columnNames", columnNames);

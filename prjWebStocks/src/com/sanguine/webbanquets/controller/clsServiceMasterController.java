@@ -141,6 +141,7 @@ public class clsServiceMasterController{
 	    objModel.setStrPropertyCode(propertyCode);
 	    objModel.setDblRate(objBean.getDblRate());
 	    objModel.setStrTaxIndicator(objGlobal.funIfNull(objBean.getStrTaxIndicator(), "", objBean.getStrTaxIndicator()));
+	    objModel.setStrServiceType(objBean.getStrServiceType());  
 		return objModel;
 
 	}
