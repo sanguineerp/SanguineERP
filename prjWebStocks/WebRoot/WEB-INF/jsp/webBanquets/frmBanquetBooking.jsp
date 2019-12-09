@@ -884,6 +884,15 @@ function funCreateNewCustomer(){
 	    
 	}
 	
+	function funfillBanquetRow(ItemCode,ItemName,ItemRate)
+	{
+		$("#txtBanquetCode").val(ItemCode);
+		$("#txtBanquetRate").val(ItemRate);
+		$("#lblBanquetName").text(ItemName);
+		
+		
+	}
+	
 	function funfillExternalServicesRow(vendorName,vendorCode,ServiceName,serviceCode,dblRate)
 	{
 		if(funDuplicateServices(ServiceName))
@@ -1039,6 +1048,10 @@ function funCreateNewCustomer(){
 		{
 			funfillMenuItemDtlRow(strDocNo,strDocName,dblDocRate,dblDocQty);	
 		}
+		else if(strType =='Banquet')
+		{
+			funfillBanquetRow(strDocNo,strDocName,dblDocRate);	
+		}
 		
 	}
 	 function  funGetDate(date) {
@@ -1159,10 +1172,11 @@ function funCreateNewCustomer(){
    			gflag=false;
    			var fromTime=$('#txtFromTime').val();
    			var fromDate=$('#txtFromDate').val();   			
+   			var locName=$('#lblAreaCode').text();   	
    			
 			$.ajax({
 				type : "GET",
-				url : getContextPath()+ "/checkBooking.html?fromTime=" + fromTime+"&fromDate="+fromDate,
+				url : getContextPath()+ "/checkBooking.html?fromTime=" + fromTime+"&fromDate="+fromDate+"&locName="+locName,
 				dataType : "json",
 				success : function(response){
 					if(response==false)
@@ -1448,6 +1462,7 @@ function funCreateNewCustomer(){
 			else if($("#txtBanquetCode").val().trim().length==0)
 			{
 				alert("Please Enter Banquet Code!!");
+				$("#txtBanquetCode").focus();
 				flag=false;
 			}
 			else if($('#txtFromDate').val()>$('#txtToDate').val())
@@ -1541,7 +1556,17 @@ function funCreateNewCustomer(){
 	    	
 	    	
 		}
-		
+		function funCheckLocation(){
+			
+			var flag=true;
+			if($("#txtAreaCode").val().trim().length==0)
+			{
+				alert("Select Area  ");	
+				$("#txtAreaCode").focus();
+				 flag=false;
+			}	
+			return flag;
+		} 
 		
 		
 		/* $(document).ready(function(){
@@ -1620,7 +1645,7 @@ function funCreateNewCustomer(){
 				<tr>
 					<td><label>From Date</label></td>
 					<td><s:input type="text" id="txtFromDate" path="dteFromDate"
-							cssClass="calenderTextBox" onchange="funChangeArrivalDate();funCheckBooking;" onblur="funCheckBooking();"/></td>
+							cssClass="calenderTextBox" onchange="funChangeArrivalDate();funCheckBooking;" onblur="funCheckBooking();" onclick= " return funCheckLocation();" /></td>
 
 					<!-- onchange="funChangeArrivalDate();"  -->
 					<td><label>To Date</label></td>

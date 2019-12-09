@@ -432,20 +432,25 @@ public class clsBanquetBookingController{
 	
 	
 	@RequestMapping(value = "/checkBooking", method = RequestMethod.GET)
-	public @ResponseBody boolean funCheckBooking(@RequestParam("fromTime") String fromTime,@RequestParam("fromDate") String fromDate,HttpServletRequest req)
+	public @ResponseBody boolean funCheckBooking(@RequestParam("fromTime") String fromTime,@RequestParam("fromDate") String fromDate,@RequestParam("locName") String locName,HttpServletRequest req)
 	{
+		String webStockDB=req.getSession().getAttribute("WebStockDB").toString();
 		List list =null;		
 		boolean condition = false;		
 		try{
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
-			String sqlCheck = "select a.strBookingNo from tblbqbookinghd a "
+			String sqlCheck = "select a.strBookingNo,b.strLocName from tblbqbookinghd a ,"+webStockDB+".tbllocationmaster b "
 					+ "where '"+objGlobalFunctions.funGetDate("yyyy-MM-dd", fromDate)+"' between Date(a.dteFromDate) and Date(a.dteToDate) "
-					+ "AND '"+fromTime+"' between a.tmeFromTime and a.tmeToTime and a.strClientCode='"+clientCode+"'";
+					+ "AND '"+fromTime+"' between a.tmeFromTime and a.tmeToTime and a.strClientCode='"+clientCode+"'  AND a.strAreaCode=b.strLocCode";
 			
 			List listAudit = objGlobalFunctionsService.funGetListModuleWise(sqlCheck, "sql");
 			if(!listAudit.isEmpty())
 			{
-				condition=true;
+				Object[] obj = (Object[])listAudit.get(0);	
+				if(locName.equalsIgnoreCase(obj[1].toString()))
+				{
+					condition=true;
+				}
 			}
 		}
 		catch(Exception e)
