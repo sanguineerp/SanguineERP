@@ -592,6 +592,7 @@
 					<value>com.sanguine.webbanquets.model.clsBanquetWeekendMasterModel</value>
 					<value>com.sanguine.webbanquets.model.clsBanquetMasterModel</value>
 					<value>com.sanguine.webbanquets.model.clsBanquetTypeMasterModel</value>
+					<value>com.sanguine.webbanquets.model.clsBanquetQuotationModelHd</value>
 					
 						
 				</list>

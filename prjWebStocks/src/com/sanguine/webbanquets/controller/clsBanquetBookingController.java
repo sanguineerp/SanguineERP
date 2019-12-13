@@ -1,11 +1,25 @@
 package com.sanguine.webbanquets.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +34,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ibm.icu.text.DecimalFormat;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.model.clsCompanyMasterModel;
+import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.webbanquets.bean.clsBanquetBookingBean;
+import com.sanguine.webbanquets.bean.clsFunctionProspectusBean;
 import com.sanguine.webbanquets.model.clsBanquetBookingModelDtl;
 import com.sanguine.webbanquets.model.clsBanquetBookingModelHd;
+import com.sanguine.webbanquets.model.clsBanquetQuotationModelHd;
 import com.sanguine.webbanquets.service.clsBanquetBookingService;
+import com.sanguine.webbanquets.service.clsBanquetQuotationService;
 
 @Controller
 public class clsBanquetBookingController{
@@ -41,7 +59,8 @@ public class clsBanquetBookingController{
 	@Autowired
 	private clsGlobalFunctions objGlobalFunctions;
 
-
+	@Autowired
+	private clsBanquetQuotationService objBanquetQuotationService;
 //Open BanquetBooking
 	
 	DecimalFormat df= new DecimalFormat("#.##");
@@ -85,6 +104,19 @@ public class clsBanquetBookingController{
 			return objHDModel;
 	}
 
+	@RequestMapping(value = "/loadBanquetQuotation", method = RequestMethod.GET)
+	public @ResponseBody clsBanquetQuotationModelHd funBanquetQuotationHd(@RequestParam("quotationCode") String bookingCode,HttpServletRequest request){
+		
+		String sql="";
+			String clientCode=request.getSession().getAttribute("clientCode").toString();
+			String userCode=request.getSession().getAttribute("usercode").toString();
+			clsBanquetQuotationModelHd objHDModel=objBanquetQuotationService.funGetQuotationData(bookingCode, clientCode);
+			if (null == objHDModel) {
+				objHDModel = new clsBanquetQuotationModelHd();
+				objHDModel.setStrQuotationNo("Invalid Code");
+			}
+			return objHDModel;
+	}
 
 
 //Save or Update BanquetBooking
@@ -272,9 +304,9 @@ public class clsBanquetBookingController{
 		}
 		else // Update
 		{
-			objBanquetBookingService.funDeleteRecord("delete from clsBanquetBookingModelHd where strBookingNo='" + objBean.getStrBookingNo() + "'  and strClientCode='" + clientCode + "'","hql");
+			/*objBanquetBookingService.funDeleteRecord("delete from clsBanquetBookingModelHd where strBookingNo='" + objBean.getStrBookingNo() + "'  and strClientCode='" + clientCode + "'","hql");
 			objBanquetBookingService.funDeleteRecord("delete from tblbqbookingdtl  where strBookingNo='" + objBean.getStrBookingNo() + "'  and strClientCode='" + clientCode + "';","sql");
-		
+		*/
 			objHDModel.setStrBookingNo(objBean.getStrBookingNo());
 			
 		}
@@ -459,6 +491,7 @@ public class clsBanquetBookingController{
 			}
 		return condition;
 	}
-	  
+	
+	
 	
 }

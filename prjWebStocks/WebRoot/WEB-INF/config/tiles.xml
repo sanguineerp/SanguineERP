@@ -5259,7 +5259,15 @@
 	  </definition>
 	  
 	  
-	  
+	  <definition name="frmBanquetQuotation" extends="base.definition">
+		   <put-attribute name="title" value="Banquet Quotation" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetQuotation.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBanquetQuotation_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Banquet Quotation"  ></put-attribute>
+	  	 <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetQuotation.jsp" ></put-attribute>
+	  </definition>
 
 	  
 <!-- 	End Of WebBanquet Tiles Entry -->

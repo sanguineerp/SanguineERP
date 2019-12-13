@@ -46,11 +46,19 @@ public class clsFunctionProspectusBean{
 	
 	private String strServiceType;
 	
+	public double getDblTotal() {
+		return dblTotal;
+	}
+	public void setDblTotal(double dblTotal) {
+		this.dblTotal = dblTotal;
+	}
 	private String strService;
 	
 	private List listOfServices;
 
 	private String strQty;
+	
+	private double dblTotal;
 	
 //Setter-Getter Methods
 	public String getStrBookingNo(){

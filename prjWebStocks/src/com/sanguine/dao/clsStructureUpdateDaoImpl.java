@@ -2156,7 +2156,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+" ('frmWebClubFacilityMaster', 'Facility Master', 'Master', 1, 'M', 1, 3, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmWebClubFacilityMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 			+ "('frmWebClubPDC', 'Post Deposit Cheque(PDC)', 'Master', 1, 'M', 1, 1, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmWebClubPDC.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 			+ "('frmMemberExplorer', 'Member Explorer', 'Master', '1', 'M', '1', '14', '1', 'default.png', '4', '1', '1', '1', 'NO', 'NO', 'frmMemberExplorer.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-			+ "('frmBankMaster', 'Bank Master', 'Master', 1, 'M', 1, 1, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmBankMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+			+ "('frmBankMaster', 'Bank Master', 'Master', 1, 'M', 1, 1, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmBankMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+			+ "('frmBanquetQuotation', 'Banquet Quotation', 'Transaction', '1', 'T', '1', '1', '1', 'default.png', '7', '1', '1', '1', 'No', 'No', 'frmBanquetQuotation.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		funExecuteQuery(sql);
 		
 		sql = "CREATE TABLE `tblbusinesssource` ("
@@ -2227,7 +2228,54 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteWebClubQuery(sql);
 		
 		
-
+		sql = "CREATE TABLE `tblbqquotationdtl` ( "
+				+ "strQuotationNo` VARCHAR(30) NOT NULL,"
+				+ "`strClientCode` VARCHAR(20) NOT NULL,"
+				+ "`strType` VARCHAR(20) NOT NULL,"
+				+ "`strDocNo` VARCHAR(20) NOT NULL,"
+				+ "`strDocName` VARCHAR(20) NOT NULL,"
+				+ "`dblDocQty` DOUBLE NOT NULL,"
+				+ "`dblDocRate` DOUBLE NOT NULL,"
+				+ "`dblDocTotalAmt` DOUBLE NOT NULL,"
+				+ "`strQuotationDate` VARCHAR(50) NOT NULL,"
+				+ "`dblDocDiscAmt` DOUBLE NOT NULL,"
+				+ "`dblDocTaxAmt` DOUBLE NOT NULL,"
+				+ "`strVendorCode` VARCHAR(50) NOT NULL)"
+				+ " "
+				+ "COLLATE='utf8_general_ci' ENGINE=InnoDB;";		
+		funExecuteWebClubQuery(sql);
+		
+		sql = "CREATE TABLE `tblbqquotationhd` ("
+				+ "`strQuotationNo` VARCHAR(30) NOT NULL,"
+				+ "`strClientCode` VARCHAR(20) NOT NULL,"
+				+ "`dteQuotationDate` DATETIME NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,"
+				+ "`dteDateEdited` DATETIME NOT NULL,"
+				+ "`dteFromDate` DATETIME NOT NULL,"
+				+ "`dteToDate` DATETIME NOT NULL,"
+				+ "`intMaxPaxNo` BIGINT(20) NOT NULL,"
+				+ "`intMinPaxNo` BIGINT(20) NOT NULL,"
+				+ "`strAreaCode` VARCHAR(20) NOT NULL,"
+				+ "`strBillingInstructionCode` VARCHAR(20) NOT NULL,"
+				+ "`strQuotationStatus` VARCHAR(20) NOT NULL,"
+				+ "`strCustomerCode` VARCHAR(20) NOT NULL,"
+				+ "`strEmailID` VARCHAR(50) NOT NULL,"
+				+ "`strEventCoordinatorCode` VARCHAR(20) NOT NULL,"
+				+ "`strFunctionCode` VARCHAR(20) NOT NULL,"
+				+ "`strPropertyCode` VARCHAR(20) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(30) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(30) NOT NULL,"
+				+ "`tmeFromTime` VARCHAR(15) NOT NULL,"
+				+ "`tmeToTime` VARCHAR(15) NOT NULL,"
+				+ "`dblSubTotal` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',"
+				+ "`dblDiscAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',"
+				+ "`dblTaxAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',"
+				+ "`dblGrandTotal` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',"
+				+ "`strBanquetCode` VARCHAR(20) NOT NULL,"
+				+ "PRIMARY KEY (`strQuotationNo`, `strClientCode`)) "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB;";
+		funExecuteWebClubQuery(sql);
 		/*----------------WebClub Forms End---------------------------*/
 		//
 		//

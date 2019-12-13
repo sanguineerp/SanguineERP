@@ -5813,6 +5813,18 @@ public class clsSearchFormController {
 				break;
 			}
 			
+			case "BanquetQuotationNo": {
+				columnNames = "a.strQuotationNo,b.strPName,DATE_FORMAT(a.dteQuotationDate,'%d-%m-%Y')";
+				tableName = "from tblbqquotationhd a ,"+webStockDB+".tblpartymaster b "
+						+ "where a.strCustomerCode=b.strPCode and a.strClientCode='"+clientCode+"'";
+				listColumnNames = "Quotation No,Guest Name,Quatation Date";
+				idColumnName = "strQuotationNo,strClientCode";
+				flgQuerySelection = true;
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Payment Receipt";
+				break;
+			}
+			
 		}
 
 		mainMap.put("columnNames", columnNames);
