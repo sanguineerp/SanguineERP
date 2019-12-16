@@ -46,7 +46,7 @@ public class clsPMSSalesFlashBean implements Serializable
 	private double dblAdvanceAmount;
 	private double dblDiscount;
 	private double dblGrndTotal;
-	
+	private String dteDatesForHousekeeping;
 	public String getStrExportType() {
 		return strExportType;
 	}
@@ -295,6 +295,12 @@ public class clsPMSSalesFlashBean implements Serializable
 	}
 	public void setDblGrndTotal(double dblGrndTotal) {
 		this.dblGrndTotal = dblGrndTotal;
+	}
+	public String getDteDatesForHousekeeping() {
+		return dteDatesForHousekeeping;
+	}
+	public void setDteDatesForHousekeeping(String dteDatesForHousekeeping) {
+		this.dteDatesForHousekeeping = dteDatesForHousekeeping;
 	}
 	
 	

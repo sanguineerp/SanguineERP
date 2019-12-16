@@ -3214,6 +3214,17 @@ public class clsSearchFormController {
 			searchFormTitle = "Room Master";
 			break;
 		}
+		
+		
+		case "houseKeepCode": {
+			columnNames = " a.strHouseKeepCode,a.strHouseKeepName,a.strUserCreated ";
+			tableName = " from tblhousekeepmaster a where a.strClientCode='"+clientCode+"' ";
+			listColumnNames = " House Keeping Code,House Keeping Name,User ";
+			idColumnName = " strHouseKeepCode,strClientCode ";
+			searchFormTitle = " House Keeping Master ";
+			flgQuerySelection = true;
+			break;
+		}
 	
 
 		}

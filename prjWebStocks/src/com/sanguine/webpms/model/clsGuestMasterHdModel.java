@@ -1,6 +1,7 @@
 package com.sanguine.webpms.model;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -8,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+
+import com.sanguine.model.clsAttachDocModel;
 
 @Entity
 @Table(name = "tblguestmaster")
@@ -176,7 +179,6 @@ public class clsGuestMasterHdModel implements Serializable {
 
 	@Column(name = "intPinCodeOfc")
 	private int intPinCodeOfc;
-	
 	
 	
 	
@@ -598,5 +600,8 @@ public class clsGuestMasterHdModel implements Serializable {
 	public void setDteAnniversaryDate(String dteAnniversaryDate) {
 		this.dteAnniversaryDate = (String) setDefaultValue(dteAnniversaryDate, "");
 	}
+
+	
+	
 
 }

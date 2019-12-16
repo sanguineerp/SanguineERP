@@ -326,6 +326,8 @@ public class clsDayEndController {
 				
 			
 			}
+				String strUpdateFlagHousekeep = "update tblroom a set a.strHouseKeepingFlg='N' where a.strRoomCode='"+arrObjRoom[1].toString()+"' and a.strClientCode='"+clientCode+"'";
+				objWebPMSUtility.funExecuteUpdate(strUpdateFlagHousekeep, "sql");
 		}
 
 			

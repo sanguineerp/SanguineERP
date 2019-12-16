@@ -1,9 +1,12 @@
 package com.sanguine.webpms.controller;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.model.clsAttachDocModel;
+import com.sanguine.service.clsAttachDocService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.webpms.bean.clsGuestMasterBean;
 import com.sanguine.webpms.dao.clsGuestMasterDao;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,13 +41,21 @@ public class clsGuestMasterController {
 
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
+	
+	@Autowired
+	clsAttachDocService objAttDocService;
 
 	// Open GuestMaster
 	@RequestMapping(value = "/frmGuestMaster", method = RequestMethod.GET)
 	public ModelAndView funOpenForm(Map<String, Object> model, HttpServletRequest request) {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String urlHits = "1";
+		/*String docCode = request.getParameter("code").toString();*/
 
+		
+
+		
+		
 		List<String> listPrefix = new ArrayList<>();
 		listPrefix.add("Mr.");
 		listPrefix.add("Mrs.");
@@ -85,7 +97,10 @@ public class clsGuestMasterController {
 		} catch (NullPointerException e) {
 			urlHits = "1";
 		}
+		
+		/*model.put("documentList", objAttDocService.funListDocs("GT000001", clientCode));*/
 		model.put("urlHits", urlHits);
+		
 
 		if (urlHits.equalsIgnoreCase("1")) {
 			return new ModelAndView("frmGuestMaster", "command", new clsGuestMasterBean());
@@ -113,18 +128,35 @@ public class clsGuestMasterController {
 
 	// Load data from database to form
 	@RequestMapping(value = "/loadGuestCode", method = RequestMethod.GET)
-	public @ResponseBody clsGuestMasterHdModel funFetchGuestMasterData(@RequestParam("guestCode") String guestCode, HttpServletRequest req) {
+	public @ResponseBody ModelAndView funFetchGuestMasterData(@RequestParam("guestCode") String guestCode, HttpServletRequest req) {
 		clsGlobalFunctions objGlobal = new clsGlobalFunctions();
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		/*String formTitle = req.getParameter("formName").toString();
+		String transactionName = req.getParameter("transName").toString();*/
+
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		List listGuestData = objGuestMasterDao.funGetGuestMaster(guestCode, clientCode);
+		List finalList = new ArrayList<>();
 		clsGuestMasterHdModel objGuestMasterModel = (clsGuestMasterHdModel) listGuestData.get(0);
 		objGuestMasterModel.setDteDOB(objGlobal.funGetDate("dd-MM-yyyy", objGuestMasterModel.getDteDOB()));
 		objGuestMasterModel.setDtePassportExpiryDate(objGlobal.funGetDate("dd-MM-yyyy", objGuestMasterModel.getDtePassportExpiryDate()));
 		objGuestMasterModel.setDtePassportIssueDate(objGlobal.funGetDate("dd-MM-yyyy", objGuestMasterModel.getDtePassportIssueDate()));
 		objGuestMasterModel.setDteAnniversaryDate(objGlobal.funGetDate("dd-MM-yyyy", objGuestMasterModel.getDteAnniversaryDate()));
+		
+		
+		
+		clsGuestMasterBean objBean = new clsGuestMasterBean();
+		objBean.setStrGuestCode(objGuestMasterModel.getStrGuestCode());
+		/*List<clsAttachDocModel> documentList = objAttDocService.funListDocs(guestCode, clientCode);*/
+		objBean.setDocumentList(objAttDocService.funListDocs(guestCode, clientCode));
+		model.put("objGuestMasterModel", objGuestMasterModel);
+		/*model.put("documentList", objAttDocService.funListDocs(guestCode, clientCode));
+		model.put("formTitle", "Guest Master");
+		model.put("transactionName", "frmGuestMaster.jsp");*/
 
-		return objGuestMasterModel;
-	}
+		return new ModelAndView("frmGuestMaster", "command", model);	
+		}
 	@RequestMapping(value = "/checkGuestMobileNo", method = RequestMethod.GET)
 	public @ResponseBody int funCheckGuestMobileNo(@RequestParam("mobileNo") String mobileNo, HttpServletRequest req) {
 	

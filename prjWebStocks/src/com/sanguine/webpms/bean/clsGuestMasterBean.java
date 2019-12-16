@@ -1,5 +1,11 @@
 package com.sanguine.webpms.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sanguine.model.clsAttachDocModel;
+import com.sanguine.webpms.model.clsGuestMasterHdModel;
+
 public class clsGuestMasterBean {
 	// Variable Declaration
 	private String strGuestCode;
@@ -109,7 +115,8 @@ public class clsGuestMasterBean {
 	
 	private String strReservationNo;
 	
-	
+	List<clsAttachDocModel> documentList = new ArrayList<clsAttachDocModel>();
+
 
 	// Setter-Getter Methods
 	public String getStrGuestCode() {
@@ -567,7 +574,20 @@ public class clsGuestMasterBean {
 	public void setStrReservationNo(String strReservationNo) {
 		this.strReservationNo = strReservationNo;
 	}
+
+	public List<clsAttachDocModel> getDocumentList() {
+		return documentList;
+	}
+
+	public void setDocumentList(List<clsAttachDocModel> documentList) {
+		this.documentList = documentList;
+	}
+
+
+
 	
+
+
 	
 	
 

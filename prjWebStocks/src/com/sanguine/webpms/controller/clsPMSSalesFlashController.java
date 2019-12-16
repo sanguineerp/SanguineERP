@@ -1,11 +1,16 @@
 package com.sanguine.webpms.controller;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.crm.bean.clsSalesReturnBean;
 import com.sanguine.model.clsCompanyMasterModel;
@@ -660,6 +668,126 @@ public class clsPMSSalesFlashController {
 		}
 
 		return listPayment;
+	}
+	
+	
+	@RequestMapping(value = "/loadHousekeepingSummary", method = RequestMethod.GET)
+	public @ResponseBody Map funloadHousekeepingSummary(HttpServletRequest request) throws ParseException {
+		String strClientCode = request.getSession().getAttribute("clientCode").toString();
+		String fromDate = request.getParameter("frmDte").toString();
+		String[] arr = fromDate.split("-");
+		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		String toDate = request.getParameter("toDte").toString();
+		String[] arr1 = toDate.split("-");
+		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		String PMSDate=request.getSession().getAttribute("PMSDate").toString();
+		List listRoomCLeanCheck =  new ArrayList();
+		Map<String,List> mapHousekeepingSummary = new HashMap<String, List>();
+		DateFormat formatter ; 
+		List<Date> dates = new ArrayList<Date>();
+		clsPMSSalesFlashBean objBean = null;
+		TreeSet listDatesHeader = new TreeSet();
+		List listRoomWise = new ArrayList();
+		//Taking all rooms from tblroom
+		
+		String sqlRoom = "select a.strRoomCode,a.strRoomDesc from tblroom a where a.strClientCode='"+strClientCode+"'"; 
+
+		List listMain = new ArrayList();
+		List listRoomNo= objGlobalService.funGetListModuleWise(sqlRoom, "sql");
+		for(int r = 0;r<listRoomNo.size();r++)
+		{
+			listRoomWise = new ArrayList();
+			Object[] arr2   = (Object[]) listRoomNo.get(r);
+			listRoomWise.add(arr2[1]);
+		int count=0;
+		formatter = new SimpleDateFormat("dd-MM-yyyy");
+		Date  startDate = (Date)formatter.parse(fromDate); 
+		Date  endDate = (Date)formatter.parse(toDate);
+		long interval = 24*1000 * 60 * 60; // 1 hour in millis
+		long endTime =endDate.getTime() ; // create your endtime here, possibly using Calendar or Date
+		long curTime = startDate.getTime();
+		
+		while (curTime <= endTime) {
+			objBean = new clsPMSSalesFlashBean();
+			Date tempDate = new Date(curTime);
+		    
+			SimpleDateFormat formatter2 = new SimpleDateFormat("dd-MM-yyyy");  
+		    String strDate= formatter2.format(tempDate);  
+		    objBean.setDteDatesForHousekeeping(strDate);
+		    curTime += interval;
+		    
+		    listDatesHeader.add(strDate);
+		    
+		    String sqlRoomCLeanCheck = "SELECT  IF(SPACE(b.strHouseKeepCode)=0,'Completed','Pending') "
+		    		+ "FROM tblroomhousekeepdtl b where  DATE(b.dteDate)='"+objGlobal.funGetDate("yyyy-MM-dd",strDate)+"' and b.strRoomCode='"+arr2[0]+"' "
+		    		+ "group by b.strRoomCode"; 
+		    
+		    listRoomCLeanCheck = objGlobalService.funGetListModuleWise(sqlRoomCLeanCheck, "sql");
+		  
+		    if(listRoomCLeanCheck!=null && listRoomCLeanCheck.size()>0)
+    		{
+		    	listRoomWise.add(listRoomCLeanCheck.get(0).toString());
+    		}
+		    else
+		    {
+		    	listRoomWise.add("Pending");
+		    }
+		  count++;
+		   
+		 }
+		//listMain.add(listDatesHeader);
+		listMain.add(listRoomWise);
+	}
+		List listDates = new ArrayList<>();
+		
+		Iterator<Integer> iterator = listDatesHeader.iterator(); 
+		while (iterator.hasNext()) 
+            {
+				listDates.add(iterator.next());
+            }
+		mapHousekeepingSummary.put("data", listMain); 
+		mapHousekeepingSummary.put("date", listDates); 
+		
+		
+		
+				
+		return mapHousekeepingSummary;
+	}
+	
+	private String funGetDayOfWeek(int day) {
+		String dayOfWeek = "Sun";
+
+		switch (day) {
+		case 0:
+			dayOfWeek = "Sun";
+			break;
+
+		case 1:
+			dayOfWeek = "Sat";
+			break;
+
+		case 2:
+			dayOfWeek = "Fir";
+			break;
+
+		case 3:
+			dayOfWeek = "Thu";
+			break;
+
+		case 4:
+			dayOfWeek = "Wed";
+			break;
+
+		case 5:
+			dayOfWeek = "Tue";
+			break;
+
+		case 6:
+			dayOfWeek = "Mon";
+			break;
+		}
+
+		return dayOfWeek;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -1755,5 +1883,136 @@ public class clsPMSSalesFlashController {
 	
 		return new ModelAndView("frmPMSSalesFlash");
 	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/exportPMSHousekeepingSummary", method = RequestMethod.GET)
+	private ModelAndView funPMSHousekeepingSummary(HttpServletRequest request) throws ParseException
+	{    
+		String strClientCode = request.getSession().getAttribute("clientCode").toString();
+		String userCode = request.getSession().getAttribute("usercode").toString();
+		List retList = new ArrayList();
+		List detailList = new ArrayList();
+		List headerList = new ArrayList();
+		TreeSet listDatesHeader = new TreeSet();
+		List listRoomCLeanCheck =  new ArrayList();
+		List<String> listRoomWise = new ArrayList<String>();
+		DateFormat formatter ; 
+	
+		String fromDate = request.getParameter("frmDte").toString();
+		String[] arr = fromDate.split("-");
+		String fromDte = arr[2] + "-" + arr[1] + "-" + arr[0];
+		
+		String toDate = request.getParameter("toDte").toString();
+		String[] arr1 = toDate.split("-");
+		String toDte = arr1[2] + "-" + arr1[1] + "-" + arr1[0];
+		
+		BigDecimal dblTotalValue = new BigDecimal(0);
+		DecimalFormat df = new DecimalFormat("#.##");
+		
+		
+	
+		
+		retList.add("Hosekeeping Service" + fromDte + "to" + toDte + "_" + userCode);
+		List titleData = new ArrayList<>();
+		titleData.add("Hosekeeping Service");
+		retList.add(titleData);
+		
+		List filterData = new ArrayList<>();
+		filterData.add("From Date");
+		filterData.add(fromDate);
+		filterData.add("To Date");
+		filterData.add(toDate);
+        retList.add(filterData); 
+        
+        
+        String sqlRoom = "select a.strRoomCode,a.strRoomDesc from tblroom a where a.strClientCode='"+strClientCode+"'"; 
+
+		List<List> listMain = new ArrayList<List>();
+		List listRoomNo= objGlobalService.funGetListModuleWise(sqlRoom, "sql");
+		for(int r = 0;r<listRoomNo.size();r++)
+		{
+			listRoomWise = new ArrayList();
+			Object[] arr2   = (Object[]) listRoomNo.get(r);
+			listRoomWise.add((String) arr2[1]);
+		int count=0;
+		formatter = new SimpleDateFormat("dd-MM-yyyy");
+		Date  startDate = (Date)formatter.parse(fromDate); 
+		Date  endDate = (Date)formatter.parse(toDate);
+		long interval = 24*1000 * 60 * 60; // 1 hour in millis
+		long endTime =endDate.getTime() ; // create your endtime here, possibly using Calendar or Date
+		long curTime = startDate.getTime();
+		
+		while (curTime <= endTime) {
+			Date tempDate = new Date(curTime);
+		    
+			SimpleDateFormat formatter2 = new SimpleDateFormat("dd-MM-yyyy");  
+		    String strDate= formatter2.format(tempDate);  
+		    curTime += interval;
+		    
+		    listDatesHeader.add(strDate);
+		    
+		    String sqlRoomCLeanCheck = "SELECT  IF(SPACE(b.strHouseKeepCode)=0,'Completed','Pending') "
+		    		+ "FROM tblroomhousekeepdtl b where  DATE(b.dteDate)='"+objGlobal.funGetDate("yyyy-MM-dd",strDate)+"' and b.strRoomCode='"+arr2[0]+"' "
+		    		+ "group by b.strRoomCode"; 
+		    
+		    listRoomCLeanCheck = objGlobalService.funGetListModuleWise(sqlRoomCLeanCheck, "sql");
+		  
+		    if(listRoomCLeanCheck!=null && listRoomCLeanCheck.size()>0)
+    		{
+		    	listRoomWise.add(listRoomCLeanCheck.get(0).toString());
+    		}
+		    else
+		    {
+		    	listRoomWise.add("Pending");
+		    }
+		  count++;
+		   
+		 }
+		listMain.add(listRoomWise);
+		}
+        
+      
+        		
+
+			
+			if (!listRoomWise.isEmpty()) {
+			for (int i = 0; i < listMain.size(); i++) {
+			//String   arr3 = listRoomWise.get(i).toString();
+			List DataList = new ArrayList<>();
+			List listTemp = listMain.get(i);
+			for(int j=0;j<listTemp.size();j++)
+			{
+			
+			DataList.add(listTemp.get(j));
+			//DataList.add("SUMEET");
+			
+			
+			
+
+			}
+			detailList.add(DataList);
+			
+			}
+			}
+		
+		Object[] objHeader = (Object[]) listDatesHeader.toArray();
+
+		String[] ExcelHeader = new String[objHeader.length+1];
+		ExcelHeader[0] = "Room No";
+		for (int k = 0; k < objHeader.length; k++) {
+			ExcelHeader[k+1] = objHeader[k].toString();
+		}
+		
+		
+		List blankList = new ArrayList();
+	    detailList.add(blankList);// Blank Row at Bottom
+	    
+			
+        retList.add(ExcelHeader);
+		retList.add(detailList);
+		
+		return new ModelAndView("excelViewFromToDteReportName", "listFromToDateReportName", retList);
+    }
+	
 }
 

@@ -518,12 +518,30 @@ public class clsPostRoomTerrifController {
 		String propCode = request.getSession().getAttribute("propertyCode").toString();
 		String PMSDate = request.getSession().getAttribute("PMSDate").toString();
 		String urlHits ="1";
-		String strResponse = "Room changes Successfully";
+		String strResponse = "";	
 		
-		String sqlChangeStatus = "update tblroom a set a.strStatus='Free' where a.strRoomDesc='"+checkInNo+"' "
-				+ "and a.strClientCode='"+clientCode+"'";
+		String sqlHosueKeepMaster = "select b.strHouseKeepCode from tblhousekeepmaster b where b.strClientCode='"+clientCode+"'";
+		List listHosueKeepMaster = objGlobalFunctionsService.funGetListModuleWise(sqlHosueKeepMaster, "sql");
+
+		String sqlHouseKeepDtl = "select a.strHouseKeepCode from tblroomhousekeepdtl a where a.strRoomCode='"+checkInNo+"'";
+		List listHouseKeepDtl = objGlobalFunctionsService.funGetListModuleWise(sqlHosueKeepMaster, "sql");
+
+		if(listHosueKeepMaster!=null && listHosueKeepMaster.size()>0 && listHouseKeepDtl!=null && listHouseKeepDtl.size()>0)
+		{
+			int list1 = listHosueKeepMaster.size();
+			int list2 = listHouseKeepDtl.size();
+			
+			if(list1==list2)
+			{
+				strResponse = "Room changes Successfully";
+				
+				String sqlChangeStatus = "update tblroom a set a.strStatus='Free' where a.strRoomDesc='"+checkInNo+"' "
+						+ "and a.strClientCode='"+clientCode+"'";
+				
+				objWebPMSUtility.funExecuteUpdate(sqlChangeStatus, "sql");
+			}
+		}
 		
-		objWebPMSUtility.funExecuteUpdate(sqlChangeStatus, "sql");
 		/*String sqlDirtyRoomCheck = "SELECT b.strStatus ,a.strRoomNo "
 				+ "FROM tblcheckindtl a,tblroom b "
 				+ "WHERE a.strCheckInNo='"+checkInNo+"' AND a.strRoomNo=b.strRoomCode "

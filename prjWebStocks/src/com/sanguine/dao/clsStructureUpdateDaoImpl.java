@@ -3278,7 +3278,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmAddExtraBed', 'Add Extra Bed','Transaction', '2', 'T', '17', '17', '1', 'imgAddExtraBed.png', '3', '2', '2', '2', 'NO', 'NO', 'frmAddExtraBed.html',  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'), "
 				+ "('frmBlockRoomReport', 'Block Room Report', 'Reports', '3', 'R', '20', '20', '5', 'imgBlockRoomReport.png', '3', '5', '5', '5', 'NO', 'NO', 'frmBlockRoomReport.html' , NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'), "
 				+ "('frmPMSSalesFlash', 'Sales Flash', 'Tools', 1, 'T', 5, 46, '1', 'imgSalesFlash.png', '3', 1, '1', '1', 'NO', 'NO', 'frmPMSSalesFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'), "
-				+ "('frmCheckInCheckOutList', 'CheckIn CheckOut List', 'Reports', '3', 'R', '4', '4', '6', 'imgCheckInCheckOutList.png', '3', '1', '1', '1', 'NO', 'NO', 'frmCheckInCheckOutList.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmCheckInCheckOutList', 'CheckIn CheckOut List', 'Reports', '3', 'R', '4', '4', '6', 'imgCheckInCheckOutList.png', '3', '1', '1', '1', 'NO', 'NO', 'frmCheckInCheckOutList.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmHouseKeepingMaster', 'House Keeping master', 'Master', '1', 'M', '8', '8', '1', 'imgGuestMaster.png', '3', '3', '3', '3', 'NO', 'NO', 'frmHouseKeepingMaster.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
 				
 		
 		funExecuteQuery(sql);
@@ -3288,7 +3289,38 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		sql = "UPDATE `tbltreemast` SET `strFormDesc`='Reservation Cancellation' WHERE  `strFormName`='frmRoomCancellation' AND `strModule`='3';";
 		funExecuteQuery(sql);
-
+		
+		sql = "CREATE TABLE `tblhousekeepmaster` ("
+				+ "`strHouseKeepCode` VARCHAR(50) NOT NULL DEFAULT '',"
+				+ "`strHouseKeepName` VARCHAR(50) NOT NULL DEFAULT '',"
+				+ "`strDescription` VARCHAR(200) NOT NULL DEFAULT '',"
+				+ "`dteDateCreated` DATETIME NOT NULL DEFAULT '1990-10-10 00:00:00',"
+				+ "`dteDateEdited` DATETIME NOT NULL DEFAULT '1990-10-10 00:00:00',"
+				+ "`strUserCreated` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strUserEdited` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strClientCode` VARCHAR(10) NOT NULL DEFAULT '',"
+				+ "`strRemarks` VARCHAR(255) NULL DEFAULT NULL,"
+				+ "PRIMARY KEY (`strHouseKeepCode`, `strClientCode`)"
+				+ ") "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB"
+				+ ";";
+		funExecutePMSQuery(sql);
+		
+		sql = "CREATE TABLE `tblroomhousekeepdtl` ("
+				+ "`strHouseKeepCode` VARCHAR(20) NOT NULL,"
+				+ "`strRoomCode` VARCHAR(20) NOT NULL,"
+				+ "`dteDate` DATETIME NOT NULL DEFAULT '1990-10-10 00:00:00',"
+				+ "`strUser` VARCHAR(50) NOT NULL,"
+				+ "`strRemarks` VARCHAR(50) NOT NULL,"
+				+ "`strRoomCodeFlg` VARCHAR(5) NOT NULL DEFAULT 'N',"
+				+ "`strClientCode` VARCHAR(50) NOT NULL"
+				+ ") COLLATE='utf8_general_ci' ENGINE=InnoDB;";
+		funExecutePMSQuery(sql);
+		
+		sql = "ALTER TABLE `tblroom` "
+				+ "ADD COLUMN `strHouseKeepingFlg` VARCHAR(5) NOT NULL DEFAULT 'Y' AFTER `strRoomTypeDesc`;";
+		funExecutePMSQuery(sql);
 		// / END ///
 
 		/*----------------WebPMS Forms End---------------------------*/
