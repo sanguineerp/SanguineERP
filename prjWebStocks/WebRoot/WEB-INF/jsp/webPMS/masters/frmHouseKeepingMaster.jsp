@@ -132,7 +132,7 @@
 			</tr>
 			<tr>
 				<td>
-					<label>Remarks</label>
+					<label>Description</label>
 				</td>
 				<td>
 					<s:input colspan="3" type="text" id="txtRemarks" path="strRemarks" cssClass="longTextBox" />
