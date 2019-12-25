@@ -118,12 +118,26 @@ public class clsProFormaInvoice {
 	
 
 	List<clsSubGroupMasterModel> dataSG = new ArrayList<clsSubGroupMasterModel>();
-	
 	@RequestMapping(value = "/frmProFormaInvoice", method = RequestMethod.GET)
 	public ModelAndView funInvoice(Map<String, Object> model, HttpServletRequest request) {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 
 		String strModuleName = request.getSession().getAttribute("selectedModuleName").toString();
+		if(request.getParameter("bookingNo")!=null&&request.getParameter("CustomerCode")!=null)
+		{
+			request.getSession().setAttribute("Banquet","Banquet");
+			request.getSession().setAttribute("BookingNo",request.getParameter("bookingNo").toString());			
+			request.getSession().setAttribute("CustomerCode",request.getParameter("CustomerCode").toString());
+			String strBookingNO=request.getParameter("bookingNo").toString();
+			String strCustomerNO=request.getParameter("CustomerCode").toString();		
+		}
+		else
+		{
+			request.getSession().setAttribute("Banquet","");
+			request.getSession().setAttribute("BookingNo","");			
+			request.getSession().setAttribute("CustomerCode","");
+			
+		}
 		
 		dataSG = new ArrayList<clsSubGroupMasterModel>();
 		@SuppressWarnings("rawtypes")
@@ -133,6 +147,7 @@ public class clsProFormaInvoice {
 			dataSG.add(sgModel);
 		}
 
+		
 		String urlHits = "1";
 		try {
 			urlHits = request.getParameter("saddr").toString();
@@ -211,7 +226,7 @@ public class clsProFormaInvoice {
 			String strModuleName = req.getSession().getAttribute("selectedModuleName").toString();
 			if(strModuleName.equalsIgnoreCase("7-WebBanquet"))
 			{
-				String sqlData = "select * from tblproformainvoicehd a where a.strInvCode='"+invCode+"' and a.strClientCode='"+clientCode+"'";
+				String sqlData = "SELECT *,c.strLocName from tblproformainvoicehd a,tblpartymaster b,tbllocationmaster c,tblsettlementmaster d where a.strInvCode='"+invCode+"' and a.strClientCode='"+clientCode+"' AND a.strCustCode=b.strPCode AND a.strLocCode=c.strLocCode;";
 				
 				List SOHelpList = objGlobalFunctionsService.funGetList(sqlData, "sql");
 				for (int k=0;k<SOHelpList.size();k++) {
@@ -255,15 +270,10 @@ public class clsProFormaInvoice {
 					objBeanInv.setDblDiscount(Double.parseDouble(objArr[34].toString()));
 					objBeanInv.setDblDiscountAmt(Double.parseDouble(objArr[35].toString()));
 					objBeanInv.setStrExciseable(objArr[36].toString());
-//					/objBeanInv.setstrd;
+					objBeanInv.setStrSettlementCode(objArr[152].toString());
 					objBeanInv.setDblGrandTotal(Double.parseDouble(objArr[38].toString()));
-					
-					
-					
-					
-					
-					
-					
+					objBeanInv.setStrCustName(objArr[54].toString());
+					objBeanInv.setStrLocName(objArr[134].toString());					
 					
 				}
 					
@@ -2848,7 +2858,7 @@ public class clsProFormaInvoice {
 					}
 				}
 
-				taxDtlSql = "select strTaxDesc,0.00,0.00,strExcisable,dblPercent " + " from tbltaxhd " + " where strTaxCode not in (select strtaxCode from tblproformainvtaxdtl where strInvCode='" + InvCode + "') " + " and (dblPercent=5.50 or dblPercent=12.50) and strTaxOnSP='Sales' and strTaxDesc not like '%Excise%' ";
+				taxDtlSql = "select strTaxDesc,0.00,0.00,strExcisable,dblPercent " + " from tbltaxhd " + " where strTaxCode not in (select strtaxCode from tblproformainvtaxdtl where strInvCode='" + InvCode + "' strClientCode='"+clientCode+"' ) " + " and (dblPercent=5.50 or dblPercent=12.50) and strTaxOnSP='Sales' and strTaxDesc not like '%Excise%' ";
 				listTax = objGlobalFunctionsService.funGetList(taxDtlSql, "sql");
 				for (int cn = 0; cn < listTax.size(); cn++) {
 					Object[] arrObjTaxDtl = (Object[]) listTax.get(cn);
@@ -2889,7 +2899,7 @@ public class clsProFormaInvoice {
 				totalInvInWords = obj.funConvertAmtInWords(grandTotal);
 				if (strDulpicateFlag.equalsIgnoreCase("N")) {
 					strDulpicateFlag = "Orignal Copy";
-					String sqlUpdateduplicateflag = "update tblproformainvoicehd set strDulpicateFlag='Y'";
+					String sqlUpdateduplicateflag = "update tblproformainvoicehd set strDulpicateFlag='Y' where strClientCode="+clientCode+"' ";
 					objGlobalFunctionsService.funUpdateAllModule(sqlUpdateduplicateflag, "sql");
 				} else {
 					strDulpicateFlag = "Duplicate Copy";
@@ -3142,7 +3152,7 @@ public class clsProFormaInvoice {
 								+ "JOIN tblbqbookingdtl c ON b.strProdCode=c.strDocNo "
 								+ "LEFT OUTER "
 								+ "JOIN "+webStockDB+".tblinvprodtaxdtl d on c.strDocNo =d.strProdCode "
-								+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"' AND d.strDocNo like 'T%' GROUP BY c.strDocNo";
+								+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"'  GROUP BY c.strDocNo";
 					}
 					else
 					{
@@ -3154,7 +3164,7 @@ public class clsProFormaInvoice {
 								+ "JOIN tblbqbookingdtl c ON b.strProdCode=c.strDocNo "
 								+ "LEFT OUTER "
 								+ "JOIN "+webStockDB+".tblproformainvprodtaxdtl d on c.strDocNo =d.strProdCode "
-								+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"' AND d.strDocNo like 'T%' GROUP BY c.strDocNo";
+								+ "WHERE a.strInvCode='"+InvCode+"' AND a.strClientCode='"+clientCode+"'  GROUP BY c.strDocNo";
 					}
 					
 					
@@ -3569,7 +3579,7 @@ public class clsProFormaInvoice {
 					custGSTNo = obj[22].toString();
 					totalInvoiceValue = totalInvoiceValue + ((Double.parseDouble(obj[2].toString()) * Double.parseDouble(obj[3].toString())) - Double.parseDouble(obj[23].toString()));
 					
-					String sqlQuery = " select b.strTaxCode,b.dblPercent,a.dblValue,b.strShortName,a.dblTaxableAmt " + " from tblproformainvprodtaxdtl a,tbltaxhd b " + " where a.strDocNo=b.strTaxCode and a.strInvCode='" + InvCode + "' " + " and  a.strProdCode='" + obj[11].toString() + "' and a.strClientCode='" + clientCode + "'  ";
+					String sqlQuery = " select b.strTaxCode,b.dblPercent,a.dblValue,b.strShortName,a.dblTaxableAmt from tblproformainvprodtaxdtl a,tbltaxhd b  where a.strDocNo=b.strTaxCode and a.strInvCode='" + InvCode + "'  and  a.strProdCode='" + obj[11].toString() + "' and a.strClientCode='" + clientCode + "'  ";
 
 					List listProdGST = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 

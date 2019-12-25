@@ -1219,7 +1219,7 @@
 				<textElement textAlignment="Right">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{finalGrandTotal}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{finalGrandTotal} + $P{dbldeliveryCharges}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="293" y="140" width="281" height="1" isPrintInFirstWholeBand="true" uuid="8d8bb8e6-cee4-4287-a397-d5d89338d2d4">

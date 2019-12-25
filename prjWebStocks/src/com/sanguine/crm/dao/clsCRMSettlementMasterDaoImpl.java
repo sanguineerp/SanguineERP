@@ -1,6 +1,7 @@
 package com.sanguine.crm.dao;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -42,8 +43,8 @@ public class clsCRMSettlementMasterDaoImpl implements clsCRMSettlementMasterDao 
 
 	@Override
 	public Map<String, String> funGetSettlementComboBox(String clientCode) {
-		Map<String, String> map = new TreeMap<String, String>();
-		Query query = sessionFactory.getCurrentSession().createQuery("from clsSettlementMasterModel where strClientCode=:clientCode");
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		Query query = sessionFactory.getCurrentSession().createQuery("from clsSettlementMasterModel where strClientCode=:clientCode and strApplicable='true'" );
 		query.setParameter("clientCode", clientCode);
 		List<clsSettlementMasterModel> subGroups = query.list();
 		for (clsSettlementMasterModel subGroup : subGroups) {

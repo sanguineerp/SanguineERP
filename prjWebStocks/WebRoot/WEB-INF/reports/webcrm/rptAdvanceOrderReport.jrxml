@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2016-08-17T15:01:54 -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptAdvOrderMainReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7ac308bc-1990-46a8-a364-ea93f9dccc1d">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="teat.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -82,6 +81,15 @@
 	</field>
 	<field name="strCharistics" class="java.lang.String">
 		<fieldDescription><![CDATA[strCharistics]]></fieldDescription>
+	</field>
+	<field name="strMessage" class="java.lang.String">
+		<fieldDescription><![CDATA[strMessage]]></fieldDescription>
+	</field>
+	<field name="strShape" class="java.lang.String">
+		<fieldDescription><![CDATA[strShape]]></fieldDescription>
+	</field>
+	<field name="strNote" class="java.lang.String">
+		<fieldDescription><![CDATA[strNote]]></fieldDescription>
 	</field>
 	<field name="strRemark" class="java.lang.String"/>
 	<variable name="SrNo" class="java.lang.Integer" resetType="Group" resetGroup="grpPName" calculation="Count">
@@ -235,10 +243,10 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="51" splitType="Stretch">
+		<band height="96" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="26" y="24" width="526" height="24" uuid="e66cd1fd-97b6-4d37-a8ff-c09544c3df06">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<reportElement x="26" y="22" width="526" height="22" uuid="e66cd1fd-97b6-4d37-a8ff-c09544c3df06">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left">
 					<font fontName="Serif" size="8"/>
@@ -286,6 +294,36 @@
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="26" y="46" width="254" height="20" uuid="93af2741-d5ad-4b9c-9e5c-9111d811e7c0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Serif" size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strMessage}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="304" y="44" width="271" height="20" uuid="0fea89df-bb15-4857-a9f6-ae0db94886b8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Serif" size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strShape}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="27" y="68" width="252" height="22" uuid="41c15918-6658-4ec6-afd2-99206cb54c24">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Serif" size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strNote}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>

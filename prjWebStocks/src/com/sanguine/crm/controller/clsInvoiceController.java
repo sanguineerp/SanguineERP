@@ -451,6 +451,26 @@ public class clsInvoiceController
 			objHDModel.setDblExtraCharges(objBean.getDblExtraCharges());
 
 			// /********Save Data forDetail in SO***********////
+			String settlementCode=objBean.getStrSettlementCode();
+			List<clsInvSettlementdtlModel> listSettlement=objBean.getListInvsettlementdtlModel();
+            if(objBean.getStrSettlementCode().equalsIgnoreCase("MultiSettle"))
+            {
+            	if(listSettlement != null)
+    			{
+    				for(clsInvSettlementdtlModel obj:listSettlement)
+    				{
+    					if(obj.getDblSettlementAmt() > 0)
+    					{
+    						settlementCode=obj.getStrSettlementCode();
+    						
+    					}
+    				}
+    			}
+    		
+            }
+			
+			
+			
            
 			
 			
@@ -607,7 +627,7 @@ public class clsInvoiceController
 					}
 					else
 					{
-						hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0",objBean.getStrSettlementCode(), req);
+						hmProdTaxDtl = objGlobalFunctions.funCalculateTax(prodTaxDtl, "Sales", objBean.getDteInvDate(), "0",settlementCode, req);
 					
 					System.out.println("Map Size= " + hmProdTaxDtl.size());
 					}
@@ -745,7 +765,16 @@ public class clsInvoiceController
 					String invCode ="";
 				
 					clsSettlementMasterModel objModel = objSttlementMasterService.funGetObject(objBean.getStrSettlementCode(), clientCode);
-
+					String strInvoiceSeries="";
+					if(objModel !=null)
+					{
+						 strInvoiceSeries=objModel.getStrInvSeriesChar();
+					}
+				
+                    if(objBean.getStrSettlementCode().equalsIgnoreCase("MultiSettle"))
+                    {
+                    	strInvoiceSeries="M";
+                    }
                     String strInvColumn1="ifnull(max(MID(a.strInvCode,8,5)),'' )";
 					if(objSetup.getStrSettlementWiseInvSer().equals("Yes"))
 					{
@@ -791,9 +820,10 @@ public class clsInvoiceController
 						{
 							
 						if (lastnoLive > lastnoAudit) {
-							invCode = propCode + "IV" + transYear + transMonth + objModel.getStrInvSeriesChar() + String.format("%05d", lastnoLive + 1);
+							
+							invCode = propCode + "IV" + transYear + transMonth + strInvoiceSeries + String.format("%05d", lastnoLive + 1);
 						} else {
-							invCode = propCode + "IV" + transYear + transMonth + objModel.getStrInvSeriesChar() +String.format("%05d", lastnoAudit + 1);
+							invCode = propCode + "IV" + transYear + transMonth + strInvoiceSeries +String.format("%05d", lastnoAudit + 1);
 						}
 						
 						
@@ -994,6 +1024,56 @@ public class clsInvoiceController
 				objHDModel=funSaveVoidedProductList(objHDModel,objBean,clientCode);
 
 				objInvoiceHdService.funAddUpdateInvoiceHd(objHDModel);
+				if(objBean.getStrSettlementCode().equalsIgnoreCase("MultiSettle"))
+	            {
+					if(listSettlement != null)
+					{
+						for(clsInvSettlementdtlModel obj:listSettlement)
+						{
+							if(obj.getDblSettlementAmt() > 0)
+							{
+								obj.setStrInvCode(objHDModel.getStrInvCode());
+								obj.setDteInvDate(objHDModel.getDteInvDate());
+								obj.setDblPaidAmt(obj.getDblSettlementAmt());
+								obj.setStrClientCode(clientCode);
+								obj.setStrCustomerCode(objHDModel.getStrCustCode());
+								obj.setStrCardName("");
+								obj.setStrDataPostFlag("");
+								obj.setStrExpiryDate("");
+								obj.setStrFolioNo("");
+								obj.setStrGiftVoucherCode("");
+								obj.setStrRemark("");
+								obj.setStrRoomNo("");
+								objInvoiceHdService.funDeleteSettlement(objHDModel.getStrInvCode(), clientCode);
+								objInvoiceHdService.funAddUpdateInvSettlementdtl(obj);
+							}
+							
+						}
+					}
+					 
+	            }
+				else
+				{
+					clsInvSettlementdtlModel obj=new clsInvSettlementdtlModel();
+					obj.setStrSettlementCode(objHDModel.getStrSettlementCode());
+					obj.setStrInvCode(objHDModel.getStrInvCode());
+					obj.setDblSettlementAmt(objHDModel.getDblGrandTotal() );
+					obj.setDteInvDate(objHDModel.getDteInvDate());
+					obj.setDblPaidAmt(obj.getDblSettlementAmt());
+					obj.setStrClientCode(clientCode);
+					obj.setStrCustomerCode(objHDModel.getStrCustCode());
+					obj.setStrCardName("");
+					obj.setStrDataPostFlag("");
+					obj.setStrExpiryDate("");
+					obj.setStrFolioNo("");
+					obj.setStrGiftVoucherCode("");
+					obj.setStrRemark("");
+					obj.setStrRoomNo("");
+					objInvoiceHdService.funDeleteSettlement(objHDModel.getStrInvCode(), clientCode);
+					objInvoiceHdService.funAddUpdateInvSettlementdtl(obj);
+				}
+				  
+				
 				String dcCode = "";
 				if (objSetup.getStrEffectOfInvoice().equals("DC"))
 				{
@@ -6896,7 +6976,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			+ " AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),"
 			+ " ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,c.strHSNCode,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),"
 			+ " IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') "
-			+ ",IFNULL(d.strGSTNo,''),b.dblProdDiscAmount,b.dblWeight,f.strSGName,IFNULL(d.strEmail,''), IFNULL(d.strMobile,''),f.intSortingNo  "//29
+			+ ",IFNULL(d.strGSTNo,''),b.dblProdDiscAmount,b.dblWeight,f.strSGName,IFNULL(d.strEmail,''), IFNULL(d.strMobile,''),f.intSortingNo ,a.dblExtraCharges "//30
 			+ " from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  "
 			+ " on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + ""
 			+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + ""
@@ -6912,12 +6992,12 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 	String custGSTNo = "";
 	String custEmailID="",custMobileNo="";
 	double totalInvoiceValue = 0.0;
-	double grandTotal=0.0;
+	double grandTotal=0.0,deliveryCharges=0.0;
 	List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlProdDtl, "sql");
 	List<clsInvoiceDtlBean> dataList = new ArrayList<clsInvoiceDtlBean>();
 	Map<Double, Double> hmCGSTCalculateTax = new HashMap<Double, Double>();
 	Map<Double, Double> hmSGSTCalculateTax = new HashMap<Double, Double>();
-	  Map<String,clsInvoiceDtlBean> mapGSTSummary=new HashMap<>();
+	Map<String,clsInvoiceDtlBean> mapGSTSummary=new HashMap<>();
 	if (listProdDtl.size() > 0)
 	{
 		for (int i = 0; i < listProdDtl.size(); i++)
@@ -6955,6 +7035,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			custGSTNo = obj[22].toString();
 			custEmailID=obj[26].toString();
 			custMobileNo=obj[27].toString();
+			deliveryCharges=(Double.parseDouble(obj[29].toString()));
 			objDtlBean.setDblWeight(Double.parseDouble(obj[24].toString()));
 			double qty=Double.parseDouble(obj[2].toString());
 			double rate=Double.parseDouble(obj[5].toString());
@@ -7131,6 +7212,9 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 		hm.put("strBankName",objSetup.getStrBankName());
 		hm.put("strBranchName", objSetup.getStrBranchName());
 		hm.put("strBankIFSC", objSetup.getStrSwiftCode());
+		hm.put("dbldeliveryCharges", deliveryCharges);
+		
+		
 
 		// ////////////
 
@@ -7521,6 +7605,19 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 }
 
 */
+
+@RequestMapping(value = "/LoadSettlementData", method = RequestMethod.GET)
+public @ResponseBody Map<String, String> funLoadSettlementData(HttpServletRequest req)
+{
+	String clientCode = req.getSession().getAttribute("clientCode").toString();
+
+	Map<String, String> settlementList = objSettlementService.funGetSettlementComboBox(clientCode);
+	
+	return settlementList;
+}
+
+
+			
 
 
 

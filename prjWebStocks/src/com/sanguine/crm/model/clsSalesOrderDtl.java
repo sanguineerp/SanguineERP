@@ -113,6 +113,12 @@ public class clsSalesOrderDtl implements Serializable {
 	@Transient
 	private double dblConversion;;
 	
+	@Column(name = "strMessage")	
+	private String strMessage;
+		
+		
+	@Column(name = "strShape")	
+	private String strShape;
 	
 
 	// Setter-Getter Methods
@@ -378,5 +384,21 @@ public class clsSalesOrderDtl implements Serializable {
 			} else {
 				return defaultValue;
 			}
+		}
+
+		public String getStrMessage() {
+			return strMessage;
+		}
+
+		public void setStrMessage(String strMessage) {
+			this.strMessage = strMessage;
+		}
+
+		public String getStrShape() {
+			return strShape;
+		}
+
+		public void setStrShape(String strShape) {
+			this.strShape = strShape;
 		}
 }

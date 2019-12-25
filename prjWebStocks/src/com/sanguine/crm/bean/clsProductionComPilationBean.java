@@ -33,10 +33,17 @@ public class clsProductionComPilationBean {
 	private String strImage;
 
 	private String strItemCode;
+	
+	private String StrMessage;
 
 	private List<String> listDta;
 
 	private String strRemark;
+	
+	private String strShape;
+	
+	private String strNote;
+
 
 	public String getStrSGName() {
 		return strSGName;
@@ -172,6 +179,30 @@ public class clsProductionComPilationBean {
 
 	public void setStrItemCode(String strItemCode) {
 		this.strItemCode = strItemCode;
+	}
+
+	public String getStrShape() {
+		return strShape;
+	}
+
+	public void setStrShape(String strShape) {
+		this.strShape = strShape;
+	}
+
+	public String getStrNote() {
+		return strNote;
+	}
+
+	public void setStrNote(String strNote) {
+		this.strNote = strNote;
+	}
+
+	public String getStrMessage() {
+		return StrMessage;
+	}
+
+	public void setStrMessage(String strMessage) {
+		StrMessage = strMessage;
 	}
 
 }

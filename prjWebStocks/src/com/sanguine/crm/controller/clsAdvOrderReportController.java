@@ -1,16 +1,11 @@
 package com.sanguine.crm.controller;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
@@ -47,7 +42,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
-import com.sanguine.bean.clsAttachDocBean;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.crm.bean.clsProductionComPilationBean;
 import com.sanguine.crm.service.clsAdvOrderReportService;
@@ -244,7 +238,8 @@ public class clsAdvOrderReportController {
 				// " ORDER BY a.strSOCode,e.strPName,b.strProdCode,b.dblWeight,h.strGName,i.strSGName,c.strCharCode  "
 				// ;
 
-				sqlAdvOrd = " select i.strSGName,   g.strProdCode,g.strProdName,b.dblQty AS dblQty, b.dblWeight AS dblWeight,b.strSOCode,ifnull(c.strCharCode,''), " + " ifnull(c.strCharValue,''),e.strPName,  DATE_FORMAT(a.dteSODate,'%d-%m-%Y'),b.strRemarks,ifnull(d.strCharName,''),IfNull(g.strProdCode,'') " + " from tblsalesorderhd a "
+
+sqlAdvOrd = " select i.strSGName,   g.strProdCode,g.strProdName,b.dblQty AS dblQty, b.dblWeight AS dblWeight,b.strSOCode,ifnull(c.strCharCode,''),ifnull(c.strCharValue,''),e.strPName,  DATE_FORMAT(a.dteSODate,'%d-%m-%Y'),b.strRemarks,ifnull(d.strCharName,''),ifnull(b.strMessage,''),ifnull(b.strShape,''),IfNull(g.strProdCode,'') " + " from tblsalesorderhd a "
 						+ " left outer join tblsalesorderdtl b on a.strSOCode=b.strSOCode " + " left outer join  tblsaleschar c on c.strSOCode=a.strSOCode and c.strProdCode=b.strProdCode and b.strRemarks=c.strAdvOrderNo " + " left outer join tblcharacteristics d on c.strCharCode=d.strCharCode " + "  left outer join tblpartymaster e on a.strCustCode=e.strPCode "
 						+ " left outer join tblproductmaster g on b.strProdCode=g.strProdCode " + " left outer join tblsubgroupmaster i on g.strSGCode=i.strSGCode " + " left outer join tblgroupmaster h on h.strGCode=i.strGCode " + " inner join tblattachdocument f on f.strCode=a.strSOCode and f.strActualFileName=g.strProdCode " + " Where h.strGCode IN   " + strGCodes + "  "
 						+ " AND i.strSGCode IN " + strSGCodes + "  " + " and a.strStatus='" + orderType + "' " + " AND DATE(a.dteFulmtDate) BETWEEN '" + dteFromDate + "' AND '" + dteToDate + "' " + " GROUP BY c.strCharCode, b.strProdCode,b.dblWeight,h.strGName,i.strSGName, e.strPName ,b.strRemarks "
@@ -253,7 +248,7 @@ public class clsAdvOrderReportController {
 						+ "  ORDER BY e.strPName,a.strSOCode,c.strAdvOrderNo,b.strProdCode,b.dblWeight,h.strGName,i.strSGName,c.strCharCode ";
 			} else {
 
-				sqlAdvOrd = "  select i.strSGName,   g.strProdCode,g.strProdName,b.dblQty AS dblQty, b.dblWeight AS dblWeight,b.strSOCode,ifnull(c.strCharCode,''),  ifnull(c.strCharValue,''),e.strPName,  DATE_FORMAT(a.dteSODate,'%d-%m-%Y'),b.strRemarks,ifnull(d.strCharName,'') " + " from tblsalesorderhd a left outer join tblsalesorderdtl b on a.strSOCode=b.strSOCode   "
+				sqlAdvOrd = "  select i.strSGName,   g.strProdCode,g.strProdName,b.dblQty AS dblQty, b.dblWeight AS dblWeight,b.strSOCode,ifnull(c.strCharCode,''),  ifnull(c.strCharValue,''),e.strPName,  DATE_FORMAT(a.dteSODate,'%d-%m-%Y'),b.strRemarks,ifnull(d.strCharName,''),ifnull(b.strMessage,''),ifnull(b.strShape,'')  " + " from tblsalesorderhd a left outer join tblsalesorderdtl b on a.strSOCode=b.strSOCode   "
 						+ " left outer join  tblsaleschar c on c.strSOCode=a.strSOCode and c.strProdCode=b.strProdCode and b.strRemarks=c.strAdvOrderNo " + " left outer join tblcharacteristics d on c.strCharCode=d.strCharCode " + " left outer join tblpartymaster e on a.strCustCode=e.strPCode " + " left outer join tblproductmaster g on b.strProdCode=g.strProdCode "
 						+ " left outer join tblsubgroupmaster i on g.strSGCode=i.strSGCode " + " left outer join tblgroupmaster h on h.strGCode=i.strGCode  " + " left outer join tblattachdocument f on f.strCode!=a.strSOCode " + " where h.strGCode IN  " + strGCodes + " " + " AND i.strSGCode IN " + strSGCodes + " " + "  and a.strStatus='" + orderType + "' " + " AND DATE(a.dteFulmtDate) BETWEEN '"
 						+ dteFromDate + "' AND '" + dteToDate + "' " + " GROUP BY a.strSOCode,b.strProdCode,b.dblWeight,c.strCharCode, h.strGName,i.strSGName, e.strPName ,b.strRemarks "
@@ -262,6 +257,7 @@ public class clsAdvOrderReportController {
 						// ;
 						+ " ORDER BY e.strPName,a.strSOCode,c.strAdvOrderNo,b.strProdCode,b.dblWeight,h.strGName,i.strSGName,c.strCharCode ";
 			}
+
 
 			List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlAdvOrd, "sql");
 			ArrayList listChar = new ArrayList();
@@ -305,9 +301,54 @@ public class clsAdvOrderReportController {
 				prodChar.append(prodArr[11].toString() + "->" + prodArr[7].toString() + "             ");
 
 				if (objBean.getStrExportType().equalsIgnoreCase("Yes")) {
-					objProdCompilationBean.setStrItemCode(prodArr[12].toString());
+					objProdCompilationBean.setStrItemCode(prodArr[14].toString());
 
 				}
+				
+				
+
+			     if(!(prodArr[12].toString().isEmpty()))
+			  {
+				StringBuffer strMessage= new StringBuffer();
+				StringBuffer strNote=new StringBuffer();	
+				
+				//String sampleString="Happy Birthday#Good";				
+				String sampleString = prodArr[12].toString();
+				String[] note = sampleString.split("#",2);
+				if(!(note[0].isEmpty()))
+				{
+					strMessage.append("Message "+"-> "+note[0]);
+			    	objProdCompilationBean.setStrMessage(strMessage.toString());
+				}
+				else
+				{
+					objProdCompilationBean.setStrMessage("");
+				}
+				if(note.length>1&&!(note[1].isEmpty()))
+			    {
+			    	strNote.append("Note "+"-> "+note[1]);
+			    	objProdCompilationBean.setStrNote(strNote.toString());
+			    }
+			    else{
+			    	objProdCompilationBean.setStrNote("");				    	
+			    }    	
+			}
+			else
+			{
+				objProdCompilationBean.setStrMessage("");			    	
+		    	objProdCompilationBean.setStrNote("");
+			}				
+			if(!(prodArr[13].toString().isEmpty()))
+			{
+				StringBuffer strShape= new StringBuffer();
+				strShape.append("Shape "+"->"+prodArr[13].toString());	
+				objProdCompilationBean.setStrShape(strShape.toString());
+			}
+			else
+			{
+				objProdCompilationBean.setStrShape("");
+			}	
+				
 
 				if (j == listProdDtl.size() - 1) {
 					objProdCompilationBean.setStrCharistics(prodChar.toString());

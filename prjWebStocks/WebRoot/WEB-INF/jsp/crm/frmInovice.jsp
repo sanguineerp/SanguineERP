@@ -13,14 +13,18 @@
 <script type="text/javascript">
 
 
-		var QtyTol=0.00,list=0;	
-		var discType="";
+		var QtyTol=0.00,list=0,listSettle=0;	
+		var discType="", settlementCodeMulti="";
+		
+	
 		
 		$(document).ready(function() 
 		{	
 			discType="";
 			var sgData ;
 			var prodData;
+			funLoadSettlementData();
+		
 			var clientCode='<%=session.getAttribute("clientCode").toString()%>';
 			
 			$(".tab_content").hide();
@@ -33,9 +37,9 @@
 				var activeTab = $(this).attr("data-state");
 				$("#" + activeTab).fadeIn();
 			});
-			
+		
 	 		var currencyCode=$("#cmbCurrency").val();
- 		   var currValue=funGetCurrencyCode(currencyCode);
+ 		    var currValue=funGetCurrencyCode(currencyCode);
 			if(currValue==null)
 			{
 				currValue=1.0;
@@ -914,66 +918,101 @@
 	    
 	    return false;
 	}
-	
-	function funFillSettlementRow() 
+	function funLoadSettlementData()
 	{
-	
-	    var table = document.getElementById("tblSettlement");
-	    var rowCount = table.rows.length;
-	    var row = table.insertRow(rowCount);
-	    var settleCode=$("#cmbPartSettlement").val();
-	    var  settleDesc="CASh";     
-	    var settlementAmt=$("#txtSettlementAmt").val();
-	  
-		
-	    row.insertCell(0).innerHTML= "<input class=\"Box\" size=\"22%\" name=\"listInvoiceTaxDtl["+(rowCount)+"].strTaxCode\" id=\"txtTaxCode."+(rowCount)+"\" value='"+settleCode+"' >";
-	    row.insertCell(1).innerHTML= "<input class=\"Box\" size=\"22%\" name=\"listInvoiceTaxDtl["+(rowCount)+"].strTaxDesc\" id=\"txtTaxDesc."+(rowCount)+"\" value='"+settleDesc+"'>";		    	    
-	    row.insertCell(2).innerHTML= "<input type=\"number\" step=\"any\" required = \"required\" style=\"text-align: right;\" size=\"15.5%\" name=\"listInvoiceTaxDtl["+(rowCount)+"].strTaxableAmt\" id=\"txtTaxableAmt."+(rowCount)+"\" value="+settlementAmt+">";
-	    row.insertCell(3).innerHTML= '<input type="button" size=\"6%\" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteTaxRow(this)" >';
-	    
-	   /*  funCalSettlementTotal();
-	    funClearFieldsOnTaxTab(); */
-	    
-	    return false;
+
+		$.ajax({
+			type : "GET",
+			url : getContextPath()+ "/LoadSettlementData.html",
+			dataType : "json",
+			success : function(response){ 
+
+		       	$.each(response, function(i,item)
+			    {
+		       		
+		       		funFillSettlementRow(item,i,0);
+		       		
+			    });
+				
+			},
+			error : function(e){
+				if (jqXHR.status === 0) {
+	                alert('Not connect.n Verify Network.');
+	            } else if (jqXHR.status == 404) {
+	                alert('Requested page not found. [404]');
+	            } else if (jqXHR.status == 500) {
+	                alert('Internal Server Error [500].');
+	            } else if (exception === 'parsererror') {
+	                alert('Requested JSON parse failed.');
+	            } else if (exception === 'timeout') {
+	                alert('Time out error.');
+	            } else if (exception === 'abort') {
+	                alert('Ajax request aborted.');
+	            } else {
+	                alert('Uncaught Error.n' + jqXHR.responseText);
+	            }
+			}
+		});
 	}
-	function funClearFieldsOnSettlementTab()
+	function funFillSettlementRow(values, key,Amt) 
 	{
-		$("#txtTaxCode").val("");
-		$("#lblTaxDesc").text("");
-		$("#txtTaxableAmt").val("");
-		$("#txtTaxAmt").val("");
-		$("#txtTaxCode").focus();
+	    
+		if(values!='MultiSettle')
+		{
+			settlementCodeMulti=key;
+			
+		    var table = document.getElementById("tblSettlement");
+		    var rowCount = table.rows.length;
+		    var row = table.insertRow(rowCount);
+		    rowCount=listSettle;
+			
+		    row.insertCell(0).innerHTML= "<input class=\"Box\" size=\"25%\" name=\"listInvsettlementdtlModel["+(rowCount)+"].strSettlementCode\" id=\"txtSettlementCode."+(rowCount)+"\" value='"+key+"' >";
+		    row.insertCell(1).innerHTML= "<input class=\"Box\" size=\"25%\" name=\"listInvsettlementdtlModel["+(rowCount)+"].strSettlementName\" id=\"txtSettlementName."+(rowCount)+"\" value='"+values+"'>";		    	    
+		    row.insertCell(2).innerHTML= "<input type=\"number\" step=\"any\" required = \"required\" style=\"text-align: right;\" size=\"15.5%\" name=\"listInvsettlementdtlModel["+(rowCount)+"].dblSettlementAmt\" id=\"txtSettlementAmt."+(rowCount)+"\" onblur =\"Javacsript:funCalSettlementTotal()\" value='"+Amt+"' >";
+		    row.insertCell(3).innerHTML= '<input type="button" size=\"6%\" class="deletebutton" value = "Delete" onClick="Javacsript:funDeleteSettlementRow(this)" >';
+		    listSettle++;
+		    funCalSettlementTotal();
+		    		    
 	
+			
+		}	
+	    
 	}
+	
 	function funCalSettlementTotal()
 	{
-		var totalTaxAmt=0,totalTaxableAmt=0;
-		var table = document.getElementById("tblTax");
-		var rowCount = table.rows.length;
-		var subTotal=parseFloat($("#txtSubTotlAmt").val());
-		totalTaxableAmt=parseFloat(document.getElementById("txtTaxableAmt."+0).value);
-		for(var i=0;i<rowCount;i++)
-		{
-			
-			//totalTaxableAmt=parseFloat(document.getElementById("txtTaxableAmt."+i).value)+totalTaxableAmt;
-			totalTaxAmt=parseFloat(document.getElementById("txtTaxAmt."+i).value)+totalTaxAmt;
-		}
 		
-		totalTaxableAmt=totalTaxableAmt.toFixed(2);
-		totalTaxAmt=totalTaxAmt.toFixed(2);
-		var grandTotal=parseFloat(subTotal)+parseFloat(totalTaxAmt);
-		grandTotal=grandTotal.toFixed(2);
-		$("#lblTaxableAmt").text(totalTaxableAmt);
-		$("#lblTaxTotal").text(totalTaxAmt);			
-// 		$("#lblPOGrandTotal").text(grandTotal);
-// 		var taxAmt=$("#txtPOTaxAmt").val();
-		var disAmt = $('#txtDiscount').val();
-		var extraCharge = $('#txtExtraCharges').val();
-		var finalAmt=parseFloat(subTotal)+parseFloat(extraCharge)+parseFloat(totalTaxAmt)-disAmt;
-		$("#txtFinalAmt").val(finalAmt.toFixed(maxQuantityDecimalPlaceLimit));
+		var table = document.getElementById("tblSettlement");
+	    var rowCount = table.rows.length;
+	    var finalAmt=0;
+	    if(rowCount > 0)
+	    {
+			    $('#tblSettlement tr').each(function()
+			    {
+				    var amt =$(this).find('input')[2].value;// `this` is TR DOM element
+				    if(amt != "")
+			    	{
+				    	finalAmt =parseFloat(amt) + finalAmt ;
+				    	if( finalAmt > $("#lblPaymentAmt").text() )
+			    		{
+			    		  alert("You have Exceeded The Total Payment Amount")
+			    		}
+				    	else
+				    	{
+				    		 $("#lblSettlementAmt").text(finalAmt.toFixed(maxQuantityDecimalPlaceLimit));
+				    	}	
+					   
+			    	}
+				    
+				});
+			    
+	   }
+	  
+		
+		
 	}
 	
-	function funDeleteTaxRow(obj) 
+	function funDeleteSettlementRow(obj) 
 	{
 	    var index = obj.parentNode.parentNode.rowIndex;
 	    var table = document.getElementById("tblSettlement");
@@ -1782,6 +1821,11 @@
 		var dteInv =$('#txtDCDate').val();
 		var CIFAmt=0;
 		var settleCode=$("#cmbSettlement").val();
+		if($("#cmbSettlement").val() == "MultiSettle")
+		{
+			settleCode=settlementCodeMulti;
+		}
+		
 		var taxType = "";
 		var strIndustryType='<%=session.getAttribute("selectedModuleName").toString()%>';
 		if(strIndustryType=='7-WebBanquet') 
@@ -1838,6 +1882,9 @@
 			}
 		});
 	}
+	
+	
+	
 	
 	/**
 	 * Calculating Tax subtotal amount
@@ -1925,6 +1972,12 @@
 		var extraCharge = $('#txtExtraCharges').val();
 		var finalAmt=parseFloat(subTotal)+parseFloat(extraCharge)+parseFloat(totalTaxAmt)-disAmt;
 		$("#txtFinalAmt").val(finalAmt.toFixed(maxQuantityDecimalPlaceLimit));
+		var code=$("#cmbSettlement").val();
+		if(code == "MultiSettle")
+		{
+			document.getElementsByName("tab4")[0].style.display = "block";
+			document.getElementById('tab4').style.visibility='visible';
+		}
 	}
 	
 		/**
@@ -2549,10 +2602,10 @@ function funGetKeyCode(event,controller) {
 		    }
 	    }
 	}
-
+/* 
 function funChangeCombo() {
 	$("#txtSubGroup").focus();
-	}
+	} */
 	
 $(document).keypress(function(e) {
 	  if(e.keyCode == 120) {
@@ -2716,8 +2769,9 @@ function funChangeCombo() {
 		var code=$("#cmbSettlement").val();
 		if(code!="MultiSettle")
 		{
-			 $("#tab4").prop("disabled", false);
-			 document.getElementById("tab4").style.visibility = "hidden";  
+		
+		 
+			document.getElementsByName("tab4")[0].style.display = "none";
 			var searchurl=getContextPath()+"/loadSettlementMasterData.html?code="+code;
 			 $.ajax({
 				        type: "GET",
@@ -2758,7 +2812,11 @@ function funChangeCombo() {
 		}
 		else
 		{
-			document.getElementById("tab4").style.visibility = "visible";  
+			
+			document.getElementsByName("tab4")[0].style.display = "block";
+			//document.getElementsByName("tab4").style.display = "block";
+			 
+			$("#txtSettlementType").val("MultiSettle");
 		}	
 	}
 	
@@ -2773,6 +2831,23 @@ function funChangeCombo() {
 			}
 			$("#txtDblCurrencyConv").val(currValue);
 	
+	}
+	function funcheckTaxCalculation()
+	{
+		if(!($("#lblTaxTotal").text() >0))
+		{
+			alert("Please Do Tax Calculation");
+			document.getElementsByName("tab4")[0].style.display = "none";
+			document.getElementById('tab4').style.visibility='hidden';
+			return false;
+		}
+		else
+		{
+			
+		   $("#lblPaymentAmt").text($("#txtFinalAmt").val());
+		   var amount= Math.round($("#lblPaymentAmt").text())
+		   $("#lblPaymentAmt").text(amount);
+		}	
 	}
 	
 	
@@ -2798,7 +2873,7 @@ function funChangeCombo() {
 								style="width: 100px; padding-left: 55px">Invoice</li>
 							<li data-state="tab2" style="width: 100px; padding-left: 55px">Address</li>
 							<li data-state="tab3" style="width: 100px; padding-left: 55px">Taxes</li>
-							<li data-state="tab4" style="width: 100px; padding-left: 55px">Settlement</li>
+							<li data-state="tab4" name="tab4" style="width: 100px; padding-left: 55px; display: none " onclick="funcheckTaxCalculation()">Settlement</li>
 							
 						</ul>
 
@@ -3302,7 +3377,7 @@ function funChangeCombo() {
 									<td style="width:5%">Delete</td>
 								</tr>							
 							</table>
-							<div style="background-color: #a4d7ff;border: 1px solid #ccc;display: block; height: 150px;
+							<div style="background-color: #a4d7ff;border: 1px solid #ccc;display: block; height: 250px;
 			    				margin: auto;overflow-x: hidden; overflow-y: scroll;width: 80%;">
 									<table id="tblSettlement" class="transTablex col5-center" style="width: 100%;">
 									<tbody>    
@@ -3319,6 +3394,12 @@ function funChangeCombo() {
 							<tr>
 								<td width="130px"><label>Settlement Amt Total</label></td>
 								<td><label id="lblSettlementAmt"></label></td>
+								
+								
+							</tr>
+							<tr>
+								<td width="130px"><label>Total Payment</label></td>
+								<td><label id="lblPaymentAmt"></label></td>
 								
 								
 							</tr>

@@ -115,5 +115,12 @@ public class clsInvoiceHdServiceImpl implements clsInvoiceHdService {
 	public List funGetDtlList(String SACode, String clientCode) {
 		return objInvoiceDao.funGetDtlList(SACode, clientCode);
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public void funDeleteSettlement(String invCode, String clientCode) {
+		 objInvoiceDao.funDeleteSettlement(invCode, clientCode);
+	}
+	
 
 }

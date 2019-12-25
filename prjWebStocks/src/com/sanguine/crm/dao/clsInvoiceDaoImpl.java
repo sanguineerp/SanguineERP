@@ -203,5 +203,20 @@ public class clsInvoiceDaoImpl implements clsInvoiceDao {
 		List list = query.list();
 		return list;
 	}
+	
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void funDeleteSettlement(String invCode, String clientCode) {
+		Query query = sessionFactory.getCurrentSession().createQuery("delete from clsInvSettlementdtlModel a " + "where strInvCode = :InvCode and strClientCode= :clientCode ");
+		query.setParameter("InvCode", invCode);
+		query.setParameter("clientCode", clientCode);
+		query.executeUpdate();
+		
+		
+		
+	}
+	
+
 
 }

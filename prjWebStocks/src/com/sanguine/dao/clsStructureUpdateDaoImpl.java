@@ -1064,6 +1064,9 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "DROP PRIMARY KEY,"
 				+ "ADD PRIMARY KEY (`strClientCode`, `strProdCode`, `strTransCode`, `strBatchCode`);";
 		funExecuteQuery(sql);
+		
+		sql="ALTER TABLE `tblsalesorderdtl` ADD COLUMN `strMessage` VARCHAR(50) NOT NULL DEFAULT '' AFTER `dblAcceptQty`,ADD COLUMN `strShape` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strMessage`;";
+		funExecuteQuery(sql);
 
 		
 		/*----------------WebStock Forms only---------------------------*/
@@ -2112,7 +2115,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		        + " ('frmSalesAndSalesReturnSummaryReport', 'Sales And Sales Return Summary Report', 'Reports',3, 'R', 92, 8, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmSalesAndSalesReturnSummaryReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
 		        + " ('frmVoidInvoiceReport', 'Void Invoice Report', 'Reports', 3, 'R', 68, 4, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmVoidInvoiceReport.html' , NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)," 
 				+ " ('frmWithholdingTaxReport', 'Withholding Tax Report', 'Reports',3, 'R', 93, 8, '1', 'default.png', '6', 1, '1', '1', 'NO', 'NO', 'frmWithholdingTaxReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
-				+ " ('frmAMCFlash', 'AMC Flash', 'Tools', 4, 'L', 5, 9, '1', 'defaults.png', '6', 1, '1', '1', 'NO', 'NO', 'frmAMCFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ;";
+				+ " ('frmAMCFlash', 'AMC Flash', 'Tools', 4, 'L', 5, 9, '1', 'defaults.png', '6', 1, '1', '1', 'NO', 'NO', 'frmAMCFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),"
+				+ "('frmMonthlySalesReport', 'Monthly sales Report', 'Reports', '3', 'R', '93', '8', '1', 'default.png', '6', '1', '1', '1', 'NO', 'NO', frmMonthlySalesReport.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) ;";
 		
 		
 		System.out.println(sql);
@@ -2156,7 +2160,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+" ('frmWebClubFacilityMaster', 'Facility Master', 'Master', 1, 'M', 1, 3, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmWebClubFacilityMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 			+ "('frmWebClubPDC', 'Post Deposit Cheque(PDC)', 'Master', 1, 'M', 1, 1, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmWebClubPDC.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
 			+ "('frmMemberExplorer', 'Member Explorer', 'Master', '1', 'M', '1', '14', '1', 'default.png', '4', '1', '1', '1', 'NO', 'NO', 'frmMemberExplorer.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
-			+ "('frmBankMaster', 'Bank Master', 'Master', 1, 'M', 1, 1, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmBankMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+			+ "('frmBankMaster', 'Bank Master', 'Master', 1, 'M', 1, 1, '1', 'default.png', '4', 1, '1', '1', 'NO', 'NO', 'frmBankMaster.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+			+ "('frmBanquetQuotation', 'Banquet Quotation', 'Transaction', '1', 'T', '1', '1', '1', 'default.png', '7', '1', '1', '1', 'No', 'No', 'frmBanquetQuotation.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
 		funExecuteQuery(sql);
 		
 		sql = "CREATE TABLE `tblbusinesssource` ("
@@ -2227,7 +2232,54 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		funExecuteWebClubQuery(sql);
 		
 		
-
+		sql = "CREATE TABLE `tblbqquotationdtl` ( "
+				+ "strQuotationNo` VARCHAR(30) NOT NULL,"
+				+ "`strClientCode` VARCHAR(20) NOT NULL,"
+				+ "`strType` VARCHAR(20) NOT NULL,"
+				+ "`strDocNo` VARCHAR(20) NOT NULL,"
+				+ "`strDocName` VARCHAR(20) NOT NULL,"
+				+ "`dblDocQty` DOUBLE NOT NULL,"
+				+ "`dblDocRate` DOUBLE NOT NULL,"
+				+ "`dblDocTotalAmt` DOUBLE NOT NULL,"
+				+ "`strQuotationDate` VARCHAR(50) NOT NULL,"
+				+ "`dblDocDiscAmt` DOUBLE NOT NULL,"
+				+ "`dblDocTaxAmt` DOUBLE NOT NULL,"
+				+ "`strVendorCode` VARCHAR(50) NOT NULL)"
+				+ " "
+				+ "COLLATE='utf8_general_ci' ENGINE=InnoDB;";		
+		funExecuteWebClubQuery(sql);
+		
+		sql = "CREATE TABLE `tblbqquotationhd` ("
+				+ "`strQuotationNo` VARCHAR(30) NOT NULL,"
+				+ "`strClientCode` VARCHAR(20) NOT NULL,"
+				+ "`dteQuotationDate` DATETIME NOT NULL,"
+				+ "`dteDateCreated` DATETIME NOT NULL,"
+				+ "`dteDateEdited` DATETIME NOT NULL,"
+				+ "`dteFromDate` DATETIME NOT NULL,"
+				+ "`dteToDate` DATETIME NOT NULL,"
+				+ "`intMaxPaxNo` BIGINT(20) NOT NULL,"
+				+ "`intMinPaxNo` BIGINT(20) NOT NULL,"
+				+ "`strAreaCode` VARCHAR(20) NOT NULL,"
+				+ "`strBillingInstructionCode` VARCHAR(20) NOT NULL,"
+				+ "`strQuotationStatus` VARCHAR(20) NOT NULL,"
+				+ "`strCustomerCode` VARCHAR(20) NOT NULL,"
+				+ "`strEmailID` VARCHAR(50) NOT NULL,"
+				+ "`strEventCoordinatorCode` VARCHAR(20) NOT NULL,"
+				+ "`strFunctionCode` VARCHAR(20) NOT NULL,"
+				+ "`strPropertyCode` VARCHAR(20) NOT NULL,"
+				+ "`strUserCreated` VARCHAR(30) NOT NULL,"
+				+ "`strUserEdited` VARCHAR(30) NOT NULL,"
+				+ "`tmeFromTime` VARCHAR(15) NOT NULL,"
+				+ "`tmeToTime` VARCHAR(15) NOT NULL,"
+				+ "`dblSubTotal` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',"
+				+ "`dblDiscAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',"
+				+ "`dblTaxAmt` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',"
+				+ "`dblGrandTotal` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',"
+				+ "`strBanquetCode` VARCHAR(20) NOT NULL,"
+				+ "PRIMARY KEY (`strQuotationNo`, `strClientCode`)) "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB;";
+		funExecuteWebClubQuery(sql);
 		/*----------------WebClub Forms End---------------------------*/
 		//
 		//
@@ -3230,7 +3282,8 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "('frmAddExtraBed', 'Add Extra Bed','Transaction', '2', 'T', '17', '17', '1', 'imgAddExtraBed.png', '3', '2', '2', '2', 'NO', 'NO', 'frmAddExtraBed.html',  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'), "
 				+ "('frmBlockRoomReport', 'Block Room Report', 'Reports', '3', 'R', '20', '20', '5', 'imgBlockRoomReport.png', '3', '5', '5', '5', 'NO', 'NO', 'frmBlockRoomReport.html' , NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'), "
 				+ "('frmPMSSalesFlash', 'Sales Flash', 'Tools', 1, 'T', 5, 46, '1', 'imgSalesFlash.png', '3', 1, '1', '1', 'NO', 'NO', 'frmPMSSalesFlash.html', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'), "
-				+ "('frmCheckInCheckOutList', 'CheckIn CheckOut List', 'Reports', '3', 'R', '4', '4', '6', 'imgCheckInCheckOutList.png', '3', '1', '1', '1', 'NO', 'NO', 'frmCheckInCheckOutList.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y');";
+				+ "('frmCheckInCheckOutList', 'CheckIn CheckOut List', 'Reports', '3', 'R', '4', '4', '6', 'imgCheckInCheckOutList.png', '3', '1', '1', '1', 'NO', 'NO', 'frmCheckInCheckOutList.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y'),"
+				+ "('frmHouseKeepingMaster', 'House Keeping master', 'Master', '1', 'M', '8', '8', '1', 'imgGuestMaster.png', '3', '3', '3', '3', 'NO', 'NO', 'frmHouseKeepingMaster.html',NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Y')";
 				
 		
 		funExecuteQuery(sql);
@@ -3240,7 +3293,38 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		
 		sql = "UPDATE `tbltreemast` SET `strFormDesc`='Reservation Cancellation' WHERE  `strFormName`='frmRoomCancellation' AND `strModule`='3';";
 		funExecuteQuery(sql);
-
+		
+		sql = "CREATE TABLE `tblhousekeepmaster` ("
+				+ "`strHouseKeepCode` VARCHAR(50) NOT NULL DEFAULT '',"
+				+ "`strHouseKeepName` VARCHAR(50) NOT NULL DEFAULT '',"
+				+ "`strDescription` VARCHAR(200) NOT NULL DEFAULT '',"
+				+ "`dteDateCreated` DATETIME NOT NULL DEFAULT '1990-10-10 00:00:00',"
+				+ "`dteDateEdited` DATETIME NOT NULL DEFAULT '1990-10-10 00:00:00',"
+				+ "`strUserCreated` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strUserEdited` VARCHAR(20) NOT NULL DEFAULT '',"
+				+ "`strClientCode` VARCHAR(10) NOT NULL DEFAULT '',"
+				+ "`strRemarks` VARCHAR(255) NULL DEFAULT NULL,"
+				+ "PRIMARY KEY (`strHouseKeepCode`, `strClientCode`)"
+				+ ") "
+				+ "COLLATE='utf8_general_ci' "
+				+ "ENGINE=InnoDB"
+				+ ";";
+		funExecutePMSQuery(sql);
+		
+		sql = "CREATE TABLE `tblroomhousekeepdtl` ("
+				+ "`strHouseKeepCode` VARCHAR(20) NOT NULL,"
+				+ "`strRoomCode` VARCHAR(20) NOT NULL,"
+				+ "`dteDate` DATETIME NOT NULL DEFAULT '1990-10-10 00:00:00',"
+				+ "`strUser` VARCHAR(50) NOT NULL,"
+				+ "`strRemarks` VARCHAR(50) NOT NULL,"
+				+ "`strRoomCodeFlg` VARCHAR(5) NOT NULL DEFAULT 'N',"
+				+ "`strClientCode` VARCHAR(50) NOT NULL"
+				+ ") COLLATE='utf8_general_ci' ENGINE=InnoDB;";
+		funExecutePMSQuery(sql);
+		
+		sql = "ALTER TABLE `tblroom` "
+				+ "ADD COLUMN `strHouseKeepingFlg` VARCHAR(5) NOT NULL DEFAULT 'Y' AFTER `strRoomTypeDesc`;";
+		funExecutePMSQuery(sql);
 		// / END ///
 
 		/*----------------WebPMS Forms End---------------------------*/
@@ -3539,6 +3623,12 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 			+" COLLATE='utf8_general_ci' "
 			+" ENGINE=InnoDB ";
 		
+		funExecuteBanquetQuery(sql);
+		
+		sql="ALTER TABLE `tblservicemaster` ADD COLUMN `strServiceType` VARCHAR(10) NOT NULL  DEFAULT ''  AFTER `strClientCode` ;";
+		funExecuteBanquetQuery(sql);
+		
+		sql="ALTER TABLE `tblbqbookingdtl` ADD COLUMN `strVendorCode` VARCHAR(10) NOT NULL DEFAULT '' AFTER `dblDocTaxAmt`;";
 		funExecuteBanquetQuery(sql);
 		
 		

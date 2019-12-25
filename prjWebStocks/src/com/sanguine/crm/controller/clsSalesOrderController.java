@@ -340,6 +340,8 @@ public class clsSalesOrderController
 							obSODtl.setStrRemarks(obSODtl.getStrRemarks());
 							obSODtl.setIntindex(intindex);
 							obSODtl.setStrProdChar("");
+							obSODtl.setStrMessage("meessage");
+							obSODtl.setStrShape("shape");
 							// obSODtl.setDblTotalPrice();
 							obSODtl.setStrClientCode(clientCode);
 							if (obSODtl.getDblAcceptQty() != 0)

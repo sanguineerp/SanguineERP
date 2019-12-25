@@ -6208,7 +6208,7 @@ return 1;
 				if(objChild[12].toString().equalsIgnoreCase("Semi Finished") || objChild[12].toString().equalsIgnoreCase("Produced")){
 					//flgSemiFinished=true;	
 					finalwt = objChild[5].toString()+"*"+finalwt;
-					dblRecipeCost+=funGetChildProduct(objChild[12].toString(),clientCode,objChild[13].toString(),parentCode,finalwt,Double.parseDouble(objChild[10].toString()));
+					//dblRecipeCost+=funGetChildProduct(objChild[12].toString(),clientCode,objChild[13].toString(),parentCode,finalwt,Double.parseDouble(objChild[10].toString()));
 				
 				}
 			}
