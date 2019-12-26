@@ -1181,7 +1181,7 @@ public class clsSetupMasterController {
 		objPropertySetupModel.setStrUserModified(string);
 		objPropertySetupModel.setClientCode(req.getSession()
 				.getAttribute("clientCode").toString());
-		objPropertySetupModel.setStrFifo(bean.getStrFifo());
+		objPropertySetupModel.setStrFifo(objGlobal.funIfNull(bean.getStrFifo(),"N",bean.getStrFifo()));
 		
 		List auditFormList = bean.getListAuditForm();
 		String AuditFrom = "";

@@ -176,7 +176,7 @@ public class clsClientDetails {
 		   //260.001", "PARAG HOTELS AND RESORT PVT LTD" for POS
 			hmClientDtl.put("260.001", clsClientDetails.createClientDetails("260.001", "PARAG HOTELS AND RESORT PVT LTD", dFormat.parse("2019-12-16"), dFormat.parse("2020-01-16")));//(Mumbai)//released on 16-12-2019 for 1 month  till 16-01-2020 
 			//Africa International
-			hmClientDtl.put("261.001", clsClientDetails.createClientDetails("261.001", "KIN DELICIEUX", dFormat.parse("2018-09-08"), dFormat.parse("2019-12-31")));//(AFRICA)//Renewed on 29-08-2019  till 31-12-2019 //released on 08-09-2018 for 1 year till 08-09-2019 
+			hmClientDtl.put("261.001", clsClientDetails.createClientDetails("261.001", "KIN DELICIEUX", dFormat.parse("2018-09-08"), dFormat.parse("2020-12-31")));//(AFRICA)//Renewed on 29-08-2019  till 31-12-2019 //released on 08-09-2018 for 1 year till 08-09-2019 
 			hmClientDtl.put("262.001", clsClientDetails.createClientDetails("262.001", "COCO JAMBO", dFormat.parse("2018-09-08"), dFormat.parse("2020-09-08")));//(AFRICA)//Renewed on 18-09-2019 foe 1 year till 08-09-2020//Renewed on 07-09-2019  till 18-09-2019 //released on 08-09-2018 for 1 year till 08-09-2019 
 			hmClientDtl.put("263.001", clsClientDetails.createClientDetails("263.001", "FIESTA CLUB", dFormat.parse("2018-09-08"), dFormat.parse("2020-09-08")));//(AFRICA)//Renewed on 18-09-2019 foe 1 year till 08-09-2020//Renewed on 07-09-2019  till 18-09-2019  //released on 08-09-2018 for 1 year till 08-09-2019hmClientDtl.put("263.001", clsClientDetails.createClientDetails("263.001", "FIESTA CLUB", dFormat.parse("2018-09-08"), dFormat.parse("2019-09-08")));//(AFRICA)//released on 08-09-2018 for 1 year till 08-09-2019
 			// 264-266 used for POS
