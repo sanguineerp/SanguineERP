@@ -600,7 +600,7 @@ public class clsPMSPaymentController {
 				}
 			}
 		}
-		else if(docName.equalsIgnoreCase("Banquet"))
+		else if(docName.equalsIgnoreCase("Booking"))
 		{
 			clsPaymentReciptBean objPaymentReciptBean = new clsPaymentReciptBean();
 			String webStockDB=request.getSession().getAttribute("WebStockDB").toString();

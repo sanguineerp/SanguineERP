@@ -94,54 +94,54 @@ function funSetGuestCode(code)
 	        	}
 	        	else
 	        	{
-	        		$("#txtGuestCode").val(response.strGuestCode);
-		        	$("#cmbGuestPrefix").val(response.strGuestPrefix);
-		        	$("#txtFirstName").val(response.strFirstName);
-		        	$("#txtMiddleName").val(response.strMiddleName);
-		        	$("#txtLastName").val(response.strLastName);
-		        	$("#cmbGender").val(response.strGender);
-		        	$("#txtDOB").val(response.dteDOB);
-		        	$("#txtDesignation").val(response.strDesignation);
-		        	$("#txtAddress").val(response.strAddress);
-		        	$("#cmbCity").val(response.strCity);
-		        	$("#cmbState").val(response.strState);
-		        	$("#cmbCountry").val(response.strCountry);
-		        	$("#txtNationality").val(response.strNationality);
-		        	$("#txtPinCode").val(response.intPinCode);
-		        	$("#txtMobileNo").val(response.lngMobileNo);
-		        	$("#txtFaxNo").val(response.lngFaxNo);
-		        	$("#txtEmailId").val(response.strEmailId);
-		        	$("#txtPANNo").val(response.strPANNo);
-		        	$("#txtArrivalFrom").val(response.strArrivalFrom);
-		        	$("#txtProceedingTo").val(response.strProceedingTo);
-		        	$("#txtStatus").val(response.strStatus);
-		        	$("#txtVisitingType").val(response.strVisitingType);
-		        	$("#txtPassportNo").val(response.strPassportNo);
-		        	$("#txtPassportIssueDate").val(response.dtePassportIssueDate);
-		        	$("#txtPassportExpiryDate").val(response.dtePassportExpiryDate);
-		        	$("#txtGSTNo").val(response.strGSTNo);
-		        	$("#txtAnniversaryDte").val(response.dteAnniversaryDate);
-		        	$("#txtUIDNo").val(response.strUIDNo);
+	        		$("#txtGuestCode").val(response.model.command.objGuestMasterModel.strGuestCode);
+		        	$("#cmbGuestPrefix").val(response.model.command.objGuestMasterModel.strGuestPrefix);
+		        	$("#txtFirstName").val(response.model.command.objGuestMasterModel.strFirstName);
+		        	$("#txtMiddleName").val(response.model.command.objGuestMasterModel.strMiddleName);
+		        	$("#txtLastName").val(response.model.command.objGuestMasterModel.strLastName);
+		        	$("#cmbGender").val(response.model.command.objGuestMasterModel.strGender);
+		        	$("#txtDOB").val(response.model.command.objGuestMasterModel.dteDOB);
+		        	$("#txtDesignation").val(response.model.command.objGuestMasterModel.strDesignation);
+		        	$("#txtAddress").val(response.model.command.objGuestMasterModel.strAddress);
+		        	$("#cmbCity").val(response.model.command.objGuestMasterModel.strCity);
+		        	$("#cmbState").val(response.model.command.objGuestMasterModel.strState);
+		        	$("#cmbCountry").val(response.model.command.objGuestMasterModel.strCountry);
+		        	$("#txtNationality").val(response.model.command.objGuestMasterModel.strNationality);
+		        	$("#txtPinCode").val(response.model.command.objGuestMasterModel.intPinCode);
+		        	$("#txtMobileNo").val(response.model.command.objGuestMasterModel.lngMobileNo);
+		        	$("#txtFaxNo").val(response.model.command.objGuestMasterModel.lngFaxNo);
+		        	$("#txtEmailId").val(response.model.command.objGuestMasterModel.strEmailId);
+		        	$("#txtPANNo").val(response.model.command.objGuestMasterModel.strPANNo);
+		        	$("#txtArrivalFrom").val(response.model.command.objGuestMasterModel.strArrivalFrom);
+		        	$("#txtProceedingTo").val(response.model.command.objGuestMasterModel.strProceedingTo);
+		        	$("#txtStatus").val(response.model.command.objGuestMasterModel.strStatus);
+		        	$("#txtVisitingType").val(response.model.command.objGuestMasterModel.strVisitingType);
+		        	$("#txtPassportNo").val(response.model.command.objGuestMasterModel.strPassportNo);
+		        	$("#txtPassportIssueDate").val(response.model.command.objGuestMasterModel.dtePassportIssueDate);
+		        	$("#txtPassportExpiryDate").val(response.model.command.objGuestMasterModel.dtePassportExpiryDate);
+		        	$("#txtGSTNo").val(response.model.command.objGuestMasterModel.strGSTNo);
+		        	$("#txtAnniversaryDte").val(response.model.command.objGuestMasterModel.dteAnniversaryDate);
+		        	$("#txtUIDNo").val(response.model.command.objGuestMasterModel.strUIDNo);
 		        
-		        	$("#cmbDefaultAddr").val(response.strDefaultAddr);
+		        	$("#cmbDefaultAddr").val(response.model.command.objGuestMasterModel.strDefaultAddr);
 		        	
-		        	$("#txtAddressLocal").val(response.strAddressLocal);
-		        	$("#cmbCityLocal").val(response.strCityLocal);
-		        	$("#cmbStateLocal").val(response.strStateLocal);
-		        	$("#cmbCountryLocal").val(response.strCountryLocal);
-		        	$("#txtPinCodeLocal").val(response.intPinCodeLocal);
+		        	$("#txtAddressLocal").val(response.model.command.objGuestMasterModel.strAddressLocal);
+		        	$("#cmbCityLocal").val(response.model.command.objGuestMasterModel.strCityLocal);
+		        	$("#cmbStateLocal").val(response.model.command.objGuestMasterModel.strStateLocal);
+		        	$("#cmbCountryLocal").val(response.model.command.objGuestMasterModel.strCountryLocal);
+		        	$("#txtPinCodeLocal").val(response.model.command.objGuestMasterModel.intPinCodeLocal);
 		        	
-		        	$("#txtAddressPermanent").val(response.strAddrPermanent);
-		        	$("#cmbCityPermanent").val(response.strCityPermanent);
-		        	$("#cmbStatePermanent").val(response.strStatePermanent);
-		        	$("#cmbCountryPermanent").val(response.strCountryPermanent);
-		        	$("#txtPinCodePermanent").val(response.intPinCodePermanent);
+		        	$("#txtAddressPermanent").val(response.model.command.objGuestMasterModel.strAddrPermanent);
+		        	$("#cmbCityPermanent").val(response.model.command.objGuestMasterModel.strCityPermanent);
+		        	$("#cmbStatePermanent").val(response.model.command.objGuestMasterModel.strStatePermanent);
+		        	$("#cmbCountryPermanent").val(response.model.command.objGuestMasterModel.strCountryPermanent);
+		        	$("#txtPinCodePermanent").val(response.model.command.objGuestMasterModel.intPinCodePermanent);
 		        	
-		        	$("#txtAddressOfc").val(response.strAddressOfc);
-		        	$("#cmbCityOfc").val(response.strCityOfc);
-		        	$("#cmbStateOfc").val(response.strStateOfc);
-		        	$("#cmbCountryOfc").val(response.strCountryOfc);
-		        	$("#txtPinCodeOfc").val(response.intPinCodeOfc);
+		        	$("#txtAddressOfc").val(response.model.command.objGuestMasterModel.strAddressOfc);
+		        	$("#cmbCityOfc").val(response.model.command.objGuestMasterModel.strCityOfc);
+		        	$("#cmbStateOfc").val(response.model.command.objGuestMasterModel.strStateOfc);
+		        	$("#cmbCountryOfc").val(response.model.command.objGuestMasterModel.strCountryOfc);
+		        	$("#txtPinCodeOfc").val(response.model.command.objGuestMasterModel.intPinCodeOfc);
 		        	
 	        	}
 			},
@@ -373,6 +373,19 @@ function funSetGuestCode(code)
 					href="javascript:void(0);">Export/Import</a>&nbsp; &nbsp; &nbsp;
 					&nbsp;<a id="baseUrl" href="#"> Attach Documents</a>&nbsp; &nbsp;
 					&nbsp; &nbsp;</th>
+					
+					<c:if test="${!empty documentList}">
+					<c:forEach items="${documentList}" var="doc" varStatus="i" >
+				<tr>
+					<td width="200px">${doc.strActualFileName}</td>
+				
+					<td><a
+						href="${pageContext.request.contextPath}/download/${doc.strCode},${doc.intId}.html">${doc.strActualFileName}</a>
+
+					</td>
+				</tr>
+			</c:forEach>
+			</c:if>
 					
 						
 			</tr>

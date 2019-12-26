@@ -101,6 +101,8 @@ public class clsFunctionProspectusController
 		List listEquipment = new ArrayList<>();
 		List listService = new ArrayList<>();
 		List listMenu = new ArrayList<>();
+		List listExtService = new ArrayList<>();
+		List listIntService = new ArrayList<>();
 		
 		String reportName = servletContext.getRealPath("/WEB-INF/reports/webbanquet/rptFunctionProspectus.jrxml");
 		String imagePath = servletContext.getRealPath("/resources/images/Sanguine_Logo_Icon.png");
@@ -185,6 +187,22 @@ public class clsFunctionProspectusController
 							objBean.setStrQty(objFunction[3].toString());
 						    listMenu.add(objBean);
 						}
+						else if(strServiceType.equals("Ex Service"))
+						{
+							objBean = new clsFunctionProspectusBean();
+							objBean.setStrServiceType(strServiceType);
+							objBean.setStrService(objFunction[1].toString());
+							objBean.setStrQty(objFunction[3].toString());
+						    listExtService.add(objBean);
+						}
+						else if(strServiceType.equals("In Service"))
+						{
+							objBean = new clsFunctionProspectusBean();
+							objBean.setStrServiceType(strServiceType);
+							objBean.setStrService(objFunction[1].toString());
+							objBean.setStrQty(objFunction[3].toString());
+						    listIntService.add(objBean);
+						}
 						/*else if(strServiceType.equals("Banquet"))
 						{
 							objBean = new clsFunctionProspectusBean();
@@ -241,6 +259,9 @@ public class clsFunctionProspectusController
 		reportParams.put("listEquipment", listEquipment);
 		reportParams.put("listService", listService);
 		reportParams.put("listMenu", listMenu);
+		reportParams.put("listExtService", listExtService);
+		reportParams.put("listIntService", listIntService);
+		
 		
 		JasperDesign jd = JRXmlLoader.load(reportName);
 		JasperReport jr = JasperCompileManager.compileReport(jd);

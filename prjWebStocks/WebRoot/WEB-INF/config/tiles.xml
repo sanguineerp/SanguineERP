@@ -5051,7 +5051,26 @@
 	  		<put-attribute name="title" value="ReprintReceipt" /> 
 	  		<put-attribute name="body" value="/WEB-INF/jsp/webPMS/transactions/frmPMSReprintReceipt.jsp" /> 
 	  	</definition>
+	  	
+	  	
+	  	<definition name="frmHouseKeepingMaster" extends="base.definition">
+			<put-attribute name="title" value="House Keeping Master"></put-attribute>
+			<put-attribute name="body" 	value="/WEB-INF/jsp/webPMS/masters/frmHouseKeepingMaster.jsp"></put-attribute>
+		</definition>
+		<definition name="frmHouseKeepingMaster_1" extends="base.definition4">
+			<put-attribute name="title" value="House Keeping Master"></put-attribute>
+			<put-attribute name="body"	value="/WEB-INF/jsp/webPMS/masters/frmHouseKeepingMaster.jsp"></put-attribute>
+		</definition>
 	
+	
+	<definition name="frmCheckDirtyRoom" extends="base.searchFormDefination">
+			<put-attribute name="title" value="Dirty Room Check"></put-attribute>
+			<put-attribute name="body" 	value="/WEB-INF/jsp/webPMS/tools/frmCheckDirtyRoom.jsp"></put-attribute>
+		</definition>
+		<definition name="frmCheckDirtyRoom_1" extends="base.searchFormDefination">
+			<put-attribute name="title" value="Dirty Room Check"></put-attribute>
+			<put-attribute name="body"	value="/WEB-INF/jsp/webPMS/tools/frmCheckDirtyRoom.jsp"></put-attribute>
+		</definition>
   	
 <!-- 	End Of WebPMS Tiles Entry -->
 
@@ -5259,7 +5278,15 @@
 	  </definition>
 	  
 	  
-	  
+	  <definition name="frmBanquetQuotation" extends="base.definition">
+		   <put-attribute name="title" value="Banquet Quotation" ></put-attribute>
+		   <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetQuotation.jsp" ></put-attribute>
+	  </definition>
+	
+	 <definition name="frmBanquetQuotation_1" extends="base.definition4">
+	 	 <put-attribute name="title" value="Banquet Quotation"  ></put-attribute>
+	  	 <put-attribute name="body" value="/WEB-INF/jsp/webBanquets/frmBanquetQuotation.jsp" ></put-attribute>
+	  </definition>
 
 	  
 <!-- 	End Of WebBanquet Tiles Entry -->

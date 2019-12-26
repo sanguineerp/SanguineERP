@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Table;
+
 
 @Embeddable
-public class clsBanquetBookingModelDtl  implements Serializable {
+public class clsBanquetQuotationModelDtl  implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	//Variable Declaration
@@ -32,8 +32,8 @@ public class clsBanquetBookingModelDtl  implements Serializable {
 		@Column(name="dblDocTotalAmt")
 		private double dblDocTotalAmt;
 		
-		@Column(name="strBookingDate")
-		private String strBookingDate;
+		@Column(name="strQuotationDate")
+		private String strQuotationDate;
 		
 		@Column(name="dblDocDiscAmt")
 		private double dblDocDiscAmt;
@@ -92,12 +92,12 @@ public class clsBanquetBookingModelDtl  implements Serializable {
 			this.dblDocTotalAmt = dblDocTotalAmt;
 		}
 
-		public String getStrBookingDate() {
-			return strBookingDate;
+		public String getStrQuotationDate() {
+			return strQuotationDate;
 		}
 
-		public void setStrBookingDate(String strBookingDate) {
-			this.strBookingDate = strBookingDate;
+		public void setStrQuotationDate(String strQuotationDate) {
+			this.strQuotationDate = strQuotationDate;
 		}
 
 		public double getDblDocDiscAmt() {

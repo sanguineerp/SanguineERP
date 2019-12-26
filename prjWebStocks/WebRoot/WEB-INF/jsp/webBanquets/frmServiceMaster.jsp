@@ -67,6 +67,7 @@ function funSetData(code){
 								false);
 	        		
 	        		$("#cmbTaxIndicator").val(response.strTaxIndicator);
+	        		$("#cmbServiceType").val(response.strServiceType);
 				}
 			},
 			error : function(jqXHR, exception){
@@ -201,6 +202,16 @@ function funSetData(code){
 					
 			</tr>
 			<tr>
+				<td><label>Service Type</label></td>
+				<td><s:select id="cmbServiceType" 
+				path="strServiceType" cssClass="BoxW48px" style="width:100px;">
+				<s:option value="Internal">Internal</s:option>
+				<s:option value="External">External</s:option>
+				</s:select>
+				</td>
+				
+		   </tr>
+			<tr>
 				<td>
 				   <label>Department Code</label>
 				</td>
@@ -225,6 +236,9 @@ function funSetData(code){
 				path="strTaxIndicator" items="${taxIndicatorList}"  cssClass="BoxW48px"/></td>
 				
 		   </tr>
+		   
+		   
+		   
 			
 		</table>
 

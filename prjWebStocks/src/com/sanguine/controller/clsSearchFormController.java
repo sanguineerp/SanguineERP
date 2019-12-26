@@ -3214,6 +3214,17 @@ public class clsSearchFormController {
 			searchFormTitle = "Room Master";
 			break;
 		}
+		
+		
+		case "houseKeepCode": {
+			columnNames = " a.strHouseKeepCode,a.strHouseKeepName,a.strUserCreated ";
+			tableName = " from tblhousekeepmaster a where a.strClientCode='"+clientCode+"' ";
+			listColumnNames = " House Keeping Code,House Keeping Name,User ";
+			idColumnName = " strHouseKeepCode,strClientCode ";
+			searchFormTitle = " House Keeping Master ";
+			flgQuerySelection = true;
+			break;
+		}
 	
 
 		}
@@ -5791,6 +5802,40 @@ public class clsSearchFormController {
 				break;
 			}
 
+			case "BanquetExternalServices": {
+				columnNames = "strServiceCode,strServiceName";
+				tableName = " clsServiceMasterModel where strClientCode='" + clientCode + "' and strServiceType='External' ";
+				listColumnNames = "Service Code,Service Name";
+				criteria = getCriteriaQuery(columnNames, search_with, tableName);
+				idColumnName = "strServiceCode";
+				searchFormTitle = "Service Master";
+							 
+				break;
+			}
+			
+			case "Banquetsuppcode": {
+				columnNames = "strPCode,strPName,strMobile,strEmail,strContact";
+				tableName = "select strPCode,strPName,strMobile,strEmail,strContact from "+webStockDB+".tblpartymaster  "
+						+ "where strClientCode='" + clientCode + "' and strPType ='Supp' or strPType='' ";
+				listColumnNames = "Vendor Code,Vendor Name,Mobile No,Email-id,Contact Person";
+				idColumnName = "strPCode";
+				searchFormTitle = "Vendor Master";
+				flgQuerySelection = true;
+				break;
+			}
+			
+			case "BanquetQuotationNo": {
+				columnNames = "a.strQuotationNo,b.strPName,DATE_FORMAT(a.dteQuotationDate,'%d-%m-%Y')";
+				tableName = "from tblbqquotationhd a ,"+webStockDB+".tblpartymaster b "
+						+ "where a.strCustomerCode=b.strPCode and a.strClientCode='"+clientCode+"'";
+				listColumnNames = "Quotation No,Guest Name,Quatation Date";
+				idColumnName = "strQuotationNo,strClientCode";
+				flgQuerySelection = true;
+				// criteria = getCriteriaQuery(columnNames,search_with,tableName);
+				searchFormTitle = "Payment Receipt";
+				break;
+			}
+			
 		}
 
 		mainMap.put("columnNames", columnNames);

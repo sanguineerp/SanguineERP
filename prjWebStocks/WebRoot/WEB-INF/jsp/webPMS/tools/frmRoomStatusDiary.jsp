@@ -692,6 +692,15 @@ body {
 									 	 url=getContextPath()+"/frmCheckOut1.html?docCode="+subStr
 									 	 window.open(url);
 										}
+										else
+											{
+											isCheckOk =	confirm("Do you want to clean this room");
+											if(isCheckOk)
+												{
+												funOpenCleanPage(subStr,obj);
+												
+												}
+											}
 		   						  break;
 			case 'rgb(128, 128, 128)'://GREY-->CHECKED-OUT
 									  
@@ -763,7 +772,8 @@ body {
 				  var isDirtyOk=confirm("Do You want to mark this room as Clean ?");
 				  if(isDirtyOk)
 					{		
-					  funCallRoomClean(subStr,obj);
+					  /* funCallRoomClean(subStr,obj); */
+					  funOpenCleanPage(subStr,obj);
 					  
 						//window.open(getContextPath() + "/cleanRoomStatus.html?checkInNo=" +nextFinalTemp);
 					}
@@ -878,6 +888,37 @@ body {
 		//	funShowRoomStatusDtl(key);
 			//funShowRoomStatusDtl();
 		}
+		
+		function funOpenCleanPage(roomNo,obj)
+		{
+			var transactionName ;
+			  transactionName  = roomNo;
+			    var name = obj.defaultValue.split(",")[0];
+				window.open("frmCheckDirtyRoom.html?formname="+transactionName+"&objData="+name,"","mywindow","directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=200,height=200,left=400");
+				window.close;
+				
+		}
+		
+		
+		function funCheckAllDirty(code)
+		{
+			switch (fieldName)
+			{
+			case 'userDefinedReportCode':
+				if(response.name.includes("mywindow")){
+					funCallRoomClean(roomNo,obj);
+					var index=obj.parentNode.parentNode.rowIndex;
+					  var table1=document.getElementById("tblRoomType");
+					  var indexData=table1.rows[index];
+					  indexData.cells[1].bgColor='';
+					  obj.defaultValue='';
+					  alert('Room cleaned Successfully');
+					}
+			        break;
+				
+			}
+		}
+		
 </script>
 
 

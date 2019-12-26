@@ -431,7 +431,7 @@
 			funHelp("BillForPayment");
 			fieldName = "BillForPayment";
 		}
-		else if ($("#cmbAgainst").val() == "Booking")
+		else if ($("#cmbAgainst").val() == "Banquet")
 		{
 			funHelp("BillForBanquet");
 			fieldName = "BillForBooking";

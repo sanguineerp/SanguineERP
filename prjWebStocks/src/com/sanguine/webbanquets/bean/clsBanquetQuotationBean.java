@@ -3,15 +3,15 @@ package com.sanguine.webbanquets.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sanguine.webbanquets.model.clsBanquetBookingModelDtl;
+import com.sanguine.webbanquets.model.clsBanquetQuotationModelDtl;
 
-public class clsBanquetBookingBean{
+public class clsBanquetQuotationBean{
 //Variable Declaration
-	private String strBookingNo;
+	private String strQuotationNo;
 
 	private String strPropertyCode;
 
-	private String dteBookingDate;
+	private String dteQuotationDate;
 
 	private String dteFromDate;
 	
@@ -47,7 +47,7 @@ public class clsBanquetBookingBean{
 	
 	private String strBillingInstructionCode;
 	
-	private String  strBookingStatus;
+	private String  strQuotationStatus;
 	
 	private double dblSubTotal;
 	
@@ -59,22 +59,22 @@ public class clsBanquetBookingBean{
 	
 	private String  strBanquetCode;
 	
-	List<clsBanquetBookingModelDtl> listSeriveDtl=new ArrayList<clsBanquetBookingModelDtl>();
-	List<clsBanquetBookingModelDtl> listEquipDtl=new ArrayList<clsBanquetBookingModelDtl>();
-	List<clsBanquetBookingModelDtl> listStaffCatDtl=new ArrayList<clsBanquetBookingModelDtl>();
-	List<clsBanquetBookingModelDtl> listMenuItemDtl=new ArrayList<clsBanquetBookingModelDtl>();
+	List<clsBanquetQuotationModelDtl> listSeriveDtl=new ArrayList<clsBanquetQuotationModelDtl>();
+	List<clsBanquetQuotationModelDtl> listEquipDtl=new ArrayList<clsBanquetQuotationModelDtl>();
+	List<clsBanquetQuotationModelDtl> listStaffCatDtl=new ArrayList<clsBanquetQuotationModelDtl>();
+	List<clsBanquetQuotationModelDtl> listMenuItemDtl=new ArrayList<clsBanquetQuotationModelDtl>();
 	
-	List<clsBanquetBookingModelDtl> listExternalServices=new ArrayList<clsBanquetBookingModelDtl>();
+	List<clsBanquetQuotationModelDtl> listExternalServices=new ArrayList<clsBanquetQuotationModelDtl>();
 	
 	
 
-	//private List<clsclsBanquetBookingBeanDtlModel> listclsclsBanquetBookingBeanDtlModel
+	//private List<clsclsBanquetQuotationBeanDtlModel> listclsclsBanquetQuotationBeanDtlModel
 //Setter-Getter Methods
-	public String getStrBookingNo(){
-		return strBookingNo;
+	public String getStrQuotationNo(){
+		return strQuotationNo;
 	}
-	public void setStrBookingNo(String strBookingNo){
-		this.strBookingNo=strBookingNo;
+	public void setStrQuotationNo(String strQuotationNo){
+		this.strQuotationNo=strQuotationNo;
 	}
 
 	public String getStrPropertyCode(){
@@ -84,11 +84,11 @@ public class clsBanquetBookingBean{
 		this.strPropertyCode=strPropertyCode;
 	}
 
-	public String getDteBookingDate(){
-		return dteBookingDate;
+	public String getDteQuotationDate(){
+		return dteQuotationDate;
 	}
-	public void setDteBookingDate(String dteBookingDate){
-		this.dteBookingDate=dteBookingDate;
+	public void setDteQuotationDate(String dteQuotationDate){
+		this.dteQuotationDate=dteQuotationDate;
 	}
 
 	public String getStrUserCreated(){
@@ -205,34 +205,34 @@ public class clsBanquetBookingBean{
 		this.strBillingInstructionCode = strBillingInstructionCode;
 	}
     
-	public String getStrBookingStatus() {
-		return strBookingStatus;
+	public String getStrQuotationStatus() {
+		return strQuotationStatus;
 	}
-	public void setStrBookingStatus(String strBookingStatus) {
-		this.strBookingStatus = strBookingStatus;
+	public void setStrQuotationStatus(String strQuotationStatus) {
+		this.strQuotationStatus = strQuotationStatus;
 	}
-	public List<clsBanquetBookingModelDtl> getListSeriveDtl() {
+	public List<clsBanquetQuotationModelDtl> getListSeriveDtl() {
 		return listSeriveDtl;
 	}
-	public void setListSeriveDtl(List<clsBanquetBookingModelDtl> listSeriveDtl) {
+	public void setListSeriveDtl(List<clsBanquetQuotationModelDtl> listSeriveDtl) {
 		this.listSeriveDtl = listSeriveDtl;
 	}
-	public List<clsBanquetBookingModelDtl> getListEquipDtl() {
+	public List<clsBanquetQuotationModelDtl> getListEquipDtl() {
 		return listEquipDtl;
 	}
-	public void setListEquipDtl(List<clsBanquetBookingModelDtl> listEquipDtl) {
+	public void setListEquipDtl(List<clsBanquetQuotationModelDtl> listEquipDtl) {
 		this.listEquipDtl = listEquipDtl;
 	}
-	public List<clsBanquetBookingModelDtl> getListStaffCatDtl() {
+	public List<clsBanquetQuotationModelDtl> getListStaffCatDtl() {
 		return listStaffCatDtl;
 	}
-	public void setListStaffCatDtl(List<clsBanquetBookingModelDtl> listStaffCatDtl) {
+	public void setListStaffCatDtl(List<clsBanquetQuotationModelDtl> listStaffCatDtl) {
 		this.listStaffCatDtl = listStaffCatDtl;
 	}
-	public List<clsBanquetBookingModelDtl> getListMenuItemDtl() {
+	public List<clsBanquetQuotationModelDtl> getListMenuItemDtl() {
 		return listMenuItemDtl;
 	}
-	public void setListMenuItemDtl(List<clsBanquetBookingModelDtl> listMenuItemDtl) {
+	public void setListMenuItemDtl(List<clsBanquetQuotationModelDtl> listMenuItemDtl) {
 		this.listMenuItemDtl = listMenuItemDtl;
 	}
 	public double getDblSubTotal() {
@@ -265,19 +265,19 @@ public class clsBanquetBookingBean{
 	public void setStrBanquetCode(String strBanquetCode) {
 		this.strBanquetCode = strBanquetCode;
 	}
-	public List<clsBanquetBookingModelDtl> getListExternalServices() {
+	public List<clsBanquetQuotationModelDtl> getListExternalServices() {
 		return listExternalServices;
 	}
 	public void setListExternalServices(
-			List<clsBanquetBookingModelDtl> listExternalServices) {
+			List<clsBanquetQuotationModelDtl> listExternalServices) {
 		this.listExternalServices = listExternalServices;
 	}
 
-	/*public List<clsclsBanquetBookingBeanDtlModel> getclsclsBanquetBookingBeanDtlModel(){
-		return listclsclsBanquetBookingBeanDtlModel;
+	/*public List<clsclsBanquetQuotationBeanDtlModel> getclsclsBanquetQuotationBeanDtlModel(){
+		return listclsclsBanquetQuotationBeanDtlModel;
 	}
-	public void setclsclsBanquetBookingBeanDtlModel(List<clsclsBanquetBookingBeanDtlModel listclsclsBanquetBookingBeanDtlModel>){
-		return listclsclsBanquetBookingBeanDtlModel;
+	public void setclsclsBanquetQuotationBeanDtlModel(List<clsclsBanquetQuotationBeanDtlModel listclsclsBanquetQuotationBeanDtlModel>){
+		return listclsclsBanquetQuotationBeanDtlModel;
 	}*/
 
 }
