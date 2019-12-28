@@ -58,7 +58,7 @@ public class clsDownloadExcelController {
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		DecimalFormat df = new DecimalFormat("#.##");
 		
-		double totalOpeningStock=0.00,totalGRN=0.00,totalSCGRN=0.00,totalStkTransferIn=0.00,totalStkAdjIn=0.00;
+		double totalOpeningStock=0.00,totalGRN=0.00,totalSCGRN=0.00,totalStkTransferIn=0.00,totalStkAdjIn=0.00,totalFreeQty=0.00;
 		double totalMISIn=0.00,totalProducedQty=0.00,totalSalesRet=0.00,totalMaterialRet=0.00,totalPurchaseRet=0.00,totalDelNote=0.00;
 		double totalStkTransOut=0.00,totalStkAdjOut=0.00,totalMISOut=0.00,totalQtyConsumed=0.00,totalSaleAmt=0.00,totalClosingStk=0.00,totalValueTotal = 0.00,totalIssueUOMStk=0.00;
 		double totalReciept=0.00,totalIssue=0.00;
@@ -72,7 +72,7 @@ public class clsDownloadExcelController {
 		}
 
 		if ("Detail".equalsIgnoreCase(reportType)) {
-			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Unit Price", "Opening Stock", "GRN","Free Qty", "SCGRN", "	Stock Transfer In", "Stock Adj In", "MIS In", "Qty Produced", "Sales Return", "Material Return", "Purchase Return", "Delivery Note", "Stock Trans Out", "Stock Adj Out", "MIS Out", "Qty Consumed", "Sales",
+			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Unit Price", "Opening Stock", "GRN","Free Qty", "SCGRN", "	Stock Transfer In", "Stock Adj In", "MIS In", "Qty Produced", "Sales Return", "Material Return", "Purchase Return", "Delivery Note", "Stock Trans Out", "Stock Adj Out", "MIS Out", "Qty Consumed", "Sales","Mat Ret Out",
 					"Closing Stock", "Value", "Issue UOM Stock", "Issue Conversion", "Issue UOM", "Part No" };
 			listStock.add(ExcelHeader);
 			
@@ -97,6 +97,7 @@ public class clsDownloadExcelController {
 			totalsList.add("");	
 			totalsList.add("");
 			totalsList.add("");	
+			totalsList.add("");
 			totalsList.add("");
 			totalsList.add("");
 			totalsList.add("");
@@ -149,7 +150,7 @@ public class clsDownloadExcelController {
 				{
 					sqlBuilder.setLength(0);
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
-							+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)/" + currValue + " , " + "a.dblOpeningStk,a.dblGRNa.dblFreeQty,,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
+							+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN,a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",a.dblClosingStk,"
 							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value,"
 							+ "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -238,8 +239,9 @@ public class clsDownloadExcelController {
 				+ ",(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 						
 				+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
-				+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "' ");
-				
+				+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + ""
+						+ " where  a.strClientCode='" + clientCode + "' ");
+				// a.strUserCode='" + userCode + "' " + "and
 
 				if (strNonStkItems.equals("Non Stockable")) {
 					sqlBuilder.append( "	and b.strNonStockableItem='Y' ");
@@ -303,17 +305,18 @@ public class clsDownloadExcelController {
 
 
 					dataList.add(arrObj[26].toString());
-					double value = Double.parseDouble(arrObj[27].toString());
+					dataList.add(arrObj[27].toString());
+					double value = Double.parseDouble(arrObj[28].toString());
 					if (value < 0) {
 						
 					}
 					
 					
 					dataList.add(df.format(value));
-					dataList.add(arrObj[26].toString());
 					dataList.add(arrObj[29].toString());
 					dataList.add(arrObj[30].toString());
 					dataList.add(arrObj[31].toString());
+					dataList.add(arrObj[32].toString());
 					
 					dblTotalValue = new BigDecimal(df.format(value)).add(dblTotalValue);
 
@@ -321,23 +324,24 @@ public class clsDownloadExcelController {
 					
 					totalOpeningStock+=Double.parseDouble(arrObj[9].toString());
 					totalGRN+= Double.parseDouble(arrObj[10].toString());
-					totalSCGRN+= Double.parseDouble(arrObj[11].toString());
-					totalStkTransferIn+= Double.parseDouble(arrObj[12].toString());
-					totalStkAdjIn+= Double.parseDouble(arrObj[13].toString());
-					totalMISIn+= Double.parseDouble(arrObj[14].toString());
-					totalProducedQty+= Double.parseDouble(arrObj[15].toString());
-					totalSalesRet+= Double.parseDouble(arrObj[16].toString());
-					totalMaterialRet+= Double.parseDouble(arrObj[17].toString());
-					totalPurchaseRet+= Double.parseDouble(arrObj[18].toString());
-					totalDelNote+= Double.parseDouble(arrObj[19].toString());
-					totalStkTransOut+= Double.parseDouble(arrObj[20].toString());
-					totalStkAdjOut+= Double.parseDouble(arrObj[21].toString());
-					totalMISOut+= Double.parseDouble(arrObj[22].toString());
-					totalQtyConsumed+= Double.parseDouble(arrObj[23].toString());
-					totalSaleAmt+= Double.parseDouble(arrObj[24].toString());
-					totalClosingStk+= Double.parseDouble(arrObj[26].toString());
+					totalFreeQty+=  Double.parseDouble(arrObj[11].toString());
+					totalSCGRN+= Double.parseDouble(arrObj[12].toString());
+					totalStkTransferIn+= Double.parseDouble(arrObj[13].toString());
+					totalStkAdjIn+= Double.parseDouble(arrObj[14].toString());
+					totalMISIn+= Double.parseDouble(arrObj[15].toString());
+					totalProducedQty+= Double.parseDouble(arrObj[16].toString());
+					totalSalesRet+= Double.parseDouble(arrObj[17].toString());
+					totalMaterialRet+= Double.parseDouble(arrObj[18].toString());
+					totalPurchaseRet+= Double.parseDouble(arrObj[19].toString());
+					totalDelNote+= Double.parseDouble(arrObj[20].toString());
+					totalStkTransOut+= Double.parseDouble(arrObj[21].toString());
+					totalStkAdjOut+= Double.parseDouble(arrObj[22].toString());
+					totalMISOut+= Double.parseDouble(arrObj[23].toString());
+					totalQtyConsumed+= Double.parseDouble(arrObj[24].toString());
+					totalSaleAmt+= Double.parseDouble(arrObj[25].toString());
+					totalClosingStk+= Double.parseDouble(arrObj[27].toString());
 					totalValueTotal+= value;
-					totalIssueUOMStk+= Double.parseDouble(arrObj[28].toString());
+					totalIssueUOMStk+= Double.parseDouble(arrObj[29].toString());
 					
 					
 
@@ -374,17 +378,18 @@ public class clsDownloadExcelController {
 					dataList.add(funGetDecimalValue(arrObj[24].toString()));
 
 					dataList.add(funGetDecimalValue(arrObj[26].toString()));
-					double value = Double.parseDouble(arrObj[27].toString());
+					dataList.add(funGetDecimalValue(arrObj[27].toString()));
+					double value = Double.parseDouble(arrObj[28].toString());
 					if (value < 0) {
 						// value=value*(-1);
 					}
 					
 					//dblValueTotal += value;
 					dataList.add(df.format(value));
-					dataList.add(funGetDecimalValue(arrObj[26].toString()));
-					dataList.add(arrObj[29].toString());
+					dataList.add(funGetDecimalValue(arrObj[29].toString()));
 					dataList.add(arrObj[30].toString());
 					dataList.add(arrObj[31].toString());
+					dataList.add(arrObj[32].toString());
 					
 					dblTotalValue = new BigDecimal(df.format(value)).add(dblTotalValue);
 
@@ -463,8 +468,10 @@ public class clsDownloadExcelController {
 			dataList.add("");
 			dataList.add("");
 			dataList.add("");
+			
 			NumberFormat formatter = new DecimalFormat("###.#####");
 			String f = formatter.format(totalValueTotal);
+			dataList.add("");
 			dataList.add("");
 			dataList.add("");
 			dataList.add("");

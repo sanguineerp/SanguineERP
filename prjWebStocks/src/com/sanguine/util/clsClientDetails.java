@@ -101,7 +101,7 @@ public class clsClientDetails {
 
 			// WebStocks Clients
 			hmClientDtl.put("000.000", clsClientDetails.createClientDetails("000.000", "Demo Company", dFormat.parse("2014-06-19"), dFormat.parse("2017-10-22")));
-			hmClientDtl.put("024.001", clsClientDetails.createClientDetails("024.001", "Eden Cake Shop", dFormat.parse("2014-09-23"), dFormat.parse("2019-12-31")));//"024.001" renewed on 27-10-2018 for 1 year till 31-12-2019 "Mr. Salim Bhai", "9820141743", "salimsheliya@gmail.com", 
+			hmClientDtl.put("024.001", clsClientDetails.createClientDetails("024.001", "Eden Cake Shop", dFormat.parse("2014-09-23"), dFormat.parse("2020-01-31")));//"024.001" renewed on 27-10-2018 for 1 year till 31-12-2019 "Mr. Salim Bhai", "9820141743", "salimsheliya@gmail.com", 
 			hmClientDtl.put("044.001", clsClientDetails.createClientDetails("044.001", "HOTEL KAMAL PVT. LTD.", dFormat.parse("2015-01-20"), dFormat.parse("2095-02-21")));
 			hmClientDtl.put("048.001", clsClientDetails.createClientDetails("048.001", "SHREE SIDDHIVINAYAK FOODS", dFormat.parse("2015-01-20"), dFormat.parse("2095-02-21")));
 			hmClientDtl.put("060.001", clsClientDetails.createClientDetails("060.001", "FLYING SAUCER SKY BAR", dFormat.parse("2015-07-01"), dFormat.parse("2019-06-01")));//Renewd for1 year till 01-06-2019
@@ -176,7 +176,7 @@ public class clsClientDetails {
 		   //260.001", "PARAG HOTELS AND RESORT PVT LTD" for POS
 			hmClientDtl.put("260.001", clsClientDetails.createClientDetails("260.001", "PARAG HOTELS AND RESORT PVT LTD", dFormat.parse("2019-12-16"), dFormat.parse("2020-01-16")));//(Mumbai)//released on 16-12-2019 for 1 month  till 16-01-2020 
 			//Africa International
-			hmClientDtl.put("261.001", clsClientDetails.createClientDetails("261.001", "KIN DELICIEUX", dFormat.parse("2018-09-08"), dFormat.parse("2020-12-31")));//(AFRICA)//Renewed on 29-08-2019  till 31-12-2019 //released on 08-09-2018 for 1 year till 08-09-2019 
+			hmClientDtl.put("261.001", clsClientDetails.createClientDetails("261.001", "KIN DELICIEUX", dFormat.parse("2018-09-08"), dFormat.parse("2020-12-31")));//(AFRICA)//Renewed on 26-12-2019  till 31-12-2020//(AFRICA)//Renewed on 29-08-2019  till 31-12-2019 //released on 08-09-2018 for 1 year till 08-09-2019 
 			hmClientDtl.put("262.001", clsClientDetails.createClientDetails("262.001", "COCO JAMBO", dFormat.parse("2018-09-08"), dFormat.parse("2020-09-08")));//(AFRICA)//Renewed on 18-09-2019 foe 1 year till 08-09-2020//Renewed on 07-09-2019  till 18-09-2019 //released on 08-09-2018 for 1 year till 08-09-2019 
 			hmClientDtl.put("263.001", clsClientDetails.createClientDetails("263.001", "FIESTA CLUB", dFormat.parse("2018-09-08"), dFormat.parse("2020-09-08")));//(AFRICA)//Renewed on 18-09-2019 foe 1 year till 08-09-2020//Renewed on 07-09-2019  till 18-09-2019  //released on 08-09-2018 for 1 year till 08-09-2019hmClientDtl.put("263.001", clsClientDetails.createClientDetails("263.001", "FIESTA CLUB", dFormat.parse("2018-09-08"), dFormat.parse("2019-09-08")));//(AFRICA)//released on 08-09-2018 for 1 year till 08-09-2019
 			// 264-266 used for POS

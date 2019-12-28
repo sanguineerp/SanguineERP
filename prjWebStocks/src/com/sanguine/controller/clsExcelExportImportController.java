@@ -223,7 +223,40 @@ public class clsExcelExportImportController {
 		String sgCode = request.getParameter("sgCode");
 		String gCode = request.getParameter("gCode");
 		String prodWiseStock = request.getParameter("prodWiseStock");
-		
+		String subGCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] SubGroupCode=sgCode.split(",");
+			for(int i=0;i<SubGroupCode.length;i++)
+			{
+				if(subGCode.length()>0)
+				{
+					subGCode +=",'"+SubGroupCode[i]+"'";
+				}
+				else
+				{
+					subGCode="'"+SubGroupCode[i]+"'";
+				}
+			}
+		}
+		String GCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] GroupCode=gCode.split(",");
+			for(int i=0;i<GroupCode.length;i++)
+			{
+				if(GCode.length()>0)
+				{
+					GCode +=",'"+GroupCode[i]+"'";
+				}
+				else
+				{
+					GCode="'"+GroupCode[i]+"'";
+				}
+			}
+		}
 		String header ="";
 		if(prodWiseStock.equals("Yes"))
 		{
@@ -245,23 +278,23 @@ public class clsExcelExportImportController {
 			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
 			if (!sgCode.equals("") || !sgCode.isEmpty()) 
 			{
-				hql += "and a.strSGCode='"+sgCode+"'";
+				hql += " and a.strSGCode in ( "+subGCode+" )";  
 			}
 			
 			if (!gCode.equals("") || !gCode.isEmpty()) 
 			{
-				hql += "and b.strGCode='"+gCode+"'";
+				hql += " and b.strGCode in ("+GCode+") ";
 			}
 			}else{
 				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
 				if (!sgCode.equals("") || !sgCode.isEmpty()) 
 				{
-					hql += "and a.strSGCode='"+sgCode+"'";
+					hql += " and a.strSGCode in ( "+subGCode+" )";
 				}
 				
 				if (!gCode.equals("") || !gCode.isEmpty()) 
 				{
-					hql += "and b.strGCode='"+gCode+"'";
+					hql += " and b.strGCode in ("+GCode+")";
 				}
 			}
 		
@@ -388,7 +421,40 @@ public class clsExcelExportImportController {
 		String sgCode = request.getParameter("sgCode");
 		String gCode = request.getParameter("gCode");
 		String prodWiseStock = request.getParameter("prodWiseStock");
-		
+		String subGCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] SubGroupCode=sgCode.split(",");
+			for(int i=0;i<SubGroupCode.length;i++)
+			{
+				if(subGCode.length()>0)
+				{
+					subGCode +=",'"+SubGroupCode[i]+"'";
+				}
+				else
+				{
+					subGCode="'"+SubGroupCode[i]+"'";
+				}
+			}
+		}
+		String GCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] GroupCode=gCode.split(",");
+			for(int i=0;i<GroupCode.length;i++)
+			{
+				if(GCode.length()>0)
+				{
+					GCode +=",'"+GroupCode[i]+"'";
+				}
+				else
+				{
+					GCode="'"+GroupCode[i]+"'";
+				}
+			}
+		}
 		String header ="";
 		if(prodWiseStock.equals("Yes"))
 		{
@@ -410,23 +476,23 @@ public class clsExcelExportImportController {
 			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
 			if (!sgCode.equals("") || !sgCode.isEmpty()) 
 			{
-				hql += "and a.strSGCode='"+sgCode+"'";
+				hql += " and a.strSGCode in ( "+subGCode+" ) ";  
 			}
 			
 			if (!gCode.equals("") || !gCode.isEmpty()) 
 			{
-				hql += "and b.strGCode='"+gCode+"'";
+				hql += " and b.strGCode in ("+GCode+") ";
 			}
 			}else{
 				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
 				if (!sgCode.equals("") || !sgCode.isEmpty()) 
 				{
-					hql += "and a.strSGCode='"+sgCode+"'";
+					hql += " and a.strSGCode in ( "+subGCode+" ) "; 
 				}
 				
 				if (!gCode.equals("") || !gCode.isEmpty()) 
 				{
-					hql += "and b.strGCode='"+gCode+"'";
+					hql += " and b.strGCode in ("+GCode+") ";
 				}
 			}
 		
@@ -484,7 +550,40 @@ public class clsExcelExportImportController {
 		String sgCode = request.getParameter("sgCode");
 		String gCode = request.getParameter("gCode");
 		String prodWiseStock = request.getParameter("prodWiseStock");
-		
+		String subGCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] SubGroupCode=sgCode.split(",");
+			for(int i=0;i<SubGroupCode.length;i++)
+			{
+				if(subGCode.length()>0)
+				{
+					subGCode +=",'"+SubGroupCode[i]+"'";
+				}
+				else
+				{
+					subGCode="'"+SubGroupCode[i]+"'";
+				}
+			}
+		}
+		String GCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] GroupCode=gCode.split(",");
+			for(int i=0;i<GroupCode.length;i++)
+			{
+				if(GCode.length()>0)
+				{
+					GCode +=",'"+GroupCode[i]+"'";
+				}
+				else
+				{
+					GCode="'"+GroupCode[i]+"'";
+				}
+			}
+		}
 		String header ="";
 		if(prodWiseStock.equals("Yes"))
 		{
@@ -506,23 +605,23 @@ public class clsExcelExportImportController {
 			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
 			if (!sgCode.equals("") || !sgCode.isEmpty()) 
 			{
-				hql += "and a.strSGCode='"+sgCode+"'";
+				hql += " and a.strSGCode in ( "+subGCode+" ) "; 
 			}
 			
 			if (!gCode.equals("") || !gCode.isEmpty()) 
 			{
-				hql += "and b.strGCode='"+gCode+"'";
+				hql += " and b.strGCode  in ("+GCode+") ";
 			}
 			}else{
 				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
 				if (!sgCode.equals("") || !sgCode.isEmpty()) 
 				{
-					hql += "and a.strSGCode='"+sgCode+"'";
+					hql += " and a.strSGCode in ( "+subGCode+" ) "; 
 				}
 				
 				if (!gCode.equals("") || !gCode.isEmpty()) 
 				{
-					hql += "and b.strGCode='"+gCode+"'";
+					hql += " and b.strGCode  in ("+GCode+") ";
 				}
 			}
 		
@@ -581,7 +680,40 @@ public class clsExcelExportImportController {
 		String sgCode = request.getParameter("sgCode");
 		String gCode = request.getParameter("gCode");
 		String prodWiseStock = request.getParameter("prodWiseStock");
-		
+		String subGCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] SubGroupCode=sgCode.split(",");
+			for(int i=0;i<SubGroupCode.length;i++)
+			{
+				if(subGCode.length()>0)
+				{
+					subGCode +=",'"+SubGroupCode[i]+"'";
+				}
+				else
+				{
+					subGCode="'"+SubGroupCode[i]+"'";
+				}
+			}
+		}
+		String GCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] GroupCode=gCode.split(",");
+			for(int i=0;i<GroupCode.length;i++)
+			{
+				if(GCode.length()>0)
+				{
+					GCode +=",'"+GroupCode[i]+"'";
+				}
+				else
+				{
+					GCode="'"+GroupCode[i]+"'";
+				}
+			}
+		}
 		String header ="";
 		if(prodWiseStock.equals("Yes"))
 		{
@@ -603,23 +735,23 @@ public class clsExcelExportImportController {
 			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
 			if (!sgCode.equals("") || !sgCode.isEmpty()) 
 			{
-				hql += "and a.strSGCode='"+sgCode+"'";
+				hql += " and a.strSGCode in ( "+subGCode+" ) "; 
 			}
 			
 			if (!gCode.equals("") || !gCode.isEmpty()) 
 			{
-				hql += "and b.strGCode='"+gCode+"'";
+				hql += " and b.strGCode  in ("+GCode+") ";
 			}
 			}else{
 				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProductReOrderLevelModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strLocationCode='" + locCode + "' ";	
 				if (!sgCode.equals("") || !sgCode.isEmpty()) 
 				{
-					hql += "and a.strSGCode='"+sgCode+"'";
+					hql += " and a.strSGCode in ( "+subGCode+" ) ";
 				}
 				
 				if (!gCode.equals("") || !gCode.isEmpty()) 
 				{
-					hql += "and b.strGCode='"+gCode+"'";
+					hql += " and b.strGCode in ("+GCode+") ";
 				}
 			}
 		
@@ -678,7 +810,40 @@ public class clsExcelExportImportController {
 		String sgCode = request.getParameter("sgCode");
 		String gCode = request.getParameter("gCode");
 		String prodWiseStock = request.getParameter("prodWiseStock");
-		
+		String subGCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] SubGroupCode=sgCode.split(",");
+			for(int i=0;i<SubGroupCode.length;i++)
+			{
+				if(subGCode.length()>0)
+				{
+					subGCode +=",'"+SubGroupCode[i]+"'";
+				}
+				else
+				{
+					subGCode="'"+SubGroupCode[i]+"'";
+				}
+			}
+		}
+		String GCode="";
+		if(sgCode.length()>0)
+		{
+			
+			String[] GroupCode=gCode.split(",");
+			for(int i=0;i<GroupCode.length;i++)
+			{
+				if(GCode.length()>0)
+				{
+					GCode +=",'"+GroupCode[i]+"'";
+				}
+				else
+				{
+					GCode="'"+GroupCode[i]+"'";
+				}
+			}
+		}
 		String header ="";
 		if(prodWiseStock.equals("Yes"))
 		{
@@ -700,23 +865,23 @@ public class clsExcelExportImportController {
 			hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c " + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode  " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  ";
 			if (!sgCode.equals("") || !sgCode.isEmpty()) 
 			{
-				hql += "and a.strSGCode='"+sgCode+"'";
+				hql += " and a.strSGCode in ( "+subGCode+" ) ";
 			}
 			
 			if (!gCode.equals("") || !gCode.isEmpty()) 
 			{
-				hql += "and b.strGCode='"+gCode+"'";
+				hql += " and b.strGCode  in ("+GCode+") ";
 			}
 			}else{
 				hql = " from clsProductMasterModel a, clsSubGroupMasterModel b,clsGroupMasterModel c ,clsProdSuppMasterModel d" + " where a.strSGCode=b.strSGCode  and b.strGCode=c.strGCode and a.strProdCode=d.strProdCode " + " and a.strClientCode='" + clientCode + "' and b.strClientCode='" + clientCode + "' " + "and c.strClientCode='" + clientCode + "'  and d.strSuppCode='" + suppCode + "' ";	
 				if (!sgCode.equals("") || !sgCode.isEmpty()) 
 				{
-					hql += "and a.strSGCode='"+sgCode+"'";
+					hql += " and a.strSGCode in ( "+subGCode+" ) ";
 				}
 				
 				if (!gCode.equals("") || !gCode.isEmpty()) 
 				{
-					hql += "and b.strGCode='"+gCode+"'";
+					hql += " and b.strGCode  in ("+GCode+") ";
 				}
 			}
 		

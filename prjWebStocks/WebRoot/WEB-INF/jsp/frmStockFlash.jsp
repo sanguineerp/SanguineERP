@@ -138,7 +138,11 @@
 		{
 			var startDate="${startDate}";
 			var arr = startDate.split("/");
-			Dat=arr[0]+"-"+arr[1]+"-"+arr[2];
+			 
+			var date = new Date(); 
+			var month=date.getMonth()+1;
+            Dat= 1 +"-"+month+"-"+date.getFullYear();
+			
 			$("#txtFromDate").datepicker({ dateFormat: 'dd-mm-yy' });
 			$("#txtFromDate").datepicker('setDate',Dat);
 			$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });

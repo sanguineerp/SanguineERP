@@ -317,16 +317,26 @@
 			
 			if($("#txtQuantity").val().trim().length==0 || $("#txtQuantity").val()==0)
 			{
-				alert("Please Enter Quantity");
-				$("#txtQuantity").focus();
-				return false;
+				if(($("#txtFreeQty").val().trim().length==0 || $("#txtFreeQty").val()==0))
+				{
+					alert("Please Enter Quantity");
+					$("#txtQuantity").focus();
+					return false;
+				}
+				
 			}
 			
-			if($("#txtCostRM").val().trim().length==0 || $("#txtQuantity").val()==0)
+			
+			if($("#txtCostRM").val().trim().length==0 || $("#txtQuantity").val()==0 )
 			{
-				alert("Please Enter Unit Price");
-				$("#txtCostRM").focus();
-				return false;
+				if(($("#txtFreeQty").val().trim().length==0 || $("#txtFreeQty").val()==0))
+				{
+					alert("Please Enter Unit Price");
+					$("#txtCostRM").focus();
+					return false;
+					
+				}
+				
 			}
 			if(parseFloat($("#txtRejected").val()) > parseFloat($("#txtQuantity").val()))
 			{
@@ -432,8 +442,13 @@
 		    var strUOM=$("#cmbUOM").val()
 		    var wtunit = $("#txtWtUnit").val();
 		    wtunit=parseFloat(wtunit).toFixed(maxQuantityDecimalPlaceLimit);
-		    
+		   
 		    var qtyrecevd = $("#txtQuantity").val();
+		    if($("#txtQuantity").val()=="")
+	    	{
+		    	qtyrecevd=0;
+	    	}
+		    
 		    qtyrecevd=parseFloat(qtyrecevd).toFixed(qtyDecPlace);
 		    
 		    var qtyrecb = $("#txtQtyRec").val();
