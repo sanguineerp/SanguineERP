@@ -576,7 +576,7 @@ public class clsStockFlashController {
 			objStkFlashModel.setDblCostRM(arrObj[8].toString());
 			objStkFlashModel.setDblOpStock(funGetDecimalValue(arrObj[9].toString())); // openStk
 			objStkFlashModel.setDblGRN(funGetDecimalValue(arrObj[10].toString())); // GRN
-			objStkFlashModel.setDblFreeQty(Double.parseDouble(funGetDecimalValue(arrObj[11].toString())));
+			objStkFlashModel.setDblFreeQty(funGetDecimalValue(arrObj[11].toString()));
 			objStkFlashModel.setDblSCGRN(funGetDecimalValue(arrObj[12].toString())); // SCGRN
 			objStkFlashModel.setDblStkTransIn(funGetDecimalValue(arrObj[13].toString())); // stkTrans
 			objStkFlashModel.setDblStkAdjIn(funGetDecimalValue(arrObj[14].toString())); // STKAdj

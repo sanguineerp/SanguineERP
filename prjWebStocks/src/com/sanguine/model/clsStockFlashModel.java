@@ -77,7 +77,7 @@ public class clsStockFlashModel {
 	
 	private String dblPriceAmt;
 	
-	private double dblFreeQty;
+	private String dblFreeQty;
 	
 	
 
@@ -385,11 +385,13 @@ public class clsStockFlashModel {
 		this.dblPriceAmt = dblPriceAmt;
 	}
 
-	public double getDblFreeQty() {
+	public String getDblFreeQty() {
 		return dblFreeQty;
 	}
 
-	public void setDblFreeQty(double dblFreeQty) {
+	public void setDblFreeQty(String dblFreeQty) {
 		this.dblFreeQty = dblFreeQty;
 	}
+
+
 }
