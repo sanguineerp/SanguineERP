@@ -296,9 +296,10 @@ public class clsStockLedgerController {
 				}
 
 			}
+// check opening stock entry	
 			if (totalOpStk < 0) {
 				if (qtyWithUOM.equals("No")) {
-					selectOpStk = " select '" + toDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + "," + totalOpStk + " Issue,'Opening Stk' Name, " + rate + " Rate ";
+					selectOpStk = " select '" + fromDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + "," + totalOpStk + " Issue,'Opening Stk' Name, " + rate + " Rate ";
 					System.out.println(selectOpStk);
 				} else {
 					selectOpStk = " select '" + toDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + ",'" + strOpStockWithUOM + "' Issue,'Opening Stk' Name, " + rate + " Rate, " + " CONCAT_WS('!',b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) UOMString  " + " from tblproductmaster b where b.strProdCode = '" + prodCode + "' ";

@@ -240,8 +240,8 @@ public class clsDownloadExcelController {
 						
 				+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 				+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + ""
-						+ " where  a.strClientCode='" + clientCode + "' ");
-				// a.strUserCode='" + userCode + "' " + "and
+						+ " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "' ");
+				// 
 
 				if (strNonStkItems.equals("Non Stockable")) {
 					sqlBuilder.append( "	and b.strNonStockableItem='Y' ");
@@ -310,7 +310,6 @@ public class clsDownloadExcelController {
 					if (value < 0) {
 						
 					}
-					
 					
 					dataList.add(df.format(value));
 					dataList.add(arrObj[29].toString());
