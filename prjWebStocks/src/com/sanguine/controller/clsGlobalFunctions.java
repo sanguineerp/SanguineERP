@@ -4667,7 +4667,7 @@ public class clsGlobalFunctions {
 
 				// both opening creditor or debtor opening balance and from date
 				// not eaqual to date opening table
-				String sql = " SELECT ifnull(dteVochDate,''),'Op','Opening','',ifnull(billDate,''), ifnull(SUM(dblDebitAmt),0.00), ifnull(SUM(dblCreditAmt),0.0), ifnull(SUM(dblBalanceAmt),0.0),sum(conv2) from  "
+				String sql = " SELECT ifnull(dteVochDate,''),'Op','Opening','',ifnull(billDate,''), ifnull(SUM(dblDebitAmt),0.00), ifnull(SUM(dblCreditAmt),0.0), ifnull(SUM(dblBalanceAmt),0.0),ifnull(SUM(conv2),0) from  "
 
 				+ "( SELECT dteVochDate dteVochDate,'Op','Opening','',dteBillDate billDate, SUM(dblDebitAmt) dblDebitAmt, " + " SUM(dblCreditAmt) dblCreditAmt, SUM(dblBalanceAmt) dblBalanceAmt ,0 as conv2 " + " FROM tblledgersummary " + " WHERE strUserCode='" + userCode + "' AND strPropertyCode='" + propertyCode + "' AND strClientCode='" + clientCode + "' "
 						+ " GROUP BY strUserCode,strPropertyCode,strClientCode "

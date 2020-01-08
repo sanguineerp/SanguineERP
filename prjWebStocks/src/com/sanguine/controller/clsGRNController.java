@@ -584,7 +584,7 @@ public class clsGRNController {
 				double totalValue = 0.00;
 				boolean flagDtlDataInserted = false;
 				double dblDis=objHdModel.getDblDisAmt();
-				double dblDisPercent=0;
+				double dblDisPercent=0;//objHdModel.getDblDisRate();
 				if(dblDis>0)
 				{
 					dblDisPercent=objHdModel.getDblSubTotal()/dblDis;
@@ -603,8 +603,8 @@ public class clsGRNController {
 							ob.setStrMISCode("");
 						}
 						ob.setDblTotalPrice(ob.getDblTotalPrice() * currValue);
-						double dblDiscount=0;
-						if(dblDiscount>0)
+						double dblDiscount=ob.getDblDiscount()*currValue;
+						if(dblDisPercent>0)
 						{
 							dblDiscount=ob.getDblTotalPrice()/dblDisPercent;
 						}
@@ -1856,8 +1856,10 @@ public class clsGRNController {
 			}
 			String webStockDB = req.getSession().getAttribute("WebStockDB")
 					.toString();
-			String reportName = servletContext
-					.getRealPath("/WEB-INF/reports/rptGrnDtlSlip.jrxml");
+			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptGrnDtlSlip.jrxml");
+			if(clientCode.equals("117.001")){
+				reportName = servletContext.getRealPath("/WEB-INF/reports/rptGrnDtlSlipShort.jrxml");
+			}
 			String imagePath = servletContext
 					.getRealPath("/resources/images/company_Logo.png");
 			sqlBuilder.setLength(0);
@@ -1917,7 +1919,7 @@ public class clsGRNController {
 							+ currValue
 							+ ") as stdRate,p.dblUnitPrice/("
 							+ currValue
-							+ ")*(g.dblQty-g.dblRejected) as stdAmt from "
+							+ ")*(g.dblQty-g.dblRejected) as stdAmt,g.dblFreeQty from "
 							+ webStockDB
 							+ ".tblgrndtl g,"
 							+ webStockDB
@@ -2261,6 +2263,9 @@ public class clsGRNController {
 			}
 			String reportName = servletContext
 					.getRealPath("/WEB-INF/reports/rptGrnDtlSlip.jrxml");
+			if(clientCode.equals("117.001")){
+				reportName = servletContext.getRealPath("/WEB-INF/reports/rptGrnDtlSlipShort.jrxml");
+			}
 			String imagePath = servletContext
 					.getRealPath("/resources/images/company_Logo.png");
 			StringBuilder sqlBuilder = new StringBuilder();
@@ -2474,8 +2479,8 @@ public class clsGRNController {
 						+ "  f.strSGName as SubGroupName, case c.strClass  WHEN '' THEN 'NA'  else c.strClass  end  as strClass,"
 						+ "  'TaxCode','TaxName','TaxPer',  b.dblRejected as RejQty,"
 						+ "  (b.dblQty-b.dblRejected) as AcceptQty,b.dblUnitPrice as Rate, "
-						+ "  b.dblUnitPrice*(b.dblQty-b.dblRejected) as Amount,b.dblDiscount as DiscountAmt, 'TaxAmt',"
-						+ "  ((b.dblUnitPrice*(b.dblQty-b.dblRejected))-b.dblDiscount)+b.dblTaxAmt  as GrandTotal , IFNULL(a.strBillNo,'')"
+						+ "  b.dblUnitPrice*(b.dblQty-b.dblRejected) as Amount,((b.dblUnitPrice*(b.dblQty-b.dblRejected))*a.dblDisRate)/100 as DiscountAmt, 'TaxAmt',"
+						+ "  ((b.dblUnitPrice*(b.dblQty-b.dblRejected))-((b.dblUnitPrice*(b.dblQty-b.dblRejected))*a.dblDisRate)/100)+b.dblTaxAmt  as GrandTotal , IFNULL(a.strBillNo,'')"
 						+ "  from tblgrnhd a ,tblgrndtl b ,tblproductmaster c,tblpartymaster d,tbllocationmaster e,tblsubgroupmaster f,tblgroupmaster g  "
 						+ "	 where a.strGRNCode=b.strGRNCode and b.strProdCode=c.strProdCode "
 						+ "  and a.strSuppCode=d.strPCode and a.strLocCode=e.strLocCode and c.strSGCode=f.strSGCode "
@@ -2508,6 +2513,7 @@ public class clsGRNController {
 		double subToltal = 0.00;
 		String grnCode = "";
 		double grandToltal = 0.00;
+		double dblDiscAmt=0;
 		HashMap<String, Double> hmTaxTotalGrid = new HashMap<String, Double>();
 		for (int i = 0; i < list.size(); i++) {
 			Object[] ob = (Object[]) list.get(i);
@@ -2591,8 +2597,8 @@ public class clsGRNController {
 			dataList.add(df.format(Double.parseDouble(ob[20].toString())
 					/ currValue)); // Amount
 			
-			
-			dataList.add(df.format(Double.parseDouble(ob[21].toString())));
+			dblDiscAmt=Double.parseDouble(ob[21].toString());
+			dataList.add(df.format(dblDiscAmt));
 			dataList.add(df.format(dblTaxamt / currValue)); // TaxAmt
 			
 			dblRowAmtTotal = Double.parseDouble(ob[23].toString());

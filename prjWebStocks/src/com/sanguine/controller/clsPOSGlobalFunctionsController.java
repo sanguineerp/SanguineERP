@@ -944,5 +944,53 @@ public class clsPOSGlobalFunctionsController {
 		return jArrList;
 
 	}
+	
+	public JSONArray funGetFillAllArea(String clientCode) {
+
+		JSONArray jArrList = null;
+		String posURL = "https://indian-cities-api-nocbegfhqg.now.sh/cities";
+		// JSONObject
+		// jObj=objWSGlobalFunctions.funGETMethodUrlJosnObjectData(posURL);
+		// JSONObject jObjPOSList = (JSONObject) jObj;
+		// jArrList = (JSONArray) jObjPOSList.get("CustomerTypeList");
+
+		try {
+			URL url = new URL(posURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+			String output = "", op = "";
+			while ((output = br.readLine()) != null) {
+				op += output;
+			}
+			System.out.println("Obj=" + op);
+			conn.disconnect();
+
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(op);
+			JSONArray jObjCardList = (JSONArray) obj;
+			String  cityName="",areaName="",District="",state="";
+			
+			
+			for(int i=0;i<jObjCardList.size();i++){
+				JSONObject jOb=(JSONObject)jObjCardList.get(i);
+				
+				areaName = jOb.get("City").toString();
+				state = jOb.get("State").toString();
+				cityName = jOb.get("District").toString();
+				
+				
+				
+				
+			}
+		//	jArrList = (JSONArray) jObjCardList.get("CustomerTypeList");
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return jArrList;
+	}
+
 
 }

@@ -84,8 +84,11 @@
       //Get and set All Location on the basis of all Property
       function funSetAllLocationAllPrpoerty() {
 			var searchUrl = "";
-			searchUrl = getContextPath()
-					+ "/loadAllLocationForAllProperty.html";
+			//searchUrl = getContextPath()
+				//	+ "/loadAllLocationForAllProperty.html";  
+			var property="${propertyCode}";
+				searchUrl = getContextPath()
+					+ "/loadLocationForProperty.html?propCode="+property;
 			$.ajax({
 				type : "GET",
 				url : searchUrl,
@@ -106,7 +109,8 @@
 					{
 						$.each(response, function(i,item)
 						 		{
-							funfillLocationGrid(response[i].strLocCode,response[i].strLocName);
+							//funfillLocationGrid(response[i].strLocCode,response[i].strLocName);
+							funfillLocationGrid(response[i][1],response[i][0]);
 								});
 						
 					}
