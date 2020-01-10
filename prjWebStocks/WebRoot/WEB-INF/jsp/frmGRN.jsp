@@ -1708,6 +1708,13 @@
 			$("#cmbAgainst").val(response.strAgainst);
 			$("#txtDblConversion").val(currValue);
 			
+			
+			$("#txtPayMode").val(response.strPayMode);
+			if(response.strPayMode=='Credit')
+			{
+			$("#txtPayMode").val(response.strPayMode.toLowerCase());
+			}
+			
 			funOnChange();
 			
 			
