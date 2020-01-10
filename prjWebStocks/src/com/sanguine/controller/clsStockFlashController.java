@@ -197,7 +197,7 @@ public class clsStockFlashController {
 		if (qtyWithUOM.equals("No")) {
 			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo "
 					// + ",b.dblCostRM,"
-					+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice), " + "a.dblOpeningStk,(a.dblGRN+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn) as Receipts " + ",(a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote) as Issue " + ",a.dblClosingStk,"
+					+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice), " + "a.dblOpeningStk,(a.dblGRN+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn) as Receipts " + ",(a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote) as Issue " + ",(a.dblClosingStk+dblFreeQty),"
 					// + "(a.dblClosingStk*b.dblCostRM) as Value"
 					+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 
@@ -239,12 +239,12 @@ public class clsStockFlashController {
 
 					+ ",funGetUOM((a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as Issue "
 
-					+ ",funGetUOM(a.dblClosingStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
+					+ ",funGetUOM((a.dblClosingStk+dblFreeQty),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
 					// + ",(a.dblClosingStk*b.dblCostRM) as Value, "
 					+ ",(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
 
-					+ " a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
+					+ " (a.dblClosingStk+dblFreeQty) as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 					/*
 					 * +
 					 * "from tblcurrentstock a,tblproductmaster b,tblsubgroupmaster c,tblgroupmaster d,tbllocationmaster e"
@@ -592,7 +592,39 @@ public class clsStockFlashController {
 			objStkFlashModel.setDblQtyConsumed(funGetDecimalValue(arrObj[24].toString()));
 			objStkFlashModel.setDblSales(funGetDecimalValue(arrObj[25].toString()));
 			objStkFlashModel.setDblMaterialReturnOut(arrObj[26].toString());
-			objStkFlashModel.setDblClosingStock(funGetDecimalValue(arrObj[27].toString()));
+			
+			double dblCurrStk = 0.0;
+			double dblFree = 0.0;
+			
+			if(arrObj[27].toString().contains(" "))
+			{
+				String[] strCurrStkArr = arrObj[27].toString().split(" ");
+				dblCurrStk = Double.parseDouble(strCurrStkArr[0].toString());
+			}
+			else
+			{
+				dblCurrStk = Double.parseDouble(funGetDecimalValue(arrObj[27].toString()));
+			}
+			if(arrObj[11].toString().equals(""))
+			{
+				
+			}
+			else
+			{
+				if(arrObj[11].toString().contains(" "))
+				{
+					String[] strFreeArr = arrObj[11].toString().split(" ");
+					dblFree = Double.parseDouble(strFreeArr[0].toString());
+				}
+				else
+				{
+					dblFree = Double.parseDouble(funGetDecimalValue(arrObj[11].toString()));
+				}
+	
+			}
+						
+			double strClosingBal = dblCurrStk+dblFree;
+			objStkFlashModel.setDblClosingStock(Double.toString(strClosingBal));
 
 			BigDecimal value = new BigDecimal(arrObj[28].toString());
 			// double value=Double.parseDouble(arrObj[27].toString());
@@ -820,7 +852,7 @@ public class clsStockFlashController {
 		objGlobal.funInvokeStockFlash(startDate, locCode, fromDate, toDate, clientCode, userCode, stockableItem, req, resp);
 		String sql = "";// clsPropertyMaster
 
-		sql = "select a.strProdCode,b.strProdName," + "a.dblClosingStk,"
+		sql = "select a.strProdCode,b.strProdName," + "(a.dblClosingStk+a.dblFreeQty),"
 				// + "(a.dblClosingStk*b.dblCostRM) as Value "
 				+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 

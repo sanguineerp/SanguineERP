@@ -13,9 +13,16 @@
 
 		$(function ()
 		{
+			/* var startDate="${startDate}";
+			var arr = startDate.split("/");
+			Dat=arr[0]+"-"+arr[1]+"-"+arr[2]; */
+			
 			var startDate="${startDate}";
 			var arr = startDate.split("/");
-			Dat=arr[0]+"-"+arr[1]+"-"+arr[2];
+			 
+			var date = new Date(); 
+			var month=date.getMonth()+1;
+            Dat= 1 +"-"+month+"-"+date.getFullYear();
 			$( "#txtFromDate" ).datepicker({ dateFormat: 'dd-mm-yy' });
 			$("#txtFromDate" ).datepicker('setDate', Dat);
 			$( "#txtToDate" ).datepicker({ dateFormat: 'dd-mm-yy' });
@@ -117,6 +124,8 @@
 		    
 		    var freeQty=0;
 		    
+		    var issueConversion = 0.0;
+		    
 			row.insertCell(0).innerHTML= "<label>Transaction Date</label>";
 			row.insertCell(1).innerHTML= "<label>CostCenter/Supplier Name</label>";
 			row.insertCell(2).innerHTML= "<label>Transaction Type</label>";
@@ -136,6 +145,11 @@
 		    			}
 			$.each(response, function(i,item)
 			{
+				if(qtyWithUOM.includes("Yes")){
+					
+					issueConversion = parseFloat(item[7].split("!")[0]);	
+				}
+				
 				var row1 = table.insertRow(rowCount);
 				if(item[2]!='')
 				{
@@ -148,7 +162,7 @@
 				   		if(qtyWithUOM=='Yes')
 			   		{
 				   		row1.insertCell(4).innerHTML= "<label>"+item[3]+"</label>";
-					   	row1.insertCell(5).innerHTML= "<label>"+item[4]+"</label>";
+					   	row1.insertCell(5).innerHTML= "<label>"+parseFloat(item[4]).toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
 			   		}else
 			   			{
 			   			row1.insertCell(4).innerHTML= "<label>"+item[3].toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
@@ -166,7 +180,15 @@
 				   	 
 				   		//row1.insertCell(8).innerHTML= "<label type=\"hidden\">"+item[7]+"</label>";
 			   		}
-				 freeQty += parseFloat(item[7]);
+				   	if(item[7].toString().includes("!"))
+				   		{
+				   		freeQty += parseFloat(item[8]);
+				   		}
+				   	else
+				   		{
+				   			freeQty += parseFloat(item[7]);
+				   		}
+				 
 				}
 			});
 			
@@ -211,7 +233,7 @@
 					//alert(uom);
 
 // 					uom = uom.substring(14, uom.lastIndexOf("type") - 2);
-					uom = uom.substring(uom.lastIndexOf("value")+7, uom.length-16);
+					//uom = uom.substring(uom.lastIndexOf("value")+7, uom.length-16);
 					//alert(uom);
 					var spUOM = funCheckNull(uom.split('!'));
 					var recipeConv = funCheckNull(spUOM[0]);
@@ -219,7 +241,7 @@
 					var recipeConv = funCheckNull(spUOM[0]);
 					var issueConv = funCheckNull(spUOM[1]);
 					var receivedUOM =funCheckNull( spUOM[2]);
-					var recipeUOM = funCheckNull(spUOM[3]);
+					var recipeUOM = funCheckNull(spUOM[3].substring(0, spUOM[3].length - 2));
 
 					if (rec == '0') {
 						tempRecipts += parseFloat(rec);
@@ -230,7 +252,7 @@
 						if (rec.indexOf(receivedUOM) > -1) {
 							var highNLowData = rec.split(".");
 							var highNo = highNLowData[0].split(" ");
-							dblReptHigh = parseFloat(highNo[0])	* parseFloat(recipeConv);
+							dblReptHigh = parseFloat(highNo[0])	* parseFloat(recipeConv.substr(28));
 
 							var lowNo = highNLowData[1].split(" ");
 							if(lowNo !="")
@@ -260,7 +282,7 @@
 						if (issue.indexOf(receivedUOM) > -1) {
 							var highNLowData = issue.split(".");
 							var highNo = highNLowData[0].split(" ");
-							dblIssHigh = parseFloat(highNo[0])* parseFloat(recipeConv);
+							dblIssHigh = parseFloat(highNo[0])* parseFloat(recipeConv.substr(28));
 
 							var lowNo = highNLowData[1].split(" ");
 							if(lowNo !="")
@@ -280,9 +302,18 @@
 						}
 
 					}
-					totRowBal = tempRecipts - tempIssue;
+					
+					if(tempIssue.toString().includes("-"))
+						{
+						totRowBal = tempRecipts + tempIssue;
+						}
+					else
+						{
+							totRowBal = tempRecipts - tempIssue;
+						}
+					
 
-					totRowBal = parseFloat(totRowBal) / parseFloat(recipeConv);
+					totRowBal = parseFloat(totRowBal) / parseFloat(recipeConv.substr(28));
 
 					bal = bal +parseFloat(totRowBal.toFixed(maxAmountDecimalPlaceLimit));
 					
@@ -299,7 +330,7 @@
 						finalBal = spBalance[0] + ' ' + receivedUOM;
 					}
 					if (spBalance[1] != "undefined") {
-						var balWithUOM = parseFloat(restQty.toFixed(maxAmountDecimalPlaceLimit))* parseFloat(recipeConv);
+						var balWithUOM = parseFloat(restQty.toFixed(maxAmountDecimalPlaceLimit))* parseFloat(recipeConv.substr(28));
 						finalBal = finalBal + '.' + balWithUOM + ' '+ recipeUOM;
 					}
 
@@ -318,7 +349,15 @@
 					openingStk = bal;
 				} else {
 					totalRec = totalRec + parseFloat(rec);
-					totalIssue = totalIssue + parseFloat(issue);
+					if(parseFloat(issue)>0)
+						{
+						totalIssue = totalIssue + parseFloat(issue);
+						}
+					else
+						{
+						totalIssue = totalIssue +0;
+						}
+					
 				}
 
 				rateForValue = rate;
@@ -326,8 +365,13 @@
 			//get weighted avg price from product master 
 			if(weightedRate>0){
 				rateForValue=weightedRate;
-			}		    
-			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec);
+			}
+			if(qtyWithUOM.includes("Yes"))
+				{
+				totalIssue = totalIssue/issueConversion;
+				}
+			
+			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec)+parseFloat(freeQty);
 			closingBalance = closingBalance - parseFloat(totalIssue);
 
 			var table = document.getElementById("tblStockLedgerSummary");
