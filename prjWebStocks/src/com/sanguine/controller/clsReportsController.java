@@ -4827,7 +4827,7 @@ public class clsReportsController {
 
 			sql = "select a.strProdCode,b.strProdName,(a.dblClosingStk+a.dblFreeQty),"
 					// + "(a.dblClosingStk*b.dblCostRM) as Value,"
-					+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "d.strGName,c.strSGName "
+					+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "d.strGName,c.strSGName "
 					/*
 					 * +
 					 * "from tblcurrentstock a,tblproductmaster b,tblsubgroupmaster c,tblgroupmaster d,tbllocationmaster e "

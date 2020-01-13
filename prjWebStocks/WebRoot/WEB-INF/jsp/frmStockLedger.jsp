@@ -85,6 +85,7 @@
 		});
 		
 		
+		
 		function funGetStockLedger(fromDate,toDate,locCode,propCode,prodCode)
 		{
 			var batchNo = $("#txtBatch").val();
@@ -162,7 +163,8 @@
 				   		if(qtyWithUOM=='Yes')
 			   		{
 				   		row1.insertCell(4).innerHTML= "<label>"+item[3]+"</label>";
-					   	row1.insertCell(5).innerHTML= "<label>"+parseFloat(item[4]).toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
+					   	/* row1.insertCell(5).innerHTML= "<label>"+parseFloat(item[4]).toFixed(maxQuantityDecimalPlaceLimit)+"</label>"; */
+				   		row1.insertCell(5).innerHTML= "<label>"+item[4]+"</label>";
 			   		}else
 			   			{
 			   			row1.insertCell(4).innerHTML= "<label>"+item[3].toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
@@ -331,7 +333,7 @@
 					}
 					if (spBalance[1] != "undefined") {
 						var balWithUOM = parseFloat(restQty.toFixed(maxAmountDecimalPlaceLimit))* parseFloat(recipeConv.substr(28));
-						finalBal = finalBal + '.' + balWithUOM + ' '+ recipeUOM;
+						finalBal = finalBal + '.' + balWithUOM.toFixed(maxQuantityDecimalPlaceLimit) + ' '+ recipeUOM;
 					}
 
 					// 		        	}
@@ -366,11 +368,22 @@
 			if(weightedRate>0){
 				rateForValue=weightedRate;
 			}
-			if(qtyWithUOM.includes("Yes"))
+			/* if(qtyWithUOM.includes("Yes"))
 				{
 				totalIssue = totalIssue/issueConversion;
+				} */
+				if(qtyWithUOM.includes("Yes")){
+				
+					var fromDate=$("#txtFromDate").val();
+					var toDate=$("#txtToDate").val();
+					var locCode=$("#cmbLocation").val();
+					var propCode=$("#cmbProperty").val();
+					var prodCode=$("#txtProdCode").val();
+					funGetStockLedgerWithUom(fromDate,toDate,locCode,propCode,prodCode);
+					totalIssue = totalIssueWithUom;
+					totalIssueWithUom=0;
 				}
-			
+							
 			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec)+parseFloat(freeQty);
 			closingBalance = closingBalance - parseFloat(totalIssue);
 
@@ -625,6 +638,40 @@
 			
 		
 		}
+		
+		function funGetStockLedgerWithUom(fromDate,toDate,locCode,propCode,prodCode)
+		{
+			var batchNo = $("#txtBatch").val();
+			var qtyWithUOM="No";
+			var param1=locCode+","+propCode+","+prodCode+",detail,"+qtyWithUOM;
+			var searchUrl=getContextPath()+"/frmStockLedgerReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&batchCode="+batchNo;
+			
+			$.ajax({
+			        type: "GET",
+			        url: searchUrl,
+				    dataType: "json",
+				    async :false,
+				    success: function(response)
+				    {
+				    	funSumOfIssueQty(response);
+				    },
+					error: function(e)
+				    {
+				       	alert('Error:=' + e);
+				    }
+			      });
+		}
+		var totalIssueWithUom = 0.0;
+		function funSumOfIssueQty(response)
+		{
+			
+			$.each(response, function(i,response){
+				totalIssueWithUom = totalIssueWithUom + response[4];
+				
+			})
+				
+		}
+		
 	</script>
 </head>
 <body onload="funOnLoad();">

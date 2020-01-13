@@ -72,7 +72,7 @@ public class clsDownloadExcelController {
 		}
 
 		if ("Detail".equalsIgnoreCase(reportType)) {
-			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Unit Price", "Opening Stock", "GRN","Free Qty", "SCGRN", "	Stock Transfer In", "Stock Adj In", "MIS In", "Qty Produced", "Sales Return", "Material Return", "Purchase Return", "Delivery Note", "Stock Trans Out", "Stock Adj Out", "MIS Out", "Qty Consumed", "Sales","Mat Ret Out",
+			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Weighted Avg Price", "Opening Stock", "GRN","Free Qty", "SCGRN", "	Stock Transfer In", "Stock Adj In", "MIS In", "Qty Produced", "Sales Return", "Material Return", "Purchase Return", "Delivery Note", "Stock Trans Out", "Stock Adj Out", "MIS Out", "Qty Consumed", "Sales","Mat Ret Out",
 					"Closing Stock", "Value", "Issue UOM Stock", "Issue Conversion", "Issue UOM", "Part No" };
 			listStock.add(ExcelHeader);
 			
@@ -126,7 +126,7 @@ public class clsDownloadExcelController {
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
 							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN,a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",(a.dblClosingStk+a.dblFreeQty),"
-							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value " + ",a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
+							+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value " + ",a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 							+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "'  " + "and a.strLocCode='" + locCode + "' and e.strPropertyCode='" + propCode + "' ");
 
@@ -152,7 +152,7 @@ public class clsDownloadExcelController {
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
 							+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN,a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",a.dblClosingStk,"
-							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value,"
+							+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value,"
 							+ "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 							+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "' "
@@ -176,7 +176,7 @@ public class clsDownloadExcelController {
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
 							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + ", " + "a.dblOpeningStk,a.dblGRN,a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",a.dblClosingStk,"
-							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
+							+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
 							+ "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 							+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "' "
@@ -236,7 +236,7 @@ public class clsDownloadExcelController {
 
 				+ " ,funGetUOM((a.dblClosingStk+a.dblFreeQty),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
-				+ ",(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
+				+ ",((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 						
 				+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 				+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + ""
@@ -499,7 +499,7 @@ public class clsDownloadExcelController {
 			// return a view which will be resolved by an excel view resolver
 			return new ModelAndView("excelViewWithReportName", "listWithReportName", listStock);
 		} else if ("Summary".equalsIgnoreCase(reportType)) {
-			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Unit Price", "Opening Stock", "Receipts", "Issue", "Closing Stock", "Value", "Issue UOM Stock", "Issue Conversion", "Issue UOM", "Part No" };
+			String[] ExcelHeader = { "Property Name", "Product Code", "Product Name", "Location", "Group", "Sub Group", "UOM", "Bin No", "Weighted Avg Price", "Opening Stock", "Receipts", "Issue", "Closing Stock", "Value", "Issue UOM Stock", "Issue Conversion", "Issue UOM", "Part No" };
 			listStock.add(ExcelHeader);
             
 			List totalsList1 = new ArrayList();
@@ -534,7 +534,7 @@ public class clsDownloadExcelController {
 				sqlBuilder.setLength(0);
 				sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo "
 						+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice), " + "a.dblOpeningStk,(a.dblGRN+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn) as Receipts " + ",(a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote) as Issue " + ",(a.dblClosingStk+a.dblFreeQty),"
-						+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value," + "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
+						+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value," + "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 						+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 						+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "' ");
 			
@@ -559,7 +559,7 @@ public class clsDownloadExcelController {
 						+ ",funGetUOM((a.dblGRN+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as Receipts "
 						+ ",funGetUOM((a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as Issue "
 						+ ",funGetUOM((a.dblClosingStk+a.dblFreeQty),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
-						+ ",(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value," + " a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
+						+ ",((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value," + " a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 						+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 						+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' "
 						+ "and a.strClientCode='" + clientCode + "' ");
@@ -727,7 +727,7 @@ public class clsDownloadExcelController {
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
 							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN+a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",(a.dblClosingStk+a.dblFreeQty),"
-							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value " + ",a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
+							+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value " + ",a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 							+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "'  " + "and a.strLocCode='" + locCode + "' and e.strPropertyCode='" + propCode + "' ");
 
@@ -748,7 +748,7 @@ public class clsDownloadExcelController {
 					sqlBuilder.append("select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"
 							+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)/" + currValue + " , " + "a.dblOpeningStk,a.dblGRN+a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",(a.dblClosingStk+a.dblFreeQty),"
-							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value,"
+							+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value,"
 							+ "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 							+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "' "
@@ -772,7 +772,7 @@ public class clsDownloadExcelController {
 					sqlBuilder.append( "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo"					
 							+ " ,(if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + ", " + "a.dblOpeningStk,a.dblGRN+a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn" + ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut "
 							+ ",(a.dblClosingStk+a.dblFreeQty),"							
-							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
+							+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
 							+ "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 							+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "' "
@@ -831,7 +831,7 @@ public class clsDownloadExcelController {
 
 				+ " ,funGetUOM(a.dblClosingStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
-				+ ",(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
+				+ ",((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 				+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 				+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + "and a.strClientCode='" + clientCode + "' ");
 				
@@ -1042,7 +1042,7 @@ public class clsDownloadExcelController {
 					sqlBuilder.setLength(0);
 					sqlBuilder.append( " select a.strProdCode,b.strProdName, "
 							+ " (a.dblClosingStk+a.dblFreeQty),"
-							+ " (a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value "
+							+ " ((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value "
 							+ ",d.strGName,c.strSGName "
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 							+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' "
@@ -1066,7 +1066,7 @@ public class clsDownloadExcelController {
 				{
 					sqlBuilder.setLength(0);
 					sqlBuilder.append( "select a.strProdCode,b.strProdName," + " (a.dblClosingStk+a.dblFreeQty),"
-							+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value " + ",d.strGName,c.strSGName "						
+							+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value " + ",d.strGName,c.strSGName "						
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 							+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' " + " and a.strClientCode='" + clientCode + "' "
 							+ " and c.strGCode='" + strGCode + "' " + " and a.strLocCode='" + locCode + "' and e.strPropertyCode='" + propCode + "' " + "  order by c.intSortingNo ");
@@ -1088,7 +1088,7 @@ public class clsDownloadExcelController {
 				{
 					sqlBuilder.setLength(0);
 					sqlBuilder.append( "select a.strProdCode,b.strProdName, " + " (a.dblClosingStk+a.dblFreeQty),"							
-							+ ",(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value" + ",d.strGName,c.strSGName "							
+							+ ",((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value" + ",d.strGName,c.strSGName "							
 							+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 							+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' "
 							+ " and a.strClientCode='" + clientCode + "' "							

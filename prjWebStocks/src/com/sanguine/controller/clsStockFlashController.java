@@ -199,7 +199,7 @@ public class clsStockFlashController {
 					// + ",b.dblCostRM,"
 					+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice), " + "a.dblOpeningStk,(a.dblGRN+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn) as Receipts " + ",(a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote) as Issue " + ",(a.dblClosingStk+dblFreeQty),"
 					// + "(a.dblClosingStk*b.dblCostRM) as Value"
-					+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
+					+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 
 					+ ",a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 					/*
@@ -419,7 +419,7 @@ public class clsStockFlashController {
 
 		if (qtyWithUOM.equals("No")) {
 			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo " + " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice) " + ",a.dblOpeningStk,a.dblGRN,a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn"
-					+ ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut " + ",a.dblClosingStk," + "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
+					+ ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut " + ",a.dblClosingStk," + "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 					// + "(a.dblClosingStk*b.dblCostRM) as Value"
 					+ ",a.dblClosingStk as IssueUOMStock "
 					+ ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -497,7 +497,7 @@ public class clsStockFlashController {
 					+ " ,funGetUOM(a.dblClosingStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
 					// + ",(a.dblClosingStk*b.dblCostRM) as Value,"
-					+ ",(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
+					+ ",((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
 
 					+ "a.dblClosingStk as IssueUOMStock "
 					+ ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -854,7 +854,7 @@ public class clsStockFlashController {
 
 		sql = "select a.strProdCode,b.strProdName," + "(a.dblClosingStk+a.dblFreeQty),"
 				// + "(a.dblClosingStk*b.dblCostRM) as Value "
-				+ "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
+				+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 
 				/*
 				 * +
