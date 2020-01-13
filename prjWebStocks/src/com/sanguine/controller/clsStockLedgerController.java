@@ -1027,7 +1027,7 @@ public class clsStockLedgerController {
 
 			+ "union all "
 
-			+ "select a.dtGRNDate TransDate,3 TransNo, 'GRN' TransType, a.strGRNCode RefNo, ifnull(sum(b.dblQty-b.dblRejected),0) Receipt, 0 Issue" + ",c.strPName Name,b.dblUnitPrice Rate " + "from tblgrnhd a, tblgrndtl b,tblpartymaster c " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode " + "and b.strProdCode = '" + prodCode + "' ";
+			+ "select a.dtGRNDate TransDate,3 TransNo, 'GRN' TransType, a.strGRNCode RefNo, ifnull(sum(b.dblQty-b.dblRejected+b.dblFreeQty),0) Receipt, 0 Issue" + ",c.strPName Name,b.dblUnitPrice Rate " + "from tblgrnhd a, tblgrndtl b,tblpartymaster c " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}

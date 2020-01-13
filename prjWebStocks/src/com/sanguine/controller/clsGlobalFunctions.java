@@ -1346,8 +1346,12 @@ public class clsGlobalFunctions {
 		 * "Update clsCurrentStockModel a Set a.dblGRN = IFNULL((select b.dblQty from clsTempItemStockModel b "
 		 * +"where a.strProdCode = b.strProdCode and b.dblQty),0)";
 		 */
-		hql = "Update tblcurrentstock a Set a.dblGRN = a.dblGRN + IFNULL((select b.dblQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' and b.dblQty ),0),a.dblFreeQty = a.dblFreeQty + IFNULL((select b.dblFreeQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' and b.dblQty and b.dblFreeQty ),0)";
+		//hql = "Update tblcurrentstock a Set a.dblGRN = a.dblGRN + IFNULL((select b.dblQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' and b.dblQty ),0)";
+		
+		//hql = "Update tblcurrentstock a Set a.dblGRN = a.dblGRN + IFNULL((select b.dblQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' and b.dblQty ),0),a.dblFreeQty = a.dblFreeQty + IFNULL((select b.dblFreeQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' and b.dblQty and b.dblFreeQty ),0)";
 
+		hql = "Update tblcurrentstock a Set a.dblGRN = a.dblGRN + IFNULL((select b.dblQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' and b.dblQty ),0),a.dblFreeQty = a.dblFreeQty + IFNULL((select b.dblFreeQty from tbltempitemstock b " + "where a.strProdCode = b.strProdCode and b.strClientCode='" + clientCode + "' and b.strUserCode='" + userCode + "' ),0)";
+		
 		objGlobalFunctionsService.funUpdateCurrentStock(hql);
 
 		// Delete TempItemStock Table
@@ -1655,7 +1659,7 @@ public class clsGlobalFunctions {
 		objGlobalFunctionsService.funUpdateCurrentStock(hql);
 
 		// Update dblClosingStock field in tblCurrentStock table
-		hql = "update tblcurrentstock set dblClosingStk=(dblOpeningStk+dblGRN+dblSCGRN+dblStkTransIn+dblStkAdjIn+" + "dblMISIn+dblMaterialReturnIn+dblSalesReturn+dblQtyProduced-dblStkTransOut-dblStkAdjOut-dblMISOut-dblQtyConsumed" + "-dblSales-dblMaterialReturnOut-dblDeliveryNote-dblPurchaseReturn) where strClientCode='" + clientCode + "' and strUserCode='" + userCode + "'";
+		hql = "update tblcurrentstock set dblClosingStk=(dblOpeningStk+dblGRN+dblFreeQty+dblSCGRN+dblStkTransIn+dblStkAdjIn+" + "dblMISIn+dblMaterialReturnIn+dblSalesReturn+dblQtyProduced-dblStkTransOut-dblStkAdjOut-dblMISOut-dblQtyConsumed" + "-dblSales-dblMaterialReturnOut-dblDeliveryNote-dblPurchaseReturn) where strClientCode='" + clientCode + "' and strUserCode='" + userCode + "'";
 		objGlobalFunctionsService.funUpdateCurrentStock(hql);
 		objGlobalFunctionsService.funDeleteTempItemStock(clientCode, userCode);
 		return 1;

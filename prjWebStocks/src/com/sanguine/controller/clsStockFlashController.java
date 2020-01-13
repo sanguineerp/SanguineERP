@@ -197,7 +197,7 @@ public class clsStockFlashController {
 		if (qtyWithUOM.equals("No")) {
 			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo "
 					// + ",b.dblCostRM,"
-					+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice), " + "a.dblOpeningStk,(a.dblGRN+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn) as Receipts " + ",(a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote) as Issue " + ",(a.dblClosingStk+dblFreeQty),"
+					+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice), " + "a.dblOpeningStk,(a.dblGRN+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn) as Receipts " + ",(a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote) as Issue " + ",(a.dblClosingStk),"
 					// + "(a.dblClosingStk*b.dblCostRM) as Value"
 					+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 
@@ -244,7 +244,7 @@ public class clsStockFlashController {
 					// + ",(a.dblClosingStk*b.dblCostRM) as Value, "
 					+ ",(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
 
-					+ " (a.dblClosingStk+dblFreeQty) as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
+					+ " (a.dblClosingStk) as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 					/*
 					 * +
 					 * "from tblcurrentstock a,tblproductmaster b,tblsubgroupmaster c,tblgroupmaster d,tbllocationmaster e"
@@ -359,7 +359,7 @@ public class clsStockFlashController {
 				value = value * (0);
 			}
 			double temp = value;
-			dblTotalValue = dblTotalValue + temp;
+			dblTotalValue = dblTotalValue ;//+ temp;
 			objStkFlashModel.setDblValue(String.valueOf(value));
 			objStkFlashModel.setDblIssueUOMStock(arrObj[12].toString());
 			objStkFlashModel.setDblIssueConversion(arrObj[15].toString());
@@ -623,7 +623,7 @@ public class clsStockFlashController {
 	
 			}
 						
-			double strClosingBal = dblCurrStk+dblFree;
+			double strClosingBal = dblCurrStk;
 			objStkFlashModel.setDblClosingStock(Double.toString(strClosingBal));
 
 			BigDecimal value = new BigDecimal(arrObj[28].toString());
@@ -852,9 +852,9 @@ public class clsStockFlashController {
 		objGlobal.funInvokeStockFlash(startDate, locCode, fromDate, toDate, clientCode, userCode, stockableItem, req, resp);
 		String sql = "";// clsPropertyMaster
 
-		sql = "select a.strProdCode,b.strProdName," + "(a.dblClosingStk+a.dblFreeQty),"
+		sql = "select a.strProdCode,b.strProdName," + "(a.dblClosingStk),"
 				// + "(a.dblClosingStk*b.dblCostRM) as Value "
-				+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
+				+ "((a.dblClosingStk)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 
 				/*
 				 * +
@@ -947,7 +947,7 @@ public class clsStockFlashController {
 				value = value * (0);
 			}
 			double temp = Double.parseDouble(df.format(value));
-			dblTotalValue = Double.parseDouble(df.format(dblTotalValue)) + temp;
+			dblTotalValue = Double.parseDouble(df.format(dblTotalValue));// + temp;
 			objStkFlashModel.setDblValue(String.valueOf(value));
 			// objStkFlashModel.setDblIssueUOMStock(arrObj[12].toString());
 			// objStkFlashModel.setDblIssueConversion(arrObj[15].toString());
