@@ -384,8 +384,10 @@
 					totalIssueWithUom=0;
 				}
 							
-			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec)+parseFloat(freeQty);
-			closingBalance = closingBalance - parseFloat(totalIssue);
+/* 			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec)+parseFloat(freeQty);
+ */			
+ 			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec);
+ 			closingBalance = closingBalance - parseFloat(totalIssue);
 
 			var table = document.getElementById("tblStockLedgerSummary");
 			var rowCount = table.rows.length;
@@ -409,10 +411,10 @@
 			
 			rowCount = rowCount + 1;
 			row1 = table.insertRow(rowCount);
-			row1.insertCell(0).innerHTML = "<label>Free Quantity</label>";
+ 			row1.insertCell(0).innerHTML = "<label>Free Quantity</label>";
 			row1.insertCell(1).innerHTML = "<label>"+ parseFloat(freeQty).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
 			row1.insertCell(2).innerHTML = "<label>"+parseFloat(0).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
-			
+ 		
 			rowCount = rowCount + 1;
 			row1 = table.insertRow(rowCount);
 			row1.insertCell(0).innerHTML = "<label>Total Issues</label>";
