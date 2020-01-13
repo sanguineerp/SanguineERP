@@ -758,7 +758,7 @@ public class clsSearchFormController {
 
 			case "childcode": {
 				columnNames = "strProdCode,strPartNo,strProdName,strProdType ";
-				tableName = "clsProductMasterModel where strClientCode='" + clientCode + "' and strNotInUse='N' ";
+				tableName = "clsProductMasterModel where strClientCode='" + clientCode + "' and strNotInUse='N' and strProdType !='Produced' ";
 				listColumnNames = "Product Code,POS Item Code,Product Name,Product Type";
 				idColumnName = "strProdCode";
 				searchFormTitle = "Product Master";
@@ -1651,7 +1651,7 @@ public class clsSearchFormController {
 				} else {
 					tableName = tableName + "  where   ";
 				}
-				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strNotInUse='N' " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
+				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strNotInUse='N' " + " and a.strProdType='Procured' and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
 				listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Product Type,Specification,Cal Amt On" + ",Class,Non Stockable,a.strPartNo";
 				idColumnName = "a.strProdCode";
 				searchFormTitle = "Product Master";
