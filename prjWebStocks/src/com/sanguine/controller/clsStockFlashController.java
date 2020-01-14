@@ -197,9 +197,9 @@ public class clsStockFlashController {
 		if (qtyWithUOM.equals("No")) {
 			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo "
 					// + ",b.dblCostRM,"
-					+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice), " + "a.dblOpeningStk,(a.dblGRN+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn) as Receipts " + ",(a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote) as Issue " + ",(a.dblClosingStk),"
+					+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice), " + "a.dblOpeningStk,(a.dblGRN+a.dblFreeQty+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn) as Receipts " + ",(a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote) as Issue " + ",(a.dblClosingStk),"
 					// + "(a.dblClosingStk*b.dblCostRM) as Value"
-					+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
+					+ "((a.dblClosingStk)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 
 					+ ",a.dblClosingStk as IssueUOMStock " + ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
 					/*
@@ -235,11 +235,11 @@ public class clsStockFlashController {
 					// + ",b.dblCostRM"
 					+ " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice) " + ",funGetUOM(a.dblOpeningStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as OpeningStk"
 
-					+ ",funGetUOM((a.dblGRN+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as Receipts "
+					+ ",funGetUOM((a.dblGRN+a.dblFreeQty+dblSCGRN+a.dblStkTransIn+a.dblStkAdjIn+a.dblMISIn+a.dblQtyProduced+a.dblMaterialReturnIn),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as Receipts "
 
 					+ ",funGetUOM((a.dblStkTransOut-a.dblStkAdjOut-a.dblMISOut-a.dblQtyConsumed-a.dblSales-a.dblMaterialReturnOut-a.dblDeliveryNote),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) as Issue "
 
-					+ ",funGetUOM((a.dblClosingStk+dblFreeQty),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
+					+ ",funGetUOM((a.dblClosingStk),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
 					// + ",(a.dblClosingStk*b.dblCostRM) as Value, "
 					+ ",(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
@@ -359,13 +359,13 @@ public class clsStockFlashController {
 				value = value * (0);
 			}
 			double temp = value;
-			dblTotalValue = dblTotalValue ;//+ temp;
+			dblTotalValue = dblTotalValue + temp;
 			objStkFlashModel.setDblValue(String.valueOf(value));
 			objStkFlashModel.setDblIssueUOMStock(arrObj[12].toString());
 			objStkFlashModel.setDblIssueConversion(arrObj[15].toString());
 			objStkFlashModel.setStrIssueUOM(arrObj[16].toString());
 			objStkFlashModel.setStrPartNo(arrObj[17].toString());
-
+		//	objStkFlashModel.setDblFreeQty(dblFreeQty);
 			listStockFlashModel.add(objStkFlashModel);
 		}
 
@@ -419,7 +419,7 @@ public class clsStockFlashController {
 
 		if (qtyWithUOM.equals("No")) {
 			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo " + " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice) " + ",a.dblOpeningStk,a.dblGRN,a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn"
-					+ ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut " + ",a.dblClosingStk," + "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
+					+ ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut " + ",a.dblClosingStk," + "((a.dblClosingStk)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 					// + "(a.dblClosingStk*b.dblCostRM) as Value"
 					+ ",a.dblClosingStk as IssueUOMStock "
 					+ ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -497,7 +497,7 @@ public class clsStockFlashController {
 					+ " ,funGetUOM(a.dblClosingStk,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM)"
 
 					// + ",(a.dblClosingStk*b.dblCostRM) as Value,"
-					+ ",((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
+					+ ",((a.dblClosingStk)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value,"
 
 					+ "a.dblClosingStk as IssueUOMStock "
 					+ ",b.dblIssueConversion,b.strIssueUOM,b.strPartNo "
@@ -601,10 +601,13 @@ public class clsStockFlashController {
 				String[] strCurrStkArr = arrObj[27].toString().split(" ");
 				dblCurrStk = Double.parseDouble(strCurrStkArr[0].toString());
 			}
-			else
+			else if(arrObj[27].toString().isEmpty())
 			{
+				dblCurrStk = 0;
+			}else{
 				dblCurrStk = Double.parseDouble(funGetDecimalValue(arrObj[27].toString()));
 			}
+			
 			if(arrObj[11].toString().equals(""))
 			{
 				
@@ -769,7 +772,9 @@ public class clsStockFlashController {
 		{
 			strVal = spl[0];
 		}
-
+		if(strVal.isEmpty()){
+			strVal="0.0";
+		}
 		return strVal;
 	}
 
@@ -1011,7 +1016,7 @@ public class clsStockFlashController {
 		String currCode = req.getSession().getAttribute("currencyCode").toString();
 		clsCurrencyMasterModel objModel = objCurrencyMasterService.funGetCurrencyMaster(currCode, clientCode);
 
-		if (qtyWithUOM.equals("No")) {
+		if (true) {//qtyWithUOM.equals("No")
 			sql = "select f.strPropertyName,a.strProdCode,b.strProdName,e.strLocName" + ",d.strGName,c.strSGName,b.strUOM,b.strBinNo " + " ,if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice) " + ",a.dblOpeningStk,a.dblGRN+a.dblFreeQty,a.dblSCGRN" + ",a.dblStkTransIn,a.dblStkAdjIn,a.dblMISIn,a.dblQtyProduced" + ",a.dblSalesReturn,a.dblMaterialReturnIn,a.dblPurchaseReturn"
 					+ ",a.dblDeliveryNote,a.dblStkTransOut,a.dblStkAdjOut,a.dblMISOut" + ",a.dblQtyConsumed,a.dblSales,a.dblMaterialReturnOut " + ",a.dblClosingStk," + "(a.dblClosingStk*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
 					+ ",a.dblClosingStk as IssueUOMStock "

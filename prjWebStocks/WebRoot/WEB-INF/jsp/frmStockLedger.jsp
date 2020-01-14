@@ -214,6 +214,7 @@
 				
 				var rate1 = cells1[7].innerHTML;
 				var rate = parseFloat(rate1.substring(7, rate1.lastIndexOf("<")));
+				var value =0;
 				if (qtyWithUOM == 'No') 
 				{
 					var negtveSign="";
@@ -244,7 +245,10 @@
 					var issueConv = funCheckNull(spUOM[1]);
 					var receivedUOM =funCheckNull( spUOM[2]);
 					var recipeUOM = funCheckNull(spUOM[3].substring(0, spUOM[3].length - 2));
-
+					
+					var convRecipe=funCheckNull(spUOM[0].split('value="')[1]);
+					
+					
 					if (rec == '0') {
 						tempRecipts += parseFloat(rec);
 					} else {
@@ -316,10 +320,22 @@
 					if(tempIssue.toString().includes("-"))
 						{
 						totRowBal = tempRecipts + tempIssue;
+							if(tempRecipts>0 ){
+								value = parseFloat((rate * tempRecipts / convRecipe ) + (rate * tempIssue / convRecipe)).toFixed(maxAmountDecimalPlaceLimit);
+							}else{
+								value = parseFloat((rate * tempIssue / convRecipe)).toFixed(maxAmountDecimalPlaceLimit);
+							}
 						}
 					else
 						{
 							totRowBal = tempRecipts - tempIssue;
+							if(tempRecipts>0 ){
+								value = parseFloat((rate * tempRecipts / convRecipe) - (rate * tempIssue / convRecipe)).toFixed(maxAmountDecimalPlaceLimit);
+							}else{
+								value = parseFloat((rate * tempIssue / convRecipe)).toFixed(maxAmountDecimalPlaceLimit);
+							}
+								
+							
 						}
 					
 
@@ -357,11 +373,13 @@
 				}
 
 				cells1[7].innerHTML = "<label>"	+ rate.toFixed(maxAmountDecimalPlaceLimit) + "</label>";
-
-				var issueOrReceipt = parseFloat(rec) + parseFloat(issue);
-				var value = parseFloat(rate * issueOrReceipt).toFixed(maxAmountDecimalPlaceLimit);
-				cells1[8].innerHTML = "<label>" + value + "</label>";
-
+//convRecipe  issueConv
+				var issueOrReceipt = parseFloat(rec)  + parseFloat(issue);
+				
+				if(qtyWithUOM == 'No'){
+					value = parseFloat(rate * issueOrReceipt).toFixed(maxAmountDecimalPlaceLimit);
+				}
+				cells1[8].innerHTML = "<label>" + value + "</label>";				
 				var transName = cells1[2].innerHTML;
 				if (transName == '<label>Opening Stk</label>') {
 					openingStk = bal;
