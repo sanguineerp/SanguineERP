@@ -341,7 +341,15 @@
 					}
 					if (spBalance[1] != "undefined") {
 						var balWithUOM = parseFloat(restQty.toFixed(maxAmountDecimalPlaceLimit))* parseFloat(recipeConv.substr(28));
-						finalBal = finalBal + '.' + balWithUOM.toFixed(maxQuantityDecimalPlaceLimit) + ' '+ recipeUOM;
+						if(qtyWithUOM.includes("Yes"))
+							{
+							finalBal = finalBal + '.' + balWithUOM + ' '+ recipeUOM;
+							}
+						else
+							{
+							finalBal = finalBal + '.' + balWithUOM.toFixed(maxAmountDecimalPlaceLimit) + ' '+ recipeUOM;
+							}
+						
 					}
 
 					// 		        	}
