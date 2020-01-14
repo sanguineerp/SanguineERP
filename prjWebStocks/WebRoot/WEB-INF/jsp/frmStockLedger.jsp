@@ -268,9 +268,17 @@
 								}
 							
 						} else {
-							dblRectlow = rec.split(" ");
-							dblRectlow = parseFloat(dblRectlow[0]);
-							tempRecipts = parseFloat(tempRecipts) + dblRectlow;
+							if(rec.includes(""))
+								{
+								
+								}
+							else
+								{
+								dblRectlow = rec.split(" ");
+								dblRectlow = parseFloat(dblRectlow[0]);
+								tempRecipts = parseFloat(tempRecipts) + dblRectlow;
+								}
+							
 						}
 
 					}
@@ -350,7 +358,14 @@
 				if (transName == '<label>Opening Stk</label>') {
 					openingStk = bal;
 				} else {
-					totalRec = totalRec + parseFloat(rec);
+					if(rec==""){
+						
+					}
+					else
+						{
+						totalRec = totalRec + parseFloat(rec);
+						}
+					
 					if(parseFloat(issue)>0)
 						{
 						totalIssue = totalIssue + parseFloat(issue);
