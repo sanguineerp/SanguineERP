@@ -24,12 +24,12 @@
  $(document).ready(function() 
 			{
 				var startDate="${startDate}";
-				var startDateOfMonth="${startDateOfMonth}";
+				var monthStartDate="${startDateOfMonth}";
 				//alert(startDate);
 				var arr = startDate.split("/");
 				Dat=arr[0]+"-"+arr[1]+"-"+arr[2];		
 				$("#txtFromDate").datepicker({ dateFormat: 'dd-mm-yy' });
-				$("#txtFromDate").datepicker('setDate',startDateOfMonth);			
+				$("#txtFromDate").datepicker('setDate',monthStartDate);			
 				$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
 				$("#txtToDate").datepicker('setDate', 'today');
 				var strPropCode='<%=session.getAttribute("propertyCode").toString()%>';
