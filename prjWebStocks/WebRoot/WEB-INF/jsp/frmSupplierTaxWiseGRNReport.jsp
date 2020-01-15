@@ -21,10 +21,11 @@ $(document).ready(function()
 		{		
 		
 			var startDate="${startDate}";
+			var startDateOfMonth="${startDateOfMonth}";
 			var arr = startDate.split("/");
 			Date1=arr[0]+"-"+arr[1]+"-"+arr[2];
 			$("#txtFromDate").datepicker({ dateFormat: 'dd-mm-yy' });
-			$("#txtFromDate" ).datepicker('setDate', Date1);
+			$("#txtFromDate" ).datepicker('setDate', startDateOfMonth);
 			$("#txtFromDate").datepicker();	
 			
 			 $("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });

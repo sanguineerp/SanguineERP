@@ -139,10 +139,17 @@ public class clsUserController {
 					String[] spDate1 = spDate[2].split(" ");
 					String date = spDate1[0];
 					startDate = date + "/" + month + "/" + year;
+					
+					String currentDate=objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
+					String date1 = currentDate.split(" ")[0];
+				    String[] arr=date1.split("-");
+				    String startDateOfMonth=1+"-"+arr[1]+"-"+arr[0];
+					
 					req.getSession().setAttribute("clientCode", objCompanyMasterModel.getStrClientCode());
 					req.getSession().setAttribute("companyCode", objCompanyMasterModel.getStrCompanyCode());
 					req.getSession().setAttribute("companyName", objCompanyMasterModel.getStrCompanyName());
 					req.getSession().setAttribute("startDate", startDate);
+					req.getSession().setAttribute("startDateOfMonth", startDateOfMonth);
 					req.getSession().setAttribute("strIndustryType", strIndustryType);
 					String strCRMModule = objCompanyMasterModel.getStrCRMModule();
 					String strWebBookModule = objCompanyMasterModel.getStrWebBookModule();

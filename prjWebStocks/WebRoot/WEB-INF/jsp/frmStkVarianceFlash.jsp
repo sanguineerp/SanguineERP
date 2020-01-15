@@ -11,8 +11,9 @@
 	 */
 	$(function()
 		{
+		    var startDateOfMonth="${startDateOfMonth}";
 			$("#txtFromDate").datepicker({ dateFormat: 'dd-mm-yy' });
-			$("#txtFromDate").datepicker('setDate','today');
+			$("#txtFromDate").datepicker('setDate',startDateOfMonth);
 			$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
 			$("#txtToDate").datepicker('setDate', 'today');
 		});

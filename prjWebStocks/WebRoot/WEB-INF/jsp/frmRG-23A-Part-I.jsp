@@ -9,13 +9,16 @@
 <script>
 
 		$(document).ready(function(){
+			var startDateOfMonth="${startDateOfMonth}";
+			var arr1 = startDateOfMonth.split("-");
+			Dat1=arr1[2]+"-"+arr1[1]+"-"+arr1[0];
 			var startDate="${startDate}";
 			var arr = startDate.split("/");
 			Dat=arr[2]+"-"+arr[1]+"-"+arr[0];
 			$("#dtFromDate").datepicker({
 				dateFormat : 'yy-mm-dd'
 			});
-			$("#dtFromDate").datepicker('setDate', Dat);	
+			$("#dtFromDate").datepicker('setDate', Dat1);	
 			
 			
 			$("#dtToDate").datepicker({

@@ -42,6 +42,8 @@ public class clsClientLoginController {
 
 	@Value("${applicationType}")
 	String applicationType;
+	@Autowired
+	private clsGlobalFunctions objGlobalFun;
 
 	@RequestMapping(value = "/validateClient", method = RequestMethod.POST)
 	public ModelAndView login(HttpServletRequest req, @Valid clsClientBean objClientBean, BindingResult result, ModelMap map) {
@@ -70,10 +72,17 @@ public class clsClientLoginController {
 									String[] spDate1 = spDate[2].split(" ");
 									String date = spDate1[0];
 									startDate = date + "/" + month + "/" + year;
+									
+									String currentDate=objGlobalFun.funGetCurrentDateTime("yyyy-MM-dd");
+									String date1 = currentDate.split(" ")[0];
+								    String[] arr=date1.split("-");
+								    String startDateOfMonth=1+"-"+arr[1]+"-"+arr[0];
+								    
 									req.getSession().setAttribute("clientCode", objclsCompanyMasterModel.getStrClientCode());
 									req.getSession().setAttribute("companyCode", objclsCompanyMasterModel.getStrCompanyCode());
 									req.getSession().setAttribute("companyName", objclsCompanyMasterModel.getStrCompanyName());
 									req.getSession().setAttribute("startDate", startDate);
+									req.getSession().setAttribute("startDateOfMonth", startDateOfMonth);
 									req.getSession().setAttribute("strIndustryType", objclsCompanyMasterModel.getStrIndustryType());
 									String strCRMModule = objclsCompanyMasterModel.getStrCRMModule();
 									String strWebBookModule = objclsCompanyMasterModel.getStrWebBookModule();

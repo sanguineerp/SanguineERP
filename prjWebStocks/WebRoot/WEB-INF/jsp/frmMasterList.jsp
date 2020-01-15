@@ -15,12 +15,15 @@
 	var inPeg;
 	$(document).ready(function() {
 		var startDate="${startDate}";
+		var startDateOfMonth="${startDateOfMonth}";
+		var arr1 = startDateOfMonth.split("-");
+		Dat1=arr1[2]+"-"+arr1[1]+"-"+arr1[0];
 		var arr = startDate.split("/");
 		Dat=arr[2]+"-"+arr[1]+"-"+arr[0];
 		$("#txtFromDate").datepicker({
 			dateFormat : 'yy-mm-dd'
 		});
-		$("#txtFromDate").datepicker('setDate', Dat);
+		$("#txtFromDate").datepicker('setDate', Dat1);
 
 		$("#txtToDate").datepicker({
 			dateFormat : 'yy-mm-dd'

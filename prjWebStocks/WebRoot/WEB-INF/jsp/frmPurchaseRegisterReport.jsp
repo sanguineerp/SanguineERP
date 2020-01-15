@@ -12,6 +12,10 @@
 			var startDate="${startDate}";
 			var arr = startDate.split("/");
 			Date1=arr[2]+"-"+arr[1]+"-"+arr[0];
+			var startDateOfMonth="${startDateOfMonth}";
+			var arr1 = startDateOfMonth.split("-");
+			Date1=arr1[2]+"-"+arr1[1]+"-"+arr1[0];
+			
 			$("#dtFromDate").datepicker({
 				dateFormat : 'yy-mm-dd'
 			});

@@ -10,9 +10,11 @@
     <script type="text/javascript">
     $(document).ready(function() 
     		{
-    
-    $("#txtFromDate").datepicker({ dateFormat: 'yy-mm-dd' });
-		$("#txtFromDate" ).datepicker('setDate', 'today');
+    	var startDateOfMonth="${startDateOfMonth}";
+    	var arr = startDateOfMonth.split("-");
+		Dat=arr[2]+"-"+arr[1]+"-"+arr[0];
+        $("#txtFromDate").datepicker({ dateFormat: 'yy-mm-dd' });
+		$("#txtFromDate" ).datepicker('setDate',Dat);
 		$("#txtFromDate").datepicker();
 		
 		 $("#txtToDate").datepicker({ dateFormat: 'yy-mm-dd' });

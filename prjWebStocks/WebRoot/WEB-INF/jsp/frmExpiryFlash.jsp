@@ -51,8 +51,10 @@
 			var startDate="${startDate}";
 			var arr = startDate.split("/");
 			Dat=arr[0]+"-"+arr[1]+"-"+arr[2];
+			var startDateOfMonth="${startDateOfMonth}";
+			
 			$("#txtFromDate").datepicker({ dateFormat: 'dd-mm-yy' });
-			$("#txtFromDate").datepicker('setDate',Dat);
+			$("#txtFromDate").datepicker('setDate',startDateOfMonth);
 			$("#txtToDate").datepicker({ dateFormat: 'dd-mm-yy' });
 			$("#txtToDate").datepicker('setDate', 'today');
 			$("#txtEXPFromDate").datepicker({ dateFormat: 'dd-mm-yy' });
