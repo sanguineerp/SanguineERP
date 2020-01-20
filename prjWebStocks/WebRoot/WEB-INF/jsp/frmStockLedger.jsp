@@ -321,7 +321,7 @@
 						{
 						totRowBal = tempRecipts + tempIssue;
 							if(tempRecipts>0 ){
-								value = parseFloat((rate * tempRecipts / convRecipe ) + (rate * tempIssue / convRecipe)).toFixed(maxAmountDecimalPlaceLimit);
+								value = parseFloat((rate * tempRecipts /( convRecipe /issueConv) ) + (rate * tempIssue / (convRecipe  /issueConv))).toFixed(maxAmountDecimalPlaceLimit);
 							}else{
 								value = parseFloat((rate * tempIssue / convRecipe)).toFixed(maxAmountDecimalPlaceLimit);
 							}

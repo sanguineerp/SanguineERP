@@ -2899,6 +2899,20 @@ public class clsGlobalFunctions {
 			hmProductTaxDtl1.put(entry.getKey(), taxDtl);
 		}
 
+		
+		//product wise tax calculation 
+		/*for (Map.Entry<String, Map<String, clsTaxDtl>> entryProductTax : hmProdTaxCalDtl.entrySet()) {
+			for (Map.Entry<String, clsTaxDtl> entry : entryProductTax.getValue().entrySet()) {
+				if(hmProductTaxDtl1.containsKey(entryProductTax.getKey())){
+					double prodTax=Double.parseDouble(hmProductTaxDtl1.get(entryProductTax.getKey()));
+					hmProductTaxDtl1.put(entryProductTax.getKey(),String.valueOf(prodTax+entry.getValue().taxAmt));
+				}else{
+					hmProductTaxDtl1.put(entryProductTax.getKey(),String.valueOf(entry.getValue().taxAmt));
+				}
+			}
+		}
+		*/
+		
 		return hmProductTaxDtl1;
 	}
 

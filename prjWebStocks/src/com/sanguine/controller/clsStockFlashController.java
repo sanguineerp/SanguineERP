@@ -545,7 +545,7 @@ public class clsStockFlashController {
 		 * if(strNonStkItems.equals("Non Stockable")) { sql+=
 		 * "and b.strNonStockableItem='Y' "; }
 		 */
-
+		//sql+=" And a.strProdCode='P0000052' ";
 		if (showZeroItems.equals("No")) {
 			sql += "and (a.dblOpeningStk >0 or a.dblGRN >0 or dblSCGRN >0 or a.dblStkTransIn >0 or a.dblStkAdjIn >0 " + "or a.dblMISIn >0 or a.dblQtyProduced >0 or a.dblMaterialReturnIn>0 or a.dblStkTransOut >0 " + "or a.dblStkAdjOut >0 or a.dblMISOut >0 or a.dblQtyConsumed  >0 or a.dblSales  >0 " + "or a.dblMaterialReturnOut  >0 or a.dblDeliveryNote > 0)";
 		}
@@ -594,9 +594,8 @@ public class clsStockFlashController {
 			objStkFlashModel.setDblMaterialReturnOut(arrObj[26].toString());
 			
 			double dblCurrStk = 0.0;
-			double dblFree = 0.0;
 			
-			if(arrObj[27].toString().contains(" "))
+			/*if(arrObj[27].toString().contains(" "))
 			{
 				String[] strCurrStkArr = arrObj[27].toString().split(" ");
 				dblCurrStk = Double.parseDouble(strCurrStkArr[0].toString());
@@ -606,9 +605,9 @@ public class clsStockFlashController {
 				dblCurrStk = 0;
 			}else{
 				dblCurrStk = Double.parseDouble(funGetDecimalValue(arrObj[27].toString()));
-			}
+			}*/
 			
-			if(arrObj[11].toString().equals(""))
+			/*if(arrObj[11].toString().equals(""))
 			{
 				
 			}
@@ -624,11 +623,11 @@ public class clsStockFlashController {
 					dblFree = Double.parseDouble(funGetDecimalValue(arrObj[11].toString()));
 				}
 	
-			}
+			}*/
 						
-			double strClosingBal = dblCurrStk;
-			objStkFlashModel.setDblClosingStock(Double.toString(strClosingBal));
-
+			//double strClosingBal = dblCurrStk;
+		//	objStkFlashModel.setDblClosingStock(Double.toString(strClosingBal));
+			objStkFlashModel.setDblClosingStock(funGetDecimalValue(arrObj[27].toString()));
 			BigDecimal value = new BigDecimal(arrObj[28].toString());
 			// double value=Double.parseDouble(arrObj[27].toString());
 			BigDecimal zero = new BigDecimal("0");
