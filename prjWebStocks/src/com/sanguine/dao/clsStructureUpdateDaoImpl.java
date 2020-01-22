@@ -1068,6 +1068,13 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblsalesorderdtl` ADD COLUMN `strMessage` VARCHAR(50) NOT NULL DEFAULT '' AFTER `dblAcceptQty`,ADD COLUMN `strShape` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strMessage`;";
 		funExecuteQuery(sql);
 		
+		sql="ALTER TABLE `tblgroupmaster` DROP PRIMARY KEY, ADD PRIMARY KEY (`strGCode`, `strClientCode`); ";
+		funExecuteQuery(sql);
+		
+		/*sql="ALTER TABLE `tblpropertysetup` ADD COLUMN `strLastSuppRateShowInStockFlash` VARCHAR(1) NOT NULL DEFAULT 'N' AFTER `strFifo`;";
+		funExecuteQuery(sql);*/
+		
+		
 		/*----------------WebStock Forms only---------------------------*/
 		String strIndustryType = "",strWebStockModule="";
 		List<clsCompanyMasterModel> listClsCompanyMasterModel = objSetupMasterService.funGetListCompanyMasterModel();

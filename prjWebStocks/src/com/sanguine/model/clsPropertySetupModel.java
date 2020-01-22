@@ -256,6 +256,8 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	@Column(name = "strFifo", columnDefinition = "VARCHAR(1) default 'Y'")
 	private String strFifo;
 	
+	
+	
 	// SMS setUp Tab End
 
 	public String getStrUserCreated() {
@@ -1284,6 +1286,8 @@ public class clsPropertySetupModel extends clsBaseModel implements Serializable 
 	public void setStrFifo(String strFifo) {
 		this.strFifo = strFifo;
 	}
+
+	
 
 	
 

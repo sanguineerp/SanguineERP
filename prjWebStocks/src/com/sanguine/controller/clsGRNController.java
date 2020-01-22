@@ -3302,4 +3302,25 @@ public class clsGRNController {
 			e.printStackTrace();
 		}
 	}
+	
+	@RequestMapping(value = "/loadLastGRNRate", method = RequestMethod.GET)
+	public @ResponseBody double funGetLastGrnRate(@RequestParam("prodCode")String prodCode,@RequestParam("clientCode") String ClientCode){
+		double rate=0;
+		try{
+			String sql="select ifnull(ifnull(b.dblUnitPrice,c.dblCostRM),0) as rate from tblgrnhd a,tblgrndtl b,tblproductmaster c "
+					+" where a.strGRNCode=b.strGRNCode and b.strProdCode=c.strProdCode and a.strClientCode=b.strClientCode  and b.strClientCode=c.strClientCode "
+					+" and b.strProdCode ='"+prodCode+"' and a.strClientCode='"+ClientCode+"' "
+					+" order by a.dtGRNDate desc limit 1";
+			List list = objGlobalFunctionsService.funGetList(sql);
+			if(list.size()>0)
+			{
+				rate=Double.parseDouble(list.get(0).toString());
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return rate;
+	}
 }

@@ -597,6 +597,7 @@ public class clsSetupMasterController {
 		
 		bean.setStrSMSContent(objSetup.getStrSMSContent());
 		bean.setStrFifo(objSetup.getStrFifo());
+		
 	}
 
 	private void funSetBlankPropertyData(clsSetupMasterBean bean) {
@@ -1182,6 +1183,7 @@ public class clsSetupMasterController {
 		objPropertySetupModel.setClientCode(req.getSession()
 				.getAttribute("clientCode").toString());
 		objPropertySetupModel.setStrFifo(objGlobal.funIfNull(bean.getStrFifo(),"N",bean.getStrFifo()));
+		
 		
 		List auditFormList = bean.getListAuditForm();
 		String AuditFrom = "";

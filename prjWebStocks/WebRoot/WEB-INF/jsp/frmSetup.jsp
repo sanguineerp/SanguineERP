@@ -1314,7 +1314,7 @@
 									<td>Show All Properties Customer</td>
 										<td><s:checkbox path="strShowAllPropCustomer" value="Y" /></td>
 																		
-									<td>Effect of Invoice</td>
+									<td>Effect of Invoice In Stock After</td>
 										<td><s:select path="strEffectOfInvoice" id="txtEffectOfInvoice"
 												cssClass="BoxW48px" cssStyle="width:25%" >
 												<s:option value="DC" >Delivery Challan</s:option>
@@ -1492,6 +1492,13 @@
 										</td>
 									
 									</tr>
+									
+									<%-- <tr>
+									<td>Last Supplier Rate Show In StockFlash and Ledger </td>
+									<td>	
+									<s:checkbox path="strLastSuppRateShowInStockFlash" value="Y"/></td>
+									</tr> --%>
+									
 								</table>
 							</div>
 				

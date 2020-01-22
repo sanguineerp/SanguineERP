@@ -111,25 +111,49 @@
 		    unitPrice=parseFloat(unitPrice).toFixed(maxAmountDecimalPlaceLimit);
 		    var wtunit = $("#txtWtUnit").val();
 		    
+		    var ProductData=fungetConversionUOM(prodCode);
+		    
 		    var actualRate = $("#txtActualRate").val();
 		    actualRate=parseFloat(actualRate).toFixed(maxAmountDecimalPlaceLimit);
 		     
 		    wtunit=parseFloat(wtunit).toFixed(maxAmountDecimalPlaceLimit);
 		    var currentStkQty = $("#txtStock").val();
-		   
+		    
+		    var currentStkQtyRecepi = $("#txtStock").val();
+		    var currentStkQty1=currentStkQtyRecepi.split(".");
+		    var tmpCurrentStkQty='';
+			if(currentStkQty1.length>1){
+				tmpCurrentStkQty=parseFloat("0."+currentStkQty1[1]) * ProductData.dblRecipeConversion;
+				tmpCurrentStkQty=tmpCurrentStkQty.toFixed(0);
+			}
+			if(tmpCurrentStkQty!=''){
+				currentStkQtyRecepi=currentStkQty1[0]+"."+tmpCurrentStkQty;
+			}
+		    
+		    
 		    var phyStkQty = $("#txtQuantity").val();
 		    if($('#cmbConversionUOM').val()=="RecUOM")
 			{
-    			var ProductData=fungetConversionUOM(prodCode);
+    			
 				ConversionValue=ProductData.dblReceiveConversion;
 				ReceivedconversionUOM=ProductData.strReceivedUOM;
 				issuedconversionUOM=ProductData.strIssueUOM;
 				recipeconversionUOM=ProductData.strRecipeUOM;
 				phyStkQty=parseFloat(phyStkQty)/parseFloat(ConversionValue);
+				 var tmpPhyStkQty1= $("#txtQuantity").val().split(".");
+				var tmpPhyStkQty2='';
+				if(tmpPhyStkQty1.length>1){
+					tmpPhyStkQty2=parseFloat("0."+tmpPhyStkQty1[1] )  * 1000 / ProductData.dblRecipeConversion;
+					//tmpPhyStkQty2=tmpPhyStkQty2.toFixed(0);
+				}
+				if(tmpPhyStkQty2!=''){
+					phyStkQty=parseFloat(tmpPhyStkQty1[0])+tmpPhyStkQty2;	
+				} 
+				
 			}
 		    if($('#cmbConversionUOM').val()=="RecipeUOM")
 			{
-    			var ProductData=fungetConversionUOM(prodCode);
+    			//var ProductData=fungetConversionUOM(prodCode);
 				ConversionValue=ProductData.dblRecipeConversion;
 				ReceivedconversionUOM=ProductData.strReceivedUOM;
 				issuedconversionUOM=ProductData.strIssueUOM;
@@ -138,7 +162,7 @@
 			}
 		    if($('#cmbConversionUOM').val()=="IssueUOM")
 			{
-    			var ProductData=fungetConversionUOM(prodCode);
+    			//var ProductData=fungetConversionUOM(prodCode);
 				ConversionValue=ProductData.dblIssueConversion;
 				ReceivedconversionUOM=ProductData.strReceivedUOM;
 				issuedconversionUOM=ProductData.strIssueUOM;
@@ -167,12 +191,12 @@
 		    var tempStkQty=DiscurrentStkQty.split(".");
 		    DiscurrentStkQty=tempStkQty[0]+" "+ReceivedconversionUOM+"."+parseFloat("0."+tempStkQty[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
 		    var tempQty=tempphyStkQty.split(".");
-		    var Displyqty=tempQty[0]+" "+ReceivedconversionUOM+"."+Math.round(parseFloat("0."+tempQty[1])*parseFloat(ConversionValue))+" "+recipeconversionUOM;
+		    var Displyqty=tempQty[0]+" "+ReceivedconversionUOM+" "+tempQty[1]+" "+recipeconversionUOM;
 		    var LooseQty=$("#txtQuantity").val();
 		    LooseQty=parseFloat(LooseQty).toFixed(maxQuantityDecimalPlaceLimit);
 		    
 		    var tempvariance=variance.split(".");
-		    var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+parseFloat("0."+tempvariance[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
+		    var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+parseFloat(tempvariance[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
 		    rowCount=listRow;
 		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listStkPostDtl["+(rowCount)+"].strProdCode\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";
 		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"100%\" name=\"listStkPostDtl["+(rowCount)+"].strProdName\" id=\"lblProdName."+(rowCount)+"\" value='"+prodName+"'>";

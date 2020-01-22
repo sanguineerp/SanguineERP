@@ -223,7 +223,13 @@ public class clsUserController {
 		ModelAndView objMV = null;
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String companyName = req.getSession().getAttribute("companyName").toString();
-
+		try{
+			req.getSession().removeAttribute("propertyCode");	
+		}catch(Exception e){
+			
+		}
+		
+		
 		if (result.hasErrors()) {
 			map.put("invalid", "1");
 			return new ModelAndView("frmLogin", "command", new clsUserHdBean());

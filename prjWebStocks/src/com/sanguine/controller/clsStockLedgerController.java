@@ -86,7 +86,7 @@ public class clsStockLedgerController {
 
 	@Autowired
 	private clsProductMasterService objProductMasterService;
-
+	
 	@Autowired
 	private clsUserMasterService objUserMasterService;
 	@Autowired
@@ -118,7 +118,13 @@ public class clsStockLedgerController {
 
 		view.addObject("LoggedInProp", propertyCode);
 		view.addObject("LoggedInLoc", locationCode);
-
+		/*String strLastSuppRateShowInStockFlash="N";
+		String sql="select strLastSuppRateShowInStockFlash from tblpropertysetup a where a.strPropertyCode='"+propertyCode+"' and strClientCode='"+clientCode+"' ";
+		List listSetup=objGlobalService.funGetList(sql);
+		if(listSetup!=null && listSetup.size()>0){
+			strLastSuppRateShowInStockFlash=listSetup.get(0).toString();
+		}
+		view.addObject("strLastSuppRateShowInStockFlash", strLastSuppRateShowInStockFlash);*/
 		mapLocation = clsGlobalFunctions.funSortByValues(mapLocation);
 		view.addObject("listLocation", mapLocation);
 		return view;
@@ -571,7 +577,7 @@ public class clsStockLedgerController {
 			sql += " AND DATE(a.dteDNDate) >= '" + fromDate + "' " + " AND DATE(a.dteDNDate) <= '" + toDate + "'  GROUP BY a.dteDNDate, a.strDNCode, a.strLocCode "
 
 			+ "union all "
-			+ "select a.dtGRNDate TransDate,2 TransNo, 'GRN FOC' TransType, a.strGRNCode RefNo, ifnull(sum(b.dblFreeQty),0) Receipt, 0 Issue" + ",c.strPName Name,0.0 Rate ,0.0 " + "from tblgrnhd a, tblgrndtl b,tblpartymaster c " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode " + "and b.strProdCode = '" + prodCode + "' ";
+			+ "select a.dtGRNDate TransDate,2 TransNo, 'GRN FOC' TransType, a.strGRNCode RefNo, ifnull(sum(b.dblFreeQty),0) Receipt, 0 Issue" + ",c.strPName Name,0.0 Rate ,0.0 " + "from tblgrnhd a, tblgrndtl b,tblpartymaster c " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode " + "and b.strProdCode = '" + prodCode + "' and  b.dblFreeQty > 0 ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -1850,6 +1856,14 @@ public class clsStockLedgerController {
 			mapLocation = clsGlobalFunctions.funSortByValues(mapLocation);
 			objModelView.addObject("listLocation", mapLocation);
 		}
+		/*String strLastSuppRateShowInStockFlash="N";
+		String sql="select strLastSuppRateShowInStockFlash from tblpropertysetup a where a.strPropertyCode='"+propertyCode+"' and strClientCode='"+clientCode+"' ";
+		List listSetup=objGlobalService.funGetList(sql);
+		if(listSetup!=null && listSetup.size()>0){
+			strLastSuppRateShowInStockFlash=listSetup.get(0).toString();
+		}
+		objModelView.addObject("strLastSuppRateShowInStockFlash", strLastSuppRateShowInStockFlash);
+		req.getSession().setAttribute("strLastSuppRateShowInStockFlash",strLastSuppRateShowInStockFlash);*/
 		return objModelView;
 	}
 
@@ -1958,6 +1972,11 @@ public class clsStockLedgerController {
 		String prodCode = spParam1[2];
 		String type = spParam1[3];
 		String qtyWithUOM = spParam1[4];
+		String ratePickUpFrom="Weighted AVG";//"Last Supplier Rate";
+		if(spParam1.length>5){
+			ratePickUpFrom=spParam1[5];	
+		}
+		
 		String fromDate = objGlobal.funGetDate("yyyy-MM-dd", fDate);
 		String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
 		List listStock = new ArrayList();
@@ -2878,6 +2897,7 @@ public class clsStockLedgerController {
 		double reciptTtl = 0.0;
 		double issueTtl = 0.0;
 		double rate = 0.0;
+		double lastSuppRate = 0.0;
 		double opnStock = 0.0;
 		double clsngBal = 0.;
 		double bal = 0.0;
@@ -2904,14 +2924,17 @@ public class clsStockLedgerController {
 			DataList.add(listObj.get(2).toString());// 3
 			DataList.add(listObj.get(3).toString());// 4
 			DataList.add(listObj.get(4).toString());// 5
-
+			if(listObj.get(1).toString().equalsIgnoreCase("GRN"))
+			{
+				lastSuppRate=Double.parseDouble(listObj.get(7).toString());
+			}
 			String rec = "";
 			String op = "";
 			// rec=rec.substring(7,rec.lastIndexOf("<"));
 			String issue = "";
 			// issue=issue.substring(7,issue.lastIndexOf("<"));
 			String finalBal = "";
-			double rate1 = 0.0;
+			//double rate1 = 0.0;
 			// double
 			// rate=parseFloat(rate1.substring(7,rate1.lastIndexOf("<")));
 			// bal=bal+(Double.parseDouble(arrObj[3].toString())-Double.parseDouble(arrObj[4].toString()));
@@ -3178,6 +3201,12 @@ public class clsStockLedgerController {
 		clsProductMasterModel objProd = objProductMasterService.funGetObject(prodCode, clientCode);
 
 		rate = objProd.getDblCostRM();
+		if(ratePickUpFrom.equalsIgnoreCase("Last Supplier Rate")){
+			//if(lastSuppRate > 0){
+				rate=objGRN.funGetLastGrnRate(prodCode,clientCode);
+			//}	
+		}
+		
 		if(qtyWithUOM.equals("Yes"))
 		{
 			
@@ -3253,4 +3282,5 @@ public class clsStockLedgerController {
 		return strDispQty;
 	}
 
+	
 }

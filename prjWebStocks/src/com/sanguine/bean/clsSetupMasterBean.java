@@ -181,8 +181,6 @@ public class clsSetupMasterBean {
 	private String strPOSTRoundOffAmtToWebBooks;
 	private String strFifo;
 
-	
-	
 	public String getStrRateHistoryFormat() {
 		return strRateHistoryFormat;
 	}

@@ -440,8 +440,9 @@
 			var qtyWithUOM=$("#cmbQtyWithUOM").val();
 			var prodType=$("#txtProdType").val();
 			var prodClass=$("#cmbProductClass").val();
+			var ratePickUpFrom = $("#cmbPriceCalculation").val();
 			
-			var param1=reportType+","+locCode+","+propCode+","+showZeroItems+","+strSGCode+","+strNonStkItems+","+strGCode+","+qtyWithUOM;
+			var param1=reportType+","+locCode+","+propCode+","+showZeroItems+","+strSGCode+","+strNonStkItems+","+strGCode+","+qtyWithUOM+","+ratePickUpFrom;
 			var paramForStkLedger=locCode+","+propCode;		
 			var manufCode=$("#txtManufacturerCode").val();
 			var searchUrl=getContextPath()+"/frmStockFlashDetailReport.html?param1="+param1+"&fDate="+fromDate+"&tDate="+toDate+"&prodType="+prodType+"&ManufCode="+manufCode+"&prodClass="+prodClass;
@@ -601,7 +602,8 @@
 				var qtyWithUOM=$("#cmbQtyWithUOM").val();
 				var strExportType=$("#cmbExportType").val();
 				var prodType=$("#txtProdType").val();
-				var param1=reportType+","+locCode+","+propCode+","+showZeroItems+","+strSGCode+","+strNonStkItems+","+strGCode+","+qtyWithUOM+","+strExportType;
+				var ratePickUpFrom = $("#cmbPriceCalculation").val();
+				var param1=reportType+","+locCode+","+propCode+","+showZeroItems+","+strSGCode+","+strNonStkItems+","+strGCode+","+qtyWithUOM+","+strExportType+","+ratePickUpFrom;
 				//var param1=reportType+","+locCode+","+propCode+","+showZeroItems;
 				var manufCode=$("#txtManufacturerCode").val();
 				if(reportType=='Summary' && strExportType=="PDF" )
@@ -755,6 +757,12 @@
 					<td><label >Product Class</label></td>
 				        <td><s:select id="cmbProductClass" name="class" path="strProductClass" items="${classProductlist}" cssClass="BoxW48px" /></td>
 					
+					<td><label>Value Calculation On </label></td>
+					<td><select id="cmbPriceCalculation" class="BoxW124px" > <!-- onchange="funValueCalculation()" -->
+							<option selected="selected">Weighted AVG</option>
+							<option>Last Supplier Rate</option>
+						</select>
+					</td>
 					
 					
 					<td colspan="7">						

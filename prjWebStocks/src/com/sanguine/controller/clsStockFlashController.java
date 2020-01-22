@@ -51,6 +51,10 @@ public class clsStockFlashController {
 
 	@Autowired
 	private clsCurrencyMasterService objCurrencyMasterService;
+	
+	@Autowired
+	clsGRNController objGRN;
+
 
 	@RequestMapping(value = "/frmStockFlash", method = RequestMethod.GET)
 	private ModelAndView funLoadPropertySelection(@ModelAttribute("command") clsStockFlashBean objPropBean, BindingResult result, HttpServletRequest req, Map<String, Object> model) {
@@ -392,6 +396,11 @@ public class clsStockFlashController {
 		String strNonStkItems = spParam1[5];
 		String strGCode = spParam1[6];
 		String qtyWithUOM = spParam1[7];
+		
+		String ratePickUpFrom="Weighted AVG";//"Last Supplier Rate";
+		if(spParam1.length>8){
+			ratePickUpFrom=spParam1[8];	
+		}
 		String fromDate = objGlobal.funGetDate("yyyy-MM-dd", fDate);
 		String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
 		// double dblTotalValue=0;
@@ -630,6 +639,12 @@ public class clsStockFlashController {
 			objStkFlashModel.setDblClosingStock(funGetDecimalValue(arrObj[27].toString()));
 			BigDecimal value = new BigDecimal(arrObj[28].toString());
 			// double value=Double.parseDouble(arrObj[27].toString());
+			if(ratePickUpFrom.equalsIgnoreCase("Last Supplier Rate")){
+				if (qtyWithUOM.equals("No")) {
+					value= new BigDecimal(objGRN.funGetLastGrnRate(arrObj[1].toString(),clientCode) * Double.parseDouble(arrObj[27].toString()));	
+				}
+				
+			}
 			BigDecimal zero = new BigDecimal("0");
 			// double temp=value;
 			if (value.compareTo(BigDecimal.ZERO) < 0) {

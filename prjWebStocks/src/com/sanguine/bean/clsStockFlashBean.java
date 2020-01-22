@@ -39,6 +39,8 @@ public class clsStockFlashBean {
 	private String strCurrency;
 	
 	private String strProductClass;
+	
+	private String strPriceCalculation; 
 
 	public String getStrTransaction() {
 		return strTransaction;
@@ -174,6 +176,14 @@ public class clsStockFlashBean {
 
 	public void setStrProductClass(String strProductClass) {
 		this.strProductClass = strProductClass;
+	}
+
+	public String getStrPriceCalculation() {
+		return strPriceCalculation;
+	}
+
+	public void setStrPriceCalculation(String strPriceCalculation) {
+		this.strPriceCalculation = strPriceCalculation;
 	}
 	
 }

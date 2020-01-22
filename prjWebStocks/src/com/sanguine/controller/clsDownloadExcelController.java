@@ -26,6 +26,9 @@ public class clsDownloadExcelController {
 	@Autowired
 	clsGlobalFunctions objGlobal;
 
+	@Autowired
+	clsGRNController objGRN;
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/downloadExcel", method = RequestMethod.GET)
 	public ModelAndView downloadExcel(@RequestParam(value = "param1") String param1, @RequestParam(value = "fDate") String fDate, @RequestParam(value = "tDate") String tDate, @RequestParam(value = "prodType") String prodType, @RequestParam(value = "ManufCode") String strManufactureCode, HttpServletRequest req, HttpServletResponse resp) {
@@ -40,7 +43,11 @@ public class clsDownloadExcelController {
 		String strNonStkItems = spParam1[5];
 		String strGCode = spParam1[6];
 		String qtyWithUOM = spParam1[7];
-
+		String ratePickUpFrom="Weighted AVG";//"Last Supplier Rate";
+		if(spParam1.length>9){
+			ratePickUpFrom=spParam1[9];	
+		}
+		
 		String fromDate = objGlobal.funGetDate("yyyy-MM-dd", fDate);
 		String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
 		List listStock = new ArrayList();
@@ -309,6 +316,12 @@ public class clsDownloadExcelController {
 					dataList.add(strClosingStk);
 					double value = Double.parseDouble(arrObj[28].toString());
 					if (value < 0) {
+						
+					}
+					if(ratePickUpFrom.equalsIgnoreCase("Last Supplier Rate")){
+						if (qtyWithUOM.equals("No")) {
+							value= objGRN.funGetLastGrnRate(arrObj[1].toString(),clientCode) * Double.parseDouble(arrObj[27].toString());	
+						}
 						
 					}
 					

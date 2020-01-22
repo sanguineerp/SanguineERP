@@ -10,7 +10,7 @@
 	<script type="text/javascript" src="<spring:url value="/resources/js/jquery-ui.min.js"/>"></script>
 	<script type="text/javascript" src="<spring:url value="/resources/js/validations.js"/>"></script>
 	<script>
-
+	var dblLastSuppRate=0;
 		$(function ()
 		{
 			/* var startDate="${startDate}";
@@ -19,6 +19,13 @@
 			
 			var startDate="${startDate}";
 			var arr = startDate.split("/");
+			
+			
+			<%-- strLastSuppRateShowInStockFlash= '<%= request.getAttribute("strLastSuppRateShowInStockFlash") %>';
+			if(strLastSuppRateShowInStockFlash==null){
+				strLastSuppRateShowInStockFlash='N';
+			} --%>
+			 
 			 
 			var date = new Date(); 
 			var month=date.getMonth()+1;
@@ -154,6 +161,7 @@
 				var row1 = table.insertRow(rowCount);
 				if(item[2]!='')
 				{
+					
 					row1.insertCell(0).innerHTML= "<label>"+item[0]+"</label>";
 					row1.insertCell(1).innerHTML= "<label>"+item[5]+"</label>";
 					row1.insertCell(2).innerHTML= "<label>"+item[1]+"</label>";
@@ -201,7 +209,7 @@
 			var rowCount1 = table.rows.length;
 		    var tableRows=table.rows;
 		    var rateForValue=0;
-		    
+		
 		for (var cnt = 1; cnt < rowCount1; cnt++) {
 				var cells1 = tableRows[cnt].cells;
             
@@ -409,6 +417,11 @@
 			if(weightedRate>0){
 				rateForValue=weightedRate;
 			}
+			if($("#cmbPriceCalculation").val()=="Last Supplier Rate"){
+				if(dblLastSuppRate>0){
+					rateForValue=dblLastSuppRate;
+				}
+			}
 			/* if(qtyWithUOM.includes("Yes"))
 				{
 				totalIssue = totalIssue/issueConversion;
@@ -489,6 +502,26 @@
 			var parts = obj.tran_date.split('-');
 			return new Date(parts[2], parts[1] - 1, parts[0]);
 		}
+		
+		function funLoadLastGRNRate(productCode){
+		
+			var searchUrl = "";
+			var clientCode="${clientCode}";
+			searchUrl = getContextPath()
+					+ "/loadLastGRNRate.html?prodCode=" + productCode+"&clientCode="+clientCode;
+			$.ajax({
+				type : "GET",
+				url : searchUrl,
+				dataType : "json",
+				async :false,
+				success : function(response) {
+					dblLastSuppRate=response;
+				},
+				error : function(e) {
+					alert('Error:=' + e);
+				}
+			});
+		}
 
 		function funGetDate(date, format) {
 			var retDate = '';
@@ -545,6 +578,7 @@
 					$("#txtProdCode").val(response.strProdCode);
 					$("#lblProdName").text(response.strProdName);
 					weightedRate = response.dblCostRM;
+					dblLastSuppRate=0;
 					funBatchCheck(response.strProdCode);
 					
 				},
@@ -552,6 +586,11 @@
 					alert('Error:=' + e);
 				}
 			});
+			
+			if($("#cmbPriceCalculation").val()=="Last Supplier Rate"){
+				funLoadLastGRNRate(code);	
+			}
+			
 		}
 		$(document).ready(
 				function() {
@@ -576,8 +615,11 @@
 								var propCode = $("#cmbProperty").val();
 								var prodCode = $("#txtProdCode").val();
 								var qtyWithUOM = $("#cmbQtyWithUOM").val();
+								var ratePickUpFrom = $("#cmbPriceCalculation").val();
+								
+								//+"&ratePickUpFrom="+ratePickUpFrom
 								var param1 = locCode + "," + propCode + ","
-										+ prodCode + ",detail," + qtyWithUOM;
+										+ prodCode + ",detail," + qtyWithUOM+ ","+ratePickUpFrom;
 								window.location.href = getContextPath()
 										+ "/frmExportStockLedger.html?param1="
 										+ param1 + "&fDate=" + fromDate
@@ -714,7 +756,13 @@
 			})
 				
 		}
-		
+	
+		function funValueCalculation(){
+			
+			if($("#cmbPriceCalculation").val()=="Last Supplier Rate"){
+				funLoadLastGRNRate($("#txtProdCode").val());	
+			}
+		}
 	</script>
 </head>
 <body onload="funOnLoad();">
@@ -771,9 +819,21 @@
 						</select>
 					</td>
 			        
+			        
 			       
 			        
 				</tr>
+					
+					<tr>
+					 <td width="10%"><label>Value Calculation On </label></td>
+					<td width="10%">
+						<select id="cmbPriceCalculation" class="BoxW124px" onchange="funValueCalculation()">
+							<option selected="selected">Weighted AVG</option>
+							<option>Last Supplier Rate</option>
+						</select>
+					</td>
+					
+					</tr>
 						
 				<tr>
 					<td><input id="btnExecute" type="button" value="EXECUTE" class="form_button1"/></td>

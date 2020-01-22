@@ -358,7 +358,7 @@ public class clsStkPostingController {
 		objHdModel.setStrLocCode(objBean.getStrLocCode());
 		objHdModel.setDblTotalAmt(objBean.getDblTotalAmt());
 		objHdModel.setStrNarration(objBean.getStrNarration());
-		;
+		
 		objHdModel.setStrUserModified(userCode);
 		objHdModel.setDtLastModified(objGlobal.funGetCurrentDateTime("yyyy-MM-dd"));
 		//objHdModel.setStrConversionUOM(objGlobal.funIfNull(objBean.getStrConversionUOM(),"RecipeUOM",objBean.getStrConversionUOM()));
