@@ -582,7 +582,7 @@ public class clsStockFlashController {
 			objStkFlashModel.setStrSubGroupName(arrObj[5].toString());
 			objStkFlashModel.setStrUOM(arrObj[6].toString());
 			objStkFlashModel.setStrBinNo(arrObj[7].toString());
-			objStkFlashModel.setDblCostRM(arrObj[8].toString());
+			
 			objStkFlashModel.setDblOpStock(funGetDecimalValue(arrObj[9].toString())); // openStk
 			objStkFlashModel.setDblGRN(funGetDecimalValue(arrObj[10].toString())); // GRN
 			objStkFlashModel.setDblFreeQty(funGetDecimalValue(arrObj[11].toString()));
@@ -652,6 +652,24 @@ public class clsStockFlashController {
 			}
 
 			dblTotalValue = dblTotalValue.add(value);
+			if(ratePickUpFrom.equalsIgnoreCase("Last Supplier Rate"))
+			{
+			    if (qtyWithUOM.equals("No"))
+			    {
+				  objStkFlashModel.setDblCostRM(String.valueOf(objGRN.funGetLastGrnRate(arrObj[1].toString(),clientCode)));
+			    }
+			    else
+			    {
+					  objStkFlashModel.setDblCostRM(String.valueOf(objGRN.funGetLastGrnRate(arrObj[1].toString(),clientCode)));
+
+			    }
+			}
+			else
+			{
+				objStkFlashModel.setDblCostRM(arrObj[8].toString());
+			}
+			
+			
 			objStkFlashModel.setDblValue(String.valueOf(value));
 			objStkFlashModel.setDblIssueUOMStock(funGetDecimalValue(arrObj[27].toString()));
 			objStkFlashModel.setDblIssueConversion(arrObj[30].toString());

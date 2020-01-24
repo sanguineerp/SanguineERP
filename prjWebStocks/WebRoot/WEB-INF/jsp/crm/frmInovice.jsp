@@ -320,7 +320,7 @@
 				} else {
 					$("#txtLocCode").val(response.strLocCode);						
 					$("#lblLocName").text(response.strLocName);
-					$("#txtCustCode").focus();
+					//$("#txtCustCode").focus();
 				}
 			},
 			error : function(jqXHR, exception) {
@@ -370,8 +370,10 @@
 						$("#txtSCountry").val(response.strSCountry);
 						$("#hidcustDiscount").val(response.dblDiscount);
 						$("#txtDiscountPer").val(response.dblDiscount);
+						$("#txtMobileNoForSettlement").val(response.strMobile);
 						
-						$("#txtLocCode").focus();
+						
+						//$("#txtLocCode").focus();
 						$("#hidCreditLimit").val(response.dblCreditLimit);
 						if(updateCurrency=='Y')
 						{

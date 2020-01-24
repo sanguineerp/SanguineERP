@@ -23,7 +23,7 @@ public interface clsPartyMasterService {
 
 	public clsPartyMasterModel funGetPartyDtl(String pCode, String clientCode);
 
-	public List<clsPartyMasterModel> funGetListCustomer(String clientCode);
+	public List<clsPartyMasterModel> funGetListCustomer(String clientCode,String propertyCode);
 
 	public List<clsPartyMasterModel> funGetLinkLocCustomer(String locCode, String clientCode);
 

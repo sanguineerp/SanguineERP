@@ -229,9 +229,9 @@
 						} else
 						{
 							$.each(response, function(i,item)
-							 		{
+							{
 								funfillCustGrid(response[i].strPCode,response[i].strPName);
-									});
+							});
 							
 						}
 					},

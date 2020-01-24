@@ -94,10 +94,11 @@ public class clsPartyMasterDaoImpl implements clsPartyMasterDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<clsPartyMasterModel> funGetListCustomer(String clientCode) {
-		String sql = "from clsPartyMasterModel where strClientCode=:clientcode and strPType='cust' ";
+	public List<clsPartyMasterModel> funGetListCustomer(String clientCode,String propertyCode) {
+		String sql = "from clsPartyMasterModel where strClientCode=:clientcode and strPType='cust' and strPropCode=:propertyCode ";
 		Query query = sessionFactory.getCurrentSession().createQuery(sql);
 		query.setParameter("clientcode", clientCode);
+		query.setParameter("propertyCode", propertyCode);
 		return (List<clsPartyMasterModel>) query.list();
 	}
 

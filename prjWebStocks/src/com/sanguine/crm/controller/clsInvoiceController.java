@@ -92,6 +92,7 @@ import com.sanguine.model.clsProdSuppMasterModel;
 import com.sanguine.model.clsProductMasterModel;
 import com.sanguine.model.clsProductReOrderLevelModel;
 import com.sanguine.model.clsProductReOrderLevelModel_ID;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsSettlementMasterModel;
 import com.sanguine.model.clsStkAdjustmentDtlModel;
@@ -105,12 +106,13 @@ import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsLinkUpService;
 import com.sanguine.service.clsLocationMasterService;
 import com.sanguine.service.clsProductMasterService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsStkAdjustmentService;
 import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.util.clsNumberToWords;
 import com.sanguine.util.clsReportBean;
-
+import com.sanguine.model.clsPropertyMaster;
 @Controller
 public class clsInvoiceController
 {
@@ -174,6 +176,10 @@ public class clsInvoiceController
 
 	@Autowired
 	clsJVGeneratorController objJVGen;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
+	
 
 	List<clsSubGroupMasterModel> dataSG = new ArrayList<clsSubGroupMasterModel>();
 
@@ -263,7 +269,7 @@ public class clsInvoiceController
 			}
 			catch (NullPointerException e)
 			{
-				flagOpenFromAuthorization = false;
+				flagOpenFromAuthorization = false; 
 			}
 			model.put("flagOpenFromAuthorization", flagOpenFromAuthorization);
 			if (flagOpenFromAuthorization)
@@ -7177,7 +7183,15 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 		String totalInvoiceValueInWords = obj1.getNumberInWorld(Math.round(grandTotal), shortName);
 
 		HashMap hm = new HashMap();
-		hm.put("strCompanyName", companyName);
+		clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+		if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+		{
+			hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+		}else
+		{
+			hm.put("strCompanyName", companyName);
+		}
+		
 		hm.put("strUserCode", userCode);
 		hm.put("strImagePath", imagePath);
 

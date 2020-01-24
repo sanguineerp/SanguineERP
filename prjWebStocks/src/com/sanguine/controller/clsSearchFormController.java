@@ -3914,7 +3914,7 @@ public class clsSearchFormController {
 
 		case "custMasterActive": {
 			columnNames = "strPCode,strPName,strMobile,strEmail,strContact,strPNHindi";
-			tableName = "clsPartyMasterModel where  strClientCode='" + clientCode + "' and strPType='cust' and strOperational='Y' ";
+			tableName = "clsPartyMasterModel where  strClientCode='" + clientCode + "' and strPType='cust' and strOperational='Y'  and strPropCode='"+propCode+"' ";
 
 			if (!objSetup.getStrShowAllPartyToAllLoc().equalsIgnoreCase("Y")) {
 				tableName += " and strPropCode='" + propCode + "' ";
@@ -3932,7 +3932,7 @@ public class clsSearchFormController {
 			// columnNames =
 			// "a.strSOCode,a.dteSODate,a.strCustPONo,strCustCode,strLocCode";
 			columnNames = "a.strSOCode,a.dteSODate,a.strCustPONo,b.strPName,c.strLocName,a.strStatus ";
-			tableName = "clsSalesOrderHdModel a,clsPartyMasterModel b,clsLocationMasterModel c " + "where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and a.strClientCode=c.strClientCode  ";
+			tableName = "clsSalesOrderHdModel a,clsPartyMasterModel b,clsLocationMasterModel c " + "where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and a.strClientCode=c.strClientCode and c.strPropertyCode='" + propCode + "'   ";
 			
 			boolean flgAuth = false;
 			if (null != req.getSession().getAttribute("hmAuthorization")) {
@@ -4023,7 +4023,7 @@ public class clsSearchFormController {
 
 		case "locationmaster": {
 			columnNames = "strLocCode,strLocName,strType,strLocDesc";
-			tableName = "clsLocationMasterModel where strClientCode='" + clientCode + "'";
+			tableName = "clsLocationMasterModel where strClientCode='" + clientCode + "' and strPropertyCode='"+propCode+"'";
 			listColumnNames = "Location Code,Location Name,Type,Description";
 			idColumnName = "strLocCode";
 			searchFormTitle = "Location Master";
@@ -4192,7 +4192,7 @@ public class clsSearchFormController {
 		case "invoice": {
 
 			columnNames = "a.strInvCode,a.strSOCode,a.dteInvDate,b.strPName,c.strLocName,a.strAuthorise";
-			tableName = " clsInvoiceHdModel a, clsPartyMasterModel b,clsLocationMasterModel c " + " where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode " + "and a.strInvCode like '%IV%' ";
+			tableName = " clsInvoiceHdModel a, clsPartyMasterModel b,clsLocationMasterModel c " + " where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode " + "and a.strInvCode like '%IV%'  and  c.strPropertyCode='" + propCode + "'    ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strInvCode like '" + propertyCode + "%' ";
 			}
@@ -4256,7 +4256,7 @@ public class clsSearchFormController {
 		
 		case "salesReturn": {
 			columnNames = "a.strSRCode,a.dteSRDate,b.strPName,c.strLocName ";
-			tableName = "clsSalesReturnHdModel a,clsPartyMasterModel b,clsLocationMasterModel c " + "where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and a.strClientCode=c.strClientCode  ";
+			tableName = "clsSalesReturnHdModel a,clsPartyMasterModel b,clsLocationMasterModel c " + "where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and a.strClientCode=c.strClientCode and  c.strPropertyCode='" + propCode + "'    ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strSRCode like '" + propertyCode + "%' ";
 			}

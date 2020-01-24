@@ -84,6 +84,7 @@ import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsProdCharMasterModel;
 import com.sanguine.model.clsProdProcessModel;
 import com.sanguine.model.clsProductMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsPurchaseIndentDtlModel;
 import com.sanguine.model.clsSubGroupMasterModel;
@@ -91,11 +92,14 @@ import com.sanguine.model.clsTransectionProdCharModel;
 import com.sanguine.service.clsCurrencyMasterService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsProductMasterService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsRecipeMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.service.clsUOMService;
 import com.sanguine.util.clsReportBean;
+
+
 
 @Controller
 public class clsSalesOrderController
@@ -147,6 +151,8 @@ public class clsSalesOrderController
 	
 	@Autowired
 	clsGlobalFunctions objGlobalFunctions;
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
 
 	List<clsSubGroupMasterModel> dataSG = new ArrayList<clsSubGroupMasterModel>();
 
@@ -798,7 +804,15 @@ public class clsSalesOrderController
 			}
 
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 
@@ -1483,7 +1497,8 @@ public class clsSalesOrderController
 	public @ResponseBody List funLoadCustomerDetail(HttpServletRequest request)
 	{
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
-		List custHelpList = objPartyMasterService.funGetListCustomer(clientCode);
+		String propCode = request.getSession().getAttribute("propertyCode").toString();
+		List custHelpList = objPartyMasterService.funGetListCustomer(clientCode,propCode);
 		return custHelpList;
 	}
 

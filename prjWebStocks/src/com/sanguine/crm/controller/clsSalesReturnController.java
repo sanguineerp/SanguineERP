@@ -64,11 +64,13 @@ import com.sanguine.model.clsCurrencyMasterModel;
 import com.sanguine.model.clsLinkUpHdModel;
 import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsProductMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsCurrencyMasterService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsLinkUpService;
 import com.sanguine.service.clsProductMasterService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsUOMService;
 import com.sanguine.util.clsReportBean;
@@ -110,7 +112,10 @@ public class clsSalesReturnController {
 	
 	@Autowired
 	private clsCRMSettlementMasterService objSettlementService;
-
+    
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
+	
 	// Open Sales Return
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/frmSalesReturn", method = RequestMethod.GET)
@@ -761,7 +766,14 @@ public class clsSalesReturnController {
 			
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
 			hm.put("strUserCode", userCreated);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());

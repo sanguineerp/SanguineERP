@@ -159,7 +159,7 @@ public class clsBulkInvoiceController {
 	@RequestMapping(value = "/loadAllCustomerSO", method = RequestMethod.GET)
 	public @ResponseBody List funAssignFields(@RequestParam("CustCode") String strCustCode,@RequestParam("frmDate") String dteFrmDate,@RequestParam("toDate") String dteToDate,HttpServletRequest req)
 	{
-		
+		String propCode = req.getSession().getAttribute("propertyCode").toString();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String strLocCode= req.getSession().getAttribute("locationCode").toString();
 		String StrSuppCode[]=strCustCode.split(",");
@@ -186,7 +186,7 @@ public class clsBulkInvoiceController {
 				+"  AND c.strPType='cust' AND a.strSOCode NOT IN( "
 				+" SELECT strSOCode FROM tblinvsalesorderdtl)  "
 				+" AND a.strClientCode='"+clientCode+"' AND a.strCustCode='"+strSupplierCode+"' " 
-				+" AND a.strLocCode='"+strLocCode+"' AND date(a.dteFulmtDate) BETWEEN '"+dteFrmDateSql+"' AND '"+dteToDateSql+"' and a.dblSubTotal>0 ";
+				+" AND a.strLocCode='"+strLocCode+"' AND date(a.dteFulmtDate) BETWEEN '"+dteFrmDateSql+"' AND '"+dteToDateSql+"' and a.dblSubTotal>0   and b.strPropertyCode='"+propCode+"'  ";
 				
 			List listSO = objGlobalFunctionsService.funGetList(sqlSO,"sql");
 			if (!listSO.isEmpty())

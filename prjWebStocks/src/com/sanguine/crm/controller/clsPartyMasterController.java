@@ -465,7 +465,9 @@ public class clsPartyMasterController {
 	@RequestMapping(value = "loadAllCustomer", method = RequestMethod.GET)
 	public @ResponseBody List<clsPartyMasterModel> funGetAllCustomerList(HttpServletRequest req) {
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
-		List<clsPartyMasterModel> listCustomerdtl = objPartyMasterService.funGetListCustomer(clientCode);
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+
+		List<clsPartyMasterModel> listCustomerdtl = objPartyMasterService.funGetListCustomer(clientCode,propertyCode);
 		if (listCustomerdtl.isEmpty()) {
 			listCustomerdtl = new ArrayList<clsPartyMasterModel>();
 		}

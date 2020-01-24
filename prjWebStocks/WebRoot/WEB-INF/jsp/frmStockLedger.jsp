@@ -122,6 +122,8 @@
 			$("#lblFromDate1").text("From");
 			var fd=$("#txtFromDate").val();
 			var td=$("#txtToDate").val();
+			var openingstockwithUOM=0;
+			var closingstockwithUOM=0;
 			
 			var fromDate=funGetDate(fd,"dd/MM/yyyy");
 			var toDate=funGetDate(td,"dd/MM/yyyy");
@@ -364,7 +366,7 @@
 						finalBal = spBalance[0] + ' ' + receivedUOM;
 					}
 					if (spBalance[1] != "undefined") {
-						var balWithUOM = parseFloat(restQty.toFixed(maxAmountDecimalPlaceLimit))* parseFloat(recipeConv.substr(28));
+						var balWithUOM = parseFloat(parseFloat(restQty.toFixed(maxAmountDecimalPlaceLimit))* parseFloat(recipeConv.substr(28))).toFixed(maxAmountDecimalPlaceLimit);//mahesh 
 						if(qtyWithUOM.includes("Yes"))
 							{
 							finalBal = finalBal + '.' + balWithUOM + ' '+ recipeUOM;
@@ -376,7 +378,13 @@
 						
 					}
 
-					// 		        	}
+					// 	
+					if(cnt== rowCount1-1 )
+					{
+						closingstockwithUOM=finalBal;
+					}
+					
+					
 					cells1[6].innerHTML = "<label>" + finalBal + "</label>";
 				}
 
@@ -391,6 +399,7 @@
 				var transName = cells1[2].innerHTML;
 				if (transName == '<label>Opening Stk</label>') {
 					openingStk = bal;
+					openingstockwithUOM=rec;
 				} else {
 					if(rec==""){
 						
@@ -439,7 +448,8 @@
 				}
 							
 /* 			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec)+parseFloat(freeQty);
- */			
+ */			var qtyWithUOM=$("#cmbQtyWithUOM").val();
+            
  			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec);
  			closingBalance = closingBalance - parseFloat(totalIssue);
 
@@ -453,7 +463,14 @@
 
 			var row1 = table.insertRow(rowCount);
 			row1.insertCell(0).innerHTML = "<label>Opening Stock</label>";
-			row1.insertCell(1).innerHTML = "<label>"+ parseFloat(openingStk).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+			if(qtyWithUOM == 'No')
+			{
+				row1.insertCell(1).innerHTML = "<label>"+ parseFloat(openingStk).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+			}
+			else
+			{
+				row1.insertCell(1).innerHTML = "<label>"+ openingstockwithUOM + "</label>";
+			}
 			row1.insertCell(2).innerHTML = "<label>"+ (parseFloat(openingStk) * parseFloat(rateForValue)).toFixed(maxAmountDecimalPlaceLimit) + "</label>";
 
 			rowCount = rowCount + 1;
@@ -478,7 +495,16 @@
 			rowCount = rowCount + 1;
 			row1 = table.insertRow(rowCount);
 			row1.insertCell(0).innerHTML = "<label>Closing Balance</label>";
-			row1.insertCell(1).innerHTML = "<label>"+ parseFloat(closingBalance).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+			 if(qtyWithUOM == 'No')
+			{ 
+				row1.insertCell(1).innerHTML = "<label>"+ parseFloat(closingBalance).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+				
+		    }
+			else
+			{
+				row1.insertCell(1).innerHTML = "<label>"+ closingstockwithUOM + "</label>";
+				
+			} 
 			row1.insertCell(2).innerHTML = "<label>"+ (parseFloat(closingBalance) * parseFloat(rateForValue)).toFixed(maxAmountDecimalPlaceLimit) + "</label>";
 			
 			

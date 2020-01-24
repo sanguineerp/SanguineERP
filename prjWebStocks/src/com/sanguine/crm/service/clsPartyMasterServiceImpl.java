@@ -67,8 +67,8 @@ public class clsPartyMasterServiceImpl implements clsPartyMasterService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public List<clsPartyMasterModel> funGetListCustomer(String clientCode) {
-		return objPartyMasterDao.funGetListCustomer(clientCode);
+	public List<clsPartyMasterModel> funGetListCustomer(String clientCode,String propertyCode) {
+		return objPartyMasterDao.funGetListCustomer(clientCode,propertyCode);
 	}
 
 	@Override

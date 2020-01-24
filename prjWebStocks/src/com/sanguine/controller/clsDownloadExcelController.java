@@ -291,7 +291,20 @@ public class clsDownloadExcelController {
 					dataList.add(arrObj[5].toString());
 					dataList.add(arrObj[6].toString());
 					dataList.add(arrObj[7].toString());
-					dataList.add(arrObj[8].toString());
+					if(ratePickUpFrom.equalsIgnoreCase("Last Supplier Rate")){
+						if (qtyWithUOM.equals("No")) {
+							dataList.add(objGRN.funGetLastGrnRate(arrObj[1].toString(),clientCode)); 
+						}
+						else
+						{
+							dataList.add(arrObj[8].toString());	
+						}
+					}
+					else
+					{
+						dataList.add(arrObj[8].toString());	
+					}
+					
 					dataList.add(arrObj[9].toString());
 					dataList.add(arrObj[10].toString());
 					dataList.add(arrObj[11].toString());
