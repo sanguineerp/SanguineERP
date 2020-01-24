@@ -26,9 +26,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.mysql.jdbc.Connection;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.crm.bean.clsShopOrderBean;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsGroupMasterService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.util.clsReportBean;
 
@@ -61,6 +63,8 @@ public class clsShopOrderListReportController {
 	private clsGroupMasterService objGrpMasterService;
 	@Autowired
 	private clsGlobalFunctionsService objGlobalFunctionsService;
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
 
 	@RequestMapping(value = "/rptShopOrderList", method = RequestMethod.POST)
 	private void funShopOrderList(@ModelAttribute("command") clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req) {
@@ -518,7 +522,14 @@ public class clsShopOrderListReportController {
 			System.out.println(objOdd);
 
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());

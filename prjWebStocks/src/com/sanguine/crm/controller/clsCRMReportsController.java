@@ -21,9 +21,11 @@ import com.mysql.jdbc.Connection;
 import com.sanguine.bean.clsAvgConsumptionReportBean;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.crm.bean.clsProductionComPilationBean;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsGroupMasterService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.util.clsReportBean;
@@ -64,6 +66,9 @@ public class clsCRMReportsController {
 	private clsGlobalFunctionsService objGlobalFunctionsService;
 	@Autowired
 	private clsSubGroupMasterService objSubGroupMasterService;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
 
 	@RequestMapping(value = "/frmCategoryWiseSalesOrderReport", method = RequestMethod.GET)
 	public ModelAndView funOpenCategoryWiseSalesOrderForm(Map<String, Object> model, HttpServletRequest request) {
@@ -358,7 +363,14 @@ public class clsCRMReportsController {
 			}
 
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());
@@ -404,6 +416,7 @@ public class clsCRMReportsController {
 		String companyName = req.getSession().getAttribute("companyName").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 		if (objSetup == null) {
 			objSetup = new clsPropertySetupModel();
@@ -447,7 +460,7 @@ public class clsCRMReportsController {
 
 		ArrayList fieldList = new ArrayList();
 
-		String sqlQuery = "select d.strSGName,c.strProdCode,c.strProdName,sum(b.dblAcceptQty),sum(b.dblWeight*b.dblAcceptQty),a.strSOCode,d.strSGCode " + "from tblsalesorderhd a,tblsalesorderdtl b,tblproductmaster c,tblsubgroupmaster d,tblgroupmaster e " + "where a.strSOCode=b.strSOCode "
+		String sqlQuery = "select d.strSGName,c.strProdCode,c.strProdName,sum(b.dblAcceptQty),sum(b.dblWeight*b.dblAcceptQty),a.strSOCode,d.strSGCode " + "from tblsalesorderhd a,tblsalesorderdtl b,tblproductmaster c,tblsubgroupmaster d,tblgroupmaster e,tbllocationmaster f " + "where a.strSOCode=b.strSOCode "
 		// + " and a.strCloseSO='Y' "
 				+ "and b.strProdCode=c.strProdCode " + "and c.strSGCode=d.strSGCode " + "and d.strGCode=e.strGCode " + "and e.strGCode IN " + strGCodes + " ";
 		if (objBean.getStrSGCode().length() > 0) {
@@ -484,7 +497,7 @@ public class clsCRMReportsController {
 		String dteFromFulDate = ffy + "-" + ffm + "-" + ffd;
 		String dteToFulDate = tfy + "-" + tfm + "-" + tfd;
 
-		sqlQuery = sqlQuery + "and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by b.strProdCode,e.strGName,d.strSGName " + "order by d.intSortingNo,d.strSGName,e.strGName ";
+		sqlQuery = sqlQuery + "and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' AND a.strLocCode=f.strLocCode AND f.strPropertyCode='"+propertyCode+"' " + " group by b.strProdCode,e.strGName,d.strSGName " + "order by d.intSortingNo,d.strSGName,e.strGName ";
 
 		List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 
@@ -513,7 +526,14 @@ public class clsCRMReportsController {
 		}
 
 		HashMap hm = new HashMap();
-		hm.put("strCompanyName", companyName);
+		clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+		if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+		{
+			hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+		}else
+		{
+			hm.put("strCompanyName", companyName);
+		}
 		hm.put("strUserCode", userCode);
 		hm.put("strImagePath", imagePath);
 		hm.put("strAddr1", objSetup.getStrAdd1());
@@ -696,7 +716,14 @@ public class clsCRMReportsController {
 		}
 
 		HashMap hm = new HashMap();
-		hm.put("strCompanyName", companyName);
+		clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+		if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+		{
+			hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+		}else
+		{
+			hm.put("strCompanyName", companyName);
+		}
 		hm.put("strUserCode", userCode);
 		hm.put("strImagePath", imagePath);
 		hm.put("strAddr1", objSetup.getStrAdd1());
@@ -925,7 +952,14 @@ public class clsCRMReportsController {
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());
@@ -1022,7 +1056,14 @@ public class clsCRMReportsController {
 
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			System.out.println(imagePath);
@@ -1307,7 +1348,14 @@ public class clsCRMReportsController {
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());
@@ -1404,7 +1452,14 @@ public class clsCRMReportsController {
 
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			System.out.println(imagePath);

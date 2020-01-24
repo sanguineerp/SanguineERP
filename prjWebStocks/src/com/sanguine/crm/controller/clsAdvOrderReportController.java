@@ -45,8 +45,10 @@ import com.mysql.jdbc.Connection;
 import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.crm.bean.clsProductionComPilationBean;
 import com.sanguine.crm.service.clsAdvOrderReportService;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.util.clsReportBean;
 
@@ -69,6 +71,9 @@ public class clsAdvOrderReportController {
 
 	@Autowired
 	private clsAdvOrderReportService objAdvOrderService;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
 
 	@RequestMapping(value = "/frmAdvanceOrderReports", method = RequestMethod.GET)
 	public ModelAndView funOpenAdvanceOrderReport(Map<String, Object> model, HttpServletRequest request) {
@@ -421,7 +426,14 @@ sqlAdvOrd = " select i.strSGName,   g.strProdCode,g.strProdName,b.dblQty AS dblQ
 			date = date[0].split("-");
 			printedDate = date[2] + "-" + date[1] + "-" + date[0];
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());
