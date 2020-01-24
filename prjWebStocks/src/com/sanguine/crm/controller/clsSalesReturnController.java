@@ -610,7 +610,8 @@ public class clsSalesReturnController {
 	private void funReport(@ModelAttribute("command") clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req) {
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
-		String currencyCode=req.getParameter("currency").toString();
+		//String currencyCode=req.getParameter("currency").toString();
+		String currencyCode="";
 		req.getSession().removeAttribute("currency");
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 		if(objSetup.getStrSRSlipFormat().equalsIgnoreCase("Format 1"))

@@ -3898,7 +3898,7 @@ public class clsSearchFormController {
 		switch (formName) {
 		case "custMaster": {
 			columnNames = "strPCode,strPName,strMobile,strEmail,strContact,strPNHindi";
-			tableName = "clsPartyMasterModel where  strClientCode='" + clientCode + "' and strPType='cust' ";
+			tableName = "clsPartyMasterModel where  strClientCode='" + clientCode + "' and strPType='cust'  and strPropCode='"+propCode+"'  ";
 
 			if (!objSetup.getStrShowAllPartyToAllLoc().equalsIgnoreCase("Y")) {
 				tableName += " and strPropCode='" + propCode + "' ";
@@ -4452,7 +4452,8 @@ public class clsSearchFormController {
 		case "invoiceslip": {
 
 			columnNames = "a.strInvCode,a.strSOCode,a.dteInvDate,b.strPName,c.strLocName,a.strAuthorise";
-			tableName = " clsInvoiceHdModel a, clsPartyMasterModel b,clsLocationMasterModel c " + " where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode " + "and a.strInvCode like '%IV%' ";
+			tableName = " clsInvoiceHdModel a, clsPartyMasterModel b,clsLocationMasterModel c " + " where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode " + "and a.strInvCode like '%IV%' "
+					+ " and  c.strPropertyCode='" + propCode + "'  ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strInvCode like '" + propertyCode + "%' ";
 			}
@@ -4468,7 +4469,8 @@ public class clsSearchFormController {
 			// columnNames =
 			// "a.strSOCode,a.dteSODate,a.strCustPONo,strCustCode,strLocCode";
 			columnNames = "a.strSOCode,a.dteSODate,a.strCustPONo,b.strPName,c.strLocName,a.strStatus ";
-			tableName = "clsSalesOrderHdModel a,clsPartyMasterModel b,clsLocationMasterModel c " + "where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and a.strClientCode=c.strClientCode  ";
+			tableName = "clsSalesOrderHdModel a,clsPartyMasterModel b,clsLocationMasterModel c " + "where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and a.strClientCode=c.strClientCode  "
+					+ " and  c.strPropertyCode='" + propCode + "'  ";
 			listColumnNames = "SO Code,So Date, CustomerPONo,Customer Name,Location Name,Order Type";
 			idColumnName = "strSOCode";
 			// flgQuerySelection=true;
@@ -4478,7 +4480,8 @@ public class clsSearchFormController {
 		
 		case "salesReturnslip": {
 			columnNames = "a.strSRCode,a.dteSRDate,b.strPName,c.strLocName ";
-			tableName = "clsSalesReturnHdModel a,clsPartyMasterModel b,clsLocationMasterModel c " + "where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and a.strClientCode=c.strClientCode  ";
+			tableName = "clsSalesReturnHdModel a,clsPartyMasterModel b,clsLocationMasterModel c " + "where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and a.strClientCode=c.strClientCode  "
+					+ " and  c.strPropertyCode='" + propCode + "'  ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strSRCode like '" + propertyCode + "%' ";
 			}
@@ -4491,7 +4494,7 @@ public class clsSearchFormController {
 		
 		case "DNCodeslip": {
 			columnNames = "strDNCode,dteDNDate,strDNType" + ",strJACode,strPName as SCName ,ifnull(b.strLocName,ifnull(c.strPName,''))  as strLocName,dteExpDate";
-			tableName = "from tbldeliverynotehd a, tbllocationmaster b , tblpartymaster c " + "	where a.strLocCode=b.strLocCode or a.strLocCode=c.strPCode and a.strClientCode='" + clientCode + "'" + " and a.strSCCode=c.strPCode and b.strClientCode=a.strClientCode " + " and c.strClientCode=a.strClientCode GROUP BY a.strDNCode ";
+			tableName = "from tbldeliverynotehd a, tbllocationmaster b , tblpartymaster c " + "	where a.strLocCode=b.strLocCode or a.strLocCode=c.strPCode and a.strClientCode='" + clientCode + "'" + " and a.strSCCode=c.strPCode and b.strClientCode=a.strClientCode " + " and c.strClientCode=a.strClientCode GROUP BY a.strDNCode and  b.strPropertyCode='" + propCode + "'  ";
 			listColumnNames = "Delivery Note Code,Date,Type,JA Code,Contractor Name,Location Name,Exp Date";
 			idColumnName = "strDNCode";
 			flgQuerySelection = true;
@@ -4502,7 +4505,8 @@ public class clsSearchFormController {
 		case "deliveryChallanslip": {
 
 			columnNames = "a.strDCCode,a.strSOCode,a.dteDCDate,b.strPName,c.strLocName,a.strAuthorise";
-			tableName = " clsDeliveryChallanHdModel a, clsPartyMasterModel b,clsLocationMasterModel c " + " where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode and a.strCloseDC='N' ";
+			tableName = " clsDeliveryChallanHdModel a, clsPartyMasterModel b,clsLocationMasterModel c " + " where a.strCustCode=b.strPCode and a.strLocCode=c.strLocCode and a.strClientCode='" + clientCode + "' " + "and a.strClientCode=b.strClientCode and b.strClientCode=c.strClientCode and a.strCloseDC='N' and  c.strPropertyCode='" + propCode + "'  "
+					+ " and  c.strPropertyCode='" + propCode + "'   ";
 			if (showPrptyWiseProdDoc.equalsIgnoreCase("Y")) {
 				tableName += " and a.strDCCode like '" + propertyCode + "%' ";
 			}
