@@ -35,8 +35,10 @@ import com.sanguine.controller.clsGlobalFunctions;
 import com.sanguine.crm.bean.clsAgeingReportBean;
 import com.sanguine.crm.model.clsPartyMasterModel;
 import com.sanguine.crm.service.clsPartyMasterService;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 
 @Controller
@@ -55,6 +57,10 @@ public class clsAgeingReportController {
 
 	@Autowired
 	private clsPartyMasterService objPartyService;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
+	
 
 	// Open ExciseChallan
 	@RequestMapping(value = "/frmAgeingReport", method = RequestMethod.GET)
@@ -158,7 +164,17 @@ public class clsAgeingReportController {
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 

@@ -96,6 +96,7 @@ public class clsInvoiceFlashController {
 		String custCode = request.getParameter("custCode").toString();
 		String strClientCode = request.getSession().getAttribute("clientCode").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String dbWebBook=request.getSession().getAttribute("WebBooksDB").toString();
 		clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(strClientCode);
 		
@@ -147,7 +148,7 @@ public class clsInvoiceFlashController {
 			
 
 			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode  and a.dblSubTotalAmt>0 "
-				+ "  order by a.strInvCode ");
+				+ " and b.strPropCode='"+propertyCode+"'  order by a.strInvCode ");
 		}
 		else
 		{
@@ -167,7 +168,7 @@ public class clsInvoiceFlashController {
 				sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
 			}
 			sqlInvoiceFlash.append(" and a.strSettlementCode=c.strSettlementCode and a.strNarration not like '%Entry deleted%'"
-				+ "  order by a.strInvCode  )");
+				+ " and b.strPropCode='"+propertyCode+"' order by a.strInvCode  )");
 			
 			sqlInvoiceFlash.append( " UNION ");
 			
@@ -187,7 +188,7 @@ public class clsInvoiceFlashController {
 				sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
 			}
 			sqlInvoiceFlash.append("  and a.strNarration not like '%Entry deleted%'"
-				+ "  order by a.strInvCode  )");
+				+ " and b.strPropCode='"+propertyCode+"' order by a.strInvCode  )");
 			
 		
 			
@@ -391,6 +392,7 @@ public class clsInvoiceFlashController {
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		Map<String,List<Object>> mapSettlementWise= new HashMap<>();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		double currValue = 1.0;
 		if(currencyCode.equalsIgnoreCase("All"))
@@ -423,7 +425,7 @@ public class clsInvoiceFlashController {
 		sqlInvoiceFlash.append("(select c.strSettlementCode,ifnull(c.strSettlementDesc,''),ifnull(c.strSettlementType,''),sum(a.dblGrandTotal) "
 				+ " from tblinvoicehd a,tblsettlementmaster c,tblpartymaster d  "
 				+ " where  a.strSettlementCode=c.strSettlementCode and  a.strCustCode=d.strPCode "
-				+ "  and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + strClientCode + "'");
+				+ "  and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + strClientCode + "' and d.strPropCode='"+propertyCode+"'");
 		if (!settlementcode.equals("All")) {
 			sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
 		}
@@ -445,7 +447,7 @@ public class clsInvoiceFlashController {
 		sqlInvoiceFlash.append(" (select e.strSettlementCode,ifnull(c.strSettlementDesc,''),ifnull(c.strSettlementType,''),SUM(e.dblSettlementAmt) "
 				+ " from tblinvoicehd a,tblsettlementmaster c,tblpartymaster d ,tblinvsettlementdtl e "
 				+ " where   a.strCustCode=d.strPCode and a.strInvCode=e.strInvCode  and e.strSettlementCode=c.strSettlementCode "
-				+ "  and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + strClientCode + "'");
+				+ "  and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + strClientCode + "' and d.strPropCode='"+propertyCode+"'");
 		
 	    sqlInvoiceFlash.append(" and  a.strSettlementCode='MultiSettle' ");
 		
@@ -517,6 +519,7 @@ public class clsInvoiceFlashController {
 		String locCode = request.getParameter("locCode").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		double currValue = 1.0;
 		if(currencyCode.equalsIgnoreCase("All"))
@@ -555,13 +558,13 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append(" and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append("group by a.strUserCreated,c.strSettlementCode "
-				+ " order by a.strUserCreated ) ");
+		sqlInvoiceFlash.append(" and b.strProperty='"+propertyCode+"' group by a.strUserCreated,c.strSettlementCode "
+				+ "  order by a.strUserCreated ) ");
 		
 		sqlInvoiceFlash.append(" UNION ");
 		
 		sqlInvoiceFlash.append("(SELECT a.strUserCreated,a.strUserCreated,  SUM(d.dblSettlementAmt)/" + currValue + ",sum(a.dblDiscountAmt)/" + currValue + ",ifnull(c.strSettlementDesc,'')  "
-				+ " FROM tblinvoicehd a,tblsettlementmaster c,tblinvsettlementdtl d" + " "
+				+ " FROM tblinvoicehd a left outer join tbllocationmaster e on a.strLocCode=e.strLocCode,tblsettlementmaster c,tblinvsettlementdtl d" + " "
 				+ " WHERE  c.strSettlementCode=d.strSettlementCode   and a.strInvCode=d.strInvCode  " + " and a.strLocCode='" + locCode + "' "
 				+ " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate
 				+ "' and  a.strClientCode='" + strClientCode + "'"
@@ -571,7 +574,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append(" and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append(" group by a.strUserCreated,d.strSettlementCode "
+		sqlInvoiceFlash.append(" and e.strPropertyCode='"+propertyCode+"' group by a.strUserCreated,d.strSettlementCode "
 				+ " order by a.strUserCreated )  ");
 		
 		DecimalFormat df = new DecimalFormat("#.##");
@@ -631,6 +634,7 @@ public class clsInvoiceFlashController {
 		String custCode = request.getParameter("custCode").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		Map<String,List<Object>> mapCustomerWise= new HashMap<>();
 		String currencyName="";
 		
@@ -677,7 +681,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append( " and  b.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append("group by b.strCustCode  order by sum(b.dblGrandTotal) desc ) ");
+		sqlInvoiceFlash.append(" and a.strPropCode='"+propertyCode+"' group by b.strCustCode  order by sum(b.dblGrandTotal) desc ) ");
 		
 		sqlInvoiceFlash.append(" UNION ");
 		
@@ -696,7 +700,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append( " and  b.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append("group by b.strCustCode  order by sum(e.dblSettlementAmt) desc ) ");
+		sqlInvoiceFlash.append(" and a.strPropCode='"+propertyCode+"' group by b.strCustCode  order by sum(e.dblSettlementAmt) desc ) ");
 
 		DecimalFormat df = new DecimalFormat("#.##");
 
@@ -757,6 +761,7 @@ public class clsInvoiceFlashController {
 		String custCode = request.getParameter("custCode").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		Map<String,List<Object>> mapProductWise= new HashMap<>();
 		String currencyName="";
 		double currValue = 1.0;
@@ -795,7 +800,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append("group by b.strProdCode ) ");
+		sqlInvoiceFlash.append(" and d.strPropCode='"+propertyCode+"' group by b.strProdCode ) ");
 		
 		sqlInvoiceFlash.append(" UNION  ");
 		
@@ -810,7 +815,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append("group by b.strProdCode ) ");
+		sqlInvoiceFlash.append(" and d.strPropCode='"+propertyCode+"' group by b.strProdCode ) ");
 		
 		DecimalFormat df = new DecimalFormat("#.##");
 		List listOfInvoice = objGlobalService.funGetList(sqlInvoiceFlash.toString(), "sql");
@@ -871,6 +876,8 @@ public class clsInvoiceFlashController {
 		String withZeroAmt = request.getParameter("withZeroAmt").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
+		
 		String currencyName="";
 		List listofInvoiveTotal = new ArrayList();
 		BigDecimal dblTotalValue = new BigDecimal(0);
@@ -914,7 +921,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append( "  group by  c.strSGCode ");
+		sqlInvoiceFlash.append( " and f.strPropCode='"+propertyCode+"'  group by  c.strSGCode ");
 		
 		sqlInvoiceFlash.append( " UNION ");
 		
@@ -931,7 +938,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append( "  group by  c.strSGCode ");
+		sqlInvoiceFlash.append( "and  f.strPropCode='"+propertyCode+"' group by  c.strSGCode ");
 
 		
 		List listOfInvoice = objGlobalService.funGetList(sqlInvoiceFlash.toString(), "sql");
@@ -1507,6 +1514,7 @@ public class clsInvoiceFlashController {
 		String userCode = request.getSession().getAttribute("usercode").toString();
 		String dbWebBook=request.getSession().getAttribute("WebBooksDB").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		clsCompanyMasterModel objCompModel = objSetupMasterService.funGetObject(clientCode);
 
@@ -1600,7 +1608,7 @@ public class clsInvoiceFlashController {
 			
 
 			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode "
-				+ "  order by a.strInvCode ");
+				+ " and b.strPropCode='"+propertyCode+"' order by a.strInvCode ");
 		}
 		else
 		{
@@ -1622,7 +1630,7 @@ public class clsInvoiceFlashController {
 			
 
 			sqlInvoiceFlash.append("and a.strSettlementCode=c.strSettlementCode  and a.dblSubTotalAmt>0 "
-				+ "  order by a.strInvCode ) ");
+				+ " and b.strPropCode='"+propertyCode+"' order by a.strInvCode ) ");
 			
 			sqlInvoiceFlash.append( " UNION ");
 				
@@ -1644,7 +1652,7 @@ public class clsInvoiceFlashController {
 			
 
 			sqlInvoiceFlash.append(" and a.dblSubTotalAmt>0 "
-				+ "  order by a.strInvCode )");
+				+ " and b.strPropCode='"+propertyCode+"'  order by a.strInvCode )");
 			
 			
 		}
@@ -1798,6 +1806,7 @@ public class clsInvoiceFlashController {
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		Map<String,List<Object>> mapSettlementWise= new HashMap<>();
@@ -1826,7 +1835,7 @@ public class clsInvoiceFlashController {
 		sqlInvoiceFlash.append("select c.strSettlementCode,ifnull(c.strSettlementDesc,''),ifnull(c.strSettlementType,''),sum(a.dblGrandTotal)/" + currValue + " "
 				+ " from tblinvoicehd a,tblsettlementmaster c,tblpartymaster d "
 				+ " where  a.strSettlementCode=c.strSettlementCode and  a.strCustCode=d.strPCode "
-				+ " and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
+				+ " and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "' ");
 		if (!settlementcode.equals("All")) {
 			sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
 		}
@@ -1839,7 +1848,7 @@ public class clsInvoiceFlashController {
 			sqlInvoiceFlash.append(" and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
 
-		sqlInvoiceFlash.append( "group by a.strSettlementCode ");
+		sqlInvoiceFlash.append( " and d.strPropCode='"+propertyCode+"' group by a.strSettlementCode ");
 		
         sqlInvoiceFlash.append(" UNION ");
 		
@@ -1861,7 +1870,7 @@ public class clsInvoiceFlashController {
 		}
 		
 
-		sqlInvoiceFlash.append("group by e.strSettlementCode )");
+		sqlInvoiceFlash.append(" and d.strPropCode='"+propertyCode+"' group by e.strSettlementCode )");
 
 		DecimalFormat df = new DecimalFormat("#.##");
 		
@@ -1951,6 +1960,7 @@ public class clsInvoiceFlashController {
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		
@@ -1984,12 +1994,12 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append(" and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append("group by a.strUserCreated,c.strSettlementCode order by a.strUserCreated )");
+		sqlInvoiceFlash.append(" and b.strProperty='"+propertyCode+"' group by a.strUserCreated,c.strSettlementCode order by a.strUserCreated )");
 		
         sqlInvoiceFlash.append(" UNION ");
 		
 		sqlInvoiceFlash.append("(SELECT a.strUserCreated,a.strUserCreated,  SUM(d.dblSettlementAmt)/" + currValue + ",sum(a.dblDiscountAmt)/" + currValue + ",ifnull(c.strSettlementDesc,'')  "
-				+ " FROM tblinvoicehd a,tblsettlementmaster c,tblinvsettlementdtl d" + " "
+				+ " FROM tblinvoicehd a left outer join tbllocationmaster e on a.strLocCode=e.strLocCode,tblsettlementmaster c,tblinvsettlementdtl d" + " "
 				+ " WHERE  c.strSettlementCode=d.strSettlementCode   and a.strInvCode=d.strInvCode  " + " and a.strLocCode='" + locCode + "' "
 				+ " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate
 				+ "' and  a.strClientCode='" + clientCode + "'"
@@ -1999,7 +2009,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append(" and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append(" group by a.strUserCreated,d.strSettlementCode "
+		sqlInvoiceFlash.append(" and e.strPropertyCode='"+propertyCode+"' group by a.strUserCreated,d.strSettlementCode "
 				+ " order by a.strUserCreated )  ");
 
 
@@ -2101,6 +2111,7 @@ public class clsInvoiceFlashController {
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		
@@ -2134,7 +2145,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append(" and  b.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append( "group by b.strCustCode  order by sum(b.dblGrandTotal) desc) ");
+		sqlInvoiceFlash.append( " and a.strPropCode='"+propertyCode+"' group by b.strCustCode  order by sum(b.dblGrandTotal) desc) ");
 		
 		sqlInvoiceFlash.append(" UNION ");
 		
@@ -2153,7 +2164,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append( " and  b.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append("group by b.strCustCode  order by sum(e.dblSettlementAmt) desc ) ");
+		sqlInvoiceFlash.append("and a.strPropCode='"+propertyCode+"' group by b.strCustCode  order by sum(e.dblSettlementAmt) desc ) ");
 
 		DecimalFormat df = new DecimalFormat("#.##");
 		
@@ -2246,6 +2257,7 @@ public class clsInvoiceFlashController {
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblTotalQty = new BigDecimal(0);
@@ -2281,7 +2293,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append(" and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append("group by b.strProdCode )");
+		sqlInvoiceFlash.append(" and d.strPropCode='"+propertyCode+"' group by b.strProdCode )");
 		
         sqlInvoiceFlash.append(" UNION  ");
 		
@@ -2296,7 +2308,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append("group by b.strProdCode ) ");
+		sqlInvoiceFlash.append(" and d.strPropCode='"+propertyCode+"' group by b.strProdCode ) ");
 
 		DecimalFormat df = new DecimalFormat("#.##");
 		List listOfInvoice = objGlobalService.funGetList(sqlInvoiceFlash.toString(), "sql");
@@ -2389,6 +2401,7 @@ public class clsInvoiceFlashController {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
 		String withZeroAmt = request.getParameter("withZeroAmt").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblTotalQty = new BigDecimal(0);
@@ -2427,7 +2440,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append(" and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append( "  group by  c.strSGCode ");
+		sqlInvoiceFlash.append( " f.strPropCode='"+propertyCode+"'  group by  c.strSGCode ");
 		
         sqlInvoiceFlash.append( " UNION ");
 		
@@ -2444,7 +2457,7 @@ public class clsInvoiceFlashController {
 		{
 			sqlInvoiceFlash.append( " and  a.strCurrencyCode='" + currencyCode + "' ");
 		}
-		sqlInvoiceFlash.append( "  group by  c.strSGCode ");
+		sqlInvoiceFlash.append( " f.strPropCode='"+propertyCode+"' group by  c.strSGCode ");
 
 		DecimalFormat df = new DecimalFormat("#.##");
 		List listOfInvoice = objGlobalService.funGetList(sqlInvoiceFlash.toString(), "sql");
@@ -3180,7 +3193,7 @@ public class clsInvoiceFlashController {
 			}
 				
 			sqlInvoiceFlashPDF.append("and a.strSettlementCode=c.strSettlementCode and a.dblSubTotalAmt>0 "
-				+ "  order by a.strInvCode )");
+				+ " and b.strPropCode='"+propertyCode+"' order by a.strInvCode )");
 			
 			sqlInvoiceFlashPDF.append(" UNION ");
 			
@@ -3202,7 +3215,7 @@ public class clsInvoiceFlashController {
 			
 	
 			sqlInvoiceFlashPDF.append(" and a.dblSubTotalAmt>0 "
-				+ "  order by a.strInvCode )");
+				+ " and b.strPropCode='"+propertyCode+"' order by a.strInvCode )");
 			
 			
 		/*	List listOfInvoicePDF = objGlobalService.funGetList(sqlInvoiceFlashPDF.toString(), "sql");

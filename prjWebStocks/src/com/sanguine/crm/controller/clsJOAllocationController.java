@@ -43,8 +43,10 @@ import com.sanguine.crm.model.clsJOAllocationHdModel;
 import com.sanguine.crm.model.clsPartyMasterModel;
 import com.sanguine.crm.service.clsJOAllocationService;
 import com.sanguine.model.clsProductMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.util.clsReportBean;
 
@@ -62,6 +64,9 @@ public class clsJOAllocationController {
 	private clsSetupMasterService objSetupMasterService;
 	@Autowired
 	private ServletContext servletContext;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
 
 	// Open Job Order Allocation
 	@RequestMapping(value = "/frmJOAllocation", method = RequestMethod.GET)
@@ -302,7 +307,7 @@ public class clsJOAllocationController {
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptJobOrderAllocationSlip.jrxml");
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
-			String sqlHd = "select a.strJANo,a.dteJADate,a.strRef,a.strSCCode,a.dteRefDate ,b.strPName,b.strSAdd1 ,b.strSAdd2," + "b.strSCity,b.strSState,b.strSCountry,b.strSPin,a.strDispatchMode " + "from tbljoborderallocationhd a,tblpartymaster b " + "where a.strJACode='" + SOCode + "' and a.strClientCode='" + clientCode + "' " + "and a.strSCCode=b.strPCode ";
+			String sqlHd = "select a.strJANo,a.dteJADate,a.strRef,a.strSCCode,a.dteRefDate ,b.strPName,b.strSAdd1 ,b.strSAdd2," + "b.strSCity,b.strSState,b.strSCountry,b.strSPin,a.strDispatchMode " + "from tbljoborderallocationhd a,tblpartymaster b " + "where a.strJACode='" + SOCode + "' and a.strClientCode='" + clientCode + "' " + "and a.strSCCode=b.strPCode and b.strPropCode='"+propertyCode+"' ";
 
 			List list = objGlobalFunctionsService.funGetList(sqlHd, "sql");
 			if (!list.isEmpty()) {
@@ -334,7 +339,15 @@ public class clsJOAllocationController {
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 

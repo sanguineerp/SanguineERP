@@ -45,9 +45,11 @@ import com.sanguine.crm.service.clsJobOrderService;
 import com.sanguine.crm.service.clsSalesOrderBOMService;
 import com.sanguine.crm.service.clsSalesOrderService;
 import com.sanguine.model.clsProductMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsProductMasterService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.util.clsReportBean;
 
@@ -76,6 +78,9 @@ public class clsJobOrderController {
 
 	@Autowired
 	private clsSetupMasterService objSetupMasterService;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
 
 	// Open JobOrder
 	@RequestMapping(value = "/frmJobOrder", method = RequestMethod.GET)
@@ -467,7 +472,15 @@ public class clsJobOrderController {
 			subDataset.setQuery(subQuery);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());
@@ -560,7 +573,17 @@ public class clsJobOrderController {
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 

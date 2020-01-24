@@ -54,10 +54,12 @@ import com.sanguine.crm.service.clsCRMSettlementMasterService;
 import com.sanguine.crm.service.clsDeliveryChallanHdService;
 import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsProductMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsSubGroupMasterModel;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsProductMasterService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.service.clsUOMService;
@@ -93,6 +95,9 @@ public class clsDeliveryChallanController {
 
 	@Autowired
 	private clsProductMasterService objProductMasterService;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
 
 	List<clsSubGroupMasterModel> dataSG = new ArrayList<clsSubGroupMasterModel>();
 
@@ -561,7 +566,7 @@ public class clsDeliveryChallanController {
 					+ " ifnull(date(c.dteCPODate),''),IFNULL(a.strNarration,''),IFNULL(a.strPackNo,''),IFNULL(a.strTimeInOut,''),IFNULL(a.strVehNo,''),IFNULL(a.strDktNo,''),"
 					+ " IFNULL(a.strSerialNo,''),IFNULL(a.strReaCode,''),IFNULL(a.strMInBy,'')  " + "	"
 					+ " from tbldeliverychallanhd a   " + " left outer join tblpartymaster b on a.strCustCode=b.strPCode " + " left outer join   tblsalesorderhd c on a.strSOCode=c.strSOCode "
-					+ " where a.strDCCode='" + DCCode + "' " + " and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode ";
+					+ " where a.strDCCode='" + DCCode + "' " + " and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode  and b.strPropCode='"+propertyCode+"'";
 
 			List list = objGlobalFunctionsService.funGetList(sqlHd, "sql");
 			if (!list.isEmpty()) {
@@ -610,7 +615,16 @@ public class clsDeliveryChallanController {
 				
 			}
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 
@@ -721,7 +735,7 @@ public class clsDeliveryChallanController {
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
 			String sqlHd = "SELECT  DATE(a.dteDCDate),b.strPName,a.strSAdd1,a.strSAdd2,a.strSCity,a.strSState,a.strSCtry," + " b.strBAdd1,b.strBAdd2,b.strBCity,b.strBState,b.strBPin,b.strBCountry,b.strPName " + "FROM tbldeliverychallanhd a,tblpartymaster b " + "WHERE a.strCustCode= '" + SOCode + "' AND a.strCustCode=b.strPCode " + "AND a.strClientCode='" + clientCode
-					+ "' AND a.strClientCode=b.strClientCode " + "AND a.dteDCDate BETWEEN '" + fromDate + "' and '" + toDate + "'  ";
+					+ "' AND a.strClientCode=b.strClientCode " + "AND a.dteDCDate BETWEEN '" + fromDate + "' and '" + toDate + "' and b.strPropCode='"+propertyCode+"'  ";
 
 			List list = objGlobalFunctionsService.funGetList(sqlHd, "sql");
 			if (!list.isEmpty()) {
@@ -736,10 +750,10 @@ public class clsDeliveryChallanController {
 
 			String sqlDtl;
 			if (against.equalsIgnoreCase("Summary")) {
-				sqlDtl = "select a.strDCCode,a.dteDCDate,a.strCustCode, b.strPName,a.strPONo,a.strPackNo,a.strAgainst,a.strSOCode " + "from tbldeliverychallanhd a,tblpartymaster b where a.strCustCode='" + SOCode + "' and a.strCustCode=b.strPCode " + "and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode and a.dteDCDate between '" + fromDate + "' and '" + toDate + "' ";
+				sqlDtl = "select a.strDCCode,a.dteDCDate,a.strCustCode, b.strPName,a.strPONo,a.strPackNo,a.strAgainst,a.strSOCode " + "from tbldeliverychallanhd a,tblpartymaster b where a.strCustCode='" + SOCode + "' and a.strCustCode=b.strPCode " + "and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode and a.dteDCDate between '" + fromDate + "' and '" + toDate + "' and b.strPropCode='"+propertyCode+"'  ";
 
 			} else {
-				sqlDtl = "select a.strDCCode ,b.strProdCode,b.strProdName,a.dblQty,a.strRemarks " + "from tbldeliverychallandtl a,tblproductmaster b,tbldeliverychallanhd c " + "where c.strCustCode='" + SOCode + "' and a.strDCCode=c.strDCCode and a.strClientCode='" + clientCode + "' and " + "a.strProdCode=b.strProdCode and c.dteDCDate between '" + fromDate + "' and '" + toDate + "'  ";
+				sqlDtl = "select a.strDCCode ,b.strProdCode,b.strProdName,a.dblQty,a.strRemarks " + "from tbldeliverychallandtl a,tblproductmaster b,tbldeliverychallanhd c left outer join tbllocationmaster d on c.strLocCode=d.strLocCode" + "where c.strCustCode='" + SOCode + "' and a.strDCCode=c.strDCCode and a.strClientCode='" + clientCode + "' and " + "a.strProdCode=b.strProdCode and c.dteDCDate between '" + fromDate + "' and '" + toDate + "' and d.strPropertyCode='"+propertyCode+"'; ";
 			}
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JRDesignQuery subQuery = new JRDesignQuery();
@@ -754,7 +768,15 @@ public class clsDeliveryChallanController {
 			subDataset.setQuery(subQuery);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());

@@ -32,8 +32,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.Connection;
 import com.sanguine.controller.clsGlobalFunctions;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.util.clsReportBean;
 
@@ -51,6 +53,9 @@ public class clsDeliveryChallanInvoiceController {
 
 	@Autowired
 	private ServletContext servletContext;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
 
 	@RequestMapping(value = "/frmDeliveryChallanSlipInvoice", method = RequestMethod.GET)
 	public ModelAndView funDeliveryChallanSlipInvoice(Map<String, Object> model, HttpServletRequest request) {
@@ -114,7 +119,7 @@ public class clsDeliveryChallanInvoiceController {
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/webcrm/rptDeliveryNoteChallanReport.jrxml");
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
-			String sqlHd = " select a.dteDNDate,a.strVehNo,b.strPName,b.strSAdd1,b.strSAdd2,b.strSCity,b.strSState,b.strSPin,b.strSCountry  " + " from tbldeliverynotehd a, tblpartymaster b where a.strDNCode='" + dNCode + "' and a.strSCCode=b.strPCode  " + " and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode ";
+			String sqlHd = " select a.dteDNDate,a.strVehNo,b.strPName,b.strSAdd1,b.strSAdd2,b.strSCity,b.strSState,b.strSPin,b.strSCountry  " + " from tbldeliverynotehd a, tblpartymaster b where a.strDNCode='" + dNCode + "' and a.strSCCode=b.strPCode  " + " and a.strClientCode='" + clientCode + "' and a.strClientCode=b.strClientCode  AND b.strPropCode='"+propertyCode+"' ";
 
 			List list = objGlobalFunctionsService.funGetList(sqlHd, "sql");
 			if (!list.isEmpty()) {
@@ -141,8 +146,8 @@ public class clsDeliveryChallanInvoiceController {
 			// "	and a.strClientCode='"+clientCode+"' and a.strClientCode = b.strClientCode "
 			// + "   and c.dteDNDate between '"+fromDate+"' and '"+toDate+"'";
 
-			String sqlDtl = " select b.strProdCode as ProdCode,c.strPartNo as PartNo,c.strProdName as ProductName,b.dblQty as Qty, " + " b.dblQty*b.dblWeight as Weight,(b.dblQty*b.dblRate) as value , 0.00 as Duty " + " from tbldeliverynotehd a,tbldeliverynotedtl b,tblproductmaster c " + " where a.strDNCode=b.strDNCode  " + " and b.strProdCode=c.strProdCode " + " and a.strDNCode='" + dNCode
-					+ "'  " + " and a.strClientCode =b.strClientCode " + " and b.strClientCode = c.strClientCode  " + " and a.strClientCode='" + clientCode + "' ";
+			String sqlDtl = " select b.strProdCode as ProdCode,c.strPartNo as PartNo,c.strProdName as ProductName,b.dblQty as Qty, " + " b.dblQty*b.dblWeight as Weight,(b.dblQty*b.dblRate) as value , 0.00 as Duty " + " from tbldeliverynotehd a Left outer join tbllocationmaster d on a.strLocCode=d.strLocCode,tbldeliverynotedtl b,tblproductmaster c " + " where a.strDNCode=b.strDNCode  " + " and b.strProdCode=c.strProdCode " + " and a.strDNCode='" + dNCode
+					+ "'  " + " and a.strClientCode =b.strClientCode " + " and b.strClientCode = c.strClientCode  " + " and a.strClientCode='" + clientCode + "' and d.strPropertyCode='"+propertyCode+"' ";
 
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JRDesignQuery subQuery = new JRDesignQuery();
@@ -152,7 +157,16 @@ public class clsDeliveryChallanInvoiceController {
 			subDataset.setQuery(subQuery);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());
@@ -228,7 +242,7 @@ public class clsDeliveryChallanInvoiceController {
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
 			String sqlHd = "  select a.dteDNDate,a.strVehNo,b.strPName,b.strSAdd1,b.strSAdd2,b.strSCity,b.strSState,b.strSPin,b.strSCountry,  " + " a.strJACode as JW,c.strDispatchMode as modeofTransp  " + " from tbldeliverynotehd a, tblpartymaster b, tbljoborderallocationhd c " + " where a.strDNCode='" + dNCode + "' and a.strSCCode=b.strPCode  "
-					+ " and a.strJACode=c.strJACode  and a.strClientCode='" + clientCode + "' " + " and a.strClientCode=b.strClientCode  ";
+					+ " and a.strJACode=c.strJACode  and a.strClientCode='" + clientCode + "' " + " and a.strClientCode=b.strClientCode and b.strPropCode='"+propertyCode+"'  ";
 
 			List list = objGlobalFunctionsService.funGetList(sqlHd, "sql");
 			if (!list.isEmpty()) {
@@ -254,7 +268,7 @@ public class clsDeliveryChallanInvoiceController {
 			// newHDQuery.setText(sql);
 			// jd.setQuery(newHDQuery);
 
-			String sqlHdtable = " select c.strProdName,c.strPartNo as PartNo,b.dblQty as Qty " + " from tbldeliverynotehd a,tbldeliverynotedtl b,tblproductmaster c," + " tbljoborderallocationdtl d where a.strDNCode=b.strDNCode " + " and b.strProdCode=c.strProdCode and a.strDNCode='" + dNCode + "' " + " and a.strJACode=d.strJACode and a.strClientCode =b.strClientCode "
+			String sqlHdtable = " select c.strProdName,c.strPartNo as PartNo,b.dblQty as Qty " + " from tbldeliverynotehd a left outer join tbllocationmaster e on a.strLocCode=e.strLocCode,tbldeliverynotedtl b,tblproductmaster c," + " tbljoborderallocationdtl d where a.strDNCode=b.strDNCode " + " and b.strProdCode=c.strProdCode and a.strDNCode='" + dNCode + "' " + " and a.strJACode=d.strJACode and a.strClientCode =b.strClientCode  and e.strPropertyCode='"+propertyCode+"' "
 					+ " and b.strClientCode = c.strClientCode and a.strClientCode='" + clientCode + "' ";
 
 			JRDesignQuery newQuery = new JRDesignQuery();
@@ -272,7 +286,16 @@ public class clsDeliveryChallanInvoiceController {
 			mainTableDataset.setQuery(subQuery);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());

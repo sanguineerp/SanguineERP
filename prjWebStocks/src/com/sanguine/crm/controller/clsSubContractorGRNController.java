@@ -45,8 +45,10 @@ import com.sanguine.crm.model.clsSubContractorGRNModelHd_ID;
 import com.sanguine.crm.service.clsSubContractorGRNService;
 import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsProductMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsGlobalFunctionsService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.util.clsReportBean;
 
@@ -62,6 +64,9 @@ public class clsSubContractorGRNController {
 	private clsSetupMasterService objSetupMasterService;
 	@Autowired
 	private ServletContext servletContext;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
 
 	// Open SubContractorGRN
 
@@ -338,7 +343,7 @@ public class clsSubContractorGRNController {
 			String reportName = servletContext.getRealPath("/WEB-INF/reports/rptSubContractorGRNSlip.jrxml");
 			String imagePath = servletContext.getRealPath("/resources/images/company_Logo.png");
 
-			String sqlHd = "select a.strSRCode,a.strSCCode,a.dteSRDate,a.strAgainst,a.strNo,a.strSCDNCode,b.strLocName " + "from tblscreturnhd a ,tbllocationmaster b " + "where a.strSRCode='" + SOCode + "' and a.strClientCode='" + clientCode + "' and a.strLocCode=b.strLocCode ";
+			String sqlHd = "select a.strSRCode,a.strSCCode,a.dteSRDate,a.strAgainst,a.strNo,a.strSCDNCode,b.strLocName " + "from tblscreturnhd a ,tbllocationmaster b " + "where a.strSRCode='" + SOCode + "' and a.strClientCode='" + clientCode + "' and a.strLocCode=b.strLocCode and b.strPropertyCode='"+propertyCode+"'";
 
 			List list = objGlobalFunctionsService.funGetList(sqlHd, "sql");
 			if (!list.isEmpty()) {
@@ -352,7 +357,7 @@ public class clsSubContractorGRNController {
 				strLocName = arrObj[6].toString();
 			}
 
-			String sqlDtl = "select a.strProdCode ,b.strProdName,a.dblQtyRbl,a.dblDCQty,a.dblQtyRej,a.dblExpQty,a.dblPrice " + "from  tblscreturndtl a,tblproductmaster b,tblscreturnhd c " + "where a.strSRCode='" + SOCode + "' and a.strClientCode='" + clientCode + "'and a.strProdCode=b.strProdCode and a.strSRCode=c.strSRCode ";
+			String sqlDtl = "select a.strProdCode ,b.strProdName,a.dblQtyRbl,a.dblDCQty,a.dblQtyRej,a.dblExpQty,a.dblPrice " + "from  tblscreturndtl a,tblproductmaster b,tblscreturnhd c left outer join tbllocationmaster d on c.strLocCode=d.strLocCode " + "where a.strSRCode='" + SOCode + "' and a.strClientCode='" + clientCode + "'and a.strProdCode=b.strProdCode and a.strSRCode=c.strSRCode and d.strPropertyCode='"+propertyCode+"' ";
 
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JRDesignQuery subQuery = new JRDesignQuery();
@@ -363,7 +368,15 @@ public class clsSubContractorGRNController {
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
+			
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 

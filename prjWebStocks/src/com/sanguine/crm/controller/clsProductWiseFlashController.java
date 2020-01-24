@@ -164,6 +164,7 @@ public class clsProductWiseFlashController {
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		List listInvoice = new ArrayList();
 		List listofInvoiveTotal = new ArrayList();
@@ -211,7 +212,7 @@ public class clsProductWiseFlashController {
 		{
 			sqlInvoiceFlash = sqlInvoiceFlash + " and  a.strCurrencyCode='" + currencyCode + "' ";
 		}
-		sqlInvoiceFlash += "group by b.strProdCode,a.strCustCode,e.strRegionDesc ";
+		sqlInvoiceFlash += " d.strPropCode='"+propertyCode+"' group by b.strProdCode,a.strCustCode,e.strRegionDesc ";
 
 		DecimalFormat df = new DecimalFormat("#.##");
 
@@ -272,6 +273,7 @@ public class clsProductWiseFlashController {
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String userCode = request.getSession().getAttribute("usercode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblTotalQty = new BigDecimal(0);
@@ -314,7 +316,7 @@ public class clsProductWiseFlashController {
 		{
 			sqlInvoiceFlash = sqlInvoiceFlash + " and  a.strCurrencyCode='" + currencyCode + "' ";
 		}
-		sqlInvoiceFlash += "group by b.strProdCode,a.strCustCode,e.strRegionDesc ";
+		sqlInvoiceFlash += " d.strPropCode='"+propertyCode+"' group by b.strProdCode,a.strCustCode,e.strRegionDesc ";
 
 		DecimalFormat df = new DecimalFormat("#.##");
 		double floatingPoint = 0.0;
