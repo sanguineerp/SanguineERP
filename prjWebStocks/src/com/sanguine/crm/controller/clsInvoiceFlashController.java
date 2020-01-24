@@ -1025,6 +1025,7 @@ public class clsInvoiceFlashController {
 		String custCode = request.getParameter("custCode").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		List listofInvoiveTotal = new ArrayList();
 		BigDecimal dblTotalValue = new BigDecimal(0);
@@ -1053,7 +1054,7 @@ public class clsInvoiceFlashController {
 		StringBuilder sqlInvoiceFlash = new StringBuilder();
 		sqlInvoiceFlash.setLength(0);
 		sqlInvoiceFlash.append("  select b.strManufacturerCode,c.strManufacturerName,sum(d.dblQty)/" + currValue + ",sum(d.dblQty*d.dblUnitPrice)/" + currValue + " from tblinvoicehd a,tblproductmaster b,tblmanufacturemaster c,tblinvoicedtl d,tblpartymaster e " + " where a.strInvCode=d.strInvCode  and d.strProdCode=b.strProdCode and b.strManufacturerCode=c.strManufacturerCode  and a.strCustCode=e.strPCode  and a.strLocCode='" + locCode + "' "
-				+ " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
+				+ " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "' AND e.strPropCode='"+propertyCode+"' ");
 		if (!settlementcode.equals("All")) {
 			sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
 		}
@@ -1071,7 +1072,7 @@ public class clsInvoiceFlashController {
 		sqlInvoiceFlash.append( " UNION ");
 		
 		sqlInvoiceFlash.append("  select b.strManufacturerCode,c.strManufacturerName,sum(d.dblQty)/" + currValue + ",sum(d.dblQty*d.dblUnitPrice)/" + currValue + " from tblinvoicehd a,tblproductmaster b,tblmanufacturemaster c,tblinvoicedtl d,tblpartymaster e " + " where a.strInvCode=d.strInvCode  and d.strProdCode=b.strProdCode and b.strManufacturerCode=c.strManufacturerCode  and a.strCustCode=e.strPCode  and a.strLocCode='" + locCode + "' "
-				+ " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
+				+ " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "' AND e.strPropCode='"+propertyCode+"' ");
 	
 		sqlInvoiceFlash.append(" and  a.strSettlementCode='MultiSettle' ");
 		
@@ -1124,6 +1125,7 @@ public class clsInvoiceFlashController {
 		String custCode = request.getParameter("custCode").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		List listofInvoiveTotal = new ArrayList();
 		BigDecimal dblTotalValue = new BigDecimal(0);
@@ -1154,7 +1156,7 @@ public class clsInvoiceFlashController {
 
 		StringBuilder sqlInvoiceFlash = new StringBuilder();
 		sqlInvoiceFlash.setLength(0);
-		sqlInvoiceFlash.append(" select b.strLocCode,b.strLocName ,sum(d.dblQty)/" + currValue + ",sum(d.dblQty*d.dblUnitPrice)/" + currValue + " from tblinvoicehd a,tbllocationmaster b,tblinvoicedtl d,tblpartymaster c " + "   where a.strInvCode=d.strInvCode  and a.strLocCode=b.strLocCode  and a.strCustCode=c.strPCode  " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
+		sqlInvoiceFlash.append(" select b.strLocCode,b.strLocName ,sum(d.dblQty)/" + currValue + ",sum(d.dblQty*d.dblUnitPrice)/" + currValue + " from tblinvoicehd a,tbllocationmaster b,tblinvoicedtl d,tblpartymaster c " + "   where a.strInvCode=d.strInvCode  and a.strLocCode=b.strLocCode  and a.strCustCode=c.strPCode  " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "' AND c.strPropCode='"+propertyCode+"' ");
 		if (!settlementcode.equals("All")) {
 			sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
 		}
@@ -1175,7 +1177,7 @@ public class clsInvoiceFlashController {
 		
 		sqlInvoiceFlash.append(" select b.strLocCode,b.strLocName ,sum(d.dblQty)/" + currValue + ",sum(d.dblQty*d.dblUnitPrice)/" + currValue + " from tblinvoicehd a,tbllocationmaster b,tblinvoicedtl d,tblpartymaster c " + "   where a.strInvCode=d.strInvCode  and a.strLocCode=b.strLocCode  and a.strCustCode=c.strPCode  " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
 
-		sqlInvoiceFlash.append(" and  a.strSettlementCode='MultiSettle' ");
+		sqlInvoiceFlash.append(" and  a.strSettlementCode='MultiSettle' AND c.strPropCode='"+propertyCode+"' ");
 
 		if (!locCode.equals("All")) {
 			sqlInvoiceFlash.append( "and a.strLocCode='" + locCode + "' ");
@@ -1249,6 +1251,7 @@ public class clsInvoiceFlashController {
 		String custCode = request.getParameter("custCode").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String currencyName="";
 		List listofInvoiveTotal = new ArrayList();
 		BigDecimal dblTotalValue = new BigDecimal(0);
@@ -1278,7 +1281,7 @@ public class clsInvoiceFlashController {
 		StringBuilder sqlInvoiceFlash = new StringBuilder();
 		sqlInvoiceFlash.setLength(0);
 		sqlInvoiceFlash.append(" (select c.strSettlementCode,ifnull(c.strSettlementDesc,''),ifnull(c.strSettlementType,''),sum(a.dblGrandTotal)/" + currValue + ",MONTHNAME(DATE(a.dteInvDate)), YEAR(DATE(a.dteInvDate))"
-				+ " from tblinvoicehd a,tblsettlementmaster c,tblpartymaster d " + " where  a.strSettlementCode=c.strSettlementCode and a.strCustCode=d.strPCode " + " and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
+				+ " from tblinvoicehd a,tblsettlementmaster c,tblpartymaster d " + " where  a.strSettlementCode=c.strSettlementCode and a.strCustCode=d.strPCode " + " and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "' AND d.strPropCode='"+propertyCode+"' ");
 		if (!settlementcode.equals("All")) {
 			sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
 		}
@@ -1299,7 +1302,7 @@ public class clsInvoiceFlashController {
 		sqlInvoiceFlash.append(" (select c.strSettlementCode,ifnull(c.strSettlementDesc,''),ifnull(c.strSettlementType,''),sum(e.dblSettlementAmt)/" + currValue + ",MONTHNAME(DATE(a.dteInvDate)), YEAR(DATE(a.dteInvDate))"
 				+ " from tblinvoicehd a,tblsettlementmaster c,tblpartymaster d ,tblinvsettlementdtl e "
 				+ " where  a.strInvCode=e.strInvCode and e.strSettlementCode=c.strSettlementCode and a.strCustCode=e.strCustomerCode and e.strCustomerCode=d.strPCode "
-				+ " and a.strCustCode=d.strPCode " + " and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
+				+ " and a.strCustCode=d.strPCode " + " and a.strLocCode='" + locCode + "' and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "' AND d.strPropCode='"+propertyCode+"' ");
 	
 	   sqlInvoiceFlash.append(" and  a.strSettlementCode='MultiSettle' ");
 
@@ -1367,6 +1370,7 @@ public class clsInvoiceFlashController {
 		String locCode = request.getParameter("locCode").toString();
 		String custCode = request.getParameter("custCode").toString();
 		String currencyCode=request.getParameter("currencyCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		String currencyName="";
 		List listofInvoiveTotal = new ArrayList();
@@ -1401,7 +1405,7 @@ public class clsInvoiceFlashController {
 				+ " WHERE b.strCustCode=a.strPCode AND a.strRegion=c.strRegionCode  "
 				+ " and b.strLocCode='" + locCode + "' " + " "
 				+ " and date(b.dteInvDate) between '" + fromDate + "' and '" + toDate + "' "
-				+ " and  b.strClientCode='" + clientCode + "'");
+				+ " and  b.strClientCode='" + clientCode + "'  AND a.strPropCode='"+propertyCode+"' ");
 		if (!settlementcode.equals("All")) {
 			sqlInvoiceFlash.append(" and  b.strSettlementCode='" + settlementcode + "' ");
 		}
@@ -1421,7 +1425,7 @@ public class clsInvoiceFlashController {
 				+ " WHERE b.strCustCode=a.strPCode AND a.strRegion=c.strRegionCode  "
 				+ " and b.strLocCode='" + locCode + "' " + " "
 				+ " and date(b.dteInvDate) between '" + fromDate + "' and '" + toDate + "' "
-				+ " and  b.strClientCode='" + clientCode + "'");
+				+ " and  b.strClientCode='" + clientCode + "'  AND a.strPropCode='"+propertyCode+"' ");
 		
 		sqlInvoiceFlash.append(" and  b.strSettlementCode='Multisettle' ");
 		
