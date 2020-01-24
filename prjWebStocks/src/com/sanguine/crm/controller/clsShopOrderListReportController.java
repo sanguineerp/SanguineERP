@@ -168,8 +168,8 @@ public class clsShopOrderListReportController {
 			for (int cnt = 0; cnt < listCustSubgroup.size(); cnt++) {
 				String strCustCode = listCustSubgroup.get(cnt).toString();
 
-				String sqlGroup = " select  c.strGCode from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, " + " tblproductmaster d , tblpartymaster e ,tblgroupmaster f " + " where a.strSOCode=b.strSOCode  and b.strProdCode=d.strProdCode  " + " and d.strSGCode=c.strSGCode  and a.strCustCode=e.strPCode " + " and c.strGCode=f.strGCode  and a.strCustCode='" + strCustCode + "' "
-						+ " and c.strGCode IN  " + strGCodes + "  " + " and date(a.dteSODate)  between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate)  between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by c.strGCode " + " ORDER BY c.strGCode ";
+				String sqlGroup = " select  c.strGCode from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, " + " tblproductmaster d , tblpartymaster e ,tblgroupmaster f,tbllocationmaster g  " + " where a.strSOCode=b.strSOCode  and b.strProdCode=d.strProdCode  " + " and d.strSGCode=c.strSGCode  and a.strCustCode=e.strPCode " + " and c.strGCode=f.strGCode  and a.strCustCode='" + strCustCode + "' "
+						+ " and c.strGCode IN  " + strGCodes + "  " + " and date(a.dteSODate)  between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate)  between '" + dteFromFulDate + "' and '" + dteToFulDate + "' AND a.strLocCode=g.strLocCode AND g.strPropertyCode='"+propertyCode+"' " + " group by c.strGCode " + " ORDER BY c.strGCode ";
 
 				List listGroup = objGlobalFunctionsService.funGetDataList(sqlGroup, "sql");
 

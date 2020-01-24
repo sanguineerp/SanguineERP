@@ -29,7 +29,6 @@ import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 import com.sanguine.service.clsSubGroupMasterService;
 import com.sanguine.util.clsReportBean;
-
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
@@ -292,7 +291,7 @@ public class clsCRMReportsController {
 
 			ArrayList fieldList = new ArrayList();
 
-			String sqlQuery = "select f.strPName,c.strProdCode,c.strProdName,e.strGName,d.strSGName,sum(b.dblAcceptQty),sum(b.dblWeight*b.dblAcceptQty),a.strSOCode " + "from tblsalesorderhd a,tblsalesorderdtl b,tblproductmaster c,tblsubgroupmaster d,tblgroupmaster e,tblpartymaster f " + "where a.strSOCode=b.strSOCode " + "and b.strProdCode=c.strProdCode " + "and c.strSGCode=d.strSGCode "
+			String sqlQuery = "select f.strPName,c.strProdCode,c.strProdName,e.strGName,d.strSGName,sum(b.dblAcceptQty),sum(b.dblWeight*b.dblAcceptQty),a.strSOCode " + "from tblsalesorderhd a,tblsalesorderdtl b,tblproductmaster c,tblsubgroupmaster d,tblgroupmaster e,tblpartymaster f ,tbllocationmaster g " + "where a.strSOCode=b.strSOCode " + "and b.strProdCode=c.strProdCode " + "and c.strSGCode=d.strSGCode "
 					+ "and d.strGCode=e.strGCode " + "and a.strCustCode=f.strPCode ";
 			if (objBean.getStrDocCode() != null && objBean.getStrDocCode().length() > 0) {
 				sqlQuery = sqlQuery + "and a.strCustCode='" + objBean.getStrDocCode() + "' ";
@@ -333,7 +332,7 @@ public class clsCRMReportsController {
 			String dteFromFulDate = ffy + "-" + ffm + "-" + ffd;
 			String dteToFulDate = tfy + "-" + tfm + "-" + tfd;
 
-			sqlQuery = sqlQuery + " and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "'   " + " group by e.strGName,d.strSGName,f.strPName,b.strProdCode " + " order by f.strPName; ";
+			sqlQuery = sqlQuery + " and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' AND a.strLocCode=g.strLocCode AND g.strPropertyCode='"+propertyCode+"'  " + " group by e.strGName,d.strSGName,f.strPName,b.strProdCode " + " order by f.strPName; ";
 
 			List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 
@@ -842,7 +841,7 @@ public class clsCRMReportsController {
 
 		ArrayList fieldList = new ArrayList();
 
-		String sqlQuery = " SELECT a.strCustCode,f.strPName,e.strLocCode,g.strLocName,d.strProdCode,e.strProdName," + " d.dblAcceptQty as dblQty,d.dblWeight FROM tblsalesorderhd a ,tblsalesorderdtl d  ,tblproductmaster e," + "  tblpartymaster f, tbllocationmaster g " + " WHERE a.strSOCode=d.strSOCode " + " and d.strProdCode=e.strProdCode " + " and e.strLocCode=g.strLocCode "
+		String sqlQuery = " SELECT a.strCustCode,f.strPName,e.strLocCode,g.strLocName,d.strProdCode,e.strProdName," + " d.dblAcceptQty as dblQty,d.dblWeight FROM tblsalesorderhd a ,tblsalesorderdtl d  ,tblproductmaster e," + "  tblpartymaster f, tbllocationmaster g ,tbllocationmaster h" + " WHERE a.strSOCode=d.strSOCode " + " and d.strProdCode=e.strProdCode " + " and e.strLocCode=g.strLocCode "
 		// + " AND a.strCloseSO='Y' "
 				+ " AND f.strPCode=a.strCustCode " + " AND a.strClientCode='" + clientCode + "' " + " AND e.strClientCode='" + clientCode + "' " + " AND d.strClientCode='" + clientCode + "' " + " AND f.strClientCode='" + clientCode + "' " + " AND g.strClientCode='" + clientCode + "' " + " and e.strLocCode IN " + locCodes + " " + " and a.strCustCode IN " + strCCodes + " ";
 
@@ -874,7 +873,7 @@ public class clsCRMReportsController {
 		String dteFromFulDate = ffy + "-" + ffm + "-" + ffd;
 		String dteToFulDate = tfy + "-" + tfm + "-" + tfd;
 
-		sqlQuery = sqlQuery + " and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " GROUP BY a.strCustCode,d.strProdCode   ";
+		sqlQuery = sqlQuery + " and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "'  AND a.strLocCode=h.strLocCode AND h.strPropertyCode='"+propertyCode+"' " + " GROUP BY a.strCustCode,d.strProdCode   ";
 
 		List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 
@@ -1040,7 +1039,7 @@ public class clsCRMReportsController {
 
 			String sqlHDQuery = " select 1 from dual; ";
 
-			String sqlDtlQuery = " SELECT '' as SrNo, a.strPCode,a.strPName,a.strPhone,a.strMobile  from tblpartymaster a  where " + "  a.strPType='cust' and a.strManualCode<> ''  and a.strClientCode='" + clientCode + "'   and a.strPCode  " + "NOT IN(select strCustCode from tblsalesorderhd where Date(dteFulmtDate)='" + dteFullfillment + "' ) ";
+			String sqlDtlQuery = " SELECT '' as SrNo, a.strPCode,a.strPName,a.strPhone,a.strMobile  from tblpartymaster a  where " + "  a.strPType='cust' and a.strManualCode<> ''  and a.strClientCode='" + clientCode + "'  AND a.strPropCode='"+propertyCode+"'  and a.strPCode  " + "NOT IN(select strCustCode from tblsalesorderhd where Date(dteFulmtDate)='" + dteFullfillment + "' ) ";
 
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JRDesignQuery newQuery = new JRDesignQuery();
@@ -1200,7 +1199,7 @@ public class clsCRMReportsController {
 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String companyName = req.getSession().getAttribute("companyName").toString();
 			String userCode = req.getSession().getAttribute("usercode").toString();
-
+			String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 			List<String> listHeader = new ArrayList<String>();
 			listHeader.add("Sr.no");
 			listHeader.add("Sub Group Code");
@@ -1215,7 +1214,7 @@ public class clsCRMReportsController {
 
 			List listProductDtl = new ArrayList<>();
 
-			String sqlDtlQuery = "SELECT '' as SrNo, b.strSGCode,b.strSGName,a.strProdCode,a.strProdName,a.dblMRP " + " from tblproductmaster a,tblsubgroupmaster b " + " where a.strSGCode=b.strSGCode and a.strProdType<> 'Procured' " + " and a.strClientCode='" + clientCode + "' " + " and b.strClientCode='" + clientCode + "' " + " order by b.strSGCode; ";
+			String sqlDtlQuery = "SELECT '' as SrNo, b.strSGCode,b.strSGName,a.strProdCode,a.strProdName,a.dblMRP " + " from tblproductmaster a,tblsubgroupmaster b ,tbllocationmaster c " + " where a.strSGCode=b.strSGCode and a.strProdType<> 'Procured' " + " and a.strClientCode='" + clientCode + "' " + " and b.strClientCode='" + clientCode + "' AND a.strLocCode=c.strLocCode AND c.strPropertyCode='"+propertyCode+"' " + " order by b.strSGCode; ";
 			List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlDtlQuery, "sql");
 			int cnt = 1;
 			for (int rowCount = 0; rowCount < listProdDtl.size(); rowCount++) {
@@ -1437,7 +1436,7 @@ public class clsCRMReportsController {
 
 			String sqlHDQuery = " select 1 from dual; ";
 
-			String sqlDtlQuery = "SELECT '' as SrNo, a.strCustCode,b.strPName ,a.strSOCode,c.dblQty " + " from tblsalesorderhd a,tblpartymaster b,tblsalesorderdtl c  " + " where a.strCustCode=b.strPCode and a.strSOCode=c.strSOCode and date(a.dteFulmtDate) " + " between '" + dteFromDate + "' and '" + dteToDate + "' " + " and a.strClientCode='" + clientCode + "' " + " and b.strClientCode='" + clientCode + "' ";
+			String sqlDtlQuery = "SELECT '' as SrNo, a.strCustCode,b.strPName ,a.strSOCode,c.dblQty " + " from tblsalesorderhd a,tblpartymaster b,tblsalesorderdtl c,tbllocationmaster d  " + " where a.strCustCode=b.strPCode and a.strSOCode=c.strSOCode and date(a.dteFulmtDate) " + " between '" + dteFromDate + "' and '" + dteToDate + "' " + " and a.strClientCode='" + clientCode + "' " + " and b.strClientCode='" + clientCode + "' AND a.strLocCode=d.strLocCode AND d.strPropertyCode='"+propertyCode+"' ";
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JRDesignQuery newQuery = new JRDesignQuery();
 			newQuery.setText(sqlHDQuery);
