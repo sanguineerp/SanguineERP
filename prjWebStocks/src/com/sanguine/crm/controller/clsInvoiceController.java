@@ -697,7 +697,7 @@ public class clsInvoiceController
 						objInvProdTaxDtl.setDblValue(taxAmt);
 						objInvProdTaxDtl.setDblTaxableAmt(taxableAmt);
 						objInvProdTaxDtl.setDblWeight(objInvDtl.getDblWeight());
-						listInvProdTaxDtl.add(objInvProdTaxDtl);
+						 listInvProdTaxDtl.add(objInvProdTaxDtl);
 						
 						if(!mapSubTotal.containsKey(objInvProdTaxDtl.getStrProdCode()+""+objInvDtl.getDblWeight()+""+objInvDtl.getDblQty()))
 						{
