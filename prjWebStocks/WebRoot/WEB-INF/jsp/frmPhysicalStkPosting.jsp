@@ -140,6 +140,8 @@
 				issuedconversionUOM=ProductData.strIssueUOM;
 				recipeconversionUOM=ProductData.strRecipeUOM;
 				phyStkQty=parseFloat(phyStkQty)/parseFloat(ConversionValue);
+				
+				// here we calculate physical stock qty in decimal point 
 				 var tmpPhyStkQty1= $("#txtQuantity").val().split(".");
 				var tmpPhyStkQty2='';
 				if(tmpPhyStkQty1.length>1){
@@ -189,14 +191,63 @@
 		    var DiscurrentStkQty=$("#txtStock").val();
 		    DiscurrentStkQty=parseFloat(DiscurrentStkQty).toFixed(maxQuantityDecimalPlaceLimit);
 		    var tempStkQty=DiscurrentStkQty.split(".");
-		    DiscurrentStkQty=tempStkQty[0]+" "+ReceivedconversionUOM+"."+parseFloat("0."+tempStkQty[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
+		    
+		    DiscurrentStkQty=tempStkQty[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tempStkQty[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
+		    if($('#cmbConversionUOM').val()=="RecUOM")
+			{
+		    	DiscurrentStkQty=tempStkQty[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tempStkQty[1])* ProductData.dblRecipeConversion+" "+recipeconversionUOM;
+			}
+		    
 		    var tempQty=tempphyStkQty.split(".");
 		    var Displyqty=tempQty[0]+" "+ReceivedconversionUOM+" "+tempQty[1]+" "+recipeconversionUOM;
 		    var LooseQty=$("#txtQuantity").val();
 		    LooseQty=parseFloat(LooseQty).toFixed(maxQuantityDecimalPlaceLimit);
 		    
-		    var tempvariance=variance.split(".");
-		    var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+parseFloat(tempvariance[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
+		    //calculate display actual qty 
+		    var DisplyActualQty=Displyqty;
+		    
+		    var tmpPhyStkQty2= $("#txtQuantity").val().split(".");
+		    if(tmpPhyStkQty2[1]!=''){
+		    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tmpPhyStkQty2[1]) * 1000 +" "+recipeconversionUOM;
+		    	 
+		    }else{
+		    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" 0 "+recipeconversionUOM;
+		    }
+		    
+		    /* var tempCurrStkQty= currentStkQtyRecepi.split(".");
+		    
+		    var disQtyInRecipe=(parseFloat(tempStkQty[0]) * ProductData.dblRecipeConversion) + parseFloat(tempStkQty[1]); 
+		    var CurrQtyInRecipe=(parseFloat(tempCurrStkQty[0]) * ProductData.dblRecipeConversion) + parseFloat(tempCurrStkQty[1]);
+		    
+		    DisplyActualQty= CurrQtyInRecipe-disQtyInRecipe;
+		     */
+		    
+		     var tempvariance=variance.split(".");
+			 var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+parseFloat(tempvariance[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
+			    
+			 if($('#cmbConversionUOM').val()=="RecUOM")
+				{
+				 	var currentStkQty1=$("#txtStock").val().split(".");
+		 		    var tmpCurrentStkQty='';
+		 			if(currentStkQty1.length>1){
+		 				tmpCurrentStkQty=parseFloat("0."+currentStkQty1[1]) * ProductData.dblRecipeConversion ;
+		 				tmpCurrentStkQty.toFixed(3);
+		 			}
+		 			var stkCurr=currentStkQty1[0]+"."+tmpCurrentStkQty;
+		 			var stkVar= parseFloat($("#txtQuantity").val()) -  parseFloat(stkCurr);
+		 			DisplayVariance = stkVar.toFixed(maxQuantityDecimalPlaceLimit);
+		 			var tempvariance= DisplayVariance.split(".");
+				 	DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+" "+tempvariance[1] +" "+recipeconversionUOM;	 
+				}
+			 
+			 
+		   /*  var varianceInRecipe=parseFloat(variance);
+		     if(varianceInRecipe!=0 || varianceInRecipe !=''){
+		    	 var varianceInRecipe1=varianceInRecipe.split(".");
+		    	 varianceInRecipe1[1]
+		    	 DisplayVariance = tempvariance[0]+" "+ReceivedconversionUOM+"."+parseFloat(tempvariance[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
+		    } */
+		     
 		    rowCount=listRow;
 		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listStkPostDtl["+(rowCount)+"].strProdCode\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";
 		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"100%\" name=\"listStkPostDtl["+(rowCount)+"].strProdName\" id=\"lblProdName."+(rowCount)+"\" value='"+prodName+"'>";
@@ -204,7 +255,8 @@
 		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  style=\"text-align: right;\" size=\"4%\" name=\"listStkPostDtl["+(rowCount)+"].dblWeight\" id=\"txtWtUnit."+(rowCount)+"\"  value="+wtunit+">";
 		    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"8%\"  id=\"txtDisplayStock."+(rowCount)+"\" value='"+DiscurrentStkQty+"'>";
 		   
-		    row.insertCell(5).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyQty\" size=\"9%\" style=\"text-align: right;\" id=\"txtDisplyQty."+(rowCount)+"\"  value='"+Displyqty+"'/>";	
+		    /* row.insertCell(5).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyQty\" size=\"9%\" style=\"text-align: right;\" id=\"txtDisplyQty."+(rowCount)+"\"  value='"+Displyqty+"'/>"; */	
+		    row.insertCell(5).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyQty\" size=\"9%\" style=\"text-align: right;\" id=\"txtDisplyQty."+(rowCount)+"\"  value='"+DisplyActualQty+"'/>";
 		    row.insertCell(6).innerHTML= "<input class=\"decimal-places inputText-Auto\" type=\"text\" style=\"text-align: right;\" name=\"listStkPostDtl["+(rowCount)+"].dblLooseQty\" id=\"txtLooseQty."+(rowCount)+"\"  value='"+LooseQty+"' onblur=\"funUpdatePrice(this);\" />";	
 		   
 		    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  size=\"8%\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyVariance\" id=\"txtDisplayVariance."+(rowCount)+"\" value='"+DisplayVariance+"'>";	
@@ -216,6 +268,7 @@
 		    row.insertCell(13).innerHTML= "<input type=\"hidden\"  class=\"decimal-places inputText-Auto\" size=\"6%\" name=\"listStkPostDtl["+(rowCount)+"].dblPStock\" id=\"txtQuantity."+(rowCount)+"\" value="+phyStkQty+" >";
 		    row.insertCell(14).innerHTML= "<input type=\"hidden\" name=\"listStkPostDtl["+(rowCount)+"].dblVariance\" id=\"lblVariance."+(rowCount)+"\" value="+variance+">";	
 		    row.insertCell(15).innerHTML= "<input name=\"listStkPostDtl["+(rowCount)+"].dblCStock\" id=\"txtStock."+(rowCount)+"\" value="+currentStkQty+">";
+		  
 		    listRow++;
 		    funApplyNumberValidation();
 		    funCalSubTotal();
@@ -731,8 +784,8 @@
 		        	 var currentStkQty1=$("#txtStock").val().split(".");
 		 		    var tmpCurrentStkQty='';
 		 			if(currentStkQty1.length>1){
-		 				tmpCurrentStkQty=parseFloat("0."+currentStkQty1[1]) * response.dblRecipeConversion ;
-		 				tmpCurrentStkQty.toFixed(3);
+		 				tmpCurrentStkQty=parseFloat(parseFloat("0."+currentStkQty1[1]) * response.dblRecipeConversion );
+		 				tmpCurrentStkQty=tmpCurrentStkQty.toFixed(0);
 		 			}
 		 			var currentStkQtyRecepi=currentStkQty1 +" "+response.strReceivedUOM;
 		 			if(tmpCurrentStkQty!=''){

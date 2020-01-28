@@ -208,7 +208,9 @@
 						var fromDate=$("#txtFromDate").val();
 						var toDate=$("#txtToDate").val();
 						var locCode=$("#txtLocCode").val();
-						var param1=locCode+","+fromDate+","+toDate;
+						var locName=$("#lblLocName").text();
+						
+						var param1=locCode+","+fromDate+","+toDate+","+locName;
 						var reportType=$("#cmbExportType").val();
 						
 						if(reportType=="Excel"){

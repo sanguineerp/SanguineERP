@@ -268,7 +268,10 @@ public class clsStockVaraianceFlashController extends AbstractExcelView {
 			String strLocCode = spParam1[0];
 			String fromDate = objGlobal.funGetDate("yyyy-MM-dd", spParam1[1]);
 			String toDate = objGlobal.funGetDate("yyyy-MM-dd", spParam1[2]);
-
+			String location ="All";
+			if(spParam1.length>3){
+				location =spParam1[3];
+			}
 			double value = 0;
 			String sql = "select e.strSGName,c.strProdName,sum(b.dblCStock),sum(b.dblPStock),sum(b.dblVariance),c.dblCostRM,(c.dblCostRM *sum(b.dblVariance)) as value " + " from clsStkPostingHdModel a,clsStkPostingDtlModel b,clsProductMasterModel c ,clsStkAdjustmentHdModel d,clsSubGroupMasterModel e " + " where a.strPSCode=b.strPSCode and b.strProdCode=c.strProdCode  and a.strSACode=d.strSACode and c.strSGCode=e.strSGCode  "
 					+ " and a.dtPSDate between '" + fromDate + "' and '" + toDate + "' " + " and a.strClientCode='" + clientCode + "' and  b.strClientCode='" + clientCode + "' " + " and c.strClientCode='" + clientCode + "' " + " and e.strClientCode='" + clientCode + "' ";
@@ -331,6 +334,7 @@ public class clsStockVaraianceFlashController extends AbstractExcelView {
 			hm.put("dteFromDate", fDate);
 			hm.put("dteToDate", tDate);
 			hm.put("stkVarianceFlashList", listStockVarianceFlash);
+			hm.put("location", location);
 			
 
 			JasperDesign jd = JRXmlLoader.load(reportName);
