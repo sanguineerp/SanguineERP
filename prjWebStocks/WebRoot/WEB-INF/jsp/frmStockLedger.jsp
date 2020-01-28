@@ -174,7 +174,13 @@
 			   		{
 				   		row1.insertCell(4).innerHTML= "<label>"+item[3]+"</label>";
 					   	/* row1.insertCell(5).innerHTML= "<label>"+parseFloat(item[4]).toFixed(maxQuantityDecimalPlaceLimit)+"</label>"; */
-				   		row1.insertCell(5).innerHTML= "<label>"+item[4]+"</label>";
+					   	row1.insertCell(5).innerHTML= "<label>"+item[4]+"</label>";
+					   /* 	if(item[4].includes(".")){
+					   		row1.insertCell(5).innerHTML= "<label>"+item[4]+"</label>";	
+					   	}else {
+					   		if(item[4].includes())
+					   	}
+				   		 */
 			   		}else
 			   			{
 			   			row1.insertCell(4).innerHTML= "<label>"+item[3].toFixed(maxQuantityDecimalPlaceLimit)+"</label>";
@@ -282,7 +288,7 @@
 								}
 							
 						} else {
-							if(rec.includes(""))
+							if(rec=="")
 								{
 								
 								}
@@ -366,7 +372,7 @@
 						finalBal = spBalance[0] + ' ' + receivedUOM;
 					}
 					if (spBalance[1] != "undefined") {
-						var balWithUOM = parseFloat(parseFloat(restQty.toFixed(maxAmountDecimalPlaceLimit))* parseFloat(recipeConv.substr(28))).toFixed(maxAmountDecimalPlaceLimit);//mahesh 
+						var balWithUOM = parseFloat(parseFloat(restQty.toFixed(maxAmountDecimalPlaceLimit))* parseFloat(recipeConv.substr(28))).toFixed(0);//mahesh 
 						if(qtyWithUOM.includes("Yes"))
 							{
 							finalBal = finalBal + '.' + balWithUOM + ' '+ recipeUOM;

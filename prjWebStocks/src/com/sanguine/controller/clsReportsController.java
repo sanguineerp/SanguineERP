@@ -4824,22 +4824,34 @@ public class clsReportsController {
 			// }
 			//
 			// }
+			if (qtyWithUOM.equals("No")) {
+				sql = "select a.strProdCode,b.strProdName,(a.dblClosingStk),"
+						// + "(a.dblClosingStk*b.dblCostRM) as Value,"
+						+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "d.strGName,c.strSGName "
+						
+						+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
+						+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' ";
 
-			sql = "select a.strProdCode,b.strProdName,(a.dblClosingStk+a.dblFreeQty),"
-					// + "(a.dblClosingStk*b.dblCostRM) as Value,"
-					+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "d.strGName,c.strSGName "
-					/*
-					 * +
-					 * "from tblcurrentstock a,tblproductmaster b,tblsubgroupmaster c,tblgroupmaster d,tbllocationmaster e "
-					 * + ",tblpropertymaster f " +
-					 * "where a.strProdCode=b.strProdCode and b.strSGCode=c.strSGCode and c.strGCode=d.strGCode "
-					 * +
-					 * "and a.strLocCode=e.strLocCode and e.strPropertyCode=f.strPropertyCode "
-					 * ;
-					 */
-					+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
-					+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' ";
+			}else{
+				
+				sql = "select a.strProdCode,b.strProdName,funGetUOM((a.dblClosingStk),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM),"
+						// + "(a.dblClosingStk*b.dblCostRM) as Value,"
+						+ "((a.dblClosingStk+a.dblFreeQty)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice))/" + currValue + " as Value," + "d.strGName,c.strSGName ,(a.dblClosingStk)"
+						/*
+						 * +
+						 * "from tblcurrentstock a,tblproductmaster b,tblsubgroupmaster c,tblgroupmaster d,tbllocationmaster e "
+						 * + ",tblpropertymaster f " +
+						 * "where a.strProdCode=b.strProdCode and b.strSGCode=c.strSGCode and c.strGCode=d.strGCode "
+						 * +
+						 * "and a.strLocCode=e.strLocCode and e.strPropertyCode=f.strPropertyCode "
+						 * ;
+						 */
+						+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
+						+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' ";
 
+				
+			}
+			
 			if (strNonStkItems.equals("Non Stockable")) {
 				sql += "	and b.strNonStockableItem='Y' ";
 			} else if (strNonStkItems.equals("Stockable")) {
@@ -4884,13 +4896,20 @@ public class clsReportsController {
 			DecimalFormat df = new DecimalFormat("#.##");
 			for (int cnt = 0; cnt < list.size(); cnt++) {
 				Object[] arrObj = (Object[]) list.get(cnt);
-				double closeStk = Double.parseDouble(arrObj[2].toString());
+				double closeStk = Double.parseDouble(arrObj[6].toString());
 				double value = Double.parseDouble(arrObj[3].toString());
 
 				clsStockFlashModel objStkFlashModel = new clsStockFlashModel();
 				objStkFlashModel.setStrProdCode(arrObj[0].toString());
 				objStkFlashModel.setStrProdName(arrObj[1].toString());
-				objStkFlashModel.setDblClosingStock(df.format(closeStk).toString());
+				if (qtyWithUOM.equals("No")) {
+					
+					objStkFlashModel.setDblClosingStock(df.format(closeStk).toString());	
+				}else{
+					
+					objStkFlashModel.setDblClosingStock(arrObj[2].toString());
+				}
+				
 				objStkFlashModel.setDblValue(df.format(value).toString());
 				objStkFlashModel.setStrGroupName(arrObj[4].toString());
 				objStkFlashModel.setStrSubGroupName(arrObj[5].toString());

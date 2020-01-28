@@ -888,7 +888,7 @@ public class clsStockFlashController {
 
 		objGlobal.funInvokeStockFlash(startDate, locCode, fromDate, toDate, clientCode, userCode, stockableItem, req, resp);
 		String sql = "";// clsPropertyMaster
-
+		if (qtyWithUOM.equals("No")) {
 		sql = "select a.strProdCode,b.strProdName," + "(a.dblClosingStk),"
 				// + "(a.dblClosingStk*b.dblCostRM) as Value "
 				+ "((a.dblClosingStk)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
@@ -905,7 +905,15 @@ public class clsStockFlashController {
 
 				+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
 				+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' ";
+		}else{
+			sql = "select a.strProdCode,b.strProdName," + " funGetUOM((a.dblClosingStk),b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM),"
 
+					+ "((a.dblClosingStk)*if(ifnull(g.dblPrice,0)=0,b.dblCostRM,g.dblPrice)) as Value"
+
+					+ " FROM tblcurrentstock a " + " left outer join tblproductmaster b on a.strProdCode=b.strProdCode " + " left outer join tblsubgroupmaster c on b.strSGCode=c.strSGCode " + " left outer join tblgroupmaster d on c.strGCode=d.strGCode " + " left outer join tbllocationmaster e on a.strLocCode=e.strLocCode "
+					+ " left outer join tblpropertymaster f on e.strPropertyCode=f.strPropertyCode " + " left outer join tblreorderlevel g on a.strProdCode=g.strProdCode and g.strLocationCode='" + locCode + "'  " + " where  a.strUserCode='" + userCode + "' ";
+			
+		}
 		if (strNonStkItems.equals("Non Stockable")) {
 			sql += "	and b.strNonStockableItem='Y' ";
 		} else if (strNonStkItems.equals("Stockable")) {
@@ -984,7 +992,7 @@ public class clsStockFlashController {
 				value = value * (0);
 			}
 			double temp = Double.parseDouble(df.format(value));
-			dblTotalValue = Double.parseDouble(df.format(dblTotalValue));// + temp;
+			dblTotalValue = Double.parseDouble(df.format(totVal));// + temp;
 			objStkFlashModel.setDblValue(String.valueOf(value));
 			// objStkFlashModel.setDblIssueUOMStock(arrObj[12].toString());
 			// objStkFlashModel.setDblIssueConversion(arrObj[15].toString());

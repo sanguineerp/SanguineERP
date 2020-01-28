@@ -343,7 +343,12 @@
 			    {
 			        newcontent += '<td><a id="stkLedgerUrl.'+i+'" href="#" onclick="funClick(this);">'+StkFlashData[i].strProdCode+'</a></td>';
 			        newcontent += '<td>'+StkFlashData[i].strProdName+'</td>';
-			        newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblClosingStock).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';
+			        if(qtyWithUOM=='No'){
+			        	newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblClosingStock).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';	
+			        }else{
+			        	newcontent += '<td align="right">'+StkFlashData[i].dblClosingStock+'</td>';
+			        }
+			        
 			        newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblValue/currValue).toFixed(maxAmountDecimalPlaceLimit)+'</td>';
 
 			        newcontent += '<td></td><tr>';
@@ -655,7 +660,7 @@
 		 
 	</script>
 </head>
-<body onload="funOnLoad();">
+<body> <!--  onload="funOnLoad();" -->
 <div id="formHeading">
 		<label>Stock Flash</label>
 	</div>

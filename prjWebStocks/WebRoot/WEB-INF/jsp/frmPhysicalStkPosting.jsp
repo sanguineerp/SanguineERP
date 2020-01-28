@@ -205,7 +205,7 @@
 		    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"8%\"  id=\"txtDisplayStock."+(rowCount)+"\" value='"+DiscurrentStkQty+"'>";
 		   
 		    row.insertCell(5).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyQty\" size=\"9%\" style=\"text-align: right;\" id=\"txtDisplyQty."+(rowCount)+"\"  value='"+Displyqty+"'/>";	
-		    row.insertCell(6).innerHTML= "<input class=\"decimal-places inputText-Auto\" type=\"text\" style=\"text-align: right;\" name=\"listStkPostDtl["+(rowCount)+"].dblLooseQty\" id=\"txtLooseQty."+(rowCount)+"\"  value='"+LooseQty+"'onblur=\"funUpdatePrice(this);\" />";	
+		    row.insertCell(6).innerHTML= "<input class=\"decimal-places inputText-Auto\" type=\"text\" style=\"text-align: right;\" name=\"listStkPostDtl["+(rowCount)+"].dblLooseQty\" id=\"txtLooseQty."+(rowCount)+"\"  value='"+LooseQty+"' onblur=\"funUpdatePrice(this);\" />";	
 		   
 		    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  size=\"8%\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyVariance\" id=\"txtDisplayVariance."+(rowCount)+"\" value='"+DisplayVariance+"'>";	
 		    row.insertCell(8).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"6%\"  name=\"listStkPostDtl["+(rowCount)+"].dblAdjWt\" id=\"lblAdjWeight."+(rowCount)+"\" value="+adjWeight+">";
@@ -232,7 +232,10 @@
 		/**
 		 * Update total price when user change the qty 
 		 */
-		function funUpdatePrice(object)
+		 function funUpdatePrice(object){
+			
+		}
+		function funUpdatePrice1(object)
 		{
 			var index=object.parentNode.parentNode.rowIndex;
 			var cStock=document.getElementById("txtStock."+index).value;
@@ -385,6 +388,8 @@
 		    $("#txtStock").val('');
 		    $("#txtQuantity").val('');
 		    $("#spStockUOM").text('');
+		    $("#spStockUOMWithConversion").text('');
+		    
 		}
 		
 		
@@ -718,9 +723,25 @@
 		        	$("#lblProdName").text(response.strProdName);
 		        	var dblStock=funGetProductStock(response.strProdCode);
 		        	$("#txtStock").val(dblStock);
-		        	$("#spStockUOM").text(response.strReceivedUOM);
+		        	//$("#spStockUOM").text(response.strReceivedUOM);
 		        	$("#txtCostRM").val(response.dblCostRM);
 		        	$("#txtWtUnit").val(response.dblWeight);
+		        	
+		        	
+		        	 var currentStkQty1=$("#txtStock").val().split(".");
+		 		    var tmpCurrentStkQty='';
+		 			if(currentStkQty1.length>1){
+		 				tmpCurrentStkQty=parseFloat("0."+currentStkQty1[1]) * response.dblRecipeConversion ;
+		 				tmpCurrentStkQty.toFixed(3);
+		 			}
+		 			var currentStkQtyRecepi=currentStkQty1 +" "+response.strReceivedUOM;
+		 			if(tmpCurrentStkQty!=''){
+		 				currentStkQtyRecepi="("+currentStkQty1[0]+" "+response.strReceivedUOM+" "+tmpCurrentStkQty+" "+response.strRecipeUOM+")";
+		 			
+		 			}
+		        	
+		        	$("#spStockUOMWithConversion").text(currentStkQtyRecepi);
+		        	
 		        	
 		        	funLatestGRNProductRate(response.strProdCode,response.dblCostRM);
 		        	
@@ -1268,14 +1289,16 @@
 			  <tr>
 			  <td><label>Stock</label></td>
 			  <td><input id="txtStock" readonly="readonly" style="width:50%" class="BoxW116px right-Align"></input>
-			  <span id="spStockUOM"></span></td>
+			  <span id="spStockUOM"></span> 
+			  <span id="spStockUOMWithConversion"></span>
+			  </td>
 			  
 			  <!-- <td><label>Stock</label></td>
 			  <td><input id="txtStock" readonly="readonly" class="BoxW116px right-Align"></input></td> -->
 			  <td><label>Wt/Unit</label></td>
 			  <td><input id="txtWtUnit"   type="text"  class="decimal-places numberField" ></input></td>
 			  <td><label>Quantity</label></td>
-			  <td><input id="txtQuantity"  type="text"  class="decimal-places numberField" ></input></td>
+			  <td><input id="txtQuantity"  type="text"  class="numberField" ></input></td>
 			  </tr>
 			  
 			 

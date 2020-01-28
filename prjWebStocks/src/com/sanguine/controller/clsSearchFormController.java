@@ -1651,7 +1651,7 @@ public class clsSearchFormController {
 				} else {
 					tableName = tableName + "  where   ";
 				}
-				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strNotInUse='N' " + " and a.strProdType='Procured' and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
+				tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strNotInUse='N' " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'  and a.strProdType In('Procured','Semi Finished','Non-Inventory') ";
 				listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Product Type,Specification,Cal Amt On" + ",Class,Non Stockable,a.strPartNo";
 				idColumnName = "a.strProdCode";
 				searchFormTitle = "Product Master";
@@ -4376,7 +4376,7 @@ public class clsSearchFormController {
 			} else {
 				tableName = tableName + "  where   ";
 			}
-			tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strNotInUse='N' and a.strProdType='Procured' " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "'";
+			tableName = tableName + "  a.strSGCode=c.strSGCode and c.strGCode=d.strGCode and a.strNotInUse='N'  " + " and a.strClientCode='" + clientCode + "'  and c.strClientCode='" + clientCode + "' and d.strClientCode='" + clientCode + "' and a.strProdType In('Procured','Semi Finished','Non-Inventory') ";
 			listColumnNames = "Product Code,Product Name,Sub Group,Group,UOM,Product Type,Code,Specification,Cal Amt On" + ",Class,Non Stockable,PartNo";
 			idColumnName = "a.strProdCode";
 			searchFormTitle = "Product Master";
