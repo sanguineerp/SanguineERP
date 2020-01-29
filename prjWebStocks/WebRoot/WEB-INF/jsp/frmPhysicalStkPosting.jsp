@@ -207,12 +207,15 @@
 		    var DisplyActualQty=Displyqty;
 		    
 		    var tmpPhyStkQty2= $("#txtQuantity").val().split(".");
-		    if(tmpPhyStkQty2[1]!=''){
-		    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tmpPhyStkQty2[1]) * 1000 +" "+recipeconversionUOM;
-		    	 
-		    }else{
-		    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" 0 "+recipeconversionUOM;
+		    if($('#cmbConversionUOM').val()=="RecUOM"){
+		    	if(tmpPhyStkQty2[1]!=''){
+			    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tmpPhyStkQty2[1]) * 1000 +" "+recipeconversionUOM;
+			    	 
+			    }else{
+			    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" 0 "+recipeconversionUOM;
+			    }
 		    }
+		    
 		    
 		    /* var tempCurrStkQty= currentStkQtyRecepi.split(".");
 		    
@@ -829,7 +832,7 @@
 			var searchUrl="";	
 			var locCode=$("#txtLocCode").val();
 			var dtPhydate=$("#txtStkPostDate").val();
-			var dblStock="0";
+			var dblStock="0.000";
 			searchUrl=getContextPath()+"/getProductStockInUOM.html?prodCode="+strProdCode+"&locCode="+locCode+"&strTransDate="+dtPhydate+"&strUOM=RecUOM";	
 			//alert(searchUrl);		
 			$.ajax({
@@ -859,7 +862,7 @@
 			            }		            
 			        }
 			      });
-			return Math.round(dblStock * 100) / 100;
+			return dblStock;//Math.round(dblStock * 100) / 100;
 		}
 		
 		/**
@@ -945,7 +948,6 @@
 			var transactionformName="frmPhysicalStkPosting";
 			var locCode=$('#txtLocCode').val();
 			var dtPhydate=$("#txtStkPostDate").val();
-			
 			
 		//	response=window.showModalDialog("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
 			response=window.open("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode+"&dtPhydate="+dtPhydate,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
@@ -1348,7 +1350,7 @@
 			 <td><label>Actual Rate</label></td>
 			 <td colspan="4"><input id="txtActualRate" readonly="readonly"   type="text" class="decimal-places-amt numberField" ></input></td>
 			 
-			
+			 
 			  </tr>
 			  <tr>
 			  <td><label>Stock</label></td>
