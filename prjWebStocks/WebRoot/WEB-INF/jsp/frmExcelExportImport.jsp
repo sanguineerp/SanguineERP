@@ -244,7 +244,8 @@
 			   if(transactionformName=='frmPhysicalStkPosting')
 				{
 				   var prodStock= $("#cmbProdStock").val();
-				   searchUrl=getContextPath()+"/ExcelExportImport.html?formname="+transactionformName+"&prodStock="+prodStock;
+				   var strIncludeAllProduct=$("#cmbIncludeAllProducts").val();
+				   searchUrl=getContextPath()+"/ExcelExportImport.html?formname="+transactionformName+"&prodStock="+prodStock+"&strIncludeAllProduct="+strIncludeAllProduct;
 				}else{
 					searchUrl=getContextPath()+"/ExcelExportImport.html?formname="+transactionformName;
 				}
@@ -818,6 +819,12 @@
 				<td colspan="1"><select id="cmbProdStock" Class="BoxW124px" >
 						<option value="Yes">Yes</option>
 						<option selected="selected" value="No">No</option>
+						
+				</select></td>
+				 <td>Include All Products</td>
+				<td><select id="cmbIncludeAllProducts" Class="BoxW124px" >
+						<option value="No">No</option>
+						<option value="Yes">Yes</option>
 						
 				</select></td>
 <!-- 	   </tr> -->

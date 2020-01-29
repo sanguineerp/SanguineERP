@@ -946,6 +946,7 @@
 			var locCode=$('#txtLocCode').val();
 			var dtPhydate=$("#txtStkPostDate").val();
 			
+			
 		//	response=window.showModalDialog("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
 			response=window.open("frmExcelExportImport.html?formname="+transactionformName+"&strLocCode="+locCode+"&dtPhydate="+dtPhydate,"","dialogHeight:500px;dialogWidth:500px;dialogLeft:550px;");
 	        
@@ -1263,7 +1264,17 @@
 	    
 	    
 	    
-	    
+			function funGetKeyCode(event,controller) {
+			    var key = event.keyCode;
+			    
+			    if(controller=='Qty' && key==13)
+			    {
+			    	btnAdd_onclick(); 
+			    }
+			    
+			   
+			}
+			
 	    
 	    
 	    
@@ -1337,7 +1348,7 @@
 			 <td><label>Actual Rate</label></td>
 			 <td colspan="4"><input id="txtActualRate" readonly="readonly"   type="text" class="decimal-places-amt numberField" ></input></td>
 			 
-			 
+			
 			  </tr>
 			  <tr>
 			  <td><label>Stock</label></td>
@@ -1351,7 +1362,7 @@
 			  <td><label>Wt/Unit</label></td>
 			  <td><input id="txtWtUnit"   type="text"  class="decimal-places numberField" ></input></td>
 			  <td><label>Quantity</label></td>
-			  <td><input id="txtQuantity"  type="text"  class="numberField" ></input></td>
+			  <td><input id="txtQuantity"  type="text"  class="numberField" onkeypress="funGetKeyCode(event,'Qty')"></input></td>
 			  </tr>
 			  
 			 

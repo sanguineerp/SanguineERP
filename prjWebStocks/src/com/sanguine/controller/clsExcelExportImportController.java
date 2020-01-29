@@ -1478,6 +1478,7 @@ public class clsExcelExportImportController {
 		String clientCode = request.getSession().getAttribute("clientCode").toString();
 		
 		String prodStock=request.getParameter("prodStock");
+		String strIncludeAllProduct= request.getParameter("strIncludeAllProduct");
 		try {
 			int i = 1;
 			while (i <= worksheet.getLastRowNum()) {
@@ -1489,36 +1490,44 @@ public class clsExcelExportImportController {
 				RowCount = row.getRowNum();
 				prodCode = row.getCell(2).getStringCellValue();
 				Cell c = row.getCell(4);
-				if (c != null && c.getCellType() != 1) {
-					if (row.getCell(4).getNumericCellValue() >= 0) {
-						PhyStkDtl.setStrProdCode(row.getCell(2).getStringCellValue());
+				if(strIncludeAllProduct.equalsIgnoreCase("Yes"))
+				{
+					double dblPhyStock=0;
+					if (c != null && c.getCellType() != 1)
+					{
+						if (row.getCell(4).getNumericCellValue() >= 0) {
+							dblPhyStock=row.getCell(4).getNumericCellValue();
+						}
+					}
+					
+					   PhyStkDtl.setStrProdCode(row.getCell(2).getStringCellValue());
 						String prodName = "";
 						if (row.getCell(3).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
 							prodName = String.valueOf(row.getCell(3).getNumericCellValue());
 						} else {
 							prodName = row.getCell(3).getRichStringCellValue().toString();
 						}
-
+	
 						PhyStkDtl.setStrProdName(prodName);
 						if(prodStock.equals("Yes"))
 						{
 							PhyStkDtl.setDblPStock(row.getCell(5).getNumericCellValue());
 						}else{
-							PhyStkDtl.setDblPStock(row.getCell(4).getNumericCellValue());
+							PhyStkDtl.setDblPStock(dblPhyStock);
 						}
 						clsProductMasterModel Prodmodel = objProductMasterService.funGetObject(prodCode, clientCode);
 						PhyStkDtl.setDblPrice(Prodmodel.getDblCostRM());
 						PhyStkDtl.setDblWeight(Prodmodel.getDblWeight());
-
+	
 						List ProdList = objGRNController.funLatestGRNProductRate(prodCode, request);
-
+	
 						if (!ProdList.isEmpty()) {
 							PhyStkDtl.setDblActualRate(Double.parseDouble((ProdList.get(1)).toString()));
-
+	
 						} else {
 							PhyStkDtl.setDblActualRate(Prodmodel.getDblCostRM());
 						}
-
+	
 						// PhyStkDtl.setDblCStock(objGlobalFunctions.funGetCurrentStockForProduct(prodCode,
 						// objMISHd.getStrLocFrom(), clientCode,
 						// userCode,startDate,objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd")));
@@ -1526,8 +1535,53 @@ public class clsExcelExportImportController {
 						// validation,
 						// data processing and then to persist
 						listPhyStklist.add(PhyStkDtl);
-					}
+						
+					
 				}
+				else
+				{
+					if (c != null && c.getCellType() != 1) {
+						if (row.getCell(4).getNumericCellValue() >= 0) {
+							PhyStkDtl.setStrProdCode(row.getCell(2).getStringCellValue());
+							String prodName = "";
+							if (row.getCell(3).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+								prodName = String.valueOf(row.getCell(3).getNumericCellValue());
+							} else {
+								prodName = row.getCell(3).getRichStringCellValue().toString();
+							}
+
+							PhyStkDtl.setStrProdName(prodName);
+							if(prodStock.equals("Yes"))
+							{
+								PhyStkDtl.setDblPStock(row.getCell(5).getNumericCellValue());
+							}else{
+								PhyStkDtl.setDblPStock(row.getCell(4).getNumericCellValue());
+							}
+							clsProductMasterModel Prodmodel = objProductMasterService.funGetObject(prodCode, clientCode);
+							PhyStkDtl.setDblPrice(Prodmodel.getDblCostRM());
+							PhyStkDtl.setDblWeight(Prodmodel.getDblWeight());
+
+							List ProdList = objGRNController.funLatestGRNProductRate(prodCode, request);
+
+							if (!ProdList.isEmpty()) {
+								PhyStkDtl.setDblActualRate(Double.parseDouble((ProdList.get(1)).toString()));
+
+							} else {
+								PhyStkDtl.setDblActualRate(Prodmodel.getDblCostRM());
+							}
+
+							// PhyStkDtl.setDblCStock(objGlobalFunctions.funGetCurrentStockForProduct(prodCode,
+							// objMISHd.getStrLocFrom(), clientCode,
+							// userCode,startDate,objGlobalFunctions.funGetCurrentDate("yyyy-MM-dd")));
+							// Sends the model object to service layer for
+							// validation,
+							// data processing and then to persist
+							listPhyStklist.add(PhyStkDtl);
+						}
+					}
+					
+				}
+				
 			}
 
 		} catch (Exception e) {
