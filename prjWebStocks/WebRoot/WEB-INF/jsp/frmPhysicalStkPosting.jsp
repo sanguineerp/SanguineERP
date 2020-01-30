@@ -683,7 +683,7 @@
 			    var rowCount = table.rows.length;
 			    var row = table.insertRow(rowCount);		   
 			    
-			    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listStkPostDtl["+(rowCount)+"].strProdCode\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";
+			    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box productCode\" size=\"10%\" name=\"listStkPostDtl["+(rowCount)+"].strProdCode\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";
 			    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"100%\" name=\"listStkPostDtl["+(rowCount)+"].strProdName\" id=\"lblProdName."+(rowCount)+"\" value='"+prodName+"'>";
 			    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"4%\"  name=\"listStkPostDtl["+(rowCount)+"].dblPrice\" id=\"txtCostRM."+(rowCount)+"\" value="+unitPrice+">";
 			    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  style=\"text-align: right;\" size=\"4%\" name=\"listStkPostDtl["+(rowCount)+"].dblWeight\" id=\"txtWtUnit."+(rowCount)+"\"  value="+wtunit+">";
@@ -701,7 +701,7 @@
 			    row.insertCell(11).innerHTML= "<input type=\"button\" value = \"Delete\" class=\"deletebutton\" onClick=\"Javacsript:funDeleteRow(this)\">";
 			    
 			    row.insertCell(12).innerHTML= "<input type=\"hidden\"  class=\"decimal-places inputText-Auto\" size=\"6%\" name=\"listStkPostDtl["+(rowCount)+"].dblActualRate\" id=\"txtActualRate."+(rowCount)+"\" value="+dblActualRate+" >";
-			    row.insertCell(13).innerHTML= "<input type=\"hidden\" required = \"required\"  class=\"decimal-places inputText-Auto\" size=\"6%\" name=\"listStkPostDtl["+(rowCount)+"].dblPStock\" id=\"txtQuantity."+(rowCount)+"\" value="+phyStkQty+" >";
+			    row.insertCell(13).innerHTML= "<input type=\"hidden\" required = \"required\"  class=\"Box phyStk\" size=\"6%\" name=\"listStkPostDtl["+(rowCount)+"].dblPStock\" id=\"txtQuantity."+(rowCount)+"\" value="+phyStkQty+" >";
 			    row.insertCell(14).innerHTML= "<input type=\"hidden\" name=\"listStkPostDtl["+(rowCount)+"].dblVariance\" id=\"lblVariance."+(rowCount)+"\" value="+variance+">";
 			    row.insertCell(15).innerHTML= "<input type=\"hidden\" name=\"listStkPostDtl["+(rowCount)+"].dblCStock\" id=\"txtStock."+(rowCount)+"\" value="+currentStkQty+">";
 		}
@@ -1278,8 +1278,32 @@
 			}
 			
 	    
+	    function btnRepost_onclick(){
 	    
-	    
+	    	// $('#tblProduct tr').each(function() {
+	    		//var row
+	    		
+	    		var tabledata = [];
+	    		var cnt=0;
+	    		 $('#tblProduct tr').each(function() {
+	    			 
+	    		 //phyStk
+		    		 var arr= [];
+	    		 	 var pstockQty = $(this).find(".phyStk").val();
+	    			 var productCode = $(this).find(".productCode").val();
+		    		 arr[0] = pstockQty;
+		    		 arr[1] = productCode;
+		    		 
+	    			 tabledata[cnt]= arr;
+	    			 cnt++;
+	    		 });
+	    	
+	    		 alert(tabledata);
+	    		/*  for(arr : tabledata){
+	    			 
+	    		 } */
+	    	
+	    }
 	    
 	    
 	    
@@ -1369,6 +1393,7 @@
 			  
 			 
 			  <td><input id="btnAdd" type="button" value="Add"   class="smallButton" onclick="return btnAdd_onclick();"></input></td>
+			   <td><input id="btnRepost" type="button" value="Repost"   class="smallButton" onclick="return btnRepost_onclick();"></input></td>
 			  </tr>			  
 			  </table>
 		<div class="dynamicTableContainer" style="height: 300px;">

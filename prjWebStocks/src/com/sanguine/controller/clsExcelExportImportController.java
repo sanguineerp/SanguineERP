@@ -1558,6 +1558,7 @@ public class clsExcelExportImportController {
 								PhyStkDtl.setDblPStock(row.getCell(4).getNumericCellValue());
 							}
 							clsProductMasterModel Prodmodel = objProductMasterService.funGetObject(prodCode, clientCode);
+							System.out.println(Prodmodel +" "+ prodCode );
 							PhyStkDtl.setDblPrice(Prodmodel.getDblCostRM());
 							PhyStkDtl.setDblWeight(Prodmodel.getDblWeight());
 

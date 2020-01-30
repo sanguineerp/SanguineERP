@@ -192,12 +192,14 @@ public class clsStockLedgerController {
 				e.printStackTrace();
 			}
 		}
+		clsProductMasterModel objProd = objProductMasterService.funGetObject(prodCode, clientCode);
+
 
 		String selectOpStk = "";
 		double totalOpStk = 0;
-		String uomRecv = "";
+		String uomRecv = objProd.getStrReceivedUOM();
 		String conRecipe = "";
-		String uomIssue = "";
+		String uomIssue = objProd.getStrRecipeUOM();
 		String conIssue = "";
 		String strOpStockWithUOM = "";
 		if (null != listTempStkLedger) {
@@ -262,32 +264,46 @@ public class clsStockLedgerController {
 					} else {
 						double dblIssHigh = 0;
 						double dblIsslow = 0;
-						if (listTemp.get(4).toString().contains(uomConv[2])) {
-							String[] highNLowData = listTemp.get(4).toString().split("\\.");
-							// high no qty
-							String[] highNo = highNLowData[0].split(" ");
-							dblIssHigh = Double.parseDouble(highNo[0]) * Double.parseDouble(conRecipe);
-							// low No Qty
-							if (highNLowData.length > 1) {
-								String[] lowNo = highNLowData[1].split(" ");
-								dblIsslow = Double.parseDouble(lowNo[0]);
+						
+							if (listTemp.get(4).toString().contains(uomConv[2])) {
+								String[] highNLowData = listTemp.get(4).toString().split("\\.");
+								// high no qty
+								String[] highNo = highNLowData[0].split(" ");
+								dblIssHigh = Double.parseDouble(highNo[0]) * Double.parseDouble(conRecipe);
+								// low No Qty
+								if (highNLowData.length > 1) {
+									if(uomConv[2].equalsIgnoreCase(uomConv[3])){
+										if (highNLowData.length > 2) {
+											String[] lowNo = highNLowData[2].split(" ");
+											dblIsslow = Double.parseDouble("0."+lowNo[0]);
+										}else{
+											String[] lowNo = highNLowData[1].split(" ");
+											dblIsslow = Double.parseDouble("0."+lowNo[0]);
+										}
+									}else{
+										String[] lowNo = highNLowData[1].split(" ");
+										dblIsslow = Double.parseDouble(lowNo[0]);	
+									}
+									
+								}
+								double totHighlowIssue = dblIssHigh + dblIsslow;
+								tempIssues += totHighlowIssue;
+							} else {
+								String strTemp = listTemp.get(4).toString().split(" ")[0].toString();
+								if(strTemp.equals(""))
+								{
+									dblIsslow=0;
+								}
+								else
+								{
+									dblIsslow = Double.parseDouble(strTemp);
+								}
+								
+								tempIssues += dblIsslow;
 							}
-							double totHighlowIssue = dblIssHigh + dblIsslow;
-							tempIssues += totHighlowIssue;
-						} else {
-							String strTemp = listTemp.get(4).toString().split(" ")[0].toString();
-							if(strTemp.equals(""))
-							{
-								dblIsslow=0;
-							}
-							else
-							{
-								dblIsslow = Double.parseDouble(strTemp);
-							}
-							
-							tempIssues += dblIsslow;
-						}
-
+	
+						
+						
 					}
 					// Issue Qty Ends
 					String tempDate = listTemp.get(0).toString().split("-")[2] + "-" + listTemp.get(0).toString().split("-")[0] + "-" + listTemp.get(0).toString().split("-")[1];
@@ -299,6 +315,9 @@ public class clsStockLedgerController {
 			}
 			if (qtyWithUOM.equals("No")) {
 				totalOpStk = tempReceipts - tempIssues;
+				if(uomRecv.equalsIgnoreCase("NOS")){
+					totalOpStk=Math.round(totalOpStk);
+				}
 			} else {
 				totalOpStk = tempReceipts - tempIssues;
 				if (listTempStkLedger.isEmpty()) {
@@ -313,27 +332,33 @@ public class clsStockLedgerController {
 					double highQty = Double.parseDouble(strtot[0]);
 					Double dblTemplow = new Double(totstkOp - highQty);
 					dblTemplow = Double.parseDouble(df.format(dblTemplow).toString());
+					
 					String lowQtyWithUOM = new Integer((int) (dblTemplow * Double.parseDouble(conRecipe))).toString() + " " + uomIssue;
 					String highQtyWithUOM = strtot[0].toString() + " " + uomRecv;
 					strOpStockWithUOM = highQtyWithUOM + "." + lowQtyWithUOM;
+					if(uomRecv.equalsIgnoreCase("NOS")){
+						highQty=Math.round(highQty+(dblTemplow * Double.parseDouble(conRecipe)));
+						strOpStockWithUOM= String.valueOf(highQty) + uomRecv;
+					}
+					
 				}
 
 			}
 // check opening stock entry	
 			if (totalOpStk < 0) {
 				if (qtyWithUOM.equals("No")) {
-					selectOpStk = " select '" + fromDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + "," + totalOpStk + " Issue,'Opening Stk' Name, " + rate + " Rate ,0.0 FreeQty ";
+					selectOpStk = " select '" + fromDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + "," + totalOpStk + " Issue,'Opening Stk' Name, " + rate + " Rate ,0.0 Free ";
 					System.out.println(selectOpStk);
 				} else {
-					selectOpStk = " select '" + fromDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + ",'" + strOpStockWithUOM + "' Issue,'Opening Stk' Name, " + rate + " Rate, " + " CONCAT_WS('!',b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) UOMString ,0.0 FreeQty " + " from tblproductmaster b where b.strProdCode = '" + prodCode + "' ";
+					selectOpStk = " select '" + fromDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + ",'" + strOpStockWithUOM + "' Issue,'Opening Stk' Name, " + rate + " Rate, " + " CONCAT_WS('!',b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) UOMString ,0.0 Free " + " from tblproductmaster b where b.strProdCode = '" + prodCode + "' ";
 				}
 			} else {
 				if (qtyWithUOM.equals("No")) {
-					selectOpStk = " select '" + fromDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, " + totalOpStk + " Receipt" + ",0 Issue,'Opening Stk' Name, " + rate + " Rate,0.0 FreeQty ";
+					selectOpStk = " select '" + fromDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, " + totalOpStk + " Receipt" + ",0 Issue,'Opening Stk' Name, " + rate + " Rate,0.0 Free ";
 					System.out.println(selectOpStk);
 				} else {
 					if (startDate.equals(fromDate)) {
-						selectOpStk = "select a.dtCreatedDate TransDate,1 TransNo, 'Opening Stk' TransType, a.strOpStkCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) Receipt, 0 Issue" + ",'Opening Stock' Name,dblCostPerUnit Rate"
+						selectOpStk = "select a.dtCreatedDate TransDate,1 TransNo, 'Opening Stk' TransType, a.strOpStkCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) Receipt, 0 Issue" + ",'Opening Stock' Name,dblCostPerUnit Rate, 0.00 FreeQty "
 						// +
 						// ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString "
 								+ ", CONCAT_WS('!',c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString " + " from tblinitialinventory a, tblinitialinvdtl b, tblproductmaster c " + "where a.strOpStkCode  = b.strOpStkCode and b.strProdCode=c.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
@@ -354,7 +379,7 @@ public class clsStockLedgerController {
 
 		sql = "";
 		if (qtyWithUOM.equals("No")) {
-			sql = "select DATE_FORMAT(date(TransDate),'%d-%m-%Y'),TransType,RefNo,Receipt,Issue,Name,Rate, FreeQty from "
+			sql = "select DATE_FORMAT(date(TransDate),'%d-%m-%Y'),TransType,RefNo,Receipt,Issue,Name,Rate, Free from "
 
 			+ "(";
 			if (!selectOpStk.isEmpty()) {
@@ -362,7 +387,7 @@ public class clsStockLedgerController {
 				sql += " union all ";
 			} else {
 
-				sql += "select a.dtCreatedDate TransDate,1 TransNo, 'Opening Stk' TransType, a.strOpStkCode RefNo, ifnull(sum(b.dblQty),0) Receipt, 0 Issue " + ",'Opening Stock' Name,dblCostPerUnit Rate " + "from tblinitialinventory a, tblinitialinvdtl b " + "where a.strOpStkCode  = b.strOpStkCode " + "and b.strProdCode = '" + prodCode + "' ";
+				sql += "select a.dtCreatedDate TransDate,1 TransNo, 'Opening Stk' TransType, a.strOpStkCode RefNo, ifnull(sum(b.dblQty),0) Receipt, 0 Issue " + ",'Opening Stock' Name,dblCostPerUnit Rate,0 Free " + "from tblinitialinventory a, tblinitialinvdtl b " + "where a.strOpStkCode  = b.strOpStkCode " + "and b.strProdCode = '" + prodCode + "' ";
 				if (!locCode.equalsIgnoreCase("All")) {
 					sql += "and a.strLocCode='" + locCode + "' ";
 				}
@@ -403,7 +428,7 @@ public class clsStockLedgerController {
 			 * + "union all "
 			 */
 
-			+ "select a.dtGRNDate TransDate,2 TransNo, 'GRN' TransType, a.strGRNCode RefNo, ifnull(sum(b.dblQty),0) Receipt, 0 Issue" + ",c.strPName Name,b.dblUnitPrice Rate ,b.dblFreeQty " + "from tblgrnhd a, tblgrndtl b,tblpartymaster c " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode " + "and b.strProdCode = '" + prodCode + "' ";
+			+ "select a.dtGRNDate TransDate,2 TransNo, 'GRN' TransType, a.strGRNCode RefNo, ifnull(sum(b.dblQty),0) Receipt, 0 Issue" + ",c.strPName Name,b.dblUnitPrice Rate ,b.dblFreeQty Free " + "from tblgrnhd a, tblgrndtl b,tblpartymaster c " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
