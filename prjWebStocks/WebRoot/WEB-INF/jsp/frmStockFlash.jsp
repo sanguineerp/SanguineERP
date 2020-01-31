@@ -337,7 +337,7 @@
 		    if($("#cmbReportType").val()=='Mini') 
 		    {
 	        	newcontent = '<table id="tblStockFlash" class="transTablex" style="width: 100%;font-size:11px;font-weight: bold;"><tr bgcolor="#75c0ff"><td id="labls2">Product Code</td><td id="labls3">Product Name</td><td id="labls13">Closing Stock</td><td id="labls14">Value</td><td style="width: 10%;"></td></tr>';
-				   
+	        	 var qtyWithUOM=$("#cmbQtyWithUOM").val();
 			    // Iterate through a selection of the content and build an HTML string
 			    for(var i=page_index*items_per_page;i<max_elem;i++)
 			    {

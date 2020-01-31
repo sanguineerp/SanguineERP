@@ -142,10 +142,21 @@
 				phyStkQty=parseFloat(phyStkQty)/parseFloat(ConversionValue);
 				
 				// here we calculate physical stock qty in decimal point 
-				 var tmpPhyStkQty1= $("#txtQuantity").val().split(".");
+				 var tmpPhyStk1=phyStkQty;
+				if(ProductData.dblReceiveConversion != ProductData.dblRecipeConversion){
+					tmpPhyStk1=parseFloat(tmpPhyStk1).toFixed(3);	
+				}
+				 
+				 
+				 var tmpPhyStkQty1= tmpPhyStk1.toString().split(".");
 				var tmpPhyStkQty2='';
 				if(tmpPhyStkQty1.length>1){
-					tmpPhyStkQty2=parseFloat("0."+tmpPhyStkQty1[1] )  * 1000 / ProductData.dblRecipeConversion;
+					if(ProductData.dblReceiveConversion != ProductData.dblRecipeConversion){
+						tmpPhyStkQty2=parseFloat(tmpPhyStkQty1[1]) / ProductData.dblRecipeConversion;	
+					}else{
+						tmpPhyStkQty2=parseFloat("0."+tmpPhyStkQty1[1]) / ProductData.dblRecipeConversion;
+					}
+					
 					//tmpPhyStkQty2=tmpPhyStkQty2.toFixed(0);
 				}
 				if(tmpPhyStkQty2!=''){
@@ -200,6 +211,9 @@
 		    
 		    var tempQty=tempphyStkQty.split(".");
 		    var Displyqty=tempQty[0]+" "+ReceivedconversionUOM+" "+tempQty[1]+" "+recipeconversionUOM;
+		    if(recipeconversionUOM==ReceivedconversionUOM){
+		    	Displyqty=tempQty[0]+"."+tempQty[1] +ReceivedconversionUOM;
+		    }
 		    var LooseQty=$("#txtQuantity").val();
 		    LooseQty=parseFloat(LooseQty).toFixed(maxQuantityDecimalPlaceLimit);
 		    
@@ -207,14 +221,18 @@
 		    var DisplyActualQty=Displyqty;
 		    
 		    var tmpPhyStkQty2= $("#txtQuantity").val().split(".");
-		    if($('#cmbConversionUOM').val()=="RecUOM"){
-		    	if(tmpPhyStkQty2[1]!=''){
-			    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tmpPhyStkQty2[1]) * 1000 +" "+recipeconversionUOM;
-			    	 
-			    }else{
-			    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" 0 "+recipeconversionUOM;
+		    if(recipeconversionUOM !=ReceivedconversionUOM){
+		    	
+		    	if($('#cmbConversionUOM').val()=="RecUOM"){
+			    	if(tmpPhyStkQty2[1]!=''){
+				    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tmpPhyStkQty2[1]) * 1000 +" "+recipeconversionUOM;
+				    	 
+				    }else{
+				    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" 0 "+recipeconversionUOM;
+				    }
 			    }
 		    }
+		    
 		    
 		    
 		    /* var tempCurrStkQty= currentStkQtyRecepi.split(".");
@@ -226,22 +244,29 @@
 		     */
 		    
 		     var tempvariance=variance.split(".");
-			 var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+parseFloat(tempvariance[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
+		     var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+parseFloat(tempvariance[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
+		     if(recipeconversionUOM ==ReceivedconversionUOM){
+		    	 DisplayVariance=variance+" "+ReceivedconversionUOM;
+		     }else{
+		    
+		    	 if($('#cmbConversionUOM').val()=="RecUOM")
+					{
+					 	var currentStkQty1=$("#txtStock").val().split(".");
+			 		    var tmpCurrentStkQty='';
+			 			if(currentStkQty1.length>1){
+			 				tmpCurrentStkQty=parseFloat("0."+currentStkQty1[1]) * ProductData.dblRecipeConversion ;
+			 				tmpCurrentStkQty.toFixed(3);
+			 			}
+			 			var stkCurr=currentStkQty1[0]+"."+tmpCurrentStkQty;
+			 			var stkVar= parseFloat($("#txtQuantity").val()) -  parseFloat(stkCurr);
+			 			DisplayVariance = stkVar.toFixed(maxQuantityDecimalPlaceLimit);
+			 			var tempvariance= DisplayVariance.split(".");
+					 	DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+" "+tempvariance[1] +" "+recipeconversionUOM;	 
+					}
+		     }
+			 
 			    
-			 if($('#cmbConversionUOM').val()=="RecUOM")
-				{
-				 	var currentStkQty1=$("#txtStock").val().split(".");
-		 		    var tmpCurrentStkQty='';
-		 			if(currentStkQty1.length>1){
-		 				tmpCurrentStkQty=parseFloat("0."+currentStkQty1[1]) * ProductData.dblRecipeConversion ;
-		 				tmpCurrentStkQty.toFixed(3);
-		 			}
-		 			var stkCurr=currentStkQty1[0]+"."+tmpCurrentStkQty;
-		 			var stkVar= parseFloat($("#txtQuantity").val()) -  parseFloat(stkCurr);
-		 			DisplayVariance = stkVar.toFixed(maxQuantityDecimalPlaceLimit);
-		 			var tempvariance= DisplayVariance.split(".");
-				 	DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+" "+tempvariance[1] +" "+recipeconversionUOM;	 
-				}
+			 
 			 
 			 
 		   /*  var varianceInRecipe=parseFloat(variance);

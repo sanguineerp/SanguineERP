@@ -371,11 +371,15 @@
 					if (spBalance[0] != 'undefined') {
 						finalBal = spBalance[0] + ' ' + receivedUOM;
 					}
+					
 					if (spBalance[1] != "undefined") {
 						var balWithUOM = parseFloat(parseFloat(restQty.toFixed(maxAmountDecimalPlaceLimit))* parseFloat(recipeConv.substr(28))).toFixed(0);//mahesh 
 						if(qtyWithUOM.includes("Yes"))
 							{
-							finalBal = finalBal + '.' + balWithUOM + ' '+ recipeUOM;
+							if(recipeUOM!='NOS'){
+								finalBal = finalBal + '.' + balWithUOM + ' '+ recipeUOM;	
+							}
+							
 							}
 						else
 							{

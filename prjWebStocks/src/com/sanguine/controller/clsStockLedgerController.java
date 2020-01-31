@@ -642,7 +642,7 @@ public class clsStockLedgerController {
 				sql += "select a.dtCreatedDate TransDate,1 TransNo, 'Opening Stk' TransType, a.strOpStkCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) Receipt, 0 Issue" + ",'Opening Stock' Name,dblCostPerUnit Rate"
 				// +
 				// ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString "
-						+ ", CONCAT_WS('!',c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString " + " from tblinitialinventory a, tblinitialinvdtl b, tblproductmaster c " + "where a.strOpStkCode  = b.strOpStkCode and b.strProdCode=c.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+						+ ", CONCAT_WS('!',c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString , 0 FreeQty " + " from tblinitialinventory a, tblinitialinvdtl b, tblproductmaster c " + "where a.strOpStkCode  = b.strOpStkCode and b.strProdCode=c.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 				if (!locCode.equalsIgnoreCase("All")) {
 					sql += "and a.strLocCode='" + locCode + "' ";
 				}
@@ -657,7 +657,7 @@ public class clsStockLedgerController {
 			sql += "select a.dtGRNDate TransDate,2 TransNo, 'GRN' TransType, a.strGRNCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue " + ",c.strPName Name,b.dblUnitPrice Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,b.dblFreeQty " + " from tblgrnhd a, tblgrndtl b,tblpartymaster c, tblproductmaster d " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,b.dblFreeQty FreeQty " + " from tblgrnhd a, tblgrndtl b,tblpartymaster c, tblproductmaster d " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -827,7 +827,7 @@ public class clsStockLedgerController {
 
 			if (objSetup.getStrEffectOfInvoice().equalsIgnoreCase("Invoice")) {
 
-				sql += " SELECT a.dteInvDate TransDate,13 TransNo, 'Invoice' TransType, a.strInvCode RefNo, 0 Receipt," + " funGetUOM(IFNULL(SUM(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue," + " c.strLocName Name,'1' Rate, " + " CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0 Free "
+				sql += " SELECT a.dteInvDate TransDate,13 TransNo, 'Invoice' TransType, a.strInvCode RefNo, 0 Receipt," + " funGetUOM(IFNULL(SUM(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue," + " c.strLocName Name,'1' Rate, " + " CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0 FreeQty "
 						+ " FROM  tblinvoicehd a, tblinvoicedtl b, tbllocationmaster c, tblproductmaster d " + " WHERE  a.strInvCode=b.strInvCode AND a.strLocCode=c.strLocCode AND b.strProdCode=d.strProdCode " + " AND b.strProdCode = '" + prodCode + "' ";
 				if (!locCode.equalsIgnoreCase("All")) {
 					sql += " and a.strLocCode='" + locCode + "' ";
@@ -890,6 +890,11 @@ public class clsStockLedgerController {
 			Object[] obj = (Object[]) listStkLedger.get(i);
 			List dataList = new ArrayList();
 			for (int j = 0; j < obj.length; j++) {
+				if(j==3 && obj[3].toString().isEmpty()){
+					obj[j]=0;
+				}else if(j==4 && obj[4].toString().isEmpty()){
+					obj[j]=0;
+				}
 				dataList.add(obj[j]);
 			}
 			listReturn.add(dataList);
