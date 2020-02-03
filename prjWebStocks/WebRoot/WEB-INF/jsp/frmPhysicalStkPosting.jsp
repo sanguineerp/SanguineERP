@@ -45,6 +45,7 @@
 		var issuedconversionUOM="";
 		var recipeconversionUOM="";
 		var ConversionValue=0;
+		var maxQuantityDecimalPlaceLimit=3;
 		
 		/**
 		 * Check validation before adding product data in grid
@@ -610,9 +611,7 @@
 			       		$("#txtLocName").text(response.strLocName);
 			       		$("#txtTotalAmount").val(response.dblTotalAmt);
 			       		$("#txtAreaNarration").val(response.strNarration);
-			       		$("#cmbConversionUOM").val(response.strConversionUOM);
-			       		
-			       		
+			       		$("#cmbConversionUOM").val(response.strConversionUOM);			       		
 			       	 	$("#txtLocCode").attr("readonly", true); 
 					    $("#txtStkPostDate").attr("readonly", true) .datepicker("destroy");
 					    $("#hidConversionUOM").val(response.strConversionUOM);
@@ -715,7 +714,7 @@
 			    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"8%\"  id=\"txtDisplayStock."+(rowCount)+"\" value='"+DiscurrentStkQty+"'>";
 			    
 			    row.insertCell(5).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyQty\" size=\"9%\" style=\"text-align: right;\" id=\"txtDisplyQty."+(rowCount)+"\" value='"+Displyqty+"'/>";	
-			    row.insertCell(6).innerHTML= "<input class=\"decimal-places inputText-Auto\" type=\"text\" style=\"text-align: right;\" name=\"listStkPostDtl["+(rowCount)+"].dblLooseQty\"  id=\"txtLooseQty."+(rowCount)+"\"  value='"+LooseQty+"'onblur=\"funUpdatePrice(this);\" />";	
+			    row.insertCell(6).innerHTML= "<input class=\"decimal-places inputText-Auto looseQty\" type=\"text\" style=\"text-align: right;\" name=\"listStkPostDtl["+(rowCount)+"].dblLooseQty\"  id=\"txtLooseQty."+(rowCount)+"\"  value='"+LooseQty+"'onblur=\"funUpdatePrice(this);\" />";	
 			    
 			    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  size=\"8%\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyVariance\" id=\"txtDisplayVariance."+(rowCount)+"\" value='"+DisplayVariance+"'>";
 			    row.insertCell(8).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"6%\"  name=\"listStkPostDtl["+(rowCount)+"].dblAdjWt\" id=\"lblAdjWeight."+(rowCount)+"\" value="+adjWeight+">";
@@ -792,6 +791,7 @@
 		        type: "GET",
 		        url: searchUrl,
 			    dataType: "json",
+			    async: false,
 			    success: function(response)
 			    {
 			    	if('Invalid Code' == response.strProdCode){
@@ -1019,8 +1019,31 @@
 						    			    var Displyqty=tempQty[0]+" "+ReceivedconversionUOM+"."+Math.round(parseFloat("0."+tempQty[1])*parseFloat(ConversionValue))+" "+recipeconversionUOM;
 						    			    LooseQty=parseFloat(response[i].dblPStock).toFixed(maxQuantityDecimalPlaceLimit);
 					 		    			
+						    			    var phyStkQty=response[i].dblPStock;
+						    			    var tmpPhyStk1=response[i].dblPStock;
+						    				if(ProductData.dblReceiveConversion != ProductData.dblRecipeConversion){
+						    					tmpPhyStk1=parseFloat(tmpPhyStk1).toFixed(3);	
+						    				}
+						    				 
+						    				 
+						    				var tmpPhyStkQty1= tmpPhyStk1.toString().split(".");
+						    				var tmpPhyStkQty2='';
+						    				if(tmpPhyStkQty1.length>1){
+						    					if(ProductData.dblReceiveConversion != ProductData.dblRecipeConversion){
+						    						tmpPhyStkQty2=parseFloat(tmpPhyStkQty1[1]) / ProductData.dblRecipeConversion;	
+						    					}else{
+						    						tmpPhyStkQty2=parseFloat("0."+tmpPhyStkQty1[1]) / ProductData.dblRecipeConversion;
+						    					}
+						    					
+						    					//tmpPhyStkQty2=tmpPhyStkQty2.toFixed(0);
+						    				}
+						    				if(tmpPhyStkQty2!=''){
+						    				  phyStkQty=parseFloat(tmpPhyStkQty1[0])+tmpPhyStkQty2;	
+						    				} 
+						    				
+						    			    
 						    			    funFillFromExcelData(response[i].strProdCode,response[i].strProdName,response[i].dblPrice,
-					 		    				response[i].dblWeight,dblStock,dblQty,Displyqty,LooseQty,ReceivedconversionUOM,recipeconversionUOM,ConversionValue,response[i].dblActualRate);
+					 		    				response[i].dblWeight,dblStock,phyStkQty,Displyqty,LooseQty,ReceivedconversionUOM,recipeconversionUOM,ConversionValue,response[i].dblActualRate,ProductData);
 							    		}
 							    		if($('#cmbConversionUOM').val()=="IssueUOM")
 						    			{
@@ -1038,7 +1061,7 @@
 						    			    LooseQty=parseFloat(response[i].dblPStock).toFixed(maxQuantityDecimalPlaceLimit);	
 						    			   
 						    			    funFillFromExcelData(response[i].strProdCode,response[i].strProdName,response[i].dblPrice,
-							    				response[i].dblWeight,dblStock,dblQty,Displyqty,LooseQty,ReceivedconversionUOM,recipeconversionUOM,ConversionValue,response[i].dblActualRate);
+							    				response[i].dblWeight,dblStock,dblQty,Displyqty,LooseQty,ReceivedconversionUOM,recipeconversionUOM,ConversionValue,response[i].dblActualRate,ProductData);
 						    			}
 							    		if($('#cmbConversionUOM').val()=="RecipeUOM")
 						    			{
@@ -1056,7 +1079,7 @@
 						    			    LooseQty=parseFloat(response[i].dblPStock).toFixed(maxQuantityDecimalPlaceLimit);
 						    			   
 						    			    funFillFromExcelData(response[i].strProdCode,response[i].strProdName,response[i].dblPrice,
-							    				response[i].dblWeight,dblStock,dblQty,Displyqty,LooseQty,ReceivedconversionUOM,recipeconversionUOM,ConversionValue,response[i].dblActualRate);
+							    				response[i].dblWeight,dblStock,dblQty,Displyqty,LooseQty,ReceivedconversionUOM,recipeconversionUOM,ConversionValue,response[i].dblActualRate,ProductData);
 						    			}
 								  	}); 
 							    	funCalSubTotal();
@@ -1075,7 +1098,7 @@
 		/**
 		 * Filling Grid
 		 */
-		function funFillFromExcelData(strProdCode,strProdName,dblCostPUnit,dblWeight,dblStock,dblQty,Displyqty,LooseQty,ReceivedconversionUOM,recipeconversionUOM,ConversionValue, dblActualRate) 
+		function funFillFromExcelData(strProdCode,strProdName,dblCostPUnit,dblWeight,dblStock,dblQty,Displyqty,LooseQty,ReceivedconversionUOM,recipeconversionUOM,ConversionValue, dblActualRate,ProductData) 
 		{	
 		    var prodCode = strProdCode;
 		    var prodName = strProdName;
@@ -1084,12 +1107,101 @@
 		    var wtunit = dblWeight;
 		    dblActualRate=parseFloat(dblActualRate).toFixed(maxAmountDecimalPlaceLimit);
 		    
-		     
 		    wtunit=parseFloat(wtunit).toFixed(maxAmountDecimalPlaceLimit);
 		    var currentStkQty = dblStock;
+		    var tempphyStkQty=parseFloat(dblQty).toFixed(maxQuantityDecimalPlaceLimit);
 		    var phyStkQty = dblQty;
-		    phyStkQty=parseFloat(phyStkQty).toFixed(maxQuantityDecimalPlaceLimit);
-		    var variance=phyStkQty-currentStkQty;
+		    var variance=tempphyStkQty-currentStkQty;
+		    LooseQty=parseFloat(LooseQty).toFixed(maxQuantityDecimalPlaceLimit);
+		    		    
+		    var DiscurrentStkQty=dblStock;
+		    
+		    
+		    DiscurrentStkQty=parseFloat(DiscurrentStkQty).toFixed(maxQuantityDecimalPlaceLimit);
+		    var tempStkQty=DiscurrentStkQty.split(".");
+		    
+		    DiscurrentStkQty=tempStkQty[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tempStkQty[1])*parseFloat(ProductData.dblRecipeConversion)+" "+recipeconversionUOM;
+		    if($('#cmbConversionUOM').val()=="RecUOM")
+			{
+		    	DiscurrentStkQty=tempStkQty[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tempStkQty[1])*  ProductData.dblRecipeConversion +" "+recipeconversionUOM;
+			}
+		  
+		    
+		    var tempQty=LooseQty.toString().split(".");
+		    var Displyqty=tempQty[0]+" "+ReceivedconversionUOM+" "+tempQty[1]+" "+recipeconversionUOM;
+		    if(recipeconversionUOM==ReceivedconversionUOM){
+		    	Displyqty=tempQty[0]+"."+tempQty[1] +ReceivedconversionUOM;
+		    }
+		    
+// 		    var LooseQty=$("#txtQuantity").val();
+// 		   
+		    
+		    //calculate display actual qty 
+		    var DisplyActualQty=Displyqty;
+		    
+		    var tmpPhyStkQty2= LooseQty.toString().split(".");
+		    if(recipeconversionUOM !=ReceivedconversionUOM){
+		    	
+		    	if($('#cmbConversionUOM').val()=="RecUOM"){
+			    	if(tmpPhyStkQty2[1]!=''){
+				    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tmpPhyStkQty2[1]) * 1000 +" "+recipeconversionUOM;
+				    	 
+				    }else{
+				    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" 0 "+recipeconversionUOM;
+				    }
+			    }
+		    }
+		    
+		    
+		    
+		    /* var tempCurrStkQty= currentStkQtyRecepi.split(".");
+		    
+		    var disQtyInRecipe=(parseFloat(tempStkQty[0]) * ProductData.dblRecipeConversion) + parseFloat(tempStkQty[1]); 
+		    var CurrQtyInRecipe=(parseFloat(tempCurrStkQty[0]) * ProductData.dblRecipeConversion) + parseFloat(tempCurrStkQty[1]);
+		    
+		    DisplyActualQty= CurrQtyInRecipe-disQtyInRecipe;
+		     */
+		    
+		     var tempvariance=variance.toString().split(".");
+		     var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+parseFloat(tempvariance[1])*parseFloat( ProductData.dblRecipeConversion)+" "+recipeconversionUOM;
+		     if(recipeconversionUOM ==ReceivedconversionUOM){
+		    	 DisplayVariance=variance.toFixed(maxQuantityDecimalPlaceLimit)+" "+ReceivedconversionUOM;
+		     }else{
+		    
+		    	 if($('#cmbConversionUOM').val()=="RecUOM")
+					{
+					 	var currentStkQty1=dblStock.toString().split(".");
+			 		    var tmpCurrentStkQty='';
+			 			if(currentStkQty1.length>1){
+			 				tmpCurrentStkQty=parseFloat("0."+currentStkQty1[1]) * ProductData.dblRecipeConversion ;
+			 				tmpCurrentStkQty.toFixed(3);
+			 			}
+			 			var stkCurr=currentStkQty1[0]+"."+tmpCurrentStkQty;
+			 			var stkVar= parseFloat(LooseQty.toString()) -  parseFloat(stkCurr);
+			 			DisplayVariance = stkVar.toFixed(maxQuantityDecimalPlaceLimit);
+			 			var tempvariance= DisplayVariance.split(".");
+					 	DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+" "+tempvariance[1] +" "+recipeconversionUOM;	 
+					}
+		     }
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		   // phyStkQty=parseFloat(phyStkQty).toFixed(maxQuantityDecimalPlaceLimit);
+		    //
+		    
 		    variance=parseFloat(variance).toFixed(maxQuantityDecimalPlaceLimit);
 		    var adjValue = unitPrice*variance;
 		    adjValue=parseFloat(adjValue).toFixed(maxQuantityDecimalPlaceLimit);
@@ -1103,13 +1215,14 @@
 		    var rowCount = table.rows.length;
 		    var row = table.insertRow(rowCount);
 		  
-		    var DiscurrentStkQty=dblStock;
-		    DiscurrentStkQty=parseFloat(DiscurrentStkQty).toFixed(maxQuantityDecimalPlaceLimit);
-		    var tempStkQty=DiscurrentStkQty.split(".");
-		    DiscurrentStkQty=tempStkQty[0]+" "+ReceivedconversionUOM+"."+Math.round(parseFloat("0."+tempStkQty[1])*parseFloat(ConversionValue))+" "+recipeconversionUOM;
 		    
-		    var tempvariance=variance.split(".");
-		    var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+Math.round(parseFloat("0."+tempvariance[1])*parseFloat(ConversionValue))+" "+recipeconversionUOM;
+// 		    var DiscurrentStkQty=dblStock;
+// 		    DiscurrentStkQty=parseFloat(DiscurrentStkQty).toFixed(maxQuantityDecimalPlaceLimit);
+// 		    var tempStkQty=DiscurrentStkQty.split(".");
+// 		    DiscurrentStkQty=tempStkQty[0]+" "+ReceivedconversionUOM+"."+Math.round(parseFloat("0."+tempStkQty[1])*parseFloat(ConversionValue))+" "+recipeconversionUOM;
+		    
+// 		    var tempvariance=variance.split(".");
+// 		    var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+Math.round(parseFloat("0."+tempvariance[1])*parseFloat(ConversionValue))+" "+recipeconversionUOM;
 		   
 		    row.insertCell(0).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"10%\" name=\"listStkPostDtl["+(rowCount)+"].strProdCode\" id=\"txtProdCode."+(rowCount)+"\" value="+prodCode+">";
 		    row.insertCell(1).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"100%\" name=\"listStkPostDtl["+(rowCount)+"].strProdName\" id=\"lblProdName."+(rowCount)+"\" value='"+prodName+"'>";
@@ -1117,7 +1230,7 @@
 		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\"  style=\"text-align: right;\" size=\"5%\" name=\"listStkPostDtl["+(rowCount)+"].dblWeight\" id=\"txtWtUnit."+(rowCount)+"\"  value="+wtunit+">";
 		    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" style=\"text-align: right;\" size=\"8%\"   id=\"txtDisplayStock."+(rowCount)+"\" value='"+DiscurrentStkQty+"'>";
 		    
-		    row.insertCell(5).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyQty\" size=\"9%\" style=\"text-align: right;\" id=\"txtDisplyQty."+(rowCount)+"\" value='"+Displyqty+"'/>";	
+		    row.insertCell(5).innerHTML= "<input class=\"Box\" type=\"text\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyQty\" size=\"9%\" style=\"text-align: right;\" id=\"txtDisplyQty."+(rowCount)+"\" value='"+DisplyActualQty+"'/>";	
 		    row.insertCell(6).innerHTML= "<input class=\"decimal-places inputText-Auto\" type=\"text\" style=\"text-align: right;\" name=\"listStkPostDtl["+(rowCount)+"].dblLooseQty\" id=\"txtLooseQty."+(rowCount)+"\"  value='"+LooseQty+"'onblur=\"funUpdatePrice(this);\" />";	
 		   
 		    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"7%\" name=\"listStkPostDtl["+(rowCount)+"].strDisplyVariance\"  id=\"txtDisplayVariance."+(rowCount)+"\" value='"+DisplayVariance+"'>";	
@@ -1249,6 +1362,7 @@
 			      });
 			
 		}
+	     
 	    
 	   //Check Month End done or not
 			function funGetMonthEnd(strLocCode,transDate) {
@@ -1303,34 +1417,91 @@
 			}
 			
 	    
-	    function btnRepost_onclick(){
-	    
-	    	// $('#tblProduct tr').each(function() {
-	    		//var row
-	    		
-	    		var tabledata = [];
-	    		var cnt=0;
-	    		 $('#tblProduct tr').each(function() {
-	    			 
-	    		 //phyStk
-		    		 var arr= [];
-	    		 	 var pstockQty = $(this).find(".phyStk").val();
-	    			 var productCode = $(this).find(".productCode").val();
-		    		 arr[0] = pstockQty;
-		    		 arr[1] = productCode;
-		    		 
-	    			 tabledata[cnt]= arr;
-	    			 cnt++;
-	    		 });
-	    	
-	    		 alert(tabledata);
-	    		/*  for(arr : tabledata){
-	    			 
-	    		 } */
-	    	
-	    }
-	    
-	    
+			 function btnRepost_onclick(){
+				    
+			    	// $('#tblProduct tr').each(function() {
+			    		//var row
+			    		
+			    		var tabledata = [];
+			    		var cnt=0;
+			    		 $('#tblProduct tr').each(function() {
+			    			 
+			    		 //phyStk
+				    		 var arr= [];
+			    		 	 var pstockQty = $(this).find(".looseQty").val();
+			    			 var productCode = $(this).find(".productCode").val();
+				    		 arr[0] = pstockQty;
+				    		 arr[1] = productCode;
+				    		 
+			    			 tabledata[cnt]= arr;
+			    			 cnt++;
+			    		 });
+			    	
+			    	     //alert(tabledata);
+			    	     funRemProdRows();
+			    		 var prodData=[];
+			    		 for (index = 0; index < tabledata.length; index++) { 
+			    			 
+			    			   prodData=tabledata[index];
+			    			   funSetProduct(prodData[1]);
+			    			   $("#txtQuantity").val(prodData[0]);
+			    			   btnAdd_onclick();
+			    			   
+			    			}  
+			    		  
+			    	$("#txtStkPostCode").val('');
+			    	$("#txtAreaNarration").val('');
+			    }
+			    
+			    function funGetLocationWiseProduct()
+				{
+			    	var code=$("#txtLocCode").val();
+			    		
+				
+			    	 var searchUrl=getContextPath()+"/GetLocationWisProduct.html?locCode="+code;	
+					$.ajax({
+					        type: "GET",
+					        url: searchUrl,
+						    dataType: "json",
+						    async: false,
+						    success: function(response)
+						    {
+						    	$.each(response, function(i,item)
+								{		
+								    funStockZero(response[i]);		
+								    
+								}); 
+						    	
+						    	$("#txtStkPostCode").val('');
+						    	$("#txtAreaNarration").val('');
+						    },
+						    error: function(jqXHR, exception) {
+					            if (jqXHR.status === 0) {
+					                alert('Not connect.n Verify Network.');
+					            } else if (jqXHR.status == 404) {
+					                alert('Requested page not found. [404]');
+					            } else if (jqXHR.status == 500) {
+					                alert('Internal Server Error [500].');
+					            } else if (exception === 'parsererror') {
+					                alert('Requested JSON parse failed.');
+					            } else if (exception === 'timeout') {
+					                alert('Time out error.');
+					            } else if (exception === 'abort') {
+					                alert('Ajax request aborted.');
+					            } else {
+					                alert('Uncaught Error.n' + jqXHR.responseText);
+					            }
+						    }
+					      });
+					
+				}
+			    
+			    function funStockZero(code)
+			    {
+			    	funSetProduct(code);
+	    			$("#txtQuantity").val("0");
+	    			btnAdd_onclick();
+			    }
 	    
 	</script>
 	
@@ -1374,6 +1545,7 @@
 						<option value="IssueUOM">Issue UOM</option>
 						<option value="RecipeUOM">Recipe UOM</option>
 				</select></td>
+			   <td><label id="lblNote">Note:Decimal values will be consider as recipe uom(loose qty)</label></td>
 			</tr>
 			<tr>
 				<td><label id="lblLocation">Location</label></td>
@@ -1418,7 +1590,9 @@
 			  
 			 
 			  <td><input id="btnAdd" type="button" value="Add"   class="smallButton" onclick="return btnAdd_onclick();"></input></td>
-			   <td><input id="btnRepost" type="button" value="Repost"   class="smallButton" onclick="return btnRepost_onclick();"></input></td>
+			  <td><input id="btnRepost" type="button" value="Repost"   class="smallButton" onclick="return btnRepost_onclick();"></input></td>
+	         <td><input id="btnMakeStockZero" type="button" value="Make Stk Zero"   class="form_button" onclick="return funGetLocationWiseProduct();  "></input></td>
+			 
 			  </tr>			  
 			  </table>
 		<div class="dynamicTableContainer" style="height: 300px;">

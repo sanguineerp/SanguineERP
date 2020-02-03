@@ -1065,7 +1065,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "ADD PRIMARY KEY (`strClientCode`, `strProdCode`, `strTransCode`, `strBatchCode`);";
 		funExecuteQuery(sql);
         
-		sql="ALTER TABLE `tblsalesorderdtl` ADD COLUMN `strMessage` VARCHAR(50) NOT NULL DEFAULT '' AFTER `dblAcceptQty`,ADD COLUMN `strShape` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strMessage`;";
+		sql="ALTER TABLE `tblsalesorderdtl` ADD COLUMN `strMessage` VARCHAR(150) NOT NULL DEFAULT '' AFTER `dblAcceptQty`,ADD COLUMN `strShape` VARCHAR(50) NOT NULL DEFAULT '' AFTER `strMessage`;";
 		funExecuteQuery(sql);
 		
 		sql="ALTER TABLE `tblgroupmaster` DROP PRIMARY KEY, ADD PRIMARY KEY (`strGCode`, `strClientCode`); ";

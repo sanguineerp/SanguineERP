@@ -441,7 +441,7 @@ public class clsSearchFormController {
 		String strWebBooksDB=req.getSession().getAttribute("WebBooksDB").toString();
 		try {
 			String propCode = req.getSession().getAttribute("propertyCode").toString();
-			String clientCode = req.getSession().getAttribute("clientCode").toString();
+ 			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String strLocCode = req.getSession().getAttribute("locationCode").toString();
 			String financialYear = req.getSession().getAttribute("financialYear").toString();
 			String[] finYear = financialYear.split("-");
