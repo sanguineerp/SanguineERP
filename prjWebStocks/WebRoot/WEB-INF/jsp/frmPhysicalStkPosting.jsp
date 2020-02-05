@@ -1545,7 +1545,7 @@
 						<option value="IssueUOM">Issue UOM</option>
 						<option value="RecipeUOM">Recipe UOM</option>
 				</select></td>
-			   <td><label id="lblNote">Note:Decimal values will be consider as recipe uom(loose qty)</label></td>
+			   <td><label id="lblNote" style="color:red;font-size:13px  ">Note:Decimal values will be consider as recipe uom(loose qty)</label></td>
 			</tr>
 			<tr>
 				<td><label id="lblLocation">Location</label></td>

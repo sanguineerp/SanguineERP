@@ -100,7 +100,7 @@ public class clsClientDetails {
 
 			// WebStocks Clients
 			hmClientDtl.put("000.000", clsClientDetails.createClientDetails("000.000", "Demo Company", dFormat.parse("2014-06-19"), dFormat.parse("2017-10-22")));
-			hmClientDtl.put("024.001", clsClientDetails.createClientDetails("024.001", "Eden Cake Shop", dFormat.parse("2014-09-23"), dFormat.parse("2020-02-07")));//Renewed on 31-01-2020 for 1 week till 07-02-2020 "024.001" renewed on 27-10-2018 for 1 year till 31-12-2019 "Mr. Salim Bhai", "9820141743", "salimsheliya@gmail.com", 
+			hmClientDtl.put("024.001", clsClientDetails.createClientDetails("024.001", "Eden Cake Shop", dFormat.parse("2014-09-23"), dFormat.parse("2022-12-31")));//Renewed on 31-01-2020 for 1 week till 07-02-2020 "024.001" renewed on 27-10-2018 for 1 year till 31-12-2019 "Mr. Salim Bhai", "9820141743", "salimsheliya@gmail.com", 
 			hmClientDtl.put("044.001", clsClientDetails.createClientDetails("044.001", "HOTEL KAMAL PVT. LTD.", dFormat.parse("2015-01-20"), dFormat.parse("2095-02-21")));
 			hmClientDtl.put("048.001", clsClientDetails.createClientDetails("048.001", "SHREE SIDDHIVINAYAK FOODS", dFormat.parse("2015-01-20"), dFormat.parse("2095-02-21")));
 			hmClientDtl.put("060.001", clsClientDetails.createClientDetails("060.001", "FLYING SAUCER SKY BAR", dFormat.parse("2015-07-01"), dFormat.parse("2019-06-01")));//Renewd for1 year till 01-06-2019
@@ -198,7 +198,7 @@ public class clsClientDetails {
 			
 			hmClientDtl.put("293.001", clsClientDetails.createClientDetails("293.001", "ZELEB", dFormat.parse("2019-01-30"), dFormat.parse("2020-03-15")));//renewed on 2-02-2019 for 1 year till 2019-12-27//relased zaleb license for 8 days POS Client
 			hmClientDtl.put("294.001", clsClientDetails.createClientDetails("294.001", "SEERAN HOSPITALITY", dFormat.parse("2019-01-11"), dFormat.parse("2021-01-11")));//Renewed on 06-02-2019 for 1 year till 11-01-2020 //released for one month on 11-01-2019 to 11-02-2019 "Mr.Santosh ", "9820339701", "santosh.seeran@gmail.com"
-			hmClientDtl.put("296.001", clsClientDetails.createClientDetails("296.001", "ISKCON", dFormat.parse("2019-02-08"), dFormat.parse("2020-02-08")));//(Gujrat)//released on 08-02-2019 for 1 year till 08-02-2020 for 3 SPOS ,10 APOS,No WebStocks,No SMS Pack,No Bill Deletion.", "Mr. Rajesh ", "9619378249", "rajesh.sha19@gmail.com", "No Bill Deletion","santesting"));	    
+			hmClientDtl.put("296.001", clsClientDetails.createClientDetails("296.001", "ISKCON", dFormat.parse("2019-02-08"), dFormat.parse("2021-02-08")));//(Gujrat)//released on 08-02-2019 for 1 year till 08-02-2020 for 3 SPOS ,10 APOS,No WebStocks,No SMS Pack,No Bill Deletion.", "Mr. Rajesh ", "9619378249", "rajesh.sha19@gmail.com", "No Bill Deletion","santesting"));	    
 			hmClientDtl.put("302.001", clsClientDetails.createClientDetails("302.001", "MOSHING CUPPA", dFormat.parse("2019-03-07"), dFormat.parse("2019-04-15"))); // released on 07-03-2019 for 1 month till 07-04-2019
 			hmClientDtl.put("304.001", clsClientDetails.createClientDetails("304.001", "PLUM HOSPITALITY LLP", dFormat.parse("2019-06-27"), dFormat.parse("2019-07-27"))); // released on 2019-06-27 for 1 month till 2019-07-27 for behive
 			//hmClientDtl.put("311.002", clsClientDetails.createClientDetails("311.002","LEVIT8",dFormat.parse("2019-07-29"),dFormat.parse("2019-08-29")));//Released on 29-07-2019 for 1 Monthtill 2019-08-29
@@ -223,7 +223,9 @@ public class clsClientDetails {
 
 			hmClientDtl.put("338.001", clsClientDetails.createClientDetails("338.001", "ELEPHANT & CO", dFormat.parse("2019-10-22"), dFormat.parse("2019-12-08")));//(Pune)//Released on 22-10-2019 for 1 month till 22-11-2019 for 2 SPOS ,5 APOS,WebStocks,No SMS Pack,No Bill Deletion.", "ANUJ SOLANKI", "9819657210", "anujsolanki@gmail.com", "No Bill Deletion","santesting","2","PUNE","50K","10K"
 			hmClientDtl.put("344.001", clsClientDetails.createClientDetails("344.001", "THE GLOBAL ADDA", dFormat.parse("2019-12-09"), dFormat.parse("2020-12-09")));//(Mumbai)//Released on 09-12-2019 for 1 year till 09-12-2020
+			hmClientDtl.put("346.001", clsClientDetails.createClientDetails("346.001", "MNV HOSPITALITY LLP", dFormat.parse("2020-02-01"), dFormat.parse("2020-03-10")));//(Mumbai)//Released on 04-02-2020 for 1 month till 10-03-2020
 		    //345.001 is given to yogi resort please give license after this number
+			
             
 			
 		} catch (Exception e) {
