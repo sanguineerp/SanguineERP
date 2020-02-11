@@ -316,7 +316,7 @@ public class clsStockLedgerController {
 			if (qtyWithUOM.equals("No")) {
 				totalOpStk = tempReceipts - tempIssues;
 				if(uomRecv.equalsIgnoreCase("NOS")){
-					totalOpStk=Math.round(totalOpStk);
+					//totalOpStk=Math.round(totalOpStk);
 				}
 			} else {
 				totalOpStk = tempReceipts - tempIssues;
@@ -602,7 +602,7 @@ public class clsStockLedgerController {
 			sql += " AND DATE(a.dteDNDate) >= '" + fromDate + "' " + " AND DATE(a.dteDNDate) <= '" + toDate + "'  GROUP BY a.dteDNDate, a.strDNCode, a.strLocCode "
 
 			+ "union all "
-			+ "select a.dtGRNDate TransDate,2 TransNo, 'GRN FOC' TransType, a.strGRNCode RefNo, ifnull(sum(b.dblFreeQty),0) Receipt, 0 Issue" + ",c.strPName Name,0.0 Rate ,0.0 " + "from tblgrnhd a, tblgrndtl b,tblpartymaster c " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode " + "and b.strProdCode = '" + prodCode + "' and  b.dblFreeQty > 0 ";
+			+ "select a.dtGRNDate TransDate,2 TransNo, 'GRN FOC' TransType, a.strGRNCode RefNo, ifnull(sum(b.dblFreeQty),0) Receipt, 0 Issue" + ",c.strPName Name,0.0 Rate ,0.0 Free " + " from tblgrnhd a, tblgrndtl b,tblpartymaster c " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode " + "and b.strProdCode = '" + prodCode + "' and  b.dblFreeQty > 0 ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -617,7 +617,7 @@ public class clsStockLedgerController {
 
 					+ "order by Date(TransDate) desc ,TransNo desc ,Receipt desc";
 		} else {
-			sql = "select DATE_FORMAT(date(TransDate),'%d-%m-%Y'),TransType,RefNo,Receipt,Issue,Name,Rate, UOMString,FreeQty from "
+			sql = "select DATE_FORMAT(date(TransDate),'%d-%m-%Y'),TransType,RefNo,Receipt,Issue,Name,Rate, UOMString, 0 Free from "
 
 			+ "(";
 			if (!selectOpStk.isEmpty()) {
@@ -627,7 +627,7 @@ public class clsStockLedgerController {
 			sql += "select a.dtMISDate TransDate,3 TransNo, 'MIS In' TransType, a.strMISCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt " + ", 0 Issue ,c.strLocName Name " + ",b.dblUnitPrice Rate"
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tblmishd a, tblmisdtl b ,tbllocationmaster c, tblproductmaster d " + "where a.strMISCode = b.strMISCode and a.strLocTo=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tblmishd a, tblmisdtl b ,tbllocationmaster c, tblproductmaster d " + "where a.strMISCode = b.strMISCode and a.strLocTo=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocTo = '" + locCode + "' ";
 			}
@@ -642,7 +642,7 @@ public class clsStockLedgerController {
 				sql += "select a.dtCreatedDate TransDate,1 TransNo, 'Opening Stk' TransType, a.strOpStkCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) Receipt, 0 Issue" + ",'Opening Stock' Name,dblCostPerUnit Rate"
 				// +
 				// ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString "
-						+ ", CONCAT_WS('!',c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString , 0 FreeQty " + " from tblinitialinventory a, tblinitialinvdtl b, tblproductmaster c " + "where a.strOpStkCode  = b.strOpStkCode and b.strProdCode=c.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+						+ ", CONCAT_WS('!',c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString , 0 Free " + " from tblinitialinventory a, tblinitialinvdtl b, tblproductmaster c " + "where a.strOpStkCode  = b.strOpStkCode and b.strProdCode=c.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 				if (!locCode.equalsIgnoreCase("All")) {
 					sql += "and a.strLocCode='" + locCode + "' ";
 				}
@@ -657,7 +657,7 @@ public class clsStockLedgerController {
 			sql += "select a.dtGRNDate TransDate,2 TransNo, 'GRN' TransType, a.strGRNCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue " + ",c.strPName Name,b.dblUnitPrice Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,b.dblFreeQty FreeQty " + " from tblgrnhd a, tblgrndtl b,tblpartymaster c, tblproductmaster d " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,b.dblFreeQty Free " + " from tblgrnhd a, tblgrndtl b,tblpartymaster c, tblproductmaster d " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -671,7 +671,7 @@ public class clsStockLedgerController {
 			+ "select a.dtSADate TransDate,11 TransNo, 'StkAdj In' TransType, a.strSACode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue " + ",c.strLocName Name, b.dblRate Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c, tblproductmaster d " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='IN' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c, tblproductmaster d " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='IN' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -685,7 +685,7 @@ public class clsStockLedgerController {
 			+ "select a.dtSTDate TransDate,4 TransNo, 'StkTrans In' TransType, a.strSTCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue " + ",c.strLocName Name,(b.dblTotalPrice/ifnull(sum(b.dblQty),1)) Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tblstocktransferhd a, tblstocktransferdtl b ,tbllocationmaster c, tblproductmaster d  " + "where a.strSTCode  = b.strSTCode and a.strToLocCode = c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tblstocktransferhd a, tblstocktransferdtl b ,tbllocationmaster c, tblproductmaster d  " + "where a.strSTCode  = b.strSTCode and a.strToLocCode = c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strToLocCode='" + locCode + "' ";
 			}
@@ -699,7 +699,7 @@ public class clsStockLedgerController {
 			+ "select a.dtMRetDate TransDate,5 TransNo, 'Mat Ret In' TransType, a.strMRetCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue " + ",c.strLocName Name,'1' Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tblmaterialreturnhd a, tblmaterialreturndtl b, tbllocationmaster c, tblproductmaster d " + "where a.strMRetCode  = b.strMRetCode and a.strLocTo=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tblmaterialreturnhd a, tblmaterialreturndtl b, tbllocationmaster c, tblproductmaster d " + "where a.strMRetCode  = b.strMRetCode and a.strLocTo=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocTo='" + locCode + "' ";
 			}
@@ -743,7 +743,7 @@ public class clsStockLedgerController {
 					+ "select a.dtPRDate TransDate,7 TransNo, 'Purchase Ret' TransType, a.strPRCode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name,b.dblUnitPrice Rate "
 					// +
 					// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tblpurchasereturnhd a, tblpurchasereturndtl b,tbllocationmaster c, tblproductmaster d " + "where a.strPRCode  = b.strPRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tblpurchasereturnhd a, tblpurchasereturndtl b,tbllocationmaster c, tblproductmaster d " + "where a.strPRCode  = b.strPRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -757,7 +757,7 @@ public class clsStockLedgerController {
 			+ "select a.dtSADate TransDate,12 TransNo, IF(a.strNarration like '%Sales Data%','StkAdj Out (POS Consumption)','StkAdj Out (Phy Stock)')  TransType, a.strSACode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name, b.dblRate Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c, tblproductmaster d " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tblstockadjustmenthd a, tblstockadjustmentdtl b,tbllocationmaster c, tblproductmaster d " + "where a.strSACode = b.strSACode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' " + "and b.strType='Out' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode='" + locCode + "' ";
 			}
@@ -771,7 +771,7 @@ public class clsStockLedgerController {
 			+ "select a.dtSTDate TransDate,8 TransNo, 'StkTrans Out' TransType, a.strSTCode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name,(b.dblPrice/ifnull(sum(b.dblQty),1)) Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tblstocktransferhd a, tblstocktransferdtl b ,tbllocationmaster c, tblproductmaster d " + "where a.strSTCode  = b.strSTCode and a.strFromLocCode = c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tblstocktransferhd a, tblstocktransferdtl b ,tbllocationmaster c, tblproductmaster d " + "where a.strSTCode  = b.strSTCode and a.strFromLocCode = c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strFromLocCode='" + locCode + "' ";
 			}
@@ -785,7 +785,7 @@ public class clsStockLedgerController {
 			+ "select a.dtMRetDate TransDate,9 TransNo, 'Mat Ret Out' TransType, a.strMRetCode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name,'1' Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tblmaterialreturnhd a, tblmaterialreturndtl b, tbllocationmaster c, tblproductmaster d " + "where a.strMRetCode  = b.strMRetCode and a.strLocFrom=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tblmaterialreturnhd a, tblmaterialreturndtl b, tbllocationmaster c, tblproductmaster d " + "where a.strMRetCode  = b.strMRetCode and a.strLocFrom=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocFrom='" + locCode + "' ";
 			}
@@ -799,7 +799,7 @@ public class clsStockLedgerController {
 			+ "select a.dtMISDate TransDate,10 TransNo, 'MIS Out' TransType, a.strMISCode RefNo, 0 Receipt" + ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue " + ",c.strLocName Name,b.dblUnitPrice Rate "
 			// +
 			// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tblmishd a, tblmisdtl b, tbllocationmaster c, tblproductmaster d " + "where a.strMISCode = b.strMISCode and a.strLocTo=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+					+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tblmishd a, tblmisdtl b, tbllocationmaster c, tblproductmaster d " + "where a.strMISCode = b.strMISCode and a.strLocTo=c.strLocCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocFrom = '" + locCode + "' ";
@@ -812,7 +812,7 @@ public class clsStockLedgerController {
 				+ "union all "
 
 				+ " select a.dteSRDate TransDate,11 TransNo, 'Sales Ret' TransType, a.strSRCode RefNo, funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue , " + " c.strLocName Name,'1' Rate  "
-				+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " 
+				+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " 
 				+ " from tblsalesreturnhd a, tblsalesreturndtl b, tbllocationmaster c, tblproductmaster d " 
 				+ " where a.strSRCode = b.strSRCode and a.strLocCode=c.strLocCode and b.strProdCode=d.strProdCode and b.strProdCode = '" + prodCode + "' ";
 
@@ -827,7 +827,7 @@ public class clsStockLedgerController {
 
 			if (objSetup.getStrEffectOfInvoice().equalsIgnoreCase("Invoice")) {
 
-				sql += " SELECT a.dteInvDate TransDate,13 TransNo, 'Invoice' TransType, a.strInvCode RefNo, 0 Receipt," + " funGetUOM(IFNULL(SUM(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue," + " c.strLocName Name,'1' Rate, " + " CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0 FreeQty "
+				sql += " SELECT a.dteInvDate TransDate,13 TransNo, 'Invoice' TransType, a.strInvCode RefNo, 0 Receipt," + " funGetUOM(IFNULL(SUM(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue," + " c.strLocName Name,'1' Rate, " + " CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0 Free "
 						+ " FROM  tblinvoicehd a, tblinvoicedtl b, tbllocationmaster c, tblproductmaster d " + " WHERE  a.strInvCode=b.strInvCode AND a.strLocCode=c.strLocCode AND b.strProdCode=d.strProdCode " + " AND b.strProdCode = '" + prodCode + "' ";
 				if (!locCode.equalsIgnoreCase("All")) {
 					sql += " and a.strLocCode='" + locCode + "' ";
@@ -835,7 +835,7 @@ public class clsStockLedgerController {
 				sql += "AND DATE(a.dteInvDate) >= '" + fromDate + "' AND DATE(a.dteInvDate) <= '" + toDate + "' " + " GROUP BY a.dteInvDate, a.strInvCode, a.strLocCode  ";
 			} else {
 
-				sql += " SELECT a.dteDCDate TransDate,13 TransNo, 'Delivery Chal.' TransType, a.strDCCode RefNo, 0 Receipt," + " funGetUOM(IFNULL(SUM(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue," + " c.strLocName Name,'1' Rate, " + " CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  "
+				sql += " SELECT a.dteDCDate TransDate,13 TransNo, 'Delivery Chal.' TransType, a.strDCCode RefNo, 0 Receipt," + " funGetUOM(IFNULL(SUM(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Issue," + " c.strLocName Name,'1' Rate, " + " CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  "
 						+ " FROM  tbldeliverychallanhd a, tbldeliverychallandtl b, tbllocationmaster c, tblproductmaster d " + " WHERE  a.strDCCode=b.strDCCode AND a.strLocCode=c.strLocCode AND b.strProdCode=d.strProdCode " + " AND b.strProdCode = '" + prodCode + "' ";
 				if (!locCode.equalsIgnoreCase("All")) {
 					sql += " and a.strLocCode='" + locCode + "' ";
@@ -845,7 +845,7 @@ public class clsStockLedgerController {
 			}
 
 			sql += "UNION ALL  ";
-			sql += "select a.dteSRDate TransDate,14 TransNo, 'SC GRN' TransType, a.strSRCode RefNo, funGetUOM(IFNULL(SUM(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, " + "0 Issue,c.strLocName Name,b.dblPrice Rate ,CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  "
+			sql += "select a.dteSRDate TransDate,14 TransNo, 'SC GRN' TransType, a.strSRCode RefNo, funGetUOM(IFNULL(SUM(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, " + "0 Issue,c.strLocName Name,b.dblPrice Rate ,CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  "
 					+ " from tblscreturnhd a,tblscreturndtl b ,tbllocationmaster c ,tblproductmaster d " + "where a.strSRCode=b.strSRCode and a.strLocCode=c.strLocCode and b.strProdCode= '" + prodCode + "' AND b.strProdCode=d.strProdCode ";
 			if (!locCode.equalsIgnoreCase("All")) {
 				sql += "and a.strLocCode = '" + locCode + "' ";
@@ -854,7 +854,7 @@ public class clsStockLedgerController {
 
 			+ " UNION ALL ";
 
-			sql += "select a.dteDNDate TransDate,15 TransNo,  'Delivery Note' TransType, a.strDNCode RefNo, 0 Receipt," + " IFNULL(SUM(b.dblQty),0)  Issue,c.strLocName Name,0 Rate ,CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 FreeQty  " + " from tbldeliverynotehd a,tbldeliverynotedtl b ,tbllocationmaster c,tblproductmaster d	"
+			sql += "select a.dteDNDate TransDate,15 TransNo,  'Delivery Note' TransType, a.strDNCode RefNo, 0 Receipt," + " IFNULL(SUM(b.dblQty),0)  Issue,c.strLocName Name,0 Rate ,CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free  " + " from tbldeliverynotehd a,tbldeliverynotedtl b ,tbllocationmaster c,tblproductmaster d	"
 					+ " where a.strDNCode=b.strDNCode and a.strLocCode=c.strLocCode and b.strProdCode='" + prodCode + "' AND b.strProdCode=d.strProdCode  ";
 
 			if (!locCode.equalsIgnoreCase("All")) {
@@ -866,7 +866,7 @@ public class clsStockLedgerController {
 			sql += "select a.dtGRNDate TransDate,2 TransNo, 'GRN FOC' TransType, a.strGRNCode RefNo" + ", funGetUOM(ifnull(sum(b.dblFreeQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) Receipt, 0 Issue " + ",c.strPName Name,0.0 Rate "
 					// +
 					// ", funGetUOM(ifnull(sum(b.dblQty),0),d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString "
-							+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 " + " from tblgrnhd a, tblgrndtl b,tblpartymaster c, tblproductmaster d " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+							+ ", CONCAT_WS('!',d.dblRecipeConversion,d.dblIssueConversion,d.strReceivedUOM,d.strRecipeUOM) UOMString,0.0 Free " + " from tblgrnhd a, tblgrndtl b,tblpartymaster c, tblproductmaster d " + "where a.strGRNCode = b.strGRNCode and a.strSuppCode=c.strPCode and b.strProdCode=d.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 					if (!locCode.equalsIgnoreCase("All")) {
 						sql += "and a.strLocCode='" + locCode + "' ";
 					}
@@ -2182,8 +2182,12 @@ public class clsStockLedgerController {
 
 			}
 			if (totalOpStk < 0) {
-				selectOpStk = " select '" + toDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + "," + totalOpStk + " Issue,'Opening Stk' Name, " + rate + " Rate ";
+				selectOpStk = " select '" + toDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + "," + totalOpStk + " Issue,'Opening Stk' Name, " + rate + " Rate,0.0 FreeQty ";
 				System.out.println(selectOpStk);
+				if (qtyWithUOM.equals("Yes")) {
+					//selectOpStk = " select '" + toDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + "," + totalOpStk + " Issue,'Opening Stk' Name, " + rate + " Rate,'' ,0.0 FreeQty ";
+					selectOpStk = " select '" + fromDate + "' TransDate, 1 TransNo " + ",'Opening Stk' TransType, 'OP' RefNo, 0 Receipt" + ",'" + strOpStockWithUOM + "' Issue,'Opening Stk' Name, " + rate + " Rate, " + " CONCAT_WS('!',b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM) UOMString ,0.0 FreeQty " + " from tblproductmaster b where b.strProdCode = '" + prodCode + "' ";
+				}
 
 			} else {
 				if (qtyWithUOM.equals("No")) {
@@ -2191,10 +2195,10 @@ public class clsStockLedgerController {
 					System.out.println(selectOpStk);
 				} else {
 					if (startDate.equals(fromDate)) {
-						selectOpStk = "select a.dtCreatedDate TransDate,1 TransNo, 'Opening Stk' TransType, a.strOpStkCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) Receipt, 0 Issue" + ",'Opening Stock' Name,dblCostPerUnit Rate"
+						selectOpStk = "select a.dtCreatedDate TransDate,1 TransNo, 'Opening Stk' TransType, a.strOpStkCode RefNo" + ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) Receipt, 0 Issue" + ",'Opening Stock' Name,dblCostPerUnit Rate "
 						// +
 						// ", funGetUOM(ifnull(sum(b.dblQty),0),c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString "
-								+ ", CONCAT_WS('!',c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString " + " from tblinitialinventory a, tblinitialinvdtl b, tblproductmaster c " + "where a.strOpStkCode  = b.strOpStkCode and b.strProdCode=c.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
+								+ ", CONCAT_WS('!',c.dblRecipeConversion,c.dblIssueConversion,c.strReceivedUOM,c.strRecipeUOM) UOMString ,0.0 FreeQty " + " from tblinitialinventory a, tblinitialinvdtl b, tblproductmaster c " + "where a.strOpStkCode  = b.strOpStkCode and b.strProdCode=c.strProdCode " + "and b.strProdCode = '" + prodCode + "' ";
 						if (!locCode.equalsIgnoreCase("All")) {
 							selectOpStk += "and a.strLocCode='" + locCode + "' ";
 						}
@@ -2932,6 +2936,8 @@ public class clsStockLedgerController {
 		double clsngBal = 0.;
 		double bal = 0.0;
 		double freeQty = 0.0;
+		double balInRecipe = 0.0;
+		
 
 		List<Object[]> arr = new ArrayList<Object[]>();
 		int i = listStkLedger.size() - 1;
@@ -3031,12 +3037,17 @@ public class clsStockLedgerController {
 								String[] opArrDwn = opArr[1].split(" ");
 								double dwnQty = Double.parseDouble(opArrDwn[0].toString());
 								dblOp = (upQty + dwnQty) / Double.parseDouble(conRecipe);
-							} else {
+							}
+							else if(opArr[0].contains(uomRecv)){ 
+								String[] recArrUp = opArr[0].split(" ");
+								dblOp = Double.parseDouble(recArrUp[0].toString());
+								
+							}else {
 								String[] opArrUp = opArr[0].split(" ");
 								double firstQty = Double.parseDouble(opArrUp[0].toString());
 								dblOp = (dblOp) / Double.parseDouble(conRecipe);
 							}
-
+							balInRecipe = balInRecipe + dblOp;
 							bal = bal + dblOp;
 							Double dblshowBal = bal;
 
@@ -3085,7 +3096,12 @@ public class clsStockLedgerController {
 								String[] recArrDwn = recArr[1].split(" ");
 								double dwnQty = Double.parseDouble(recArrDwn[0].toString());
 								dblRec = (upQty + dwnQty) / Double.parseDouble(conRecipe);
-							} else {
+							}else if(recArr[0].contains(uomRecv)){ 
+								String[] recArrUp = recArr[0].split(" ");
+								dblRec = Double.parseDouble(recArrUp[0].toString());
+							}
+							else {
+							
 								String[] recArrUp = recArr[0].split(" ");
 								double firstQty = Double.parseDouble(recArrUp[0].toString());
 								dblRec = (firstQty) / Double.parseDouble(conRecipe);
@@ -3114,7 +3130,7 @@ public class clsStockLedgerController {
 							String[] arrAry = df3Zeors.format(dblshowBal).toString().split("\\.");
 							String restQty = df3Zeors.format(dblshowBal - Integer.parseInt(arrAry[0]));
 							String[] arrRestQty = restQty.split("\\.");
-							finalBal = arrAry[0] + " " + uomRecv + "." + df3Zeors.format(Double.parseDouble(arrRestQty[1])) + " " + uomIssue;
+							//finalBal = arrAry[0] + " " + uomRecv + "." + df3Zeors.format(Double.parseDouble(arrRestQty[1])) + " " + uomIssue;
 						}
 					}
 				}
@@ -3144,14 +3160,22 @@ public class clsStockLedgerController {
 							String[] issArrDwn = issArr[1].split(" ");
 							double dwnQty = Double.parseDouble(issArrDwn[0].toString());
 							dblIss = (upQty + dwnQty) / Double.parseDouble(conRecipe);
+						} else if(issArr[0].contains(uomRecv)){ 
+							String[] recArrUp = issArr[0].split(" ");
+							dblIss = Double.parseDouble(recArrUp[0].toString());
 						} else {
 							String[] issArrUp = issArr[0].split(" ");
 							double firstQty = Double.parseDouble(issArrUp[0].toString());
 							dblIss = (firstQty) / Double.parseDouble(conRecipe);
 						}
-						bal = bal - dblIss;
+						
+						if(dblIss<0){
+							bal = bal + dblIss;
+						}else{
+							bal = bal - dblIss;	
+						}
+						
 						Double dblshowBal = new Double(df3Zeors.format(bal));
-						;
 
 						String[] arrAry = df3Zeors.format(dblshowBal).toString().split("\\.");
 						String restQty = df3Zeors.format(dblshowBal - Integer.parseInt(arrAry[0]));
@@ -3162,23 +3186,26 @@ public class clsStockLedgerController {
 					} else {
 						String[] issArrDwn = issue.split(" ");
 						Double dwnQty = 0.0;
-						if(issArrDwn.equals("") && issArrDwn.length>0)
+						if( issArrDwn.length>0)
 						{
 							dwnQty = Double.parseDouble(issArrDwn[0].toString());
 						}
-						else
-						{
-							
-						} 
 						double dwntempQty = dwnQty / Double.parseDouble(conRecipe);
 						bal = bal - dwntempQty;
 						finalBal = "0" + " " + uomRecv + "." + Math.rint(dwnQty) + " " + uomIssue;
 						Double dblshowBal = bal;
 
 						String[] arrAry = df3Zeors.format(dblshowBal).toString().split("\\.");
+						
 						String restQty = df3Zeors.format(dblshowBal - Integer.parseInt(arrAry[0]));
 						String[] arrRestQty = restQty.split("\\.");
-						finalBal = arrAry[0] + " " + uomRecv + "." + arrRestQty[1] + " " + uomIssue;
+						finalBal = arrAry[0] + " " + uomRecv ;// "." + dwnQty + " " + uomIssue;
+						
+						if(arrAry.length > 1){
+							dwnQty=  Double.parseDouble("0."+ arrAry[1]) *  Double.parseDouble(conRecipe);
+							finalBal = arrAry[0] + " " + uomRecv + "." + dwnQty + " " + uomIssue;
+						}
+						
 					}
 				}
 

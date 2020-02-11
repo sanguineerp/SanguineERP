@@ -231,6 +231,16 @@
 				    }else{
 				    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" 0 "+recipeconversionUOM;
 				    }
+			    }else if($('#cmbConversionUOM').val()=="RecipeUOM"){
+			    	tmpPhyStkQty2 = $("#txtQuantity").val();
+			    	tmpPhyStkQty2= parseFloat(tmpPhyStkQty2) / ProductData.dblRecipeConversion ;
+			    	var tPhyStkQty=tmpPhyStkQty2.toString().split(".");
+			    	
+			    	DisplyActualQty = tPhyStkQty[0]+" "+ReceivedconversionUOM+" 0 "+recipeconversionUOM;
+			    	if(tPhyStkQty.length >1){
+			    		DisplyActualQty = tPhyStkQty[0]+" "+ReceivedconversionUOM+"."+ parseFloat("0."+tPhyStkQty[1]) * ProductData.dblRecipeConversion +" "+recipeconversionUOM;
+			    	}
+			    	
 			    }
 		    }
 		    
@@ -245,7 +255,9 @@
 		     */
 		    
 		     var tempvariance=variance.split(".");
+		     
 		     var DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+"."+parseFloat(tempvariance[1])*parseFloat(ConversionValue)+" "+recipeconversionUOM;
+		     
 		     if(recipeconversionUOM ==ReceivedconversionUOM){
 		    	 DisplayVariance=variance+" "+ReceivedconversionUOM;
 		     }else{
@@ -253,17 +265,32 @@
 		    	 if($('#cmbConversionUOM').val()=="RecUOM")
 					{
 					 	var currentStkQty1=$("#txtStock").val().split(".");
-			 		    var tmpCurrentStkQty='';
+			 		    var tmpCurrentStkQty="0";
 			 			if(currentStkQty1.length>1){
 			 				tmpCurrentStkQty=parseFloat("0."+currentStkQty1[1]) * ProductData.dblRecipeConversion ;
-			 				tmpCurrentStkQty.toFixed(3);
+			 				tmpCurrentStkQty=tmpCurrentStkQty / 1000;
+			 				
 			 			}
-			 			var stkCurr=currentStkQty1[0]+"."+tmpCurrentStkQty;
+			 			var stkCurr=parseFloat(currentStkQty1[0])+tmpCurrentStkQty;
 			 			var stkVar= parseFloat($("#txtQuantity").val()) -  parseFloat(stkCurr);
 			 			DisplayVariance = stkVar.toFixed(maxQuantityDecimalPlaceLimit);
 			 			var tempvariance= DisplayVariance.split(".");
 					 	DisplayVariance=tempvariance[0]+" "+ReceivedconversionUOM+" "+tempvariance[1] +" "+recipeconversionUOM;	 
 					}
+		    	  else if($('#cmbConversionUOM').val()=="RecipeUOM"){
+		    		 
+			 		    var tmpCurrentStkQty="0";
+			 		    var diff=  phyStkQty -  $("#txtStock").val();
+			 			var currentStkQty1= diff.toString().split(".");   
+			 		    
+			 			DisplayVariance=currentStkQty1[0]+" "+ReceivedconversionUOM ;
+			 			if(currentStkQty1.length>1){
+			 				tmpCurrentStkQty=parseFloat("0."+currentStkQty1[1]) * ProductData.dblRecipeConversion ;
+			 				tmpCurrentStkQty=tmpCurrentStkQty.toFixed(0);
+			 				DisplayVariance=currentStkQty1[0]+" "+ReceivedconversionUOM+" "+tmpCurrentStkQty +" "+recipeconversionUOM;
+			 			}
+					 	
+		    	 } 
 		     }
 			 
 			    

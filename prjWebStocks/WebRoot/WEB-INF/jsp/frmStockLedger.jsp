@@ -211,6 +211,7 @@
 			});
 			
 			var bal=0;
+			var balInRecipe=0,receiptInRec=0,issueInRec=0;
 			var balUOM=0;
 			var openingStk=0;
 			var totalRec=0,totalIssue=0;
@@ -302,6 +303,7 @@
 						}
 
 					}
+					receiptInRec=receiptInRec+tempRecipts;
 
 					if (issue == '0') {
 						tempIssue += parseFloat(issue);
@@ -333,6 +335,8 @@
 
 					}
 					
+					issueInRec =issueInRec+tempIssue;
+					
 					if(tempIssue.toString().includes("-"))
 						{
 						totRowBal = tempRecipts + tempIssue;
@@ -350,14 +354,13 @@
 							}else{
 								value = parseFloat((rate * tempIssue / convRecipe)).toFixed(maxAmountDecimalPlaceLimit);
 							}
-								
-							
 						}
 					
-
+					balInRecipe =balInRecipe + totRowBal;
 					totRowBal = parseFloat(totRowBal) / parseFloat(recipeConv.substr(28));
 
 					bal = bal +parseFloat(totRowBal.toFixed(maxAmountDecimalPlaceLimit));
+					
 					
 					var restQty = 0;
 					var balance = bal + "";
@@ -387,7 +390,18 @@
 							}
 						
 					}
-
+					
+					var highQty = balInRecipe / parseFloat(recipeConv.substr(28));
+					
+					var tmpHigQty = highQty.toString().split('.');						
+					finalBal = tmpHigQty[0] +' ' + receivedUOM;
+					if(tmpHigQty.length> 1){
+						
+						var tmpLowQty = parseFloat('0.'+tmpHigQty[1]) *  parseFloat(recipeConv.substr(28)); 
+						tmpLowQty=tmpLowQty.toFixed(0);
+						finalBal =finalBal + '.'+ tmpLowQty +' '+recipeUOM;
+					}
+					
 					// 	
 					if(cnt== rowCount1-1 )
 					{
@@ -409,19 +423,27 @@
 				var transName = cells1[2].innerHTML;
 				if (transName == '<label>Opening Stk</label>') {
 					openingStk = bal;
-					openingstockwithUOM=rec;
+					openingstockwithUOM=finalBal;
 				} else {
 					if(rec==""){
 						
 					}
 					else
 						{
-						totalRec = totalRec + parseFloat(rec);
-						}
+						totalRec = totalRec + parseFloat(rec);	
+						/* if(qtyWithUOM.includes("Yes")){
+								totalRec = totalRec + (tempRecipts / convRecipe);
+							}
+						*/
+						} 
 					
 					if(parseFloat(issue)>0)
 						{
-						totalIssue = totalIssue + parseFloat(issue);
+							totalIssue = totalIssue + parseFloat(issue);
+							/* if(qtyWithUOM.includes("Yes")){
+								totalIssue = totalIssue + (tempIssue / convRecipe);		
+							} */
+						
 						}
 					else
 						{
@@ -432,6 +454,8 @@
 
 				rateForValue = rate;
 			}
+	/// for loop end	
+		
 			//get weighted avg price from product master 
 			if(weightedRate>0){
 				rateForValue=weightedRate;
@@ -441,11 +465,18 @@
 					rateForValue=dblLastSuppRate;
 				}
 			}
+			
+			
+			if(qtyWithUOM.includes("Yes")){
+				totalRec = receiptInRec / convRecipe;
+				totalIssue = issueInRec / convRecipe;
+				
+			}
 			/* if(qtyWithUOM.includes("Yes"))
 				{
 				totalIssue = totalIssue/issueConversion;
 				} */
-				if(qtyWithUOM.includes("Yes")){
+				/* if(qtyWithUOM.includes("Yes")){
 				
 					var fromDate=$("#txtFromDate").val();
 					var toDate=$("#txtToDate").val();
@@ -455,10 +486,12 @@
 					funGetStockLedgerWithUom(fromDate,toDate,locCode,propCode,prodCode);
 					totalIssue = totalIssueWithUom;
 					totalIssueWithUom=0;
-				}
+				} */
 							
 /* 			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec)+parseFloat(freeQty);
- */			var qtyWithUOM=$("#cmbQtyWithUOM").val();
+ */			
+ 
+ 			var qtyWithUOM=$("#cmbQtyWithUOM").val();
             
  			var closingBalance = parseFloat(openingStk) + parseFloat(totalRec);
  			closingBalance = closingBalance - parseFloat(totalIssue);
@@ -481,6 +514,9 @@
 			{
 				row1.insertCell(1).innerHTML = "<label>"+ openingstockwithUOM + "</label>";
 			}
+			if(openingStk < 0){
+				openingStk = openingStk * (-1); 
+			}
 			row1.insertCell(2).innerHTML = "<label>"+ (parseFloat(openingStk) * parseFloat(rateForValue)).toFixed(maxAmountDecimalPlaceLimit) + "</label>";
 
 			rowCount = rowCount + 1;
@@ -490,12 +526,15 @@
 			row1.insertCell(2).innerHTML = "<label>"+ (parseFloat(totalRec) * parseFloat(rateForValue)).toFixed(maxAmountDecimalPlaceLimit) + "</label>";
 
 			
-			rowCount = rowCount + 1;
-			row1 = table.insertRow(rowCount);
- 			row1.insertCell(0).innerHTML = "<label>Free Quantity</label>";
-			row1.insertCell(1).innerHTML = "<label>"+ parseFloat(freeQty).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
-			row1.insertCell(2).innerHTML = "<label>"+parseFloat(0).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
- 		
+			if(freeQty > 0 ){
+				rowCount = rowCount + 1;
+				row1 = table.insertRow(rowCount);
+	 			row1.insertCell(0).innerHTML = "<label>Free Quantity</label>";
+				row1.insertCell(1).innerHTML = "<label>"+ parseFloat(freeQty).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+				row1.insertCell(2).innerHTML = "<label>"+parseFloat(0).toFixed(maxQuantityDecimalPlaceLimit) + "</label>";
+	 			
+			}
+			
 			rowCount = rowCount + 1;
 			row1 = table.insertRow(rowCount);
 			row1.insertCell(0).innerHTML = "<label>Total Issues</label>";

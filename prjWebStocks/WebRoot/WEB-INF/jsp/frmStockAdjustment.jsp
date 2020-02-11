@@ -105,6 +105,7 @@ $(document).ready(function(){
 		    var quantity = $("#txtQuantity").val();
 		    var LooseQty=quantity;
 		    var unitPrice=$("#txtUnitPrice").val();
+		    var actualQty=LooseQty;
 		    
 		    var totalPrice=parseFloat(quantity)*parseFloat(unitPrice);
 		    unitPrice=parseFloat(unitPrice).toFixed(maxQuantityDecimalPlaceLimit);
@@ -131,6 +132,27 @@ $(document).ready(function(){
 				issuedconversionUOM=ProductData.strIssueUOM;
 				recipeconversionUOM=ProductData.strRecipeUOM;
 				quantity=parseFloat(quantity)/parseFloat(ConversionValue);
+				
+				actualQty=quantity;
+				 var tmpQtyStk1=quantity;
+					if(ProductData.dblReceiveConversion != ProductData.dblRecipeConversion){
+						tmpQtyStk1=parseFloat(tmpQtyStk1).toFixed(3);	
+					}
+					var tmpStkQty1= tmpQtyStk1.toString().split(".");
+					var tmpStkQty2='';
+					if(tmpStkQty1.length>1){
+						if(ProductData.dblReceiveConversion != ProductData.dblRecipeConversion){
+							tmpStkQty2=parseFloat(tmpStkQty1[1]) / ProductData.dblRecipeConversion;	
+						}else{
+							tmpStkQty2=parseFloat("0."+tmpStkQty1[1]) / ProductData.dblRecipeConversion;
+						}
+						
+						//tmpPhyStkQty2=tmpPhyStkQty2.toFixed(0);
+					}
+					if(tmpStkQty2!=''){
+						actualQty=parseFloat(tmpStkQty1[0])+tmpStkQty2;	
+					} 
+				
 			}
 		    if($('#cmbConversionUOM').val()=="RecipeUOM")
 			{
@@ -156,6 +178,10 @@ $(document).ready(function(){
 		    quantity=parseFloat(quantity).toFixed(maxQuantityDecimalPlaceLimit);
 			var tempQty=quantity.split(".");
 			var Displyqty=tempQty[0]+" "+ReceivedconversionUOM+"."+Math.round(parseFloat("0."+tempQty[1])*parseFloat(ConversionValue))+" "+recipeconversionUOM;
+			if($('#cmbConversionUOM').val()=="RecUOM"){
+				Displyqty=tempQty[0]+" "+ReceivedconversionUOM+". "+tempQty[1] +" "+recipeconversionUOM;
+			}
+			
 		
 			var Price=parseFloat(unitPrice) / parseFloat(ConversionValue);
 			totalPrice=(parseFloat(Price)*parseFloat(LooseQty));				
@@ -170,7 +196,8 @@ $(document).ready(function(){
 		    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"14%\" name=\"listStkAdjDtl["+(rowCount)+"].strProdType\" value="+prodType+" id=\"lblProdType."+(rowCount)+"\" >";
 		    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"6%\" type=\"text\" name=\"listStkAdjDtl["+(rowCount)+"].strUOM\" id=\"lblUOM."+(rowCount)+"\" value="+uom+">";
 		    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" type=\"text\"  class=\"inputText-Auto\"  name=\"listStkAdjDtl["+(rowCount)+"].strDisplayQty\" id=\"txtDisplayQty."+(rowCount)+"\" value='"+Displyqty+"' \">";
-		    row.insertCell(5).innerHTML= "<input style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto\"  name=\"listStkAdjDtl["+(rowCount)+"].dblQty\" id=\"txtQuantity."+(rowCount)+"\" value="+LooseQty+" onblur=\"funUpdatePrice(this);\">";
+		    //row.insertCell(5).innerHTML= "<input style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto\"  name=\"listStkAdjDtl["+(rowCount)+"].dblQty\" id=\"txtQuantity."+(rowCount)+"\" value="+LooseQty+" onblur=\"funUpdatePrice(this);\">";
+		    row.insertCell(5).innerHTML= "<input style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto\"  id=\"txtQuantity."+(rowCount)+"\" value="+LooseQty+" onblur=\"funUpdatePrice(this);\">";
 		    row.insertCell(6).innerHTML= "<input readonly=\"readonly\" style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto\"  name=\"listStkAdjDtl["+(rowCount)+"].dblRate\" id=\"txtUnitPrice."+(rowCount)+"\" value="+unitPrice+">";
 		    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto totalValueCell\"  name=\"listStkAdjDtl["+(rowCount)+"].dblPrice\" id=\"txtTotalPrice."+(rowCount)+"\" value="+totalPrice+">";
 		    row.insertCell(8).innerHTML= "<input style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto\" name=\"listStkAdjDtl["+(rowCount)+"].dblWeight\" id=\"txtWtUnit."+(rowCount)+"\" value="+wtUnit+">";
@@ -187,6 +214,12 @@ $(document).ready(function(){
 		    row.insertCell(11).innerHTML= "<input size=\"22%\" name=\"listStkAdjDtl["+(rowCount)+"].strRemark\" id=\"txtRemark."+(rowCount)+"\" value="+remark+">";		    
 		    row.insertCell(12).innerHTML= '<input type="button" value = "Delete"  class="deletebutton" onClick="Javacsript:funDeleteRow(this)">';
 		    row.insertCell(13).innerHTML= "<input size=\"0%\" style=\"display:none;\" name=\"listStkAdjDtl["+(rowCount)+"].strWSLinkedProdCode\" id=\"strWSLinkedProdCode."+(rowCount)+"\" value=''>";
+		    if($('#cmbConversionUOM').val()=="RecUOM"){
+		    	row.insertCell(14).innerHTML= "<input type=\"hidden\" name=\"listStkAdjDtl["+(rowCount)+"].dblQty\" id=\"dblQty."+(rowCount)+"\" value="+actualQty+">";	
+		    }else{
+		    	row.insertCell(14).innerHTML= "<input type=\"hidden\" name=\"listStkAdjDtl["+(rowCount)+"].dblQty\" id=\"dblQty."+(rowCount)+"\" value="+quantity+">";
+		    }
+		    
 		    listRow++;
 		    funApplyNumberValidation();
 		    funCalSubTotal();
@@ -303,6 +336,8 @@ $(document).ready(function(){
 		    $("#txtRemark").val('');
 		    $("#txtStock").val('');
 		    $("#txtProdCode").focus() ;
+		    $("#spStockUOMWithConversion").text('');
+		    
 		}
 		
 		/**
@@ -426,34 +461,40 @@ $(document).ready(function(){
 				{
 					$("#txtLocCode").focus();
 					alert("Please select Location");
+					clickCount=0;
 					return false;
 				}
 				else if($("#txtSADate").val().length==0)
 				{
 					alert("Please enter Stock Posting Date");
 					$("#txtSADate").focus();
+					clickCount=0;
 					return false;
 				}
 				else if($("#txtReasonCode").val()=='')
 				{
 					alert("Please Select Reason Code");
 					$("#txtReasonCode").focus();
+					clickCount=0;
 					return false;
 				}
 				else if(document.getElementById("tblProduct").rows.length=0)
 				{
 						alert("Plase Select Product");
 						$("#txtProdCode").focus();
+						clickCount=0;
 						return false;
 				}
 				else
 				{
+					clickCount=0;
 					return true;
 				}
 		
 			
 		}
 			else{
+				clickCount=0;
 				return false;
 			}
 		}
@@ -595,7 +636,7 @@ $(document).ready(function(){
 						count=i;
 						funfillProdRow(response[i].strProdCode,response[i].strProdName,response[i].strProdType,
 						response[i].strUOM,response[i].dblQty,response[i].dblRate,response[i].dblPrice,response[i].dblWeight,response[i].dblTotalWt
-						,response[i].strRemark,response[i].strType,response[i].strWSLinkedProdCode);
+						,response[i].strRemark,response[i].strType,response[i].strWSLinkedProdCode,response[i].dblQty);
                                                    
                     });
 					listRow=count+1;
@@ -605,7 +646,7 @@ $(document).ready(function(){
 		/**
 		 * filling Product grid
 		 */
-		function funfillProdRow(prodCode,prodName,prodType,uom,quantity,dblRate,dblPrice,wtUnit,totalWt ,remark,strType,strWSLinkedProdCode )
+		function funfillProdRow(prodCode,prodName,prodType,uom,quantity,dblRate,dblPrice,wtUnit,totalWt ,remark,strType,strWSLinkedProdCode ,actualQty)
 		{
 				var ProductData=fungetConversionUOM(prodCode);
 				var ConversionValue=ProductData.dblRecipeConversion;
@@ -625,7 +666,7 @@ $(document).ready(function(){
 			    row.insertCell(2).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"14%\" name=\"listStkAdjDtl["+(rowCount)+"].strProdType\"  id=\"lblProdType."+(rowCount)+"\" value="+prodType+">";
 			    row.insertCell(3).innerHTML= "<input readonly=\"readonly\" class=\"Box\" size=\"6%\" type=\"text\" name=\"listStkAdjDtl["+(rowCount)+"].strUOM\" id=\"lblUOM."+(rowCount)+"\" value="+uom+">";
 			    row.insertCell(4).innerHTML= "<input readonly=\"readonly\" class=\"Box\" type=\"text\"  class=\"inputText-Auto\"  name=\"listStkAdjDtl["+(rowCount)+"].strDisplayQty\" id=\"txtDisplayQty."+(rowCount)+"\" value='"+Displyqty+"' \">";
-			    row.insertCell(5).innerHTML= "<input style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto\"  name=\"listStkAdjDtl["+(rowCount)+"].dblQty\" id=\"txtQuantity."+(rowCount)+"\" value="+quantity+" onblur=\"funUpdatePrice(this);\">";
+			    row.insertCell(5).innerHTML= "<input style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto\" id=\"txtQuantity."+(rowCount)+"\" value="+quantity+" onblur=\"funUpdatePrice(this);\">"; // name=\"listStkAdjDtl["+(rowCount)+"].dblQty\" 
 			    row.insertCell(6).innerHTML= "<input readonly=\"readonly\" style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto\"  name=\"listStkAdjDtl["+(rowCount)+"].dblRate\" id=\"txtUnitPrice."+(rowCount)+"\" value="+dblRate.toFixed(maxQuantityDecimalPlaceLimit)+">";
 			    row.insertCell(7).innerHTML= "<input readonly=\"readonly\" style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto totalValueCell\"  name=\"listStkAdjDtl["+(rowCount)+"].dblPrice\" id=\"txtTotalPrice."+(rowCount)+"\" value="+dblPrice.toFixed(maxQuantityDecimalPlaceLimit)+">";
 			    row.insertCell(8).innerHTML= "<input style=\"text-align: right;\" type=\"text\" required = \"required\" class=\"decimal-places inputText-Auto\" name=\"listStkAdjDtl["+(rowCount)+"].dblWeight\" id=\"txtWtUnit."+(rowCount)+"\" value="+wtUnit.toFixed(maxQuantityDecimalPlaceLimit)+">";
@@ -642,6 +683,8 @@ $(document).ready(function(){
 			    row.insertCell(11).innerHTML= "<input size=\"21%\" name=\"listStkAdjDtl["+(rowCount)+"].strRemark\" id=\"txtRemark."+(rowCount)+"\" value='"+remark+"'>";		    
 			    row.insertCell(12).innerHTML= '<input type="button" value = "Delete"  class="deletebutton" onClick="Javacsript:funDeleteRow(this)">';
 			    row.insertCell(13).innerHTML= "<input size=\"0%\" style=\"display:none;\" name=\"listStkAdjDtl["+(rowCount)+"].strWSLinkedProdCode\" id=\"strWSLinkedProdCode."+(rowCount)+"\" value='"+strWSLinkedProdCode+"' >";
+			    row.insertCell(14).innerHTML= "<input type=\"hidden\" name=\"listStkAdjDtl["+(rowCount)+"].dblQty\" id=\"dblQty."+(rowCount)+"\" value="+actualQty+">";
+			    //
 		}
 		/**
 		 * Set Location Data after selecting form Help windows
@@ -724,6 +767,19 @@ $(document).ready(function(){
 		        	gUOM=response.strUOM;
 		        	gProdType=response.strProdType;
 		        	$("#txtQuantity").focus();
+		        	
+		        	 var currentStkQty1=$("#txtStock").val().split(".");
+			 		    var tmpCurrentStkQty='';
+			 			if(currentStkQty1.length>1){
+			 				tmpCurrentStkQty=parseFloat(parseFloat("0."+currentStkQty1[1]) * response.dblRecipeConversion );
+			 				tmpCurrentStkQty=tmpCurrentStkQty.toFixed(0);
+			 			}
+			 			var currentStkQtyRecepi=currentStkQty1 +" "+response.strReceivedUOM;
+			 			if(tmpCurrentStkQty!=''){
+			 				currentStkQtyRecepi="("+currentStkQty1[0]+" "+response.strReceivedUOM+" "+tmpCurrentStkQty+" "+response.strRecipeUOM+")";
+			 			
+			 			}
+			        	$("#spStockUOMWithConversion").text(currentStkQtyRecepi);
 			    	}
 			    },
 			    error: function(jqXHR, exception) {
@@ -990,7 +1046,13 @@ $(document).ready(function(){
 					<td width="90px">Product Name </td>
 					<td width="200px"><label id="lblProdName" class="namelabel" style="font-size: 12px;"></label></td>
 					<td width="50px">Stock </td>
-					<td width="50px" colspan="3"><input id="txtStock" readonly="readonly" class="BoxW116px right-Align" style="width: 15%;padding-right: 4px;" ></input></td>
+					<td width="50px" colspan="3"><input id="txtStock" readonly="readonly" class="BoxW116px right-Align" style="width: 15%;padding-right: 4px;" ></input>
+					<span id="spStockUOMWithConversion"></span>
+					</td>
+				</tr>
+				<tr>
+				
+				<td colspan="8"><label id="lblNote" style="color:red;font-size:13px  ">Note:Decimal values will be consider as recipe uom(loose qty)</label></td>
 				</tr>
 				<tr>
 					<td>Quantity </td>
@@ -1083,7 +1145,9 @@ $(document).ready(function(){
 					<!--  COl13   -->
 					<col style="width: 0%">
 					<!--  COl13   -->
-
+					<col style="width: 0%">
+					<!--  COl14   -->
+					
 					<%-- <c:forEach items="${command.listStkAdjDtl}" var="stkAdj" varStatus="status">
 	<tr>
 							<td><input name="listStkAdjDtl[${status.index}].strProdCode" value="${stkAdj.strProdCode}" readonly="readonly" class="Box" size="10%"/></td>

@@ -932,6 +932,7 @@ public class clsStkAdjustmentController {
 			String[] spqty = (qty.toString()).split("\\.");
 			double lowest = qty - Double.parseDouble(spqty[0]);
 			double qtytemp = Double.parseDouble(df3Zeors.format(lowest * objProdModel.getDblRecipeConversion()).toString());
+			qtytemp=Math.round(qtytemp);
 			strDispQty = spqty[0] + " " + objProdModel.getStrReceivedUOM() + "." + qtytemp + " " + objProdModel.getStrRecipeUOM();
 		}
 
