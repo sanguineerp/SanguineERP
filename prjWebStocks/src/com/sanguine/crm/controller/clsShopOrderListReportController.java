@@ -101,7 +101,7 @@ public class clsShopOrderListReportController {
 
 			// Customer code
 			String strCustCodes = objBean.getStrSuppCode();
-			String tempstrCCode[] = strCustCodes.split(",");
+			String tempstrCCode[] = strCustCodes.split(",");	
 			String strCCodes = "(";
 			for (int i = 0; i < tempstrCCode.length; i++) {
 				if (i == 0) {
@@ -158,10 +158,15 @@ public class clsShopOrderListReportController {
 			 * customer order print
 			 */
 
-			String sqlSubGroup = " select  a.strCustCode from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, " + " tblproductmaster d , tblpartymaster e ,tblgroupmaster f " + " where a.strSOCode=b.strSOCode  and b.strProdCode=d.strProdCode  " + "and d.strSGCode=c.strSGCode  and a.strCustCode=e.strPCode " + "and c.strGCode=f.strGCode  and a.strCustCode IN " + strCCodes + " "
-					+ " and date(a.dteSODate)  between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate)  between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by a.strCustCode " + " ORDER BY e.strPName  ";
-
-			List listCustSubgroup = objGlobalFunctionsService.funGetDataList(sqlSubGroup, "sql");
+//			String sqlSubGroup = " select  a.strCustCode from tblsalesorderhd a,tblsalesorderdtl b,tblsubgroupmaster c, " + " tblproductmaster d , tblpartymaster e ,tblgroupmaster f " + " where a.strSOCode=b.strSOCode  and b.strProdCode=d.strProdCode  " + "and d.strSGCode=c.strSGCode  and a.strCustCode=e.strPCode " + "and c.strGCode=f.strGCode  and a.strCustCode IN " + strCCodes + " "
+//					+ " and date(a.dteSODate)  between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate)  between '" + dteFromFulDate + "' and '" + dteToFulDate + "' " + " group by a.strCustCode " + " ORDER BY e.strPName  ";
+//             
+			List listCustSubgroup=new ArrayList<>();
+			for(int k=0;k<tempstrCCode.length;k++)
+			{
+				listCustSubgroup.add(tempstrCCode[k]);
+			}
+			//List listCustSubgroup = objGlobalFunctionsService.funGetDataList(sqlSubGroup, "sql");
 
 			List<JasperPrint> jprintlist = new ArrayList<JasperPrint>();
 

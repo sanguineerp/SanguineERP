@@ -647,15 +647,16 @@ public class clsStkPostingController {
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
 		String sql="SELECT a.strProdCode FROM tblproductmaster a, tblsubgroupmaster c, tblgroupmaster d"
-				+ " WHERE a.strSGCode=c.strSGCode AND c.strGCode=d.strGCode AND a.strNotInUse='N' "
+				+ " WHERE a.strSGCode=c.strSGCode AND c.strGCode=d.strGCode  "
 				+ " AND a.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' "
-				+ " AND a.strProdType IN('Procured','Semi Finished','Non-Inventory') "
-				+ " AND a.strLocCode='"+strLocCode+"'  ";
-				
-		List list = objGlobalFunctionsService.funGetList(sql, "sql");
+				+ " AND a.strProdType IN('Procured','Semi Finished','Non-Inventory') ";
 		
+		//	+ " AND a.strLocCode='"+strLocCode+"'  ";
+				
+		List list = objGlobalFunctionsService.funGetList(sql, "sql");	
 		return list;
 
 	}
+	
 
 }

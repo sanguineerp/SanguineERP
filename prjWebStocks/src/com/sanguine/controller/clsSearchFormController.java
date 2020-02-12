@@ -643,7 +643,12 @@ public class clsSearchFormController {
 
 			case "taxmaster": {
 				columnNames = "strTaxCode,strTaxDesc,strTaxIndicator,strExternalCode";
-				tableName = "clsTaxHdModel where strClientCode='" + clientCode + "' and strPropertyCode='" + propertyCode + "' ";
+				tableName = "clsTaxHdModel where strClientCode='" + clientCode + "' ";
+						if(!clientCode.equalsIgnoreCase("319.001"))
+						{
+							tableName += " and strPropertyCode='" + propertyCode + "' ";
+						}
+						
 				listColumnNames = "Tax Code,Tax Desc,Tax Indicator,External Code";
 				idColumnName = "strTaxCode";
 				searchFormTitle = "Tax Master";
@@ -4279,7 +4284,11 @@ public class clsSearchFormController {
 
 		case "taxmaster": {
 			columnNames = "strTaxCode,strTaxDesc,strTaxIndicator";
-			tableName = "clsTaxHdModel where strClientCode='" + clientCode + "' and strPropertyCode='" + propertyCode + "' ";
+			tableName = "clsTaxHdModel where strClientCode='" + clientCode + "' ";
+			if(!clientCode.equalsIgnoreCase("319.001"))
+			{
+				tableName += " and strPropertyCode='" + propertyCode + "' ";
+			}
 			listColumnNames = "Tax Code,Tax Desc,Tax Indicator";
 			idColumnName = "strTaxCode";
 			searchFormTitle = "Tax Master";

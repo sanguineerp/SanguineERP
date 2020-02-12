@@ -42,10 +42,12 @@ import com.sanguine.crm.service.clsCRMSettlementMasterService;
 import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsCurrencyMasterModel;
 import com.sanguine.model.clsLocationMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.service.clsCurrencyMasterService;
 import com.sanguine.service.clsGlobalFunctionsService;
 import com.sanguine.service.clsLocationMasterService;
+import com.sanguine.service.clsPropertyMasterService;
 import com.sanguine.service.clsSetupMasterService;
 
 @Controller
@@ -73,6 +75,10 @@ public class clsInvoiceFlashController {
 	
 	@Autowired
 	private ServletContext servletContext;
+	
+	@Autowired
+	private clsPropertyMasterService objPropertyMasterService;
+	
 	
 	String baseCurrencyCode="";
 	Map<String,String> currencyList=new TreeMap<String, String>();
@@ -3255,7 +3261,14 @@ public class clsInvoiceFlashController {
 			
 			JasperReport jr = JasperCompileManager.compileReport(jd);
 			HashMap hm = new HashMap();
-			hm.put("strCompanyName", companyName);
+			clsPropertyMaster objPropertyMaster = objPropertyMasterService.funGetProperty(propertyCode, clientCode);
+			if(clientCode.equals("319.001") && objPropertyMaster.getPropertyName().equalsIgnoreCase("TARANG FOODS"))
+			{
+				hm.put("strCompanyName", objPropertyMaster.getPropertyName());
+			}else
+			{
+				hm.put("strCompanyName", companyName);
+			}
 			hm.put("strUserCode", userCode);
 			hm.put("strImagePath", imagePath);
 			hm.put("strAddr1", objSetup.getStrAdd1());

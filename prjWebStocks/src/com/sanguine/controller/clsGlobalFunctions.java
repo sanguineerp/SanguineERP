@@ -2151,6 +2151,7 @@ public class clsGlobalFunctions {
 			}
 		
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Error in conection");
 		}
 		return con;
@@ -2376,8 +2377,12 @@ public class clsGlobalFunctions {
 							+ " from tblpartytaxdtl a,tbltaxhd b "
 							+ " where a.strTaxCode=b.strTaxCode and a.strPCode='" + entry.getValue().getStrSupplierCode() + "' and strTaxOnSP='" + taxType + "' " 
 							+ " and (b.strTaxIndicator='" + entry.getValue().getStrTaxIndicator() + "' or b.strTaxIndicator='') " 
-							+ " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' and b.strPropertyCode='" + propCode + "' "
+							+ " and date(b.dtValidFrom) <= '" + transDate + "' and b.dtValidTo >= '" + transDate + "' "
 							+ " and b.strTaxReversal='N' ");
+					if(!clientCode.equalsIgnoreCase("319.001"))
+					{
+						sbSql.append(" and b.strPropertyCode='" + propCode + "' "); 
+					}
 					
 				}
 				
