@@ -585,6 +585,8 @@ $(document).ready(function()
 							<option value="Normal Order">Normal Order</option>
 							<option value="Advance Order">Advance Order</option>
 							<option value="Urgent Order">Urgent Order</option>
+							<option value="Daily Order">Daily Order</option>
+							<option value="Normal/Daily Order">Normal/Daily Order</option>
 				    </s:select>
 					</td>
 					

@@ -50,6 +50,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 @Controller
 public class clsCRMReportsController {
+	
 	@Autowired
 	private clsGlobalFunctionsService objGlobalService;
 	@Autowired
@@ -119,11 +120,11 @@ public class clsCRMReportsController {
 
 		// funCallCategoryWiseSalesOrderReport(objBean, resp, req);
 
-		if (objBean.getStrReportType().equals("Normal Order")) {
+//		if (objBean.getStrReportType().equals("Normal Order")) {
 			funCallProductionCompilationReport(objBean, resp, req);
-		} else {
-			funCallProductionCompilationAdvOrderReport(objBean, resp, req);
-		}
+//		} else {
+//			funCallProductionCompilationAdvOrderReport(objBean, resp, req);
+//		}
 
 	}
 
@@ -201,7 +202,7 @@ public class clsCRMReportsController {
 			String dteToDate = ty + "-" + tm + "-" + td;
 
 			sqlQuery = sqlQuery + "and date(a.dteFulmtDate) between '" + dteFromDate + "' and '" + dteToDate + "' " + "group by b.strProdCode,e.strGName,d.strSGName " + "order by b.strProdCode,e.strGName,d.strSGName ";
-
+			
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JRDesignQuery newQuery = new JRDesignQuery();
 			newQuery.setText(sqlQuery);
@@ -415,7 +416,7 @@ public class clsCRMReportsController {
 		String companyName = req.getSession().getAttribute("companyName").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
-		
+		String report="";
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 		if (objSetup == null) {
 			objSetup = new clsPropertySetupModel();
@@ -495,8 +496,21 @@ public class clsCRMReportsController {
 
 		String dteFromFulDate = ffy + "-" + ffm + "-" + ffd;
 		String dteToFulDate = tfy + "-" + tfm + "-" + tfd;
-
-		sqlQuery = sqlQuery + "and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' AND a.strLocCode=f.strLocCode AND f.strPropertyCode='"+propertyCode+"' " + " group by b.strProdCode,e.strGName,d.strSGName " + "order by d.intSortingNo,d.strSGName,e.strGName ";
+        
+		sqlQuery = sqlQuery + "and date(a.dteSODate) between '" + dteFromDate + "' and '" + dteToDate + "' " + " and date(a.dteFulmtDate) between '" + dteFromFulDate + "' and '" + dteToFulDate + "' "
+				+ "AND a.strLocCode=f.strLocCode AND f.strPropertyCode='"+propertyCode+"'  ";
+		if(objBean.getStrReportType().equalsIgnoreCase("Normal/Daily Order"))
+		{
+			sqlQuery += " and a.strStatus in ('Daily Order','Normal Order')  ";
+			report="Normal/Daily Order";
+		}
+		else
+		{
+			sqlQuery += " and a.strStatus ='"+objBean.getStrReportType()+"'  ";
+			report=objBean.getStrReportType();
+		}
+				
+		sqlQuery += " group by b.strProdCode,e.strGName,d.strSGName " + "order by d.intSortingNo,d.strSGName,e.strGName ";
 
 		List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 
@@ -543,6 +557,7 @@ public class clsCRMReportsController {
 		hm.put("strPin", objSetup.getStrPin());
 		hm.put("dteFromDate", objBean.getDteFromDate());
 		hm.put("dteToDate", objBean.getDteToDate());
+		hm.put("strReportType", report);
 
 		try {
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);

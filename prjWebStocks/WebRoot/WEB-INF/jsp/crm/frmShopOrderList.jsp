@@ -347,9 +347,9 @@
 	   		<br />
 	   		<table class="transTable">
 			    <tr>
-					<td width="10%"><label>From SO Date :</label></td>
+					<td width="10%"><label>From Inv Date :</label></td>
 					<td colspan="1" width="10%"><s:input id="txtFromDate" path="dtFromDate" required="true" readonly="readonly" cssClass="calenderTextBox"/></td>
-					<td width="10%"><label>To SO Date :</label></td>
+					<td width="10%"><label>To Inv Date :</label></td>
 					<td colspan="1"><s:input id="txtToDate" path="dtToDate" required="true" readonly="readonly" cssClass="calenderTextBox"/>
 					</td>
 				</tr>
@@ -357,13 +357,13 @@
 				<td colspan="4"></td>
 				
 				</tr>
-				 <tr>
-					<td width="10%"><label>From Fulfillment Date :</label></td>
-					<td colspan="1" width="10%"><s:input id="txtFromFulfillment" path="dteFromFulfillment" required="true" readonly="readonly" cssClass="calenderTextBox"/></td>
-					<td width="10%"><label>To Fulfillment Date :</label></td>
-					<td colspan="1"><s:input id="txtToFulfillment" path="dteToFulfillment" required="true" readonly="readonly" cssClass="calenderTextBox"/>
-					</td>
-				</tr>
+<!-- 				 <tr> -->
+<!-- 					<td width="10%"><label>From Fulfillment Date :</label></td> -->
+<%-- 					<td colspan="1" width="10%"><s:input id="txtFromFulfillment" path="dteFromFulfillment" required="true" readonly="readonly" cssClass="calenderTextBox"/></td> --%>
+<!-- 					<td width="10%"><label>To Fulfillment Date :</label></td> -->
+<%-- 					<td colspan="1"><s:input id="txtToFulfillment" path="dteToFulfillment" required="true" readonly="readonly" cssClass="calenderTextBox"/> --%>
+<!-- 					</td> -->
+<!-- 				</tr> -->
 				
 			    </table>
 				<br>

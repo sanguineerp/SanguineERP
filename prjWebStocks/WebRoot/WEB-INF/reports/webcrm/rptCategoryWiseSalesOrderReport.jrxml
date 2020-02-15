@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.2.1.final using JasperReports Library version 6.2.1  -->
-<!-- 2016-07-19T11:07:32 -->
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptProductionCompliation" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2488e6a3-51a0-4c68-9dc0-167c464af006">
 	<property name="ireport.zoom" value="1.2100000000000002"/>
 	<property name="ireport.x" value="0"/>
@@ -28,6 +27,7 @@
 	<parameter name="strState" class="java.lang.String"/>
 	<parameter name="strCountry" class="java.lang.String"/>
 	<parameter name="strPin" class="java.lang.String"/>
+	<parameter name="strReportType" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select  1 from dual]]>
 	</queryString>
@@ -162,6 +162,10 @@
 				</textElement>
 				<text><![CDATA[From Fullfillment Date :]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2" y="85" width="146" height="21" uuid="1629fc0f-d712-417d-aab8-3db773c4badd"/>
+				<textFieldExpression><![CDATA[$P{strReportType}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
