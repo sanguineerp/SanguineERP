@@ -172,8 +172,8 @@ public class clsClientDetails {
 			hmClientDtl.put("257.001", clsClientDetails.createClientDetails("257.001", "BLACK SHEEP HOSPITALITY PVT LTD", dFormat.parse("2018-08-16"), dFormat.parse("2020-08-17")));//renewed till 17-08-2020  renwed on 06-12-2018 for one year accordin to from date till 06-08-2019  //Sunny Shriram contact no - 9769545955 email id - arrowhospitalityconsulting@gmail.com
 			hmClientDtl.put("258.001", clsClientDetails.createClientDetails("258.001", "SAI MADHUBAN HOSPITALITY PVT LTD", dFormat.parse("2018-05-27"), dFormat.parse("2019-05-27")));//Sunny Shriram contact no - 9769545955 email id - arrowhospitalityconsulting@gmail.com
 			hmClientDtl.put("259.001", clsClientDetails.createClientDetails("259.001", "PENTAGON INDIA RETAIL PVT LTD", dFormat.parse("2018-08-24"), dFormat.parse("2019-09-02")));//POS Licence //As Per JPOs iYear Licence Renewed
-		   //260.001", "PARAG HOTELS AND RESORT PVT LTD" for POS
-			hmClientDtl.put("260.001", clsClientDetails.createClientDetails("260.001", "PARAG HOTELS AND RESORT PVT LTD", dFormat.parse("2019-12-16"), dFormat.parse("2020-02-16")));//(Mumbai)//released on 16-12-2019 for 1 month  till 16-01-2020 
+		    //260.001", "PARAG HOTELS AND RESORT PVT LTD" for POS
+			hmClientDtl.put("260.001", clsClientDetails.createClientDetails("260.001", "PARAG HOTELS AND RESORT PVT LTD", dFormat.parse("2019-12-16"), dFormat.parse("2020-03-03")));//(Mumbai)//released on 16-12-2019 for 1 month  till 16-01-2020 
 			//Africa International
 			hmClientDtl.put("261.001", clsClientDetails.createClientDetails("261.001", "KIN DELICIEUX", dFormat.parse("2018-09-08"), dFormat.parse("2020-12-31")));//(AFRICA)//Renewed on 26-12-2019  till 31-12-2020//(AFRICA)//Renewed on 29-08-2019  till 31-12-2019 //released on 08-09-2018 for 1 year till 08-09-2019 
 			hmClientDtl.put("262.001", clsClientDetails.createClientDetails("262.001", "COCO JAMBO", dFormat.parse("2018-09-08"), dFormat.parse("2020-09-08")));//(AFRICA)//Renewed on 18-09-2019 foe 1 year till 08-09-2020//Renewed on 07-09-2019  till 18-09-2019 //released on 08-09-2018 for 1 year till 08-09-2019 

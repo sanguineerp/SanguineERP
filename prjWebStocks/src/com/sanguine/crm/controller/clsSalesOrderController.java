@@ -502,9 +502,13 @@ public class clsSalesOrderController {
 		SOHDModel.setStrMaxCap("");
 		SOHDModel.setStrNoFall("");
 		SOHDModel.setStrReaCode("");
-		if (objBean.getStrNarration().contains("POS")) {
+		if (objBean.getStrNarration().contains("Advance Order")) {
 			SOHDModel.setStrStatus("Advance Order");
-		} else {
+		} else if(objBean.getStrNarration().contains("Daily Order")) {
+			SOHDModel.setStrStatus("Daily Order");
+		}
+		else
+		{
 			SOHDModel.setStrStatus("Normal Order");
 		}
 

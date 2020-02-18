@@ -87,7 +87,7 @@
 								}
 								clearInterval(timer);
 							}
-					    }, 500);	
+					    }, 800);	
 				
 		}
 
