@@ -773,10 +773,12 @@
 					    success: function(response)
 					    {
 					    	funSKUWiseProductDetail(response[0]);
-					    	$("#txtTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
+					    	
+					    	$("#txtTotValue").val(parseFloat(response[3]).toFixed(maxQuantityDecimalPlaceLimit));
 					    	document.getElementById("txtTaxTotValue").style.visibility = "visible";
-					    	$("#txtTaxTotValue").val(parseFloat(response[2]).toFixed(maxQuantityDecimalPlaceLimit));
-					    	document.getElementById("txtSubTotValue").style.visibility = "hidden"; 
+					    	$("#txtTaxTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
+					    	$("#txtSubTotValue").val(parseFloat(response[2]).toFixed(maxQuantityDecimalPlaceLimit));
+					    	//document.getElementById("txtSubTotValue").style.visibility = "hidden"; 
 					    	
 					    },
 					    error: function(jqXHR, exception) {
@@ -812,6 +814,7 @@
 				
 				 data[2]=parseFloat(data[2]).toFixed(maxQuantityDecimalPlaceLimit);
 				 data[3]=parseFloat(data[3]).toFixed(maxQuantityDecimalPlaceLimit);
+				 data[5]=parseFloat(data[5]).toFixed(maxQuantityDecimalPlaceLimit);
 				 
 			    var table = document.getElementById("tblSKUProdDet");
 			    var rowCount = table.rows.length;
@@ -819,10 +822,12 @@
 			    var formName='frmProductWiseFlashForInvoice';
 			    
 			    row.insertCell(0).innerHTML= "<a  name=\"SKUCode["+(rowCount)+"]\" readonly=\"readonly\" href="+formName+"\.html?code="+data[0]+"&fromDate="+frmDte1+"&toDate="+toDte1+"&locCode="+$('#txtLocCode').val()+"&custCode="+$('#txtCustCode').val()+"&settleCode="+$('#cmbSettlement').val()+"&reportName=productwise"+"&currencyCode="+$('#cmbCurrency').val()+"\ target=\"_blank\"  class=\"Box\" size=\"20%\" id=\"SKUCode."+(rowCount)+"\"  >"+data[0]+"</a>";			    
-			    row.insertCell(1).innerHTML= "<input name=\"SKUName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"SKUName."+(rowCount)+"\" value='"+data[1]+"'>";
+			    row.insertCell(1).innerHTML= "<input name=\"SKUName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"SKUName."+(rowCount)+"\" value='"+data[1]+"'>";
 			    row.insertCell(2).innerHTML= "<input name=\"currency["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"10%\" id=\"currency."+(rowCount)+"\" value='"+data[4]+"'>";
 			    row.insertCell(3).innerHTML= "<input name=\"SKUQty["+(rowCount)+"]\" id=\"SKUQty."+(rowCount)+"\"readonly=\"readonly\" style=\"text-align: right;\" size=\"18%\" class=\"Box\" value="+data[2]+">";
 			    row.insertCell(4).innerHTML= "<input name=\"SKUAmount["+(rowCount)+"]\" id=\"SKUAmount."+(rowCount)+"\" readonly=\"readonly\"  style=\"text-align: right;\"  size=\"14%\" class=\"Box\"  value="+data[3]+">";
+			    row.insertCell(5).innerHTML= "<input name=\"SKUDiscAmount["+(rowCount)+"]\" id=\"SKUDiscAmount."+(rowCount)+"\" readonly=\"readonly\"  style=\"text-align: right;\"  size=\"14%\" class=\"Box\"  value="+data[5]+">";
+
 			    
 			    
 			   }
@@ -1610,6 +1615,7 @@
 					<!-- COl4  -->
 					<td width="5.2%">Sales Amount</td>
 					<!--  COl5   -->
+					<td width="5.2%">Disc Amount</td>
 					
 
 				</tr>
@@ -1630,6 +1636,7 @@
 					<!--  COl4   -->
 					<col style="width: 5.5%">
 					<!--  COl5   -->
+					<col style="width: 5.5%">
 				
 					
 				

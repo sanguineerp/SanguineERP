@@ -1138,7 +1138,16 @@
 	   if(dblTotalWeight>0){
 		   totalPrice=unitprice*dblQty*dblWeight;
 	   }
-	   var disAmt=(prodDisPer*totalPrice)/100;
+	   var disAmt=0;
+	   if($("#cmbDiscType").val() =='Per')
+	   {
+		   disAmt=(prodDisPer*totalPrice)/100;
+	   }
+	   else
+	   {
+		   disAmt=prodDisPer;	   
+	   }	   
+	 
 	   var grandtotalPrice=totalPrice- disAmt;
 	   
     
@@ -2754,7 +2763,7 @@ function funSetTax(code)
 				discType="";
 				var subtotal=$("#txtSubTotlAmt").val();
 				var discAmount=$("#txtDiscount").val();
-				var discPer=((discAmount / subtotal)*100);
+				var discPer=((discAmount / subtotal)*100).toFixed(5);
 				$("#txtDiscountPer").val(discPer);
 				discType="Total Disc";
 				$("#hidDiscType").val(discType);
@@ -3007,6 +3016,12 @@ function funChangeCombo() {
 											<option value="N">No</option>
 											<option value="Y">Yes</option>
 										</s:select></td>
+									<td><label>Disc Type</label></td>
+									<td><s:select id="cmbDiscType" name="cmbDiscType"
+											path="" cssClass="BoxW48px">
+											<option value="Per">Per</option>
+											<option value="Amt">Amt</option>
+										</s:select></td>	
 								</tr>
 
 								<tr>
@@ -3016,8 +3031,8 @@ function funChangeCombo() {
 									<td><label>Remarks</label></td>
 									<td><input id="txtRemarks" class="longTextBox"
 										style="width: 100%" /></td>
-											<td><label>Discount %</label></td>
-								    <td><input type="text" id="txtProdDisper"  
+											<td><label>Discount </label></td>
+									    <td><input type="text" id="txtProdDisper"  
 											 value="0"
 											class="decimal-places-amt numberField"  /></td>
 									<td><input type="button" value="Add" class="smallButton"
