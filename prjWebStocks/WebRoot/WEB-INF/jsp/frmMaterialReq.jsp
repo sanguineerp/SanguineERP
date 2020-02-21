@@ -198,7 +198,7 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 		function funHelp(transactionName)
 		{
 			fieldName=transactionName;
-		
+			var byLocation =  $("#txtLocBy").val();
 			if("productInUse"==transactionName)
 				{
 					if($("#txtLocOn").val()=="")
@@ -209,7 +209,7 @@ var fieldName,strLocationType,listRow=0,showReqVal="",showReqStk="";
 					else
 						{
 					//	window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1100px;dialogLeft:200px;")
-						window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px,dialogWidth:1100px,top=500,left=500")
+						window.open("searchform.html?formname="+transactionName+"&locationCode="+byLocation+"&searchText=","","dialogHeight:600px,dialogWidth:1100px,top=500,left=500")
 						
 						}
 				}

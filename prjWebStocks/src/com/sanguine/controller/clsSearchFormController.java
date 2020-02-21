@@ -66,6 +66,7 @@ public class clsSearchFormController {
 	String strModule = "1";
 	String strGroupCode="",strSubGroupCode="";
 	private String txtArrivalDate;
+	String strLocation="";
 
 	// Variable For Excise
 	private String txtFromDate = "";
@@ -79,6 +80,11 @@ public class clsSearchFormController {
 	private  String strCustCode="",strFunctionCode = "";
 	@RequestMapping(value = "/searchform", method = RequestMethod.GET)
 	public ModelAndView funOpenSearchForm(Map<String, Object> model, @ModelAttribute("formname") String value, BindingResult result, @RequestParam(value = "formname") String formName, @RequestParam(value = "searchText") String search_with, HttpServletRequest req) {
+		if(req.getParameter("locationCode") !=null)
+		{
+			strLocation = req.getParameter("locationCode").toString();	
+		}
+		
 		if (req.getSession().getAttribute("selectedModuleName").toString().equalsIgnoreCase("7-WebBanquet"))
 		{
 			formName = "Banquet"+formName;
@@ -444,6 +450,7 @@ public class clsSearchFormController {
  			String clientCode = req.getSession().getAttribute("clientCode").toString();
 			String strLocCode = req.getSession().getAttribute("locationCode").toString();
 			String financialYear = req.getSession().getAttribute("financialYear").toString();
+			
 			String[] finYear = financialYear.split("-");
 			String showAllProd = "Y";
 			if (null == req.getSession().getAttribute("showAllProdToAllLoc")) {
@@ -464,6 +471,7 @@ public class clsSearchFormController {
 			String strShowTransOrder = objSetup.getStrShowTransAsc_Desc();
 			JSONArray jArrSearchList = null;
 			List<Object[]> listSearchData = new ArrayList<Object[]>();
+			
 			switch (formName) {
 
 			case "BrandMasterWeb-Service": {
@@ -696,7 +704,7 @@ public class clsSearchFormController {
 				columnNames = "a.strProdCode,a.strProdName,c.strSGName,d.strGName,a.strUOM,a.strProdType" + ",a.strSpecification,a.strCalAmtOn,a.strClass,a.strNonStockableItem,a.strPartNo";
 				tableName = "clsProductMasterModel a , clsSubGroupMasterModel c , clsGroupMasterModel d ";
 				if (showAllProd.equals("N")) {
-					tableName = tableName + " ,clsProductReOrderLevelModel b " + " where a.strProdCode=b.strProdCode and b.strLocationCode='" + strLocCode + "' and b.strClientCode='" + clientCode + "' and ";
+					tableName = tableName + " ,clsProductReOrderLevelModel b " + " where a.strProdCode=b.strProdCode and b.strLocationCode='" + strLocation + "' and b.strClientCode='" + clientCode + "' and ";
 				} else {
 					tableName = tableName + " where  ";
 				}
@@ -1550,7 +1558,7 @@ public class clsSearchFormController {
 				columnNames = "a.strProdCode,a.strProdName,c.strSGName,d.strGName,a.strUOM,a.strProdType,a.strBarCode" + ",a.strSpecification,a.strCalAmtOn,a.strClass,a.strNonStockableItem,a.strPartNo";
 				tableName = "clsProductMasterModel a, clsSubGroupMasterModel c , clsGroupMasterModel d ";
 				if (showAllProd.equals("N")) {
-					tableName = tableName + " ,clsProductReOrderLevelModel b " + " where  a.strProdCode=b.strProdCode and  b.strLocationCode='" + strLocCode + "' and " + " b.strClientCode='" + clientCode + "' and ";
+					tableName = tableName + " ,clsProductReOrderLevelModel b " + " where  a.strProdCode=b.strProdCode and  b.strLocationCode='" + strLocation + "' and " + " b.strClientCode='" + clientCode + "' and ";
 				} else {
 					tableName = tableName + "  where   ";
 				}
@@ -1652,7 +1660,7 @@ public class clsSearchFormController {
 				tableName = "clsProductMasterModel a, clsSubGroupMasterModel c , clsGroupMasterModel d ";
 				if (showAllProd.equals("N")) {
 
-					tableName = tableName + " ,clsProductReOrderLevelModel b " + " where  a.strProdCode=b.strProdCode  " + "and b.strLocationCode='" + loctemp + "' and  b.strClientCode='" + clientCode + "' and ";
+					tableName = tableName + " ,clsProductReOrderLevelModel b " + " where  a.strProdCode=b.strProdCode  " + "and b.strLocationCode='" + strLocation + "' and  b.strClientCode='" + clientCode + "' and ";
 				} else {
 					tableName = tableName + "  where   ";
 				}

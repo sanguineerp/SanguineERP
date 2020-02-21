@@ -394,9 +394,9 @@
 		function funHelp(transactionName)
 		{
 			fieldName=transactionName;
-	        
+			var location=$("#txtLocCode").val();
 	    //    window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
-	        window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
+	        window.open("searchform.html?formname="+transactionName+"&locationCode="+location+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
 	    }
 		
 		/**

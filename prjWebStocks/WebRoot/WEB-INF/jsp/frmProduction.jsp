@@ -41,9 +41,9 @@
 		function funHelp(transactionName)
 		{
 			fieldName=transactionName;
-		
+			var location=$("#txtLocCode").val();
 			// window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
-			 window.open("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
+			 window.open("searchform.html?formname="+transactionName+"&locationCode="+location+"&searchText=","","dialogHeight:600px;dialogWidth:600px;dialogLeft:400px;")
 		}	
 		/**
 		 * Set Data after selecting form Help windows

@@ -855,6 +855,7 @@
 		{
 			if ($("#cmbAgainst").val() == 'Purchase Order')
 			{
+				var location=$("#txtLocCode").val();
 				var POCode=$("#cmbPODoc").val();
 				//alert(POCode);
 				if(POCode.trim().length>0)
@@ -862,7 +863,7 @@
 					fieldName = "prodforPO";
 					transactionName=fieldName;
 				//	window.showModalDialog("searchform.html?formname="+transactionName+"&POCode="+POCode+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
-					window.open("searchform.html?formname="+transactionName+"&POCode="+POCode+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;top=500,left=500")
+					window.open("searchform.html?formname="+transactionName+"&POCode="+POCode+"&locationCode="+location+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;top=500,left=500")
 				}
 			}
 			/* if($("#cmbAgainst").val() == 'Invoice')
