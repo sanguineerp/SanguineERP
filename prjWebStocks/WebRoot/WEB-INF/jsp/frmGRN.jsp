@@ -899,9 +899,10 @@
 				}
 				else
 				{
+					var location=$("#txtLocCode").val();
 					var searchProd="RawProduct";
 			       // window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
-				window.open("searchform.html?formname="+searchProd+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;top=500,left=500")
+				window.open("searchform.html?formname="+searchProd+"&locationCode="+location+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;top=500,left=500")
 				}
 			}
 			else
@@ -1824,7 +1825,7 @@
 					funRemoveTaxRows();
 					$.each(response, function(i,item)
 		            {
-						funAddTaxRow1(response[i].strTaxCode,response[i].strTaxDesc,response[i].strTaxableAmt/currValue,response[i].strTaxAmt/currValue);
+						funAddTaxRow1(response[i].strTaxCode,response[i].strTaxDesc,response[i].strTaxableAmt / currValue,response[i].strTaxAmt/currValue);
 		            });
 				},
 				error : function(jqXHR, exception) {
