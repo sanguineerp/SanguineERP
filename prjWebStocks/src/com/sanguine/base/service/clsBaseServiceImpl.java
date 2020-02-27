@@ -13,6 +13,7 @@ import com.sanguine.base.model.clsBaseModel;
 @Service("intfBaseService")
 public class clsBaseServiceImpl implements intfBaseService {
 
+	
 	@Autowired
 	intfBaseDao objBaseDao;
 

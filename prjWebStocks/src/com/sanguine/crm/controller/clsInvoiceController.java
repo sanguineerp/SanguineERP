@@ -6982,7 +6982,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			+ " AS dblPrice, a.dteInvDate, " + " IFNULL(d.strPName,''),ifnull(e.strDCCode,''),"
 			+ " ifnull(e.dteDCDate,''),ifnull(e.strPONo,''), " + " b.strProdCode,c.strHSNCode,g.dblValue as discAmt,IFNULL(d.strBAdd1,''),"
 			+ " IFNULL(d.strBAdd2,''), " + " IFNULL(d.strBState,''),IFNULL(d.strBPin,'') ,IFNULL(d.strSAdd1,''),IFNULL(d.strSAdd2,''), " + " IFNULL(d.strSState,''),IFNULL(d.strSPin,'') "
-			+ ",IFNULL(d.strGSTNo,''),b.dblProdDiscAmount,b.dblWeight,f.strSGName,IFNULL(d.strEmail,''), IFNULL(d.strMobile,''),f.intSortingNo ,a.dblExtraCharges "//30
+			+ ",IFNULL(d.strGSTNo,''),b.dblProdDiscAmount,b.dblWeight,f.strSGName,IFNULL(d.strEmail,''), IFNULL(d.strMobile,''),f.intSortingNo ,a.dblExtraCharges,ifnull(b.strRemarks,'') "//31
 			+ " from tblinvoicehd a left outer join tblinvoicedtl b on a.strInvCode=b.strInvCode   " + " left outer join tblproductmaster c  "
 			+ " on b.strProdCode=c.strProdCode left outer join tblpartymaster d on a.strCustCode=d.strPCode " + " left outer join tbldeliverychallanhd e on a.strSOCode=e.strDCCode " + ""
 			+ " left outer join tblsubgroupmaster f on f.strSGCode=c.strSGCode " + ""
@@ -7011,6 +7011,11 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 			Object[] obj = (Object[]) listProdDtl.get(i);
 			clsInvoiceDtlBean objDtlBean = new clsInvoiceDtlBean();
 			objDtlBean.setStrProdName(obj[0].toString());
+			if(obj[30].toString().length()>0)
+			{
+				objDtlBean.setStrProdName(obj[0].toString()+" ( Remark : "+obj[30].toString()+" ) ");
+			}
+			
 			
 			objDtlBean.setStrProdNamemarthi(obj[1].toString());
 			objDtlBean.setDblQty(Double.parseDouble(obj[2].toString()));
@@ -7081,6 +7086,13 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 						objDtlBean.setDblTaxableAmt(Double.parseDouble(objGST[4].toString()));
 					//	totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
 					}
+					else if (objGST[3].toString().equalsIgnoreCase("IGST"))
+					{
+						objDtlBean.setDblIGSTPer(Double.parseDouble(objGST[1].toString()));
+						objDtlBean.setDblIGSTAmt(Double.parseDouble(objGST[2].toString()));
+						objDtlBean.setDblTaxableAmt(Double.parseDouble(objGST[4].toString()));
+					//	totalInvoiceValue = totalInvoiceValue + Double.parseDouble(objGST[2].toString());
+					}
 					else
 					{
 						objDtlBean.setDblNonGSTTaxPer(Double.parseDouble(objGST[1].toString()));
@@ -7091,12 +7103,12 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 				}
 			}
 			DecimalFormat decFormat = new DecimalFormat("#.##");
-			objDtlBean.setDblTotalAmt(Double.parseDouble(decFormat.format(objDtlBean.getDblTaxableAmt()+objDtlBean.getDblSGSTAmt()+objDtlBean.getDblCGSTAmt())));
+			objDtlBean.setDblTotalAmt(Double.parseDouble(decFormat.format(objDtlBean.getDblTaxableAmt()+objDtlBean.getDblSGSTAmt()+objDtlBean.getDblCGSTAmt()+objDtlBean.getDblIGSTAmt())));
 			// if abatement amount is greater than zero then tax not added in GT
 			if(isTaxAbatement){
 				grandTotal=totalInvoiceValue;
 			}else{
-				grandTotal=Double.parseDouble(decFormat.format(totalInvoiceValue+objDtlBean.getDblSGSTAmt()+objDtlBean.getDblCGSTAmt()));
+				grandTotal=Double.parseDouble(decFormat.format(totalInvoiceValue+objDtlBean.getDblSGSTAmt()+objDtlBean.getDblCGSTAmt()+objDtlBean.getDblIGSTAmt()));
 			}
 			
 			dataList.add(objDtlBean);
@@ -7129,6 +7141,12 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 						 objDtlBean.setDblCGSTPer(Double.parseDouble(objGST[5].toString()));
 						 objDtlBean.setDblCGSTAmt(Double.parseDouble(objGST[2].toString()));
 					 }
+					if (objGST[7].toString().equalsIgnoreCase("IGST"))
+					 {
+						 objDtlBean.setDblIGSTPer(Double.parseDouble(objGST[5].toString()));
+						 objDtlBean.setDblIGSTAmt(Double.parseDouble(objGST[2].toString()));
+					 }
+					
 					
 					 
 				}else{
@@ -7148,6 +7166,11 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 						 objDtlBean.setDblSGSTPer(Double.parseDouble(objGST[5].toString()));
 						 objDtlBean.setDblSGSTAmt(Double.parseDouble(objGST[2].toString()));	
 					 }
+						if (objGST[7].toString().equalsIgnoreCase("IGST"))
+						 {
+							 objDtlBean.setDblIGSTPer(Double.parseDouble(objGST[5].toString()));
+							 objDtlBean.setDblIGSTAmt(Double.parseDouble(objGST[2].toString()));
+						 }
 					 
 					// objDtlBean.setDblTotalAmt(Double.parseDouble(objGST[1].toString()));
 					 

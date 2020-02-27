@@ -865,6 +865,7 @@
 				        		<option selected="selected" value=" "></option>
 					            <option value="CGST">CGST</option>
 					            <option value="SGST">SGST</option>
+					            <option value="IGST">IGST</option>
 					            </s:select>
 				        	
 				        	<s:errors path="strShortName"></s:errors>
