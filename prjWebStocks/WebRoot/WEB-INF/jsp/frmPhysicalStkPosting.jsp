@@ -145,9 +145,16 @@
 				// here we calculate physical stock qty in decimal point 
 				 var tmpPhyStk1=phyStkQty;
 				if(ProductData.dblReceiveConversion != ProductData.dblRecipeConversion){
-					tmpPhyStk1=parseFloat(tmpPhyStk1).toFixed(3);	
+					tmpPhyStk1=parseFloat(tmpPhyStk1).toFixed(maxQuantityDecimalPlaceLimit);	
 					if(ProductData.dblRecipeConversion >1000){
-						tmpPhyStk1=parseFloat($("#txtQuantity").val()).toFixed(4);
+						tmpPhyStk1=parseFloat($("#txtQuantity").val()).toFixed(4);   
+						var vartxtQuantity= tmpPhyStk1.split(".");
+						   if(vartxtQuantity[1]!=''){
+							   if(vartxtQuantity[1] > ProductData.dblRecipeConversion){
+								   tmpPhyStk1=parseFloat($("#txtQuantity").val()).toFixed(maxQuantityDecimalPlaceLimit);
+							   }
+						   }
+						
 					}
 				}
 				 
@@ -220,7 +227,14 @@
 		    }
 		    var LooseQty=$("#txtQuantity").val();
 		    if(ProductData.dblRecipeConversion >1000){
-		    	LooseQty=parseFloat(LooseQty).toFixed(4);
+		    	LooseQty=parseFloat(LooseQty).toFixed(4);   
+				var vartxtQuantity= LooseQty.split(".");
+				   if(vartxtQuantity[1]!=''){
+					   if(vartxtQuantity[1] > ProductData.dblRecipeConversion){
+						   LooseQty=parseFloat(LooseQty).toFixed(maxQuantityDecimalPlaceLimit);
+					   }
+				   }
+		    	
 		    }else{
 		    	LooseQty=parseFloat(LooseQty).toFixed(maxQuantityDecimalPlaceLimit);	
 		    }
@@ -233,7 +247,20 @@
 		    	if($('#cmbConversionUOM').val()=="RecUOM"){
 			    	if(tmpPhyStkQty2[1]!=''){
 			    	    if(ProductData.dblRecipeConversion >1000){
-			    	    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+ tmpPhyStkQty2[1] +" "+recipeconversionUOM;	
+			    	    	
+			    	    	DisplyActualQty =parseFloat($("#txtQuantity").val()).toFixed(4);
+			    	    	tmpPhyStkQty2=DisplyActualQty.split(".");
+			    	    	  if(tmpPhyStkQty2[1]!=''){
+								   if(tmpPhyStkQty2[1] > ProductData.dblRecipeConversion){
+									   DisplyActualQty=parseFloat(DisplyActualQty).toFixed(maxQuantityDecimalPlaceLimit);
+									   tmpPhyStkQty2=DisplyActualQty.split(".");
+									   DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+ tmpPhyStkQty2[1] +" "+recipeconversionUOM;
+								   }
+							   }else{
+								   DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+ tmpPhyStkQty2[1] +" "+recipeconversionUOM;	   
+							   }
+			    	    	
+			    	    		
 			    	    }else{
 			    	    	DisplyActualQty =tmpPhyStkQty2[0]+" "+ReceivedconversionUOM+" "+parseFloat("0."+tmpPhyStkQty2[1]) * 1000 +" "+recipeconversionUOM;
 			    	    }

@@ -765,7 +765,7 @@
 				<td colspan="2"><input id="txtWt" ondblclick="" type="text"
 					class="decimal-places numberField"></input></td>
 				<td colspan="2">
-				<label>Direct </label> <input type="Checkbox" id="chkDirectWorkOrder"/>
+				<label>Direct Work order</label> <input type="Checkbox" id="chkDirectWorkOrder"/>
 				</td>
 
 			</tr>
