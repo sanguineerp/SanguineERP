@@ -791,12 +791,13 @@ public class clsInvoiceFlashController {
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblTotalQty = new BigDecimal(0);
 		BigDecimal dblTotalDiscAmt = new BigDecimal(0);
+		BigDecimal dblTotalAmt = new BigDecimal(0);
 		List listofInvFlash = new ArrayList();
 
 		String strClientCode = request.getSession().getAttribute("clientCode").toString();
 		StringBuilder sqlInvoiceFlash = new StringBuilder();
 		sqlInvoiceFlash.setLength(0);
-		sqlInvoiceFlash.append( "(SELECT  b.strProdCode,c.strProdName,sum(b.dblQty)/" + currValue + ", SUM(b.dblQty*b.dblPrice)/" + currValue + ",b.dblProdDiscAmount  FROM tblinvoicedtl b, tblproductmaster c,tblinvoicehd a,tblpartymaster d " + " WHERE a.strInvCode=b.strInvCode  and b.strProdCode=c.strProdCode and a.strCustCode=d.strPCode and a.strLocCode='" + locCode + "' " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + strClientCode + "'");
+		sqlInvoiceFlash.append( "(SELECT  b.strProdCode,c.strProdName,sum(b.dblQty)/" + currValue + ", SUM(b.dblQty*b.dblPrice)/" + currValue + ",b.dblProdDiscAmount , SUM(b.dblQty*b.dblPrice)/1.0 - b.dblProdDiscAmount  FROM tblinvoicedtl b, tblproductmaster c,tblinvoicehd a,tblpartymaster d " + " WHERE a.strInvCode=b.strInvCode  and b.strProdCode=c.strProdCode and a.strCustCode=d.strPCode and a.strLocCode='" + locCode + "' " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + strClientCode + "'");
 		if (!settlementcode.equals("All")) {
 			sqlInvoiceFlash.append( " and  a.strSettlementCode='" + settlementcode + "' ");
 		}
@@ -811,7 +812,7 @@ public class clsInvoiceFlashController {
 		
 		sqlInvoiceFlash.append(" UNION  ");
 		
-		sqlInvoiceFlash.append( "(SELECT  b.strProdCode,c.strProdName,sum(b.dblQty)/" + currValue + ", SUM(b.dblQty*b.dblPrice)/" + currValue + ",b.dblProdDiscAmount FROM tblinvoicedtl b, tblproductmaster c,tblinvoicehd a,tblpartymaster d " + " WHERE a.strInvCode=b.strInvCode  and b.strProdCode=c.strProdCode and a.strCustCode=d.strPCode and a.strLocCode='" + locCode + "' " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + strClientCode + "'");
+		sqlInvoiceFlash.append( "(SELECT  b.strProdCode,c.strProdName,sum(b.dblQty)/" + currValue + ", SUM(b.dblQty*b.dblPrice)/" + currValue + ",b.dblProdDiscAmount,SUM(b.dblQty*b.dblPrice)/1.0 - b.dblProdDiscAmount FROM tblinvoicedtl b, tblproductmaster c,tblinvoicehd a,tblpartymaster d " + " WHERE a.strInvCode=b.strInvCode  and b.strProdCode=c.strProdCode and a.strCustCode=d.strPCode and a.strLocCode='" + locCode + "' " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + strClientCode + "'");
 	
 		sqlInvoiceFlash.append( " and  a.strSettlementCode='Multisettle' ");
 
@@ -841,6 +842,9 @@ public class clsInvoiceFlashController {
 					double dblDiscAmt = Double.parseDouble(df.format( Double.parseDouble(objInvoice[4].toString())));
 					dblDiscAmt = Double.parseDouble(list.get(5).toString()) + dblDiscAmt;
 					list.set(5, dblDiscAmt);
+					double TotAmt = Double.parseDouble(df.format( Double.parseDouble(objInvoice[5].toString())));
+					TotAmt = Double.parseDouble(list.get(6).toString()) + TotAmt;
+					list.set(6, TotAmt);
 					
 				}
 				else
@@ -849,10 +853,10 @@ public class clsInvoiceFlashController {
 					dataList.add(objInvoice[0].toString());
 					dataList.add(objInvoice[1].toString());
 					dataList.add(objInvoice[2].toString());
-					dataList.add(objInvoice[3].toString());
-					
+					dataList.add(objInvoice[3].toString());					
 					dataList.add(currencyName);
 					dataList.add(objInvoice[4].toString());
+					dataList.add(objInvoice[5].toString());
 
 					mapProductWise.put(objInvoice[0].toString(), dataList);
 				}
@@ -863,6 +867,9 @@ public class clsInvoiceFlashController {
 				dblTotalQty = dblTotalQty.add(qty);
 				BigDecimal discAmt = new BigDecimal(Double.parseDouble(objInvoice[4].toString()));
 				dblTotalDiscAmt=dblTotalDiscAmt.add(discAmt);
+				BigDecimal TotAmt = new BigDecimal(Double.parseDouble(objInvoice[5].toString()));
+				dblTotalAmt=dblTotalAmt.add(TotAmt);
+				
 				
 				
 			}
@@ -876,6 +883,7 @@ public class clsInvoiceFlashController {
 		listofInvoiveTotal.add(dblTotalValue);
 		listofInvoiveTotal.add(dblTotalQty);
 		listofInvoiveTotal.add(dblTotalDiscAmt);
+		listofInvoiveTotal.add(dblTotalAmt);
 
 		return listofInvoiveTotal;
 	}
@@ -2277,6 +2285,7 @@ public class clsInvoiceFlashController {
 		BigDecimal dblTotalValue = new BigDecimal(0);
 		BigDecimal dblTotalQty = new BigDecimal(0);
 		BigDecimal dblTotalDiscAmt = new BigDecimal(0);
+		BigDecimal dblTotalFinalAmt = new BigDecimal(0);
 			
 		double currValue = 1.0;
 		if(currencyCode.equalsIgnoreCase("All"))
@@ -2298,7 +2307,7 @@ public class clsInvoiceFlashController {
 		
 		StringBuilder sqlInvoiceFlash = new StringBuilder();
 		sqlInvoiceFlash.setLength(0);
-		sqlInvoiceFlash.append("(SELECT  b.strProdCode,c.strProdName,sum(b.dblQty)/" + currValue + ", SUM(b.dblQty*b.dblPrice)/" + currValue + ",b.dblProdDiscAmount FROM tblinvoicedtl b, tblproductmaster c,tblinvoicehd a,tblpartymaster d " + " WHERE a.strInvCode=b.strInvCode  and b.strProdCode=c.strProdCode and a.strCustCode=d.strPCode and a.strLocCode='" + locCode + "' " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
+		sqlInvoiceFlash.append("(SELECT  b.strProdCode,c.strProdName,sum(b.dblQty)/" + currValue + ", SUM(b.dblQty*b.dblPrice)/" + currValue + ",b.dblProdDiscAmount,SUM(b.dblQty*b.dblPrice)/1.0 - b.dblProdDiscAmount FROM tblinvoicedtl b, tblproductmaster c,tblinvoicehd a,tblpartymaster d " + " WHERE a.strInvCode=b.strInvCode  and b.strProdCode=c.strProdCode and a.strCustCode=d.strPCode and a.strLocCode='" + locCode + "' " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
 		if (!settlementcode.equals("All")) {
 			sqlInvoiceFlash.append(" and  a.strSettlementCode='" + settlementcode + "' ");
 		}
@@ -2313,7 +2322,7 @@ public class clsInvoiceFlashController {
 		
         sqlInvoiceFlash.append(" UNION  ");
 		
-		sqlInvoiceFlash.append( "(SELECT  b.strProdCode,c.strProdName,sum(b.dblQty)/" + currValue + ", SUM(b.dblQty*b.dblPrice)/" + currValue + ",b.dblProdDiscAmount FROM tblinvoicedtl b, tblproductmaster c,tblinvoicehd a,tblpartymaster d " + " WHERE a.strInvCode=b.strInvCode  and b.strProdCode=c.strProdCode and a.strCustCode=d.strPCode and a.strLocCode='" + locCode + "' " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
+		sqlInvoiceFlash.append( "(SELECT  b.strProdCode,c.strProdName,sum(b.dblQty)/" + currValue + ", SUM(b.dblQty*b.dblPrice)/" + currValue + ",b.dblProdDiscAmount,SUM(b.dblQty*b.dblPrice)/1.0 - b.dblProdDiscAmount FROM tblinvoicedtl b, tblproductmaster c,tblinvoicehd a,tblpartymaster d " + " WHERE a.strInvCode=b.strInvCode  and b.strProdCode=c.strProdCode and a.strCustCode=d.strPCode and a.strLocCode='" + locCode + "' " + " and date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' and  a.strClientCode='" + clientCode + "'");
 	
 		sqlInvoiceFlash.append( " and  a.strSettlementCode='Multisettle' ");
 
@@ -2338,12 +2347,19 @@ public class clsInvoiceFlashController {
 					double dblAmt = Double.parseDouble(df.format( Double.parseDouble(objInvoice[3].toString())));
 					dblAmt = Double.parseDouble(list.get(4).toString()) + dblAmt;
 					list.set(4, dblAmt);	
+					
 					double dblQty=Double.parseDouble(df.format( Double.parseDouble(objInvoice[2].toString())));
 					dblQty=Double.parseDouble(list.get(3).toString()) + dblQty;
 					list.set(3, dblQty);
+					
 					double dblDiscAmt=Double.parseDouble(df.format( Double.parseDouble(objInvoice[4].toString())));
 					dblDiscAmt=Double.parseDouble(list.get(5).toString()) + dblDiscAmt;
-					list.set(5, dblQty);
+					list.set(5, dblDiscAmt);
+					
+					double dblTotalAmt=Double.parseDouble(df.format( Double.parseDouble(objInvoice[5].toString())));
+					dblTotalAmt=Double.parseDouble(list.get(6).toString()) + dblTotalAmt;
+					list.set(6, dblTotalAmt);
+					
 					
 				}
 				else
@@ -2356,6 +2372,7 @@ public class clsInvoiceFlashController {
 				dataList.add(df.format(Double.valueOf(objInvoice[2].toString())));
 				dataList.add(df.format(Double.valueOf(objInvoice[3].toString())));
 				dataList.add(df.format(Double.valueOf(objInvoice[4].toString())));
+				dataList.add(df.format(Double.valueOf(objInvoice[5].toString())));
 				mapProductWise.put(objInvoice[0].toString(), dataList);
 				}
 				//detailList.add(dataList);
@@ -2365,6 +2382,9 @@ public class clsInvoiceFlashController {
 				dblTotalQty = dblTotalQty.add(valueQty);
 				BigDecimal discAmt = new BigDecimal(Double.parseDouble(objInvoice[4].toString()));
 				dblTotalDiscAmt = dblTotalDiscAmt.add(discAmt);
+				
+				BigDecimal toatalAmt = new BigDecimal(Double.parseDouble(objInvoice[5].toString()));
+				dblTotalFinalAmt = dblTotalFinalAmt.add(toatalAmt);
 				
 			}
 		}
@@ -2376,6 +2396,7 @@ public class clsInvoiceFlashController {
 		totalsList.add(df.format(dblTotalQty));
 		totalsList.add(df.format(dblTotalValue));
 		totalsList.add(df.format(dblTotalDiscAmt));
+		totalsList.add(df.format(dblTotalFinalAmt));
 	
 		
 		headerList.add("Product Code");
@@ -2384,6 +2405,7 @@ public class clsInvoiceFlashController {
 		headerList.add("Quantity");
 		headerList.add("Sales Amount");
 		headerList.add("Disc Amount");
+		headerList.add("Total Amount");
 
 		Object[] objHeader = (Object[]) headerList.toArray();
 

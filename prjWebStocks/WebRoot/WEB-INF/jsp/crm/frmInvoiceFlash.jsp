@@ -773,12 +773,13 @@
 					    success: function(response)
 					    {
 					    	funSKUWiseProductDetail(response[0]);
-					    	
 					    	$("#txtTotValue").val(parseFloat(response[3]).toFixed(maxQuantityDecimalPlaceLimit));
 					    	document.getElementById("txtTaxTotValue").style.visibility = "visible";
 					    	$("#txtTaxTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
 					    	$("#txtSubTotValue").val(parseFloat(response[2]).toFixed(maxQuantityDecimalPlaceLimit));
-					    	//document.getElementById("txtSubTotValue").style.visibility = "hidden"; 
+					    	document.getElementById("txFinalTotValue").style.visibility = "visible"
+					    	$("#txFinalTotValue").val(parseFloat(response[4]).toFixed(maxQuantityDecimalPlaceLimit));					    	
+					    	//document.getElementById("txFinalTotValue").style.visibility = "hidden"; 
 					    	
 					    },
 					    error: function(jqXHR, exception) {
@@ -815,7 +816,7 @@
 				 data[2]=parseFloat(data[2]).toFixed(maxQuantityDecimalPlaceLimit);
 				 data[3]=parseFloat(data[3]).toFixed(maxQuantityDecimalPlaceLimit);
 				 data[5]=parseFloat(data[5]).toFixed(maxQuantityDecimalPlaceLimit);
-				 
+				 data[6]=parseFloat(data[6]).toFixed(maxQuantityDecimalPlaceLimit);				 
 			    var table = document.getElementById("tblSKUProdDet");
 			    var rowCount = table.rows.length;
 			    var row = table.insertRow(rowCount);
@@ -827,6 +828,7 @@
 			    row.insertCell(3).innerHTML= "<input name=\"SKUQty["+(rowCount)+"]\" id=\"SKUQty."+(rowCount)+"\"readonly=\"readonly\" style=\"text-align: right;\" size=\"18%\" class=\"Box\" value="+data[2]+">";
 			    row.insertCell(4).innerHTML= "<input name=\"SKUAmount["+(rowCount)+"]\" id=\"SKUAmount."+(rowCount)+"\" readonly=\"readonly\"  style=\"text-align: right;\"  size=\"14%\" class=\"Box\"  value="+data[3]+">";
 			    row.insertCell(5).innerHTML= "<input name=\"SKUDiscAmount["+(rowCount)+"]\" id=\"SKUDiscAmount."+(rowCount)+"\" readonly=\"readonly\"  style=\"text-align: right;\"  size=\"14%\" class=\"Box\"  value="+data[5]+">";
+			    row.insertCell(6).innerHTML= "<input name=\"SKUTotalAmount["+(rowCount)+"]\" id=\"SKUTotalAmount."+(rowCount)+"\" readonly=\"readonly\"  style=\"text-align: right;\"  size=\"14%\" class=\"Box\"  value="+data[6]+">";
 
 			    
 			    
@@ -857,7 +859,7 @@
 					    success: function(response)
 					    {
 					    	funCategoryWiseProductDetail(response[0],response[1]);
-					    	
+					    	document.getElementById("txFinalTotValue").style.visibility = "hidden"
 					    	//$("#txtTotValue").val(parseFloat(response[1]).toFixed(maxQuantityDecimalPlaceLimit));
 					    	document.getElementById("txtSubTotValue").style.visibility = "visible"; 
 							document.getElementById("txtTaxTotValue").style.visibility = "visible";
@@ -1605,17 +1607,19 @@
 			<table style="width: 100%; border: #0F0; table-layout: fixed;"
 				class="transTablex col15-center">
 				<tr bgcolor="#72BEFC">
-					<td width="3.1%">Product Code</td>
+				   <td width="3.1%">Product Code</td>
 					<!--  COl1   -->
 					<td width="9.3%">Product Name</td>
 					<!--  COl2   -->
-					<td width="4.8%">Currency</td>
+					<td width="5%">Currency</td>
 					<!-- COl3  -->
-					<td width="5%">Quantity</td>
+					<td width="4.7%">Quantity</td>
 					<!-- COl4  -->
-					<td width="5.2%">Sales Amount</td>
+					<td width="4.9%">Sales Amount</td>
 					<!--  COl5   -->
-					<td width="5.2%">Disc Amount</td>
+					<td width="4.9%">Disc Amount</td>
+					
+					<td width="5.5%">Total Amount</td>
 					
 
 				</tr>
@@ -1636,6 +1640,8 @@
 					<!--  COl4   -->
 					<col style="width: 5.5%">
 					<!--  COl5   -->
+					<col style="width: 5.5%">
+					<!--  COl6   -->
 					<col style="width: 5.5%">
 				
 					
@@ -1879,7 +1885,7 @@
 				
 				<tr style="margin-left: 28px">
 				
-					<td id="labld26" style="width:70%; text-align:right">Total</td>
+					<td id="labld26" style="width:50%; text-align:right">Total</td>
 					<td id="tdSubTotValue" style="width:10%; align:right">
 						<input id="txtSubTotValue" style="width: 100%; text-align: right;" class="Box"></input>
 					</td>
@@ -1888,6 +1894,9 @@
 					</td>
 					<td id="tdTotValue" style="width:10%; align:right">
 						<input id="txtTotValue" style="width: 100%; text-align: right;" class="Box"></input>
+					</td>
+					<td id="tdFinalTotValue" style="width:10%; align:right">
+						<input id="txFinalTotValue" style="width: 100%; text-align: right;" class="Box"></input>
 					</td>
 
 				</tr>
