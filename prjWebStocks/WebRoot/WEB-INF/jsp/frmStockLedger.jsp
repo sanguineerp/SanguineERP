@@ -229,6 +229,8 @@
 				
 				var qtyWithUOM = $("#cmbQtyWithUOM").val();
 				
+				var transName = cells1[2].innerHTML;
+				
 				var rate1 = cells1[7].innerHTML;
 				var rate = parseFloat(rate1.substring(7, rate1.lastIndexOf("<")));
 				var value =0;
@@ -303,7 +305,10 @@
 						}
 
 					}
-					receiptInRec=receiptInRec+tempRecipts;
+					if (transName != '<label>Opening Stk</label>') {
+						receiptInRec=receiptInRec+tempRecipts;	
+					}
+					
 
 					if (issue == '0') {
 						tempIssue += parseFloat(issue);
@@ -335,7 +340,10 @@
 
 					}
 					
-					issueInRec =issueInRec+tempIssue;
+					if (transName != '<label>Opening Stk</label>') {
+						issueInRec =issueInRec+tempIssue;	
+					}
+					
 					
 					if(tempIssue.toString().includes("-"))
 						{
@@ -420,7 +428,7 @@
 					value = parseFloat(rate * issueOrReceipt).toFixed(maxAmountDecimalPlaceLimit);
 				}
 				cells1[8].innerHTML = "<label>" + value + "</label>";				
-				var transName = cells1[2].innerHTML;
+				
 				if (transName == '<label>Opening Stk</label>') {
 					openingStk = bal;
 					openingstockwithUOM=finalBal;
