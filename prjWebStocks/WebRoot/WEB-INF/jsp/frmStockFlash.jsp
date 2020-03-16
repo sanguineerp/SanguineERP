@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	<script type="text/javascript" src="<spring:url value="/resources/js/jQuery.js"/>"></script>
 	<script type="text/javascript" src="<spring:url value="/resources/js/jquery-ui.min.js"/>"></script>	
 	<script type="text/javascript" src="<spring:url value="/resources/js/validations.js"/>"></script>
@@ -346,6 +347,7 @@
 			        if(qtyWithUOM=='No'){
 			        	newcontent += '<td align="right">'+parseFloat(StkFlashData[i].dblClosingStock).toFixed(maxQuantityDecimalPlaceLimit)+'</td>';	
 			        }else{
+			        	
 			        	newcontent += '<td align="right">'+StkFlashData[i].dblClosingStock+'</td>';
 			        }
 			        

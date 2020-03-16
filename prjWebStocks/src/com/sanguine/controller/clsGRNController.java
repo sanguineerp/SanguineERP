@@ -2804,7 +2804,8 @@ public class clsGRNController {
 				openingStklist.add(dataListTax);
 			}
 			System.out.println(dblTaxamt);
-			grandToltal = grandToltal - totDisAmt + totExtraAmt + dblTaxamt;
+			//grandToltal = grandToltal - totDisAmt + totExtraAmt + dblTaxamt;
+			grandToltal = grandToltal - totDisAmt + totExtraAmt;
 			if (grandToltal > 0) {
 				List dataListgrandtotal = new ArrayList<>();
 				dataListgrandtotal.add("");

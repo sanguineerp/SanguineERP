@@ -5315,6 +5315,8 @@ public class clsReportsController {
 		String companyName = req.getSession().getAttribute("companyName").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		double extraAmt=0.00;
+		double disAmt=0.00;
 		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
 		if (objSetup == null)
 		{
@@ -5336,8 +5338,14 @@ public class clsReportsController {
 
 		ArrayList fieldList = new ArrayList();
 
-		String sqlQuery = " SELECT d.strPName,a.strBillNo, a.dblTotal AS Amt,e.strLocName, DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y')dtGRNDate ,a.strGRNCode" + " FROM tblgrnhd a,tblpartymaster d,tbllocationmaster e" + " WHERE  a.strSuppCode=d.strPCode  " + " and a.strLocCode=e.strLocCode ";
+		//String sqlQuery = " SELECT d.strPName,a.strBillNo, a.dblTotal AS Amt,e.strLocName, DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y')dtGRNDate ,a.strGRNCode" + " FROM tblgrnhd a,tblpartymaster d,tbllocationmaster e" + " WHERE  a.strSuppCode=d.strPCode  " + " and a.strLocCode=e.strLocCode ";
 
+		String sqlQuery = "SELECT d.strPName,a.strBillNo, sum(((b.dblUnitPrice*(b.dblQty-b.dblRejected))-((b.dblUnitPrice*(b.dblQty-b.dblRejected))*a.dblDisRate)/100)+b.dblTaxAmt) AS Amt,e.strLocName, "
+                +" DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y')dtGRNDate,a.strGRNCode,a.dblExtra,a.dblDisAmt  "
+                +" FROM tblgrnhd a,tblgrndtl b,tblpartymaster d,tbllocationmaster e "
+                +" WHERE a.strGRNCode =b.strGRNCode and a.strSuppCode=d.strPCode AND a.strLocCode=e.strLocCode  "; 
+
+		
 		if (null != objBean.getStrDocCode() && objBean.getStrDocCode().length() > 0)
 		{
 			sqlQuery = sqlQuery + " and a.strSuppCode='" + objBean.getStrDocCode() + "' ";
@@ -5358,13 +5366,16 @@ public class clsReportsController {
 
 		String td = toDate.split("-")[2];
 		String tm = toDate.split("-")[1];
+		
 		String ty = toDate.split("-")[0];
 
 		String dteFromDate = fd + "-" + fm + "-" + fy;
 		String dteToDate = td + "-" + tm + "-" + ty;
 
 		sqlQuery = sqlQuery + " and date(a.dtGRNDate) between  '" + fromDate + "' and '" + toDate + "'" + " ";
-		sqlQuery = sqlQuery + " ORDER BY  a.dtGRNDate,d.strPName,a.strBillNo ";
+		
+		sqlQuery = sqlQuery + "  group by b.strGRNCode "
+				+ " ORDER BY  a.dtGRNDate,d.strPName,a.strBillNo ";
 
 		List listProdDtl = objGlobalFunctionsService.funGetDataList(sqlQuery, "sql");
 
@@ -5382,7 +5393,9 @@ public class clsReportsController {
 			objProdBean.setStrFromLocation(prodArr[3].toString());
 			objProdBean.setDtGRNDate(prodArr[4].toString());
 			objProdBean.setStrGRNNo(prodArr[5].toString());
-
+			extraAmt=extraAmt+Double.parseDouble(prodArr[6].toString());
+	        disAmt=disAmt+Double.parseDouble(prodArr[7].toString());
+			
 			fieldList.add(objProdBean);
 
 		}
@@ -5399,7 +5412,8 @@ public class clsReportsController {
 		hm.put("strPin", objSetup.getStrPin());
 		hm.put("dteFromDate", dteFromDate);
 		hm.put("dteToDate", dteToDate);
-
+		hm.put("dblExtraAmt", extraAmt);
+        hm.put("dblDisAmt",disAmt);
 		try
 		{
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);

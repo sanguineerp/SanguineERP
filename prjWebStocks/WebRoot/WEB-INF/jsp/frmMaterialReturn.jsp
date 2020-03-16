@@ -186,7 +186,7 @@ var mreditable;
 	var fieldName="";	
 	function funHelp(transactionName)
 	{
-		var fromLoc=$("#txtLocFromCode").val(code);
+		var fromLoc=$("#txtLocFromCode").val();
 		fieldName=transactionName;
 		
 		// window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")

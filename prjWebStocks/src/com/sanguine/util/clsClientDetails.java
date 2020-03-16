@@ -195,7 +195,7 @@ public class clsClientDetails {
 			
 			hmClientDtl.put("287.001", clsClientDetails.createClientDetails("287.001", "OVER THE TOP HOSPITALITY", dFormat.parse("2018-12-05"), dFormat.parse("2019-08-31")));//released on 5-12-2018 till 31-08-2019 for 4 SPOS ,5 APOS,WebStocks,No SMS Pack,No Bill Deletion.", "Mr.Ravi", "9136025911", "Ravitejold@oldtimessake.in"
 			
-			hmClientDtl.put("289.001", clsClientDetails.createClientDetails("289.001", "RIVERSIDE BISTRO & BANQUET", dFormat.parse("2020-02-10"), dFormat.parse("2020-03-10")));////Released for 1 month till 03-10-2020
+			hmClientDtl.put("289.001", clsClientDetails.createClientDetails("289.001", "RIVERSIDE BISTRO & BANQUET", dFormat.parse("2020-02-10"), dFormat.parse("2021-02-10")));////Released for 1 month till 03-10-2020
 
 			hmClientDtl.put("290.001", clsClientDetails.createClientDetails("290.001", "CREME HOSPITALITY AND MANAGEMENT", dFormat.parse("2018-12-15"), dFormat.parse("2019-12-15"))); //Renewed on 16-04-2019 till 15-12-2019//Renewed on 12-3-2019 for 1 month till 15-4-2019//Renewed on 12-2-2019 for 1 year till 15-12-2019//renewed  for one month on 17-01-2019 form 15-01-2019 till 15-02-2019
 			
@@ -219,11 +219,11 @@ public class clsClientDetails {
 			hmClientDtl.put("331.001", clsClientDetails.createClientDetails("331.001", "DMPRS HOSPITALITY LLP", dFormat.parse("2019-09-09"), dFormat.parse("2019-12-08")));//renewed on 09-11-2019 for one month till 2019-12-08//(Mumbai)//Released on 09-09-2019 for 1 MONTH till 08-10-2019 for 8 SPOS ,4 APOS, WebStocks,No SMS Pack,No Bill Deletion.", "Mr.RAVI", "7738332591", "bythebae.versova@gmail.com", "No Bill Deletion","santesting"));
 			hmClientDtl.put("336.001", clsClientDetails.createClientDetails("336.001", "SHAH SPORTS ACADEMY PRIVATE LIMITED", dFormat.parse("2019-10-05"), dFormat.parse("2020-04-05")));//renewed on 06-02-2020 for 1 momnth //renewed on 05-11-2019 for one month till 05-12-2019//renewed on 06-12-2019 for one month till 05-1-2020
 			hmClientDtl.put("337.001", clsClientDetails.createClientDetails("337.001", "Symbiosis University", dFormat.parse("2019-10-08"), dFormat.parse("2020-03-11")));//Abhijit Rege  9112299043 headhospitality@symbiosis.ac.in regeabhijit@gmail.com			
-			hmClientDtl.put("341.001", clsClientDetails.createClientDetails("341.001", "THE FLOUR WORKS", dFormat.parse("2019-12-01"), dFormat.parse("2020-03-11")));//(Mumbai)//Released on 09-12-2019 for 1 year till 09-12-2020			
+			hmClientDtl.put("341.001", clsClientDetails.createClientDetails("341.001", "THE FLOUR WORKS", dFormat.parse("2019-12-01"), dFormat.parse("2020-03-19")));//(Mumbai)//Released on 09-12-2019 for 1 year till 09-12-2020			
 			hmClientDtl.put("343.001", clsClientDetails.createClientDetails("343.001", "RASHI COMFORTS", dFormat.parse("2020-02-11"), dFormat.parse("2020-03-11")));//(Benglore)
 			hmClientDtl.put("338.001", clsClientDetails.createClientDetails("338.001", "ELEPHANT & CO", dFormat.parse("2019-10-22"), dFormat.parse("2019-12-08")));//(Pune)//Released on 22-10-2019 for 1 month till 22-11-2019 for 2 SPOS ,5 APOS,WebStocks,No SMS Pack,No Bill Deletion.", "ANUJ SOLANKI", "9819657210", "anujsolanki@gmail.com", "No Bill Deletion","santesting","2","PUNE","50K","10K"
 			hmClientDtl.put("344.001", clsClientDetails.createClientDetails("344.001", "THE GLOBAL ADDA", dFormat.parse("2019-12-09"), dFormat.parse("2020-12-09")));//(Mumbai)//Released on 09-12-2019 for 1 year till 09-12-2020
-			hmClientDtl.put("346.001", clsClientDetails.createClientDetails("346.001", "MNV HOSPITALITY LLP", dFormat.parse("2020-02-01"), dFormat.parse("2020-03-10")));//(Mumbai)//Released on 04-02-2020 for 1 month till 10-03-2020
+			hmClientDtl.put("346.001", clsClientDetails.createClientDetails("346.001", "MNV HOSPITALITY LLP", dFormat.parse("2020-02-01"), dFormat.parse("2021-02-01")));//(Mumbai)//Released on 04-02-2020 for 1 month till 10-03-2020
 		    //345.001 is given to yogi resort please give license after this number									
 		} catch (Exception e) {
 			e.printStackTrace();
