@@ -576,9 +576,29 @@ public class clsStkPostingController {
 
 			String sqlHDQuery = "select a.strPSCode,DATE_FORMAT(a.dtPSDate,'%d-%m-%Y') as dtPSDate,a.strLocCode,b.strLocName " + " from tblstockpostinghd a,tbllocationmaster b " + "where a.strclientcode='" + clientCode + "' and b.strclientCode='" + clientCode + "' and a.strLocCode=b.strLocCode " + "and a.strPSCode='" + stockPostingCode + "' ";
 
-			String sqlDtlQuery = "select a.strProdCode,b.strProdName," + "b.strUOM,b.dblCostRM,b.strWtUOM,a.dblCStock,a.dblPStock," + "a.dblPStock-a.dblCStock as variance,(a.dblPStock-a.dblCStock)*b.dblCostRM as AjdValue " + " ,a.dblActualRate,(a.dblPStock-a.dblCStock)*a.dblActualRate  as actValue   " + "from tblstockpostingdtl a,tblproductmaster b where a.strProdCode=b.strProdCode  "
-					+ " and a.strPSCode='" + stockPostingCode + "' " + "and a.strClientCode='" + clientCode + "' and  b.strClientCode='" + clientCode + "'";
-
+			/*
+			 * String sqlDtlQuery = "select a.strProdCode,b.strProdName," +
+			 * "b.strUOM,b.dblCostRM,b.strWtUOM,a.dblCStock,a.dblPStock," +
+			 * "a.dblPStock-a.dblCStock as 
+			 * variance,(a.dblPStock-a.dblCStock)*b.dblCostRM as AjdValue "
+			 * +
+			 * " ,a.dblActualRate,(a.dblPStock-a.dblCStock)*a.dblActualRate  as actValue   "
+			 * +
+			 * "from tblstockpostingdtl a,tblproductmaster b where a.strProdCode=b.strProdCode  "
+			 * + " and a.strPSCode='" + stockPostingCode + "' " +
+			 * "and a.strClientCode='" + clientCode + "' and  b.strClientCode='"
+			 * + clientCode + "'";
+			 */
+			String sqlDtlQuery="SELECT a.strProdCode,b.strProdName,b.strUOM,b.dblCostRM,b.strWtUOM,\r\n" + 
+					"if(a.dblCStock=0,CONCAT('0 ',b.strUOM),funGetUOM(a.dblCStock,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM))  as dblCStock,\r\n" + 
+					"a.dblCStock as dblCStock1,\r\n" + 
+					"if(a.dblPStock=0,CONCAT('0 ',b.strUOM),funGetUOM(a.dblPStock,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM))  as dblPStock,\r\n" + 
+					"a.dblPStock as dblPStock1,\r\n" + 
+					"if((a.dblPStock-a.dblCStock)=0,CONCAT('0 ',b.strUOM),funGetUOM(a.dblPStock-a.dblCStock,b.dblRecipeConversion,b.dblIssueConversion,b.strReceivedUOM,b.strRecipeUOM))  AS VARIANCE ,\r\n" + 
+					"a.dblPStock-a.dblCStock AS VARIANCE1,\r\n" + 
+					"(a.dblPStock-a.dblCStock)*b.dblCostRM AS AjdValue,a.dblActualRate,(a.dblPStock-a.dblCStock)*a.dblActualRate AS actValue\r\n" + 
+					"from tblstockpostingdtl a,tblproductmaster b where a.strProdCode=b.strProdCode   and a.strPSCode='" + stockPostingCode + "' " +
+					" and a.strClientCode='" + clientCode + "' and  b.strClientCode='"+ clientCode + "'";
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JRDesignQuery newQuery = new JRDesignQuery();
 			newQuery.setText(sqlHDQuery);

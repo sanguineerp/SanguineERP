@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
+<!-- Created with Jaspersoft Studio version 6.12.0.final using JasperReports Library version 6.12.1-ac0eebdb29e4c0985457bab279a6db744d661530  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d0d6b106-fc8f-4fd2-9361-e3b368a86a8f">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -58,18 +58,21 @@ where a.strProdCode=b.strProdCode and a.strPSCode='01PSAA000001' and a.strclient
 		<field name="strWtUOM" class="java.lang.String">
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
-		<field name="dblCStock" class="java.math.BigDecimal">
+		<field name="dblCStock" class="java.lang.String">
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
-		<field name="dblPStock" class="java.math.BigDecimal">
+		<field name="dblPStock" class="java.lang.String">
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
-		<field name="variance" class="java.lang.Double"/>
+		<field name="variance" class="java.lang.String"/>
 		<field name="AjdValue" class="java.lang.Double"/>
 		<field name="actValue" class="java.lang.Double"/>
 		<field name="dblActualRate" class="java.lang.String"/>
+		<field name="dblPStock1" class="java.lang.Double">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
 		<variable name="totalPhyStk" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[$F{dblPStock}]]></variableExpression>
+			<variableExpression><![CDATA[$F{dblPStock1}]]></variableExpression>
 			<initialValueExpression><![CDATA[new Double(0.00)]]></initialValueExpression>
 		</variable>
 		<variable name="totalValue" class="java.lang.Double" calculation="Sum">
@@ -241,7 +244,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 								</reportElement>
 								<box leftPadding="2"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{strProdCode}]]></textFieldExpression>
 							</textField>
@@ -275,7 +278,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{strProdName}]]></textFieldExpression>
 							</textField>
@@ -308,7 +311,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 								</reportElement>
 								<box leftPadding="2"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{strUOM}]]></textFieldExpression>
 							</textField>
@@ -340,7 +343,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 								</reportElement>
 								<box rightPadding="2"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblCostRM}]]></textFieldExpression>
 							</textField>
@@ -368,7 +371,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 								</reportElement>
 								<box rightPadding="2"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblActualRate}]]></textFieldExpression>
 							</textField>
@@ -407,7 +410,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 								</reportElement>
 								<box rightPadding="2"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblCStock}]]></textFieldExpression>
 							</textField>
@@ -446,7 +449,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 								</reportElement>
 								<box rightPadding="2"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{dblPStock}]]></textFieldExpression>
 							</textField>
@@ -478,7 +481,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 								</reportElement>
 								<box rightPadding="2"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{variance}]]></textFieldExpression>
 							</textField>
@@ -504,7 +507,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 							<textField pattern="#,##0.00#">
 								<reportElement x="0" y="0" width="54" height="20" uuid="e6922995-a793-4884-af58-2a6aab889fcb"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{totalValue}]]></textFieldExpression>
 							</textField>
@@ -514,7 +517,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 							<textField pattern="#,##0.00#">
 								<reportElement x="2" y="1" width="49" height="18" uuid="f5d4ca65-ea63-46ac-8095-6f6df9462d46"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{AjdValue}]]></textFieldExpression>
 							</textField>
@@ -538,7 +541,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 							<textField pattern="#,##0.00#">
 								<reportElement x="0" y="0" width="40" height="20" uuid="21a6dc2e-4557-4743-a40c-de803e2f0d44"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{totalActualValue}]]></textFieldExpression>
 							</textField>
@@ -550,7 +553,7 @@ and a.strclientcode='024.001' and b.strclientCode='024.001']]>
 								</reportElement>
 								<box rightPadding="2"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Serif" size="8"/>
+									<font fontName="Serif" size="7"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{actValue}]]></textFieldExpression>
 							</textField>

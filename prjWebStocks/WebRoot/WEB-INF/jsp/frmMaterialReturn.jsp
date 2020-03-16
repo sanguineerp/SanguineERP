@@ -189,6 +189,7 @@ var mreditable;
 		var fromLoc=$("#txtLocFromCode").val();
 		fieldName=transactionName;
 		
+		
 		// window.showModalDialog("searchform.html?formname="+transactionName+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;dialogLeft:200px;")
 		 window.open("searchform.html?formname="+transactionName+"&locationCode="+fromLoc+"&searchText=","","dialogHeight:600px;dialogWidth:1000px;top=500,left=500")
 	}	
