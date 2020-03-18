@@ -45,6 +45,7 @@ import com.sanguine.model.clsAuditHdModel;
 import com.sanguine.model.clsCompanyMasterModel;
 import com.sanguine.model.clsLocationMasterModel;
 import com.sanguine.model.clsProductMasterModel;
+import com.sanguine.model.clsPropertyMaster;
 import com.sanguine.model.clsPropertySetupModel;
 import com.sanguine.model.clsStkPostingDtlModel;
 import com.sanguine.model.clsStkPostingHdModel;
@@ -98,6 +99,12 @@ public class clsStkPostingController {
 		/**
 		 * Checking Authorization
 		 */
+		String clientCode = request.getSession().getAttribute("clientCode").toString();
+		String propertyCode = request.getSession().getAttribute("propertyCode").toString();
+		clsPropertySetupModel objSetup = objSetupMasterService.funGetObjectPropertySetup(propertyCode, clientCode);
+	     
+		String strCheckPOSSales=objSetup.getStrCheckPOSSales();
+		model.put("strCheckPOSSales", strCheckPOSSales);
 		String docCode = "";
 		boolean flagOpenFromAuthorization = true;
 		try {
@@ -675,6 +682,31 @@ public class clsStkPostingController {
 				
 		List list = objGlobalFunctionsService.funGetList(sql, "sql");	
 		return list;
+
+	}
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/CheckPOSCheck", method = RequestMethod.GET)
+	private @ResponseBody clsReportBean funGetCheckPOSCheck( @RequestParam(value = "postingDate") String strpostingDate,@RequestParam(value = "location") String strLocCode,HttpServletResponse resp, HttpServletRequest req) {
+		
+	    strpostingDate=objGlobalFunctions.funGetDate("yyyy/MM/dd", strpostingDate);
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String companyName = req.getSession().getAttribute("companyName").toString();
+		String userCode = req.getSession().getAttribute("usercode").toString();
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		String sql="select * from tblstockadjustmenthd a where a.strNarration like '%Sales Data%'"
+				+ " and date(a.dtSADate)='"+strpostingDate+"' and a.strLocCode='"+strLocCode+"' and a.strClientCode='"+clientCode+"'; ";
+		
+		//	+ " AND a.strLocCode='"+strLocCode+"'  ";
+	    
+	    clsReportBean obj = new clsReportBean();
+	    obj.setStrDocType("N");//This is to check pos sales
+		List list = objGlobalFunctionsService.funGetList(sql, "sql");
+		if(list.size()>0 && list !=null)
+		{
+			obj.setStrDocType("Y");
+		}
+		return obj;
+		
 
 	}
 	

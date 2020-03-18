@@ -180,6 +180,9 @@ public class clsSetupMasterBean {
 	private String strRoundOffFinalAmtOnTransaction;
 	private String strPOSTRoundOffAmtToWebBooks;
 	private String strFifo;
+	private String strCheckPOSSales;
+
+	
 
 	public String getStrRateHistoryFormat() {
 		return strRateHistoryFormat;
@@ -1432,7 +1435,16 @@ public class clsSetupMasterBean {
 	}
 
 	
+	public String getStrCheckPOSSales() {
+		return strCheckPOSSales;
+	}
 
+	public void setStrCheckPOSSales(String strCheckPOSSales) {
+		this.strCheckPOSSales = strCheckPOSSales;
+	}
+	
+	
+	
 
 
 

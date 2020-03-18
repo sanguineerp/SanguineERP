@@ -597,6 +597,7 @@ public class clsSetupMasterController {
 		
 		bean.setStrSMSContent(objSetup.getStrSMSContent());
 		bean.setStrFifo(objSetup.getStrFifo());
+		bean.setStrCheckPOSSales(objSetup.getStrCheckPOSSales());
 		
 	}
 
@@ -1148,7 +1149,7 @@ public class clsSetupMasterController {
 		 objPropertySetupModel.setStrIncludeTaxInWeightAvgPrice(objGlobal.funIfNull(bean.getStrIncludeTaxInWeightAvgPrice(), "N", bean.getStrIncludeTaxInWeightAvgPrice()));
 		 
 		/*
-		 * Bank Tab
+		 * Bank TabF
 		 */
 		objPropertySetupModel.setStrBankName(bean.getStrBankName());
 		objPropertySetupModel.setStrBranchName(bean.getStrBranchName());
@@ -1176,14 +1177,13 @@ public class clsSetupMasterController {
 
 		objPropertySetupModel.setDtCreatedDate(ob
 				.funGetCurrentDateTime("yyyy-MM-dd"));
-		objPropertySetupModel.setDtLastModified(ob
-				.funGetCurrentDateTime("yyyy-MM-dd"));
+		objPropertySetupModel.setDtLastModified(ob.funGetCurrentDateTime("yyyy-MM-dd"));
 		objPropertySetupModel.setStrUserCreated(string);
 		objPropertySetupModel.setStrUserModified(string);
-		objPropertySetupModel.setClientCode(req.getSession()
-				.getAttribute("clientCode").toString());
+		objPropertySetupModel.setClientCode(req.getSession().getAttribute("clientCode").toString());
 		objPropertySetupModel.setStrFifo(objGlobal.funIfNull(bean.getStrFifo(),"N",bean.getStrFifo()));
-		
+		objPropertySetupModel.setStrCheckPOSSales(objGlobal.funIfNull(bean.getStrCheckPOSSales(),"N",bean.getStrCheckPOSSales()));
+
 		
 		List auditFormList = bean.getListAuditForm();
 		String AuditFrom = "";

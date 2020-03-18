@@ -1060,6 +1060,7 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 				+ "ADD COLUMN `strFifo` VARCHAR(1) NOT NULL DEFAULT 'N' AFTER `strIncludeTaxInWeightAvgPrice`;";
 		funExecuteQuery(sql);
 		
+		
 		sql = "ALTER TABLE `tblbatchhd` "
 				+ "DROP PRIMARY KEY,"
 				+ "ADD PRIMARY KEY (`strClientCode`, `strProdCode`, `strTransCode`, `strBatchCode`);";
@@ -1075,6 +1076,10 @@ public class clsStructureUpdateDaoImpl implements clsStructureUpdateDao {
 		sql="ALTER TABLE `tblstockpostingdtl` "+
 				" CHANGE COLUMN `dblCStock` `dblCStock` DECIMAL(18,4) NOT NULL DEFAULT '0.00' AFTER `strProdCode`,"+
 				" 	CHANGE COLUMN `dblPStock` `dblPStock` DECIMAL(18,4) NOT NULL DEFAULT '0.00' AFTER `dblCStock`";
+		funExecuteQuery(sql);
+		
+		sql = "ALTER TABLE `tblpropertysetup`"
+			+ " ADD COLUMN `strCheckPOSSales` VARCHAR(1) NOT NULL DEFAULT 'N' AFTER `strFifo`;";
 		funExecuteQuery(sql);
 
 		/*sql="ALTER TABLE `tblpropertysetup` ADD COLUMN `strLastSuppRateShowInStockFlash` VARCHAR(1) NOT NULL DEFAULT 'N' AFTER `strFifo`;";

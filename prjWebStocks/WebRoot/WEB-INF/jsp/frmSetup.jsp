@@ -840,7 +840,7 @@
 				style="border: 0px solid black; width: 100%;height:100%; margin-left: auto; margin-right: auto; background-color: #C0E4FF;">
 				<tr>
 					<td>
-						<div id="tab_container" style="height: 900px">
+						<div id="tab_container" style="height: 950px">
 							<ul class="tabs">
 								<li class="active" data-state="tab1">Company</li>
 								<li data-state="tab2">General</li>
@@ -1493,11 +1493,10 @@
 									
 									</tr>
 									
-									<%-- <tr>
-									<td>Last Supplier Rate Show In StockFlash and Ledger </td>
-									<td>	
-									<s:checkbox path="strLastSuppRateShowInStockFlash" value="Y"/></td>
-									</tr> --%>
+									<tr>
+									<td>Check POS Sales In Physical Post </td>
+									<td><s:checkbox path="strCheckPOSSales" value="Y"/></td>
+									</tr>
 									
 								</table>
 							</div>
