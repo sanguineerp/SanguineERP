@@ -3463,7 +3463,7 @@ public class clsReportsController {
 						sql = sql + " and (" + strLocCodes + ") ";
 					}
 					
-			sql = sql + " AND (a.dblQuantity* IFNULL(d.RecipeCost,c.dblCostRM))>0 ";
+			//This condition need to be discuss ,discuss and then uncommnet this line  //sql = sql + " AND (a.dblQuantity* IFNULL(d.RecipeCost,c.dblCostRM))>0 ";
 			
 			sql = sql + " GROUP BY c.strProdCode ORDER BY h.strLocName ASC, f.strGName ASC, e.strSGName ASC, c.strProdName ASC " ;
 		
