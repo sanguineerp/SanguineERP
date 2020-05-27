@@ -4896,7 +4896,7 @@ public class clsReportsController {
 			DecimalFormat df = new DecimalFormat("#.##");
 			for (int cnt = 0; cnt < list.size(); cnt++) {
 				Object[] arrObj = (Object[]) list.get(cnt);
-				double closeStk = Double.parseDouble(arrObj[6].toString());
+				double closeStk = Double.parseDouble(arrObj[2].toString());
 				double value = Double.parseDouble(arrObj[3].toString());
 
 				clsStockFlashModel objStkFlashModel = new clsStockFlashModel();
