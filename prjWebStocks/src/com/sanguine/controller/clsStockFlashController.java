@@ -1080,7 +1080,7 @@ public class clsStockFlashController {
 		{
 			sql+="and b.strClass='" + prodClass + "' ";
 		}
-		
+		sql+=" and a.dblClosingStk <>0";
 
 		System.out.println(sql);
 		// List list=objStkFlashService.funGetStockFlashData(sql,clientCode,

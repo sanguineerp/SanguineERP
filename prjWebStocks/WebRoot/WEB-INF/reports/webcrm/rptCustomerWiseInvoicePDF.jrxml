@@ -82,6 +82,7 @@
 		<field name="subTotalAmt" class="java.lang.Double"/>
 		<field name="strRemark" class="java.lang.String"/>
 		<field name="taxAmt" class="java.lang.Double"/>
+		<field name="SrNoOfInv" class="java.lang.Integer"/>
 		<variable name="vdblTotalAmt" class="java.lang.Double" calculation="Sum">
 			<variableExpression><![CDATA[$F{totalAmt}]]></variableExpression>
 			<initialValueExpression><![CDATA[new Double(0.00)]]></initialValueExpression>
@@ -182,11 +183,11 @@
 					<datasetRun subDataset="dsBillWiseInvoice" uuid="15ef1fc8-05ad-43ba-8178-4a69d0c06039">
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:column width="80" uuid="c507399c-e92e-4534-9a27-967d896bc755">
+					<jr:column width="70" uuid="755013c8-83ea-4ba4-9ec2-ac408f0752e1">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
-						<jr:tableHeader style="Table_TH" height="15">
+						<jr:tableHeader style="Table_TH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="80" height="15" uuid="bf15ba75-8782-4f74-b291-ead8990f2404"/>
+								<reportElement x="0" y="0" width="70" height="15" uuid="d47605da-df79-4a0b-a10f-c97e2a6002cd"/>
 								<box leftPadding="2"/>
 								<textElement>
 									<font fontName="Serif" size="8" isBold="true"/>
@@ -197,7 +198,7 @@
 						<jr:tableFooter style="Table_TD" height="15" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="15">
 							<textField>
-								<reportElement x="0" y="0" width="80" height="15" uuid="a7f8d4f2-f34f-4705-845c-dff07edb47d3"/>
+								<reportElement x="0" y="0" width="70" height="15" uuid="28879778-77f0-4cb7-8ab4-190fb28248b6"/>
 								<box leftPadding="2"/>
 								<textElement>
 									<font fontName="Serif" size="8"/>
@@ -206,11 +207,35 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="190" uuid="3fc3ff79-0437-42f8-b36b-897be660093e">
+					<jr:column width="70" uuid="c507399c-e92e-4534-9a27-967d896bc755">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
-						<jr:tableHeader style="Table_TH" height="15">
+						<jr:tableHeader style="Table_TH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="190" height="15" uuid="374dac02-42ea-47f7-a830-06a624e99c96"/>
+								<reportElement x="0" y="0" width="70" height="15" uuid="bf15ba75-8782-4f74-b291-ead8990f2404"/>
+								<box leftPadding="2"/>
+								<textElement>
+									<font fontName="Serif" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Sr No Of Inv ]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="Table_TD" height="15" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="15">
+							<textField>
+								<reportElement x="0" y="0" width="70" height="15" uuid="a7f8d4f2-f34f-4705-845c-dff07edb47d3"/>
+								<box leftPadding="2"/>
+								<textElement>
+									<font fontName="Serif" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{SrNoOfInv}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="170" uuid="3fc3ff79-0437-42f8-b36b-897be660093e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:tableHeader style="Table_TH" height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="170" height="15" uuid="374dac02-42ea-47f7-a830-06a624e99c96"/>
 								<box leftPadding="2"/>
 								<textElement>
 									<font fontName="Serif" size="8" isBold="true"/>
@@ -220,7 +245,7 @@
 						</jr:tableHeader>
 						<jr:tableFooter style="Table_TD" height="15" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="190" height="15" uuid="f22942c7-5266-4403-ab90-56b96c217bf8"/>
+								<reportElement x="0" y="0" width="170" height="15" uuid="f22942c7-5266-4403-ab90-56b96c217bf8"/>
 								<box rightPadding="2">
 									<topPen lineWidth="0.0"/>
 									<leftPen lineWidth="0.0"/>
@@ -235,7 +260,7 @@
 						</jr:tableFooter>
 						<jr:detailCell style="Table_TD" height="15">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="190" height="15" uuid="d874910c-1522-42d2-81b7-f622bda941d4"/>
+								<reportElement x="0" y="0" width="170" height="15" uuid="d874910c-1522-42d2-81b7-f622bda941d4"/>
 								<box leftPadding="2"/>
 								<textElement>
 									<font fontName="Serif" size="8"/>
@@ -245,12 +270,12 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="60" uuid="78651244-8419-41c0-aea9-0e19bad0d7bd">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
-						<jr:tableHeader style="Table_TH" height="15">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:tableHeader style="Table_TH" height="15" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="15" uuid="ff47584d-616c-4cb1-ba65-1c40b107b2c1"/>
 								<box rightPadding="2"/>
-								<textElement textAlignment="Right">
+								<textElement textAlignment="Center">
 									<font fontName="Serif" size="8" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Inv Date]]></text>
@@ -277,8 +302,8 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="60" uuid="1e81658e-6b5c-488a-91b8-5fcd7cc4ca1c">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
-						<jr:tableHeader style="Table_TH" height="15">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:tableHeader style="Table_TH" height="15" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="15" uuid="2a9941c0-dbd3-4c24-a042-9758c4960859"/>
 								<box rightPadding="2"/>
@@ -316,8 +341,8 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="60" uuid="64574b83-edb4-40a7-9d79-f346b45ad924">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
-						<jr:tableHeader style="Table_TH" height="15">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:tableHeader style="Table_TH" height="15" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="15" uuid="f8673d6c-2794-42ef-b900-3c2e19096236"/>
 								<box rightPadding="2"/>
@@ -351,12 +376,12 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="90" uuid="3f281b6b-62be-4b68-acc4-300f9468d470">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
-						<jr:tableHeader style="Table_TH" height="15">
+					<jr:column width="70" uuid="3f281b6b-62be-4b68-acc4-300f9468d470">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+						<jr:tableHeader style="Table_TH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="90" height="15" uuid="c5209fdc-ccec-4670-be97-192ea511710e"/>
-								<box leftPadding="2"/>
+								<reportElement x="0" y="0" width="70" height="15" uuid="c5209fdc-ccec-4670-be97-192ea511710e"/>
+								<box leftPadding="0" rightPadding="3"/>
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="8" isBold="true"/>
 								</textElement>
@@ -365,8 +390,8 @@
 						</jr:tableHeader>
 						<jr:tableFooter style="Table_TD" height="15" rowSpan="1">
 							<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="90" height="15" uuid="89e84686-50a5-4887-92d1-fab92ada6282"/>
-								<box rightPadding="2"/>
+								<reportElement x="0" y="0" width="70" height="15" uuid="89e84686-50a5-4887-92d1-fab92ada6282"/>
+								<box rightPadding="3"/>
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="8"/>
 								</textElement>
@@ -375,8 +400,8 @@
 						</jr:tableFooter>
 						<jr:detailCell style="Table_TD" height="15">
 							<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="90" height="15" uuid="dcc658fc-0ff6-455f-bb12-77eda28d3f59"/>
-								<box rightPadding="2"/>
+								<reportElement x="0" y="0" width="70" height="15" uuid="dcc658fc-0ff6-455f-bb12-77eda28d3f59"/>
+								<box rightPadding="3"/>
 								<textElement textAlignment="Right">
 									<font fontName="Serif" size="8"/>
 								</textElement>

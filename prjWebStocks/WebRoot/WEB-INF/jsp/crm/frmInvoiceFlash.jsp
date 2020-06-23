@@ -434,18 +434,22 @@
 			    var table = document.getElementById("tblInvoiceDet");
 			    var rowCount = table.rows.length;
 			    var row = table.insertRow(rowCount);
+			    var SrNoInv=data.strInvCode.substr(7,data.strInvCode.length);
+			    SrNoInv=parseInt(SrNoInv);
 			    row.insertCell(0).innerHTML= "<a  name=\"StrInvCode["+(rowCount)+"]\"  href="+invoiceUrl+"\.html?rptInvCode="+data.strInvCode+"&rptInvDate="+data.dteInvDate+"\ target=\"_blank\"  id=\"StrInvCode."+(rowCount)+"\" >"+data.strInvCode+"</a>";		    
-			    row.insertCell(1).innerHTML= "<input name=\"DteInvDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"DteInvDate."+(rowCount)+"\" value='"+data.dteInvDate+"'>";
-			    row.insertCell(2).innerHTML= "<input name=\"strSerialNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strSerialNo."+(rowCount)+"\" value='"+data.strSerialNo+"'>";
-			    row.insertCell(3).innerHTML= "<input name=\"CustomerName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"CustomerName."+(rowCount)+"\" value='"+data.strCustName+"'>";
-			    row.insertCell(4).innerHTML= "<input name=\"strSettleDesc["+(rowCount)+"]\" id=\"strSettleDesc."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.strSettleDesc+">";
-			    row.insertCell(5).innerHTML= "<input name=\"StrAgainst["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"StrAgainst."+(rowCount)+"\" value='"+data.strAgainst+"'>";
-			    row.insertCell(6).innerHTML= "<input name=\"StrVehNo["+(rowCount)+"]\" id=\"StrVehNo."+(rowCount)+"\" readonly=\"readonly\" size=\"14%\" class=\"Box\" value="+data.strVehNo+">";
-			    row.insertCell(7).innerHTML= "<input name=\"StrCurrency["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"14%\" id=\"StrCurrency."+(rowCount)+"\" value='"+data.strCurrency+"'>";
-			    row.insertCell(8).innerHTML= "<input name=\"DblSubTotalAmt["+(rowCount)+"]\" id=\"DblSubTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblSubTotalAmt+">";
-			    row.insertCell(9).innerHTML= "<input name=\"DblTaxAmt["+(rowCount)+"]\" id=\"DblTaxAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblTaxAmt+">";
-			    row.insertCell(10).innerHTML= "<input name=\"DblTotalAmt["+(rowCount)+"]\" id=\"DblTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblTotalAmt+">";
-			    var x=row.insertCell(11);
+			    row.insertCell(1).innerHTML= "<a  name=\"StrInvCode["+(rowCount)+"]\"    id=\"StrInvCode."+(rowCount)+"\" >"+SrNoInv+"</a>";		    
+
+			    row.insertCell(2).innerHTML= "<input name=\"DteInvDate["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"DteInvDate."+(rowCount)+"\" value='"+data.dteInvDate+"'>";
+			    row.insertCell(3).innerHTML= "<input name=\"strSerialNo["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"15%\" id=\"strSerialNo."+(rowCount)+"\" value='"+data.strSerialNo+"'>";
+			    row.insertCell(4).innerHTML= "<input name=\"CustomerName["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"30%\" id=\"CustomerName."+(rowCount)+"\" value='"+data.strCustName+"'>";
+			    row.insertCell(5).innerHTML= "<input name=\"strSettleDesc["+(rowCount)+"]\" id=\"strSettleDesc."+(rowCount)+"\" readonly=\"readonly\"   size=\"14%\" class=\"Box\" value="+data.strSettleDesc+">";
+			    row.insertCell(6).innerHTML= "<input name=\"StrAgainst["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"25%\" id=\"StrAgainst."+(rowCount)+"\" value='"+data.strAgainst+"'>";
+			    row.insertCell(7).innerHTML= "<input name=\"StrVehNo["+(rowCount)+"]\" id=\"StrVehNo."+(rowCount)+"\" readonly=\"readonly\" size=\"14%\" class=\"Box\" value="+data.strVehNo+">";
+			    row.insertCell(8).innerHTML= "<input name=\"StrCurrency["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"14%\" id=\"StrCurrency."+(rowCount)+"\" value='"+data.strCurrency+"'>";
+			    row.insertCell(9).innerHTML= "<input name=\"DblSubTotalAmt["+(rowCount)+"]\" id=\"DblSubTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblSubTotalAmt+">";
+			    row.insertCell(10).innerHTML= "<input name=\"DblTaxAmt["+(rowCount)+"]\" id=\"DblTaxAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblTaxAmt+">";
+			    row.insertCell(11).innerHTML= "<input name=\"DblTotalAmt["+(rowCount)+"]\" id=\"DblTotalAmt."+(rowCount)+"\" readonly=\"readonly\" style=\"text-align: right;\" size=\"10%\" class=\"Box\" value="+data.dblTotalAmt+">";
+			    var x=row.insertCell(12);
 				x.innerHTML= "<input name=\"strNarration["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strNarration."+(rowCount)+"\" value='"+data.strNarration+"'>";			
 				x.title=data.strNarration;
 			   // row.insertCell(11).innerHTML= "<input name=\"strNarration["+(rowCount)+"]\" readonly=\"readonly\" class=\"Box\" size=\"50%\" id=\"strNarration."+(rowCount)+"\" value='"+data.strNarration+"'>";
@@ -1385,6 +1389,8 @@
 				<tr bgcolor="#72BEFC">
 					<td width="4.4%">Invoice Code</td>
 					<!--  COl1   -->
+					<td width="4.4%">Sr No Of Inv</td>
+					
 					<td width="4%">Date</td>
 					<!--  COl2   -->
 					<td width="4.4%">JV No</td>
@@ -1418,6 +1424,8 @@
 					<tbody>
 					<col style="width: 4%">
 					<!--  COl1   -->
+					<col style="width: 4%">
+					
 					<col style="width: 3.7%">
 					<!--  COl2   -->
 					<col style="width: 4%">

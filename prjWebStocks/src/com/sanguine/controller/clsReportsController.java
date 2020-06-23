@@ -4885,8 +4885,9 @@ public class clsReportsController {
 			 */
 			if (showZeroItems.equals("No")) {
 				sql += "and (a.dblOpeningStk >0 or a.dblGRN >0 or dblSCGRN >0 or a.dblStkTransIn >0 or a.dblStkAdjIn >0 " + "or a.dblMISIn >0 or a.dblQtyProduced >0 or a.dblMaterialReturnIn>0 or a.dblStkTransOut >0 " + "or a.dblStkAdjOut >0 or a.dblMISOut >0 or a.dblQtyConsumed  >0 or a.dblSales  >0 " + "or a.dblMaterialReturnOut  >0 or a.dblDeliveryNote > 0)";
+			
 			}
-
+			sql +=" and a.dblClosingStk <>0";
 			clsLocationMasterModel objLocCode = objLocationMasterService.funGetObject(locCode, clientCode);
 			// System.out.println(sql);
 			// List list=objStkFlashService.funGetStockFlashData(sql,clientCode,
@@ -4896,7 +4897,16 @@ public class clsReportsController {
 			DecimalFormat df = new DecimalFormat("#.##");
 			for (int cnt = 0; cnt < list.size(); cnt++) {
 				Object[] arrObj = (Object[]) list.get(cnt);
-				double closeStk = Double.parseDouble(arrObj[2].toString());
+				double closeStk=0;
+				if(qtyWithUOM.equals("No"))
+				{
+					closeStk = Double.parseDouble(arrObj[2].toString());
+
+				}
+				else
+				{
+					closeStk=Double.parseDouble(arrObj[6].toString());
+				}
 				double value = Double.parseDouble(arrObj[3].toString());
 
 				clsStockFlashModel objStkFlashModel = new clsStockFlashModel();
@@ -4906,8 +4916,7 @@ public class clsReportsController {
 					
 					objStkFlashModel.setDblClosingStock(df.format(closeStk).toString());	
 				}else{
-					
-					objStkFlashModel.setDblClosingStock(arrObj[2].toString());
+						objStkFlashModel.setDblClosingStock(arrObj[2].toString());					
 				}
 				
 				objStkFlashModel.setDblValue(df.format(value).toString());

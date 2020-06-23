@@ -556,7 +556,7 @@
 								</staticText>
 							</jr:tableHeader>
 							<jr:tableFooter style="table 7_TD" height="30" rowSpan="1">
-								<textField isBlankWhenNull="true">
+								<textField pattern="#,##0.0000#" isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="90" height="30" uuid="f3e5597e-b9e8-46ad-b6bb-4667afb60404"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif" isBold="true"/>
@@ -567,6 +567,7 @@
 							<jr:detailCell style="table 7_TD" height="21" rowSpan="1">
 								<textField>
 									<reportElement x="0" y="0" width="90" height="21" uuid="b511d6de-bea2-4a8b-8ccc-2f5cc883bff3"/>
+									<box rightPadding="4"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif" size="8"/>
 									</textElement>

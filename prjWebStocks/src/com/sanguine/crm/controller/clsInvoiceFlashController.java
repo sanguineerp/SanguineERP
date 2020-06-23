@@ -1527,6 +1527,8 @@ public class clsInvoiceFlashController {
 		totalsList.add("");	
 		totalsList.add("");
 		totalsList.add("");
+		totalsList.add("");
+
 		
 		
 		String fromDate = request.getParameter("frmDte").toString();
@@ -1564,6 +1566,8 @@ public class clsInvoiceFlashController {
 		
 		StringBuilder sqlInvoiceFlash = new StringBuilder();
 		headerList.add("Invoice Code");
+		headerList.add("Sr No Of Inv");
+
 		headerList.add("Date");
 		headerList.add("JV No");
 		headerList.add("Customer Name");
@@ -1688,6 +1692,11 @@ public class clsInvoiceFlashController {
 				
 				List dataList = new ArrayList<>();
 				dataList.add(objInvoice[0].toString());
+				String InvCode=objInvoice[0].toString().substring(7,objInvoice[0].toString().length() );
+				int InvNum=Integer.parseInt(InvCode);
+				InvCode=String.valueOf(InvNum);
+				dataList.add(InvCode);
+
 				dataList.add(objInvoice[1].toString());
 				String jvNo="";
 				jvNo=objInvoice[10].toString();
@@ -3223,7 +3232,7 @@ public class clsInvoiceFlashController {
 				}
 			}
 			
-			sqlInvoiceFlashPDF.append("(select a.strInvCode ,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y') as dteInvDate,b.strPName as strCustName,a.dblSubTotalAmt/" + currValue + " as subTotalAmt,a.dblTaxAmt/" + currValue + " as taxAmt"
+			sqlInvoiceFlashPDF.append("(select a.strInvCode ,RIGHT(a.strInvCode,5) as SrNoOfInv,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y') as dteInvDate,b.strPName as strCustName,a.dblSubTotalAmt/" + currValue + " as subTotalAmt,a.dblTaxAmt/" + currValue + " as taxAmt"
 					+ ",(a.dblSubTotalAmt/" + currValue + "+ a.dblTaxAmt/" + currValue + ") as totalAmt,ifnull(a.strNarration,'') as strRemark"
 					+ " FROM tblpartymaster b,tblsettlementmaster c,tblinvoicehd a "
 					+ " where   date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' " + " and a.strLocCode='" + locCode +"' "
@@ -3244,7 +3253,7 @@ public class clsInvoiceFlashController {
 			
 			sqlInvoiceFlashPDF.append(" UNION ");
 			
-			sqlInvoiceFlashPDF.append("(select a.strInvCode ,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y') as dteInvDate,b.strPName as strCustName,a.dblSubTotalAmt/" + currValue + " as subTotalAmt,a.dblTaxAmt/" + currValue + " as taxAmt"
+			sqlInvoiceFlashPDF.append("(select a.strInvCode ,RIGHT(a.strInvCode,5) as SrNoOfInv,DATE_FORMAT(a.dteInvDate,'%d-%m-%Y') as dteInvDate,b.strPName as strCustName,a.dblSubTotalAmt/" + currValue + " as subTotalAmt,a.dblTaxAmt/" + currValue + " as taxAmt"
 					+ ",(a.dblSubTotalAmt/" + currValue + "+ a.dblTaxAmt/" + currValue + ") as totalAmt,ifnull(a.strNarration,'') as strRemark"
 					+ " FROM tblpartymaster b,tblinvoicehd a "
 					+ " where   date(a.dteInvDate) between '" + fromDate + "' and '" + toDate + "' " + " and a.strLocCode='" + locCode +"' "
