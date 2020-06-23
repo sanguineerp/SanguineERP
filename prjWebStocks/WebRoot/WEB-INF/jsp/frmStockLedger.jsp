@@ -312,6 +312,7 @@
 
 					if (issue == '0') {
 						tempIssue += parseFloat(issue);
+					
 					} else {
 						var dblIssHigh = 0;
 						var dblIsslow = 0;

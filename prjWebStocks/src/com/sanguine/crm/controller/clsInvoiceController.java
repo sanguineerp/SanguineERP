@@ -7234,6 +7234,7 @@ public void funCallReportInvoiceFormat8Report(@RequestParam("rptInvCode") String
 		hm.put("strState", objSetup.getStrState());
 		hm.put("strCountry", objSetup.getStrCountry());
 		hm.put("strPin", objSetup.getStrPin());
+		
 		if(clientCode.equalsIgnoreCase("336.001"))
 		{
 			InvCode=InvCode.substring(7,InvCode.length() );

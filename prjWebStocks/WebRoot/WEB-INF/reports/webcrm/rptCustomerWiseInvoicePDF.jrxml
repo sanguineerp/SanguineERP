@@ -150,7 +150,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font fontName="Serif" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Customer Wise Invoice Report]]></text>
+				<text><![CDATA[ Customer Wise Invoice Report]]></text>
 			</staticText>
 			<line>
 				<reportElement x="-2" y="80" width="554" height="1" uuid="94fd99b3-07bd-4661-a8ad-71dd84e3100c"/>

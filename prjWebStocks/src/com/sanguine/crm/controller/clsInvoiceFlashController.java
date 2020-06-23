@@ -1518,6 +1518,7 @@ public class clsInvoiceFlashController {
 		List detailList = new ArrayList();
 		List headerList = new ArrayList();
 		// Totals at Bottom
+		
 		List totalsList = new ArrayList();
 		totalsList.add("Total");
 		totalsList.add("");

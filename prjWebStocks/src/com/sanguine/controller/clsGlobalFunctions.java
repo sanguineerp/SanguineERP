@@ -348,6 +348,7 @@ public class clsGlobalFunctions {
 		//String transYear = funGetAlphabet((Integer.parseInt(years) % 26));
 		String transMonth = funGetAlphabet(Integer.parseInt(spDate[1])-1);
 		String strDocLiteral = "";
+		
 		String sql = "";
 		String sqlAudit = "";
 

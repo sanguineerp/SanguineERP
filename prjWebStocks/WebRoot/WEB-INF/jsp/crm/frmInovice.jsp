@@ -160,6 +160,7 @@
 									}
 									else if(invoiceformat=="Format 7")
 									{
+				
 										window.open(getContextPath()+"/rptInvoiceSlipFormat7Report.html?rptInvCode="+code+"&rptInvDate="+invDate,'_blank');
 									}
 									else if(invoiceformat=="Format 8")
