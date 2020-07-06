@@ -312,54 +312,12 @@
 	</pageFooter>
 	<lastPageFooter>
 		<band height="70">
-			<textField>
-				<reportElement style="SubTitle" x="0" y="41" width="290" height="17" forecolor="#050505" uuid="154d5c93-aa74-4f74-9cc8-ce1fdecd528f"/>
-				<textElement>
-					<font fontName="Serif" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
-			</textField>
-			<textField pattern="#0.00">
-				<reportElement x="450" y="38" width="103" height="20" forecolor="#050505" uuid="98b41385-0e2e-48fc-9e48-da9704aa5a1c"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Serif" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{vTotalAmt}+$P{dblExtraAmt}-$P{dblDisAmt}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="0" y="61" width="555" height="1" forecolor="#969696" uuid="db397613-d6e9-4755-96b6-7b0b417fd3f4"/>
 				<graphicElement>
 					<pen lineWidth="3.0"/>
 				</graphicElement>
 			</line>
-			<textField>
-				<reportElement style="SubTitle" x="0" y="3" width="290" height="17" forecolor="#050505" uuid="aba81138-1fa4-4595-b7d1-84d92e4b362a"/>
-				<textElement>
-					<font fontName="Serif" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Total Extra Amount"]]></textFieldExpression>
-			</textField>
-			<textField pattern="#0.00">
-				<reportElement x="451" y="-1" width="103" height="20" forecolor="#050505" uuid="8311bf50-d1a1-427b-b6fb-6bbf5215c12d"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Serif" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{dblDisAmt}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement style="SubTitle" x="0" y="21" width="290" height="17" forecolor="#050505" uuid="667d1582-beb7-40f2-811a-f1eb437fffb5"/>
-				<textElement>
-					<font fontName="Serif" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Total Discount Amount"]]></textFieldExpression>
-			</textField>
-			<textField pattern="#0.00">
-				<reportElement x="450" y="17" width="103" height="20" forecolor="#050505" uuid="31be649a-5290-477c-91d5-29efa7243aee"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Serif" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{dblExtraAmt}]]></textFieldExpression>
-			</textField>
 		</band>
 	</lastPageFooter>
 	<summary>

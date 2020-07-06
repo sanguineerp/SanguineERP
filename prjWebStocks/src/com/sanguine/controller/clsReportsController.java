@@ -4965,8 +4965,8 @@ public class clsReportsController {
 			hm.put("dteToDate", tDate);
 			hm.put("stkMiniFlashList", listStockFlashModel);
 			hm.put("strLocName", objLocCode.getStrLocName());
-			hm.put("totValue", totValue);
-			hm.put("totClosingStk", totClosingStk);
+			hm.put("totValue", Math.round(Float.parseFloat(String.valueOf(totValue))));
+			hm.put("totClosingStk", Math.round(Float.parseFloat(String.valueOf(totClosingStk))));
 
 			JasperDesign jd = JRXmlLoader.load(reportName);
 			JasperReport jr = JasperCompileManager.compileReport(jd);
@@ -5318,7 +5318,7 @@ public class clsReportsController {
 			{ "unused", "unused", "unused", "unchecked" })
 	private void funCallBillWisePurchaseRegisterReport(clsReportBean objBean, HttpServletResponse resp, HttpServletRequest req)
 	{
-
+//Used by 1000 oaks ,before changing in this function first discuss with sir
 		Connection con = objGlobalFunctions.funGetConnection(req);
 		String clientCode = req.getSession().getAttribute("clientCode").toString();
 		String companyName = req.getSession().getAttribute("companyName").toString();
@@ -5349,7 +5349,7 @@ public class clsReportsController {
 
 		//String sqlQuery = " SELECT d.strPName,a.strBillNo, a.dblTotal AS Amt,e.strLocName, DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y')dtGRNDate ,a.strGRNCode" + " FROM tblgrnhd a,tblpartymaster d,tbllocationmaster e" + " WHERE  a.strSuppCode=d.strPCode  " + " and a.strLocCode=e.strLocCode ";
 
-		String sqlQuery = "SELECT d.strPName,a.strBillNo, sum(((b.dblUnitPrice*(b.dblQty-b.dblRejected))-((b.dblUnitPrice*(b.dblQty-b.dblRejected))*a.dblDisRate)/100)+b.dblTaxAmt) AS Amt,e.strLocName, "
+		String sqlQuery = "SELECT d.strPName,a.strBillNo,ROUND( sum(((b.dblUnitPrice*(b.dblQty-b.dblRejected))-((b.dblUnitPrice*(b.dblQty-b.dblRejected))*a.dblDisRate)/100)+b.dblTaxAmt)) + ROUND(a.dblExtra) AS Amt,e.strLocName, "
                 +" DATE_FORMAT(a.dtGRNDate,'%d-%m-%Y')dtGRNDate,a.strGRNCode,a.dblExtra,a.dblDisAmt  "
                 +" FROM tblgrnhd a,tblgrndtl b,tblpartymaster d,tbllocationmaster e "
                 +" WHERE a.strGRNCode =b.strGRNCode and a.strSuppCode=d.strPCode AND a.strLocCode=e.strLocCode  "; 
@@ -5421,8 +5421,8 @@ public class clsReportsController {
 		hm.put("strPin", objSetup.getStrPin());
 		hm.put("dteFromDate", dteFromDate);
 		hm.put("dteToDate", dteToDate);
-		hm.put("dblExtraAmt", extraAmt);
-        hm.put("dblDisAmt",disAmt);
+		//hm.put("dblExtraAmt", extraAmt);
+       // hm.put("dblDisAmt",disAmt);
 		try
 		{
 			JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(fieldList);

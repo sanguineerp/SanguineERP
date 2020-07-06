@@ -274,10 +274,10 @@
 		</box>
 	</style>
 	<subDataset name="dsStockFlashMini" uuid="853047b7-6353-4c38-9433-7c65bf9e6f98">
-		<parameter name="totval" class="java.lang.Double">
+		<parameter name="totval" class="java.lang.Integer">
 			<parameterDescription><![CDATA[]]></parameterDescription>
 		</parameter>
-		<parameter name="totClosingStk" class="java.lang.Double"/>
+		<parameter name="totClosingStk" class="java.lang.Integer"/>
 		<queryString language="SQL">
 			<![CDATA[]]>
 		</queryString>
@@ -324,8 +324,8 @@
 	<parameter name="dteToDate" class="java.lang.String"/>
 	<parameter name="strLocName" class="java.lang.String"/>
 	<parameter name="stkMiniFlashList" class="java.util.List"/>
-	<parameter name="totValue" class="java.lang.Double"/>
-	<parameter name="totClosingStk" class="java.lang.Double"/>
+	<parameter name="totValue" class="java.lang.Integer"/>
+	<parameter name="totClosingStk" class="java.lang.Integer"/>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
@@ -556,8 +556,9 @@
 								</staticText>
 							</jr:tableHeader>
 							<jr:tableFooter style="table 7_TD" height="30" rowSpan="1">
-								<textField pattern="#,##0.0000#" isBlankWhenNull="true">
+								<textField isBlankWhenNull="true">
 									<reportElement x="0" y="0" width="90" height="30" uuid="f3e5597e-b9e8-46ad-b6bb-4667afb60404"/>
+									<box rightPadding="4"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
@@ -587,8 +588,9 @@
 								</staticText>
 							</jr:tableHeader>
 							<jr:tableFooter style="table 7_TD" height="30" rowSpan="1">
-								<textField pattern="#,##0.00">
+								<textField>
 									<reportElement x="0" y="0" width="90" height="30" uuid="d0cc86de-b64c-411e-a722-eea7b5383058"/>
+									<box rightPadding="4"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif" isBold="true"/>
 									</textElement>
@@ -598,6 +600,7 @@
 							<jr:detailCell style="table 7_TD" height="21" rowSpan="1">
 								<textField>
 									<reportElement x="2" y="0" width="85" height="20" uuid="5c69b479-1d5c-41ca-82a7-6699a5a09fd1"/>
+									<box rightPadding="1"/>
 									<textElement textAlignment="Right">
 										<font fontName="Serif" size="8"/>
 									</textElement>
