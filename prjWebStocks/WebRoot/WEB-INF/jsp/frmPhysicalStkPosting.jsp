@@ -414,7 +414,7 @@
 			var looseQty=document.getElementById("txtLooseQty."+index).value;
 			document.getElementById("txtQuantity."+index).value=looseQty;
 			var PhyQty=document.getElementById("txtQuantity."+index).value;
-			var unitPrice=document.getElementById("txtCostRM."+index).value;
+			 var unitPrice=document.getElementById("txtCostRM."+index).value;
 			
 			var actualRate=document.getElementById("txtActualRate."+index).value; 
 			actualRate=parseFloat(actualRate).toFixed(maxAmountDecimalPlaceLimit);
@@ -1549,8 +1549,121 @@
 			    	$("#txtAreaNarration").val('');
 			    }
 			    
-			    function funGetLocationWiseProduct()
+			    function funMakeStockZero()
 				{
+			    	var code=$("#txtLocCode").val();
+			    	var postingDate=$("#txtStkPostDate").val();
+
+
+			    	 var searchUrl=getContextPath()+"/funGetStock.html?locCode="+code+"&fDate="+postingDate;	
+					$.ajax({
+					        type: "GET",
+					        url: searchUrl,
+						    dataType: "json",
+						    async: false,
+						    success: function(response)
+						    {
+						    	
+						    	
+						    },
+						    error: function(jqXHR, exception) {
+					            if (jqXHR.status === 0) {
+					                alert('Not connect.n Verify Network.');
+					            } else if (jqXHR.status == 404) {
+					                alert('Requested page not found. [404]');
+					            } else if (jqXHR.status == 500) {
+					                alert('Internal Server Error [500].');
+					            } else if (exception === 'parsererror') {
+					                alert('Requested JSON parse failed.');
+					            } else if (exception === 'timeout') {
+					                alert('Time out error.');
+					            } else if (exception === 'abort') {
+					                alert('Ajax request aborted.');
+					            } else {
+					                alert('Uncaught Error.n' + jqXHR.responseText);
+					            }
+						    }
+					      });
+					
+					funGetStockOfAllProducts();
+				
+			    	
+				}
+			    function funGetStockOfAllProducts()
+				{
+			    	
+			    	var code=$("#txtLocCode").val();
+
+					var searchUrl="";
+					searchUrl=getContextPath()+"/GetStockOfAllProducts.html?locCode="+code;
+					$.ajax
+					({
+				        type: "GET",
+				        url: searchUrl,
+					    dataType: "json",
+					    async: false,
+					    success: function(response)
+					    {
+					    	
+					    	$.each(response, function(i,item)
+							{		
+					    		$("#txtProdCode").val(response[i][0]);
+					        	$("#lblProdName").text(response[i][1]);
+					        	//var dblStock=funGetProductStock(response.strProdCode);
+					        	$("#txtStock").val(response[i][2]);
+					        	//$("#spStockUOM").text(response.strReceivedUOM);
+					        	$("#txtCostRM").val(response[i][3]);
+					        	$("#txtWtUnit").val(response[i][4]);
+					        	
+					        	
+					        	 var currentStkQty1=$("#txtStock").val().split(".");
+					 		    var tmpCurrentStkQty='';
+					 			if(currentStkQty1.length>1){
+					 				tmpCurrentStkQty=parseFloat(parseFloat("0."+currentStkQty1[1]) * response.dblRecipeConversion );
+					 				tmpCurrentStkQty=tmpCurrentStkQty.toFixed(0);
+					 			}
+					 			var currentStkQtyRecepi=currentStkQty1 +" "+response.strReceivedUOM;
+					 			if(tmpCurrentStkQty!=''){
+					 				currentStkQtyRecepi="("+currentStkQty1[0]+" "+response.strReceivedUOM+" "+tmpCurrentStkQty+" "+response.strRecipeUOM+")";
+					 			
+					 			}
+					        	
+					        	$("#spStockUOMWithConversion").text(currentStkQtyRecepi);
+					        	
+					        	
+					        	funLatestGRNProductRate(response[i][0],response[i][3]);
+				    			$("#txtQuantity").val("0");
+
+				    			btnAdd_onclick();
+						    	    
+							}); 
+							    	
+					    	
+					    },
+					    error: function(jqXHR, exception) {
+				            if (jqXHR.status === 0) {
+				                alert('Not connect.n Verify Network.');
+				            } else if (jqXHR.status == 404) {
+				                alert('Requested page not found. [404]');
+				            } else if (jqXHR.status == 500) {
+				                alert('Internal Server Error [500].');
+				            } else if (exception === 'parsererror') {
+				                alert('Requested JSON parse failed.');
+				            } else if (exception === 'timeout') {
+				                alert('Time out error.');
+				            } else if (exception === 'abort') {
+				                alert('Ajax request aborted.');
+				            } else {
+				                alert('Uncaught Error.n' + jqXHR.responseText);
+				            }		            
+				        }
+				    });
+				}
+				
+			    
+			    
+			    function funGetLocationWiseProduct()
+			    {
 			    	var code=$("#txtLocCode").val();
 			    		
 				
@@ -1755,7 +1868,7 @@
 			 
 			  <td><input id="btnAdd" type="button" value="Add"   class="smallButton" onclick="return btnAdd_onclick();"></input></td>
 			  <td><input id="btnRepost" type="button" value="Repost"   class="smallButton" onclick="return btnRepost_onclick();"></input></td>
-	         <td><input id="btnMakeStockZero" type="button" value="Make Stk Zero"   class="form_button" onclick="return funGetLocationWiseProduct();  "></input></td>
+	         <td><input id="btnMakeStockZero" type="button" value="Make Stk Zero"   class="form_button" onclick="return funMakeStockZero();  "></input></td>
 			 
 			  </tr>			  
 			  </table>

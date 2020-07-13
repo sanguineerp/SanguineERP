@@ -3109,12 +3109,12 @@ public class clsGRNController {
 		StringBuilder sqlBuilder = new StringBuilder();
 		sqlBuilder.setLength(0);
 		sqlBuilder
-				.append(" SELECT ifnull(MAX(DATE(a.dtGRNDate)),''),ifnull(b.dblUnitPrice,p.dblCostRM) "
+				.append(" SELECT ifnull((DATE(a.dtGRNDate)),''),ifnull(b.dblUnitPrice,p.dblCostRM) "
 						+ " FROM tblproductmaster p left outer join tblgrndtl b on p.strProdCode=b.strProdCode "
 						+ " left outer join tblgrnhd a on a.strGRNCode=b.strGRNCode "
-						+ " WHERE   p.strProdCode='"
-						+ prodCode
-						+ "' AND p.strClientCode='" + clientCode + "';  ");
+						+ " WHERE   p.strProdCode='"+ prodCode+ "' AND p.strClientCode='" + clientCode + "' "
+					    + " order by DATE(a.dtGRNDate) desc "
+					    + " limit 1; ");
 		List list = objGlobalFunctionsService.funGetList(sqlBuilder.toString(),
 				"sql");
 

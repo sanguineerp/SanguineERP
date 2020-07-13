@@ -1591,7 +1591,7 @@ public class clsExcelExportImportController {
 			List list = new ArrayList<>();
 			list.add("Invalid Excel File");
 			list.add("Invalid Entry In Row No." + RowCount + " and Product Code " + prodCode + " ");
-			return list;
+			return listPhyStklist;
 		}
 		return listPhyStklist;
 	}

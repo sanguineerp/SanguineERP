@@ -673,12 +673,12 @@ public class clsStkPostingController {
 		String companyName = req.getSession().getAttribute("companyName").toString();
 		String userCode = req.getSession().getAttribute("usercode").toString();
 		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
-		String sql="SELECT a.strProdCode FROM tblproductmaster a, tblsubgroupmaster c, tblgroupmaster d"
+		String sql="SELECT a.strProdCode FROM tblproductmaster a, tblsubgroupmaster c, tblgroupmaster d,tblreorderlevel e"
 				+ " WHERE a.strSGCode=c.strSGCode AND c.strGCode=d.strGCode  "
 				+ " AND a.strClientCode='"+clientCode+"' AND c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' "
-				+ " AND a.strProdType IN('Procured','Semi Finished','Non-Inventory') ";
-		
-		//	+ " AND a.strLocCode='"+strLocCode+"'  ";
+				+ " AND a.strProdType IN('Procured','Semi Finished','Non-Inventory') "
+		    	+ " and a.strClientCode=e.strClientCode and a.strProdCode=e.strProdCode "
+		    	+ " AND e.strLocationCode=='"+strLocCode+"'  ";
 				
 		List list = objGlobalFunctionsService.funGetList(sql, "sql");	
 		return list;
@@ -710,5 +710,51 @@ public class clsStkPostingController {
 
 	}
 	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/funGetStock", method = RequestMethod.GET)
+	private  @ResponseBody List  funCalculateStock(@RequestParam(value = "locCode") String locCode, @RequestParam(value = "fDate") String fDate, HttpServletRequest req, HttpServletResponse resp) 
+	{
+	
+		List list= new ArrayList<>();
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String userCode = req.getSession().getAttribute("usercode").toString();
 
+		String fromDate = objGlobalFunctions.funGetDate("yyyy-MM-dd", fDate);
+		//String toDate = objGlobal.funGetDate("yyyy-MM-dd", tDate);
+
+		String startDate = req.getSession().getAttribute("startDate").toString();
+		String[] sp = startDate.split(" ");
+		String[] spDate = sp[0].split("/");
+		startDate = spDate[2] + "-" + spDate[1] + "-" + spDate[0];
+
+		objGlobalFunctions.funInvokeStockFlash(startDate, locCode, fromDate, fromDate, clientCode, userCode, "Y", req, resp);
+        return list;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/GetStockOfAllProducts", method = RequestMethod.GET)
+	private @ResponseBody List funGetStockOfAllProducts( @RequestParam(value = "locCode") String strLocCode,HttpServletResponse resp, HttpServletRequest req) {
+		
+		String clientCode = req.getSession().getAttribute("clientCode").toString();
+		String companyName = req.getSession().getAttribute("companyName").toString();
+		String userCode = req.getSession().getAttribute("usercode").toString();
+		String propertyCode = req.getSession().getAttribute("propertyCode").toString();
+		/*String sql="select a.strProdCode,a.strProdName,a.dblClosingStk,b.dblCostRM,b.dblWeight from tblcurrentstock a,"
+				+ " tblproductmaster b where a.strProdCode in"
+				+ " (SELECT a.strProdCode FROM tblproductmaster a, tblsubgroupmaster c, tblgroupmaster d,tblreorderlevel e"
+				+ " WHERE a.strSGCode=c.strSGCode AND c.strGCode=d.strGCode   AND a.strClientCode='"+clientCode+"' AND"
+				+ " c.strClientCode='"+clientCode+"' AND d.strClientCode='"+clientCode+"' and a.strProdType IN('Procured','Semi Finished','Non-Inventory') "
+				+ " and a.strClientCode=e.strClientCode and a.strProdCode=e.strProdCode AND e.strLocationCode='"+strLocCode+"')"
+				+ " and a.strLocCode='"+strLocCode+"' and a.strUserCode='"+userCode+"' and a.strProdCode=b.strProdCode and a.strClientCode=b.strClientCode";
+		*/
+		String sql="select a.strProdCode,a.strProdName,a.dblClosingStk,b.dblCostRM,b.dblWeight from  tblcurrentstock a ,tblproductmaster b where a.strLocCode='L000003' and a.strUserCode='SANGUINE' AND (a.dblOpeningStk >0 OR a.dblGRN >0 OR dblSCGRN >0 OR a.dblStkTransIn >0 OR a.dblStkAdjIn >0 "
+				+ " OR a.dblMISIn >0 OR a.dblQtyProduced >0 OR a.dblMaterialReturnIn>0 OR a.dblStkTransOut >0 OR a.dblStkAdjOut >0 "
+				+ " OR a.dblMISOut >0 OR a.dblQtyConsumed >0 OR a.dblSales >0 OR a.dblMaterialReturnOut >0 OR a.dblDeliveryNote > 0)"
+				+ " and a.strProdCode=b.strProdCode and a.strClientCode=b.strClientCode " ;
+		List list = objGlobalFunctionsService.funGetList(sql, "sql");	
+		return list;
+
+	}
+
+	
 }
